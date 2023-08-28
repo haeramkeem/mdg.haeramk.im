@@ -7,22 +7,23 @@
   "license": "0BSD",
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
     "develop:cypress": "cross-env CYPRESS_SUPPORT=y yarn develop",
     "build:cypress": "cross-env CYPRESS_SUPPORT=y yarn build",
-    "start": "gatsby develop",
+    "start": "gatsby clean && gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean"
   },
   "dependencies": {
     "@lekoarts/gatsby-theme-minimal-blog": "^6.0.5",
     "gatsby": "^5.10.0",
+    "gatsby-omni-font-loader": "^2.0.2",
     "gatsby-plugin-feed": "^5.10.0",
     "gatsby-plugin-manifest": "^5.10.0",
     "gatsby-plugin-sitemap": "^6.10.0",
     "gatsby-plugin-webpack-statoscope": "^1.0.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0"
   },
   "devDependencies": {
     "@types/node": "^18.16.16",
