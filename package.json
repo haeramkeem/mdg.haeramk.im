@@ -1,9 +1,8 @@
 {
-  "name": "gatsby-starter-digital-garden",
+  "name": "garden.haeramk.im",
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "develop": "gatsby develop",
     "start": "gatsby develop",
     "build": "gatsby build",
     "clean": "gatsby clean"
