@@ -4,11 +4,11 @@ module.exports = {
       resolve: `gatsby-theme-garden`,
       options: {
         contentPath: `${__dirname}/content/garden`,
-        rootNote: `/hello`,
+        rootNote: `/README`,
       },
     },
   ],
   siteMetadata: {
-    title: `Site title`,
+    title: `garden.haeramk.im`,
   },
 }
