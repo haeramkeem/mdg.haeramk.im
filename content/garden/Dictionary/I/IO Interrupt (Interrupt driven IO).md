@@ -1,0 +1,1 @@
+- [[IO Module]] 이 제대로 된 데이터를 갖고왔는지 [[CPU]] 가 확인해야하기 때문에 [[IO Module]] 이 [[Interrupt]] 를 거는 것

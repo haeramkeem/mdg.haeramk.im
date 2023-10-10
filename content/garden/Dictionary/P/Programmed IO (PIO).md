@@ -1,0 +1,3 @@
+- 지금은 [[Direct Memory Access (DMA)]] 에 의해 [[IO Module]] 이 IO 작업을 수행하지만,
+- 이전에는 원하는 데이터가 메인메모리에 없으면 cpu가 직접 하드디스크로 갖고왔음
+- 이런걸 [[Programmed IO (PIO)]] 라고 한다

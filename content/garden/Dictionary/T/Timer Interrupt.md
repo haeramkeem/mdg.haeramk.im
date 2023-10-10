@@ -1,0 +1,1 @@
+- [[Timesharing System]] 에 의해 [[Process]] 가 할당받은 시간이 만료되었을때 발생하는 [[Interrupt]]

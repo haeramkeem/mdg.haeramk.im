@@ -1,0 +1,1 @@
+- [[PC(Program Counter)]] 에 담긴 주소로 가서 가져온 instruction을 저장하는 레지스터

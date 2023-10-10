@@ -1,0 +1,2 @@
+- [[IO (Input Output)]] 가 안일어나서 [[CPU]] 가 쉬는경우가 안일어나면 하나의 [[Process]] 가 [[CPU]] 를 계속 사용하는 일이 일어나게 된다 - **[[Process Monopolize]]** 라고 한다
+- 이것을 방지하기 위해 각각의 [[Process]] 에 시간을 할당하는 **[[Timesharing System]]** 이 나오게 된다
