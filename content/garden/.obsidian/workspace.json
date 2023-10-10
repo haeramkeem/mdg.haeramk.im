@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Dictionary/T/Timer Interrupt.md",
+                "file": "OriginalSeries/CNU/2021/Spring/OS/01/01. 인터럽트와 타임쉐어링.md",
                 "mode": "source",
                 "source": false
               }
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Dictionary/T/Timer Interrupt.md",
+                "file": "OriginalSeries/CNU/2021/Spring/OS/01/01. 인터럽트와 타임쉐어링.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -126,7 +126,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Dictionary/T/Timer Interrupt.md",
+                "file": "OriginalSeries/CNU/2021/Spring/OS/01/01. 인터럽트와 타임쉐어링.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -149,7 +149,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Dictionary/T/Timer Interrupt.md"
+                "file": "OriginalSeries/CNU/2021/Spring/OS/01/01. 인터럽트와 타임쉐어링.md"
               }
             }
           }
@@ -170,8 +170,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2b412dd45ef71e19",
+  "active": "75fe81c53fa8b68f",
   "lastOpenFiles": [
+    "OriginalSeries/CNU/2021/Spring/OS/01/20231010225853.png",
+    "OriginalSeries/CNU/2021/Spring/OS/01/01. 인터럽트와 타임쉐어링.md",
+    "Dictionary/T/Timer Interrupt.md",
     "Dictionary/U",
     "Dictionary/M/Multi Processing(Symmetric Multi Processing - SMP).md",
     "Dictionary/T",
@@ -185,7 +188,6 @@
     "Dictionary/H",
     "Dictionary/G",
     "Dictionary/B",
-    "OriginalSeries/CNU/2021/Spring/OS/01/01. 인터럽트와 타임쉐어링.md",
     "Dictionary/A",
     "Dictionary/P/Privileged Instruction.md",
     "OS.md",
@@ -205,9 +207,6 @@
     "Dictionary/M/Memory Protection.md",
     "Dictionary/N/Nested Interrupt Handling.md",
     "Dictionary/D/Disable (Sequential) Interrupt Handling.md",
-    "Dictionary/S/System Call Table.md",
-    "Dictionary/I/IDT - Interrupt Descriptor Table (IVT - Interrupt Vector Table).md",
-    "Dictionary/C",
-    "OriginalSeries/CNU/2021/Spring/OS/01/Pasted image 20231010225853.png"
+    "Dictionary/S/System Call Table.md"
   ]
 }
