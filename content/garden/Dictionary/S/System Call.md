@@ -1,1 +1,0 @@
-- OS와 밀접한 함수를 뜻하며 privileged instruction의 바로 상위 레벨 언어라고도 할 수 있다

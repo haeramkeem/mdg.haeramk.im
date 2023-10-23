@@ -1,3 +1,0 @@
-- [[OS (Operating System)]] 의 핵심부분을 일컫는 말
-- [[OS (Operating System)]] 는 아주 사이즈가 크기 때문에 [[Kernel]] 이라는 핵심만 메모리에 상주하게 된다
-- 요즘은 컴퓨터의 성능이 놓기 때문에 커널의 사이즈를 점차 줄여나가는 **microkernel** 이 추세이다

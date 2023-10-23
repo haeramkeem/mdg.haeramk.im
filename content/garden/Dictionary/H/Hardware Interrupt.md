@@ -1,1 +1,0 @@
-- Memory Parity Failure등의 하드웨어적 이벤트가 일어났을 떄 발생하는 [[Interrupt]]

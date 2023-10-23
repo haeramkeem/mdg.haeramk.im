@@ -1,3 +1,0 @@
-- 여러개의 코어를 갖는 [[CPU]] 를 이용해 말 그대로 [[Process]] 를 여러개 가동시키는것
-- [[Multi Programming(Concurrent Programming)]] 과 헷갈리지 말아야 한다
-	- [[Multi Programming(Concurrent Programming)]] 의 경우에는 코어가 한개여도 가능하다 (반대개념은 **[[Uniprocessing]]** 이다)

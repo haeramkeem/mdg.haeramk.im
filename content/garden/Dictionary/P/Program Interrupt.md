@@ -1,1 +1,0 @@
-- 프로그램 내에서 overflow, division by zero등의 상황이 일어났을 때 발생하는 [[Interrupt]]

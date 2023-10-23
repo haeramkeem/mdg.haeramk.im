@@ -1,2 +1,0 @@
-- [[Multi Processing(Symmetric Multi Processing - SMP)]] 의 반대 개녕
-- 즉, 싱글코어 환경에서 [[Process]] 를 실행시키는 것을 의미

@@ -1,2 +1,0 @@
-- 우선순위를 정해서 [[Interrupt]] 를 처리하는 것
-- [[Interrupt]] 가 처리되는 와중에 새로운 [[Interrupt]] 가 발생했을 때 우선순위를 따져서 높은걸 먼저 처리하고 낮은걸 나중에 처리한다 - 낮은 [[Interrupt]]가 발생하면 [[Disable (Sequential) Interrupt Handling]] 처럼 하던거 계속 하고 높은게 발생하면 중단하고 높은거 처리한 다음에 넘어와서 계속 처리 하는 구조이다

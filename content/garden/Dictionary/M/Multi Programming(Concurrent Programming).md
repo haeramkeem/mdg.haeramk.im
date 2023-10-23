@@ -1,2 +1,0 @@
-- [[IO (Input Output)]] 등의 [[Interrupt]] 가 일어나서 [[CPU]] 가 기다리는동안 놀지 않고 다른 [[Process]] 를 가동하는 것
-- time sharing 도 [[Interrupt]] 를 발생시키지만 time sharing 에 의한 인터럽트는 multi programming 이라고 하지 않는다 (반대개념으로는 **[[Uniprogramming]]** 이 있다)

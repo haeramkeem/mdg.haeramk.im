@@ -1,2 +1,0 @@
-- [[IO Module]] 을 따로 두어서 이 과정을 책임지는 것을 말한다
-	- 즉, cpu가 직접 IO작업을 하지 않는다 ([[Programmed IO (PIO)]])

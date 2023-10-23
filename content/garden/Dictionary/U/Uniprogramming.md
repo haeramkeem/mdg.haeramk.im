@@ -1,2 +1,0 @@
-- [[Multi Programming(Concurrent Programming)]] 의 반대 개념
-- 즉, [[IO Interrupt (Interrupt driven IO)]] 가 발생하더라도 다른 [[Process]] 를 실행시키지 않음

@@ -1,2 +1,0 @@
-- [[Process]] 가 작동 중에 [[IO Interrupt (Interrupt driven IO)]] 가 발생하지 않아 하나의 [[Process]] 가 [[CPU]] 를 점거하는 현상
-- 이를 방지하기 위해 [[Timesharing System]] 을 사용한다

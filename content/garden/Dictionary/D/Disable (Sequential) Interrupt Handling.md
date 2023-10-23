@@ -1,1 +1,0 @@
-- [[Interrupt]] 가 일어난 순서대로 처리하는 것 - 하나의 [[interrupt]] 를 다 처리하고 나서 다음것이 실행됨 - [[Interrupt]] 를 처리하는 중간에 또다른 [[Interrupt]] 가 발생해도 처리하던 [[Interrupt]] 를 계속 처리한다
