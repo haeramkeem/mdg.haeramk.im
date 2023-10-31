@@ -6,8 +6,10 @@ on:
       - feat/publish
 
 jobs:
-  build:
+  cicd:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -27,14 +29,6 @@ jobs:
         run: npm ci
       - name: Build
         run: npx quartz build --verbose --bundleInfo
-  deploy:
-    runs-on: ubuntu-22.04
-    needs: build
-    permissions:
-      contents: write
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-    steps:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
