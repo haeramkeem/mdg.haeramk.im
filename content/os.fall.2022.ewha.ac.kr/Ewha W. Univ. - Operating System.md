@@ -6,6 +6,7 @@
 - [[4. Process Management]]
 - [[5. CPU Scheduling]]
 - [[6. Process Synchronize]]
+- [[7. Deadlocks]]
 - [[8-1. Memory Address]]
 - [[8-2. Physical Memory Allocation]]
 - [[9. Virtual Memory]]
