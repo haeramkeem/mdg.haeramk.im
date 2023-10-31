@@ -1,12 +1,16 @@
 ---
-title: 매디슨 디지딸 갈든
+title: 매디쏜 디지딸 갈든
 ---
-![Madison Square Garden NYC](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Madison_Square_Garden_%28MSG%29_-_Full_%2848124330357%29.jpg/2880px-Madison_Square_Garden_%28MSG%29_-_Full_%2848124330357%29.jpg)
-> Madison Square Garden, Midtown Manhattan, NYC ([Image Source](https://en.wikipedia.org/wiki/Madison_Square_Garden))
+
+<a href="https://mdg.haeramk.im">
+    <div align="center">
+        <img src="https://raw.githubusercontent.com/haeramkeem/haeramkeem/main/docs/image/mdg.svg" alt="mdg banner image" width=500 />
+    </div>
+</a>
 
 ## 오리지날 씨리즈
 
-> [!info] "오리지날 씨리즈" 는 Digital Garden 의 컨벤션을 따르지 않는, Sequential 한 문서들을 모아놓은 항목입니다.
+> [!info] "오리지날 씨리즈" 는 Networked-thought 에 포함되지 않는, 강의 필기록과 같은 Sequential 한 문서를 모아놓는 항목입니다.
 
 - [[(이화여대) 운영체제 강의록]]
 - [[(충남대) 운영체제 강의록]]
