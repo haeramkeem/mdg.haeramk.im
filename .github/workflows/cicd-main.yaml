@@ -12,13 +12,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Build Link Index
-        uses: jackyzha0/hugo-obsidian@v2.19
-        with:
-          index: true
-          input: content
-          output: assets/indices
-          root: .
+      # - name: Build Link Index
+      #   uses: jackyzha0/hugo-obsidian@v2.2
+      #   with:
+      #     index: true
+      #     input: content
+      #     output: assets/indices
+      #     root: .
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
