@@ -1,11 +1,8 @@
 ---
-title: 매디슨 디지딸 가든
+title: 매디슨 디지딸 갈든
 ---
-<a href="https://mdg.haeramk.im">
-    <div align="center">
-        <img src="https://raw.githubusercontent.com/haeramkeem/haeramkeem/main/docs/image/mdg.svg" alt="HaeramK banner image" width=500vw />
-    </div>
-</a>
+![Madison Square Garden NYC](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Madison_Square_Garden_%28MSG%29_-_Full_%2848124330357%29.jpg/2880px-Madison_Square_Garden_%28MSG%29_-_Full_%2848124330357%29.jpg)
+> Madison Square Garden, Midtown Manhattan, NYC ([Image Source](https://en.wikipedia.org/wiki/Madison_Square_Garden))
 
 ## 오리지날 씨리즈
 
