@@ -8,6 +8,8 @@ title: 매디쏜 디지딸 갈든
     </div>
 </a>
 
+> [!warning] 현재 기존의 Notion 및 Bear 에 기록된 문서들의 Migration 작업이 진행중입니다.
+
 ## 오리지날 씨리즈
 
 > [!info] "오리지날 씨리즈" 는 Networked-thought 에 포함되지 않는, 강의 필기록과 같은 Sequential 한 문서를 모아놓는 항목입니다.
