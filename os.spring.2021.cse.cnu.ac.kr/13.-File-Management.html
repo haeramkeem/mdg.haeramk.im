@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html><head><title>13. File Management</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="13. File Management"/><meta property="og:description" content="Files § File : 사용자가 만든 비트들의 모음 성질 § Long-term Existence : 오랫동안 보관되어야 함 Shareable between Processes : 프로세스들이 공유할 수 있어야 함 Structure : 확장자 얘기하는듯 - 여러 구조의 파일들을 잘 관리할 수 있어야 함 구성 요소 § Name : 파일의 이름 유닉스 시스템에서는 inode# 라는 정수형태로 파일의 이름을 저장한다 Type : 확장자 Location : 위치 - Block# 로 디스크에서의 위치가 저장된다 Size : 파일의 크기 Protection : 파일의 Log Creation : 생성 Last Modification : 마지막 변경 Last Use : 마지막 사용 위 세가지에 대해 Time, Date, *UID(User ID)*를 로그로 저장한다 Operation § Create : 파일의 생성 Delete : 파일의 삭제 Open : 파일 열기 Close : 파일 닫기 Read : 파일 읽기 Write : 파일 쓰기 C언어에서는 open system call 이 create와 open 을 모두 책임진다 사용자가 파일 하나를 open하면 파일의 이름을 inode로 변환하고 그것을 이용해 Block# 를 알아낸 다음 메인 메모리로 갖고 올라와 read 혹은 write의 연산을 하고 끝나면 close를 통해 파일이 닫히는 구조이다 Structure - Database와 File System 의 차이점 § OS의 File System에서는 위에서 명시한 파일을 생성하고 삭제하고 열고쓰는 등의 Rough한 연산들만 지원한다 반면에 Database에서는 File의 내용, 즉, File의 Field(데이터베이스에서 Column을 말하는듯)와 Record(데이터베이스에서의 Row를 말하는듯)등의 File의 세부적인 내용을 관리하는 역할을 한다 UNIX File System § 일단 디스크의 구조가 저렇게 n개의 블락으로 구성되어있다고 할 때 첫번째 블록을 Boot Block이라고 한다 - 얘는 처음 부팅할때 메인메모리에 들어가서 OS초기화하고 부팅작업을 하는데에 사용된다 그리고 두번째 블록을 Super Block이라고 한다 - 얘는 부팅 이후 메인메모리로 들어가서 전체적인 File System에 대한 정보를 OS에 제공해준다 그 이후 위의 예시에서 2~m-1까지를 inode list라고 한다 inode list에는 inode들이 저장되고 블록보다는 사이즈가 작기 때문에 한 블록에 여러개의 inode가 저장되게 된다 따라서 하나의 시스템 안에 저장될 수 있는 파일의 갯수는 저 m에 달려있는 것이다 그 다음 m부터 n-1까지는 data block이라고 한다 data block 은 파일의 실질적인 내용이 블럭단위로 잘려서 저장되게 된다 inode는 파일 하나에 대한 정보를 저장하게 된다 - 프로세스에 PCB가 있었듯이 파일에는 inode가 존재하는 셈이다 inode에는 다양한 정보들이 저장되는데 일단 위에서 말한 파일의 구성 요소인 name, type, size, location, protection과 파일의 주인인 owner가 들어간다 그리고 index table이 들어가게 되는데 이놈이 하나의 파일에 대한 내용을 블럭단위로 쪼개서 data block에 저장하게 되므로 그 블럭들이 data block의 어디에 존재하는지를 나타내는 테이블이다 위의 예시에서는 327, 15, 216이라고 돼있으므로 파일의 첫번째 블럭은 data block의 327에 가면 있다는 거고 두번째 블럭은 15, 마지막 블럭은 216에 가면 있다는 소리이다 따라서 파일 하나가 가질 수 있는 최대 크기는 index table에 달려있게 된다 그리고 한 파일이 열리면 그 파일에 대한 inode가 메인메모리로 올라가고, index table을 이용해 data block들도 하나씩 차례로 올라가게 된다 Index table § index table의 구조를 조금 더 자세히 살펴보면 다음과 같다 일단 index table의 일정부분은 바로 파일의 내용이 저장된 data block의 블럭으로 연결된다 - 여기를 direct block이라고 함 위의 예시에서는 10까지는 따라가보면 바로 파일의 내용이 나오게 된다는 소리이다 그리고 그 다음부터는 계층구조를 가지게 된다 이게 뭔말이냐면, index table에 적혀있는 block# 으로 가보면 해당 블럭에 들어있는 내용은 파일의 내용이 아니라 또다른 index table이 존재하는 것이다 즉, data block에 저장되어있는 블럭은 파일의 내용을 저장하는 블럭일 뿐만 아니라 index table일 수도 있다는 소리이다 따라서 인덱스 테이블에서 다시 또다른 인텍스 테이블로 움직이고, 거기서 파일의 내용이 저장된 블럭으로 이동하는 계층구조를 가진다 최상위 index table은 이렇게 일정구간은 바로 파일 내용 블럭으로 가지만 나머지는 차수가 점차 늘어나는 계층구조를 갖도록 되어 있다 - 이부분을 indirect block이라고 한다 즉, 위의 예시에서는 11번째 칸에는 또다른 index table의 위치가 저장되어있고, 그 index table에는 파일 내용 블럭의 위치가 저장된 1중 계층구조였다면, 12번째 칸에는 2중 계층구조, 13번째 칸에는 3중 계층구조로 되어있는 것이다 이때 data block에 저장된 index table의 크기가 256이라면, 하나의 파일은 10 + 256 + 256^2 + 256^3 개의 블럭에 나뉘어져 저장되는 셈인거다 보통 블럭 10개를 direct block으로 갖고 3개를 indirect block 로 1-Level, 2-Level, 3-Level 을 갖는 식으로 inode의 index table이 구성된댄다 Directory § 일단 유닉스 시스템에서는 directory도 하나의 file로 취급한다 일단 현재 디렉토리(current directory)가 inode 300번이라고 해보자 그럼 거기의 index table을 통해 data block으로 간 결과가 그 옆의 column두개짜리 테이블이다 디렉토리이기 때문에 파일의 내용이 저렇게 2 column table로 나타나게 되고 이 2 column table에는 위의 예시에서는 오른쪽에는 해당 디렉토리에 들어있는 파일의 이름, 그리고 왼쪽에는 그 파일의 index# 가 저장된다 그리고 만약 내가 A라는 디렉토리로 가고 싶으면 A 옆의 inode로 들어가게 된다 A의 inode가 766이라고 했을 때 해당 inode list의 원소로 가면 동일하게 A의 정보와 A의 내용을 볼 수 있다(index table을 이용해서) A의 내용을 보면 A 또한 디렉토리이기 때문에 2 column table을 볼 수 있고, A에는 f1이 들어있기 때문에 f1과 f1의 inode# 가 2 column table에 저장되게 된다 마찬가지로 f1의 inode# 인 111로 가면 거기에서 마찬가지로 index table을 이용해 f1의 내용을 볼 수 있는 것이다 따라서 핵심은 유닉스에서는 디렉토리도 file로 관리되어 inode가 존재하고, 디렉토리의 inode에 저장된 index table을 이용해 내용 블럭으로 가면 거기에는 해당 디렉토리의 하위 디렉토리 / 파일에 대한 ( 이름, inode# ) 들이 저장되어 있는 것이다 - 따라서 해당 inode# 을 쫒아가면 하위 디렉토리 / 폴더로 접근하게 되는 구조이다 File Directory Structure § Single Level Directory : 한명의 유저와 하나의 current directory만을 지원해 모든 파일들이 다 같은 곳에 unique한 이름들을 가지며 존재하는 것 Two Level Directory : 이제는 여러명의 유저와 하나의 current directory만을 지원해 파일들이 하나의 유저한테 속하여 존재하는 구조 - 한 유저 안에서는 unique한 이름을 가져야 되지만 유저가 다르다면 이름이 중복되어도 된다 Tree Structured Directory : 일반적으로 우리가 생각하는 디렉토리의 구조 여러명의 유저가 있고 한 유저 안에서도 여러개의 디렉토리, 디렉토리 안의 디렉토리를 생성해 트리구조로 디렉토리들이 형성되는 것 Acyclic Graph Directory : 얘도 동일하게 트리구조를 갖지만 트리구조에서는 할 수 없는 공유의 개념이 가능한 구조이다 - 파일 하나를 여러명의 유저가 공유할 수 있는 구조 File Sharing System § Hard Link : 공유파일에 대해 하나의 inode와 data block을 두 디렉토리 / 유저가 공유하는 형태이다 inode와 data block을 하나씩 사용하기 때문에 resource를 적게 사용한다는 장점이 있다 Symbolic Link : 얘는 두 디렉토리 / 유저가 각각 하나씩 공유파일에 대한 inode와 data block을 갖고있고 둘 중 하나의 data block에 나머지 하나의 inode의 경로가 적혀있는 형태이다 얘는 inode와 data block이 더 필요하므로 resource를 더 많이 먹는다는 단점은 있지만, network를 사용해서 파일을 공유한다거나 하는 등의 더 강력한 파일 공유를 지원할 수 있다 - 그냥 파일의 경로만 data block에 적어주면 되므로 File Allocation § inode에서 쓰는 index table방식 말고 다른 방식의 data block을 찾아가는 방식들 Contiguous File Allocation § Contiguous File Allocation : 얘는 data block을 연속적으로 디스크에 배치한 뒤, 시작블럭과 갯수를 File Allocation Table에 저장하는 방식이다 이놈의 단점은 일단 마지막 data block 뒤에 다른 파일의 data block이 들어있으면 그자리를 사용하지 못하므로 파일의 크기가 커졌을 때 대처할 수 없다는 것과 파일이 삭제되어 data block들을 삭제했을 때에 External Fragmentation이 일어난다는 것이다 옛날 windows xp가 이런 방식으로 작동해 external fragmentation 들을 모으는 조각 모음(compaction) 이 있었던 것이다 Chained Allocation § Chained Allocation은 Linked List마냥 다음 data block의 위치를 data block의 마지막에다 저장해서 찾아가도록 하는 구조이다 단점은 당연히 pointer를 잃어버리면 파일이 날라가는 문제가 발생한다는 것과 파일의 특정 지점을 읽으려면 그곳까지 datablock을 차례로 들러야 하기 때문에 오래걸린다는 것이다 이것을 해결하기 위해 FAT(File Allocation Table) 라는 것을 이용한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../static/icon.png"/><meta name="description" content="Files § File : 사용자가 만든 비트들의 모음 성질 § Long-term Existence : 오랫동안 보관되어야 함 Shareable between Processes : 프로세스들이 공유할 수 있어야 함 Structure : 확장자 얘기하는듯 - 여러 구조의 파일들을 잘 관리할 수 있어야 함 구성 요소 § Name : 파일의 이름 유닉스 시스템에서는 inode# 라는 정수형태로 파일의 이름을 저장한다 Type : 확장자 Location : 위치 - Block# 로 디스크에서의 위치가 저장된다 Size : 파일의 크기 Protection : 파일의 Log Creation : 생성 Last Modification : 마지막 변경 Last Use : 마지막 사용 위 세가지에 대해 Time, Date, *UID(User ID)*를 로그로 저장한다 Operation § Create : 파일의 생성 Delete : 파일의 삭제 Open : 파일 열기 Close : 파일 닫기 Read : 파일 읽기 Write : 파일 쓰기 C언어에서는 open system call 이 create와 open 을 모두 책임진다 사용자가 파일 하나를 open하면 파일의 이름을 inode로 변환하고 그것을 이용해 Block# 를 알아낸 다음 메인 메모리로 갖고 올라와 read 혹은 write의 연산을 하고 끝나면 close를 통해 파일이 닫히는 구조이다 Structure - Database와 File System 의 차이점 § OS의 File System에서는 위에서 명시한 파일을 생성하고 삭제하고 열고쓰는 등의 Rough한 연산들만 지원한다 반면에 Database에서는 File의 내용, 즉, File의 Field(데이터베이스에서 Column을 말하는듯)와 Record(데이터베이스에서의 Row를 말하는듯)등의 File의 세부적인 내용을 관리하는 역할을 한다 UNIX File System § 일단 디스크의 구조가 저렇게 n개의 블락으로 구성되어있다고 할 때 첫번째 블록을 Boot Block이라고 한다 - 얘는 처음 부팅할때 메인메모리에 들어가서 OS초기화하고 부팅작업을 하는데에 사용된다 그리고 두번째 블록을 Super Block이라고 한다 - 얘는 부팅 이후 메인메모리로 들어가서 전체적인 File System에 대한 정보를 OS에 제공해준다 그 이후 위의 예시에서 2~m-1까지를 inode list라고 한다 inode list에는 inode들이 저장되고 블록보다는 사이즈가 작기 때문에 한 블록에 여러개의 inode가 저장되게 된다 따라서 하나의 시스템 안에 저장될 수 있는 파일의 갯수는 저 m에 달려있는 것이다 그 다음 m부터 n-1까지는 data block이라고 한다 data block 은 파일의 실질적인 내용이 블럭단위로 잘려서 저장되게 된다 inode는 파일 하나에 대한 정보를 저장하게 된다 - 프로세스에 PCB가 있었듯이 파일에는 inode가 존재하는 셈이다 inode에는 다양한 정보들이 저장되는데 일단 위에서 말한 파일의 구성 요소인 name, type, size, location, protection과 파일의 주인인 owner가 들어간다 그리고 index table이 들어가게 되는데 이놈이 하나의 파일에 대한 내용을 블럭단위로 쪼개서 data block에 저장하게 되므로 그 블럭들이 data block의 어디에 존재하는지를 나타내는 테이블이다 위의 예시에서는 327, 15, 216이라고 돼있으므로 파일의 첫번째 블럭은 data block의 327에 가면 있다는 거고 두번째 블럭은 15, 마지막 블럭은 216에 가면 있다는 소리이다 따라서 파일 하나가 가질 수 있는 최대 크기는 index table에 달려있게 된다 그리고 한 파일이 열리면 그 파일에 대한 inode가 메인메모리로 올라가고, index table을 이용해 data block들도 하나씩 차례로 올라가게 된다 Index table § index table의 구조를 조금 더 자세히 살펴보면 다음과 같다 일단 index table의 일정부분은 바로 파일의 내용이 저장된 data block의 블럭으로 연결된다 - 여기를 direct block이라고 함 위의 예시에서는 10까지는 따라가보면 바로 파일의 내용이 나오게 된다는 소리이다 그리고 그 다음부터는 계층구조를 가지게 된다 이게 뭔말이냐면, index table에 적혀있는 block# 으로 가보면 해당 블럭에 들어있는 내용은 파일의 내용이 아니라 또다른 index table이 존재하는 것이다 즉, data block에 저장되어있는 블럭은 파일의 내용을 저장하는 블럭일 뿐만 아니라 index table일 수도 있다는 소리이다 따라서 인덱스 테이블에서 다시 또다른 인텍스 테이블로 움직이고, 거기서 파일의 내용이 저장된 블럭으로 이동하는 계층구조를 가진다 최상위 index table은 이렇게 일정구간은 바로 파일 내용 블럭으로 가지만 나머지는 차수가 점차 늘어나는 계층구조를 갖도록 되어 있다 - 이부분을 indirect block이라고 한다 즉, 위의 예시에서는 11번째 칸에는 또다른 index table의 위치가 저장되어있고, 그 index table에는 파일 내용 블럭의 위치가 저장된 1중 계층구조였다면, 12번째 칸에는 2중 계층구조, 13번째 칸에는 3중 계층구조로 되어있는 것이다 이때 data block에 저장된 index table의 크기가 256이라면, 하나의 파일은 10 + 256 + 256^2 + 256^3 개의 블럭에 나뉘어져 저장되는 셈인거다 보통 블럭 10개를 direct block으로 갖고 3개를 indirect block 로 1-Level, 2-Level, 3-Level 을 갖는 식으로 inode의 index table이 구성된댄다 Directory § 일단 유닉스 시스템에서는 directory도 하나의 file로 취급한다 일단 현재 디렉토리(current directory)가 inode 300번이라고 해보자 그럼 거기의 index table을 통해 data block으로 간 결과가 그 옆의 column두개짜리 테이블이다 디렉토리이기 때문에 파일의 내용이 저렇게 2 column table로 나타나게 되고 이 2 column table에는 위의 예시에서는 오른쪽에는 해당 디렉토리에 들어있는 파일의 이름, 그리고 왼쪽에는 그 파일의 index# 가 저장된다 그리고 만약 내가 A라는 디렉토리로 가고 싶으면 A 옆의 inode로 들어가게 된다 A의 inode가 766이라고 했을 때 해당 inode list의 원소로 가면 동일하게 A의 정보와 A의 내용을 볼 수 있다(index table을 이용해서) A의 내용을 보면 A 또한 디렉토리이기 때문에 2 column table을 볼 수 있고, A에는 f1이 들어있기 때문에 f1과 f1의 inode# 가 2 column table에 저장되게 된다 마찬가지로 f1의 inode# 인 111로 가면 거기에서 마찬가지로 index table을 이용해 f1의 내용을 볼 수 있는 것이다 따라서 핵심은 유닉스에서는 디렉토리도 file로 관리되어 inode가 존재하고, 디렉토리의 inode에 저장된 index table을 이용해 내용 블럭으로 가면 거기에는 해당 디렉토리의 하위 디렉토리 / 파일에 대한 ( 이름, inode# ) 들이 저장되어 있는 것이다 - 따라서 해당 inode# 을 쫒아가면 하위 디렉토리 / 폴더로 접근하게 되는 구조이다 File Directory Structure § Single Level Directory : 한명의 유저와 하나의 current directory만을 지원해 모든 파일들이 다 같은 곳에 unique한 이름들을 가지며 존재하는 것 Two Level Directory : 이제는 여러명의 유저와 하나의 current directory만을 지원해 파일들이 하나의 유저한테 속하여 존재하는 구조 - 한 유저 안에서는 unique한 이름을 가져야 되지만 유저가 다르다면 이름이 중복되어도 된다 Tree Structured Directory : 일반적으로 우리가 생각하는 디렉토리의 구조 여러명의 유저가 있고 한 유저 안에서도 여러개의 디렉토리, 디렉토리 안의 디렉토리를 생성해 트리구조로 디렉토리들이 형성되는 것 Acyclic Graph Directory : 얘도 동일하게 트리구조를 갖지만 트리구조에서는 할 수 없는 공유의 개념이 가능한 구조이다 - 파일 하나를 여러명의 유저가 공유할 수 있는 구조 File Sharing System § Hard Link : 공유파일에 대해 하나의 inode와 data block을 두 디렉토리 / 유저가 공유하는 형태이다 inode와 data block을 하나씩 사용하기 때문에 resource를 적게 사용한다는 장점이 있다 Symbolic Link : 얘는 두 디렉토리 / 유저가 각각 하나씩 공유파일에 대한 inode와 data block을 갖고있고 둘 중 하나의 data block에 나머지 하나의 inode의 경로가 적혀있는 형태이다 얘는 inode와 data block이 더 필요하므로 resource를 더 많이 먹는다는 단점은 있지만, network를 사용해서 파일을 공유한다거나 하는 등의 더 강력한 파일 공유를 지원할 수 있다 - 그냥 파일의 경로만 data block에 적어주면 되므로 File Allocation § inode에서 쓰는 index table방식 말고 다른 방식의 data block을 찾아가는 방식들 Contiguous File Allocation § Contiguous File Allocation : 얘는 data block을 연속적으로 디스크에 배치한 뒤, 시작블럭과 갯수를 File Allocation Table에 저장하는 방식이다 이놈의 단점은 일단 마지막 data block 뒤에 다른 파일의 data block이 들어있으면 그자리를 사용하지 못하므로 파일의 크기가 커졌을 때 대처할 수 없다는 것과 파일이 삭제되어 data block들을 삭제했을 때에 External Fragmentation이 일어난다는 것이다 옛날 windows xp가 이런 방식으로 작동해 external fragmentation 들을 모으는 조각 모음(compaction) 이 있었던 것이다 Chained Allocation § Chained Allocation은 Linked List마냥 다음 data block의 위치를 data block의 마지막에다 저장해서 찾아가도록 하는 구조이다 단점은 당연히 pointer를 잃어버리면 파일이 날라가는 문제가 발생한다는 것과 파일의 특정 지점을 읽으려면 그곳까지 datablock을 차례로 들러야 하기 때문에 오래걸린다는 것이다 이것을 해결하기 위해 FAT(File Allocation Table) 라는 것을 이용한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="os.spring.2021.cse.cnu.ac.kr/13.-File-Management"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div><div class="explorer desktop-only"><button type="button" id="explorer" data-behavior="collapse" data-collapsed="collapsed" data-savestate="true" data-tree="[{&quot;path&quot;:&quot;os.fall.2022.cse.ewha.ac.kr&quot;,&quot;collapsed&quot;:true},{&quot;path&quot;:&quot;os.spring.2021.cse.cnu.ac.kr&quot;,&quot;collapsed&quot;:true},{&quot;path&quot;:&quot;pl.spring.2021.cse.cnu.ac.kr&quot;,&quot;collapsed&quot;:true}]"><h1>Explorer</h1><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-content"><ul class="overflow" id="explorer-ul"><li><div><div class="folder-outer open"><ul style="padding-left:0;" class="content" data-folderul><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/os.fall.2022.cse.ewha.ac.kr"><button class="folder-button"><p class="folder-title">os.fall.2022.cse.ewha.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/os.fall.2022.cse.ewha.ac.kr"><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/(이화여대)-운영체제-강의록" data-for="os.fall.2022.cse.ewha.ac.kr/(이화여대)-운영체제-강의록">(이화여대) 운영체제 강의록</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/1.-운영체제란" data-for="os.fall.2022.cse.ewha.ac.kr/1.-운영체제란">1. 운영체제란</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/2.-System-Structure-&amp;-Process-Execution" data-for="os.fall.2022.cse.ewha.ac.kr/2.-System-Structure-&amp;-Process-Execution">2. System Structure &amp; Process Execution</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/3.-Process" data-for="os.fall.2022.cse.ewha.ac.kr/3.-Process">3. Process</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/4.-Process-Management" data-for="os.fall.2022.cse.ewha.ac.kr/4.-Process-Management">4. Process Management</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/5.-CPU-Scheduling" data-for="os.fall.2022.cse.ewha.ac.kr/5.-CPU-Scheduling">5. CPU Scheduling</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/6.-Process-Synchronize" data-for="os.fall.2022.cse.ewha.ac.kr/6.-Process-Synchronize">6. Process Synchronize</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/7.-Deadlocks" data-for="os.fall.2022.cse.ewha.ac.kr/7.-Deadlocks">7. Deadlocks</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/8-1.-Memory-Address" data-for="os.fall.2022.cse.ewha.ac.kr/8-1.-Memory-Address">8-1. Memory Address</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/8-2.-Physical-Memory-Allocation" data-for="os.fall.2022.cse.ewha.ac.kr/8-2.-Physical-Memory-Allocation">8-2. Physical Memory Allocation</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/9.-Virtual-Memory" data-for="os.fall.2022.cse.ewha.ac.kr/9.-Virtual-Memory">9. Virtual Memory</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/10.-File-Systems" data-for="os.fall.2022.cse.ewha.ac.kr/10.-File-Systems">10. File Systems</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/11.-Disk-Scheduling" data-for="os.fall.2022.cse.ewha.ac.kr/11.-Disk-Scheduling">11. Disk Scheduling</a></li></li></ul></div></div></li><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/os.spring.2021.cse.cnu.ac.kr"><button class="folder-button"><p class="folder-title">os.spring.2021.cse.cnu.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/os.spring.2021.cse.cnu.ac.kr"><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록" data-for="os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록">(충남대) 운영체제 강의록</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/1.-인터럽트,-타임쉐어링" data-for="os.spring.2021.cse.cnu.ac.kr/1.-인터럽트,-타임쉐어링">1. 인터럽트, 타임쉐어링</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/2.-프로세스" data-for="os.spring.2021.cse.cnu.ac.kr/2.-프로세스">2. 프로세스</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/3.-쓰레드" data-for="os.spring.2021.cse.cnu.ac.kr/3.-쓰레드">3. 쓰레드</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/4.-Concurrency" data-for="os.spring.2021.cse.cnu.ac.kr/4.-Concurrency">4. Concurrency</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/5.-Semaphore" data-for="os.spring.2021.cse.cnu.ac.kr/5.-Semaphore">5. Semaphore</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/6.-Deadlock-&amp;-Starvation" data-for="os.spring.2021.cse.cnu.ac.kr/6.-Deadlock-&amp;-Starvation">6. Deadlock &amp; Starvation</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/7.-메모리-관리" data-for="os.spring.2021.cse.cnu.ac.kr/7.-메모리-관리">7. 메모리 관리</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/8.-가상메모리" data-for="os.spring.2021.cse.cnu.ac.kr/8.-가상메모리">8. 가상메모리</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/9.-Segmentation" data-for="os.spring.2021.cse.cnu.ac.kr/9.-Segmentation">9. Segmentation</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/10.-CPU-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/10.-CPU-Scheduling">10. CPU Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/11.-Multicore-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/11.-Multicore-Scheduling">11. Multicore Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/12.-IO-&amp;-Disk-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/12.-IO-&amp;-Disk-Scheduling">12. IO &amp; Disk Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/13.-File-Management" data-for="os.spring.2021.cse.cnu.ac.kr/13.-File-Management">13. File Management</a></li></li></ul></div></div></li><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/pl.spring.2021.cse.cnu.ac.kr"><button class="folder-button"><p class="folder-title">pl.spring.2021.cse.cnu.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/pl.spring.2021.cse.cnu.ac.kr"><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/(충남대)-프로그래밍-언어-개론-강의록" data-for="pl.spring.2021.cse.cnu.ac.kr/(충남대)-프로그래밍-언어-개론-강의록">(충남대) 프로그래밍 언어 개론 강의록</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/1.-OCaml-문법-(1)" data-for="pl.spring.2021.cse.cnu.ac.kr/1.-OCaml-문법-(1)">1. OCaml 문법 (1)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/2.-OCaml-문법-(2)" data-for="pl.spring.2021.cse.cnu.ac.kr/2.-OCaml-문법-(2)">2. OCaml 문법 (2)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/3.-재귀-호출-최적화-기법" data-for="pl.spring.2021.cse.cnu.ac.kr/3.-재귀-호출-최적화-기법">3. 재귀 호출 최적화 기법</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/4.-Syntax와-Semantics" data-for="pl.spring.2021.cse.cnu.ac.kr/4.-Syntax와-Semantics">4. Syntax와 Semantics</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/5.-Lexical-Analyzer-(Lexer,-어휘분석기)" data-for="pl.spring.2021.cse.cnu.ac.kr/5.-Lexical-Analyzer-(Lexer,-어휘분석기)">5. Lexical Analyzer (Lexer, 어휘분석기)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/6.-Syntax-Analyzer-(Parser,-구문분석기)" data-for="pl.spring.2021.cse.cnu.ac.kr/6.-Syntax-Analyzer-(Parser,-구문분석기)">6. Syntax Analyzer (Parser, 구문분석기)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/7.-언어의-정의" data-for="pl.spring.2021.cse.cnu.ac.kr/7.-언어의-정의">7. 언어의 정의</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/8.-문법적-설탕과-식별자" data-for="pl.spring.2021.cse.cnu.ac.kr/8.-문법적-설탕과-식별자">8. 문법적 설탕과 식별자</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/9.-함수와-함수호출" data-for="pl.spring.2021.cse.cnu.ac.kr/9.-함수와-함수호출">9. 함수와 함수호출</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/10.-1등-시민-함수" data-for="pl.spring.2021.cse.cnu.ac.kr/10.-1등-시민-함수">10. 1등 시민 함수</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/11.-조건분기문" data-for="pl.spring.2021.cse.cnu.ac.kr/11.-조건분기문">11. 조건분기문</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/12.-재귀함수" data-for="pl.spring.2021.cse.cnu.ac.kr/12.-재귀함수">12. 재귀함수</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/13.-명령형-언어-(1)" data-for="pl.spring.2021.cse.cnu.ac.kr/13.-명령형-언어-(1)">13. 명령형 언어 (1)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/14.-명령형언어-(2)" data-for="pl.spring.2021.cse.cnu.ac.kr/14.-명령형언어-(2)">14. 명령형언어 (2)</a></li></li></ul></div></div></li></ul></div></div></li><li id="explorer-end"></li></ul></div></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">13. File Management</h1><p class="content-meta ">Nov 02, 2023, 17 min read</p></div></div><article class="popover-hint"><h2 id="files">Files<a aria-hidden="true" tabindex="-1" href="#files" class="internal"> §</a></h2>
+<ul>
+<li><em>File</em> : 사용자가 만든 비트들의 모음</li>
+</ul>
+<h3 id="성질">성질<a aria-hidden="true" tabindex="-1" href="#성질" class="internal"> §</a></h3>
+<ul>
+<li><em>Long-term Existence</em> : 오랫동안 보관되어야 함</li>
+<li><em>Shareable between Processes</em> : 프로세스들이 공유할 수 있어야 함</li>
+<li><em>Structure</em> : 확장자 얘기하는듯 - 여러 구조의 파일들을 잘 관리할 수 있어야 함</li>
+</ul>
+<h3 id="구성-요소">구성 요소<a aria-hidden="true" tabindex="-1" href="#구성-요소" class="internal"> §</a></h3>
+<ul>
+<li><em>Name</em> : 파일의 이름
+<ul>
+<li>유닉스 시스템에서는 <em>inode#</em> 라는 정수형태로 파일의 이름을 저장한다</li>
+</ul>
+</li>
+<li><em>Type</em> : 확장자</li>
+<li><em>Location</em> : 위치 - Block# 로 디스크에서의 위치가 저장된다</li>
+<li><em>Size</em> : 파일의 크기</li>
+<li><em>Protection</em> : 파일의 Log
+<ul>
+<li><em>Creation</em> : 생성</li>
+<li><em>Last Modification</em> : 마지막 변경</li>
+<li><em>Last Use</em> : 마지막 사용</li>
+<li>위 세가지에 대해 <em>Time</em>, <em>Date</em>, *UID(User ID)*를 로그로 저장한다</li>
+</ul>
+</li>
+</ul>
+<h3 id="operation">Operation<a aria-hidden="true" tabindex="-1" href="#operation" class="internal"> §</a></h3>
+<ul>
+<li><em>Create</em> : 파일의 생성</li>
+<li><em>Delete</em> : 파일의 삭제</li>
+<li><em>Open</em> : 파일 열기</li>
+<li><em>Close</em> : 파일 닫기</li>
+<li><em>Read</em> : 파일 읽기</li>
+<li><em>Write</em> : 파일 쓰기</li>
+<li>C언어에서는 open system call 이 create와 open 을 모두 책임진다</li>
+<li>사용자가 파일 하나를 open하면 파일의 이름을 inode로 변환하고 그것을 이용해 Block# 를 알아낸 다음 메인 메모리로 갖고 올라와 read 혹은 write의 연산을 하고 끝나면 close를 통해 파일이 닫히는 구조이다</li>
+</ul>
+<h3 id="structure---database와-file-system-의-차이점">Structure - Database와 File System 의 차이점<a aria-hidden="true" tabindex="-1" href="#structure---database와-file-system-의-차이점" class="internal"> §</a></h3>
+<ul>
+<li>OS의 File System에서는 위에서 명시한 파일을 생성하고 삭제하고 열고쓰는 등의 Rough한 연산들만 지원한다</li>
+<li>반면에 Database에서는 File의 내용, 즉, File의 <em>Field</em>(데이터베이스에서 Column을 말하는듯)와 <em>Record</em>(데이터베이스에서의 Row를 말하는듯)등의 File의 세부적인 내용을 관리하는 역할을 한다</li>
+</ul>
+<h2 id="unix-file-system">UNIX File System<a aria-hidden="true" tabindex="-1" href="#unix-file-system" class="internal"> §</a></h2>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image1.png" alt="스크린샷 2021-06-13 오후 4.14.29.png"/></p>
+<ul>
+<li>일단 디스크의 구조가 저렇게 n개의 블락으로 구성되어있다고 할 때</li>
+<li>첫번째 블록을 <em>Boot Block</em>이라고 한다 - 얘는 처음 부팅할때 메인메모리에 들어가서 OS초기화하고 부팅작업을 하는데에 사용된다</li>
+<li>그리고 두번째 블록을 <em>Super Block</em>이라고 한다 - 얘는 부팅 이후 메인메모리로 들어가서 전체적인 File System에 대한 정보를 OS에 제공해준다</li>
+<li>그 이후 위의 예시에서 2~m-1까지를 <em>inode list</em>라고 한다
+<ul>
+<li><em>inode list</em>에는 inode들이 저장되고 블록보다는 사이즈가 작기 때문에 한 블록에 여러개의 inode가 저장되게 된다</li>
+<li>따라서 하나의 시스템 안에 저장될 수 있는 파일의 갯수는 저 <em>m</em>에 달려있는 것이다</li>
+</ul>
+</li>
+<li>그 다음 m부터 n-1까지는 <em>data block</em>이라고 한다
+<ul>
+<li><em>data block</em> 은 파일의 실질적인 내용이 블럭단위로 잘려서 저장되게 된다</li>
+</ul>
+</li>
+<li><em>inode</em>는 파일 하나에 대한 정보를 저장하게 된다 - 프로세스에 PCB가 있었듯이 파일에는 inode가 존재하는 셈이다
+<ul>
+<li><em>inode</em>에는 다양한 정보들이 저장되는데 일단</li>
+<li>위에서 말한 파일의 구성 요소인 <em>name</em>, <em>type</em>, <em>size</em>, <em>location</em>, <em>protection</em>과 파일의 주인인 <em>owner</em>가 들어간다</li>
+<li>그리고 <em>index table</em>이 들어가게 되는데 이놈이 하나의 파일에 대한 내용을 블럭단위로 쪼개서 <em>data block</em>에 저장하게 되므로 그 블럭들이 <em>data block</em>의 어디에 존재하는지를 나타내는 테이블이다</li>
+<li>위의 예시에서는 327, 15, 216이라고 돼있으므로 파일의 첫번째 블럭은 data block의 327에 가면 있다는 거고 두번째 블럭은 15, 마지막 블럭은 216에 가면 있다는 소리이다</li>
+<li>따라서 파일 하나가 가질 수 있는 최대 크기는 <em>index table</em>에 달려있게 된다</li>
+</ul>
+</li>
+<li>그리고 한 파일이 열리면 그 파일에 대한 inode가 메인메모리로 올라가고, index table을 이용해 data block들도 하나씩 차례로 올라가게 된다</li>
+</ul>
+<h3 id="index-table">Index table<a aria-hidden="true" tabindex="-1" href="#index-table" class="internal"> §</a></h3>
+<ul>
+<li><em>index table</em>의 구조를 조금 더 자세히 살펴보면 다음과 같다</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image2.png" alt="스크린샷 2021-06-13 오후 4.42.11.png"/></p>
+<ul>
+<li>일단 index table의 일정부분은 바로 파일의 내용이 저장된 data block의 블럭으로 연결된다 - 여기를 <em>direct block</em>이라고 함</li>
+<li>위의 예시에서는 10까지는 따라가보면 바로 파일의 내용이 나오게 된다는 소리이다</li>
+<li>그리고 그 다음부터는 계층구조를 가지게 된다</li>
+<li>이게 뭔말이냐면, index table에 적혀있는 block# 으로 가보면 해당 블럭에 들어있는 내용은 파일의 내용이 아니라 또다른 index table이 존재하는 것이다</li>
+<li>즉, <em>data block</em>에 저장되어있는 블럭은 파일의 내용을 저장하는 블럭일 뿐만 아니라 index table일 수도 있다는 소리이다</li>
+<li>따라서 인덱스 테이블에서 다시 또다른 인텍스 테이블로 움직이고, 거기서 파일의 내용이 저장된 블럭으로 이동하는 <em>계층구조</em>를 가진다</li>
+<li>최상위 index table은 이렇게 일정구간은 바로 파일 내용 블럭으로 가지만 나머지는 차수가 점차 늘어나는 계층구조를 갖도록 되어 있다 - 이부분을 <em>indirect block</em>이라고 한다</li>
+<li>즉, 위의 예시에서는 11번째 칸에는 또다른 index table의 위치가 저장되어있고, 그 index table에는 파일 내용 블럭의 위치가 저장된 1중 계층구조였다면,</li>
+<li>12번째 칸에는 2중 계층구조, 13번째 칸에는 3중 계층구조로 되어있는 것이다</li>
+<li>이때 data block에 저장된 index table의 크기가 256이라면, 하나의 파일은 <em>10 + 256 + 256^2 + 256^3</em> 개의 블럭에 나뉘어져 저장되는 셈인거다</li>
+<li>보통 블럭 10개를 <em>direct block</em>으로 갖고 3개를 <em>indirect block</em> 로 1-Level, 2-Level, 3-Level 을 갖는 식으로 inode의 index table이 구성된댄다</li>
+</ul>
+<h3 id="directory">Directory<a aria-hidden="true" tabindex="-1" href="#directory" class="internal"> §</a></h3>
+<ul>
+<li>일단 유닉스 시스템에서는 directory도 하나의 file로 취급한다</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image3.png" alt="스크린샷 2021-06-13 오후 4.48.06.png"/></p>
+<ul>
+<li>일단 현재 디렉토리(current directory)가 inode 300번이라고 해보자</li>
+<li>그럼 거기의 index table을 통해 data block으로 간 결과가 그 옆의 column두개짜리 테이블이다</li>
+<li>디렉토리이기 때문에 파일의 내용이 저렇게 2 column table로 나타나게 되고</li>
+<li>이 2 column table에는 위의 예시에서는 오른쪽에는 해당 디렉토리에 들어있는 파일의 이름, 그리고 왼쪽에는 그 파일의 index# 가 저장된다</li>
+<li>그리고 만약 내가 A라는 디렉토리로 가고 싶으면 A 옆의 inode로 들어가게 된다</li>
+<li>A의 inode가 766이라고 했을 때 해당 inode list의 원소로 가면 동일하게 A의 정보와 A의 내용을 볼 수 있다(index table을 이용해서)</li>
+<li>A의 내용을 보면 A 또한 디렉토리이기 때문에 2 column table을 볼 수 있고, A에는 f1이 들어있기 때문에 f1과 f1의 inode# 가 2 column table에 저장되게 된다</li>
+<li>마찬가지로 f1의 inode# 인 111로 가면 거기에서 마찬가지로 index table을 이용해 f1의 내용을 볼 수 있는 것이다</li>
+<li>따라서 핵심은 유닉스에서는 디렉토리도 file로 관리되어 inode가 존재하고, 디렉토리의 inode에 저장된 index table을 이용해 내용 블럭으로 가면 거기에는 해당 디렉토리의 하위 디렉토리 / 파일에 대한 <em>( 이름, inode# )</em> 들이 저장되어 있는 것이다 - 따라서 해당 inode# 을 쫒아가면 하위 디렉토리 / 폴더로 접근하게 되는 구조이다</li>
+</ul>
+<h3 id="file-directory-structure">File Directory Structure<a aria-hidden="true" tabindex="-1" href="#file-directory-structure" class="internal"> §</a></h3>
+<ul>
+<li><em>Single Level Directory</em> : 한명의 유저와 하나의 current directory만을 지원해 모든 파일들이 다 같은 곳에 unique한 이름들을 가지며 존재하는 것</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image4.png" alt="스크린샷 2021-06-13 오후 5.12.17.png"/></p>
+<ul>
+<li><em>Two Level Directory</em> : 이제는 여러명의 유저와 하나의 current directory만을 지원해 파일들이 하나의 유저한테 속하여 존재하는 구조 - 한 유저 안에서는 unique한 이름을 가져야 되지만 유저가 다르다면 이름이 중복되어도 된다</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image5.png" alt="스크린샷 2021-06-13 오후 5.13.16.png"/></p>
+<ul>
+<li><em>Tree Structured Directory</em> : 일반적으로 우리가 생각하는 디렉토리의 구조 여러명의 유저가 있고 한 유저 안에서도 여러개의 디렉토리, 디렉토리 안의 디렉토리를 생성해 트리구조로 디렉토리들이 형성되는 것</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image6.png" alt="스크린샷 2021-06-13 오후 5.15.15.png"/></p>
+<ul>
+<li><em>Acyclic Graph Directory</em> : 얘도 동일하게 트리구조를 갖지만 트리구조에서는 할 수 없는 공유의 개념이 가능한 구조이다 - 파일 하나를 여러명의 유저가 공유할 수 있는 구조</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image7.png" alt="스크린샷 2021-06-13 오후 5.17.32.png"/></p>
+<h3 id="file-sharing-system">File Sharing System<a aria-hidden="true" tabindex="-1" href="#file-sharing-system" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image8.png" alt="스크린샷 2021-06-13 오후 5.22.33.png"/></p>
+<ul>
+<li><em>Hard Link</em> : 공유파일에 대해 하나의 inode와 data block을 두 디렉토리 / 유저가 공유하는 형태이다
+<ul>
+<li>inode와 data block을 하나씩 사용하기 때문에 resource를 적게 사용한다는 장점이 있다</li>
+</ul>
+</li>
+<li><em>Symbolic Link</em> : 얘는 두 디렉토리 / 유저가 각각 하나씩 공유파일에 대한 inode와 data block을 갖고있고 둘 중 하나의 data block에 나머지 하나의 inode의 경로가 적혀있는 형태이다
+<ul>
+<li>얘는 inode와 data block이 더 필요하므로 resource를 더 많이 먹는다는 단점은 있지만, network를 사용해서 파일을 공유한다거나 하는 등의 더 강력한 파일 공유를 지원할 수 있다 - 그냥 파일의 경로만 data block에 적어주면 되므로</li>
+</ul>
+</li>
+</ul>
+<h2 id="file-allocation">File Allocation<a aria-hidden="true" tabindex="-1" href="#file-allocation" class="internal"> §</a></h2>
+<ul>
+<li>inode에서 쓰는 index table방식 말고 다른 방식의 data block을 찾아가는 방식들</li>
+</ul>
+<h3 id="contiguous-file-allocation">Contiguous File Allocation<a aria-hidden="true" tabindex="-1" href="#contiguous-file-allocation" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image9.png" alt="스크린샷 2021-06-13 오후 6.00.47.png"/></p>
+<ul>
+<li><em>Contiguous File Allocation</em> : 얘는 data block을 연속적으로 디스크에 배치한 뒤, 시작블럭과 갯수를 <em>File Allocation Table</em>에 저장하는 방식이다</li>
+<li>이놈의 단점은 일단
+<ul>
+<li>마지막 data block 뒤에 다른 파일의 data block이 들어있으면 그자리를 사용하지 못하므로 파일의 크기가 커졌을 때 대처할 수 없다는 것과</li>
+<li>파일이 삭제되어 data block들을 삭제했을 때에 <em>External Fragmentation</em>이 일어난다는 것이다</li>
+<li>옛날 windows xp가 이런 방식으로 작동해 external fragmentation 들을 모으는 <em>조각 모음(compaction)</em> 이 있었던 것이다</li>
+</ul>
+</li>
+</ul>
+<h3 id="chained-allocation">Chained Allocation<a aria-hidden="true" tabindex="-1" href="#chained-allocation" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image10.png" alt="스크린샷 2021-06-13 오후 6.06.29.png"/></p>
+<ul>
+<li><em>Chained Allocation</em>은 Linked List마냥 다음 data block의 위치를 data block의 마지막에다 저장해서 찾아가도록 하는 구조이다</li>
+<li>단점은 당연히
+<ul>
+<li>pointer를 잃어버리면 파일이 날라가는 문제가 발생한다는 것과</li>
+<li>파일의 특정 지점을 읽으려면 그곳까지 datablock을 차례로 들러야 하기 때문에 오래걸린다는 것이다</li>
+<li>이것을 해결하기 위해 <em>FAT(File Allocation Table)</em> 라는 것을 이용한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image11.png" alt="스크린샷 2021-06-13 오후 6.11.02.png"/></p>
+<ul>
+<li>얘는 여기저기 흩어져있는 포인터를 하나의 테이블에 모은 것으로, ( Block# , next Block# )을 저장하는 테이블이다</li>
+<li>포인터를 잃어버리지 않는다는 것과 이것이 특정 위치로 갈때 블락들을 찾는게 아닌 이 테이블만 읽으면 되니까 훨씬 더 빠르다는 장점이 있지만</li>
+<li>디스크의 사이즈가 커지면 FAT도 너무 커진다는 단점도 존재한다</li>
+</ul>
+<h3 id="index-allocation-with-variable-length-portions">Index Allocation with Variable-Length Portions<a aria-hidden="true" tabindex="-1" href="#index-allocation-with-variable-length-portions" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image12.png" alt="스크린샷 2021-06-13 오후 6.22.19.png"/></p>
+<ul>
+<li><em>Index Allocation with Variable-Length Portion</em>은 index table개념과 contiguous allocation 개념을 합친거다</li>
+<li>즉, index table을 사용하되 연속된 블럭을 하나의 행에 저장하는 방법 - (start block, lengh)를 저장한다</li>
+</ul>
+<h2 id="free-block-management">Free Block Management<a aria-hidden="true" tabindex="-1" href="#free-block-management" class="internal"> §</a></h2>
+<ul>
+<li>비어있는 블럭을 관리하는 방법</li>
+</ul>
+<h3 id="bit-table">Bit table<a aria-hidden="true" tabindex="-1" href="#bit-table" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image13.png" alt="스크린샷 2021-06-13 오후 6.26.18.png"/></p>
+<ul>
+<li><em>Bit Table</em>은 모든 Block# 에 하나씩 비트를 할당한 테이블로 이 비트를 이용해 해당 블럭이 비었는지 아닌지를 표시하는 방법이다</li>
+</ul>
+<h3 id="chained-free-portions">Chained Free Portions<a aria-hidden="true" tabindex="-1" href="#chained-free-portions" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image14.png" alt="스크린샷 2021-06-13 오후 6.28.00.png"/></p>
+<ul>
+<li><em>Chained Free Portions</em>는 Free block들을 Linked List처럼 이어놓은 형태이다</li>
+</ul>
+<h3 id="indexing">Indexing<a aria-hidden="true" tabindex="-1" href="#indexing" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/13/image15.png" alt="스크린샷 2021-06-13 오후 6.29.20.png"/></p>
+<ul>
+<li><em>Indexing</em>은 table 하나를 만들어서 거기에 free block의 block# 를 다 저장하는 방법이다</li>
+<li>얘는 크기가 디스크의 블락의 갯수랑 같을 필요는 없다
+<ul>
+<li>free block의 갯수가 table의 갯수보다 클때는 일단 table을 다 채워놓고서 table에 들어있는 free block들이 다 사용되고 나면 다시 하드를 조사해 free block들을 채우면 되기 때문</li>
+<li>즉, 디스크의 모든 free block을 아는것이 중요한게 아니기 때문에 몇개를 채워놓고 다쓰면 다시 채우고 하는 방식으로 작동하게 된다</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#files" data-for="files">Files</a></li><li class="depth-1"><a href="#성질" data-for="성질">성질</a></li><li class="depth-1"><a href="#구성-요소" data-for="구성-요소">구성 요소</a></li><li class="depth-1"><a href="#operation" data-for="operation">Operation</a></li><li class="depth-1"><a href="#structure---database와-file-system-의-차이점" data-for="structure---database와-file-system-의-차이점">Structure - Database와 File System 의 차이점</a></li><li class="depth-0"><a href="#unix-file-system" data-for="unix-file-system">UNIX File System</a></li><li class="depth-1"><a href="#index-table" data-for="index-table">Index table</a></li><li class="depth-1"><a href="#directory" data-for="directory">Directory</a></li><li class="depth-1"><a href="#file-directory-structure" data-for="file-directory-structure">File Directory Structure</a></li><li class="depth-1"><a href="#file-sharing-system" data-for="file-sharing-system">File Sharing System</a></li><li class="depth-0"><a href="#file-allocation" data-for="file-allocation">File Allocation</a></li><li class="depth-1"><a href="#contiguous-file-allocation" data-for="contiguous-file-allocation">Contiguous File Allocation</a></li><li class="depth-1"><a href="#chained-allocation" data-for="chained-allocation">Chained Allocation</a></li><li class="depth-1"><a href="#index-allocation-with-variable-length-portions" data-for="index-allocation-with-variable-length-portions">Index Allocation with Variable-Length Portions</a></li><li class="depth-0"><a href="#free-block-management" data-for="free-block-management">Free Block Management</a></li><li class="depth-1"><a href="#bit-table" data-for="bit-table">Bit table</a></li><li class="depth-1"><a href="#chained-free-portions" data-for="chained-free-portions">Chained Free Portions</a></li><li class="depth-1"><a href="#indexing" data-for="indexing">Indexing</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록" class="internal">(충남대) 운영체제 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2023</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="../postscript.js" type="module"></script></html>

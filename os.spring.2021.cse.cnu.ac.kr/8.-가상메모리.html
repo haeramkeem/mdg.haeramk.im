@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html><head><title>8. 가상메모리</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="8. 가상메모리"/><meta property="og:description" content="가상메모리 § 봐봐라 실제로는 프로그램의 전부가 메모리에 올라가는 것이 아닌 프로그램의 페이지 일부만 메모리에 올라가게 된다 그리고 실제로는 페이지들이 하드에나 메모리에나 연속된 공간에 있지 않고 다 흩어져 있다 하지만 우리가 생각할때는 이 페이지들이 전부 메모리에 연속적으로 적재되어있다고 생각하고 프로그램을 짜게 된다 - 이렇게 사용자입장에서 생각하기 편하게 하려고 착각을 유도하는 기법을 가상 메모리(Virtual Memory) 라고 한다 이렇게 가상 메모리 기법을 적용한 paging을 일반 paging과 구분해 Virtual Memory Paging이라고도 부르더라 마찬가지로 가상 메모리 기법을 적용한 segmentation을 Virtual Memory Segmentation이라고 한다 이렇게 함으로써 우선 메모리 사이즈보다 더 용량이 큰 프로그램도 메모리에 적재시킬 수 있고, 프로그램 전부가 올라가지 않기 때문에 더 많은 프로그램을 적재할 수 있어 Multiprogramming에서도 이점이 있다(Multiprogramming level을 높일 수 있다) 그리고 이것은 프로그램 개발자의 관점에서도 프로그램 크기에 따라 다르게 프로그래밍 할 필요가 없다는 이점이기도 하다 이때 원하는 페이지가 메모리에 적재되어있지 않고 하드에 들어있을때 Page fault가 일어나게 된다 - 이렇게 page fault가 일어나면 block을 먹고 IO operation이 일어나며 가져오고난 뒤에는 인터럽트를 걸고 다시 ready상태로 바뀐 다음에 dispatch되면 실행되는 과정을 거치는 것 가상메모리가 잘 구동되기 위해서는 물리적으로 메모리 공간을 나눠 page가 들어올 frame들을 구성하는 하드웨어적인 역할 과 page replacement같은 기능을 수행할 소프트웨어적(운영체제적)인 역할 이 중요하다 Page 사이즈 정하기 § Page 사이즈가 작으면 만약에 page fault가 일어났을때 한번에 가져오는 양이 적기 때문에 page fault가 자주 일어나게 된다 또한 page table의 사이즈가 커져 PCB가 커지기 때문에 많은양의 메모리를 먹게 된다 하지만 반대로 page 사이즈가 너무 크면 작은 프로그램의 경우에는 page하나에 담기고 남은 부분이 internal fragmentation이 되기 때문에 메모리의 낭비가 생기게 된다 이렇듯 운영체제를 설계할때는 항상 대조되는 선택지의 장단점이 존재하기 때문에(Trade-off라고 한다) 이것을 잘 조화시켜서 최선의 결과를 내는 Optimal Design이 중요하다 요즘의 경우에는 메인메모리의 값이 그렇게 비싸지 않기 때문에 fragmentation이 그렇게 큰 문제가 안돼 page의 사이즈를 크게 하는것이 추세란다 첫번째 그래프에서 왜 사이즈가 작을때 page fault가 작아지는지는 모르겠음 - 어중간할때는 왜 큰지도 모르겠음 어쨋든 사이즈가 커지면 한번에 많이 갖고오므로 page fault가 잘 안일어난다는게 중헌것이고 두번째 그래프는 프로세스 하나에 대해 frame이 몇개가 할당되는지에 대한 그래프다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../static/icon.png"/><meta name="description" content="가상메모리 § 봐봐라 실제로는 프로그램의 전부가 메모리에 올라가는 것이 아닌 프로그램의 페이지 일부만 메모리에 올라가게 된다 그리고 실제로는 페이지들이 하드에나 메모리에나 연속된 공간에 있지 않고 다 흩어져 있다 하지만 우리가 생각할때는 이 페이지들이 전부 메모리에 연속적으로 적재되어있다고 생각하고 프로그램을 짜게 된다 - 이렇게 사용자입장에서 생각하기 편하게 하려고 착각을 유도하는 기법을 가상 메모리(Virtual Memory) 라고 한다 이렇게 가상 메모리 기법을 적용한 paging을 일반 paging과 구분해 Virtual Memory Paging이라고도 부르더라 마찬가지로 가상 메모리 기법을 적용한 segmentation을 Virtual Memory Segmentation이라고 한다 이렇게 함으로써 우선 메모리 사이즈보다 더 용량이 큰 프로그램도 메모리에 적재시킬 수 있고, 프로그램 전부가 올라가지 않기 때문에 더 많은 프로그램을 적재할 수 있어 Multiprogramming에서도 이점이 있다(Multiprogramming level을 높일 수 있다) 그리고 이것은 프로그램 개발자의 관점에서도 프로그램 크기에 따라 다르게 프로그래밍 할 필요가 없다는 이점이기도 하다 이때 원하는 페이지가 메모리에 적재되어있지 않고 하드에 들어있을때 Page fault가 일어나게 된다 - 이렇게 page fault가 일어나면 block을 먹고 IO operation이 일어나며 가져오고난 뒤에는 인터럽트를 걸고 다시 ready상태로 바뀐 다음에 dispatch되면 실행되는 과정을 거치는 것 가상메모리가 잘 구동되기 위해서는 물리적으로 메모리 공간을 나눠 page가 들어올 frame들을 구성하는 하드웨어적인 역할 과 page replacement같은 기능을 수행할 소프트웨어적(운영체제적)인 역할 이 중요하다 Page 사이즈 정하기 § Page 사이즈가 작으면 만약에 page fault가 일어났을때 한번에 가져오는 양이 적기 때문에 page fault가 자주 일어나게 된다 또한 page table의 사이즈가 커져 PCB가 커지기 때문에 많은양의 메모리를 먹게 된다 하지만 반대로 page 사이즈가 너무 크면 작은 프로그램의 경우에는 page하나에 담기고 남은 부분이 internal fragmentation이 되기 때문에 메모리의 낭비가 생기게 된다 이렇듯 운영체제를 설계할때는 항상 대조되는 선택지의 장단점이 존재하기 때문에(Trade-off라고 한다) 이것을 잘 조화시켜서 최선의 결과를 내는 Optimal Design이 중요하다 요즘의 경우에는 메인메모리의 값이 그렇게 비싸지 않기 때문에 fragmentation이 그렇게 큰 문제가 안돼 page의 사이즈를 크게 하는것이 추세란다 첫번째 그래프에서 왜 사이즈가 작을때 page fault가 작아지는지는 모르겠음 - 어중간할때는 왜 큰지도 모르겠음 어쨋든 사이즈가 커지면 한번에 많이 갖고오므로 page fault가 잘 안일어난다는게 중헌것이고 두번째 그래프는 프로세스 하나에 대해 frame이 몇개가 할당되는지에 대한 그래프다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="os.spring.2021.cse.cnu.ac.kr/8.-가상메모리"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div><div class="explorer desktop-only"><button type="button" id="explorer" data-behavior="collapse" data-collapsed="collapsed" data-savestate="true" data-tree="[{&quot;path&quot;:&quot;os.fall.2022.cse.ewha.ac.kr&quot;,&quot;collapsed&quot;:true},{&quot;path&quot;:&quot;os.spring.2021.cse.cnu.ac.kr&quot;,&quot;collapsed&quot;:true},{&quot;path&quot;:&quot;pl.spring.2021.cse.cnu.ac.kr&quot;,&quot;collapsed&quot;:true}]"><h1>Explorer</h1><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-content"><ul class="overflow" id="explorer-ul"><li><div><div class="folder-outer open"><ul style="padding-left:0;" class="content" data-folderul><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/os.fall.2022.cse.ewha.ac.kr"><button class="folder-button"><p class="folder-title">os.fall.2022.cse.ewha.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/os.fall.2022.cse.ewha.ac.kr"><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/(이화여대)-운영체제-강의록" data-for="os.fall.2022.cse.ewha.ac.kr/(이화여대)-운영체제-강의록">(이화여대) 운영체제 강의록</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/1.-운영체제란" data-for="os.fall.2022.cse.ewha.ac.kr/1.-운영체제란">1. 운영체제란</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/2.-System-Structure-&amp;-Process-Execution" data-for="os.fall.2022.cse.ewha.ac.kr/2.-System-Structure-&amp;-Process-Execution">2. System Structure &amp; Process Execution</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/3.-Process" data-for="os.fall.2022.cse.ewha.ac.kr/3.-Process">3. Process</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/4.-Process-Management" data-for="os.fall.2022.cse.ewha.ac.kr/4.-Process-Management">4. Process Management</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/5.-CPU-Scheduling" data-for="os.fall.2022.cse.ewha.ac.kr/5.-CPU-Scheduling">5. CPU Scheduling</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/6.-Process-Synchronize" data-for="os.fall.2022.cse.ewha.ac.kr/6.-Process-Synchronize">6. Process Synchronize</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/7.-Deadlocks" data-for="os.fall.2022.cse.ewha.ac.kr/7.-Deadlocks">7. Deadlocks</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/8-1.-Memory-Address" data-for="os.fall.2022.cse.ewha.ac.kr/8-1.-Memory-Address">8-1. Memory Address</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/8-2.-Physical-Memory-Allocation" data-for="os.fall.2022.cse.ewha.ac.kr/8-2.-Physical-Memory-Allocation">8-2. Physical Memory Allocation</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/9.-Virtual-Memory" data-for="os.fall.2022.cse.ewha.ac.kr/9.-Virtual-Memory">9. Virtual Memory</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/10.-File-Systems" data-for="os.fall.2022.cse.ewha.ac.kr/10.-File-Systems">10. File Systems</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/11.-Disk-Scheduling" data-for="os.fall.2022.cse.ewha.ac.kr/11.-Disk-Scheduling">11. Disk Scheduling</a></li></li></ul></div></div></li><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/os.spring.2021.cse.cnu.ac.kr"><button class="folder-button"><p class="folder-title">os.spring.2021.cse.cnu.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/os.spring.2021.cse.cnu.ac.kr"><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록" data-for="os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록">(충남대) 운영체제 강의록</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/1.-인터럽트,-타임쉐어링" data-for="os.spring.2021.cse.cnu.ac.kr/1.-인터럽트,-타임쉐어링">1. 인터럽트, 타임쉐어링</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/2.-프로세스" data-for="os.spring.2021.cse.cnu.ac.kr/2.-프로세스">2. 프로세스</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/3.-쓰레드" data-for="os.spring.2021.cse.cnu.ac.kr/3.-쓰레드">3. 쓰레드</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/4.-Concurrency" data-for="os.spring.2021.cse.cnu.ac.kr/4.-Concurrency">4. Concurrency</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/5.-Semaphore" data-for="os.spring.2021.cse.cnu.ac.kr/5.-Semaphore">5. Semaphore</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/6.-Deadlock-&amp;-Starvation" data-for="os.spring.2021.cse.cnu.ac.kr/6.-Deadlock-&amp;-Starvation">6. Deadlock &amp; Starvation</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/7.-메모리-관리" data-for="os.spring.2021.cse.cnu.ac.kr/7.-메모리-관리">7. 메모리 관리</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/8.-가상메모리" data-for="os.spring.2021.cse.cnu.ac.kr/8.-가상메모리">8. 가상메모리</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/9.-Segmentation" data-for="os.spring.2021.cse.cnu.ac.kr/9.-Segmentation">9. Segmentation</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/10.-CPU-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/10.-CPU-Scheduling">10. CPU Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/11.-Multicore-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/11.-Multicore-Scheduling">11. Multicore Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/12.-IO-&amp;-Disk-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/12.-IO-&amp;-Disk-Scheduling">12. IO &amp; Disk Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/13.-File-Management" data-for="os.spring.2021.cse.cnu.ac.kr/13.-File-Management">13. File Management</a></li></li></ul></div></div></li><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/pl.spring.2021.cse.cnu.ac.kr"><button class="folder-button"><p class="folder-title">pl.spring.2021.cse.cnu.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/pl.spring.2021.cse.cnu.ac.kr"><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/(충남대)-프로그래밍-언어-개론-강의록" data-for="pl.spring.2021.cse.cnu.ac.kr/(충남대)-프로그래밍-언어-개론-강의록">(충남대) 프로그래밍 언어 개론 강의록</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/1.-OCaml-문법-(1)" data-for="pl.spring.2021.cse.cnu.ac.kr/1.-OCaml-문법-(1)">1. OCaml 문법 (1)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/2.-OCaml-문법-(2)" data-for="pl.spring.2021.cse.cnu.ac.kr/2.-OCaml-문법-(2)">2. OCaml 문법 (2)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/3.-재귀-호출-최적화-기법" data-for="pl.spring.2021.cse.cnu.ac.kr/3.-재귀-호출-최적화-기법">3. 재귀 호출 최적화 기법</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/4.-Syntax와-Semantics" data-for="pl.spring.2021.cse.cnu.ac.kr/4.-Syntax와-Semantics">4. Syntax와 Semantics</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/5.-Lexical-Analyzer-(Lexer,-어휘분석기)" data-for="pl.spring.2021.cse.cnu.ac.kr/5.-Lexical-Analyzer-(Lexer,-어휘분석기)">5. Lexical Analyzer (Lexer, 어휘분석기)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/6.-Syntax-Analyzer-(Parser,-구문분석기)" data-for="pl.spring.2021.cse.cnu.ac.kr/6.-Syntax-Analyzer-(Parser,-구문분석기)">6. Syntax Analyzer (Parser, 구문분석기)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/7.-언어의-정의" data-for="pl.spring.2021.cse.cnu.ac.kr/7.-언어의-정의">7. 언어의 정의</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/8.-문법적-설탕과-식별자" data-for="pl.spring.2021.cse.cnu.ac.kr/8.-문법적-설탕과-식별자">8. 문법적 설탕과 식별자</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/9.-함수와-함수호출" data-for="pl.spring.2021.cse.cnu.ac.kr/9.-함수와-함수호출">9. 함수와 함수호출</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/10.-1등-시민-함수" data-for="pl.spring.2021.cse.cnu.ac.kr/10.-1등-시민-함수">10. 1등 시민 함수</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/11.-조건분기문" data-for="pl.spring.2021.cse.cnu.ac.kr/11.-조건분기문">11. 조건분기문</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/12.-재귀함수" data-for="pl.spring.2021.cse.cnu.ac.kr/12.-재귀함수">12. 재귀함수</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/13.-명령형-언어-(1)" data-for="pl.spring.2021.cse.cnu.ac.kr/13.-명령형-언어-(1)">13. 명령형 언어 (1)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/14.-명령형언어-(2)" data-for="pl.spring.2021.cse.cnu.ac.kr/14.-명령형언어-(2)">14. 명령형언어 (2)</a></li></li></ul></div></div></li></ul></div></div></li><li id="explorer-end"></li></ul></div></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">8. 가상메모리</h1><p class="content-meta ">Nov 02, 2023, 21 min read</p></div></div><article class="popover-hint"><h2 id="가상메모리">가상메모리<a aria-hidden="true" tabindex="-1" href="#가상메모리" class="internal"> §</a></h2>
+<ul>
+<li>봐봐라</li>
+<li>실제로는 프로그램의 전부가 메모리에 올라가는 것이 아닌 프로그램의 페이지 일부만 메모리에 올라가게 된다</li>
+<li>그리고 실제로는 페이지들이 하드에나 메모리에나 연속된 공간에 있지 않고 다 흩어져 있다</li>
+<li>하지만 우리가 생각할때는 이 페이지들이 전부 메모리에 연속적으로 적재되어있다고 생각하고 프로그램을 짜게 된다 - 이렇게 사용자입장에서 생각하기 편하게 하려고 착각을 유도하는 기법을 <strong>가상 메모리(Virtual Memory)</strong> 라고 한다
+<ul>
+<li>이렇게 가상 메모리 기법을 적용한 paging을 일반 paging과 구분해 <strong>Virtual Memory Paging</strong>이라고도 부르더라</li>
+<li>마찬가지로 가상 메모리 기법을 적용한 segmentation을 <strong>Virtual Memory Segmentation</strong>이라고 한다</li>
+</ul>
+</li>
+<li>이렇게 함으로써 우선 메모리 사이즈보다 더 용량이 큰 프로그램도 메모리에 적재시킬 수 있고, 프로그램 전부가 올라가지 않기 때문에 더 많은 프로그램을 적재할 수 있어 Multiprogramming에서도 이점이 있다(<strong>Multiprogramming level</strong>을 높일 수 있다)
+<ul>
+<li>그리고 이것은 프로그램 개발자의 관점에서도 프로그램 크기에 따라 다르게 프로그래밍 할 필요가 없다는 이점이기도 하다</li>
+</ul>
+</li>
+<li>이때 원하는 페이지가 메모리에 적재되어있지 않고 하드에 들어있을때 <strong>Page fault</strong>가 일어나게 된다 - 이렇게 page fault가 일어나면 block을 먹고 IO operation이 일어나며 가져오고난 뒤에는 인터럽트를 걸고 다시 ready상태로 바뀐 다음에 dispatch되면 실행되는 과정을 거치는 것</li>
+<li>가상메모리가 잘 구동되기 위해서는 물리적으로 메모리 공간을 나눠 page가 들어올 frame들을 구성하는 하드웨어적인 역할 과 page replacement같은 기능을 수행할 소프트웨어적(운영체제적)인 역할 이 중요하다</li>
+</ul>
+<h2 id="page-사이즈-정하기">Page 사이즈 정하기<a aria-hidden="true" tabindex="-1" href="#page-사이즈-정하기" class="internal"> §</a></h2>
+<ul>
+<li>Page 사이즈가 작으면 만약에 page fault가 일어났을때 한번에 가져오는 양이 적기 때문에 page fault가 자주 일어나게 된다</li>
+<li>또한 page table의 사이즈가 커져 PCB가 커지기 때문에 많은양의 메모리를 먹게 된다</li>
+<li>하지만 반대로 page 사이즈가 너무 크면 작은 프로그램의 경우에는 page하나에 담기고 남은 부분이 internal fragmentation이 되기 때문에 메모리의 낭비가 생기게 된다</li>
+<li>이렇듯 운영체제를 설계할때는 항상 대조되는 선택지의 장단점이 존재하기 때문에(<strong>Trade-off</strong>라고 한다) 이것을 잘 조화시켜서 최선의 결과를 내는 <strong>Optimal Design</strong>이 중요하다</li>
+<li>요즘의 경우에는 메인메모리의 값이 그렇게 비싸지 않기 때문에 fragmentation이 그렇게 큰 문제가 안돼 page의 사이즈를 크게 하는것이 추세란다</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image1.png"/></p>
+<ul>
+<li>첫번째 그래프에서 왜 사이즈가 작을때 page fault가 작아지는지는 모르겠음 - 어중간할때는 왜 큰지도 모르겠음</li>
+<li>어쨋든 사이즈가 커지면 한번에 많이 갖고오므로 page fault가 잘 안일어난다는게 중헌것이고</li>
+<li>두번째 그래프는 프로세스 하나에 대해 frame이 몇개가 할당되는지에 대한 그래프다. 높을수록 프로세스 하나에 많은 frame을 할당받으므로 메모리에 올라갈 수 있는 프로세스의 갯수는 적어지고 대신 보다시피 page fault rate는 적어진다</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image2.png"/></p>
+<ul>
+<li>근데 할당되는 프레임의 갯수가 많아지면 rate가 줄어야 정상인데 replacement algorithm 이 잘못되면 저렇게 rate가 치솟는 현상이 생기고 이것을 <strong>Belady’s anomaly</strong>라고 한다</li>
+</ul>
+<h2 id="page-replacement">Page Replacement<a aria-hidden="true" tabindex="-1" href="#page-replacement" class="internal"> §</a></h2>
+<ul>
+<li>이전에 프로세스가 메모리에 들어와야 되는데 메모리에 자리가 없으면 한놈이 자리를 비켜주고 하드로 내려가는거를 swapping이라고 했는데</li>
+<li>Paging기법에서도 동일하게 메모리에 자리가 없으면 어느 한 놈이 자리를 비켜주는 동작을 하게 되고 이것을 <strong>Page Replacement</strong>라고 한다</li>
+<li>근데 이때 아무 page나 내려보내게 되면 프로그램이 비효율적으로 동작할 수도 있다
+<ul>
+<li>즉, page 교체 알고리즘에 따라서 동작의 효율성도 달라질 수 있다는 소리임</li>
+<li>뭐 예를 들면 우선순위가 비교적 높은 놈의 page를 내려보내면 얘를 조만간 다시 갖고 올라와야되기 때문에 page fault가 자주 일어나 IO request도 자주 일어나게 되는 것</li>
+</ul>
+</li>
+<li>그리고 page는 어차피 원본의 page가 하드디스크에 저장되어있기 때문에 메모리에 적재되어있던 page와 하드디스크에 있던 원본의 page가 차이가 없으면 하드로 내려보낼 때 굳이 새로 write하지 않고 하드에서 올라오는 page를 그 자리에 overwite하게 된다</li>
+<li>하지만 메모리에 올라와있던 page에 변경이 생기게 되면 그제서야 하드에 write하는 작업을 하게 된다</li>
+<li>그리고 이제 안그래도 IO가 일어나서 기다렸는데 자리가 없어서 replacement까지 일어나면 OS입장에서는 굉장히 기다리는 시간이 아까우므로 OS는 항상 일정한 수만큼 <strong>blank(비어있는)</strong> frame을 만들어놓는다 - 그래서 IO가 끝나면 바로바로 올릴 수 있게</li>
+</ul>
+<h2 id="위에꺼를-반영한-paging--segmentation">위에꺼를 반영한 paging / segmentation<a aria-hidden="true" tabindex="-1" href="#위에꺼를-반영한-paging--segmentation" class="internal"> §</a></h2>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image3.png"/></p>
+<ul>
+<li>여기서 페이지 테이블의 한 행의 구조를 나타낸 것이 아래 그림인데 보면 frame number만 있는게 아니고 앞에 <strong>Control Bit</strong>가 붙는다</li>
+<li>얘는 데통에서 헤더마냥 frame / page 의 여러가지 정보를 담는 부분이다</li>
+<li>일단 <strong>P</strong>는 이 page가 현재 메모리에 적재되어있냐를 나타내는 비트(Present)이다.
+<ul>
+<li>즉, 이게 enable되어 있으면 frame number부분에 유효한 number가 들어가 있을 것이고</li>
+<li>disable되어 있으면 메모리에 적재되어있지 않다는 뜻으로 유효하지 않은 number가 들어있게 된다</li>
+</ul>
+</li>
+<li>그리고 <strong>M</strong>은 이 page가 변경되었냐를 나타내는 비트(Modified)이다
+<ul>
+<li>위에서 설명한것처럼 page replacement를 할 때 변경되지 않았으면 굳이 하드에 write를 하지 않아도 되기 때문</li>
+</ul>
+</li>
+<li>segmentation의 경우에도 앞에서 배운거랑 마찬가지되 <strong>P</strong>, <strong>M</strong>이 붙게 된다</li>
+</ul>
+<h3 id="paging의-address-translation-방법-복습">Paging의 address translation 방법 복습<a aria-hidden="true" tabindex="-1" href="#paging의-address-translation-방법-복습" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image4.png"/></p>
+<ul>
+<li>가상 주소에서 offset은 그대로 가고 page# 을 이용해 frame# 를 찾는거</li>
+<li>레지스터에 저장된 page table의 시작점, 즉. <strong>page table ptr</strong>을 이용해 page table로 이동하고, page# 를 인덱스로 하여 frame# 을 얻어내 physical address를 얻어내는 것</li>
+</ul>
+<h2 id="thrashing">Thrashing<a aria-hidden="true" tabindex="-1" href="#thrashing" class="internal"> §</a></h2>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image5.png"/></p>
+<ul>
+<li>봐봐라</li>
+<li>메모리에 많은 프로세스가 올라가게 되면, 즉, multiprogramming level이 올라가게 되면 당연히 cpu utilization도 늘어난다</li>
+<li>근데 multiprogramming level이 늘어난다고 무조건적으로 좋은것은 또 아니다 이말이야
+<ul>
+<li>왜냐면 multiprogramming level이 늘어나면 하나의 프로세스에게 할당되는 공간이 줄어들고 그러면 page fault가 더 자주 일어나게 되기 때문이다</li>
+<li>그래서 저 위의 그래프에서 보이듯이 일정수준까지는 multiprogramming level이 늘어갈수록 cpu utilization도 늘어나게 된다.</li>
+<li>하지만 그 수준을 넘어서게 되면 위에서 설명한것처럼 page fault가 자주 일어나 cpu utilization이 급격하게 하락하게 된다</li>
+<li>이 지점을 <strong>Thrashing</strong>이라고 하는 것. 즉, multiprogramming level이 과도하게 많아지면 page fault가 너무 자주 일어나 cpu utilization이 급락하는 것을 의미한다</li>
+<li>따라서 운영체제 입장에서는 Thrashing은 반드시 막아야 되는 현상이다</li>
+</ul>
+</li>
+<li>따라서 multiprogramming level이 너무 낮으면 프로세스 하나가 블락을 먹었을때 대체제의 선택폭이 좁아져 cpu utilization이 안좋고 또 너무 높으면 thrashing이 일어나기 때문에 안좋아져서 적절한 level을 잡는 것이 중요 하다</li>
+</ul>
+<h2 id="locality---지역성">Locality - 지역성<a aria-hidden="true" tabindex="-1" href="#locality---지역성" class="internal"> §</a></h2>
+<ul>
+<li>만약에 프로그램에 while문이 하나 있다고 하고 이부분이 세개의 page로 나뉘어졌다고 해보자</li>
+<li>근데 만약 메모리에 공간이 없어서 두개의 frame밖에 할당하지 못한다면 루프가 돌때마다 page fault가 일어나므로 아주 효율성이 떨어질 것이다</li>
+<li>따라서 다음과 같은 경우에는 해당 프로세스에게 3개 이상의 frame을 할당하는 것이 효율성을 높이게 된다</li>
+<li>이렇듯 프로세스를 이루는 page들 중에서도 집중적으로 실행되는 page들을 중간에 끊지 않고 전부 메모리에 올려 page fault를 줄이는 것을 <strong>지역성(Locality)</strong> 이라고 한다</li>
+</ul>
+<h2 id="combined-segmentation--paging">Combined segmentation &amp; paging<a aria-hidden="true" tabindex="-1" href="#combined-segmentation--paging" class="internal"> §</a></h2>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image6.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image6.png"/></p>
+<ul>
+<li>이부분은 별로 설명 안함 - 가상메모리에 page# 와 seg# 둘 다 있어서 page table과 segment table을 둘 다 이용한댄다</li>
+</ul>
+<h2 id="multi-level-hierarchical-page-table">Multi-Level Hierarchical Page Table<a aria-hidden="true" tabindex="-1" href="#multi-level-hierarchical-page-table" class="internal"> §</a></h2>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image7.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image7.png"/></p>
+<ul>
+<li>page table을 다계층 구조로 만들어 page table의 사이즈를 줄이는 기법이다
+<ul>
+<li>봐봐라</li>
+<li>만약에 page# 에 20비트가 할당되어있고 offset이 12비트인 32비트 체제라면 page table의 길이는 2의 20승이다</li>
+<li>하지만 프로그램의 크기가 작아서 page가 몇개 되지 않는다면 2의 20승 중에 일부만 사용하고 나머지는 버리게 되는 셈이다</li>
+<li>근데 이것을 두개의 계층으로 나누면 첫 10비트는 첫번째 계층 table에서의 index를 나타내고 나머지 10비트는 두번째 계층 table에서의 index를 나타내는데</li>
+<li>만약에 프로그램을 구성하는 page의 갯수가 2의 10제곱보다 작으면 하나의 2^10 사이즈 테이블로 모든 page# 에 대응되는 frame# 을 저장할 수 있자네</li>
+<li>이때 이 2^10 사이즈 테이블이 2계층 테이블인거고 이 2계층 테이블들로 접근할 수 있도록 얘네들의 주소를 담고 있는 테이블이 1계층 테이블인 것이다</li>
+<li>따라서 page의 사이즈가 2^10보다 작으면 1계층 테이블에는 하나의 원소만 존재하고 2계층 table하나만 있어도 모든 page에 대응되는 frame을 저장할 수 있으므로 메모리를 2^11 만 차지하게 되는 것 - 계층구조를 도입하기 전인 2^20에 비해 엄청난 양의 공간을 절약할 수 있다</li>
+</ul>
+</li>
+<li>이런식으로 가상주소의 page# 구역을 여러개로 쪼개 page table하나로 모든 page에 대응하는 것이 아닌 page table을 계층적으로 구조화해 동적으로 page table이 생성되며 메모리를 절약하는 방식 이 <strong>Multi-Level Hierarchical Page Table</strong>인 것이다</li>
+<li>다만 이 방식에 장점만 있는 것은 아니다 - 다계층이 될 수록 address translation은 복잡해지기 때문에 수행시간이 오래 걸리는 것 = 공간과 시간이 반비례하는 현상이 여기서도 나타나게 되는 것이다</li>
+</ul>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image8.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image8.png"/></p>
+<ul>
+<li>따라서 보면
+<ul>
+<li>첫 10비트와 page table ptr를 통해 알아낸 1계층 테이블로 이 가상주소의 frame# 을 담고 있는 2계층 테이블의 주소를 알아낸다</li>
+<li>그리고 2계층 테이블로 가서 두번째 10비트를 이용해 frame# 을 알아내게 되는 것</li>
+</ul>
+</li>
+</ul>
+<h2 id="inverted-page-table">Inverted Page Table<a aria-hidden="true" tabindex="-1" href="#inverted-page-table" class="internal"> §</a></h2>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image9.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image9.png"/></p>
+<ul>
+<li>봐봐라</li>
+<li>일단 <strong>Inverted Page Table</strong>의 개념은 프로세스들마다 존재하는 page table을 하나로 합쳐 OS에 하나만 존재하는 테이블로 만드는 것이다</li>
+<li>이렇게 바꾸는 과정은 약간 데베식의 설명을 곁들이면 하나의 frame# 을 특정하기 위해서는 page# 와 pid를 기본키로 하면 특정할 수 있다
+<ul>
+<li>근데 프로세스마다 존재하는 page table은 이미 pid가 PCB에 저장되어있기 때문에 page# 만으로 하나의 frame# 을 특정할 수 있었던 것 인데</li>
+<li>이것을 이제 하나의 테이블로 합치면 pid는 알 수가 없기 때문에 pid 어트리뷰트를 하나 추가하고 거기에 대응되는 frame# 을 저장하는 것 - 저기 그림에서 <strong>Chain</strong>이라고 표시된 부분이 frame# 이 저장되는 부분이다</li>
+<li>근데 하나의 메모리 공간을 여러 프로세스가 공유하는 경우도 생긴다 - 뭐 공유 메모리라던가, 하나의 프로그램을 여러번 실행시켜 read-only인 코드는 여러개의 프로세스가 공유하는 등</li>
+<li>이것을 지원해주기 위해 chain값으로 다른 프로세스의 페이지가 담긴 frame# 을 넣어서 참조하게 할 수 있다</li>
+</ul>
+</li>
+<li>따라서 page# 을 가져와서 테이블에서 자신과 page# 와 pid가 같은 인스턴스를 찾아 chain 어트리뷰트의 값인 frame# 을 받아 address translation 을 하는 것</li>
+<li>이때에는 찾는 과정을 빠르게 하기 위해 hash function을 이용한다 - 파이썬 딕셔너리할때 그 해시임</li>
+</ul>
+<h2 id="lookaside-buffer">Lookaside Buffer<a aria-hidden="true" tabindex="-1" href="#lookaside-buffer" class="internal"> §</a></h2>
+<ul>
+<li>얘는 저장장치의 한 종류인데</li>
+<li>보통 하나의 값을 배열에서 찾거나 할때는 처음부터 serial하게 쭉쭉 찾아나가자네?(O(n))</li>
+<li>근데 이걸 사용하면 배열의 모든 원소를 한번에 비교해 원하는 값을 찾는 것 같은 기능을 제공해준다(O(1))</li>
+<li>저장장치의 한 종류이므로 하드웨어이고 이런 강력한 기능을 제공하는 대신 좀 비싸다</li>
+<li>address translation을 담당하는 lookaside buffer를 **Traslation Lookaside Buffer(TLB)**라 하고 얘는 레지스터의 한 종류이다</li>
+</ul>
+<h3 id="얘를-이용해-address-translation을-하는-방법">얘를 이용해 address translation을 하는 방법<a aria-hidden="true" tabindex="-1" href="#얘를-이용해-address-translation을-하는-방법" class="internal"> §</a></h3>
+<p><img src="../os.spring.2021.cse.cnu.ac.kr/images/8/image10.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image10.png"/></p>
+<ol>
+<li>Page table의 일부분을 저 TLB로 올린다</li>
+<li>이제 가상주소 하나를 translation할 때 page# 을 저기 TLB에 먼저 넣어본다</li>
+<li>만약에 hit(찾음) 이면 바로 frame# 가 나오게 되고 miss(못찾음) 이면 이제 그제서야 page table로 가서 serial하게 찾게 된다 - page table의 일부분만 TLB에 올라갈 수 있으므로 miss될 수 있다</li>
+<li>찾으면 Locality를 활용하기 위해 TLB에 이 page를 넣어놓는다 - 또 사용되면 빠르게 hit시키기 위해 → 그리고 translation을 해 frame# 을 얻어내는 것</li>
+<li>하지만 page table에서 봤더니 얘가 메모리에 없을 수도 있다 - 그러면 page fault handling routine이 실행되어 이놈을 갖고오고 처음부터 다시 하게 되는 것</li>
+</ol>
+<ul>
+<li>이 방법은 운이 없어서 miss가 뜨면 TLB에 접근하는 시간만큼 손해이긴 하다</li>
+<li>하지만 위에서 말한 Locality를 이용하면 hit의 비율을 90퍼센트 이상으로 끌어올릴 수 있고 이러면 serial하게 비교하는 경우가 거의 없기 때문에 아주 빠르게 address translation이 가능하다</li>
+</ul>
+<h2 id="cache">Cache<a aria-hidden="true" tabindex="-1" href="#cache" class="internal"> §</a></h2>
+<ul>
+<li>캐시도 TLB와 비슷하게 one-time search를 지원해주는 저장장치이다</li>
+<li>physical address를 구하고 나서 원래는 이 주소에 해당하는 메모리 공간으로 가 instruction을 실행하는데</li>
+<li>메모리에 가기 전에 먼저 cache에 가서 이 주소에 대한 instruction이 이미 존재하는지를 찾는다</li>
+<li>그래서 만약에 hit라면 바로 cpu로 올려 실행하게 되는 것 이고</li>
+<li>아니면 그제서야 메인메모리의 해당 주소로 가게 되는 것</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#가상메모리" data-for="가상메모리">가상메모리</a></li><li class="depth-0"><a href="#page-사이즈-정하기" data-for="page-사이즈-정하기">Page 사이즈 정하기</a></li><li class="depth-0"><a href="#page-replacement" data-for="page-replacement">Page Replacement</a></li><li class="depth-0"><a href="#위에꺼를-반영한-paging--segmentation" data-for="위에꺼를-반영한-paging--segmentation">위에꺼를 반영한 paging / segmentation</a></li><li class="depth-1"><a href="#paging의-address-translation-방법-복습" data-for="paging의-address-translation-방법-복습">Paging의 address translation 방법 복습</a></li><li class="depth-0"><a href="#thrashing" data-for="thrashing">Thrashing</a></li><li class="depth-0"><a href="#locality---지역성" data-for="locality---지역성">Locality - 지역성</a></li><li class="depth-0"><a href="#combined-segmentation--paging" data-for="combined-segmentation--paging">Combined segmentation &amp; paging</a></li><li class="depth-0"><a href="#multi-level-hierarchical-page-table" data-for="multi-level-hierarchical-page-table">Multi-Level Hierarchical Page Table</a></li><li class="depth-0"><a href="#inverted-page-table" data-for="inverted-page-table">Inverted Page Table</a></li><li class="depth-0"><a href="#lookaside-buffer" data-for="lookaside-buffer">Lookaside Buffer</a></li><li class="depth-1"><a href="#얘를-이용해-address-translation을-하는-방법" data-for="얘를-이용해-address-translation을-하는-방법">얘를 이용해 address translation을 하는 방법</a></li><li class="depth-0"><a href="#cache" data-for="cache">Cache</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록" class="internal">(충남대) 운영체제 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2023</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="../postscript.js" type="module"></script></html>

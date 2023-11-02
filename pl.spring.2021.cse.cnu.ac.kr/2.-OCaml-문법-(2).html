@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html><head><title>2. OCaml 문법 (2)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="2. OCaml 문법 (2)"/><meta property="og:description" content="충남대학교 컴퓨터공학과 이성호 교수님의 &amp;quot;프로그래밍 언어 개론&amp;quot; 강의를 필기한 내용입니다. 강의를 듣고 필기한 내용이기에, 다소 잘못된 부분과 부적절한 언행 이 포함되어 있을 수 있습니다. 모듈 § 대문자로 시작함 - 소문자로 해주면 컴파일이 되지 않는다(관례가 아님) import해줄 필요 없음 - dune이 자동으로 모듈화한다 dune은 굳이 안건들여도 된다 - (include_subdirs unqualified) 해주면 하위디렉토리까지 전부 모듈화시켜줌 Nested module § 모듈 내에 모듈을 또 정의해서 사용 가능함 module module_name_ = struct ."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 이성호 교수님의 &amp;quot;프로그래밍 언어 개론&amp;quot; 강의를 필기한 내용입니다. 강의를 듣고 필기한 내용이기에, 다소 잘못된 부분과 부적절한 언행 이 포함되어 있을 수 있습니다. 모듈 § 대문자로 시작함 - 소문자로 해주면 컴파일이 되지 않는다(관례가 아님) import해줄 필요 없음 - dune이 자동으로 모듈화한다 dune은 굳이 안건들여도 된다 - (include_subdirs unqualified) 해주면 하위디렉토리까지 전부 모듈화시켜줌 Nested module § 모듈 내에 모듈을 또 정의해서 사용 가능함 module module_name_ = struct ."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="pl.spring.2021.cse.cnu.ac.kr/2.-OCaml-문법-(2)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div><div class="explorer desktop-only"><button type="button" id="explorer" data-behavior="collapse" data-collapsed="collapsed" data-savestate="true" data-tree="[{&quot;path&quot;:&quot;os.fall.2022.cse.ewha.ac.kr&quot;,&quot;collapsed&quot;:true},{&quot;path&quot;:&quot;os.spring.2021.cse.cnu.ac.kr&quot;,&quot;collapsed&quot;:true},{&quot;path&quot;:&quot;pl.spring.2021.cse.cnu.ac.kr&quot;,&quot;collapsed&quot;:true}]"><h1>Explorer</h1><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-content"><ul class="overflow" id="explorer-ul"><li><div><div class="folder-outer open"><ul style="padding-left:0;" class="content" data-folderul><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/os.fall.2022.cse.ewha.ac.kr"><button class="folder-button"><p class="folder-title">os.fall.2022.cse.ewha.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/os.fall.2022.cse.ewha.ac.kr"><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/(이화여대)-운영체제-강의록" data-for="os.fall.2022.cse.ewha.ac.kr/(이화여대)-운영체제-강의록">(이화여대) 운영체제 강의록</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/1.-운영체제란" data-for="os.fall.2022.cse.ewha.ac.kr/1.-운영체제란">1. 운영체제란</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/2.-System-Structure-&amp;-Process-Execution" data-for="os.fall.2022.cse.ewha.ac.kr/2.-System-Structure-&amp;-Process-Execution">2. System Structure &amp; Process Execution</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/3.-Process" data-for="os.fall.2022.cse.ewha.ac.kr/3.-Process">3. Process</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/4.-Process-Management" data-for="os.fall.2022.cse.ewha.ac.kr/4.-Process-Management">4. Process Management</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/5.-CPU-Scheduling" data-for="os.fall.2022.cse.ewha.ac.kr/5.-CPU-Scheduling">5. CPU Scheduling</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/6.-Process-Synchronize" data-for="os.fall.2022.cse.ewha.ac.kr/6.-Process-Synchronize">6. Process Synchronize</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/7.-Deadlocks" data-for="os.fall.2022.cse.ewha.ac.kr/7.-Deadlocks">7. Deadlocks</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/8-1.-Memory-Address" data-for="os.fall.2022.cse.ewha.ac.kr/8-1.-Memory-Address">8-1. Memory Address</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/8-2.-Physical-Memory-Allocation" data-for="os.fall.2022.cse.ewha.ac.kr/8-2.-Physical-Memory-Allocation">8-2. Physical Memory Allocation</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/9.-Virtual-Memory" data-for="os.fall.2022.cse.ewha.ac.kr/9.-Virtual-Memory">9. Virtual Memory</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/10.-File-Systems" data-for="os.fall.2022.cse.ewha.ac.kr/10.-File-Systems">10. File Systems</a></li></li><li><li><a href="../os.fall.2022.cse.ewha.ac.kr/11.-Disk-Scheduling" data-for="os.fall.2022.cse.ewha.ac.kr/11.-Disk-Scheduling">11. Disk Scheduling</a></li></li></ul></div></div></li><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/os.spring.2021.cse.cnu.ac.kr"><button class="folder-button"><p class="folder-title">os.spring.2021.cse.cnu.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/os.spring.2021.cse.cnu.ac.kr"><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록" data-for="os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록">(충남대) 운영체제 강의록</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/1.-인터럽트,-타임쉐어링" data-for="os.spring.2021.cse.cnu.ac.kr/1.-인터럽트,-타임쉐어링">1. 인터럽트, 타임쉐어링</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/2.-프로세스" data-for="os.spring.2021.cse.cnu.ac.kr/2.-프로세스">2. 프로세스</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/3.-쓰레드" data-for="os.spring.2021.cse.cnu.ac.kr/3.-쓰레드">3. 쓰레드</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/4.-Concurrency" data-for="os.spring.2021.cse.cnu.ac.kr/4.-Concurrency">4. Concurrency</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/5.-Semaphore" data-for="os.spring.2021.cse.cnu.ac.kr/5.-Semaphore">5. Semaphore</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/6.-Deadlock-&amp;-Starvation" data-for="os.spring.2021.cse.cnu.ac.kr/6.-Deadlock-&amp;-Starvation">6. Deadlock &amp; Starvation</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/7.-메모리-관리" data-for="os.spring.2021.cse.cnu.ac.kr/7.-메모리-관리">7. 메모리 관리</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/8.-가상메모리" data-for="os.spring.2021.cse.cnu.ac.kr/8.-가상메모리">8. 가상메모리</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/9.-Segmentation" data-for="os.spring.2021.cse.cnu.ac.kr/9.-Segmentation">9. Segmentation</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/10.-CPU-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/10.-CPU-Scheduling">10. CPU Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/11.-Multicore-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/11.-Multicore-Scheduling">11. Multicore Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/12.-IO-&amp;-Disk-Scheduling" data-for="os.spring.2021.cse.cnu.ac.kr/12.-IO-&amp;-Disk-Scheduling">12. IO &amp; Disk Scheduling</a></li></li><li><li><a href="../os.spring.2021.cse.cnu.ac.kr/13.-File-Management" data-for="os.spring.2021.cse.cnu.ac.kr/13.-File-Management">13. File Management</a></li></li></ul></div></div></li><li><div><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div data-folderpath="/pl.spring.2021.cse.cnu.ac.kr"><button class="folder-button"><p class="folder-title">pl.spring.2021.cse.cnu.ac.kr</p></button></div></div><div class="folder-outer "><ul style="padding-left:1.4rem;" class="content" data-folderul="/pl.spring.2021.cse.cnu.ac.kr"><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/(충남대)-프로그래밍-언어-개론-강의록" data-for="pl.spring.2021.cse.cnu.ac.kr/(충남대)-프로그래밍-언어-개론-강의록">(충남대) 프로그래밍 언어 개론 강의록</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/1.-OCaml-문법-(1)" data-for="pl.spring.2021.cse.cnu.ac.kr/1.-OCaml-문법-(1)">1. OCaml 문법 (1)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/2.-OCaml-문법-(2)" data-for="pl.spring.2021.cse.cnu.ac.kr/2.-OCaml-문법-(2)">2. OCaml 문법 (2)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/3.-재귀-호출-최적화-기법" data-for="pl.spring.2021.cse.cnu.ac.kr/3.-재귀-호출-최적화-기법">3. 재귀 호출 최적화 기법</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/4.-Syntax와-Semantics" data-for="pl.spring.2021.cse.cnu.ac.kr/4.-Syntax와-Semantics">4. Syntax와 Semantics</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/5.-Lexical-Analyzer-(Lexer,-어휘분석기)" data-for="pl.spring.2021.cse.cnu.ac.kr/5.-Lexical-Analyzer-(Lexer,-어휘분석기)">5. Lexical Analyzer (Lexer, 어휘분석기)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/6.-Syntax-Analyzer-(Parser,-구문분석기)" data-for="pl.spring.2021.cse.cnu.ac.kr/6.-Syntax-Analyzer-(Parser,-구문분석기)">6. Syntax Analyzer (Parser, 구문분석기)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/7.-언어의-정의" data-for="pl.spring.2021.cse.cnu.ac.kr/7.-언어의-정의">7. 언어의 정의</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/8.-문법적-설탕과-식별자" data-for="pl.spring.2021.cse.cnu.ac.kr/8.-문법적-설탕과-식별자">8. 문법적 설탕과 식별자</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/9.-함수와-함수호출" data-for="pl.spring.2021.cse.cnu.ac.kr/9.-함수와-함수호출">9. 함수와 함수호출</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/10.-1등-시민-함수" data-for="pl.spring.2021.cse.cnu.ac.kr/10.-1등-시민-함수">10. 1등 시민 함수</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/11.-조건분기문" data-for="pl.spring.2021.cse.cnu.ac.kr/11.-조건분기문">11. 조건분기문</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/12.-재귀함수" data-for="pl.spring.2021.cse.cnu.ac.kr/12.-재귀함수">12. 재귀함수</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/13.-명령형-언어-(1)" data-for="pl.spring.2021.cse.cnu.ac.kr/13.-명령형-언어-(1)">13. 명령형 언어 (1)</a></li></li><li><li><a href="../pl.spring.2021.cse.cnu.ac.kr/14.-명령형언어-(2)" data-for="pl.spring.2021.cse.cnu.ac.kr/14.-명령형언어-(2)">14. 명령형언어 (2)</a></li></li></ul></div></div></li></ul></div></div></li><li id="explorer-end"></li></ul></div></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">2. OCaml 문법 (2)</h1><p class="content-meta ">Nov 02, 2023, 10 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 이성호 교수님의 &quot;프로그래밍 언어 개론&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>강의를 듣고 필기한 내용이기에, 다소 잘못된 부분과 <del>부적절한 언행</del> 이 포함되어 있을 수 있습니다.</p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="모듈">모듈<a aria-hidden="true" tabindex="-1" href="#모듈" class="internal"> §</a></h2>
+<ul>
+<li>대문자로 시작함 - 소문자로 해주면 컴파일이 되지 않는다(관례가 아님)</li>
+<li>import해줄 필요 없음 - dune이 자동으로 모듈화한다</li>
+<li>dune은 굳이 안건들여도 된다 - <code>(include_subdirs unqualified)</code> 해주면 하위디렉토리까지 전부 모듈화시켜줌</li>
+</ul>
+<h2 id="nested-module">Nested module<a aria-hidden="true" tabindex="-1" href="#nested-module" class="internal"> §</a></h2>
+<ul>
+<li>모듈 내에 모듈을 또 정의해서 사용 가능함</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">module</span><span style="color:var(--shiki-color-text);"> module_name_ = struct ... end</span></span></code></pre></div>
+<ul>
+<li>nested module은 이렇게 접근 가능하다</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">Module.Nested_module_.func_</span></span></code></pre></div>
+<h2 id="모듈-불러오기">모듈 불러오기<a aria-hidden="true" tabindex="-1" href="#모듈-불러오기" class="internal"> §</a></h2>
+<ul>
+<li>기본적으로 import는 할 필요 없다</li>
+<li>하지만 경로가 길어지면 불편해지므로 open이라는 기능을 지원한다</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">Module_name_.func_</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);">(*</span><span style="color:var(--shiki-token-comment);font-style:italic;"> 이건 아래와 같다 </span><span style="color:var(--shiki-token-comment);">*)</span></span>
+<span data-line><span style="color:var(--shiki-token-string-expression);">open</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">Module_name_</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">func_</span></span></code></pre></div>
+<ul>
+<li><code>open</code> 을 이용하면 모듈 내의 함수/변수 등을 <code>.</code> 로 경로를 들어가서 불러내지 않아도 바로 불러줄 수 있다</li>
+<li>하지만 같은 이름의 변수 / 함수의 경우 충돌이 있으므로 잘 생각해서 사용할 것(충돌이 일어날 경우 그늘효과에 의해 마지막에 불러온 놈으로 앞의 놈까지 다 가려진다)</li>
+<li><code>let-open-in</code> 을 통해 scope를 제한할 수 있다 - 해당 모듈 내에서만 open하여 사용하고 싶을 때</li>
+<li>함수 module을 이용해서도 모듈을 불러올 수 있다 - 모듈의 경로가 긴 경우 이것으로 닉네임을 설정해 사용할 수 있음</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">module</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);font-style:italic;">M_</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);font-weight:bold;">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">Module_</span></span></code></pre></div>
+<ul>
+<li>conflict를 막을수도 있고 가독성도 떨어지지 않으므로 추천하는 방향이다</li>
+</ul>
+<h2 id="pattern-matching">Pattern matching<a aria-hidden="true" tabindex="-1" href="#pattern-matching" class="internal"> §</a></h2>
+<ul>
+<li><strong>매우 중요하고 유용하다</strong></li>
+<li>값의 <strong>형태</strong>에 기반하여 다르게 처리함</li>
+<li>처리안한 형태가 있을 경우 warning을 뿜는다</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">match expression_ with</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    pattern1_ -> expression1_</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    pattern2_ -> expression2_</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    pattern3_ -> expression3_</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    ...</span></span></code></pre></div>
+<ul>
+<li>pattern에 선언되지 않은 변수를 사용해도 된다 - expression의 결과가 자동으로 그 변수에 할당됨 (<em>매칭시 어떤 값을 담는 그릇</em>)</li>
+<li>따라서 변수는 하나의 패턴에만 사용해야 한다(<em>미리선언한 변수를 갖고와서 사용하는것도 안된다 이거야</em>)</li>
+<li>wildcard를 pattern에 넣으면 나머지 전부의 경우의 수를 처리할 수 있다
+<ul>
+<li>변수를 써도 되지만 이 변수를 다시 사용하지 않으면 warning이 나오므로 사용하지 않을거면 wildcard를 쓰는게 현명하다</li>
+<li>예상하지 못한 경우의 수가 있을 수 있으므로 항상 마지막엔 wildcard를 pattern에 넣어주는것이 에러가 안난다</li>
+</ul>
+</li>
+<li>그리고 처음에 넣어준 expression의 결과값의 type을 보고 모든 가능한 범위가 커버되었는지 확인하므로 논리적으로는 가능한 범위가 커버되었어도 자료형적으로는 모든 범위가 커버되지 않았을 경우가 있다</li>
+<li>연속된 값을 pattern으로 처리하고 싶을때에는 정규식에서의 [a-b]와 비슷한 연산을 제공한다</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">[a-b] </span><span style="color:var(--shiki-token-comment);">(*</span><span style="color:var(--shiki-token-comment);font-style:italic;"> 정규식에서의 이 표현은 </span><span style="color:var(--shiki-token-comment);">*)</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">'a' .. 'b' </span><span style="color:var(--shiki-token-comment);">(*</span><span style="color:var(--shiki-token-comment);font-style:italic;"> 이것과 같다 </span><span style="color:var(--shiki-token-comment);">*)</span></span></code></pre></div>
+<ul>
+<li>if-then-else와 마찬가지로 모든 pattern에 대한 매칭값은 자료형이 일관되어야 한다</li>
+</ul>
+<h2 id="failwith">failwith<a aria-hidden="true" tabindex="-1" href="#failwith" class="internal"> §</a></h2>
+<ul>
+<li>파이썬에서의 raise와 비슷하다</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">failwith &quot;error_message&quot;</span></span></code></pre></div>
+<ul>
+<li>에러를 발생시키고 넣어준 문구를 반환하는 함수이다</li>
+<li>아주 많은 경우의 수에 대해 각각 복잡한 구현을 해야한다면 하나의 경우의 수 pattern에 넣고 나머지는 failwith로 두고 이런식으로 점진적으로 구현하는 것이 가능하다</li>
+</ul>
+<h2 id="리스트">리스트<a aria-hidden="true" tabindex="-1" href="#리스트" class="internal"> §</a></h2>
+<ul>
+<li>원소들의 타입이 반드시 같아야 한다</li>
+<li>리스트의 타입은 int list, string list 등 <code>type list</code> 형태이다
+<ul>
+<li>이것이 해당 리스트의 자료형 이름이 되는 것</li>
+</ul>
+</li>
+<li>리스트의 원소 구분은 세미콜론(;)이다</li>
+<li><code>::</code> 연산자
+<ul>
+<li>append_first기능</li>
+</ul>
+</li>
+<li><code>@</code> 연산자
+<ul>
+<li>+기능</li>
+</ul>
+</li>
+<li>다행히도 동적배열을 지원한다</li>
+</ul>
+<h3 id="listiter-함수">List.iter 함수<a aria-hidden="true" tabindex="-1" href="#listiter-함수" class="internal"> §</a></h3>
+<ul>
+<li>아무것도 반환하지 않는 함수와 리스트를 받아 각 원소들을 함수에 넣어 실행하고 아무것도 반환하지 않음</li>
+<li>args:
+<ul>
+<li>f(function) : 리스트를 받아 뭔가를 실행하고 unit을 반환</li>
+<li>l(list) : 함수에 넣어줄 값들을 원소로 하는 리스트</li>
+</ul>
+</li>
+<li>return:
+<ul>
+<li>unit : 아무것도 반환하지 않음</li>
+</ul>
+</li>
+</ul>
+<h3 id="listmap-함수">List.map 함수<a aria-hidden="true" tabindex="-1" href="#listmap-함수" class="internal"> §</a></h3>
+<ul>
+<li>함수와 리스트를 받아 리스트 원소들을 함수에 넣어 실행하고 그 결과를 다시 리스트로 묶어 반환</li>
+<li>args:
+<ul>
+<li>f(function) : 원하는 동작을 담은 함수</li>
+<li>l(list) : 함수에 넣어줄 값들을 원소로 하는 리스트</li>
+</ul>
+</li>
+<li>return:
+<ul>
+<li>list : 함수 실행 결과들을 묶어서 만든 리스트</li>
+</ul>
+</li>
+</ul>
+<h3 id="listfold_left-함수">List.fold_left 함수<a aria-hidden="true" tabindex="-1" href="#listfold_left-함수" class="internal"> §</a></h3>
+<ul>
+<li>f와 어떤 값x, 리스트l을 받아 f(f(f(x, l[0]), l[1]…)을 실행하는 함수</li>
+<li>args:
+<ul>
+<li>f(function) : 원하는 동작을 담은 함수</li>
+<li>x(whatever) : 어떤 값</li>
+<li>l(list) : 중첩실행할 리스트</li>
+</ul>
+</li>
+<li>return:
+<ul>
+<li>whatever : 결과값</li>
+</ul>
+</li>
+<li>자료형 유의해라 - f, x, l에 어떤 자료형을 넣어야 하는지</li>
+</ul>
+<h3 id="리스트-패턴매칭에의-활용">리스트 패턴매칭에의 활용<a aria-hidden="true" tabindex="-1" href="#리스트-패턴매칭에의-활용" class="internal"> §</a></h3>
+<ul>
+<li><code>::</code> 연산자는 append_first라는 기능을 하기도 하지만 패턴매칭에서 패턴으로 활용하면 쪼개는 기능으로 활용할 수 있다</li>
+<li>pattern을 <code>a :: b</code> 이렇게 적어주면 리스트의 첫번째 원소가 a로 들어가고 첫번째 원소를 제외한 나머리 리스트는 b에 담기게 된다</li>
+</ul>
+<h2 id="disjoint-unions">Disjoint unions<a aria-hidden="true" tabindex="-1" href="#disjoint-unions" class="internal"> §</a></h2>
+<ul>
+<li>여러개의 자료형들을 하나의 자료형으로 묶어서 <strong>다양한 형태를 갖는 하나의 자료형을 정의</strong>하는 것이다</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">type</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);font-weight:bold;">type_name_</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);font-weight:bold;">=</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-constant);font-weight:bold;">|</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);font-weight:bold;">Identifier1_</span><span style="color:var(--shiki-color-text);"> of int</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-constant);font-weight:bold;">|</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);font-weight:bold;">Identifier2_</span><span style="color:var(--shiki-color-text);"> of string</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-constant);font-weight:bold;">|</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);font-weight:bold;">Identifier3_</span><span style="color:var(--shiki-color-text);"> of char</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-string-expression);font-weight:bold;">...</span></span></code></pre></div>
+<ul>
+<li>Identifier은 variant라고 불리는데 <code>type_name_</code> 자료형의 한가지 형태라고 볼 수 있다.
+<ul>
+<li>예를들어 number 자료형에 Integer of int라고 명시한다면 Integer 3은 정수로써 기능은 하지만 자료형은 number인 것이다</li>
+</ul>
+</li>
+<li><code>type_name_</code> 은 반드시 <strong>소문자로 시작</strong>하여야 한다</li>
+<li>그리고 <code>Identifier</code> 은 반드시 <strong>대문자로 시작</strong>하여야 한다</li>
+<li>of 자료형은 반드시 적어줘야 하는 것은 아니다 - <strong>of 자료형을 적지 않으면 unit을 대체하는 자료형이 생성되는 것이다</strong></li>
+<li><code>Identifier 값</code> 으로 <code>type_name_</code> 의 자료형을 하나 생성할 수도 있지만 그 반대도 된다
+<ul>
+<li><code>type_name_</code> 을 자료형으로 하는 변수를 만든 다음 이 변수에 값을 넣어주면 이 값의 자료형에 따라 <code>Identifier</code> 가 결정되기도 함</li>
+</ul>
+</li>
+<li>따라서 pattern matching에서 pattern에 걸리도록 할 수 있다</li>
+<li>type이 모듈이 들어있을때 type의 variant을 사용할때도 모듈이름을 붙여줘야 한다</li>
+</ul>
+<h2 id="disjoint-union을-활용한-내장-자료형---option">Disjoint union을 활용한 내장 자료형 - option<a aria-hidden="true" tabindex="-1" href="#disjoint-union을-활용한-내장-자료형---option" class="internal"> §</a></h2>
+<ul>
+<li>None과 Some의 두 형태를 가짐</li>
+<li>어따쓰는건지는 나도 잘 모르겠다</li>
+</ul>
+<h2 id="함수에서의-자료형-명시">함수에서의 자료형 명시<a aria-hidden="true" tabindex="-1" href="#함수에서의-자료형-명시" class="internal"> §</a></h2>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="ocaml" data-theme="default"><code data-language="ocaml" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">func_name_ (arg1 : </span><span style="color:var(--shiki-token-keyword);">type</span><span style="color:var(--shiki-color-text);">) (arg2 : type) ... :type</span></span></code></pre></div>
+<ul>
+<li>이렇게 매개변수는 <code>: 자료형</code> 을 함께 괄호로 묶어주고 리턴타입은 맨 끝에 저렇게 적어주면 된다</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#모듈" data-for="모듈">모듈</a></li><li class="depth-0"><a href="#nested-module" data-for="nested-module">Nested module</a></li><li class="depth-0"><a href="#모듈-불러오기" data-for="모듈-불러오기">모듈 불러오기</a></li><li class="depth-0"><a href="#pattern-matching" data-for="pattern-matching">Pattern matching</a></li><li class="depth-0"><a href="#failwith" data-for="failwith">failwith</a></li><li class="depth-0"><a href="#리스트" data-for="리스트">리스트</a></li><li class="depth-1"><a href="#listiter-함수" data-for="listiter-함수">List.iter 함수</a></li><li class="depth-1"><a href="#listmap-함수" data-for="listmap-함수">List.map 함수</a></li><li class="depth-1"><a href="#listfold_left-함수" data-for="listfold_left-함수">List.fold_left 함수</a></li><li class="depth-1"><a href="#리스트-패턴매칭에의-활용" data-for="리스트-패턴매칭에의-활용">리스트 패턴매칭에의 활용</a></li><li class="depth-0"><a href="#disjoint-unions" data-for="disjoint-unions">Disjoint unions</a></li><li class="depth-0"><a href="#disjoint-union을-활용한-내장-자료형---option" data-for="disjoint-union을-활용한-내장-자료형---option">Disjoint union을 활용한 내장 자료형 - option</a></li><li class="depth-0"><a href="#함수에서의-자료형-명시" data-for="함수에서의-자료형-명시">함수에서의 자료형 명시</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../pl.spring.2021.cse.cnu.ac.kr/(충남대)-프로그래밍-언어-개론-강의록" class="internal">(충남대) 프로그래밍 언어 개론 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2023</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="../postscript.js" type="module"></script></html>
