@@ -1,304 +1,343 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/(%EC%B6%A9%EB%82%A8%EB%8C%80)-%EC%BB%B4%ED%93%A8%ED%84%B0-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EA%B0%95%EC%9D%98%EB%A1%9D</loc>
-    <lastmod>2023-11-04T16:02:44.913Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/01.-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%86%B5%EC%8B%A0-%ED%9A%8C%EA%B3%A0</loc>
-    <lastmod>2023-11-04T16:02:44.913Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/02.-Network-Layer</loc>
-    <lastmod>2023-11-04T16:02:44.913Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/03.-Packet-switching-example</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/04.-Routing-%EB%B3%B5%EC%8A%B5</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/05.-Routing-%EC%98%88%EC%8B%9C</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/06.-IPv4,-IPv6</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/07.-Address-mapping,-Multicasting,-Error-rep</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/08.-Transport-Layer-&-UDP</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/09.-TCP</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/10.-Congestion-control,-SCTP</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/11.-Application-Layer,-DNS</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/12.-TELNET,-Email,-File-Transfer</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/13.-WWW,--HTTP</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/14.-SNMP</loc>
-    <lastmod>2023-11-04T16:02:44.917Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.709Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%9C%ED%97%98%EB%8C%80%EB%B9%84)-%EC%8B%B1%ED%95%98%ED%98%95%EB%B0%B0-%EC%BB%B4%ED%93%A8%ED%84%B0-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EB%AA%A8%EC%9D%98%EA%B3%A0%EC%82%AC-%EC%A0%95%EB%8B%B5</loc>
-    <lastmod>2023-11-04T16:02:45.009Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%9C%ED%97%98%EB%8C%80%EB%B9%84)-%EC%8B%B1%ED%95%98%ED%98%95%EB%B0%B0-%EC%BB%B4%ED%93%A8%ED%84%B0-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EB%AA%A8%EC%9D%98%EA%B3%A0%EC%82%AC</loc>
-    <lastmod>2023-11-04T16:02:45.009Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%A4%EC%8A%B5%EC%9E%90%EB%A3%8C-1)-Network-layer-&-ARP</loc>
-    <lastmod>2023-11-04T16:02:45.009Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%A4%EC%8A%B5%EC%9E%90%EB%A3%8C-2)-Proxy-ARP</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%A4%EC%8A%B5%EC%9E%90%EB%A3%8C-3)-GARP</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/comnet.fall.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%A4%EC%8A%B5%EC%9E%90%EB%A3%8C-4)-Static-Router</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/(%EC%B6%A9%EB%82%A8%EB%8C%80)-%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%9F%AC-%EA%B0%9C%EB%A1%A0-%EA%B0%95%EC%9D%98%EB%A1%9D</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/01.-%EC%96%B4%ED%9C%98%EB%B6%84%EC%84%9D-&-%ED%86%A0%ED%81%B0</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/02.-%EC%96%B4%ED%9C%98%EB%B6%84%EC%84%9D%EA%B8%B0-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EA%B8%B0</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/03.-%EA%B5%AC%EB%AC%B8%EB%B6%84%EC%84%9D-&-%ED%8C%8C%EC%8A%A4%ED%8A%B8%EB%A6%AC</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/04.-Top-down-%EA%B5%AC%EB%AC%B8%EB%B6%84%EC%84%9D</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/05.-LL%EB%AC%B8%EB%B2%95</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/06.-%EA%B5%AC%EB%AC%B8%EB%B6%84%EC%84%9D%EA%B8%B0-%EB%A7%8C%EB%93%A4%EA%B8%B0</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/07.-Bottom-up-parsing</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/08.-yacc</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/09.-LR(0)-%ED%8C%8C%EC%8B%B1-%ED%85%8C%EC%9D%B4%EB%B8%94,--SLR-%ED%8C%8C%EC%8B%B1</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/10.-LR(1)-%ED%8C%8C%EC%84%9C,--LALR-%ED%8C%8C%EC%84%9C</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/11.-SDD,-AST</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/12.-IR</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/13.-3-Address-code</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/14.-Semantic-Analysis,-Type-Checking</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/15.-Machine-Dependent-Processing</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/compiler.fall.2021.cse.cnu.ac.kr/16.-Analysis-&-Optimization</loc>
-    <lastmod>2023-11-04T16:02:45.013Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.805Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/(%EC%B6%A9%EB%82%A8%EB%8C%80)-%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%86%B5%EC%8B%A0-%EA%B0%95%EC%9D%98%EB%A1%9D</loc>
-    <lastmod>2023-11-04T16:02:45.093Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/01.-Bitrate</loc>
-    <lastmod>2023-11-04T16:02:45.093Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/02.-D2D,-A2D-Conversion</loc>
-    <lastmod>2023-11-04T16:02:45.093Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/03.-D2A,-A2A-Conversion</loc>
-    <lastmod>2023-11-04T16:02:45.093Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/04.-Bandwidth-Utilization</loc>
-    <lastmod>2023-11-04T16:02:45.093Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/05.-Data-Link-Control</loc>
-    <lastmod>2023-11-04T16:02:45.093Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/06.-ARQ-Protocol,-HDLC</loc>
-    <lastmod>2023-11-04T16:02:45.093Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/07.-MAC</loc>
-    <lastmod>2023-11-04T16:02:45.097Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/08.-Ethernet</loc>
-    <lastmod>2023-11-04T16:02:45.097Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/09.-Wireless-LAN-(1)</loc>
-    <lastmod>2023-11-04T16:02:45.097Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/10.-Wireless-LAN-(2)</loc>
-    <lastmod>2023-11-04T16:02:45.097Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/11.-Layer-Architecture</loc>
-    <lastmod>2023-11-04T16:02:45.097Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/12.-Network-Layer,-Routing</loc>
-    <lastmod>2023-11-04T16:02:45.097Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/13.-Routing</loc>
-    <lastmod>2023-11-04T16:02:45.097Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.889Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%9C%ED%97%98%EB%8C%80%EB%B9%84)-%EC%8B%B1%ED%95%98%ED%98%95%EB%B0%B0-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%86%B5%EC%8B%A0-%EB%AA%A8%EC%9D%98%EA%B3%A0%EC%82%AC-%EC%A0%95%EB%8B%B5</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.953Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%9C%ED%97%98%EB%8C%80%EB%B9%84)-%EC%8B%B1%ED%95%98%ED%98%95%EB%B0%B0-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%86%B5%EC%8B%A0-%EB%AA%A8%EC%9D%98%EA%B3%A0%EC%82%AC</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%A4%EC%8A%B5%EC%9E%90%EB%A3%8C-1)-MAC,-ARQ</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%A4%EC%8A%B5%EC%9E%90%EB%A3%8C-2)-Peer-2-Peer-process</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%A4%EC%8A%B5%EC%9E%90%EB%A3%8C-3)-%EB%8B%A8%ED%8E%B8%ED%99%94</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/datacommunication.spring.2021.cse.cnu.ac.kr/%EB%B6%80%EB%A1%9D---%EC%8B%A4%EC%8A%B5%EC%9E%90%EB%A3%8C-4)-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/(%EC%9D%B4%ED%99%94%EC%97%AC%EB%8C%80)-%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C-%EA%B0%95%EC%9D%98%EB%A1%9D</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/01.-%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%EB%9E%80</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/02.-System-Structure-&-Process-Execution</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/03.-Process</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/04.-Process-Management</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/05.-CPU-Scheduling</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/06.-Process-Synchronize</loc>
-    <lastmod>2023-11-04T16:02:45.161Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/07.-Deadlocks</loc>
-    <lastmod>2023-11-04T16:02:45.165Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/08-1.-Memory-Address</loc>
-    <lastmod>2023-11-04T16:02:45.165Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/08-2.-Physical-Memory-Allocation</loc>
-    <lastmod>2023-11-04T16:02:45.165Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/09.-Virtual-Memory</loc>
-    <lastmod>2023-11-04T16:02:45.165Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/10.-File-Systems</loc>
-    <lastmod>2023-11-04T16:02:45.165Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.fall.2022.cse.ewha.ac.kr/11.-Disk-Scheduling</loc>
-    <lastmod>2023-11-04T16:02:45.165Z</lastmod>
+    <lastmod>2023-11-05T09:55:00.957Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/(%EC%B6%A9%EB%82%A8%EB%8C%80)-%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C-%EA%B0%95%EC%9D%98%EB%A1%9D</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/01.-%EC%9D%B8%ED%84%B0%EB%9F%BD%ED%8A%B8,-%ED%83%80%EC%9E%84%EC%89%90%EC%96%B4%EB%A7%81</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/02.-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/03.-%EC%93%B0%EB%A0%88%EB%93%9C</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/04.-Concurrency</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/05.-Semaphore</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/06.-Deadlock-&-Starvation</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/07.-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/08.-%EA%B0%80%EC%83%81%EB%A9%94%EB%AA%A8%EB%A6%AC</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.045Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/09.-Segmentation</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.045Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/10.-CPU-Scheduling</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.045Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/11.-Multicore-Scheduling</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.045Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/12.-IO-&-Disk-Scheduling</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.045Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/os.spring.2021.cse.cnu.ac.kr/13.-File-Management</loc>
-    <lastmod>2023-11-04T16:02:45.249Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.045Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/(%EC%B6%A9%EB%82%A8%EB%8C%80)-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-%EC%96%B8%EC%96%B4-%EA%B0%9C%EB%A1%A0-%EA%B0%95%EC%9D%98%EB%A1%9D</loc>
-    <lastmod>2023-11-04T16:02:45.377Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/01.-OCaml-%EB%AC%B8%EB%B2%95-(1)</loc>
-    <lastmod>2023-11-04T16:02:45.377Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/02.-OCaml-%EB%AC%B8%EB%B2%95-(2)</loc>
-    <lastmod>2023-11-04T16:02:45.377Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/03.-%EC%9E%AC%EA%B7%80-%ED%98%B8%EC%B6%9C-%EC%B5%9C%EC%A0%81%ED%99%94-%EA%B8%B0%EB%B2%95</loc>
-    <lastmod>2023-11-04T16:02:45.377Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/04.-Syntax%EC%99%80-Semantics</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/05.-Lexical-Analyzer-(Lexer,-%EC%96%B4%ED%9C%98%EB%B6%84%EC%84%9D%EA%B8%B0)</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/06.-Syntax-Analyzer-(Parser,-%EA%B5%AC%EB%AC%B8%EB%B6%84%EC%84%9D%EA%B8%B0)</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/07.-%EC%96%B8%EC%96%B4%EC%9D%98-%EC%A0%95%EC%9D%98</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/08.-%EB%AC%B8%EB%B2%95%EC%A0%81-%EC%84%A4%ED%83%95%EA%B3%BC-%EC%8B%9D%EB%B3%84%EC%9E%90</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/09.-%ED%95%A8%EC%88%98%EC%99%80-%ED%95%A8%EC%88%98%ED%98%B8%EC%B6%9C</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/10.-1%EB%93%B1-%EC%8B%9C%EB%AF%BC-%ED%95%A8%EC%88%98</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/11.-%EC%A1%B0%EA%B1%B4%EB%B6%84%EA%B8%B0%EB%AC%B8</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/12.-%EC%9E%AC%EA%B7%80%ED%95%A8%EC%88%98</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/13.-%EB%AA%85%EB%A0%B9%ED%98%95-%EC%96%B8%EC%96%B4-(1)</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/pl.spring.2021.cse.cnu.ac.kr/14.-%EB%AA%85%EB%A0%B9%ED%98%95%EC%96%B8%EC%96%B4-(2)</loc>
-    <lastmod>2023-11-04T16:02:45.381Z</lastmod>
+    <lastmod>2023-11-05T09:55:01.173Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/(%EC%B6%A9%EB%82%A8%EB%8C%80)-%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-%EA%B0%95%EC%9D%98%EB%A1%9D</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/01.-HTML-(1)</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/02.-CSS-Basic</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/03.-JS-Basic</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/04.-JS-DOM</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/05.-PHP</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/06.-PHP-form</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/07.-HTML-(2)</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/08.-JQuery,-AJAX</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/09.-HTML-API</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/10.-JS-Basic-2</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/11.-JS-Functions</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/webprogramming.fall.2021.cse.cnu.ac.kr/12.-HTML,-JS,-HTTP</loc>
+    <lastmod>2023-11-05T09:55:01.205Z</lastmod>
   </url></urlset>
