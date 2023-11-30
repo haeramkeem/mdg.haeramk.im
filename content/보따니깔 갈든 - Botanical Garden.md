@@ -4,4 +4,5 @@
 
 ## 재배 작물들
 
-- [[(Gardening) ElasticSearch|엘라스틱서치]]
+- [[(Botanical Garden) ElasticSearch|엘라스틱서치]]
+- [[(Botanical Garden) Kubernetes|쿠버네티스]]
