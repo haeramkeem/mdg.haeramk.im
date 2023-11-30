@@ -10,7 +10,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     baseUrl: "mdg.haeramk.im",
-    ignorePatterns: ["private", "templates", ".obsidian"],
+    ignorePatterns: ["draft", "private", "templates", ".obsidian"],
     defaultDateType: "created",
     theme: {
       typography: {
