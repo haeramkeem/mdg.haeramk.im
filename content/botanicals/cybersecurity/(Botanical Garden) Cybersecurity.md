@@ -5,4 +5,6 @@
 
 ## 용어집
 
-- [[Serial Number (PKIX)]]
+- [[Common Name, CN (PKIX)|Common Name (CN)]]
+- [[Serial Number (PKIX)|Serial Number]]
+- [[Subject Alternative Name, SAN (PKIX)|Subject Alternative Name (SAN)]]
