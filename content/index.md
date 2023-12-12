@@ -20,4 +20,4 @@ title: 매디쏜 디지딸 갈든
 
 그리고 저는 정원일 혹은 농사일 둘 다와 무관한 [이런걸로](https://www.linkedin.com/in/haeram-kim-277404220) 먹고사는 사람입니다.
 
-하여간 만나서 반갑네요. 만약 여기 심어진 작물들이 좀 상태가 안좋아보인다면, [이메일](mailto://haeram.kim1@gmail.com) 이나 [링크드인 DM](https://www.linkedin.com/in/haeram-kim-277404220) 을 주셔도 됩니다.
+하여간 만나서 반갑네요. 만약 여기 심어진 작물들이 좀 상태가 안좋아보인다면, [이메일](mailto://haeram.kim1@gmail.com) 이나 [링크드인 DM](https://www.linkedin.com/in/haeram-kim-277404220) 혹은 [깃허브 이슈](https://github.com/haeramkeem/mdg) 를 남겨주셔도 됩니다.
