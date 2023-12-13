@@ -6,6 +6,6 @@
 ## 용어집
 
 - [[Common Name, CN (PKIX)|Common Name (CN)]]
+- [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]
 - [[Serial Number (PKIX)|Serial Number]]
 - [[Subject Alternative Name, SAN (PKIX)|Subject Alternative Name (SAN)]]
-- [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]
