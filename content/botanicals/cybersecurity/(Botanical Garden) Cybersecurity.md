@@ -8,3 +8,4 @@
 - [[Common Name, CN (PKIX)|Common Name (CN)]]
 - [[Serial Number (PKIX)|Serial Number]]
 - [[Subject Alternative Name, SAN (PKIX)|Subject Alternative Name (SAN)]]
+- [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]
