@@ -11,4 +11,10 @@
 
 ## 문서들
 
+### Kubernetes
+
 - [[Kubeconfig 파일로 Kube apiserver 에 직접 cURL 찔러보기]]
+
+### etcd
+
+- [[Security model in etcd - etcd 에서 사용되는 인증서들|etcd 에서 사용되는 인증서들]]
