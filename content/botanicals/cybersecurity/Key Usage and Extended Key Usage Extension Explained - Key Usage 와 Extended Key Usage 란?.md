@@ -70,4 +70,4 @@ extendedKeyUsage = 항목들 나열...
 
 ### TLS Web Client Authentication (`clientAuth`)
 
-- 일반적인 TLS 에 사용되는 [[Key Usage and Extended Key Usage Extension Explained - Key Usage 와 Extended Key Usage 란?#TLS Web Server Authentication (`serverAuth`)|Server Auth]] 과 달리, [[Mutual TLS, mTLS (PKIX)|mTLS]] 통신에서 Client 가 CA 의 도움을 받아 자신의 신원을 인증할 수 있도록 하는 기능이다.
+- 일반적인 TLS 에 사용되는 [[Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?#TLS Web Server Authentication (`serverAuth`)|Server Auth]] 과 달리, [[Mutual TLS, mTLS (PKIX)|mTLS]] 통신에서 Client 가 CA 의 도움을 받아 자신의 신원을 인증할 수 있도록 하는 기능이다.
