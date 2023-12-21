@@ -4,7 +4,7 @@ tags:
 ---
 > [!info] [참고한 문서 - Quora](https://www.quora.com/Why-does-TLS-use-symmetric-encryption)
 
-## TLS 에서는 비대칭키를 사용하는 것 아녔음??
+## TLS 에서는 비대칭키만 사용하는 것 아녔음??
 
 - 라고 알았다면, 뭔가 잘못된 것이다.
 - TLS 통신에서의 암호화는 간략하게 설명하면 다음과 같이 이루어진다
