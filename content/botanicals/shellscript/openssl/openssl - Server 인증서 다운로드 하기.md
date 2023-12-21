@@ -18,5 +18,5 @@ openssl s_client -showcerts -connect $IP:$PORT </dev/null 2>/dev/null \
 
 - 인증서 뿐 아니라 연결 상태 등도 같이 체크하고 싶을 때는 `openssl s_client ...` 만 실행하면 된다.
 	- `openssl x509 -outform PEM` 은 그냥 인증서 PEM 만 추출하는 것.
-- 파일로 리다이렉트 시키지 않고 다른 것으로 연계하는 것도 가능하다.
-	- 예를 들어, [[openssl - 인증서 상세 정보 확인하기|인증서 상세 정보 확인하는 방법]] 으로 인증서 자체에 대한 inspect 도 가능하다.
+- PEM 을 추출하지 않고 다른 명령어로 연계하는 것도 가능하다.
+	- 예를 들어, [[openssl - 인증서 상세 정보 확인하기|인증서 상세 정보 확인하는 방법]] 처럼 `openssl x509 -outform PEM` 대신 `openssl x509 -text` 로 하면 인증서 자체에 대한 inspect 도 가능하다.
