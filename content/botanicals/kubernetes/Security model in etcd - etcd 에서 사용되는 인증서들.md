@@ -1,7 +1,7 @@
 > [!info] 참고한 [공식 문서](https://etcd.io/docs/v3.5/op-guide/security/)
 ## 개요
 
-- [[Kubernetes Control Plane TLS Explained - 컨트롤 플레인 인증서 톺아보기|이 글]] 을 적다가 etcd 에서 사용되는 인증서들 용도가 헷갈려서 직접 확인해본 내용들.
+- [[Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기|이 글]] 을 적다가 etcd 에서 사용되는 인증서들 용도가 헷갈려서 직접 확인해본 내용들.
 - etcd 클러스터를 직접 구축해봤으면 더 좋았겠지만, 일단 [Kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm) 으로 생성한 쿠버네티스 클러스터 controlplane 의 etcd 클러스터를 이용했다.
 
 ## etcd 의 인증서들

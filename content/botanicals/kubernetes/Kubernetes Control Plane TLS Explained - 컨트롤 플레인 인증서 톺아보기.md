@@ -69,11 +69,11 @@ front-proxy-ca          Aug 28, 2033 11:38 UTC   9y              no
 	- 파일 위치: `/etc/kubernetes/pki/apiserver.{crt,key}`
 - `etcd-server` (Client, Server 겸용)
 	- etcd 가 접근하는 클라이언트들에게 제시하는 Server 인증서.
-		- [[Kubernetes Control Plane TLS Explained - 컨트롤 플레인 인증서 톺아보기#(CA-Signed) Client 인증서|뒤]] 에서 한번 더 말하겠지만, 이 인증서는 Client 인증서로 사용할 수도 있다.
+		- [[Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기#(CA-Signed) Client 인증서|뒤]] 에서 한번 더 말하겠지만, 이 인증서는 Client 인증서로 사용할 수도 있다.
 	- 파일 위치: `/etc/kubernetes/pki/etcd/server.{crt,key}`
 - `etcd-peer` (Client, Server 겸용)
 	- etcd 가 접근하는 etcd member 들에게 제시하는 Server 인증서.
-		- 이 인증서도 Client 인증서로 사용할 수도 있다. ([[Kubernetes Control Plane TLS Explained - 컨트롤 플레인 인증서 톺아보기#(CA-Signed) Client 인증서|뒤]] 에서 한번 더 등장한다.)
+		- 이 인증서도 Client 인증서로 사용할 수도 있다. ([[Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기#(CA-Signed) Client 인증서|뒤]] 에서 한번 더 등장한다.)
 		- Member 가 다른 member 에 접근했을 때 server 인증서로 `etcd-server` 를 제시할 지 아니면 `etcd-peer` 를 제시할 지 궁금해서 [[Security model in etcd - etcd 에서 사용되는 인증서들|이 디버깅 기록]] 에서 확인해 봤는데, `etcd-peer` 인증서가 날라왔다.
 	- 파일위치: `/etc/kubernetes/pki/etcd/peer.{crt,key}`
 
