@@ -1,5 +1,5 @@
 ---
-title: "RabbitMQ on Kubernetes: Command timed out: '/usr/bin/df -kP ...' 에러 해결기"
+title: "RabbitMQ on Kubernetes - \"Command timed out: '/usr/bin/df -kP ...'\" 에러 해결기"
 tags:
   - 삽질록
 ---
