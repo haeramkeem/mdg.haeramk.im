@@ -6045,7 +6045,7 @@ document.addEventListener("nav", () => {
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
       gtag(`js`, new Date());
-      gtag(`config`, `G-6GZ6P69EH6`, { send_page_view: false });
+      gtag(`config`, `G-N68CCP1QHG`, { send_page_view: false });
   
       document.addEventListener(`nav`, () => {
         gtag(`event`, `page_view`, {
