@@ -10,6 +10,7 @@
 
 ## 용어집
 
+- [[Certificate Authority, CA (PKIX)|Certificate Authority (CA)]]
 - [[Common Name, CN (PKIX)|Common Name (CN)]]
 - [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]
 - [[Serial Number (PKIX)|Serial Number]]
