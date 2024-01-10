@@ -7,7 +7,7 @@ tags:
 ## Basic Constraints
 
 - 간단하다.
-- 이 인증서가 (1) CA 인지, (2) 만일 CA 라면, 자식 Intermediate certificate 를 몇개나 만들 수 있는지 명시하는 부분이다.
+- 이 인증서가 (1) [[Certificate Authority, CA (PKIX)|CA]] 인지, (2) 만일 CA 라면, 자식 Intermediate certificate 를 몇개나 만들 수 있는지 명시하는 부분이다.
 	- (1) 항목은 `cA` 필드를 이용해 명시하고,
 	- (2) 항목은 `pathLenConstraint` 필드를 이용해 명시한다.
 - [RFC5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.9) 에는 이 항목을 다음과 같은 구조체로 정의한다:
@@ -19,13 +19,15 @@ BasicConstraints ::= SEQUENCE {
 }
 ```
 
-## `cA`
+## 항목들
+
+### `cA`
 
 - 별로 어려울 건 없다; 이 인증서가 CA 인지를 나타내는 boolean 값이다.
 	- `cA:TRUE` 라면, 이 인증서는 CA 인증서로 사용할 수 있는거고
 	- `cA:FALSE` 라면 그 반대겠지
 
-## `pathLenConstraint`
+### `pathLenConstraint`
 
 - 이건 이 인증서가 생성할 수 있는 자식 CA (Intermediate certificate) 가 몇개인지를 제한하는 값이다.
 	- *제한* 의 말뜻처럼, 이 값을 명시하지 않으면 무한대의 자식 CA 를 생성할 수 있다

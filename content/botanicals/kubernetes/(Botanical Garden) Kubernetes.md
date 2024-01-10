@@ -18,5 +18,5 @@
 
 ## 병든놈 고치기
 
-- [[Ingress NGINX - upstream sent too large http2 frame 4740180 에러 해결]]
-- [[RabbitMQ on Kubernetes - Troubleshooting error "Command df timed out"]]
+- [[Ingress NGINX - "upstream sent too large http2 frame 4740180" 에러 해결기]]
+- [[RabbitMQ on Kubernetes - Troubleshooting error "Command df timed out"|RabbitMQ on Kubernetes - "Command timed out: 'df -kP ...'" 에러 해결기]]

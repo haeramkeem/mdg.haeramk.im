@@ -7,9 +7,9 @@
 
 ## 문서들
 
-- [[TL;DR ElasticSearch|엘라스틱서치 간단하게 시작하기]]
-- [[ElasticSearch Architecture|엘라스틱서치 아키텍처]]
-- [[Read & Write Operation in ElasticSearch|엘라스틱서치 RW 과정 정리]]
+- [[TL;DR ElasticSearch - 엘라스틱서치 간단하게 시작하기|엘라스틱서치 간단하게 시작하기]]
+- [[ElasticSearch Architecture - 엘라스틱서치 아키텍처|엘라스틱서치 아키텍처]]
+- [[Read & Write Operation in ElasticSearch - 엘라스틱서치 RW 과정 정리|엘라스틱서치 RW 과정 정리]]
 
 ## 용어들
 
