@@ -8,7 +8,7 @@ const config: QuartzConfig = {
     enablePopovers: true,
     analytics: {
       provider: "google",
-      tagId: "G-6GZ6P69EH6",
+      tagId: "G-N68CCP1QHG",
     },
     baseUrl: "mdg.haeramk.im",
     ignorePatterns: ["draft", "private", "templates", ".obsidian"],
