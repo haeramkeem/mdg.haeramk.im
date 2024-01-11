@@ -14,6 +14,7 @@
 
 - [[openssl - Server 인증서 다운로드 하기|Server 인증서 다운로드 하기]]
 - [[openssl - 인증서 상세 정보 확인하기|인증서 상세 정보 확인하기]]
+- [[openssl - 인증서에서 CSR (Certificate Signing Request) 뽑아내기|인증서에서 CSR (Certificate Signing Request) 뽑아내기]]
 
 #### `tcpdump`
 

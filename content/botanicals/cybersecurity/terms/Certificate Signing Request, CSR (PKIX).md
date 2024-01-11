@@ -4,6 +4,7 @@ tags:
   - 용어집
 ---
 > [!info] 참고 [문서 - GlobalSign](https://www.globalsign.com/en/blog/what-is-a-certificate-signing-request-csr)
+
 ## 용어 설명
 
 - 별거 없다 - Certificate (인증서) Signing (서명) Request (요청), 즉, 이 파일에 담긴 내용을 가지고 인증서를 하나 생성해 달라는 일종의 신청서 같은 것이라 보면 된다.
