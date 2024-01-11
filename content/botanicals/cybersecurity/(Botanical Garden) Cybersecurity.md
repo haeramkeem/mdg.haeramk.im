@@ -5,8 +5,9 @@
 
 ## 문서집
 
-- [[x509v3 Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?|Key Usage 와 Extended Key Usage 란?]]
 - [[Symmetric Key for TLS - TLS 통신에 대칭키를 사용하는 이유|TLS 통신에 대칭키를 사용하는 이유]]
+- [[x509v3 Basic Constraints extension explained - Basic Constraints 란?|Basic Constraints 란?]]
+- [[x509v3 Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?|Key Usage 와 Extended Key Usage 란?]]
 
 ## 용어집
 
