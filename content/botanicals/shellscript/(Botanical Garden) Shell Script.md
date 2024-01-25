@@ -27,6 +27,10 @@
 - [[arp - ARP 테이블 요소 삭제하기|ARP 테이블 요소 삭제하기]]
 - [[arp - ARP 테이블 확인하기|ARP 테이블 확인하기]]
 
+#### `fdisk`
+
+- [[fdisk - 디스크 확인하기|디스크 확인하기]]
+
 #### `openssl`
 
 - [[openssl - Server 인증서 다운로드 하기|Server 인증서 다운로드 하기]]
