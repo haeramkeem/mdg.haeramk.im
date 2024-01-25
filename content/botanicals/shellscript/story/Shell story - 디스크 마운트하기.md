@@ -47,3 +47,18 @@ mount: /path/to/mount: wrong fs type, bad option, bad superblock on /dev/sdb, mi
 ```bash
 sudo mkfs.ext4 /dev/sdb
 ```
+
+### 3. 잘 됐나?
+
+- [[df - 마운트 현황 출력하기]] 를 통해 잘 마운트 됐나 확인한다.
+
+```bash
+df -hT /dev/sdb
+```
+
+- 다음처럼 나오면 성공:
+
+```
+Filesystem     Type  Size  Used Avail Use% Mounted on
+/dev/sdb       ext4  3.5T   20G  3.3T   1% /path/to/mount
+```
