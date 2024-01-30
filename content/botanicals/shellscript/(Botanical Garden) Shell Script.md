@@ -50,6 +50,12 @@
 - [[openssl - 인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기|인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기]]
 - [[openssl - 인증서에서 CSR (Certificate Signing Request) 뽑아내기|인증서에서 CSR (Certificate Signing Request) 뽑아내기]]
 
+#### `tar`
+
+- [[TAR vs GZIP - 뭔차이지?]]
+- [[tar - 파일 압축하기|파일 압축하기]]
+- [[tar - 파일 압축 풀기|파일 압축 풀기]]
+
 #### `tcpdump`
 
 - [[tcpdump - 인터페이스 지정하기|인터페이스 지정하기]]
