@@ -4,4 +4,4 @@
 
 ## 작물
 
-- [[논문 - Hints for Computer System Design]]
+### Storage
