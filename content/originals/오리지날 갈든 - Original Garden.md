@@ -23,3 +23,4 @@
 ## 기타..
 
 - [[쿠버네티스 교육자료 (SI Analytics, Jan. 2023)]]
+- [[jan.daejeon.k-devcon.com|2024-01-27) K-DevCon 대전 강연 기록]]

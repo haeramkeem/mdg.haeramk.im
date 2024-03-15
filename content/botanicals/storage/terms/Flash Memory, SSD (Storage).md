@@ -12,7 +12,7 @@ tags:
 
 ## 특징
 
-- SSD 는 전기 소자의 특성때문에 r/w 횟수에 제한이 있다. 자세한 것은 [[PE Cyclen Limit, Wearing-off (Storage)|P/E Cyclen Limit, Wearing-off]] 를 참고하자.
+- SSD 는 전기 소자의 특성때문에 r/w 횟수에 제한이 있다. 자세한 것은 [[PE Cyclen Limit, Wearing-off (Storage)|PE Cyclen Limit, Wearing-off]] 를 참고하자.
 - SSD 는 *block* 과 *page* 단위로 연산이 이루어 진다. 자세한 것은 [[Block Interface (Storage)|Block Interface]] 를 참고하자.
 
 ## 종류

@@ -15,7 +15,7 @@ tags:
 ## WA 로 인해 발생하는 문제
 
 - WA 로 인해 추가적인 쓰기 작업이 발생한다는 것은 두 문제점을 초래한다:
-	1. 수명 단축: NAND 플래시 메모리는 [[PE Cyclen Limit, Wearing-off (Storage)|P/E Cycle]] 이 있기 때문에 당연히 수명이 짧아질 수 밖에 없다.
+	1. 수명 단축: NAND 플래시 메모리는 [[PE Cyclen Limit, Wearing-off (Storage)|PE Cycle Limit]] 이 있기 때문에 당연히 수명이 짧아질 수 밖에 없다.
 	2. 성능 저하: 그만큼 대역폭을 소모하는 등의 퍼포먼스 저하가 발생하게 된다.
 
 ## WA 가 발생하는 이유들

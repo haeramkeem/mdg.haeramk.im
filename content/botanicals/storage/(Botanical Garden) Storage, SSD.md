@@ -14,7 +14,7 @@
 - [[Flash Memory, SSD (Storage)|NAND Flash Memory]]
 - [[NOR-based Flash Memory (Storage)|NOR Flash Memory]]
 - [[Over Provisioning (OP) (Storage)|Over Provisioning, OP]]
-- [[PE Cyclen Limit, Wearing-off (Storage)|P/E Cycle Limit, Wearing-off]]
+- [[PE Cyclen Limit, Wearing-off (Storage)|PE Cycle Limit, Wearing-off]]
 - [[Pre-conditioning (Storage)|Pre-conditioning]]
 - [[Read Disturb (Storage)|Read Disturb]]
 - [[Throughput (Storage)|Throughput]]

@@ -28,7 +28,7 @@ tags:
 
 ### 수명 연장
 
-- 이 공간은 [[PE Cyclen Limit, Wearing-off (Storage)|P/E Cycle Limit]] 을 극복하는데 사용될 수 있다.
+- 이 공간은 [[PE Cyclen Limit, Wearing-off (Storage)|PE Cycle Limit]] 을 극복하는데 사용될 수 있다.
 - 즉, LBA 에 연결된 PBA 공간의 일부 block 이 수명이 다 했을 경우, SSD Controller 는 OP 공간에 있는 block 으로 PBA 공간을 매핑해 수명이 다한 block 을 대체하게 된다.
 
 ### Write Throughput 향상
