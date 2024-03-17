@@ -1,3 +1,9 @@
+---
+tags:
+  - 스토리
+  - Kubernetes
+draft: "true"
+---
 > [!warning] 적고 보니 글이 좀 기네요. 마음의 평정심을 갖고 차근차근 해봅시다.
 
 ## Pain point - 왜 이런짓을?

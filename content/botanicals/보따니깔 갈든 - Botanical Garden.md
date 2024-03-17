@@ -4,7 +4,9 @@
 
 ## 재배 작물들
 
+- [[(Botanical Garden) Cybersecurity|사이버보안]]
 - [[(Botanical Garden) ElasticSearch|엘라스틱서치]]
 - [[(Botanical Garden) Kubernetes|쿠버네티스]]
-- [[(Botanical Garden) Cybersecurity|사이버보안]]
+- [[(Botanical Garden) Operating Systems, Linux|운영체제]]
 - [[(Botanical Garden) Shell Script|쉘스크립트]]
+- [[(Botanical Garden) Storage, SSD|스토리지]]
