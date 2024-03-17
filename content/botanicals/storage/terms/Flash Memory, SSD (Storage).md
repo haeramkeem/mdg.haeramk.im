@@ -3,7 +3,11 @@ tags:
   - Storage
   - 용어집
 ---
-> [!info] 주로 참고한 글: [블로그 글](https://metar.tistory.com/entry/NAND-flash%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80), [어떤 회사 블로그 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/), [어떤 글](https://codecapsule.com/2014/02/12/coding-for-ssds-part-2-architecture-of-an-ssd-and-benchmarking/), [카카오 테크 블로그](https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2)
+> [!info] 참고한 자료
+> - [블로그 글](https://metar.tistory.com/entry/NAND-flash%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
+> - [어떤 회사 블로그 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/)
+> - [어떤 글](https://codecapsule.com/2014/02/12/coding-for-ssds-part-2-architecture-of-an-ssd-and-benchmarking/)
+> - [카카오 테크 블로그](https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2)
 
 ## 이게 무언가?
 
@@ -61,6 +65,6 @@ tags:
 		- Input 혹은 output 작업 1회 수행시 처리되는 양
 - 또한 이런 벤치마킹 결과는 다음과 같은 메트릭 (뭐 단위 정도로 생각하자) 으로 정량적인 결과를 산출한다:
 	- [[Throughput (Storage)|스루풋 (Throughput)]]
-	- [[Input Output per second (IOps) (storage)|IOps]]
+	- [[Input Output per second, IOps (storage)|IOps]]
 	- [[Latency (Storage)|레이턴시 (Latency)]]
 - 벤치마킹의 결과를 해석할 때는, (각 메트릭들은 SSD 의 성능을 각기 다른 시선에서 수치화하기 때문에) 이러한 메트릭을 정확하게 이해하고 분석하는게 좋다고 한다.

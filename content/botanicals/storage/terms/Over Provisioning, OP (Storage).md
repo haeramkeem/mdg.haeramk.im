@@ -3,12 +3,13 @@ tags:
   - Storage
   - 용어집
 ---
-> [!info] 출처: [카카오 테크 블로그](https://tech.kakao.com/2016/07/16/coding-for-ssd-part-4/)
+> [!info] 참고한 자료
+> - [카카오 테크 블로그](https://tech.kakao.com/2016/07/16/coding-for-ssd-part-4/)
 
 ## 초과해서 (Over) 공급하다 (Provisioning)
 
 - 간단하게 말하면 Host 에서 사용할 수 있는 공간의 크기보다 더 큰 공간을 물리적으로 구성해 놓는 것이다.
-	- 즉, [[Logical Block Addressing (LBA) (Storage)|LBA]] 공간보다 더 큰 공간을 PBA 공간으로 잡아 놓는 것.
+	- 즉, [[Logical Block Addressing, LBA (Storage)|LBA]] 공간보다 더 큰 공간을 PBA 공간으로 잡아 놓는 것.
 - 여러 이유에서 이러한 짓을 한다.
 
 ## 이유
@@ -33,7 +34,7 @@ tags:
 
 ### Write Throughput 향상
 
-- Random write 부하가 걸리는 상황에서는 free page 소진 속도가 [[Garbage Collection (GC) (Storage)|GC]] 로 생성해 내는 free page 생성 속도보다 빠르기 때문에 성능 저하가 나타나게 된다.
+- Random write 부하가 걸리는 상황에서는 free page 소진 속도가 [[Garbage Collection, GC (Storage)|GC]] 로 생성해 내는 free page 생성 속도보다 빠르기 때문에 성능 저하가 나타나게 된다.
 - 이때 OP 공간의 free page 를 버퍼처럼 사용해 GC 가 free page 를 생성하는 시간을 벌어 성능 저하를 감소할 수 있게 된다.
 - 또한 [이 친구](https://codecapsule.com/2014/02/12/coding-for-ssds-part-4-advanced-functionalities-and-internal-parallelism/) 는 비록 추측이긴 하지만 이 OP 가 [[TRIM, Deallocation (Storage)|TRIM]] 처럼 작용해 성능이 향상될 수 있다고 한다.
-	- Random write 부하가 걸려 OP 공간까지 활용해 ssd 가 100% 사용되더라도 다시 부하가 낮아져 OP 공간을 사용할 필요성이 없어지면 OP 공간은 LBA 와 매핑되지 않은 공간이기 때문에 TRIM 으로 invalid 공간을 inform 받지 않고서도 invalid 하다고 판단할 수 있을 것이고, 따라서 GC 효율성과 [[Write Amplification, Write Amplication Factor (WA, WAF) (Storage)|WA]] 감소에 도움이 될 것이라는 것.
+	- Random write 부하가 걸려 OP 공간까지 활용해 ssd 가 100% 사용되더라도 다시 부하가 낮아져 OP 공간을 사용할 필요성이 없어지면 OP 공간은 LBA 와 매핑되지 않은 공간이기 때문에 TRIM 으로 invalid 공간을 inform 받지 않고서도 invalid 하다고 판단할 수 있을 것이고, 따라서 GC 효율성과 [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|WA]] 감소에 도움이 될 것이라는 것.

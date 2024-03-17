@@ -3,7 +3,8 @@ tags:
   - 용어집
   - Storage
 ---
-> [!info] 출처: [카카오 테크 블로그](https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2)
+> [!info] 참고한 자료
+> - [카카오 테크 블로그](https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2)
 
 ## IOps
 

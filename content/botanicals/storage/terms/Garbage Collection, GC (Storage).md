@@ -3,7 +3,11 @@ tags:
   - 용어집
   - Storage
 ---
-> [!info] 출처: [어떤 회사 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/), [어떤 블로그 글](https://medium.com/@reefland/over-provisioning-ssd-for-increased-performance-and-write-endurance-142feb015b4e), [카카오 테크 블로그](https://tech.kakao.com/2016/07/15/coding-for-ssd-part-3), [윅히피디아](https://en.wikipedia.org/wiki/Write_amplification)
+> [!info] 참고한 자료
+> - [어떤 회사 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/)
+> - [어떤 블로그 글](https://medium.com/@reefland/over-provisioning-ssd-for-increased-performance-and-write-endurance-142feb015b4e)
+> - [카카오 테크 블로그](https://tech.kakao.com/2016/07/15/coding-for-ssd-part-3)
+> - [윅히피디아](https://en.wikipedia.org/wiki/Write_amplification)
 
 ## SSD 에서의 Garbage Collection (GC)
 
@@ -17,14 +21,14 @@ tags:
 
 ## GC 의 과정
 
-- SSD 의 컨트롤러는 [[Flash Translation Layer (FTL) (Storage)|FTL]] 의 LBA mapping table 를 보고 block 내의 valid page 들을 확인한다.
+- SSD 의 컨트롤러는 [[Flash Translation Layer, FTL (Storage)|FTL]] 의 LBA mapping table 를 보고 block 내의 valid page 들을 확인한다.
 - 그리고 이들을 다른 block 으로 옮긴 후, LBA 에 기존의 page 는 `invalid` 로 표시한 뒤 새로운 page address 를 매핑해 놓는다.
 	- SSD 를 사용하는 호스트 (예: OS) 는 GC 가 수행되었는지 아닌지 모르기 때문. 즉, GC 여부와 관계 없이 호스트는 자신이 알고 있던 주소로 접근한다.
 - 이후 해당 block 을 erase 한다.
 
 ## GC 의 문제점 및 개선 방법들
 
-- GC 를 한다는 것은 page 를 옮기는 작업이 수반되므로, 추가적인 write 가 발생해 [[Write Amplification, Write Amplication Factor (WA, WAF) (Storage)|WA]] 를 늘리는 원인이 된다.
+- GC 를 한다는 것은 page 를 옮기는 작업이 수반되므로, 추가적인 write 가 발생해 [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|WA]] 를 늘리는 원인이 된다.
 - 또한 write 보다 erase 의 작업 시간이 더 길다. (250 ~ 1500 마이크로 초 vs 1500 ~ 3500 마이크로 초) 따라서 GC 를 하는 것은 비용이 꽤나 큰 작업이다.
 
 ## GC 종류들

@@ -3,7 +3,9 @@ tags:
   - 용어집
   - Storage
 ---
-> [!info] 출처: [어떤 회사 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/), [위키피디아](https://en.wikipedia.org/wiki/Wear_leveling)
+> [!info] 참고한 자료
+> - [어떤 회사 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/)
+> - [위키피디아](https://en.wikipedia.org/wiki/Wear_leveling)
 
 ## 닳는 것 (wear) 을 고르게 (leveling) 하는 것
 

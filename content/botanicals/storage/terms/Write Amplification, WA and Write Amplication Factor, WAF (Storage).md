@@ -3,7 +3,9 @@ tags:
   - 용어집
   - Storage
 ---
-> [!info] 출처: [어느 회사 사이트](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/), [위키피디아](https://en.wikipedia.org/wiki/Write_amplification)
+> [!info] 참고한 자료
+> - [어느 회사 사이트](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/)
+> - [위키피디아](https://en.wikipedia.org/wiki/Write_amplification)
 
 ## 쓰기 작업 (write) 이 증폭 (amplification) 되는 것
 
@@ -28,17 +30,17 @@ tags:
 
 ### Garbage collection
 
-- NAND 플래시에서는 write 하기 위해 [[Garbage Collection (GC) (Storage)|GC]] 가 수행되기도 하는데
+- NAND 플래시에서는 write 하기 위해 [[Garbage Collection, GC (Storage)|GC]] 가 수행되기도 하는데
 - 이때 invalid block 들을 옮기는 작업 때문에 추가적인 write 가 발생하게 되고, 따라서 WA 가 발생하게 된다.
 - 이를 해결하기 위해 다음과 같은 기술들이 도입되었다고 한다... ([출처](https://nvmexpress.org/wp-content/uploads/Hyperscale-Innovation-Flexible-Data-Placement-Mode-FDP.pdf))
-	- ~1991 년: [[Over Provisioning (OP) (Storage)|Over Provisioning]]
+	- ~1991 년: [[Over Provisioning, OP (Storage)|Over Provisioning]]
 	- ~2007-2008 년: [[TRIM, Deallocation (Storage)|TRIM, Deallocation]]
-	- 2022 년: [[Zoned Namespaces (ZNS) (Storage)|ZNS]], [[Flexible Data Placement (FDP) (Storage)|FDP]]
+	- 2022 년: [[Zoned Namespaces, ZNS (Storage)|ZNS]], [[Flexible Data Placement, FDP (Storage)|FDP]]
 
 ### Wear leveling
 
 - [[Wear Leveling (Storage)|Wear Leveling]] 도 WA 를 증가시킬 수 있다고 한다.
-	- 데이터가 여러 block 에 분산되어 저장된다는 것은 그만큼 데이터 rewrite 시에 invalid 로 마킹되는 page 들이 여러 block 들에 분산된다는 것이고, 따라서 [[Garbage Collection (GC) (Storage)|GC]] 를 수행할 때 더 많은 page 들을 이동시켜야 하기 때문.
+	- 데이터가 여러 block 에 분산되어 저장된다는 것은 그만큼 데이터 rewrite 시에 invalid 로 마킹되는 page 들이 여러 block 들에 분산된다는 것이고, 따라서 [[Garbage Collection, GC (Storage)|GC]] 를 수행할 때 더 많은 page 들을 이동시켜야 하기 때문.
 		- 좀만 생각해보면 당연하다: GC 는 어찌보면 invalid page 들을 모아서 지우는 것이기 때문에 invalid page 들이 한 블럭에 이미 모여있으면 옮겨야 할 page 가 더 적어지기 때문이다.
 	- 또한 Wear Leveling 방식에 따라 위와는 다른 이유로 데이터를 옮겨야 할 수도 있다.
 - 즉 Wear Leveling 과 WA 사이에는 어느정도의 trade-off 가 있는 것.
@@ -53,7 +55,7 @@ tags:
 		- 이는 GC 를 비교적 적게 실행할 수 있게 하고, 따라서 WA 도 개선된다.
 	- 물론 이렇게 하면 cold data page 와 hot data page 간에 wear level 에 다소 차이가 생긴다는 문제점이 있긴 하다.
 		- 이를 위해 cold data page 와 hot data page 들을 주기적으로 swap 해주기도 한다. (물론 이것 또한 WA 를 증가시킨다.)
-	- 다만 [[Flash Translation Layer (FTL) (Storage)|FTL]] 입장에서는 어떤 데이터가 cold 인지 hot 인지 구분하기 힘들기 때문에, host level 에서 제어를 해야 된다.
+	- 다만 [[Flash Translation Layer, FTL (Storage)|FTL]] 입장에서는 어떤 데이터가 cold 인지 hot 인지 구분하기 힘들기 때문에, host level 에서 제어를 해야 된다.
 
 ### Block Interface
 
@@ -63,11 +65,12 @@ tags:
 
 ### Read Disturb
 
-- [[Read Disturb (Storage)|Read Disturb]] 현상 때문에 block 을 종종 옮겨줘야 하고, 이것은 마찬가지로 추가적인 GC 와 WA 증가를 유발한다.
+- [[Read Disturb (Storage)|Read Disturb]] 현상도 WA 를 증가시킨다.
+	- Read disturb 를 막기 위해 block 을 종종 옮겨줘야 하고, 이것은 마찬가지로 추가적인 GC 를 유발하기 때문
 
 ## Write Amplification Factor (WAF)
 
 - WA 의 정도를 나타내는 수치로 WAF (Write Amplification Factor) 를 사용한다.
 - 이것은 "배수" 로 생각하면 된다. 즉, WAF 가 2라면 실 데이터의 2배 양의 write 가 발생한다는 것.
 	- 따라서 1보다 작아질 수는 없다. (더 적은 양의 write 가 발생할 수는 없으므로)
-- 일반적인 SSD 에서는 이 수치가 4를 넘어가기도 하며, 이 문제를 해결하기 위해 등장한 [[Zoned Namespaces (ZNS) (Storage)|ZNS]] 가 이론적으로는 WAF 가 1이라고 한다.
+- 일반적인 SSD 에서는 이 수치가 4를 넘어가기도 하며, 이 문제를 해결하기 위해 등장한 [[Zoned Namespaces, ZNS (Storage)|ZNS]] 가 이론적으로는 WAF 가 1이라고 한다.

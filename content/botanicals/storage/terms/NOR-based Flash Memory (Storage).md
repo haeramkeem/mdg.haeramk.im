@@ -3,7 +3,8 @@ tags:
   - 용어집
   - Storage
 ---
-> [!info] 출처: [블로그 글](https://metar.tistory.com/entry/NAND-flash%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
+> [!info] 참고한 자료
+> - [블로그 글](https://metar.tistory.com/entry/NAND-flash%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
 
 ## 이게 무언가?
 

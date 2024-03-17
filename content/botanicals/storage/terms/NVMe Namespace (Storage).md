@@ -3,7 +3,8 @@ tags:
   - 용어집
   - Storage
 ---
-> 참고 자료: [NVMe doc](https://nvmexpress.org/resource/nvme-namespaces/)
+> [!info] 참고한 자료
+> - [NVMe document](https://nvmexpress.org/resource/nvme-namespaces/)
 
 ## 이건 뭐지
 

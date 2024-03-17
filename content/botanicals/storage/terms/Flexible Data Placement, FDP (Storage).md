@@ -3,7 +3,11 @@ tags:
   - 용어집
   - Storage
 ---
-> [!info] 참고 자료: [OCP 발표 영상](https://youtu.be/ZEISXHcNmSk?si=DwLLItWONhXSXze2), [NVMe 발표 자료 1](https://nvmexpress.org/wp-content/uploads/Hyperscale-Innovation-Flexible-Data-Placement-Mode-FDP.pdf), [NVMe 발표 자료 2](https://nvmexpress.org/wp-content/uploads/FMS-2023-Flexible-Data-Placement-FDP-Overview.pdf), [어떤 회사 자료](https://cdn.teledynelecroy.com/files/whitepapers/testingflexibledataplacementwithsvf-enduro_final.pdf)
+> [!info] 참고한 자료
+> - [OCP 발표 영상](https://youtu.be/ZEISXHcNmSk?si=DwLLItWONhXSXze2)
+> - [NVMe 발표 자료 1](https://nvmexpress.org/wp-content/uploads/Hyperscale-Innovation-Flexible-Data-Placement-Mode-FDP.pdf)
+> - [NVMe 발표 자료 2](https://nvmexpress.org/wp-content/uploads/FMS-2023-Flexible-Data-Placement-FDP-Overview.pdf)
+> - [어떤 회사 자료](https://cdn.teledynelecroy.com/files/whitepapers/testingflexibledataplacementwithsvf-enduro_final.pdf)
 
 > [!info] 본 문서의 이미지는 별도의 참조가 걸려있지 않는 한 [이 영상](https://youtu.be/ZEISXHcNmSk?si=85mL2nzQ6gLLlqpG) 에서 가져왔습니다.
 
@@ -11,7 +15,7 @@ tags:
 
 ## 이건 뭐람
 
-- 결론부터 간단히 말하면, Host 에서 data 를 어디에 저장할지 (어느 [[Logical Block Addressing (LBA) (Storage)|LBA]] 공간을 어느 위치에 저장할지) 지정하는 방식 을 통해 [[Garbage Collection (GC) (Storage)|GC]] 로 인한 [[Write Amplification, Write Amplication Factor (WA, WAF) (Storage)|WAF]] 증가 등의 문제점을 해결한 방식이다.
+- 결론부터 간단히 말하면, Host 에서 data 를 어디에 저장할지 (어느 [[Logical Block Addressing, LBA (Storage)|LBA]] 공간을 어느 위치에 저장할지) 지정하는 방식 을 통해 [[Garbage Collection, GC (Storage)|GC]] 로 인한 [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|WAF]] 증가 등의 문제점을 해결한 방식이다.
 - 2022-12-12 에, NVMe TP (Technical Proposal) 4146 으로 제안된 제안서가 승낙 받았다.
 	- 정식 표준으로 도입되었는 지는 모르겠다.
 - 이제 이거에 대해 차근차근 알아보자구
@@ -20,12 +24,12 @@ tags:
 
 ### 기존 방식의 문제점 - WAF 증가
 
-- 기존의 [[Garbage Collection (GC) (Storage)|GC]] 방식은 데이터 이동이 불가피 하였고, 따라서  [[Write Amplification, Write Amplication Factor (WA, WAF) (Storage)|WAF]] 가 증가하게 되는 문제점이 있었다.
+- 기존의 [[Garbage Collection, GC (Storage)|GC]] 방식은 데이터 이동이 불가피 하였고, 따라서  [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|WAF]] 가 증가하게 되는 문제점이 있었다.
 	1. 이것은 추가적인 R/W 가 수반되기 때문에 대역폭 차지, 컴퓨팅 자원 소모 등의 오버헤드가 있어 성능 및 QoS (Quality of Service) 저하를 일으켰다.
 		- 성능 저하의 일환으로, Host operation 과 GC 의 경합에 의해 시간이 지남에 따라 성능이 더욱 저하되는 문제 ([[Pre-conditioning (Storage)|Pre-conditioning]] 참고) 가 있다.
 	2. 추가적인 R/W 는 [[PE Cyclen Limit, Wearing-off (Storage)|PE Cycle Limit]] 에 더 일찍 도달하게 하여 디바이스 수명을 단축하는 문제가 있었고
 	3. 마찬가지로 추가적인 R/W 는 전력을 더 많이 소모하게 해 환경적/비용적으로도 좋지 않았다.
-	4. 또한 성능을 개선하고자 도입된 [[Over Provisioning (OP) (Storage)|OP]] 는 디바이스의 가용 저장 공간을 제한하는 부작용도 낳았다.
+	4. 또한 성능을 개선하고자 도입된 [[Over Provisioning, OP (Storage)|OP]] 는 디바이스의 가용 저장 공간을 제한하는 부작용도 낳았다.
 
 ### WAF 를 줄이기 위한 FDP 의 접근
 
@@ -41,7 +45,7 @@ tags:
 	- 이것은 WAF 를 줄이지는 못했지만 수명 단축 문제와 Random write 부하 상황에서 GC 성능을 개선했다.
 - 그 다음으로 도입된 것은 [[TRIM, Deallocation (Storage)|TRIM]] 이다.
 	- Host 가 사용하지 않는 LBA 공간에 대한 정보를 제공해 줌으로서 GC 시 이동시켜야 하는 page 의 양을 줄이도록 하였다.
-- 이후에는 [[Multi-stream SSD (Storage)|Multi-stream 방식]], [[Zoned Namespaces (ZNS) (Storage)|ZNS]] 와 FDP 가 제안되었다.
+- 이후에는 [[Multi-stream SSD (Storage)|Multi-stream 방식]], [[Zoned Namespaces, ZNS (Storage)|ZNS]] 와 FDP 가 제안되었다.
 	- 이것은 Life cycle 이 유사한 데이터들을 함께 배치함으로써, 데이터 이동 없이 GC 가 수행될 수 있도록 해 WAF 를 획기적으로 감소시키고자 하는 접근이다.
 
 #### Multi-stream, ZNS 와의 차이점

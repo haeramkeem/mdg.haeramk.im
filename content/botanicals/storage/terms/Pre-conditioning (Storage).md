@@ -3,7 +3,8 @@ tags:
   - 용어집
   - Storage
 ---
-> [!info] 출처: [카카오 테크 블로그](https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2)
+> [!info] 참고한 자료
+> - [카카오 테크 블로그](https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2)
 
 ## 이게 무언가?
 
@@ -18,5 +19,5 @@ tags:
 
 ## 왜 그런가?
 
-- 과한 랜덤 쓰기가 가해질 경우, [[Garbage Collection (GC) (Storage)|GC]] 과도하게 발생하기 때문.
+- 과한 랜덤 쓰기가 가해질 경우, [[Garbage Collection, GC (Storage)|GC]] 과도하게 발생하기 때문.
 	- [저기](https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2) 에서는 "Sustaining mode" 에 들어간다고 했는데, 공식 용어가 아닌건지, 검색해도 잘 안나온다.

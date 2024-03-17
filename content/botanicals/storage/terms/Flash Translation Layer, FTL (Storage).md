@@ -3,13 +3,15 @@ tags:
   - 용어집
   - Storage
 ---
-> 출처: [카카오 테크 블로그](https://tech.kakao.com/2016/07/15/coding-for-ssd-part-3/), [어떤 강의 ppt](https://ocw.snu.ac.kr/sites/default/files/NOTE/Week7_1.pdf)
+> [!info] 참고한 자료
+> - [카카오 테크 블로그](https://tech.kakao.com/2016/07/15/coding-for-ssd-part-3/)
+> - [서울대 OCW 강의 자료](https://ocw.snu.ac.kr/sites/default/files/NOTE/Week7_1.pdf)
 
 ## 이게 뭐지
 
 - Host 에서 사용하는 주소인 *Logical Block Address (LBA)* 를 실제 데이터가 저장된 주소인 *Physical Block Address (PBA)* 로 바꿔주는 작업이 필요한데
 	- 아마 이러한 LBA 가 존재하는 이유는 데이터의 실제 주소가 바뀌어도 Host 에서는 변경된 주소가 아닌 기존의 주소를 그대로 사용하게 해주기 위함이리라.
-- HDD 는 overwrite 가 가능하기 때문에 [[Logical Block Addressing (LBA) (Storage)|LBA]] 어레이를 사용하는 것이 효율적이었지만 SSD 에서는 (overwrite 가 불가능하기 때문에) 다소 문제가 있다.
+- HDD 는 overwrite 가 가능하기 때문에 [[Logical Block Addressing, LBA (Storage)|LBA]] 어레이를 사용하는 것이 효율적이었지만 SSD 에서는 (overwrite 가 불가능하기 때문에) 다소 문제가 있다.
 	- 고 하더라. 어떤게 문제가 되는지는 깊게 들어가 보지 않았다.
 - 따라서 SSD 에서도 HDD 의 LBA 시스템을 동일하게 지원해주기 위해 도입된 것이 *Flash Translation Layer (FTL)* 이다.
 - 이놈은 별도의 HW 가 아닌 SW layer 로, SSD Controller 펌웨어에 포함된다.
@@ -18,7 +20,8 @@ tags:
 
 - 당연히 LBA 와 PBA 의 매핑을 테이블 형식으로 저장하게 된다.
 	- 이 테이블은 SSD 내의 RAM 에 저장되고, 전원 차단시에도 이 내용을 유지하기 위해 저장공간 (플래시 메모리) 에도 저장한다.
-	- 아마 [[Over Provisioning (OP) (Storage)|오버프로비저닝]] 된 공간에 저장되겠지
+	- 아마 [[Over Provisioning, OP (Storage)|오버프로비저닝]] 된 공간에 저장되겠지
+	- 이 테이블은 *L2P Table* 이라고도 불린다.
 - Mapping table 을 구현하는 방식은 여러 가지가 있을 수 있다:
 
 ### Page level mapping
@@ -40,7 +43,7 @@ tags:
 	- 위 예시에서는 `1`번 block 에서 `3`번 page 를 찾는다.
 - 해당 페이지는 invalid 처리한 후에, 새로운 free page 를 찾아 write 를 하고, 테이블 entry 를 수정한다.
 	- 위의 예시에서는 테이블 entry 값이 `[1, 3]` 에서 `[2, 3]` 으로 변경된다.
-- 그럼 write 작업은 완료되고, 이 과정에서 생성된 invalid page 는 추후에 [[Garbage Collection (GC) (Storage)|GC]] 로 사라지게 될 것이다.
+- 그럼 write 작업은 완료되고, 이 과정에서 생성된 invalid page 는 추후에 [[Garbage Collection, GC (Storage)|GC]] 로 사라지게 될 것이다.
 
 #### 문제점
 
@@ -84,7 +87,7 @@ tags:
 #### 문제점
 
 - 위 과정은 딱 봐도 너무나 비효율적인 것처럼 보인다.
-	- Page 들을 복사하는 것 자체부터 수많은 [[Write Amplification, Write Amplication Factor (WA, WAF) (Storage)|WA]] 를 유발하고
+	- Page 들을 복사하는 것 자체부터 수많은 [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|WA]] 를 유발하고
 	- Page 들을 복사하는 과정에서 Invalid page 가 수도 없이 생기기 때문에 당연히 GC 도 자주 발생하게 될 것이기 때문.
 
 ### Hybrid log-block FTL
