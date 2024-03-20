@@ -5,6 +5,7 @@
 ## 작물들
 
 - [[Block Interface (Storage)|Block Interface]]
+- [[Conventional Magnetic Recording, CMR HDD (Storage)|Conventional Magnetic Recording HDD, CMR HHD]]
 - [[Data Chunk (Storage)|Data Chunk]]
 - [[NAND-based Flash Memory (Storage)|Flash Memory, SSD]]
 - [[Flash Translation Layer, FTL (Storage)|Flash Translation Layer, FTL]]
@@ -21,6 +22,7 @@
 - [[PE Cyclen Limit, Wearing-off (Storage)|PE Cycle Limit, Wearing-off]]
 - [[Pre-conditioning (Storage)|Pre-conditioning]]
 - [[Read Disturb (Storage)|Read Disturb]]
+- [[Shingled Magnetic Recording HDD, SMR HDD (Storage)|Shingled Magnetic Recording HDD, SMR HDD]]
 - [[Superblock (Storage)|Superblock]]
 - [[Throughput (Storage)|Throughput]]
 - [[TRIM, Deallocation (Storage)|TRIM, Deallocation]]
