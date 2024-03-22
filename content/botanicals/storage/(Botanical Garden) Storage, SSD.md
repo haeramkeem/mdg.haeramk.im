@@ -5,7 +5,7 @@
 ## 작물들
 
 - [[Block Interface (Storage)|Block Interface]]
-- [[Conventional Magnetic Recording, CMR HDD (Storage)|Conventional Magnetic Recording HDD, CMR HHD]]
+- [[Conventional Magnetic Recording, CMR HDD (Storage)|Conventional Magnetic Recording HDD, CMR HDD]]
 - [[Data Chunk (Storage)|Data Chunk]]
 - [[NAND-based Flash Memory (Storage)|Flash Memory, SSD]]
 - [[Flash Translation Layer, FTL (Storage)|Flash Translation Layer, FTL]]
