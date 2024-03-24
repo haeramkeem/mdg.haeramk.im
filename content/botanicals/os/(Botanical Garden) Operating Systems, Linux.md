@@ -2,6 +2,8 @@
 
 - 운영체제 (주로 리눅스 계열) 한번 심어보자
 
-## 작물
+## 작물들
 
-### Storage
+### 논문
+
+- [[논문 - The Evolution of the Unix Time-sharing System|Dennis M. Ritchie - The Evolution of the Unix Time-sharing System]]

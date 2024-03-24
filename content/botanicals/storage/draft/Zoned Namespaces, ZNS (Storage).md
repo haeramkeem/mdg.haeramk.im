@@ -5,6 +5,7 @@ tags:
 ---
 > [!info] 참고한 자료
 > - [ZNS: Avoiding the Block Interface Tax for Flash-based SSDs (USENIX ATC '21)](https://www.usenix.org/system/files/atc21-bjorling.pdf)
+> - [WD 블로그](https://blog.westerndigital.com/what-is-zoned-storage-initiative/)
 
 ## 이게 뭐임
 
@@ -25,12 +26,18 @@ tags:
 		- 성능을 예측하기 힘듦 (performance unpredictability)
 	- 위의 자원들 중 OP 와 DRAM 은 모두 현재의 SSD 가 감수해야 하는 아주 비싼 자원들이다.
 
-### 문제를 해결하기 위한 ZNS 의 접근
+### 문제를 해결하기 위한 접근
 
 #### Zoned Storage Model
 
-- 이러한 문제를 해결하기 위해 SSD (+ 와 SMR HDD 라고 불리는 특별 HDD) 에 맞는 인터페이스가 고안되었는데 이것이 *Zoned Storage Model* 이다.
-
+- ZSM 은 각 표준에 따라 다음과 같은 이름으로 인터페이스가 구현되었다:
+	- 이것은 [[Small Computer Systems Interface, SCSI (Storage)|SCSI]] 용 Command set 인 [[Zoned Block Commands, ZBC (Storage)|ZBC]] 인터페이스와
+	- [[Parallel ATA, AT Attachment, Integrated Drive Electronics, PATA, ATA, IDE (Storage)|ATA]] 용 Command set 인 [[Zoned Device ATA Command Set, ZAC (Storage)|ZAC]] 인터페이스로 구현되었고
+	- 그리고 [[Non-Volatile Memory Express, NVMe (Storage)|NVMe]] 용으로 구현된 인터페이스가 바로 ZNS 이다.
+- ZNS 는 이러한 기능을 제공해 준다:
+	- Zoned Storage Model 와 완벽하게 호환됨
+	- SSD 의 특징을 최대한으로 이끌어내 성능을 높임
+	- (OCSSD와는 다르게) 각 디바이스의 특성과는 무관함
 
 ### 기존 방식의 문제점을 해결하기 위해 이전에 시도된 것들 (History)
 
