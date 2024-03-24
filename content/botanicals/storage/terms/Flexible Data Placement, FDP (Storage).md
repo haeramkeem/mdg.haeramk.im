@@ -3,7 +3,7 @@ tags:
   - 용어집
   - Storage
 ---
-> [!info] 참고한 자료
+ > [!info] 참고한 자료
 > - [OCP 발표 영상](https://youtu.be/ZEISXHcNmSk?si=DwLLItWONhXSXze2)
 > - [NVMe 발표 자료 1](https://nvmexpress.org/wp-content/uploads/Hyperscale-Innovation-Flexible-Data-Placement-Mode-FDP.pdf)
 > - [NVMe 발표 자료 2](https://nvmexpress.org/wp-content/uploads/FMS-2023-Flexible-Data-Placement-FDP-Overview.pdf)
