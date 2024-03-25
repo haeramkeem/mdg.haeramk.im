@@ -5,12 +5,9 @@ tags:
   - SNU_CSE_MS_AOS24S
 draft: "true"
 ---
-> [!fail] (주의!) 논문에 대한 부정확한 해석이 다수 포함되어 있습니다.
+> [!info] 본 글은 ACM SIGOPS 에 게재된 논문 "[Hints for Computer System Design](https://dl.acm.org/doi/10.1145/773379.806614)" 를 읽고 정리한 내용입니다. ([한국어 번역본](https://johngrib.github.io/wiki/clipping/butler-w-lampson/hints-for-computer-system-design/))
 
-## 개요
-
-- ACM SIGOPS 에 게재된 논문 "[Hints for Computer System Design](https://dl.acm.org/doi/10.1145/773379.806614)" 읽어보기
-- [한국어 번역본](https://johngrib.github.io/wiki/clipping/butler-w-lampson/hints-for-computer-system-design/)
+> [!fail] (주의!) 본 문서는 Draft 상태이고 관리되지 않습니다. 읽을 때 주의해 주세요.
 
 ## Abstract
 
