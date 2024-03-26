@@ -6,5 +6,6 @@
 
 ### 논문
 
-- [[논문 - Hints for Computer System Design|(!DRAFT!) Butler W. Lampson - Hints for Computer System Design]]
+- [[논문 - A Fast File System for UNIX|(DRAFT!!) A Fast File System for UNIX]]
+- [[논문 - Hints for Computer System Design|(DRAFT!!) Butler W. Lampson - Hints for Computer System Design]]
 - [[논문 - The Evolution of the Unix Time-sharing System|Dennis M. Ritchie - The Evolution of the Unix Time-sharing System]]
