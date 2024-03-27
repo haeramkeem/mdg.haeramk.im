@@ -8,9 +8,9 @@ tags:
 
 ## 이게뭐임?
 
-- 말 그대로 [[Domain Name System, DNS (Network)|DNS]] Zone 의 관리를 위임 (Delegate) 하는 것이다.
+- 말 그대로 [[Zone (DNS)|DNS Zone]] 의 관리를 위임 (Delegate) 하는 것이다.
 - 여기서 "관리" 라는 것은 해당 DNS zone 에 대해
-	- DNS record 들을 저장하고
+	- [[Resource Record, RR (DNS)|DNS record]] 들을 저장하고
 	- DNS record 에 따라 query 에 응답하는 것이라고 생각하면 될 것 같다.
 - 또한 아무한테나 위임하는 것이 아니고, parent zone (예를 들어 `.com.`) 이 child zone (예를 들어 `example.com.`) 에게 위임하는 것이다.
 - 즉, Parent zone 은 child zone 에 대한 record 를 저장하고 query 를 응답해야 하지만, 이런 delegation 을 통해 parent 가 아닌 child 가 record 저장 및 응답을 하게 하는 것.
