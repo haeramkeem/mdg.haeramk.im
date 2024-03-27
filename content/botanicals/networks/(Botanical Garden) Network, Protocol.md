@@ -12,4 +12,5 @@
 
 ### Domain Name System (DNS)
 
-- [[DNS Zone Delegation (Network)|DNS Zone Delegation]]
+- [[Domain Name System, DNS (Network)|Domain Name System, DNS]]
+- [[Zone Delegation (Network)|Zone Delegation]]

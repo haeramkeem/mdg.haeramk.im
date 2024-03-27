@@ -8,7 +8,7 @@ tags:
 
 ## 이게뭐임?
 
-- 말 그대로 [[Domain Name System (Network)|DNS]] Zone 의 관리를 위임 (Delegate) 하는 것이다.
+- 말 그대로 [[Domain Name System, DNS (Network)|DNS]] Zone 의 관리를 위임 (Delegate) 하는 것이다.
 - 여기서 "관리" 라는 것은 해당 DNS zone 에 대해
 	- DNS record 들을 저장하고
 	- DNS record 에 따라 query 에 응답하는 것이라고 생각하면 될 것 같다.
