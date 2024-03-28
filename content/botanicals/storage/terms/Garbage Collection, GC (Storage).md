@@ -14,7 +14,7 @@ tags:
 ![[Pasted image 20240312195045.png]]
 > [이미지 출처](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/)
 
-- [[Block Interface (Storage)#Operation 특징|여기에서 언급한 특성]] 때문에 플래시 메모리에서는 GC (Garbage Collection) 을 수행한다.
+- [[Flash Memory, SSD (Storage)#Read-modify-write|여기서 언급한 것]] 처럼, 플래시 메모리에서는 GC (Garbage Collection) 을 필요로 한다.
 	- 즉, read/write size (page) 와 erase size (block) 이 다르기 때문
 	- write page 를 하려면 erase 를 먼저 해야 하는데 이것이 page 단위가 아닌 block 단위로만 가능하기 때문에 block 내부에 있던 기존의 valid page 들을 딴 곳으로 옮겨야 한다.
 - 구체적으로 이것이 어떻게 수행되는 지는 아래에서 설명해준다.

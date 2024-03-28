@@ -4,7 +4,6 @@
 
 ## 작물들
 
-- [[Block Interface (Storage)|Block Interface]]
 - [[Conventional Magnetic Recording, CMR HDD (Storage)|Conventional Magnetic Recording HDD, CMR HDD]]
 - [[Data Chunk (Storage)|Data Chunk]]
 - [[NAND-based Flash Memory (Storage)|Flash Memory, SSD]]
@@ -28,3 +27,4 @@
 - [[TRIM, Deallocation (Storage)|TRIM, Deallocation]]
 - [[Wear Leveling (Storage)|Wear Leveling]]
 - [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|Write Amplification, Write Amplication Factor (WA, WAF)]]
+- [[Zoned Block Model (Storage)|Zoned Block Model]]

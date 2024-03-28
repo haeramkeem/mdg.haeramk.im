@@ -57,9 +57,9 @@ tags:
 		- 이를 위해 cold data page 와 hot data page 들을 주기적으로 swap 해주기도 한다. (물론 이것 또한 WA 를 증가시킨다.)
 	- 다만 [[Flash Translation Layer, FTL (Storage)|FTL]] 입장에서는 어떤 데이터가 cold 인지 hot 인지 구분하기 힘들기 때문에, host level 에서 제어를 해야 된다.
 
-### Block Interface
+### Read/Write Page, Erase Block
 
-- SSD 의 [[Block Interface (Storage)|Block Interface]] 도 WA 를 유발한다.
+- SSD 의 [[Flash Memory, SSD (Storage)#Read/Write by Page|Read, Write 와 Erase 의 단위가 다른 특징]] 도 WA 를 유발한다.
 - 즉, write 작업은 page 단위로 이루어 지기 때문에, 데이터의 크기가 page 사이즈에 딱 맞지 않으면 비는 만큼 불필요한 write 가 발생하는 것.
 	- 이러한 것을 방지하기 위해 page 크기에 맞게 데이터의 크기를 맞추거나 (*Align writes*), 아니면 여러 데이터를 합쳐서 쓰는 방법 (*Buffer small writes*) 을 사용하기도 한다고 한다.
 

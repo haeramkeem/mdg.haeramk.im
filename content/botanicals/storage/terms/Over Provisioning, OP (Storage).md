@@ -27,12 +27,12 @@ tags:
 	- SSD 에서 자체 지원하지 않더라도 사용자가 필요에 따라 이 공간을 늘릴 수 있다: 디스크 파티셔닝할 때 적은 공간을 파티션하면 남는 공간은 자동으로 OP 공간으로 사용된다.
 - 이렇게 남는 공간은 Host 에서는 보이지 않지만 SSD Controller 에서는 보이고, 따라서 SSD Controller 에 의해 이 공간을 성능 향상을 위해 활용하게 된다.
 
-### 수명 연장
+### 3. 수명 연장
 
 - 이 공간은 [[PE Cyclen Limit, Wearing-off (Storage)|PE Cycle Limit]] 을 극복하는데 사용될 수 있다.
 - 즉, LBA 에 연결된 PBA 공간의 일부 block 이 수명이 다 했을 경우, SSD Controller 는 OP 공간에 있는 block 으로 PBA 공간을 매핑해 수명이 다한 block 을 대체하게 된다.
 
-### Write Throughput 향상
+### 4. Write Throughput 향상
 
 - Random write 부하가 걸리는 상황에서는 free page 소진 속도가 [[Garbage Collection, GC (Storage)|GC]] 로 생성해 내는 free page 생성 속도보다 빠르기 때문에 성능 저하가 나타나게 된다.
 - 이때 OP 공간의 free page 를 버퍼처럼 사용해 GC 가 free page 를 생성하는 시간을 벌어 성능 저하를 감소할 수 있게 된다.

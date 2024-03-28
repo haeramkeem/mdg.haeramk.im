@@ -16,7 +16,7 @@ tags:
 
 ## 좋은 점
 
-- 이렇게 하면 좋은점은 (지겹게 등장하긴 하지만) GC 오버헤드 등의 [[Block Interface (Storage)|Block interface]] 의 한계를 완화할 수 있다는 것이다.
+- 이렇게 하면 좋은점은 (지겹게 등장하긴 하지만) GC 오버헤드 등의 한계를 완화할 수 있다는 것이다.
 	- 데이터를 어디에 저장하냐가 GC 오버헤드에 영향을 주고
 	- 데이터의 저장 위치를 정하는 것에는 Host 가 알고 있는 정보들을 활용하는 것이 도움이 된다고 한다.
 		- 이에 대해서는 [[Flexible Data Placement, FDP (Storage)|FDP 문서]] 나 [[Zoned Namespaces, ZNS (Storage)|ZNS 문서]], [[Multi-stream SSD (Storage)|Multi-stream SSD]] 에서도 여러번 언급했으니 모르겠으면 가서 보도록 하자.
