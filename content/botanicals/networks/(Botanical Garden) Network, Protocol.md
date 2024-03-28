@@ -13,4 +13,10 @@
 ### Domain Name System (DNS)
 
 - [[Domain Name System (DNS)|Domain Name System, DNS]]
+- [[Full Qualified Domain Name, FQDN (DNS)|Full Qualified Domain Name, FQDN]]
+- [[Nameserver (DNS)|Nameserver]]
+- [[Namespace (DNS)|Namespace]]
+- [[Partially Qualified Domain Name, PQDN (DNS)|Partially Qualified Domain Name, PQDN]]
+- [[Top Level Domain, TLD (DNS)|Top Level Domain, TLD]]
+- [[Zone (DNS)|Zone]]
 - [[Zone Delegation (DNS)|Zone Delegation]]
