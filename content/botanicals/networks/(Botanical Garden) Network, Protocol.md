@@ -12,6 +12,7 @@
 
 ### Domain Name System (DNS)
 
+- [[DNS Tunneling (DNS)|DNS Tunneling]]
 - [[Domain Name System (DNS)|Domain Name System, DNS]]
 - [[Full Qualified Domain Name, FQDN (DNS)|Full Qualified Domain Name, FQDN]]
 - [[Nameserver (DNS)|Nameserver]]
