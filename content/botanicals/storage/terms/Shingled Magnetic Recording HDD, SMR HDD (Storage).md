@@ -4,7 +4,7 @@ tags:
   - 용어집
 ---
 > [!info] 참고한 것들
-> - [서울대 김진수 교수님 고급운영체제 강의(Spring 2024)](http://csl.snu.ac.kr/courses/4190.568/2024-1/)
+> - [고급운영체제 (김진수 교수님 '24H1, SNU CSE)](http://csl.snu.ac.kr/courses/4190.568/2024-1/)
 
 ## 이게 뭐고
 

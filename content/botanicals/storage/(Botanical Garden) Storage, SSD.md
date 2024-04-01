@@ -4,7 +4,6 @@
 
 ## 작물들
 
-- [[Block Interface (Storage)|Block Interface]]
 - [[Conventional Magnetic Recording, CMR HDD (Storage)|Conventional Magnetic Recording HDD, CMR HDD]]
 - [[Data Chunk (Storage)|Data Chunk]]
 - [[NAND-based Flash Memory (Storage)|Flash Memory, SSD]]
@@ -13,6 +12,8 @@
 - [[Garbage Collection, GC (Storage)|Garbage Collection, GC]]
 - [[Input Output per second, IOps (storage)|IOps]]
 - [[Latency (Storage)|Latency]]
+- [[Logical Block Addressing, LBA (Storage)|Logical Block Addressing, LBA]]
+- [[Multi Level Cell, MLC (Storage)|Multi Level Cell, MLC]]
 - [[Multi-stream SSD (Storage)|Multi-stream SSD]]
 - [[Flash Memory, SSD (Storage)|NAND Flash Memory]]
 - [[NOR-based Flash Memory (Storage)|NOR Flash Memory]]
@@ -20,6 +21,7 @@
 - [[Open Channel SSD, OCSSD (Storage)|Open Channel SSD, OCSSD]]
 - [[Over Provisioning, OP (Storage)|Over Provisioning, OP]]
 - [[PE Cyclen Limit, Wearing-off (Storage)|PE Cycle Limit, Wearing-off]]
+- [[Physical Block Address, PBA (Storage)|Physical Block Address, PBA]]
 - [[Pre-conditioning (Storage)|Pre-conditioning]]
 - [[Read Disturb (Storage)|Read Disturb]]
 - [[Shingled Magnetic Recording HDD, SMR HDD (Storage)|Shingled Magnetic Recording HDD, SMR HDD]]
@@ -28,3 +30,4 @@
 - [[TRIM, Deallocation (Storage)|TRIM, Deallocation]]
 - [[Wear Leveling (Storage)|Wear Leveling]]
 - [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|Write Amplification, Write Amplication Factor (WA, WAF)]]
+- [[Zoned Storage Model (Storage)|Zoned Storage Model]]
