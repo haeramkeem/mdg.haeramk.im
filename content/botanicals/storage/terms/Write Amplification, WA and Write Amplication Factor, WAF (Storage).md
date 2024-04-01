@@ -44,18 +44,7 @@ tags:
 		- 좀만 생각해보면 당연하다: GC 는 어찌보면 invalid page 들을 모아서 지우는 것이기 때문에 invalid page 들이 한 블럭에 이미 모여있으면 옮겨야 할 page 가 더 적어지기 때문이다.
 	- 또한 Wear Leveling 방식에 따라 위와는 다른 이유로 데이터를 옮겨야 할 수도 있다.
 - 즉 Wear Leveling 과 WA 사이에는 어느정도의 trade-off 가 있는 것.
-- 따라서 조금이라도 WA 를 줄이기 위해 아래와 같은 방법을 사용할 수 있다.
-	- 일단 데이터는 수정 빈도에 따라 종류를 두가지 정도로 나눌 수 있다.
-		- 자주 바뀌지 않는 *cold data (static data)*
-		- 자주 변경되는 *hot data (dynamic data)*
-	- 이러한 구분에 따라 WA 를 줄이기 위해 다음과 같은 전략을 짤 수 있다.
-		- Hot data 와 cold data 가 같은 page 에 있을 경우 hot data 가 rewite 될 때 cold data 까지 옮겨지게 된다.
-		- 만일 cold data 를 별도의 page 에 모아두면 이 page 들은 rewrite 되지 않으므로 invalid page 가 비교적 적어지게 된다.
-			- 이렇게 생각하면 쉽다: hot data 가 많은 page 에 분산되어 있는가 아니면 적은 page 에 밀집되어 있는가 - 당연히 밀집되어 있을 때 rewrite 시 적은 page 가 invalid 처리된다.
-		- 이는 GC 를 비교적 적게 실행할 수 있게 하고, 따라서 WA 도 개선된다.
-	- 물론 이렇게 하면 cold data page 와 hot data page 간에 wear level 에 다소 차이가 생긴다는 문제점이 있긴 하다.
-		- 이를 위해 cold data page 와 hot data page 들을 주기적으로 swap 해주기도 한다. (물론 이것 또한 WA 를 증가시킨다.)
-	- 다만 [[Flash Translation Layer, FTL (Storage)|FTL]] 입장에서는 어떤 데이터가 cold 인지 hot 인지 구분하기 힘들기 때문에, host level 에서 제어를 해야 된다.
+- 따라서 조금이라도 WA 를 줄이기 위해 [[Hot Cold Separation (Storage)|Hot cold separation]] 와 같은 방법을 사용할 수 있다.
 
 ### Read/Write Page, Erase Block
 
