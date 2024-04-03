@@ -8,6 +8,8 @@ tags:
 
 > [!info] 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다.
 
+> [!danger] 본 문서는 아직 Draft 상태입니다. 읽을 때 주의해 주세요.
+
 ## Abstract - 개요
 
 - 기존의 UNIX 파일시스템을 더 개선시킨 "Fast File System - FFS" 에 대한 내용이다.
