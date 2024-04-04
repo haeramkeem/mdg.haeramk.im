@@ -6,14 +6,16 @@ tags:
 ---
 > [!info] 본 작물은 [The design and implementation of a log-structured file system (SOSP '91)](https://dl.acm.org/doi/10.1145/121132.121137) 논문을 읽고 정리한 글입니다.
 
-## 1. Abstract & Introduction
+> [!info] 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다.
 
-- 어차피 뒤에서 다 자세히 설명해 줄 테니 지금 당장 왜??? 라는 생각이 들어도 일단 넘어가자.
+> [!danger] 본 문서는 아직 Draft 상태입니다. 읽을 때 주의해 주세요.
+
+## 1. Abstract & Introduction
 
 ### Problem Statement
 
 - CPU 속도는 음청나게 빨라지는 반면, disk 속도는 거의 그대로이고, 따라서 disk 속도가 여러 application 에서 병목이 되고 있다.
-- 이 문제를 해결하기 위해 저자들은 (특히 다수의 작은 파일들을 처리할 때 더 특출난) [[Log-structured File System, LFS (File System)|LFS]] 라는 새로운 file system 을 개발했다고 한다.
+- 이 문제를 해결하기 위해 저자들은 (특히 다수의 작은 파일들을 처리할 때 더 특출난) [[Log-structured File System, LFS (File System)|LFS]] 라는 새로운 file system 을 개발했다.
 
 ### Log Structure
 
@@ -169,7 +171,7 @@ tags:
 	- 일단 FFS 에서는 inode 의 위치가 정해져 있었다. inode number 를 이용해 간단한 계산으로 inode 의 주소를 계산해 낼 수 있었다.
 	- 하지만 LFS 에서는 inode 가 정해진 위치에 저장되지 않고 log 내의 어딘가에 저장된다.
 	- 이것이 LFS 에서 *inode map* 을 도입한 이유이다:
-		- *inode map* 은 file id number 와 inode 주소를 연결지어 놓은 테이블이다.
+		- ==*inode map* 은 file id number 와 inode 주소를 연결지어 놓은 테이블==이다.
 		- 따라서 file id number 를 알면 inode map 을 통해 inode 가 어디에 있는지 바로 알 수 있다.
 	- 그럼 이 inode map 은 어디에 있는가
 		- 일단 이놈은 block 단위로 쪼개어져 log 에 포함되게 되고
@@ -232,7 +234,7 @@ tags:
 	1. 어떻게 live data 를 구별해 낼 것인가?
 	2. 어떻게 live data 의 소속 (해당 live data 를 소유한 file) 을 알아내 주소가 변경되었음을 inode 에 반영할 것인가?
 - LFS 에서는 이 문제를 segment 별로 *Segment Summary Information* 을 유지하는 것으로 해결했다.
-- 여기에는 segment 의 block number 와 file number 간의 mapping 이 되어 있다.
+- 여기에는 ==segment 의 block number 와 file number 간의 mapping== 이 되어 있다.
 	- 이렇게 하면 일단 문제점 (2) 는 해결된다: block number 를 통해 file number 를 알 수 있고, 따라서 [[#Index structure - inode map|inode map]] 을 통해 inode 를 찾을 수 있게 됨.
 - 이 *segment summary information* 으로 live data 를 식별해 내는 것은 다음과 같이 할 수 있다.
 	- 우선 이것으로 한 block 에 대한 inode 를 찾은 다음
@@ -322,44 +324,135 @@ tags:
 
 ### 3.5. Simulation results
 
-> [!fail] 여기부터 대충 정리함
+#### 실험 방법
 
-- LFS uniform 의 경우
-	- Access: 모두 동일한 확률
-	- Cleaning policy: Greedy - utilization 이 가장 낮는 segment 부터 cleaning
-	- Reorganize: live block 의 순서는 바뀌지 않음
-- LFS hot-and-cold
-	- Access: 특정 파일은 자주, 나머지 파일은 덜 자주
-	- Cleaning policu: 마찬가지로 greedy policy 적용
-	- Reorganize: live block 이 age 에 따라 정렬됨 - hot 과 cold 가 다른 segment 에 분리되는 효과
-- uniform 에서보다 hot-and-cold 가 더 안좋았음
-- greedy 에서는 가장 utilization 이 안좋은 놈을 clean 하기 때문에 모든 segment 들이 전반적으로 낮아지게 된다
-- 근데 cold 의 경우에는 utilization 이 그리 빠르게 떨어지지 않기 때문에 아주 많은 양의 free space 들을 아주 오랜 기간동안 잡고 있음
-- hot 은 free space 를 만들어도 곧 다시 사용되기 때문에 free space 를 생성하는 주기를 늦추고 더 많은 데이터가 invalid 가 되도록 냅두는 방식을 사용한다.
-- 정리하면 free space 의 가치는 데이터의 안정성 (stability) 에 달려있다
-- 하지만 이것은 예측하기 힘들다
-- 따라서 나이가 많은 데이터는 앞으로도 잘 안바뀔 것이라는 가정하에 나이를 기준으로 hot cold 를 구분한다
-- 
+- 저자는 locality 를 고려했을 때 어떤 cleaning policy 를 선택해야 cost 가 적게 나오는지 분석하기 위해 간단한 시뮬레이터를 만들었다고 한다.
+	- 실험 환경은 실제 사용환경보다는 더욱 더 혹독하지만 locality 분석에 많은 도움이 되었다네
+- 이 실험은 다음과 같은 방식으로 진행됐다:
+	1. 디스크 용량의 일정 비율 (*Disk capacity utilization*) 이 채워지도록 FS 에 4KB 파일들을 생성한다.
+		- 만일 디스크 용량이 2MB 이고, disk capacity utilization 을 0.5 로 정했다면, 1MB 를 채우기 위해 4KB 파일을 250개 생성한 것.
+	2. 해당 파일들을 지속적으로 overwrite 한다.
+	3. Overwrite 로 인해 모든 clean segment 들이 소진된다면, segment 들이 다시 확보될때까지 segment cleaning 을 한다.
+	4. Write cost 가 안정화되면 실험을 종료한다.
+	5. 위의 작업을 disk capacity utilization 을 변화시키며 반복한다.
+- 이때, overwrite 와 segment cleaning 은 아래와 같은 두 가지 방식 (*Uniform*, *Hot-and-cold*) 을 이용한다:
+
+|                       | *Uniform*                                        | *Hot-and-cold*                                                                                                          |
+| --------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| Access rate           | 모든 파일에 대해 동일한 확률로 overwrite                      | 차등적인 확률로 overwrite (10% 의 파일들에 대해서는 90% 의 확률로 overwrite 하고 - *hot*, 나머지 90% 의 파일들에 대해서는 10% 의 확률로 overwrite 함 - *cold*) |
+| Cleaning policy       | Greedy - Utilization 이 가장 낮은 segment 부터 cleaning | (마찬가지로 greedy 하게)                                                                                                       |
+| Live block reorganize | Read 한 순서 그대로 write 함                            | Age 에 따라 정렬해서 write 함                                                                                                   |
+
+- 여기서 *hot-and-cold* 에서 age 에 따라 정렬해서 write 하게 되면 자연스럽게 segment 단위로 hot data 와 cold data 가 분리되는 효과를 가진다.
+	- 즉, hot segment 와 cold segment 가 나뉘게 되는 것
+- 추가적으로, 편의를 위해 다음의 것은 고려하지 않았다고 한다..
+	- read traffic
+	- cold start [^cold-start]
+
+#### 실험 결과...
+
+![[write-util.png]]
+
+- 일단 각 선들이 어떤 의미를 가지는지 부터 살펴보자.
+	- 점선 (널찍): FFS today - 기존의 UNIX FFS
+	- 점선 (촘촘): FFS improved - 기존의 UNIX FFS 에서 조금 더 개선된 버전
+	- 실선 (얇): *No variance* 방식 - 모든 segment 들이 동일한 utilization 을 가진다고 가정했을 때, write cost 의 변화
+	- 실선 (굵): *Uniform* 방식을 사용했을 때
+	- 점선 (널찍-촘촘): *Hot-and-cold* 방식을 사용했을 때
+- 그래프가 오른쪽 아래로 깔릴수록 더 좋다 - disk capacity util 이 늘어나도 성능 방어를 잘 해 write cost 가 많이 늘어나지 않는다는 의미이기 때문
+
+> [!note] 논문에서의 75%, 55% 의 의미
+> - 본문에는 *"For example, at 75% overall disk capacity utilization, the segments cleaned have an average utilization of only 55%."* 라는 문장이 나온다.
+> - 이것은 말 그대로 disk capacity util 을 75% 로 설정했을 때 segment util 은 그보다 작은 55% 가 나온다는 소리이다. 즉, segment util 은 적을수록 write cost 가 적어지므로 더 좋다는 의미.
+> - 근데 저 수치는 어떻게 나온 것이냐: 75% 의 disk capacity util 일때 LFS Uniform 의 write cost 값을 No variance 그래프를 이용해 util 로 바꿔보면 55% 가 나온다. (위 그래프에서 빨간색 점선)
+
+- 일단 uniform 방식이나 hot-and-cold 방식을 이용할 때나 모두 no variance 일때보다 write cost 가 적게 나왔다.
+	- Util 이 20% 아래로 떨어졌을 때에는 write cost 가 2 아래로 떨어진다; 이것은 live block 이 아예 없는 segment 가 존재해 cleaning 이 발생하지 않아 write cost 가 1 이 되기 때문.
+- 근데 여기서 문제점은 locality 가 고려되면 더 성능이 좋아질 줄 알았는데 locality 가 고려되지 않은 uniform 이 더 결과가 좋았다.
+	- 즉, 같은 data capacity util 기준 uniform 에서보다 hot-and-cold 에서 write cost 가 더 높게 나왔다.
+
+#### 결과가 예상대로 나오지 않은 이유
+
+##### 현상 - 많은 cold segment 들이 cleaning 되고 있지 않다.
+
+- Greedy policy 에서는 segment 의 util 이 다른 segment 보다 작아져야 cleaning 이 진행된다.
+- 따라서 cold segment 를 포함한 모든 segment 의 util 이 cleaning threshold 까지 떨어지게 된다.
+
+> [!note] 논문에서의 "Cleaning Threshold" 의 의미
+> - 여기서 cleaning threshold 는 특별하게 설정된 값은 아닌 것으로 보인다.
+> - Greedy policy 에서 cleaning 의 대상으로 선정되는 segment 의 util 최소값이 threshold 인 것.
+
+- 하지만 cold segment 는 util 이 아주 천천히 떨어지기 때문에, 대부분의 cold segment 들이 threshold 근처에서 cleaning 되지 않고 오랜 기간 머물게 된다.
+	- 다르게 말하면, cold segment 가 hot segment 보다 utli 이 천천히 떨어지기에 cleaning 대상 선정 경쟁에서 밀리게 되는 것.
+- ==결과적으로 cold segment 들은 outdated block 들을 오랜 기간동안 품고 놔주지 않게 된다.==
+- 이것을 그래프로 확인해 보면 아래와 같다:
+
+![[Pasted image 20240403211012.png]]
+
+- 위 그래프는 모든 segment 들에 대한 segment util 별 분포도이다.
+	- 뭐 대략 특정 segment util 을 갖는 segment 의 개수 (물론 개수는 아니긴 하지만 [^fraction-of-segments]) 라고 생각하고 넘어가자
+	- Disk cap util 이 75% 인 상황을 시뮬레이션하던 중에, cleaning 이 시작되었을 때 집계한 것이라고 한다.
+- 그래프를 보면 seg util 이 55% 정도가 될 때 cleaning 이 시작되는 threshold 가 형성된다고 볼 수 있는데
+- Uniform 일 때보다 hot-and-cold 일 때 threshold 근처에 더 많은 segment 들이 몰려있는 것을 볼 수 있다.
+	- hot segment 보다 cold segment 의 개수가 훨씬 더 많고,
+	- 이런 많은 cold segment 들이 threshold 근처에 잔류하고 있기 때문에 위와 같은 모양이 되는 것.
+
+##### 이런 현상이 어떻게 결과로 이어질까?
+
+- Cold segment 와 hot segment 의 util 감소 속도를 생각해 보면, cold 와 hot 에서의 outdated block 이 가지는 가치가 다르다는 것을 알 수 있다.
+	- Hot 의 경우에는 어차피 outdated block 을 clean 해 봤자 조만간 다시 write - overwrite 되어 outdated 될 것이고
+	- Cold 의 경우에는 outdated block 가 잘 생성되지 않고 해당 outdated block 을 clean 했을 때 다시 outdated 로 돌아오기에는 시간이 꽤 걸릴 것이기 때문.
+- 하지만 가치가 낮은 hot segment 들의 outdated block 이 경쟁에서 이겨 지속적으로 cleaning 되고 있으니 더 안좋은 결과가 나오는 것 [^simulation-result-inspection].
+
+##### 이것을 어떻게 하면 해결할 수 있을까?
+
+- 결론적으로는, block 의 *stability* 가 *value* 에 영향을 미치고, 이러한 value 를 고려해서 cleaning 을 진행해야 한다.
+	- Value 가 높은 cold segment 의 outdated block 은 조금만 생겨도 cleaning 을 하고, value 가 낮은 hot segment 의 outdated block 은 많이 생길때 까지 기다렸다가 cleaning 을 하면 되는 것
+- 하지만 실제 상황에서는 미래의 block 접근 패턴을 알기 어렵기 때문에, stability 을 산출하는 것은 어려움이 있다.
+- LFS 에서는 stability 의 척도로 age 를 사용한다.
+	- 즉, segment 의 block 나이가 많을수록 앞으로도 변경 가능성이 낮다고 보는 것.
+- 이것을 수치적으로 policy 에 반영한 것이 *Cost-Benefit Policy* 이다.
 
 #### Cost-benefit policy
 
+- Cost-benefit policy 에서는 아래의 수식으로 cleaning 할 segment 를 선정한다.
+
 ![[Pasted image 20240402111449.png]]
 
-- cold segment 의 경우에는 변화가 적기 때문에 free space 가 적게 생기고, 오랜 기간동안 free 로 남게 된다
-- hot segment 의 경우에는 변화가 커서 free space 도 많이 생기지만 곧 다시 새로운 데이터가 write 될 것이다.
-- 따라서 hot 보다는 cold segment 의 free space 가 더 가치가 있다
-	- 어차피 금방 occupied 될 hot free space 보다는 오랜기간 free 로 남아 있을 cold free space 가 더 가치있다
-- 위 수식에서 cost 는 cleaning 에서의 read 데이터 양 (segement 전체, 즉 1) 과 cleaning 에서의 live data 의 양 (u) 의 합이 될 것이다
-- 그리고 age 는 segment 내의 가장 최근에 변경된 block 을 기준으로 산출한다.
+- 이 수식의 의미를 씹뜯맛 해보자.
+- 일단 cost-benefit policy 에서는 benefit 이 cost 에 비해 큰 순서대로 cleaning 을 진행한다.
+	- 즉, $benefit / cost$ 의 값이 큰 순서대로 cleaning 을 진행하는 것.
+- 우선 $benefit$ 부터 살펴보자면,
+	- 한번의 cleaning 에 많은 free block 들이 생성될 때, 즉 outdated block 이 많을 수록 cleaning 의 효과가 좋을 것이다.
+		- 이것은 segment 에서 live block 이 차지하는 비중을 뺀 것이기에, $1 - u$ 로 계산할 수 있을 것이다.
+	- 또한, 위에서의 가정에 따라 나이가 많을 수록 stability 가 높아져 cleaning 의 효과도 좋을 것이다
+		- 이것은 $age$ 값 으로 반영되고, 해당 segment 에서 가장 최근의 변경 시간을 기준으로 한다.
+	- 따라서 $benefit = (1 - u) * age$ 가 된다.
+- 그리고 $cost$ 를 살펴보자.
+	- $cost$ 는 cleaning 과정 중에 수행되는 read 와 write 의 양으로 계산된다.
+		- Cleaning 중에는 segment 전체를 read 하고 ($1$), live block 을 write 할 것이기에 ($u$), 이 둘을 더한 값 ($1 + u$) 가 $cost$ 가 된다.
+- 이렇게 함으로써 cold segment 는 $age$ 가 올라가게 되어 $u$ 가 작아도 (즉, seg util 이 높아도) cleaning 대상으로 선정되게 된다.
 
-- cost-benefit policy 에서 cold segment 는 75% util 에서 clean 이 이루어졌고, hot 은 15% utili 에서 이루어 졌다.
-- 결과적으로 write cost 를 50% 정도 줄이고
-- 
+#### 재실험
+
+- Greedy 대신 *cost-benefit policy* 를 적용한 결과, 성능이 눈에 띄게 좋아졌다:
+	- Cleaning policy 만 변경되었고, reorganize policy 는 age-sorting 으로 동일하게 유지되었다.
+
+![[Pasted image 20240404103915.png]]
+
+- 성능 좋아졌다는 것 이제 말 안해도 아시겠죠?
+- 그리고 이때 segment 분포는 다음과 같았다.
+
+![[cost-benefit.png]]
+
+- 보면 cold segment 는 seg util 75% 정도에서 cleaning 이 되었고, hot segment 는 15% 정도에서 cleaning 이 되는 것을 확인할 수 있었다.
 
 ### 3.6. Segment usage table
 
+> [!danger] Draft 입니다.
+
 - Cost-benefit policy 를 지원하기 위해, *Segment Usage Table* 이 추가되었다
-- segment usage table 에는 segment 의 live byte 와 last modified time 이 들어간다
+- segment usage table 에는 segment 의 ==live byte count 와 last modified time== 이 들어간다
 	- 이 값들은 segment 에 write 되기 시작할 때 채워지고, 데이터가 삭제/변경되며 live byte count 가 내려간다
 	- live byte cound 가 0 이 되면 clean 없이 사용 가능
 - segment usage table 의 block 들은 log 에 저장되고 checkpoint 에 해당 block 들이 어디에 있는지 저장된다
@@ -370,6 +463,8 @@ tags:
 
 ### 4. Crash Recovery
 
+> [!danger] Draft 입니다.
+
 - 일반적으로 crash 가 발생하게 되면 reboot 중에 이것을 다 고치게 되는데
 - Logging 기능이 없던 UNIX FS 의 경우에는 어쩔 수 없이 모든 metadata 를 뒤지며 파일이 정상적으로 존재하는지, 누락된 데이터는 없는 지 등을 체크한다.
 - 하지만 이것은 몇십분이나 되는 시간을 먹게 되는 문제점이 있었다
@@ -378,11 +473,13 @@ tags:
 
 ### 4.1. Checkpoints
 
+> [!danger] Draft 입니다.
+
 - Checkpoint 는 한 시점에서의 로그를 가리키고, 이 시점에서는 모든 FS 의 구조와 데이터들이 일관되고 완료되었다는 의미를 가진다.
 	- 말이 좀 모호하긴 한데 이상하게 생각할 것은 없다; 그냥 언제든 이 시점으로 돌아와도 정상작동한다고 정도로 생각하자
 - 모든 변경사항들을 log 에 적고
 - 위에서도 여러번 언급한 checkpoint region 을 디스크의 특정한 위치에 적는다.
-	- inode map, segment summary information 들의 block 위치
+	- inode map, segment usage table 들의 block 위치
 	- 현재 시간
 	- 마지막 segment 의 위치
 - 재부팅 중에 이 checkpoint region 을 읽어서 메인 메모리 데이터 구조를 초기화함
@@ -399,6 +496,8 @@ tags:
 
 ### 4.2. Roll-forward
 
+> [!danger] Draft 입니다.
+
 - 문제가 생겼을 때 재부팅을 해서 checkpoint 로 돌아가는 것은 간단하고 빠른 해결방법이지만 checkpoint 이후의 데이터는 손실될 가능성이 있다
 - 따라서 마지막 checkpoint 이후의 log 를 보면서 추가적인 복구를 하는 것이 roll-forward 이다
 - segment summary information 을 보면서 최근에 write 된 block 을 찾고
@@ -411,6 +510,8 @@ tags:
 
 #### Directory operation log
 
+> [!danger] Draft 입니다.
+
 - directory 내용이 변경되었을 경우 LFS 는 *Directory Operation Log* 라는 특별한 record 를 log 에 추가한다.
 	- 어떤 작업인지 (operation code)
 	- 변경된 directory entry 의 위치 (directory 에 대한 inode number 및 directory 내에서의 index)
@@ -422,17 +523,129 @@ tags:
 
 ## 5. Experience with the Sprite LFS
 
+- LFS 는 1989 년부터 개발되기 시작해 1990 년 중반에 이르러서는 Sprite network OS 에서 사용되기 시작했다고 한다.
+- 1990년 후반에는 5개의 디스크 파티션을 관리하며 30여명의 사용자들이 사용했다.
+- 이때 당시에는 위에 기술된 내용 중 거의 모든 기능들이 구현되었다고 한다.
+	- 단지 [[#4.2. Roll-forward|Roll-forward]] 만 구현이 안되어 있었다.
+	- 따라서 30초 간격으로 [[#4.1. Checkpoints|Checkpoint]] 를 생성하게 되고, Reboot 이후에는 checkpoint 에 저장된 내용외에는 전부 다 날라간다.
+- 처음에 개발을 시작할 때에만 해도 LFS 의 구현이 FFS 보다 어려울 것으로 생각했지만, 결과적으로는 그렇지 않았다.
+	- [[#3.3. Segment cleaning mechanism|Segment cleaning]] 의 구현이 까다롭기는 했지만, FFS 의 [[논문 - A Fast File System for UNIX#Bookkeeping Information|Bitmap]] 이 제거되었기에 이것이 상쇄되었고
+	- Checkpoint 와 roll-forward 는 FFS 의 crash recovery 를 위한 툴인 [fsck](https://en.wikipedia.org/wiki/Fsck) 에 비해 구현이 어렵지 않았다고 한다.
+- 실 production 환경에서는 성능 향상이 그렇게 드라마틱하게 나타나지 않았는데, 이것은 해당 환경에서 디스크에 병목이 생기는 것이 아닌 cpu, mem 측면에서 속도가 나오지 않았기 때문이었다고 한다.
+
 ### 5.1. Micro-benchmarks
+
+- Sprite LFS 는 UNIX FFS 가 돌고 있는 SunOS 4.0.3 과 비교해서 벤치마크를 돌렸다.
+	- 물론 이 벤치마크들은 실 사용환경과는 차이가 있긴 하지만, 둘 간의 차이점을 극명하게 보여줬다고 한다.
+- 작동 환경은:
+	- Sun-4/260 머신 + 32MB 메모리 + Wren 4 디스크 (1.3Mbyte/s 대역폭 + 17.5밀리초의 seek time)
+	- 각 디스크는 300MB 정도의 공간을 사용할 수 있도록 포맷
+	- SunOS 는 8KB block, LFS 는 4KB block + 1MB segment 를 사용
+	- 여러명의 유저가 사용
+	- LFS 의 경우 실험 도중에는 cleaning 이 작동하지 않음 - 최대의 성능이 나오는 상태
+
+#### Small file benchmark
+
+![[Pasted image 20240404130212.png]]
+
+- 위 그래프는 작은 파일들을 create, read, delete 했을 때의 결과다.
+	- 왼쪽이 측정 결과, 오른쪽이 예상
+- 보면 create 와 delete 시 SunOS 에 비해 10배정도 더 빨랐다.
+- 또한 read 의 경우에도 더 빨랐다
+	- 생성된 순서로 read 를 했고, [[#Index structure - inode map|여기]] 에서 설명한 것처럼 파일을 더 밀집해서 저장하기 때문
+- Create 실험 당시에 LFS 는 총 실험 시간 중 17% 의 시간에 디스크 부하가 걸린 반면 CPU 는 최대로 사용했다.
+	- 반면, SunOS FFS 의 경우에는 85% 가 부하가 걸렸고, 디스크 대역폭의 1.2% 밖에 사용하지 못했다.
+- LFS 의 실험 결과는 CPU 때문에 디스크에 17%밖에 부하가 걸리지 않았기에 만일 CPU 가 더 빨라진다면 성능이 더욱 개선될 것으로 보였다.
+
+#### Large file benchmark
+
+![[Pasted image 20240404131003.png]]
+
+- LFS 는 small file 접근에 특화되어 있었지만, large file 에도 꿀리지 않는 성능을 보여줬다.
+- Write 의 경우에는, random/sequential 모두 대역폭이 향상되었다.
+	- 특히 random write 에서 큰 성능 향상이 있었는데, 이것은 random write 를 LFS 가 sequential write 로 변환하기 때문이었다.
+	- 또한 Sequential write 에서 성능 향상을 보인 것은 SunOS FFS 에서는 각 block 에 대해 IO 가 처리되지만 LFS 에서는 memory 에 많은 블럭을 버퍼링해서 하나의 IO 으로 처리하기 때문이었다.
+	- 물론 최신의 SunOS 에서도 이러한 버퍼링 기능을 지원하고, 따라서 이 경우에는 성능이 비슷할 것이다.
+- Read 의 경우에는 비슷한 성능을 보였으나 random write 이후 sequential read 를 하는 경우 (*Reread sequential*) 은 큰 성능 저하를 보였다.
+	- 이것은 LFS 에서는 이 상황에서 read seek 이 들어가기 때문이라고 한다 [^reread-sequential].
+
+#### FFS vs LFS
+
+- FFS 의 locality 방식은 *Logical locality* 라고 할 수 있다:
+	- 이 말인 즉슨, FFS 에서는 ==사용자들의 일반적인 파일의 접근 패턴에 맞게 데이터를 인접하게 배치== 하여 locality 를 구현한다.
+	- Directory 의 파일들을 하나의 cylinder group 에 넣어놓는 것을 예시로 들 수 있다: directory 의 파일들은 같이 접근하는 경우가 빈번하다는 접근 패턴을 이용한 것.
+	- 따라서 FFS 에서는 이 패턴에 맞게 데이터를 배치하기 위해 추가적인 write 도 감당한다.
+- 반면, LFS 의 locality 방식은 *Temporal locality* 라고 할 수 있다:
+	- 즉, ==한번 접근한 데이터는 곧 다시 접근할 확률이 높다는 가정 하에 생성/변경 시간이 유사한 데이터를 인접하게 배치== 하는 locality 방식이다.
+- 이런 방식의 차이는 둘 간의 장단점을 명확하게 보여준다 (!정리 필요):
+	- 만일 logical locality 와 temporal locality 가 일치된다면 (= 생성/변경된 순서대로 데이터에 접근 = 가령, sequential write + sequential read), LFS 와 FFS 는 동일한 성능을 보인다.
+	- 그리고 이것이 일치되지 않는다면 (= 생성/변경된 순서와 다르게 데이터에 접근 = random write + sequential read 혹은 sequential write + random read) 다른 성능을 보일 것이다.
+	- Sprite LFS 는 random write 를 sequential 로 변환하기에 더 효율적으로 처리한다.
+	- SunOS FFS 는 logical locality 를 위해 추가적인 비용을 들이며 random write 를 구현한다.
+	- 따라서 SunOS FFS 의 경우에 sequential re-read 를 더 효율적으로 처리하는 것
+	- 하지만 non-sequential read 가 non-sequential write 와 동일한 순서로 요청되면 (순서가 동일하기 때문에) Sprite LFS 가 더 효율적이다.
 
 ### 5.2. Cleaning overheads
 
+> [!danger] Draft 입니다.
+
+- [[#5.1. Micro-benchmarks|5.1]] 섹션에서의 벤치마크는 cleaning 이 돌지 않았기에, write cost 가 1인 최적의 상태를 보여줬다.
+	- 따라서 이 벤치마크는 *"Optimistic benchmark"* 라고 할 수 있다.
+- 이에 대조적으로, cleaning 성능을 보기 위해 저자는 몇달에 걸친 실사용 벤치마크를 수행했다.
+	- 이 벤치마크는 *"Pessimistic benchnark"* 인 셈이다.
+- 벤치마크는 다음과 같이 수행되었다고 한다:
+	- 5개의 디렉토리 모니터링
+		- `/user6`: 사용자들이 사용하는 홈 디렉토리. 여기서 사용자들은 프로그램 개발, 문서작성, 시뮬레이션 등을 수행한다고 한다.
+		- `/pcs`: 병렬처리 등을 연구하는 용도의 디렉토리.
+		- `/src/kernel`: Sprite kernel 의 소스코드와 바이너리
+		- `/swap2`: Sprite client workstation (아마 시스템에 원격으로 접속해서 사용하는 것) 에 대한 swap 파일들. 여기에서는 virtual memory swap 파일이 주로 저장되고, 보통 큰 사이즈에 non-sequential access 가 수행된다.
+		- `/tmp`: 임시 파일들
+	- 세팅 직후 초기상태에서의 영향을 없애기 위해 몇달 기다린 후 측정 시작해서 몇달에 걸쳐 측정함.
+- 벤치마크 결과 [[#3.5. Simulation results|3.5]] 섹션에서의 시뮬레이션보다 더 좋았다고 한다.
+	- 벤치마크 동안 disk cap util 은 11%~75% 정도로 유지되었는데, [[#재실험|시뮬레이션 결과]] 에 비춰보면 write cost 는 2.5~3 정도로 예상되었다.
+	- 하지만 실제로는 1.2~1.6 이라는 놀라운 결과가 나왔다.
+		- Segment cleaning 수행시, 절반이 넘는 segment 들이 완벽하게 비워진 상태로 종료되었고,
+		- 완벽하게 지워지지 않고 live block 을 담고 있는 segment 들도 seg util 이 평균 disk util 보다 훨씬 적었기에 이런 결과가 나온 것.
+- 이러한 결과가 나온 이유는 다음과 같다:
+	1. 일단 파일의 크기가 시뮬레이션에 비해 더 크다. 시뮬레이션의 경우에는 1 block 사이즈의 동일한 파일들이었다면, 실 사용에서는 수 block, 심지어 segment 보다도 큰 파일들이 생성되다 보니 통으로 write-overwrite-clean 되는 경우가 많았고, 더 좋은 locality 도 보여주었다.
+	2. Cold 와 hot 간의 access 빈도가 더 극명했다. 시뮬레이션에서는 1:9 의 비율이었지만, 실제로는 아예 overwrite 가 되지 않아 clean 이 한번도 이루어지지 않은 파일들도 존재했다.
+- 이 벤치마크를 통해 몇가지 추가적으로 개선할 수 있는 것들은:
+	- 밤이나 한가한 시간에 cleaning 을 진행해서 사용량이 많은 시간대에 cleaning 이 발생되지 않게 하는 방법도 가능
+
 ### 5.3. Crash recovery
+
+> [!danger] Draft 입니다.
 
 ### 5.4. Other overheads in Sprite LFS
 
+> [!danger] Draft 입니다.
+
 ## 6. Related work
 
+> [!danger] Draft 입니다.
+
 ## 7. Conclusion
+
+> [!danger] Draft 입니다.
+
+> [!tip]- Quiz
+> - Disk traffic will become more and more dominated by (writes)
+> - Too many (small access)
+> - The disk traffic is dominated by (synchronous) metadata writes
+> - Write all the changes to disk in a sequential structure called the (log)
+> - The sequential nature of logs permits much faster (crash recovery)
+> - The locations of the inode map blocks are kept in a fixed (checkpoint region) on disk
+> - The log can be (~~rewritable~~) through clean segments
+> - The transfer time to read/write a whole segment should be much greater than the cost of a (seek to the begining of the segment)
+> - Live if the block is still pointed by (direct/indirect block in inode)
+> - Not live if the file's version number (in the segment summary block) does not match the version number stored in (inode map)
+> - Choose the (least utilized) segments
+> - Choose the segment with the (highest) ratio of benefit to cost
+> - Free space in a (cold) segment is more valuable than free space in a (hot) segment
+> - Produces the (bimodal) distribution of segments
+> - The addresses of all the blocks in (inode map) and (segment usage table)
+> - Adjust the utilizations in the (segment usage table)
+> - (directory operation log) for each directory change
 
 [^active-portion]: 이게 정확히 어떤 것을 의미하는 지는 잘 모르겠음.
 
@@ -445,3 +658,11 @@ tags:
 [^dirty-block-cache]: 어떤 상황인지 잘 감이 안오긴 한다 그쵸?
 
 [^time-byte]: 어느샌가 time 에서 byte 로 단위가 바꿔었는데 그냥 그런갑다 하자.
+
+[^cold-start]: 이게 뭔지는 잘 모르겠음. Disk capacity utilization 을 바꿨을 때 cold start 를 하지 않는다는 것인가?
+
+[^fraction-of-segments]: 세로축 "Fraction of segments" 뭔지 모르겠음.
+
+[^simulation-result-inspection]: 많은 cold segment 가 threshold 근처에 잔류하는 것과 write cost 가 올라가는 것에 대해 대강 감은 오지만 아직 명확하게 어떤 연관성이 있는지는 와닿지 않는다.
+
+[^reread-sequential]: 왜 seek 이 들어가지?

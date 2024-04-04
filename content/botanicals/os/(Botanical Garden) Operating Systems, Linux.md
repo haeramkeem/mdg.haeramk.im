@@ -6,8 +6,9 @@
 
 ### 논문
 
-- [[논문 - A Fast File System for UNIX|(DRAFT!!) A Fast File System for UNIX]]
-- [[논문 - Hints for Computer System Design|(DRAFT!!) Butler W. Lampson - Hints for Computer System Design]]
+- [[논문 - A Fast File System for UNIX|(Draft) Marshall K. McKusick - A Fast File System for UNIX (ACM ToCS '84)]]
+- [[논문 - Hints for Computer System Design|(Draft) Butler W. Lampson - Hints for Computer System Design (ACM SIGOPS)]]
+- [[논문 - The design and implementation of a log-structured file system|(Draft) Mendel Rosenblum - The design and implementation of a log-structured file system (SOSP '91)]]
 - [[논문 - The Evolution of the Unix Time-sharing System|Dennis M. Ritchie - The Evolution of the Unix Time-sharing System]]
 
 ## File System
