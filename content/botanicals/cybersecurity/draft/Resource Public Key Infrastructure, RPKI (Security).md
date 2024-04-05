@@ -3,10 +3,13 @@ tags:
   - 용어집
   - Security
 ---
-> [!info] 참고한 것
+> [!info]- 참고한 것
 > - [어떤 회사 글](https://www.noction.com/blog/rpki-overview)
 > - [위키피디아](https://en.wikipedia.org/wiki/Resource_Public_Key_Infrastructure)
 > - [RFC6480](https://datatracker.ietf.org/doc/html/rfc6480)
+
+> [!fail]- 본 글은 #draft 상태입니다.
+> - [ ] 내용 정리
 
 ## 뭘까
 

@@ -5,6 +5,9 @@ tags:
 ---
 > [!info] 이 글은 USENIX ATC '21 에 소개된 [ZNS: Avoiding the Block Interface Tax for Flash-based SSDs](https://www.usenix.org/system/files/atc21-bjorling.pdf) 논문을 읽고 정리한 것입니다.
 
+> [!fail]- 본 글은 #draft 상태입니다.
+> - [ ] 내용 정리
+
 ## 1. Introduction
 
 - 본 논문에서는 아래의 다섯가지 contribution 을 소개한다:
@@ -85,7 +88,7 @@ tags:
 	- File System
 	- End-to-End Data Placement
 - ZNS 는 sequential write 가 기본 원리에 깔려있기 때문에, sequential write 를 자주 사용하는 application 에 적합하다.
-	- 가령 [[Log Structure Merge Tree, LSM Tree (Database)|LSM tree database]] 와 같은 것들
+	- 가령 [[Log Structure Merge Tree, LSM Tree (Data Structure)|LSM tree database]] 와 같은 것들
 	- 당연히 in-place update 가 잦은 시스템은 ZNS 도입이 어렵다.
 
 #### Host-side FTL (HFTL)

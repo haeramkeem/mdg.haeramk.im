@@ -4,12 +4,39 @@ tags:
   - Database
   - RocksDb
 ---
-> [!info] 참고한 것들
+> [!info]- 참고한 것들
 > - [RocksDB 공식 문서](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction)
+> - [간단하게 자바로 구현한 것](https://itnext.io/log-structured-merge-tree-a79241c959e3) + [소스코드 - 깃헙](https://github.com/tomfran/LSM-Tree)
 > - [ZNS: Avoiding the Block Interface Tax for Flash-based SSDs (USENIX ATC '21)](https://www.usenix.org/system/files/atc21-bjorling.pdf) 의 4.2 섹션
+> - [미디엄 블로그](https://jaeyeong951.medium.com/%EC%83%89%EC%9D%B8-index-%EC%9D%98-%EB%91%90-%EA%B0%80%EC%A7%80-%ED%98%95%ED%83%9C-lsm-%ED%8A%B8%EB%A6%AC-b-%ED%8A%B8%EB%A6%AC-7a4ab7887db5)
+> - [Flink 0.3 시절의 공식문서](https://nightlies.apache.org/flink/flink-table-store-docs-release-0.3/docs/concepts/lsm-trees/)
 
 > [!info] 이미지 출처
 > - 별도의 명시가 없으면, [RocksDB 공식 문서](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction) 에서 갖고왔습니다.
+
+> [!fail]- 본 글은 #draft 상태입니다.
+> - [ ] 내용 정리
+
+## 가 뭔데?
+
+- *Leveled Compaction* 은 [[Log Structure Merge Tree, LSM Tree (Data Structure)|LSM Tree]] 의 RocksDB 구현체로
+- 
+- 이건 자료구조이긴 하지만 흔히 생각하는 자료구조와는 느낌이 좀 다르다; HW 적인 요소가 포함되어 있기 때문.
+- 기본 구조로는 
+
+- [[Sorted Run (Data Structure)]]
+
+- Compaction 은 작업 수행 이후 다음의 것들을 보장한다:
+	- level 의 sstable 들은 해당 level 의 size limit 을 넘지 않는다
+	- 해당 level 에는 duplicated key 가 포함되어 있지 않고, 모든 sstable 들은 sorted run 이다
+		- 즉, 각 sstable 들의 key range 는 겹치지 않는다.
+	- 
+
+- LeetCode 1206
+- [[Balanced Tree, B Tree (Data Structure)]]
+- 
+- 
+
 
 ## 뭔데이게
 
@@ -38,16 +65,10 @@ tags:
 ![[Pasted image 20240330150941.png]]
 
 - 각 level 에 포함된 key-value 데이터들은 key 를 기준으로 중복 없이 정렬되어 있다.
-	- 이것을 공식문서에서는 *"Sorted Run"* 이라고 표현하더라
+	- 이것을 공식문서에서는 *"Sorted Run"* 로 표현되어 있다.
 - 다만 이 key-value 데이터들을 하나의 파일에 전부 다 때려박는 것은 아니고 여러개의 파일들로 나누어 저장된다.
-	- 따라서 각 파일 또한 key-value 데이터를 key 를 기준으로 중복 없이 정렬해서 저장하고 있고, 이러한 파일들을 가리켜 *Sorted String Table (SSR)* 파일이라고 부른다.
-
-> [!note] 주인장의 한마디
-> - 이러한 SST 의 구조는 여러 프로그래밍 언어에서 찾아볼 수 있는 Map 와 유사하다고 생각할 수 있다.
-> - 가령 [C++ std::map](https://en.cppreference.com/w/cpp/container/map) 의 경우에도 unique key 에 대해 정렬된 형태를 띄기 때문.
-
-- 특정 Key 가 어떤 SSR 파일에 존재하는지는 Binary Search 로 알아낸다.
-	- 어차피 모든 데이터가 정렬되어 있기 때문.
+	- 따라서 각 파일 또한 key-value 데이터를 key 를 기준으로 중복 없이 정렬해서 저장하고 있고, 이러한 파일들을 가리켜 *Sorted String Table (SST)* 파일이라고 부른다.
+- 특정 Key 가 어떤 SST 파일에 존재하는지는 (어차피 모든 데이터가 정렬되어 있기 때문에) Binary Search 로 알아낼 수 있다.
 
 ### 3. Level 0
 
