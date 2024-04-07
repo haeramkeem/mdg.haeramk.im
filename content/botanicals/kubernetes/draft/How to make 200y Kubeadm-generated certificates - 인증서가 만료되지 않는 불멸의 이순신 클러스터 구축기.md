@@ -6,6 +6,9 @@ draft: "true"
 ---
 > [!warning] 적고 보니 글이 좀 기네요. 마음의 평정심을 갖고 차근차근 해봅시다.
 
+> [!fail]- 본 글은 #draft 상태입니다.
+> - [ ] 내용 정리
+
 ## Pain point - 왜 이런짓을?
 
 - 기본적으로 [Kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm) 은 CA 인증서는 10년, CA-signed 인증서는 1년 뒤에 만료되도록 설정하여 인증서를 발급한다.

@@ -11,7 +11,7 @@ const config: QuartzConfig = {
       tagId: "G-N68CCP1QHG",
     },
     baseUrl: "mdg.haeramk.im",
-    ignorePatterns: ["draft", "private", "templates", ".obsidian", "**/draft"],
+    ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "created",
     theme: {
       typography: {

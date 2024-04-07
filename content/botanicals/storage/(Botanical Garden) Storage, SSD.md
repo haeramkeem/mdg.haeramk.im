@@ -6,10 +6,11 @@
 
 - [[Conventional Magnetic Recording, CMR HDD (Storage)|Conventional Magnetic Recording HDD, CMR HDD]]
 - [[Data Chunk (Storage)|Data Chunk]]
-- [[NAND-based Flash Memory (Storage)|Flash Memory, SSD]]
+- [[Flash Memory, SSD (Storage)|Flash Memory, SSD]]
 - [[Flash Translation Layer, FTL (Storage)|Flash Translation Layer, FTL]]
 - [[Flexible Data Placement, FDP (Storage)|Flexible Data Placement, FDP]]
 - [[Garbage Collection, GC (Storage)|Garbage Collection, GC]]
+- [[Hot Cold Separation (Storage)|Hot Cold Separation]]
 - [[Input Output per second, IOps (storage)|IOps]]
 - [[Latency (Storage)|Latency]]
 - [[Logical Block Addressing, LBA (Storage)|Logical Block Addressing, LBA]]
