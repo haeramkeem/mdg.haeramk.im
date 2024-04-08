@@ -13,13 +13,13 @@
 
 ### Data Structure
 
-#### Hash Map
-
-- [[Bloom Filter (Data Structure)|Bloom Filter]]
-
 #### Linear
 
 - [[Sorted Run (Data Structure)|Sorted Run]]
+
+#### Map
+
+- [[Bloom Filter (Data Structure)|Bloom Filter]]
 
 #### Tree
 
