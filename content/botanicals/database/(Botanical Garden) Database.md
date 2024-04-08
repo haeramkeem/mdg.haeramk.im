@@ -8,4 +8,5 @@
 
 - [[Leveled Compaction (RocksDB)|Leveled Compaction]]
 - [[LSM Tree (RocksDB)|LSM Tree]]
+- [[Memtable (RocksDB)|Memtable]]
 - [[Static Sorted Table, SST (RocksDB)|Static Sorted Table, SST]]
