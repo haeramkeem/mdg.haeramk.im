@@ -11,6 +11,11 @@
 - [[논문 - The design and implementation of a log-structured file system|(Draft) Mendel Rosenblum - The design and implementation of a log-structured file system (SOSP '91)]]
 - [[논문 - The Evolution of the Unix Time-sharing System|Dennis M. Ritchie - The Evolution of the Unix Time-sharing System]]
 
+## 용어들
+
+- [[External Fragment (OS)|External Fragment]]
+- [[Internal Fragment (OS)|Internal Fragment]]
+
 ## File System
 
 - [[Slack Space Recycling, SSR (File System)|Slack Space Recycling, SSR]]
