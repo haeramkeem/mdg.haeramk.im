@@ -88,7 +88,7 @@ tags:
 	- File System
 	- End-to-End Data Placement
 - ZNS 는 sequential write 가 기본 원리에 깔려있기 때문에, sequential write 를 자주 사용하는 application 에 적합하다.
-	- 가령 [[Log Structure Merge Tree, LSM Tree (Data Structure)|LSM tree database]] 와 같은 것들
+	- 가령 [[LSM Tree (RocksDB)|LSM Tree]] 와 같은 것들
 	- 당연히 in-place update 가 잦은 시스템은 ZNS 도입이 어렵다.
 
 #### Host-side FTL (HFTL)
@@ -195,37 +195,23 @@ tags:
 ### 4.2. RocksDB Zone Support
 
 - 이 섹션에서는 RocksDB 에서 Zoned device 를 사용하기 위해 ZenFS 라는 backend store 를 구현한 것에 대해 설명한다.
-	- RocksDB 는 LSM 을 이용해 데이터를 저장 관리하고, 이것들을 이용해 seqential-only compaction 을 수행한다.
-	- ZenFS 는 위와 같은 작업들을 최대한 활용한다.
-- 본문에서는 RocksDB 의 개략적인 작동 원리에 대한 설명이 포함되어 있다. 이것은 RocksDB 공식 문서와 같이 정리한 [[Leveled Compaction (RocksDB)|Leveled Compaction]] 문서를 참고하자.
-- LSM tree 는 여러개의 level 로 구현되고, 이 중 L0 은 메모리 안에 저장되고, 나머지는 storage 에 저장된다.
-- 우선 L0 에서의 작동 과정을 보고 가자.
-	- Key-value 데이터 쌍은 새롭게 추가되거나 변경될 경우 우선 L0 에 반영되게 되는데,
-	- 구체적으로는 [[Write Ahead Log, WAL (Database)|WAL]] 으로 메모리에 저장되는 식으로 반영된다.
-	- 그리고 이들은 주기적 혹은 메모리 공간이 다 찼을 경우 storage 에 저장하기 위해 flush 를 하여 하위 level 로 내려간다.
-	- Flush 과정중에는 중복을 제거하고 Key 를 기준으로 정렬되어서 Sorted String Table (SST) 형식으로 SSD 에 저장된다.
-		- 따라서 하나의 SST 는 중복되지 않고 key 를 기준으로 정렬된 key-value 쌍들로 구성된다.
+	- ZenFS 는 RocksDB 의 LSM 과 seqential-only compaction 를 ZNS SSD 에서 효율적으로 수행할 수 있게 도와준다.
 
-> [!note] 주인장의 한마디
-> - 이러한 SST 의 구조는 여러 프로그래밍 언어에서 찾아볼 수 있는 Map 와 유사하다고 생각할 수 있다.
-> - 가령 [C++ std::map](https://en.cppreference.com/w/cpp/container/map) 의 경우에도 unique key 에 대해 정렬된 형태를 띄기 때문.
+#### RocksDB 기본 설명
 
-- 그럼 flush 과정을 거쳐 L1 로 내려간 이후에는 어떻게 될까.
-	- 우선 각 level 은 상위 level 의 배수의 사이즈이고 여러 SST 가 저장된다.
-	- SST 파일을 다음 level 로 내려보내는 것은 *Compaction Process* 를 통해 수행된다.
-	- *Compaction Process* 는 한 level 의 key-value 쌍들을 다음 level 의 key-value 쌍들로 합치는 과정을 의미하는데, 다음과 같이 진행된다.
-		1. 우선 해당 level 의 하나 이상의 SST 에서 key-value 쌍들을 읽어 온다.
-		2. 또한 다음 level 의 하나 이상의 SST 에서도 key-value 쌍들을 읽어 온다.
-		3. 이후 이들은 하나의 SST 로 합쳐져 다음 level 의 하나의 SST 파일로서 저장된다.
+##### Log Structured Merge Tree
 
-> [!note] 주인장의 한마디
-> - 우선 언제 SST 파일을 다음 level 로 내려보내기 위해 compaction 을 진행하는지는 본문에서 
+- [[LSM Tree (RocksDB)|RocksDB 에서의 LSM tree]] 는 인메모리 [[Memtable (RocksDB)|Memtable]] 와 저장장치에의 여러 level 들 (L0 ~ LMAX) 로 구성되는데
+- 우선 memtable 에 데이터가 저장되고, 이후 주기적 혹은 memtable 의 공간이 부족해지면 L0 로 flush 된다.
+	- Memtable 의 내용은 WAL 이 작성되어 crash recovery 를 지원한다.
+	- Memtable 에서 L0 으로 flush 될 때는 key 를 기준으로 중복 제거 및 정렬되어 [[Static Sorted Table, SST (RocksDB)|SST]] 로 저장된다.
+	- 이 SST 들은 변경이 불가능하고 sequential write 되며 SST 단위로 생성과 삭제된다.
+- Level 은 사이즈가 exponential 하게 증가하고, 각 level 에는 여러 SST 파일들이 key 범위가 겹치지 않게 저장된다.
+- 하위 level 로 내리는 작업은 [[Leveled Compaction (RocksDB)|Compaction]] 를 통해 수행된다.
+	- Compaction 에서는 현재 level 의 SST 와 다음 level 의 SST 가 병합되어 다름 level 의 새로운 SST 로 생성되게 된다.
+	- 낮은 level 로 갈수록 오래된 key-value 가 저장되기에 자연스럽게 hot-cold separation 이 달성된다.
 
-- compaction process 에 의해 한 level 의 key-value 쌍은 다음 level 의 key-value 으로 합쳐진다.
-- compaction process 에서는, 한 level 의 여러 SST 에서 key-value 쌍을 읽어온 다음, 다음 level 의 여러 SST 의 key-value 쌍들과 합쳐진다.
-- 합쳐진 결과는 새로운 SST 파일에 저장되고 LSM tree 상에의 merged SST 를 대체한다
-- 이 결과로 SST 파일은 변경되지 않고, sequential write 되며, 하나의 덩어리로 생성/삭제되게 된다.
-- 또한, key-value 쌍이 다음 level 로 합쳐지기 때문에 hot-cold separation 도 달성된다.
+##### Backend Storage API
 
 - RocksDB 는 File System Wrapper API 를 통해 다양한 backend storage 를 단일 인터페이스를 통해 사용할 수 있도록 설계되어 있다.
 - Wrapper API 는 데이터의 단위 (SST 파일 혹은 WAL 등) 을 고유한 식별자 (파일 이름 등) 으로 식별한다.
@@ -236,6 +222,8 @@ tags:
 - File system 을 거치지 않고 zone 에 직접 data 를 넣는 e2e 방식을 사용하면 더욱 성능이 좋아질 것이기에 ZenFS 를 개발하게 된 것.
 
 #### 4.2.1. ZenFS Architecture
+
+- 
 
 ---
 ---

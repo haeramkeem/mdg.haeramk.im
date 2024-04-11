@@ -13,7 +13,7 @@ tags:
 - 어떤 key-value pair 가 write 되면, 일단 제일 먼저 이곳에 저장되고, read 도 이 공간을 제일 먼저 찾아보게 된다.
 - 여기의 내용은 추후에 memtable 이 꽉 차는 등의 조건이 맞으면 디스크로 flush 된다.
 
-## Mutable memtable, Immutable memtable
+## Mutable, Immutable memtable
 
 - 디스크로의 flush 과정을 좀 더 세분하게 살펴보자: 메모리 공간에는 *Mutable memtable* 과 *Immutable memtable* 이 있다.
 - 일단 ==인메모리 write buffer 로 사용되는 공간은 mutable memtable== 이고, 여기에 데이터들이 write 된다.
