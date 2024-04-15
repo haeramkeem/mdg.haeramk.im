@@ -57,7 +57,7 @@ tags:
 - Zone 은 여러 die 의 block 들 (이것을 *stripe* 라고도 한다) 로 구성된다.
 - Zone size 가 커지는 것은 더욱 많은 die 의 block 들을 응집할 수 있으므로, (1) die-level fault 에서 데이터를 보호하기 쉽고 (2) 병렬 처리율이 높아진다는 장점이 있다.
 	- 반대의 극단을 생각해보면 이해가 빠르다: zone 의 block 이 한 die 에 속하게 된다면,
-	- (1) 해당 die 에 문제가 생기면 zone 전체가 날라가게 되고 [^1]
+	- (1) 해당 die 에 문제가 생기면 zone 전체가 날라가게 되고 [^multiple-die-parity]
 	- (2) 해당 die 에만 command 를 실행할 수 있으므로 병렬처리율도 낮아져 성능도 낮아진다.
 - 반대로 커지는 것에 대한 단점은 zone 의 갯수가 작아지기 때문에 data placement 선택권이 낮아져 ZNS 의 이점을 살리지 못한다.
 	- 만일 storage 전체를 커버하는 zone 하나만이 존재한다고 생각해 보자.
@@ -68,15 +68,15 @@ tags:
 #### Mapping Table
 
 - 기존의 Block interface SSD 에서는 [[Flash Translation Layer, FTL (Storage)#Page level mapping|Fully-associative mapping table (Page level mapping)]] 을 사용했는데, 이것은 당연히 엄청난 양의 DRAM 공간을 필요로 한다.
-- 하지만 ZNS 의 Sequential write constraint 는 이것을 [[Flash Translation Layer, FTL (Storage)#Block level mapping|erase block level]] 혹은 [[Flash Translation Layer, FTL (Storage)#Hybrid log-block FTL|hybrid fashion]] 으로 바꿀 수 있게 해서 DRAM 공간을 줄이거나 필요성을 아예 없앨 수도 있다고 한다 [^2].
+- 하지만 ZNS 의 Sequential write constraint 는 이것을 [[Flash Translation Layer, FTL (Storage)#Block level mapping|erase block level]] 혹은 [[Flash Translation Layer, FTL (Storage)#Hybrid log-block FTL|hybrid fashion]] 으로 바꿀 수 있게 해서 DRAM 공간을 줄이거나 필요성을 아예 없앨 수도 있다고 한다.
 - 어떻게 ZNS 가 이런 것을 가능하게 하는지는 설명 안한다.
 
 #### Device Resources
 
 - 이것은 [[Zoned Storage Model (Storage)#Open Zone Limit|Open Zone Limit]] 과 연관된 내용이다.
 - Active zone 의 data 와 parity 를 위해서는 XOR 엔진이나 SRAM, DRAM 같은 자원과 parity 보존을 위한 power capacitor 가 필요하다.
-- 하지만 zone 의 data 와 parity 의 사이즈는 아주 크고 [^3] 자원의 양은 한정되어 있기 때문에 8개에서 32개의 active zone 만을 유지할 수 있고 이것이 Open Zone Limit 으로 제한걸려있는 것.
-- 이 active zone 개수를 늘리기 위해서는 다음과 같은 전략을 취할 수 있다고 한다 [^4] :
+- 하지만 zone 의 data 와 parity 의 사이즈는 아주 크고 [^two-step-programming] 자원의 양은 한정되어 있기 때문에 8개에서 32개의 active zone 만을 유지할 수 있고 이것이 Open Zone Limit 으로 제한걸려있는 것.
+- 이 active zone 개수를 늘리기 위해서는 다음과 같은 전략을 취할 수 있다고 한다 [^write-back-cache] :
 	- 더 많은 자원을 구비하거나 (adding extra power capacitors)
 	- 최적화를 통해 자원 사용량을 줄이거나 (utilizing DRAM for data movements)
 	- Parity 를 조금 포기하는 방법
@@ -109,7 +109,7 @@ tags:
 #### File System
 
 - File system 은 application 들이 "file" 형식으로 storage 에 접근할 수 있도록 해준다.
-- File system 을 zone 과 통합함으로써 [^5], 여러 overhead 들 (data placement overhead 혹은 indirect overhead [^indirection-overhead] 와 같은 FTL 과 HFTL 이 발생시키는 overhead) 을 없앨 수 있다고 한다.
+- File system 을 zone 과 통합함으로써 [^primarily-sequential-workload], 여러 overhead 들 (data placement overhead 혹은 indirect overhead [^indirection-overhead] 와 같은 FTL 과 HFTL 이 발생시키는 overhead) 을 없앨 수 있다고 한다.
 - 또한 file 의 데이터 특성 정보들을 data placement 에 활용할 수 있다.
 	- 적어도 이러한 정보들이 file system 에서 인지할 수 있도록 해준다.
 - 대부분의 file system 들은 in-place write 를 사용하기 때문에 zone 을 사용하기 힘들다.
@@ -223,7 +223,78 @@ tags:
 
 #### 4.2.1. ZenFS Architecture
 
+- 정리하자면 ZenFS 는 ZNS SSD 의 특성을 최대한 살려 RocksDB 에서 사용할 수 있도록 FS 의 필수적인 것만 구현한 것이다.
+
+##### Journaling and Data
+
+- ZenFS 는 두가지 종류의 zone 이 존재한다:
+	- *Journaling Zone*: 이것은 다음과 같은 용도로 사용된다:
+		1. FS 의 crash recovery
+		2. Superblock 구조 유지
+		3. WAL 과 data file 을 zone 에 매핑
+	- *Data Zone*: 일반적인 data file 을 저장
+
+##### Extents
+
+- Data file 들은 *Extent* 라는 단위로 저장되고, 또 이들은 하나의 data zone 에 sequential write 된다.
+	- *Extent* 는 (1) 가변 크기 (2) 블럭 단위 (3) 연속된 공간 이라는 특징을 가진다.
+	- 특정한 ID 와 연관된 데이터들이 들어있다
+	- 하나의 zone 에는 여러 extent 가 들어가지만 extent 가 zone 을 넘칠 수는 없다.
+- Extent 에 대한 metadata [^extent-metadata] 는 인메모리에 자료구조에 기록된다.
+	- Extent metadata 에는 를 할당하고 반환하는 것, extent 가 어느 zone 에 매핑되었는지 추적하는 등이 포함된다.
+	- 이것은 Extent 의 file 이 close 되거나 rocksdb 가 명시적으로 flush 하면 journal zone 에 기록된다.
+	- Zone 의 모든 extent 에 할당된 파일들이 모두 삭제되면 zone 은 reset 될 수 있다.
+
+##### Superblock
+
+- Superblock 은 ZenFS 를 초기화하거나 복구할 때 첫 진입점이 된다.
+- 현재의 상태에 대한 ID 값, magic value [^magic-value], user option 등이 저장된다.
+- "현재의 상태에 대한 ID 값" 은 system 에서의 device 순서가 바뀌어도 (가령 재부팅 이후 `/dev/nvme0` 에서 `/dev/nvme1` 로 바뀌는 등) filesystem 을 식별할 수 있게 해준다.
+
+##### Journal
+
+- ZenFS 가 journaling 을 하는 것은 아래의 두가지 목적을 위해서 이다:
+	- Superblock 저장
+	- WAL 과 data file 이 어떤 extent 를 통해 어떤 zone 에 매핑되었는지를 추적
+- 당연히 journal state 는 journal zone 에 저장되는데, 이것은 `OFFLINE` 상태가 아닌 첫 두 zone 으로 지정된다.
+	- 두 zone 은 번갈아 사용되며 journal state update 가 logging 된다.
+	- (F2FS 에서처럼 이전 버전의 journal zone 을 보존해놓는 용도 아닐까)
+- Journal zone 에는 제일 먼저 header 가 저장된다.
+	- Header 에는 (1) sequence number (새로운 journal zone 이 초기화될 때마다 증가하는 값) (2) superblock 자료 구조 (3) 현재의 journal state 에 대한 스냅샷 (journal snapshot) 이 들어간다.
+	- header 가 저장된 이후에는 journal update 들이 쭉 logging 된다.
+- Journal zone 를 이용해 ZenFS 를 초기화하는 것은 다음과 같은 세 단계로 진행된다.
+	1. 두 journal zone 의 첫 LBA 를 읽은 후, 여기의 header 에서 sequence number 를 읽어와 어떤 journal zone 이 더 최신인지 (어떤 zone 이 active zone 인지, 더 sequence number 가 높은지) 확인한다.
+	2. Active zone 의 header 전체를 읽어들여 superblock 과 journal state 를 초기화한다.
+	3. journal update 를 쭉 따라가며 journal snapshot 에 반영한다.
+- Journal update 를 어디까지 따라가며 journal snapshot 에 반영할지는 zone 의 상태와 write pointer 에 따라 결정된다.
+	- 만일 zone 이 `OPEN` 혹은 `CLOSED` 상태라면 현재 write pointer 가 있는 위치까지의 journal update 가 반영된다.
+	- 만일 zone 이 `FULL` 상태라면 header 뒤의 모든 journal update 가 반영된다.
+		- 만일 zone 이 `FULL` 상태라면 recovery 이후 나머지 한 journal zone 이 active 가 되며 초기화 후 journal update 를 logging 하게 된다.
+- Fresh journal state 를 생성하는 것은 타 file system 의 초기화 툴과 비슷한 방식으로 진행된다.
+	- ZenFS 의 fresh journal state 초기화 툴은 journal zone 에 sequence number 초기값, superblock, 빈 journal snapshot 로 이루어진 header 를 저장한다.
+- 만일 RocksDB 에 의해 ZenFS 가 초기화되면 상기한 모든 recovery process 가 실행되고, RocksDB 로 부터 데이터를 받아들일 준비가 된다.
+
+##### Writable capacity in Data Zones
+
 - 
+
+##### Data Zone Selection
+
+##### Active Zone Limits
+
+##### Direct I/O and Buffered Writes
+
+## Evaluation
+
+### 5.1. Raw I/O Characteristics
+
+### 5.2. RocksDB
+
+### 5.3. Streams
+
+## 6. Related Work
+
+## 7. Conclusion
 
 ---
 ---
@@ -256,18 +327,13 @@ tags:
 - 또한 Block SSD 끼리 비교했을 때에는, OP 를 더 많이 설정한 SSD 가 그나마 성능 저하가 덜 나타나는 것으로 확인됐다.
 - 다만 28% OP 를 먹인 SSD 의 경우에는 공간이 부족하기 때문에 write 가 6TB 을 넘어가자 더이상 기록되지 않는 것을 볼 수 있다.
 
-[^1]: 다만, (1) 의 경우에는 본문에서는 좀 다른 뉘앙스로 말한다. 여러개의 die 에 분산되어 있으면 parity 를 구성하기 용이하기에 여러 die 에 분산시키는 것이 protection 에 유리하다고 한다. - *"There is a direct correlation between a zone’s write capacity and the size of the erase block implemented by the SSD. In a block-interface SSD, the erase block size is selected such that data is striped across multiple flash dies, both to gain higher read/write performance, but also to protect against die-level and other media failures through per-stripe parity."*
-
-[^2]: 이 부분은 확실히 모르겠다. 기존의 block interface SSD 에서도 block level 혹은 hybrid 방식의 mapping table 이 사용되고 있었기 때문에, 기존의 SSD 에서 page level 만 사용하고 있었다고 말하는 것도, ZNS 덕분에 block/hybrid 로 구현하는 것이 가능해졌다고 말하는 것도 뭔가 이상해 보인다.
-
-[^3]: 본문에서는 zone 사이즈가 큰 이유로 [[One-shot Programming (Storage)|Two-step programming]] 을 언급하지만, 어떤 연관이 있는지 모르겠다.
-
-[^4]: 본문에서는 SLC 에서의 Write-back cache 를 사용하는 방법도 소개한다. 이게 뭔지는 모르겡누
-
-[^5]: 본문에서는 통합의 예시로 "ensuring a primarily sequential workload" 를 제시하는데 감이 안온다.
-
+---
+[^multiple-die-parity]: 다만, (1) 의 경우에는 본문에서는 좀 다른 뉘앙스로 말한다. 여러개의 die 에 분산되어 있으면 parity 를 구성하기 용이하기에 여러 die 에 분산시키는 것이 protection 에 유리하다고 한다. - *"There is a direct correlation between a zone’s write capacity and the size of the erase block implemented by the SSD. In a block-interface SSD, the erase block size is selected such that data is striped across multiple flash dies, both to gain higher read/write performance, but also to protect against die-level and other media failures through per-stripe parity."*
+[^two-step-programming]: 본문에서는 zone 사이즈가 큰 이유로 [[One-shot Programming (Storage)|Two-step programming]] 을 언급하지만, 어떤 연관이 있는지 모르겠다.
+[^write-back-cache]: 본문에서는 SLC 에서의 Write-back cache 를 사용하는 방법도 소개한다. 이게 뭔지는 모르겡누
+[^primarily-sequential-workload]: 본문에서는 통합의 예시로 "ensuring a primarily sequential workload" 를 제시하는데 감이 안온다.
 [^indirection-overhead]: 본문에서 말하는 *"Indirection overhead"* 는 [Don’t stack your Log on my Log, INFLOW '14](https://www.usenix.org/system/files/conference/inflow14/inflow14-yang.pdf) 논문에서 제기된 문제를 말하는 것이다. 해당 논문에서는 sequential write 를 활용하기 위한 방법 중 하나인 log-structured 를 중복해서 사용하는 것 (가령, log-structured fs 위에서 log-structured application 을 사용하는 등) 이 오히려 성능 저하를 유발한다고 한다.
-
 [^zone-descriptor]: "Zone Descriptor Data Structure" 는 본문에 별도의 설명이 되어 있지는 않지만, 일단 zone 의 메타데이터로 생각하고 넘어가자. 아마 "Zone Descriptor" 는 zone 의 attribute 들에 대한 key-value 쌍이 아닐까.
-
 [^open-segment-limit]: 본문에는 "Open Segment Limit" 과 같은 용어는 나오지 않는다. 대신 "The number of segments that can be open simultaneously" 라는 표현이 나오며, 주인장이 이것을 단어화 한 것.
+[^extent-metadata]: "Extent metadata" 라는 용어는 없다. 이해를 위해 주인장이 임의로 쓴 용어이다.
+[^magic-value]: 이게 무엇인지는 자세한 설명이 안나온다.
