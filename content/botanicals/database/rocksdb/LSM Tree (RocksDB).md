@@ -2,28 +2,21 @@
 tags:
   - 용어집
   - Database
-  - RocksDb
+  - RocksDB
 ---
 > [!info]- 참고한 것들
-> - [RocksDB 공식 문서](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction)
-> - [간단하게 자바로 구현한 것](https://itnext.io/log-structured-merge-tree-a79241c959e3) + [소스코드 - 깃헙](https://github.com/tomfran/LSM-Tree)
-> - [ZNS: Avoiding the Block Interface Tax for Flash-based SSDs (USENIX ATC '21)](https://www.usenix.org/system/files/atc21-bjorling.pdf) 의 4.2 섹션
-> - [미디엄 블로그](https://jaeyeong951.medium.com/%EC%83%89%EC%9D%B8-index-%EC%9D%98-%EB%91%90-%EA%B0%80%EC%A7%80-%ED%98%95%ED%83%9C-lsm-%ED%8A%B8%EB%A6%AC-b-%ED%8A%B8%EB%A6%AC-7a4ab7887db5)
-> - [Flink 0.3 시절의 공식문서](https://nightlies.apache.org/flink/flink-table-store-docs-release-0.3/docs/concepts/lsm-trees/)
+> - [RocksDB 공식 문서 - Compaction](https://github.com/facebook/rocksdb/wiki/Compaction)
+> - [RocksDB 공식 문서 - Leveled Compaction](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction)
 
-> [!info] 이미지 출처
-> - 별도의 명시가 없으면, [RocksDB 공식 문서](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction) 에서 갖고왔습니다.
+> [!info] 그림 출처
+> - 별도의 명시가 있지 않는 한, 그림들은 [RocksDB 공식문서](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction) 에서 가져왔습니다.
 
-> [!fail]- 본 글은 #draft 상태입니다.
-> - [ ] 내용 정리
-
-## 가 뭔데?
-
-- *Leveled Compaction* 은 [[Log Structure Merge Tree, LSM Tree (Data Structure)|LSM Tree]] 
+> [!warning] 내용의 범위
+> - 본 글의 내용은 [[Log Structure Merge Tree, LSM Tree (Data Structure)|LSM Tree]] 의 RocksDB 구현체를 기준으로 설명합니다. Patrick O'Neil 의 논문 및 LSM 의 이론적인 내용은 여기 담겨있지 않습니다.
 
 ## 기본 아이디어
 
-- Leveled Compaction 의 기본 아이디어는 다음과 같다:
+- LSM 의 기본 아이디어는 다음과 같다:
 
 1. *Log-structured (sequential write)* 를 통해 write 성능을 개선한다.
 	- 일반적으로 sequential write 는 write 성능을 개선하는 것으로 알려져 있다. ([[논문 - The design and implementation of a log-structured file system|참고 사례 - LFS]])
@@ -57,8 +50,9 @@ tags:
 > - 지금은 이해를 위해 Level 단위로 Sequential write 가 된다고 설명했지만, 실제 작동 방식은 조금 더 복잡하고, 명확하게 말하자면 level 단위의 sequential write 는 틀린 얘기이다.
 > - 더 구체적인 얘기는 아래에서 하도록 하고 지금은 최신의 key-value pair 는 상위 level 에, 오래된 pair 는 하위 pair 에 위치한다는 것만 알고 넘어가자.
 
-- 이 방식에서 read 를 하는 방법은 다음과 같다.
-	- 최신의 pair 는 상위 level 에 있기 때문에 상위 level 에서부터 binary search 를 수행해 pair 가 있는 지 찾고, 없다면 다음 level 로 넘어가며 read 를 한다.
+- 이 방식에서 read 는 다음처럼 수행할 수 있을 것이다.
+	- 최신의 pair 는 상위 level 에 있기 때문에 상위 level 에서부터 binary search 를 수행해 pair 가 있는 지 찾고, 없다면 다음 level 로 넘어가며 read 를 하면 되지 않을까.
+	- 아니면 다음 level 로 넘어가며 level 간 linear search 를 하는 대신에, [[Sparse Index (Data Structure)|sparse index]] 등을 이용하여 더욱 최적화 할 수도 있을 것이다.
 
 ### Compaction Process
 
@@ -76,24 +70,24 @@ tags:
 
 - 위에서 말한 Level 은 실제로 위와 같은 모습을 띄고 있다.
 	- 헷갈리지 말자: Level 은 번호가 작을수록 상위 Level 이다.
-- 이 구조를 Top-down 식으로 살펴보자.
+- 이 구조를 Top-down 으로 살펴보자.
 
 #### 최상단: Memtable
 
-- 우선 제일 위에는 ==*Memtable* 이라는 인메모리 write buffer== 가 있다.
-- 어떤 key-value pair 가 write 되면, 일단 제일 먼저 이곳에 저장되고, 추후에 디스크로 flush 된다.
-- Sorting 은 여기서부터 시작된다: RocksDB 기준, Memtable 은 [[Skip List (Data Structure)|Skip List]] 로 구현되어 있고, 여기에 key-value pair 가 정렬되어 저장된다.
-
-#### Sorted String Table (SST)
+- 우선 제일 위에는 ==*[[Memtable (RocksDB)|Memtable]]* 이라는 인메모리 write buffer== 가 있다.
+	- 즉 어떤 key-value pair 가 write 되면, 일단 제일 먼저 이곳에 저장되고, 추후에 디스크로 flush 되는 것.
+- 이 memtable 은 RocksDB 에서는 기본적으로 [[Skip List (Data Structure)|skiplist]] 로 구현되고, append-only 로 작동한다.
+	- 왜 굳이 메모리에 있는데 append-only 일까? 라는 생각이 든다면 [[Memtable (RocksDB)|Memtable]] 문서에서 더 자세한 내용을 확인하자.
+#### Static Sorted Table (SST)
 
 - Memtable 에 있던 key-value 쌍들은 디스크에 flush 될 때, SST 라는 파일로 저장된다.
-- ==*Sorted String Table (SST)* 는 key 를 기준으로 중복 없이 정렬되어 있고, 수정이 불가능한 key-value pair 들의 모음 파일==이다.
+- ==*[[Static Sorted Table, SST (RocksDB)|Static Sorted Table (SST)]]* 는 key 를 기준으로 중복 없이 정렬되어 있고, 수정이 불가능한 key-value pair 들의 모음 파일==이다.
 
 #### Level 0 (L0)
 
 - 이렇게 ==Memtable 에 있던 내용이 SST 가 되어 처음으로 디스크에 저장되는 장소가 *Level0 (L0)*== 이다. 
 - 이 level 은 다른 level 들과는 다른 특별한 공간이다.
-	- 추후에 설명할 [[#Level Size Limit]] 이나 [[#Sorted Run]] 은 level 에 적용되지 않는다.
+	- 아래에서 설명할 [[#Level Size Limit]] 이나 [[#Sorted Run]] 은 level 에 적용되지 않는다.
 	- 즉, Memtable 에서 L0 로 내려올 때는 그냥 SST 로 변환되어 내려오기만 하고, SST 간의 key 중복 혹은 key 범위 겹침 등은 얼마든지 가능하다.
 - 여기에 있던 SST 들의 개수가 `level0_file_num_compaction_trigger` 에 도달하면 모든 SST 가 [[#Compaction]] 을 통해 다음 level 로 내려간다.
 
@@ -121,10 +115,10 @@ tags:
 - 그런데 어떻게 이것이 가능할까? 상위 level 에서 SST 가 내려오면 분명히 내려온 SST 와 원래 있던 SST 간에는 중복된 key 들도 있을 것이고, 범위도 겹칠텐데, 어떻게 이런 sorted run 상태를 유지할 수 있을까?
 	- 정답은 [[#Compaction]] 에 있다.
 
-## Compaction
+## R/W Operation
 
-- 위에서는 Compaction 으로 뭐 하위 level 로 내려보낸다는 둥, 중복 제거 해준다는 등 어떻게 하는지는 안알려주고 추상적으로만 씨부렸는데, 이제 제대로 살펴보자.
-- Compaction 의 가장 큰 목적은
-	1. 각 level 이 각자의 size limit 을 넘지 않도록 조절해 주고
-	2. 각 level 이 sorted run 상태, 즉 SST 간에 중복된 key 혹은 범위가 겹치는 key 가 없도록 유지시켜 빠른 search 와 용량 최적화를 보장해주는 것이다.
-- 
+- 위에서도 중간중간 설명하긴 했지만, 이 구조에서 어떻게 R/W 를 수행하는지 총정리를 해보자.
+
+> [!fail]- #draft 추후에 작성할 예정입니다.
+> - [x] 내용 정리
+> - [ ] R/W 과정 정리
