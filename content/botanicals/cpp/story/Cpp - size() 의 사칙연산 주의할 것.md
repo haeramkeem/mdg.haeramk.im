@@ -14,9 +14,10 @@ tags:
 	- 가령, `-1` 는 `2^64 - 1 == 18446744073709551615` 와 같다.
 - 확인해 보자.
 
-### CodeRef
+### Code reference
 
 - 아래 코드를 실행해 보면 자신있게 모두 -1 이라고 생각할 수 있다.
+
 ```cpp
 #include <iostream>
 #include <vector>
