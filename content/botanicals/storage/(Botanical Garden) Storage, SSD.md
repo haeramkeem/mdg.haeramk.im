@@ -32,3 +32,5 @@
 - [[Wear Leveling (Storage)|Wear Leveling]]
 - [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|Write Amplification, Write Amplication Factor (WA, WAF)]]
 - [[Zoned Storage Model (Storage)|Zoned Storage Model]]
+
+- [[Story - NVMeVirt 테스트]]
