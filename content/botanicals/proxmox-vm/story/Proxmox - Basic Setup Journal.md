@@ -1,6 +1,7 @@
 ---
 tags:
   - 삽질록
+  - Proxmox
 date: 2024-04-21
 ---
 > [!info] 넋두리
