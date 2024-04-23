@@ -2,6 +2,7 @@
 tags:
   - 삽질록
   - Proxmox
+  - NVMe
 date: 2024-04-22
 ---
 > [!info]- 참고한 것들

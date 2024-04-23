@@ -2,6 +2,7 @@
 tags:
   - Storage
   - 삽질록
+  - NVMe
 date: 2024-04-21
 ---
 > [!info]- 참고한 것들

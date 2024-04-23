@@ -12,4 +12,5 @@
 ### Story
 
 - [[Proxmox - Basic Setup Journal|Basic Setup Journal]]
+- [[Proxmox - NVMe Emulation (ZNS, FDP)|NVMe Emulation (ZNS, FDP)]]
 - [[Proxmox - NVMe Emulation for VM|NVMe Emulation for VM]]
