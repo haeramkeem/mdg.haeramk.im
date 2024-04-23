@@ -4,6 +4,10 @@ tags:
   - 삽질록
 date: 2024-04-21
 ---
+> [!info]- 참고한 것들
+> - [논문 (FAST '23)](https://www.usenix.org/conference/fast23/presentation/kim-sang-hoon)
+> - [GItHub](https://github.com/snu-csl/nvmevirt)
+> - [유투브 저자직강](https://youtu.be/eV7vQyg46zc?si=USiYITI09Sdz01YZ)
 
 ## 환경
 
@@ -20,6 +24,7 @@ date: 2024-04-21
 ## NVMeVirt 설치
 
 ### 설치 결과
+
 - [NVMeVirt 설치 가이드](https://github.com/snu-csl/nvmevirt?tab=readme-ov-file#installation)
 	- Memmap_start: `4G`
 	- Memmap_size: `4G`
@@ -152,7 +157,7 @@ sudo nvme smart-log /dev/nvme0
 
 ![[Pasted image 20240422182257.png]]
 
-### SMART 추적
+### NVMeVirt SMART log 기능 추적
 
 1. [nvme smart log impl](https://github.com/snu-csl/nvmevirt/blob/main/admin.c#L180-L193)([nvme smart log iface](https://github.com/snu-csl/nvmevirt/blob/main/nvme.h#L218-L239))
 2. [admin.c::nvmev_proc_admin_req](https://github.com/snu-csl/nvmevirt/blob/main/admin.c#L548-L596)
