@@ -134,7 +134,7 @@ sudo journalctl -k
 
 ### 간단히 몇개의 command 날려보기
 
-- list
+- [[nvme-cli - 디바이스 조회|List]]
 
 ```bash
 sudo nvme list
@@ -142,7 +142,7 @@ sudo nvme list
 
 ![[Pasted image 20240422182145.png]]
 
-- Log
+- [[nvme-cli - 로그 보기|Log]]
 
 ```bash
 sudo nvme get-log /dev/nvme0 -i 2 -l 512
