@@ -1,3 +1,6 @@
+---
+date: 2024-04-23
+---
 ## 개요
 
 - [[(Botanical Garden) Operating Systems, Linux|OS]] 보다 한단계 더 아래.. 스토리지도 심어보자
