@@ -38,3 +38,4 @@
 ### NVMe
 
 - [[NVMe - NVMeVirt PoC|NVMeVirt PoC]]
+- [[NVMe - ZNS 를 위한 CLI 명령어 사용해보기|ZNS 를 위한 CLI 명령어 사용해보기]]
