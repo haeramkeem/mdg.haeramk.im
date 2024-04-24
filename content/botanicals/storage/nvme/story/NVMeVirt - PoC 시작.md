@@ -157,17 +157,3 @@ sudo nvme smart-log /dev/nvme0
 ```
 
 ![[Pasted image 20240422182257.png]]
-
-### NVMeVirt SMART log 기능 추적
-
-1. [nvme smart log impl](https://github.com/snu-csl/nvmevirt/blob/main/admin.c#L180-L193)([nvme smart log iface](https://github.com/snu-csl/nvmevirt/blob/main/nvme.h#L218-L239))
-2. [admin.c::nvmev_proc_admin_req](https://github.com/snu-csl/nvmevirt/blob/main/admin.c#L548-L596)
-3. [admin.c::nvmev_proc_admin_sq](https://github.com/snu-csl/nvmevirt/blob/main/admin.c#L598-L617)
-4. [main.c::nvmev_proc_dbs](https://github.com/snu-csl/nvmevirt/blob/main/main.c#L114-L157)
-5. [main.c::nvmev_dispatcher](https://github.com/snu-csl/nvmevirt/blob/main/main.c#L159-L173)
-6. [main.c::NVMEV_DISPATCHER_INIT](https://github.com/snu-csl/nvmevirt/blob/main/main.c#L175-L181)
-	1. [main.c::NVMeV_init](https://github.com/snu-csl/nvmevirt/blob/main/main.c#L587-L630)
-		1. <-- Module load
-7. [main.c::NVMEV_DISPATCHER_FINAL](https://github.com/snu-csl/nvmevirt/blob/main/main.c#L183-L189)
-	1. [main.c::NVMeV_exit](https://github.com/snu-csl/nvmevirt/blob/main/main.c#L632-L662)
-		1. <-- Module stop

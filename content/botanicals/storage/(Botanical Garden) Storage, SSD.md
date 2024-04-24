@@ -40,5 +40,9 @@ date: 2024-04-23
 
 ### NVMe
 
-- [[NVMe - NVMeVirt PoC|NVMeVirt PoC]]
-- [[NVMe - ZNS 를 위한 CLI 명령어 사용해보기|ZNS 를 위한 CLI 명령어 사용해보기]]
+- [[Zoned Namespaces, ZNS (Storage)|ZNS]] 관련
+	- [[NVMe - ZNS 를 위한 CLI 명령어 사용해보기|ZNS 를 위한 CLI 명령어 사용해보기]]
+- [[논문 - NVMeVirt - A Versatile Software-defined Virtual NVMe Device|NVMeVirt]] 관련
+	- [[NVMeVirt - FDP 디버깅 기록|FDP 디버깅 기록]]
+	- [[NVMeVirt - PoC 시작|PoC 시작]]
+	- [[NVMe - S.M.A.R.T 로그|S.M.A.R.T 로그]]
