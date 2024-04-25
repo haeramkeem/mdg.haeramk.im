@@ -3,6 +3,7 @@ tags:
   - NVMe
   - 쉘스크립트
   - nvme-cli
+date: 2024-04-25
 ---
 ## TL;DR
 

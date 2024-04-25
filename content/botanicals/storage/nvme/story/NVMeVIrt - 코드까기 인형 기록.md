@@ -4,6 +4,7 @@ tags:
   - NVMe
   - NVMeVirt
   - Storage
+date: 2024-04-24
 ---
 
 - 모든 debugging 로그 출력
