@@ -59,12 +59,13 @@ date: 2024-04-23
 - `fdisk`
 	- [[fdisk - 디스크 확인하기|디스크 확인하기]]
 - `nvme-cli`
-	- [[nvme-cli - 디바이스 조회|디바이스 조회]]
+	- [[nvme-cli - 디바이스 조회하기|디바이스 조회하기]]
 	- [[nvme-cli - 로그 보기|로그 보기]]
+	- [[nvme-cli - 최신 버전 설치하기|최신 버전 설치하기]]
 	- `zns` Subcommand
-		- [[nvme-cli - ZNS zone 상태 변경|ZNS zone 상태 변경]]
-		- [[nvme-cli - ZNS 디바이스 조회|ZNS 디바이스 조회]]
-		- [[nvme-cli - ZNS 입출력|ZNS 입출력]]
+		- [[nvme-cli - ZNS zone 상태 변경하기|ZNS zone 상태 변경하기]]
+		- [[nvme-cli - ZNS 디바이스 조회하기|ZNS 디바이스 조회하기]]
+		- [[nvme-cli - ZNS 데이터 입출력하기|ZNS 데이터 입출력하기]]
 - `openssl`
 	- [[openssl - Server 인증서 다운로드 하기|Server 인증서 다운로드 하기]]
 	- [[openssl - 인증서 상세 정보 확인하기|인증서 상세 정보 확인하기]]

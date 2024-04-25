@@ -2,6 +2,7 @@
 tags:
   - 쉘스크립트
   - NVMe
+  - nvme-cli
 date: 2024-04-23
 ---
 ## Log entry 확인
