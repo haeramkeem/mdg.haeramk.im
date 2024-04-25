@@ -7,9 +7,7 @@ tags:
 date: 2024-04-23
 ---
 > [!info]- 참고한 것들
-> - [Zoned Storage](https://zonedstorage.io/docs/tools/zns)
-
-> [!tip] 여기는 명령어만 정리되어 있습니다. 실 사용 예시는 [[NVMe - ZNS 를 위한 CLI 명령어 사용해보기|ZNS 를 위한 CLI 명령어 사용해보기]] 문서를 참고해 주세용
+> - [Zoned Storage 공식 문서](https://zonedstorage.io/docs/tools/zns)
 
 ## [[Zoned Namespaces, ZNS (Storage)|ZNS]] 지원 기기 목록 출력
 
@@ -17,6 +15,8 @@ date: 2024-04-23
 sudo nvme zns list
 ```
 
+> [!example]- 결과 예시
+> ![[Pasted image 20240423191359.png]]
 ## Controller 정보 출력
 
 ```bash
@@ -28,12 +28,17 @@ sudo nvme zns id-ctrl /dev/nvme1
 	- `-H` 옵션은 없다.
 	- ZASL 은 Zone Append Size Limit 을 뜻한다.
 
+> [!example]- 결과 예시
+> ![[Pasted image 20240423191432.png]]
+
 ## [[NVMe Namespace (Storage)|Namespace]] 정보 출력
 
 ```bash
 sudo nvme zns id-ns /dev/nvme1n1 -H
 ```
 
+> [!example]- 결과 예시
+> ![[Pasted image 20240423191530.png]]
 ## [[Zoned Storage Model (Storage)#State Machine|Zone 상태]] 확인
 
 ```bash
@@ -47,3 +52,6 @@ sudo nvme zns report-zones /dev/nvme1n1 -d 10 -v
 	- `SLBA`: Start LBA
 	- `WP`: Write Pointer
 	- `Cap`: Capacity
+
+> [!example]- 결과 예시
+> ![[Pasted image 20240423191608.png]]

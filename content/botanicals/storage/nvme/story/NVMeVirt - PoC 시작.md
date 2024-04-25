@@ -115,26 +115,13 @@ sudo journalctl -k
 
 ## NVMe CLI
 
-- Ubuntu 22.04 에 기본적으로 nvme-cli 가 포함되어 있는 것 같지만, nvme-cli 도 같이 디버깅하기 위해 nvme-cli 도 빌드해서 사용했당.
-
-> [!info]- `nvme-cli` 빌드
-> ```bash
-> sudo apt-get install -y meson
-> git clone https://github.com/linux-nvme/nvme-cli.git
-> cd nvme-cli
-> meson setup --force-fallback-for=libnvme,json-c .build
-> meson compile -C .build
-> sudo meson install -C .build
->
-> # Replace bin
-> sudo cp .build/nvme /usr/local/sbin/nvme
-> ```
+- [[nvme-cli - 최신 버전 설치하기|설치 과정은 이곳에서]]
 
 ## 디버깅
 
 ### 간단히 몇개의 command 날려보기
 
-- [[nvme-cli - 디바이스 조회|List]]
+- [[nvme-cli - 디바이스 조회하기|List]]
 
 ```bash
 sudo nvme list

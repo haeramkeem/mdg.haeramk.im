@@ -63,7 +63,7 @@ date: 2024-04-23
 	- [[nvme-cli - 로그 보기|로그 보기]]
 	- [[nvme-cli - 최신 버전 설치하기|최신 버전 설치하기]]
 	- `zns` Subcommand
-		- [[nvme-cli - ZNS zone 상태 변경하기|ZNS zone 상태 변경하기]]
+		- [[nvme-cli - ZNS zone 상태 관리하기|ZNS zone 상태 관리하기]]
 		- [[nvme-cli - ZNS 디바이스 조회하기|ZNS 디바이스 조회하기]]
 		- [[nvme-cli - ZNS 데이터 입출력하기|ZNS 데이터 입출력하기]]
 - `openssl`
