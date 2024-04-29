@@ -11,6 +11,8 @@ date: 2024-04-24
 
 > [!tip] [[NVMeVirt - PoC 시작|이전 글]]
 
+> [!fail] 이 글은 #draft 입니다.
+
 ## [[Flexible Data Placement, FDP (Storage)|FDP]] 정보 조회
 
 ### Controller ID
@@ -110,3 +112,22 @@ sudo nvme fdp status /dev/nvme*n*
 > [!example]- PM9D3 SSD 결과 - 에러 (?)
 > ![[Pasted image 20240425204550.png]]
 
+## 입출력
+
+![[Pasted image 20240425213142.png]]
+
+![[Pasted image 20240425212241.png]]
+> DTYPE - TP 4146
+
+![[Pasted image 20240425213157.png]]
+
+![[Pasted image 20240425214442.png]]
+
+- `DTYPE: 2` (FDP), `DSPEC: 0` (RUH 0)
+
+```bash
+echo 'bhc vs kfc' \
+	| sudo nvme write $(fdp) -z 512 -T 2 -S 0 \
+	&& sudo nvme fdp status $(fdp) \
+	| head -n 16
+```

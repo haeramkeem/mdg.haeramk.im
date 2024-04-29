@@ -6,6 +6,7 @@ tags:
   - Storage
 date: 2024-04-24
 ---
+## Debug 로그 출력
 
 - 모든 debugging 로그 출력
 	- `nvmev.h` L31 ~ L32
@@ -15,36 +16,36 @@ date: 2024-04-24
 #define CONFIG_NVMEV_DEBUG_VERBOSE
 ```
 
-- 한번 Write 시 journal
+> [!example]- 한번 Write 시 journal 예시
+>
+> ```bash
+> echo 'bhc vs kfc' \
+> 	| sudo nvme write /dev/nvme1n1 -s 0 -z 512 \
+> 	&& sudo nvme read /dev/nvme1n1 -s 0 -z 512
+> ```
+> 
+> ```
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: __nvmev_proc_admin_req: 7 0x6 0x301d
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 39, vector 36
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: [W] 0 + 0, prp 23214d000 0
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0/302[1], sq 2 cq 2, entry > 206, 13207252616726 + 623
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: __reclaim_completed_reqs: 301 -- 301, 1
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0: copied 302, 2 2 206
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0: completed 302, 2 2 206
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 41, vector 39
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: __nvmev_proc_admin_req: 8 0x6 0x401c
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 39, vector 36
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: [R] 0 + 0, prp 20aee4000 0
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0/303[2], sq 2 cq 2, entry 207, 13207259919175 + 1254
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: __reclaim_completed_reqs: 302 -- 302, 1
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0: copied 303, 2 2 207
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0: completed 303, 2 2 207
+> Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 41, vector 39
+> ```
 
-```bash
-echo 'bhc vs kfc' \
-	| sudo nvme write /dev/nvme1n1 -s 0 -z 512 \
-	&& sudo nvme read /dev/nvme1n1 -s 0 -z 512
-```
+## Debug 메세지 포맷 변경
 
-```
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: __nvmev_proc_admin_req: 7 0x6 0x301d
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 39, vector 36
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: [W] 0 + 0, prp 23214d000 0
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0/302[1], sq 2 cq 2, entry 206, 13207252616726 + 623
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: __reclaim_completed_reqs: 301 -- 301, 1
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0: copied 302, 2 2 206
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0: completed 302, 2 2 206
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 41, vector 39
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: __nvmev_proc_admin_req: 8 0x6 0x401c
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 39, vector 36
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: [R] 0 + 0, prp 20aee4000 0
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0/303[2], sq 2 cq 2, entry 207, 13207259919175 + 1254
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: __reclaim_completed_reqs: 302 -- 302, 1
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0: copied 303, 2 2 207
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: nvmev_io_worker_0: completed 303, 2 2 207
-Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 41, vector 39
-```
-
-- DEBUG 메세지 포맷 변경
-
-- `NVMEV_DEBUG()`, `nvmev.h` L32
+### `NVMEV_DEBUG()`, `nvmev.h` L32
 
 - 이전
 
@@ -58,7 +59,8 @@ Apr 24 11:55:37 nvmevirt kernel: NVMeVirt: irq: msi 41, vector 39
 #define NVMEV_DEBUG(string, args...) printk(KERN_INFO "%s{file: '%s', line: %d, func: '%s'}: " string, NVMEV_DRV_NAME, __FILE__, __LINE__, __func__, ##args)
 ```
 
-- `NVMEV_DEBUG()`, `nvmev.h` L37
+### `NVMEV_DEBUG()`, `nvmev.h` L37
+
 - 이전
 
 ```c
@@ -92,3 +94,7 @@ Apr 24 12:51:38 nvmevirt kernel: NVMeVirt{file: '/home/toor/nvmevirt/pci.c', lin
 
 - kernel update 먼저 해야 함
 	- nvme 설치 후 kernel update 시 정상적으로 작동하지 않을 수 있음
+
+```bash
+for c in $(find . -name '*.c'); do perl -0777 -i -pe 's/([a-z].+)\((.+)\)\n[{]/$1($2)\n{ NVMEV_DEBUG_HL("func()");/g' $c; done
+```
