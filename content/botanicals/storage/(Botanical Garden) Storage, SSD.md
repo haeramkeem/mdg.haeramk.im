@@ -1,8 +1,13 @@
+---
+date: 2024-04-23
+---
 ## 개요
 
 - [[(Botanical Garden) Operating Systems, Linux|OS]] 보다 한단계 더 아래.. 스토리지도 심어보자
 
 ## 작물들
+
+### 이론/용어
 
 - [[Conventional Magnetic Recording, CMR HDD (Storage)|Conventional Magnetic Recording HDD, CMR HDD]]
 - [[Data Chunk (Storage)|Data Chunk]]
@@ -33,4 +38,8 @@
 - [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|Write Amplification, Write Amplication Factor (WA, WAF)]]
 - [[Zoned Storage Model (Storage)|Zoned Storage Model]]
 
-- [[Story - NVMeVirt 테스트]]
+### NVMe
+
+- [[논문 - NVMeVirt - A Versatile Software-defined Virtual NVMe Device|NVMeVirt]] 관련
+	- [[NVMeVirt - PoC 시작|PoC 시작]]
+	- [[NVMe - S.M.A.R.T 로그|S.M.A.R.T 로그]]
