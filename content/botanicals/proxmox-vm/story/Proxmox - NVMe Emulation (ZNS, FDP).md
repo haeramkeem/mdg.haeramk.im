@@ -64,11 +64,9 @@ sh -c "qm set ${VMID} --args '$(echo ${FDP_PARAMS[@]})'"
 ## 합쳐부러
 
 ```bash
-IMG_DIRBASE='/etc/hci-dcs/qemu-server/102'
-
 # Conventional SSD
 CNS_PARAMS=(
-	-drive format=raw,file=${IMG_DIRBASE}/nvme-0.raw,if=none,id=cns-0
+	-drive format=raw,file=/path/to/cns.raw,if=none,id=cns-0
 	-device nvme,drive=cns-0,serial=QEMU_CNS_0
 )
 
@@ -76,7 +74,7 @@ CNS_PARAMS=(
 ZNS_PARAMS=(
 	-device nvme,id=zns-0-ctrl,serial=QEMU_ZNS_0
 	-device nvme-ns,drive=zns-0,zoned=on
-	-drive format=raw,file=${IMG_DIRBASE}/nvme-1-zns.raw,if=none,id=zns-0
+	-drive format=raw,file=/path/to/zns.raw,if=none,id=zns-0
 )
 
 # FDP SSD
@@ -84,7 +82,7 @@ FDP_PARAMS=(
 	-device nvme-subsys,id=fdp-0-subsys,nqn=subsys0,fdp=on,fdp.nruh=16,fdp.nrg=8
 	-device nvme,id=fdp-0-ctrl,serial=QEMU_FDP_0,subsys=fdp-0-subsys
 	-device nvme-ns,drive=fdp-0,fdp.ruhs=0-8
-	-drive format=raw,file=${IMG_DIRBASE}/nvme-2-fdp.raw,if=none,id=fdp-0
+	-drive format=raw,file=/path/to/fdp.raw,if=none,id=fdp-0
 )
 
 sh -c "qm set 102 --args '$(echo ${CNS_PARAMS[@]} ${ZNS_PARAMS[@]} ${FDP_PARAMS[@]})'"

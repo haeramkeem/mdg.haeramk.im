@@ -28,7 +28,7 @@ date: 2024-04-21
 - 다만 Proxmox 에서 virtual network 를 설정하고 port-forwarding 등을 하는 것은 대부분 가이드에서 iptable 을 직접 만지는 것으로 소개한다. 하지만
 	- 많은 가이드에서 소개하는 `/etc/network/interface` 파일을 만져서 bridge 를 생성해주면 왜인지는 모르겠지만 GUI 상에서 안보였다.
 	- 그리고 이렇게 직접 iptable 만져서 네트워크 구성할 거면 HCI 를 쓸 이유가 없다고 생각한다.
-		- 이럴거면 그냥 linux distro 깐 다음에 vagrant 같은걸로 provisioning 하지
+		- 이럴거면 그냥 linux distro 깐 다음에 vagrant 같은걸로 provisioning 하지 안그래?
 		- 따라서 최대한 GUI 로 해결하고 도저히 안되는 것만 cli 로 하기로 했당.
 
 ## Proxmox 설정 기록
@@ -72,6 +72,7 @@ iface vnet0
 
 - VM 생성
 	- Cloud image 를 사용할 수 없기 때문에 갓절수 없이 깡통 VM 하나 생성해서 복사하면서 쓰기로 한다.
+		- 물론 뭐 cli 로 qcow 이미지 압축해제해서 사용하는 예시들이 인터넷에 많이 있긴 하다.
 	- 사용환경에서는 이놈을 복사해서:
 		1. Hostname 변경
 			- 깡통에 있는 hostname 도 그대로 가져오기 때문에 간지나는걸로 하나 만들어서 바꿔주자.
