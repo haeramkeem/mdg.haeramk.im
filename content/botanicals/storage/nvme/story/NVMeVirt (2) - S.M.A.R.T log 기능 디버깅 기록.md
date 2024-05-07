@@ -10,7 +10,7 @@ date: 2024-04-21
 > - [GItHub](https://github.com/snu-csl/nvmevirt)
 > - [유투브 저자직강](https://youtu.be/eV7vQyg46zc?si=USiYITI09Sdz01YZ)
 
-> [!tip] [[NVMeVirt - PoC 시작|이전 글]]
+> [!tip] [[NVMeVirt (1) - 설치 기록|이전 글]]
 
 ## 환경
 

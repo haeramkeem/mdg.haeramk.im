@@ -127,7 +127,8 @@ sudo journalctl -k
 sudo nvme list
 ```
 
-![[Pasted image 20240422182145.png]]
+> [!example]- 결과 예시
+> ![[Pasted image 20240422182145.png]]
 
 - [[nvme-cli - 로그 보기|Log]]
 
@@ -135,7 +136,8 @@ sudo nvme list
 sudo nvme get-log /dev/nvme0 -i 2 -l 512
 ```
 
-![[Pasted image 20240422182220.png]]
+> [!example]- 결과 예시
+> ![[Pasted image 20240422182220.png]]
 
 - SMART log
 
@@ -143,4 +145,5 @@ sudo nvme get-log /dev/nvme0 -i 2 -l 512
 sudo nvme smart-log /dev/nvme0
 ```
 
-![[Pasted image 20240422182257.png]]
+> [!example]- 결과 예시
+> ![[Pasted image 20240422182257.png]]

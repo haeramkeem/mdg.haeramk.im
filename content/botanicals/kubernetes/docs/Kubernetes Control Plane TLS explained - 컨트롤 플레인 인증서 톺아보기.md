@@ -118,7 +118,6 @@ front-proxy-ca          Aug 28, 2033 11:38 UTC   9y              no
 	- Kubelet 이 Kube-apiserver 에 접근하기 위해 제시하는 Kubeconfig 형태의 인증서
 	- 인데, `kubeadm certs` 명령어에 표시되지 않는 이유는 이 인증서가 자동으로 rotation 되기 때문이다.
 		- 즉, 주기적으로 재생성되며 기간이 만료되지 않게 자동으로 관리되기 때문
-		- 
 - `(kube-system/cm/kube-proxy)`
 	- Kube-proxy 가 kube-apiserver 에 접근하기 위해 제시하는 Kubeconfig 형태의 인증서
 	- 인데, 얘는 파일로 관리되지 않고 클러스터 내에 ConfigMap 으로 저장된다.
