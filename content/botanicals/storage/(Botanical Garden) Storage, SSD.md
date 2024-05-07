@@ -41,5 +41,6 @@ date: 2024-04-23
 ### NVMe
 
 - [[논문 - NVMeVirt - A Versatile Software-defined Virtual NVMe Device|NVMeVirt]] 관련
-	- [[NVMeVirt - PoC 시작|PoC 시작]]
-	- [[NVMe - S.M.A.R.T 로그|S.M.A.R.T 로그]]
+	- [[NVMeVirt (1) - 설치 기록|1. 설치 기록]]
+	- [[NVMeVirt (2) - S.M.A.R.T log 기능 디버깅 기록|2. S.M.A.R.T log 기능 디버깅 기록]]
+	- [[NVMeVIrt (3) - 디버깅 메세지 출력 설정 기록|3. 디버깅 메세지 출력 설정 기록]]

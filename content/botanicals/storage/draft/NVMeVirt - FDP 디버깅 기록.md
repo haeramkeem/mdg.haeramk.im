@@ -9,7 +9,7 @@ date: 2024-04-24
 > [!info]- 참고한 것들
 > - [창민형 깃허브 메모](https://github.com/salutepop/Notes/blob/master/PM9D3/enable_fdp.md)
 
-> [!tip] [[NVMeVirt - PoC 시작|이전 글]]
+> [!tip] [[NVMeVirt (1) - 설치 기록|이전 글]]
 
 > [!fail] 이 글은 #draft 입니다.
 

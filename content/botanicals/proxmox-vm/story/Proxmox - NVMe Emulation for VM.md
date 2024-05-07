@@ -15,8 +15,8 @@ date: 2024-04-22
 ## TL;DR
 
 ```bash
-qemu-img create -f raw /etc/hci-dcs/qemu-server/102/nvme-0.raw 10G
-qm set 102 --args '-drive format=raw,file=/etc/hci-dcs/qemu-server/102/nvme-0.raw,if=none,id=nvm -device nvme,drive=nvm,serial=deadbeef'
+qemu-img create -f raw /path/to/myblock.raw 10G
+qm set 102 --args '-drive format=raw,file=/path/to/myblock.raw,if=none,id=nvm -device nvme,drive=nvm,serial=deadbeef'
 ```
 
 ## Detail
