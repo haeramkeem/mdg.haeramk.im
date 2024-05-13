@@ -16,8 +16,11 @@
 
 - [[External Fragment (OS)|External Fragment]]
 - [[Internal Fragment (OS)|Internal Fragment]]
-- [[Translation Lookaside Buffer, TLB (OS)|Translation Lookaside Buffer (TLB)]]
 
 ## File System
 
 - [[Slack Space Recycling, SSR (File System)|Slack Space Recycling, SSR]]
+
+## Memory management
+
+- [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer (TLB)]]
