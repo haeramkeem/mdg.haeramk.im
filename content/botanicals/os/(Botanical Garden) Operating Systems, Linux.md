@@ -16,6 +16,7 @@
 
 - [[External Fragment (OS)|External Fragment]]
 - [[Internal Fragment (OS)|Internal Fragment]]
+- [[Translation Lookaside Buffer, TLB (OS)|Translation Lookaside Buffer (TLB)]]
 
 ## File System
 
