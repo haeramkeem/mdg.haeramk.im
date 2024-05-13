@@ -6,7 +6,7 @@ tags:
 ---
 > [!info] 본 글은 ACM SIGOPS 에 게재된 논문 "[Hints for Computer System Design](https://dl.acm.org/doi/10.1145/773379.806614)" 를 읽고 정리한 내용입니다. ([한국어 번역본](https://johngrib.github.io/wiki/clipping/butler-w-lampson/hints-for-computer-system-design/))
 
-> [!danger] 본 문서는 아직 Draft 상태입니다. 읽을 때 주의해 주세요.
+> [!danger] 본 문서는 아직 #draft 상태입니다. 읽을 때 주의해 주세요.
 
 ## Abstract
 
