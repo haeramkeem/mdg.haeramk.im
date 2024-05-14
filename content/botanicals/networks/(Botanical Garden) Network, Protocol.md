@@ -6,13 +6,24 @@
 
 - Protocol 별로 좀 모아서 심자
 
+---
 ### Border Gateway Protocol (BGP)
 
 - [[Regional Internet Registry, RIR (Network)|Regional Internet Registry, RIR]]
 
+---
 ### Domain Name System (DNS)
 
+#### 논문
+
+- [[논문 - A comprehensive survey on DNS tunnel detection|(Draft) A comprehensive survey on DNS tunnel detection]]
+
+#### 스토리
+
 - [[How DNS Works - Iterative or Recursive (DNS)|How DNS Works - Iterative or Recursive]]
+
+#### 용어집
+
 - [[Cache Poisoning (DNS)|Cache Poisoning]]
 - [[DNS Tunneling (DNS)|DNS Tunneling]]
 - [[Domain Name System (DNS)|Domain Name System, DNS]]
