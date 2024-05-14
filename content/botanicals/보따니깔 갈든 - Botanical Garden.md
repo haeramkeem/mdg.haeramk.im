@@ -11,7 +11,6 @@ date: 2024-04-23
 - [[(Botanical Garden) C, Cpp|C, C++]]
 - [[(Botanical Garden) Cybersecurity|사이버보안]]
 - [[(Botanical Garden) Database|데이터베이스]]
-- [[(Botanical Garden) ElasticSearch|엘라스틱서치]]
 - [[(Botanical Garden) Kubernetes|쿠버네티스]]
 - [[(Botanical Garden) Network, Protocol|네트워크]]
 - [[(Botanical Garden) Operating Systems, Linux|운영체제]]
