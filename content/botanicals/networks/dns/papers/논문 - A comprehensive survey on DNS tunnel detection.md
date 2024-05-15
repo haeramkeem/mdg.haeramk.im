@@ -4,11 +4,12 @@ tags:
   - Network
   - Security
   - 논문
+  - SNU_CSE_MS_COMNET24S
 date: 2024-05-03
 ---
 > [!info] 본 글은 [A comprehensive survey on DNS tunnel detection](https://www.sciencedirect.com/science/article/pii/S1389128621003248) 를 읽고 정리한 글입니다.
 
-> [!info]- 참고한 것들
+> [!info] 별도의 명시가 없는 한, 그림들은 본 논문에서 가져왔습니다.
 
 > [!fail]- 본 글은 #draft 상태입니다.
 > - [ ] Section 1~4.1 정리하기
@@ -88,8 +89,6 @@ date: 2024-05-03
 
 ![[Pasted image 20240504140155.png]]
 
-> 출처: [논문](https://www.sciencedirect.com/science/article/pii/S1389128621003248?ref=pdf_download&fr=RR-2&rr=87de46450a69aa44)
-
 - 하지만 DNS tunneling 에서는 용도에 맞는 type 을 사용하는 것이 아니고, bandwidth 를 극대화시킬 수 있는 type 을 사용하기에, 자주 사용되지 않는 type 을 사용하곤 한다.
 - 가령 많은 DNS tunneling tool 들이 `TXT` type 을 사용하고, 따라서 이러한 성질을 이용한 detection tool 들이 많이 개발되었다.
 - 하지만 이것은 다른 type 을 사용하면 되기에 언제든지 회피할 수 있고, [TUNs](https://github.com/lnussbaum/tuns) 와 같은 tool 은 `CNAME` 만을 사용하는 등의 예외 케이스들이 있다.
@@ -139,13 +138,7 @@ date: 2024-05-03
 
 - Signature 를 이용해 DNS tunnel 을 감지하는 사례를 표로 정리해 보면 다음과 같다:
 
-| NO. | DNS TUNNEL SOLUTION | SIGNATURE                                                                                                                                                                                                                                                                  |
-| --- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Iodine              | `alert udp any any -> any 53 (content:"\|01 00 00 01 00 00 00 00 00 01\|"; offset: 2; depth: 10; content:"\|00 00 29 10 00 00 00 80 00 00 00\|"; \ msg: "covert iodine tunnel request"; threshold: type limit, track by_src, count 1, seconds 300; sid: 5619500; rev: 1;)` |
-| 2   | Iodine              | `alert udp any 53 -> any any (content: "\|84 00 00 01 00 01 00 00 00 00\|"; offset: 2; depth: 10; content:"\|00 00 0a 00 01\|"; \ msg: "covert iodine tunnel response"; threshold: type limit, track by_src, count 1, seconds 300; sid: 5619501; rev: 1;)`                 |
-| 3   | Iodine              | `alert udp any any —>any any (content:‘‘ - 45 10 -’’; msg:‘‘covert iodine tunnel request IP packet encapsulated’’; offset:13; threshold:type threshold, track bysrc, count 10, seconds 5; sid: 5619500; rev: 1;)`                                                          |
-| 4   | Dns2tcp             | `AAACCFNTSC0yLjAtT3BlblNTSF83LjJw MiBVYnVudHUtNHVidW50dTIuMg0`                                                                                                                                                                                                             |
-| 5   | NSTX                | `alert udp $EXTERNAL_NET any —>$HOME_NET 53 (msg:‘‘Potential NSTX DNS Tunneling’’; content:‘‘\|01 00\|’’; offset:2; within:4; content:‘‘cT’’; offset:12; depth:3; content:‘‘\|00 10 00 01\|’’; within:255; classtype:bad-unknown; sid:10002;)`                             |
+![[dns_sig_examples.png]]
 
 - 1, 2번:
 	- 1, 2번의 [Snort](https://www.snort.org/) rule 은 [Detection of DNS Based Covert Channels](https://arrow.tudublin.ie/cgi/viewcontent.cgi?article=1001&context=nsdcon/) 논문에 제시된 것인데, 여기에서도 자기네들이 고안한 것은 아니다.
