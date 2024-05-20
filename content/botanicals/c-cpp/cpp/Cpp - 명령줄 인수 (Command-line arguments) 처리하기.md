@@ -1,6 +1,7 @@
 ---
 tags:
   - cpp
+date: 2024-05-08
 ---
 > [!info]- 참고한 것들
 > - [마소](https://learn.microsoft.com/en-us/cpp/cpp/main-function-command-line-args)
