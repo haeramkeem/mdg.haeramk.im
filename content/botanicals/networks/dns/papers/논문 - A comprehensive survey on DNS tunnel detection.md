@@ -4,20 +4,26 @@ tags:
   - Network
   - Security
   - 논문
+  - SNU_CSE_MS_COMNET24S
 date: 2024-05-03
 ---
 > [!info] 본 글은 [A comprehensive survey on DNS tunnel detection](https://www.sciencedirect.com/science/article/pii/S1389128621003248) 를 읽고 정리한 글입니다.
 
-> [!info]- 참고한 것들
+> [!info] 별도의 명시가 없는 한, 그림들은 본 논문에서 가져왔습니다.
 
-> [!fail]- 본 글은 #draft 상태입니다.
+> [!danger]- 본 글은 #draft 상태입니다.
 > - [ ] Section 1~4.1 정리하기
 
-## Abstract, 1. Introduction, 2. Background Information
+## 1. Abstract & Introduction
 
 > [!fail] #draft 나중에 정리할 예정입니다.
 
-### Direct connected DNS tunneling
+## 2. Background Information
+### 2.3. DNS tunnels
+#### 2.3.1 Working principles
+##### Direct connected DNS tunneling
+
+> [!fail] #draft 나중에 정리할 예정입니다.
 
 ## 3. Analysis of behavior-based feature of DNS tunnels
 
@@ -88,8 +94,6 @@ date: 2024-05-03
 
 ![[Pasted image 20240504140155.png]]
 
-> 출처: [논문](https://www.sciencedirect.com/science/article/pii/S1389128621003248?ref=pdf_download&fr=RR-2&rr=87de46450a69aa44)
-
 - 하지만 DNS tunneling 에서는 용도에 맞는 type 을 사용하는 것이 아니고, bandwidth 를 극대화시킬 수 있는 type 을 사용하기에, 자주 사용되지 않는 type 을 사용하곤 한다.
 - 가령 많은 DNS tunneling tool 들이 `TXT` type 을 사용하고, 따라서 이러한 성질을 이용한 detection tool 들이 많이 개발되었다.
 - 하지만 이것은 다른 type 을 사용하면 되기에 언제든지 회피할 수 있고, [TUNs](https://github.com/lnussbaum/tuns) 와 같은 tool 은 `CNAME` 만을 사용하는 등의 예외 케이스들이 있다.
@@ -101,6 +105,7 @@ date: 2024-05-03
 	- 가령 'OpenSSH' 는 Base64 로 바꾸면 `T3BlblNTSA==` 가 되고, 이러한 문자열은 dns tunneling 의 가능성을 시사하기에 signature 로 볼 수 있는 것.
 - 일부 dns tunneling tool 들은 victim 과 attacker 간의 통신 형식을 맞추기 위해 이러한 특정 문자열을 사용할 때가 있고, 이러한 성질을 이용하는 것이 *Signature-based detection* 이다.
 - 다만 이러한 방법은 Well known signature library 를 구축하는 것에 많은 시간이 소요되고, 알려지지 않았거나 새로운 dns tunneling tool 에 대해서는 감지하지 못한다는 문제가 있다.
+- 더 구체적인 사례는 [[#4.1.1. The signature-based methods|섹션 4.1.1]] 에서 살펴보자.
 
 ##### (3) Policy violation
 
@@ -110,29 +115,46 @@ date: 2024-05-03
 
 ### 3.2. Traffic-based feature
 
-#### (1) Volume of the DNS traffic to the IP address
-
-#### (2) Volume of DNS traffic to the domain
-
-#### (3) Volume of hostnames to the domain name
-
-#### (4) Time interval
-
-#### (5) Domain history
-
-#### (6) Geographic location of DNS server
-
-#### (7) DNS queries to the dynamic domain name server (DDNS)
-
-#### (8) Isolated DNS queries
-
-#### (9) Volume of the NxDomain response
-
-#### (10) DNS traffic visualisation
+> [!fail] #draft 나중에 정리할 예정입니다.
 
 ## 4. DNS tunnel detection
 
 ### 4.1. The rule-based detection
+
+#### 4.1.1. The signature-based methods
+
+- Signature 를 이용해 DNS tunnel 을 감지하는 사례를 표로 정리해 보면 다음과 같다:
+
+![[dns_sig_examples.png]]
+
+- 1, 2번:
+	- 1, 2번의 [Snort](https://www.snort.org/) rule 은 [Detection of DNS Based Covert Channels](https://arrow.tudublin.ie/cgi/viewcontent.cgi?article=1001&context=nsdcon/) 논문에 제시된 것인데, 여기에서도 자기네들이 고안한 것은 아니다.
+	- 이 방법은 2009년에 Michel Chamberland 란 사람이 자기 블로그에 올린 것인데, 지금은 도메인이 만료되어 더이상 접근이 안된다... ([관련 트위터](https://twitter.com/SecurityWire/status/2856385964))
+- 3번:
+	- 이 Snort rule 은 [Winning tactics with DNS tunnelling](https://www.sciencedirect.com/science/article/pii/S1353485819301448) 논문에 제시된 것인데, 이것도 자신들이 고안한 방법인지는 잘 모르겠다.
+	- 원리는 저 offset 13 에 등장하는 `45 10` 이라는 숫자가 중요한데, 저것이 IP packet 을 암시하기 때문이다.
+		- [[Internet Protocol, IP (Network)|IP packet]] 에 따르면, IP packet 의 첫 값은 IP version 으로 여기서는 4, 즉 IPv4 를 의미한다.
+		- 두번째 값인 5 는 Internet Header Length (IHL) 로, 5는 $5 * 32$ bit 를 의미한다.
+		- 세번째와 네번째 값인 10 은 binary 로는 `0001 0000` 인데,
+			- 여기에서 6bit (`000 100`) 은 [[Differentiated Service (Network)|Differentiated Service Code Point (DSCP)]] 를 의미하며, `000` 은 Service class 가 Standard 임을, `100` 은 Drop probability 가 `Medium` 이라는 것을 의미한다.
+			- 그리고 나머지 2bit (`00`) 은 [[Explicit Congestion Notification, ECN (Network)|Explicit Congestion Notification (ECN)]] 값으로, ECN 을 지원하지 않는다는 의미이다.
+- 4번:
+	- 간단하다. `SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.` 에 대한 Base64 encoding 이다.
+	- 이 방법은 [A Multi-Stage Detection Technique for DNS-Tunneled Botnets](https://easychair.org/publications/paper/qnp1) 논문에서 처음 제시되었는데, False negative 가 10% 정도로 높게 나왔다고 한다.
+		- 하지만 이것은 SSH variation 으로 "OpenSSH" 만을 고려했기 때문이고, 다른 SSH tool 도 같이 고려한다면 이러한 false negative 는 낮아질 것으로 저자는 주장하였다.
+- 5번:
+	- 이것은 NSTX 라는 이제는 잘 안쓰이는 DNS tunneling tool 에 하드코딩되어 있는 값을 이용하는 방법이라고 한다.
+
+##### 장단점
+
+- 장점은 DNS tunnel 의 킹능성이 높은 문자열을 signature 로 등록해 놓기 때문에, false positive 가 낮다는 점이다.
+- 반면에 단점은
+	- 이런 signature 를 모으는 것은 생각보다 쉽지 않으며
+	- signature 들을 모았다고 하더라도 dns tunnel 의 입장에서는 그러한 signature 을 사용하지 않으면 그만이기 때문에 회피하기도 아주 쉽다는 것이다.
+
+#### 4.1.2. The threshold-based methods
+
+> [!fail] #draft 나중에 정리할 예정입니다.
 
 ### 4.2. The model-based detection
 
@@ -144,7 +166,7 @@ date: 2024-05-03
 #### 4.2.1. The traditional machine learning-based methods
 
 - ML 은 경험으로부터 paramter 를 조작해 점진적으로 성능을 개선해 나가는 모델 개발 방법이다.
-- Feature engineering 부터 시작한다고 한다 - 어떤 feature 을 detecting 할지를 정하고, 그에 적합한 algorithm 을 정하는
+- Feature engineering 부터 시작한다고 한다 - 어떤 feature 을 detecting 할지를 정하고, 그에 적합한 algorithm 을 정하는 과정
 
 ##### Unsupervised learning
 
