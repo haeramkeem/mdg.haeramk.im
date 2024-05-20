@@ -11,14 +11,19 @@ date: 2024-05-03
 
 > [!info] 별도의 명시가 없는 한, 그림들은 본 논문에서 가져왔습니다.
 
-> [!fail]- 본 글은 #draft 상태입니다.
+> [!danger]- 본 글은 #draft 상태입니다.
 > - [ ] Section 1~4.1 정리하기
 
-## Abstract, 1. Introduction, 2. Background Information
+## 1. Abstract & Introduction
 
 > [!fail] #draft 나중에 정리할 예정입니다.
 
-### Direct connected DNS tunneling
+## 2. Background Information
+### 2.3. DNS tunnels
+#### 2.3.1 Working principles
+##### Direct connected DNS tunneling
+
+> [!fail] #draft 나중에 정리할 예정입니다.
 
 ## 3. Analysis of behavior-based feature of DNS tunnels
 
@@ -110,25 +115,7 @@ date: 2024-05-03
 
 ### 3.2. Traffic-based feature
 
-#### (1) Volume of the DNS traffic to the IP address
-
-#### (2) Volume of DNS traffic to the domain
-
-#### (3) Volume of hostnames to the domain name
-
-#### (4) Time interval
-
-#### (5) Domain history
-
-#### (6) Geographic location of DNS server
-
-#### (7) DNS queries to the dynamic domain name server (DDNS)
-
-#### (8) Isolated DNS queries
-
-#### (9) Volume of the NxDomain response
-
-#### (10) DNS traffic visualisation
+> [!fail] #draft 나중에 정리할 예정입니다.
 
 ## 4. DNS tunnel detection
 
@@ -167,9 +154,7 @@ date: 2024-05-03
 
 #### 4.1.2. The threshold-based methods
 
-##### The payload-based threshold analysis
-
-##### The traffic-based threshold analysis
+> [!fail] #draft 나중에 정리할 예정입니다.
 
 ### 4.2. The model-based detection
 
@@ -181,7 +166,7 @@ date: 2024-05-03
 #### 4.2.1. The traditional machine learning-based methods
 
 - ML 은 경험으로부터 paramter 를 조작해 점진적으로 성능을 개선해 나가는 모델 개발 방법이다.
-- Feature engineering 부터 시작한다고 한다 - 어떤 feature 을 detecting 할지를 정하고, 그에 적합한 algorithm 을 정하는
+- Feature engineering 부터 시작한다고 한다 - 어떤 feature 을 detecting 할지를 정하고, 그에 적합한 algorithm 을 정하는 과정
 
 ##### Unsupervised learning
 

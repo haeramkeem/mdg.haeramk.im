@@ -66,6 +66,8 @@ date: 2024-04-24
 
 ### 결론부터 보기
 
+> [!danger] #draft 최신화 안되어 있음
+
 #### Enter log
 
 - 함수 진입 logging 할 때는 모든 함수 시작에 `NVMEV_DEBUG` 메크로를 끼워넣는 것으로 해결했다.

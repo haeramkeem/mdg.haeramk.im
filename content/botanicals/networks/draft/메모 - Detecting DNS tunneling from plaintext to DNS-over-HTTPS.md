@@ -51,6 +51,9 @@ tags:
 	        - tunneling 이 아닌 정상 패킷의 경우에도 인코딩된 것과 유사한 형태의 subdomain 을 사용
 	        - 가령 CDN 의 경우 uuid 가 subdomain 으로 붙을 때도 있다
 	    - 또한 tunneling 의 경우 caching 을 방지하기 위해 TTL 을 낮게 설정하기도 하는데, 이것은 benign 에서도 이러한 패킷이 많아 TTL 을 이용해 detection 하는 것도 힘들다고 함
+	    - Threshold 를 정하는 과정에서 [[논문 - Increased DNS forgery resistance through 0x20-bit encoding - security via leet queries|0x20 인코딩]] 된 데이터셋은 전부 제외했다고 한다.
+		    - 당연히 0x20 인코딩을 적용하게 되면 DNS tunneling 의 데이터가 전부 망가지기 때문에 data leakage 를 걱정할 일이 없기 때문.
+		    - 다만 이들을 제외하는 것이 본 논문에서는 나름의 challenge 였다고 한다. 하지만 어떻게 했는지는 별로 안중요했는지 논문에서는 서술하지 않았다.
 - [Detecting DNS Tunneling (SANS, 2013)](https://www.sans.org/white-papers/34152/)
 - [Flow-Based Detection of DNS Tunnels (AIMS'13)](https://link.springer.com/chapter/10.1007/978-3-642-38998-6_16)
 - [NgViz: detecting DNS tunnels through n-gram visualization and quantitative analysis (CSIIRW'10)](https://dl.acm.org/doi/10.1145/1852666.1852718)
