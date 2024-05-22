@@ -18,12 +18,15 @@
 - [[External Fragment (OS)|External Fragment]]
 - [[Internal Fragment (OS)|Internal Fragment]]
 
-## File System
+## File system
 
 - [[Slack Space Recycling, SSR (File System)|Slack Space Recycling, SSR]]
 
 ## Memory management
 
-- [[Least Frequently Used, LFU (memory)|Least Frequently Used (LFU)]]
-- [[Least Recently Used, LRU (memory)|Least Recently Used (LRU)]]
 - [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer (TLB)]]
+
+## Replacement policy
+
+- [[Least Frequently Used, LFU (replacement policy)|Least Frequently Used (LFU)]]
+- [[Least Recently Used, LRU (replacement policy)|Least Recently Used (LRU)]]
