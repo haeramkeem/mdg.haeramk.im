@@ -24,5 +24,6 @@
 
 ## Memory management
 
+- [[Least Frequently Used, LFU (memory)|Least Frequently Used (LFU)]]
 - [[Least Recently Used, LRU (memory)|Least Recently Used (LRU)]]
 - [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer (TLB)]]
