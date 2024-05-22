@@ -24,4 +24,5 @@
 
 ## Memory management
 
+- [[Least Recently Used, LRU (memory)|Least Recently Used (LRU)]]
 - [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer (TLB)]]
