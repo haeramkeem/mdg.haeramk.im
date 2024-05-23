@@ -18,7 +18,7 @@ tags:
 - 얘는 인터페이스별로 다음과 같이 구현되었다:
 	- [[Parallel ATA, AT Attachment, Integrated Drive Electronics, PATA, ATA, IDE (Storage)|SATA]] 를 위한 [[Zoned Device ATA Command Set, ZAC (Storage)|ZAC]]
 	- [[Small Computer Systems Interface, SCSI (Storage)|SAS]] 위한 [[Zoned Block Commands, ZBC (Storage)|ZBC]]
-	- [[Non-Volatile Memory Express, NVMe (Storage)|NVMe]] 를 위한 [[Zoned Namespaces, ZNS (Storage)|ZNS]]
+	- [[Non-Volatile Memory Express, NVMe (NVMe)|NVMe]] 를 위한 [[Zoned Namespaces, ZNS (Storage)|ZNS]]
 
 ## 구조, 작동 원리
 

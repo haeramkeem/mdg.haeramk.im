@@ -25,7 +25,7 @@ sh -c "qm set ${VMID} --args '$(echo ${PARAMS[@]})'"
 qemu-img create -f raw /path/to/zns.raw 32G
 ```
 
-- [[NVMe Namespace (Storage)|NVMe Namespace]] device 에 `zoned=on` 설정을 넣어줘야 ZNS 가 되기 때문에 `nvme` device 에 추가적으로 `nvme-ns` 도 생성
+- [[Namespace (NVMe)|NVMe Namespace]] device 에 `zoned=on` 설정을 넣어줘야 ZNS 가 되기 때문에 `nvme` device 에 추가적으로 `nvme-ns` 도 생성
 
 ```bash
 ZNS_PARAMS=(

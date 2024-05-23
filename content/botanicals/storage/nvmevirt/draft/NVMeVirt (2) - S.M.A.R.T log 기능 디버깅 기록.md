@@ -24,7 +24,7 @@ date: 2024-04-21
 	- Kernel: `5.15.0-94-generic`
 	- Distro: Ubuntu 22.05 Jammy
 
-### NVMeVirt [[NVMe - S.M.A.R.T 로그|S.M.A.R.T. log]] 기능 추적
+### NVMeVirt [[S.M.A.R.T Log (NVMe)|S.M.A.R.T. log]] 기능 추적
 
 1. [nvme smart log impl](https://github.com/snu-csl/nvmevirt/blob/main/admin.c#L180-L193)([nvme smart log iface](https://github.com/snu-csl/nvmevirt/blob/main/nvme.h#L218-L239))
 2. [admin.c::nvmev_proc_admin_req](https://github.com/snu-csl/nvmevirt/blob/main/admin.c#L548-L596)

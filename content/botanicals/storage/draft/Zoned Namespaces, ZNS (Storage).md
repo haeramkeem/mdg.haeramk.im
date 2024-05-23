@@ -12,5 +12,5 @@ tags:
 
 ## 이게 뭐임
 
-- [[Zoned Storage Model (Storage)|Zoned Storage Model]] 에 대한 [[Non-Volatile Memory Express, NVMe (Storage)|NVMe]] 의 구현체이다.
+- [[Zoned Storage Model (Storage)|Zoned Storage Model]] 에 대한 [[Non-Volatile Memory Express, NVMe (NVMe)|NVMe]] 의 구현체이다.
 

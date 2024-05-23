@@ -11,7 +11,7 @@ date: 2024-05-03
 
 > [!info] 별도의 명시가 없는 한, 그림들은 본 논문에서 가져왔습니다.
 
-> [!danger]- 본 글은 #draft 상태입니다.
+> [!fail]- 본 글은 #draft 상태입니다.
 > - [ ] Section 1~4.1 정리하기
 
 ## 1. Abstract & Introduction

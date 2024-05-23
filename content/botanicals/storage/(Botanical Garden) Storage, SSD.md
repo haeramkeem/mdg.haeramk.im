@@ -23,7 +23,6 @@ date: 2024-04-23
 - [[Multi-stream SSD (Storage)|Multi-stream SSD]]
 - [[Flash Memory, SSD (Storage)|NAND Flash Memory]]
 - [[NOR-based Flash Memory (Storage)|NOR Flash Memory]]
-- [[NVMe Namespace (Storage)|NVMe Namespace]]
 - [[Open Channel SSD, OCSSD (Storage)|Open Channel SSD, OCSSD]]
 - [[Over Provisioning, OP (Storage)|Over Provisioning, OP]]
 - [[PE Cyclen Limit, Wearing-off (Storage)|PE Cycle Limit, Wearing-off]]
@@ -40,7 +39,8 @@ date: 2024-04-23
 
 ### NVMe
 
-- [[논문 - NVMeVirt - A Versatile Software-defined Virtual NVMe Device|NVMeVirt]] 관련
-	- [[NVMeVirt (1) - 설치 기록|1. 설치 기록]]
-	- [[NVMeVirt (2) - S.M.A.R.T log 기능 디버깅 기록|2. S.M.A.R.T log 기능 디버깅 기록]]
-	- [[NVMeVIrt (3) - 디버깅 메세지 출력 설정 기록|3. 디버깅 메세지 출력 설정 기록]]
+- [[Namespace (NVMe)|Namespace]]
+
+### [[논문 - NVMeVirt - A Versatile Software-defined Virtual NVMe Device|NVMeVirt]]
+
+- [[NVMeVirt (1) - 설치 기록|1. 설치 기록]]

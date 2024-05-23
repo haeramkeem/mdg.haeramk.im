@@ -66,7 +66,7 @@ date: 2024-04-24
 
 ### 결론부터 보기
 
-> [!danger] #draft 최신화 안되어 있음
+> [!fail] #draft 최신화 안되어 있음
 
 #### Enter log
 

@@ -113,7 +113,7 @@ tags:
 - 또한 file 의 데이터 특성 정보들을 data placement 에 활용할 수 있다.
 	- 적어도 이러한 정보들이 file system 에서 인지할 수 있도록 해준다.
 - 대부분의 file system 들은 in-place write 를 사용하기 때문에 zone 을 사용하기 힘들다.
-- 하지만 [[Flash Friendly File System, F2FS (Storage)|f2fs]], [btrfs](https://en.wikipedia.org/wiki/Btrfs), [zfs](https://en.wikipedia.org/wiki/ZFS) 는 sequential write 자주 사용하고, 따러서 zone 또한 지원하도록 업데이트 되었다고 한다.
+- 하지만 [[Flash Friendly File System, F2FS (File System)|f2fs]], [btrfs](https://en.wikipedia.org/wiki/Btrfs), [zfs](https://en.wikipedia.org/wiki/ZFS) 는 sequential write 자주 사용하고, 따러서 zone 또한 지원하도록 업데이트 되었다고 한다.
 	- 물론 모든 write 가 sequential 한 것은 아니다; superblock 이나 metadata 같은 경우에는  in-place write 를 사용한다.
 	- 하지만 이러한 non-sequential write 의 경우에는 strict log-structured write, floating superblock 과 같은 방법을 이용해 해결할 수 있다고 한다.
 - 이러한 file system 에는 HFTL 의 로직들이 많이 포함된다고 한다.

@@ -82,7 +82,7 @@ sudo nvme fdp configs /dev/nvme* -e 1
 
 ### 모니터링 정보들
 
-- [[NVMe FDP - Statistics (Log Page ID 22h)|FDP stats]]
+- [[FDP Statistics (NVMe)|FDP stats]]
 
 ```bash
 sudo nvme fdp stats /dev/nvme* -e 1
