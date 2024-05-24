@@ -1,4 +1,3 @@
-
 ![[KakaoTalk_Photo_2024-05-15-19-46-04.png]]
 
 - `nvme write` function call stack
@@ -126,3 +125,14 @@ NVMeVirt: __le16  appmask;      0000
 - [enum nvme_io_opcode](https://github.com/linux-nvme/libnvme/blob/master/src/nvme/types.h#L8236-L8278)
 
 - `main.c` 의 `nvme_proc_dbs()` 에서 모든 doorbell 들을 돌며 변화가 있는지 체크
+- `io.c` 의 nvmev_proc_io_
+
+![[Pasted image 20240523203013.png]]
+
+- `__do_perform_io` 는 건들 필요 없음
+	- ns.mapped 는 mmap (reserve 된 공간) 의 시작주소 (...물론 1MB 뒤)
+	- offset 은 `slba << 9` 로 초기화되어 `io_size` 만큼 늘어남
+- Page: 4Ki (4096byte)
+- LBA: 512byte
+- rmap: reverse maptable
+- nv_parts: namespace partitions
