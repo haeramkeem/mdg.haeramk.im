@@ -4,15 +4,19 @@
 
 ## 작물들
 
-- Protocol 별로 좀 모아서 심자
+### 용어들
 
----
-### Border Gateway Protocol (BGP)
+- [[Regional Internet Registry, RIR (Network)|Regional Internet Registry (RIR)]]
 
-- [[Regional Internet Registry, RIR (Network)|Regional Internet Registry, RIR]]
+### BGP
 
----
-### Domain Name System (DNS)
+#### 용어들
+
+- [[Internet Routing Registry, IRR (BGP)|Internet Routing Registry (IRR)]]
+- [[Resource Public Key Infrastructure, RPKI (BGP)|Resource Public Key Infrastructure (RPKI)]]
+- [[Route Hijack Attack (BGP)|Route Hijack Attack]]
+
+### DNS
 
 #### 논문
 
