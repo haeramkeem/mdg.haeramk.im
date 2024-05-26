@@ -38,11 +38,12 @@
 - 용어집
 	- [[Cache Poisoning (DNS)|Cache Poisoning]]
 	- [[DNS Tunneling (DNS)|DNS Tunneling]]
-	- [[Domain Name System (DNS)|Domain Name System, DNS]]
+	- [[Domain Name System, DNS (DNS)|Domain Name System, DNS]]
 	- [[Full Qualified Domain Name, FQDN (DNS)|Full Qualified Domain Name, FQDN]]
 	- [[Nameserver (DNS)|Nameserver]]
 	- [[Namespace (DNS)|Namespace]]
 	- [[Partially Qualified Domain Name, PQDN (DNS)|Partially Qualified Domain Name, PQDN]]
+	- [[Resource Record, RR (DNS)|Resource Record (RR)]]
 	- [[Top Level Domain, TLD (DNS)|Top Level Domain, TLD]]
 	- [[Zone (DNS)|Zone]]
 	- [[Zone Delegation (DNS)|Zone Delegation]]
