@@ -6,7 +6,7 @@ tags:
 date: 2024-03-25
 ---
 > [!info]- 참고한 것
-> - [[6. DNS#DNS||서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
+> - [[6. DNS#DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 > - [Under attack? 회사 블로그](https://www.cloudflare.com/learning/dns/what-is-dns/)
 > - [RFC1035](https://www.rfc-editor.org/rfc/rfc1035.txt)
 
