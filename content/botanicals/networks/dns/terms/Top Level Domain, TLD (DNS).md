@@ -3,13 +3,15 @@ tags:
   - 용어집
   - Network
   - DNS
+date: 2024-03-25
 ---
-> [!info] 참고한 것
-> - 컴퓨터 네트워크 특강 (권태경 교수님 '24H1, SNU CSE)
+> [!info]- 참고한 것
+> - [[6. DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 
 ## 이게 뭐임
 
 - [[Namespace (DNS)|DNS Namespace]] 내에서 root 바로 아래에 있는 [[Full Qualified Domain Name, FQDN (DNS)|domain]] 들을 *Top Level Domain, TLD* 라고 부른다.
+- [ICANN](https://www.icann.org/) 이라는 단체에서 관리한다.
 
 ## 종류
 

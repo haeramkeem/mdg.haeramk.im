@@ -68,6 +68,7 @@ date: 2024-04-23
 		- [[nvme-cli - ZNS 디바이스 조회하기|ZNS 디바이스 조회하기]]
 		- [[nvme-cli - ZNS 데이터 입출력하기|ZNS 데이터 입출력하기]]
 - `openssl`
+	- [[openssl - AES 암복호화 하기|AES 암복호화 하기]]
 	- [[openssl - Server 인증서 다운로드 하기|Server 인증서 다운로드 하기]]
 	- [[openssl - 인증서 상세 정보 확인하기|인증서 상세 정보 확인하기]]
 	- [[openssl - 인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기|인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기]]

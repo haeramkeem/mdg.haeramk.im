@@ -2,6 +2,7 @@
 tags:
   - c
   - linux-kernel
+date: 2024-05-16
 ---
 ## TL;DR
 

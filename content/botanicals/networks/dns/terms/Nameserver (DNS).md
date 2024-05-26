@@ -10,7 +10,7 @@ tags:
 
 ## 이게 뭐임
 
-- [[Domain Name System (DNS)|DNS]] name 와 관련된 작업을 수행하는 server 이다.
+- [[Domain Name System, DNS (DNS)|DNS]] name 와 관련된 작업을 수행하는 server 이다.
 	- 조금 더 구체적으로는, 어떤 [[Zone (DNS)|Zone]] 의 domain 에 대한 record 들을 저장하고, 이것에 대한 query 가 들어왔을 때 응답하는 등의 작업을 하는 server 를 말한다.
 - [이 사이트](https://www.dynu.com/en-US/NetworkTools/Delegation) 에 가서 도메인을 입력하면 해당 도메인에 대한 zone 들과 해당 zone 의 nameserver 를 한눈에 볼 수 있다.
 	- [MDG](https://mdg.haeramk.im) 의 경우에는 다음과 같다...
@@ -27,8 +27,9 @@ tags:
 
 - Frontend nameserver 라고 생각하면 된다.
 - 여러 host 들로 부터 DNS query 를 가장 먼저 받아들여서,
-- 자기 자신에는 많은 정보를 저장하지 않고, 다른 DNS nameserver 들로 query 를 forward 해 IP 를 받아와 host 들에게 응답하고 (이 부분은 [[How DNS Works - Iterative or Recursive (DNS)|이 문서]] 에서 좀 더 자세히 알아보자)
+- 자기 자신에는 많은 정보를 저장하지 않고, 다른 DNS nameserver 들로 query 를 forward 해 IP 를 받아와 host 들에게 응답하고 (이 부분은 [[Resolver (DNS)|이 문서]] 에서 좀 더 자세히 알아보자)
 - 해당 IP 를 caching 하여 다음번의 query 에 빠르게 응답하는 역할의 server 이다.
+- Google 의 8.8.8.8(8.8.4.4) 나 Cloudflare 의 1.1.1.1(1.0.0.1) 같은 애들이다.
 
 ### Root Nameserver
 

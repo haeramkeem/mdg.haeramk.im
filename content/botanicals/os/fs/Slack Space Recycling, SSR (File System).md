@@ -2,6 +2,7 @@
 tags:
   - 용어집
   - Storage
+date: 2024-03-27
 ---
 > [!info] 참고한 문서
 > - [성균관대 논문](http://nyx.skku.ac.kr/publications/papers/04_partial_GC.pdf)

@@ -31,7 +31,7 @@ sudo nvme zns id-ctrl /dev/nvme1
 > [!example]- 결과 예시
 > ![[Pasted image 20240423191432.png]]
 
-## [[NVMe Namespace (Storage)|Namespace]] 정보 출력
+## [[Namespace (NVMe)|Namespace]] 정보 출력
 
 ```bash
 sudo nvme zns id-ns /dev/nvme1n1 -H

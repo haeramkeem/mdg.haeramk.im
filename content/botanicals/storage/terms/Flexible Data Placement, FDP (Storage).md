@@ -96,7 +96,7 @@ tags:
 
 ![[Pasted image 20240315192508.png]]
 
-- [[NVMe Namespace (Storage)|NVMe Namespace]] 에서도 FDP 기능을 사용할 수 있도록 호환성을 가지고 있다.
+- [[Namespace (NVMe)|NVMe Namespace]] 에서도 FDP 기능을 사용할 수 있도록 호환성을 가지고 있다.
 - Host 가 Namespace 를 생성할 때 해당 Namespace 에서 접근할 수 있는 RUH 들을 지정할 수 있다.
 	- 즉, 해당 NS 에서는 지정된 RUH 밖에 접근할 수 없게 되는 것.
 - 그렇다고 해서 한 RUH 가 한 NS 에 종속되는 것은 아니다; 한 RUH 는 여러 NS 에서 접근할 수 있도록 설정할 수도 있다.

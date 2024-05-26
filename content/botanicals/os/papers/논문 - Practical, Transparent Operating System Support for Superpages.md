@@ -9,7 +9,7 @@ date: 2024-05-13
 
 > [!info] 본 글의 사진은 별도의 명시가 없는 한 상기 논문에서 가져왔습니다.
 
-> [!danger] 본 글은 아직 #draft 상태입니다.
+> [!fail] 본 글은 아직 #draft 상태입니다.
 
 ## 1. Abstract & Introduction
 
@@ -130,7 +130,7 @@ date: 2024-05-13
 	2. Reservation-based: 이것은 위와 같은 조건에 맞는 공간을 미리 예약 (Reserve) 해놓고, 이 예약된 공간 내의 base page 들을 할당해 주는 것이다.
 		- 그러고 나중에 이 공간을 superpage 로 변환하고자 할 때에는, (이미 조건이 갖춰져 있기 때문에) 그냥 Page table 이랑 TLB entry 를 바꿔주는 등의 작업만 하면 되는 것.
 
-> [!danger] 중간 생략... #draft 
+> [!fail] 중간 생략... #draft 
 
 ## 4. Design
 
@@ -167,7 +167,7 @@ date: 2024-05-13
 - 위 내용을 보면 대부분 최대의 reserve 공간을 제공해 준다는 것을 알 수 있는데, 이 시스템의 기본적인 아이디어는 "최대로 준 다음 나중에 빼앗자" 이다.
 	- 물론 경우에 따라서 reserve 공간이 부족할 수도 있다. 이때는 reallocation 으로 새로운 reserve 공간으로 page 들을 옮기는 방법으로 해결한다.
 
-> [!danger] 이후 생략... #draft 
+> [!fail] 이후 생략... #draft 
 
 ### 4.8. Multi-list reservation scheme
 

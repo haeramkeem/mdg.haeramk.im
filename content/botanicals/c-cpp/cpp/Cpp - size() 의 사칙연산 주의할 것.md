@@ -1,6 +1,7 @@
 ---
 tags:
   - cpp
+date: 2024-05-08
 ---
 > [!info]- 참고한 것들
 > - [스댕오버플로](https://stackoverflow.com/a/51234964)
