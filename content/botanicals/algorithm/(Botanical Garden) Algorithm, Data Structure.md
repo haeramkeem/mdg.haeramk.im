@@ -7,21 +7,15 @@
 
 ### Algorithm
 
-#### Sort
-
-- [[Merge Sort (Algorithm)|Merge Sort]]
+- Sort
+	- [[Merge Sort (Algorithm)|Merge Sort]]
 
 ### Data Structure
 
-#### Linear
-
-- [[Sorted Run (Data Structure)|Sorted Run]]
-
-#### Map
-
-- [[Bloom Filter (Data Structure)|Bloom Filter]]
-
-#### Tree
-
-- [[Balanced Tree, B Tree (Data Structure)|Balanced Tree, B Tree]]
-- [[Binary Search Tree, BST (Data Structure)|Binary Search Tree, BST]]
+- Linear
+	- [[Sorted Run (Data Structure)|Sorted Run]]
+- Map
+	- [[Bloom Filter (Data Structure)|Bloom Filter]]
+- Tree
+	- [[Balanced Tree, B Tree (Data Structure)|Balanced Tree, B Tree]]
+	- [[Binary Search Tree, BST (Data Structure)|Binary Search Tree, BST]]

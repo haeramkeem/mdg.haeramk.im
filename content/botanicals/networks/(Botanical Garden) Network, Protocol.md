@@ -6,35 +6,43 @@
 
 ### 용어들
 
+- [[Classless Inter-Domain Routing, CIDR (Network)|Classless Inter-Domain Routing (CIDR)]]
+- [[Cross-Origin Resource Sharing, CORS (Network)|Cross-Origin Resource Sharing (CORS)]]
+- [[Dynamic Host Configuration Protocol, DHCP (Network)|Dynamic Host Configuration Protocol (DHCP)]]
+- [[ICMP Router Discovery Protocol, DISC (Network)|ICMP Router Discovery Protocol (DISC)]]
+- [[Interior Gateway Protocol, IGP (Network)|Interior Gateway Protocol (IGP)]]
+- [[Internet Service Provider, ISP (Network)|Internet Service Provider (ISP)]]
+- [[IP Class (Network)|IP Class]]
 - [[Regional Internet Registry, RIR (Network)|Regional Internet Registry (RIR)]]
+- [[Split Horizon (Network)|Split Horizon]]
+- [[Variable Length Subnet Mask, VLSM (Network)|Variable Length Subnet Mask (VLSM)]]
 
 ### BGP
 
-#### 용어들
-
-- [[Internet Routing Registry, IRR (BGP)|Internet Routing Registry (IRR)]]
-- [[Resource Public Key Infrastructure, RPKI (BGP)|Resource Public Key Infrastructure (RPKI)]]
-- [[Route Hijack Attack (BGP)|Route Hijack Attack]]
+- 용어집
+	- [[Autonomous System, AS (BGP)|Autonomous System (AS)]]
+	- [[Border Gateway Protocol, BGP (BGP)|Border Gateway Protocol (BGP)]]
+	- [[External Gateway Protocol, EGP (BGP)|External Gateway Protocol (EGP)]]
+	- [[Internet Routing Registry, IRR (BGP)|Internet Routing Registry (IRR)]]
+	- [[Network Layer Reachability Information, NLRI (BGP)|Network Layer Reachability Information (NLRI)]]
+	- [[Resource Public Key Infrastructure, RPKI (BGP)|Resource Public Key Infrastructure (RPKI)]]
+	- [[Route Hijack Attack (BGP)|Route Hijack Attack]]
+	- [[Route Leak (BGP)|Route Leak]]
 
 ### DNS
 
-#### 논문
-
-- [[논문 - A comprehensive survey on DNS tunnel detection|(Draft) A comprehensive survey on DNS tunnel detection]]
-
-#### 스토리
-
-- [[How DNS Works - Iterative or Recursive (DNS)|How DNS Works - Iterative or Recursive]]
-
-#### 용어집
-
-- [[Cache Poisoning (DNS)|Cache Poisoning]]
-- [[DNS Tunneling (DNS)|DNS Tunneling]]
-- [[Domain Name System (DNS)|Domain Name System, DNS]]
-- [[Full Qualified Domain Name, FQDN (DNS)|Full Qualified Domain Name, FQDN]]
-- [[Nameserver (DNS)|Nameserver]]
-- [[Namespace (DNS)|Namespace]]
-- [[Partially Qualified Domain Name, PQDN (DNS)|Partially Qualified Domain Name, PQDN]]
-- [[Top Level Domain, TLD (DNS)|Top Level Domain, TLD]]
-- [[Zone (DNS)|Zone]]
-- [[Zone Delegation (DNS)|Zone Delegation]]
+- 논문
+	- [[논문 - A comprehensive survey on DNS tunnel detection|(Draft) A comprehensive survey on DNS tunnel detection]]
+- 스토리
+	- [[How DNS Works - Iterative or Recursive (DNS)|How DNS Works - Iterative or Recursive]]
+- 용어집
+	- [[Cache Poisoning (DNS)|Cache Poisoning]]
+	- [[DNS Tunneling (DNS)|DNS Tunneling]]
+	- [[Domain Name System (DNS)|Domain Name System, DNS]]
+	- [[Full Qualified Domain Name, FQDN (DNS)|Full Qualified Domain Name, FQDN]]
+	- [[Nameserver (DNS)|Nameserver]]
+	- [[Namespace (DNS)|Namespace]]
+	- [[Partially Qualified Domain Name, PQDN (DNS)|Partially Qualified Domain Name, PQDN]]
+	- [[Top Level Domain, TLD (DNS)|Top Level Domain, TLD]]
+	- [[Zone (DNS)|Zone]]
+	- [[Zone Delegation (DNS)|Zone Delegation]]

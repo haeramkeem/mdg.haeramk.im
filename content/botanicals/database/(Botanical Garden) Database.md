@@ -4,7 +4,6 @@
 
 ## 작물들
 
----
 ### RocksDB
 
 #### 용어집 
@@ -14,7 +13,6 @@
 - [[Memtable (RocksDB)|Memtable]]
 - [[Static Sorted Table, SST (RocksDB)|Static Sorted Table, SST]]
 
----
 ### ElasticSearch
 
 #### 스토리

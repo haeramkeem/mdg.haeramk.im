@@ -4,9 +4,9 @@ tags:
   - Network
   - DNS
 ---
-> [!info] 참고한 것
-> - 컴퓨터 네트워크 특강 (권태경 교수님 '24H1, SNU CSE)
-> - [[11. Application Layer, DNS#Domain Name Space|컴퓨터 네트워크 (김상하 교수님 '21H1, CNU CSE)]]
+> [!info]- 참고한 것
+> - [[6. DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
+> - [[11. Application Layer, DNS#Domain Name Space|충남대 김상하 교수님 컴퓨터네트워크 강의 (Spring 2021)]]
 
 ## 이게 뭐임
 

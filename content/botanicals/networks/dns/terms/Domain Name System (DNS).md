@@ -2,9 +2,11 @@
 tags:
   - 용어집
   - Network
+  - DNS
+date: 2024-03-25
 ---
-> [!info] 참고한 것
-> - 컴퓨터 네트워크 특강 (권태경 교수님 '24H1, SNU CSE)
+> [!info]- 참고한 것
+> - [[6. DNS#DNS||서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 > - [Under attack? 회사 블로그](https://www.cloudflare.com/learning/dns/what-is-dns/)
 
 ## DNS: Key(Domain)-Value(IP) Store
@@ -17,6 +19,7 @@ tags:
 		2. 중앙 서버로 다수의 트래픽이 몰림
 		3. 어떤 client 에게는 가깝고 누구에게는 멀고
 		4. 확장성 문제
+
 ## Domain-IP 관계
 
 - 1:1 관계가 일반적이지만
