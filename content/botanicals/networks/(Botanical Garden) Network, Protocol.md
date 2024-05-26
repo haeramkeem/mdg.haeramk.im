@@ -15,6 +15,8 @@
 - [[Internet Service Provider, ISP (Network)|Internet Service Provider (ISP)]]
 - [[IP Class (Network)|IP Class]]
 - [[Split Horizon Problem, Route Loop (Network)|Split Horizon Problem, Route Loop]]
+- [[Transmission Control Protocol, TCP (Network)|Transmission Control Protocol (TCP)]]
+- [[User Datagram Protocol, UDP (Network)|User Datagram Protocol (UDP)]]
 - [[Variable Length Subnet Mask, VLSM (Network)|Variable Length Subnet Mask (VLSM)]]
 
 ### BGP

@@ -29,6 +29,7 @@ date: 2024-03-25
 
 ## DNS message format
 
+- 일단 DNS 는 53/[[User Datagram Protocol, UDP (Network)|UDP]] 를 사용한다.
 - 전체적으로 보면 이렇게 생깃다:
 
 ```
@@ -122,7 +123,7 @@ date: 2024-03-25
 		- 일단 label 의 시작은 label 의 길이를 나타내는 16진수이다.
 		- 그리고 해당 개수만큼의 알파벳을 읽어들이는 식으로 하나의 label 을 읽는다.
 		- 그리고 label 의 알파벳 개수가 0 이라면, 종료 (root 로 간주)
-		- 예를 들면, `.com` TLD 의 경우에는 `0x03(3) 0x63(c) 0x6F(o) 0x6D(m)` 로 표현되는 것.
+		- 예를 들면, `.com` [[Top Level Domain, TLD (DNS)|TLD]] 의 경우에는 `0x03(3) 0x63(c) 0x6F(o) 0x6D(m)` 로 표현되는 것.
 - `QTYPE`: Query 할 record type.
 	- 일반적으로는 domain 으로 ip 를 질의하기 때문에 `A`(혹은 `AAAA`) 가 들어간다.
 - `QCLASS`
