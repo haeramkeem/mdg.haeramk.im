@@ -6,7 +6,7 @@ tags:
 date: 2024-05-24
 ---
 > [!info]- 참고한 것들
-> - [[5. BGPSEC, RPKI#1. Route hijack (IP prefix hijack)|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
+> - [[5. RPKI, BGPSEC#1. Route hijack (IP prefix hijack)|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 
 ## 시나리오
 
