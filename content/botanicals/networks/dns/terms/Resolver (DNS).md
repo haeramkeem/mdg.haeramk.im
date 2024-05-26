@@ -3,6 +3,7 @@ tags:
   - 스토리
   - Network
   - DNS
+date: 2024-05-26
 ---
 > [!info]- 참고한 것들
 > - [어떤 Medium 블로그](https://medium.com/networks-security/dns-queries-recursive-and-iterative-cdb73e290299)

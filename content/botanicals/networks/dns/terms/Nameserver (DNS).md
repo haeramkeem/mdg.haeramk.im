@@ -3,6 +3,7 @@ tags:
   - 용어집
   - Network
   - DNS
+date: 2024-03-24
 ---
 > [!info] 참고한 것
 > - 컴퓨터 네트워크 특강 (권태경 교수님 '24H1, SNU CSE)
