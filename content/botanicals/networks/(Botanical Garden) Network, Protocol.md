@@ -38,7 +38,8 @@
 - 논문
 	- [[논문 - A comprehensive survey on DNS tunnel detection|(Draft) A comprehensive survey on DNS tunnel detection]]
 - 용어집
-	- [[Cache Poisoning (DNS)|Cache Poisoning]]
+	- [[Cache Poisoning, Spoofing (DNS)|Cache Poisoning, Spoofing]]
+	- [[DNS Amplification Attack, Reflection Attack (DNS)|DNS Amplification (Reflection) Attack]]
 	- [[DNS Tunneling (DNS)|DNS Tunneling]]
 	- [[Domain Name System, DNS (DNS)|Domain Name System, DNS]]
 	- [[EDNS0 Client Subnet, ECS (DNS)|EDNS0 Client Subnet (ECS)]]
@@ -47,6 +48,7 @@
 	- [[Full Qualified Domain Name, FQDN (DNS)|Full Qualified Domain Name, FQDN]]
 	- [[Nameserver (DNS)|Nameserver]]
 	- [[Namespace (DNS)|Namespace]]
+	- [[NXDomain Attack, Random-subdomain Attack (DNS)|NXDomain (Random-subdomain) Attack]]
 	- [[Partially Qualified Domain Name, PQDN (DNS)|Partially Qualified Domain Name, PQDN]]
 	- [[Resolver (DNS)|Resolver]]
 	- [[Resource Record, RR (DNS)|Resource Record (RR)]]
