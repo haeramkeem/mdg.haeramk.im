@@ -28,7 +28,7 @@ date: 2024-05-24
 
 ![[Pasted image 20240525153309.png]]
 
-- 위에서 말한 것처럼 root CA 는 [[Regional Internet Registry, RIR (Network)|RIR]] 이 된다.
+- 위에서 말한 것처럼 root CA 는 [[Internet Registry System (Network)|RIR]] 이 된다.
 	- 기존의 PKI 에서처럼 이놈들은 그냥 묻지도 따지지도 않고 신뢰하게 되며
 	- 따라서 스스로 서명한 인증서 (Self-signed certificate) 를 갖고 있다.
 - 그리고 intermediate CA 는 NIR (혹은 LIR), ISP 들이 된다.

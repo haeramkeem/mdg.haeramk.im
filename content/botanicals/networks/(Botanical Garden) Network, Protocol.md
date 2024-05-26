@@ -12,8 +12,8 @@
 - [[ICMP Router Discovery Protocol, DISC (Network)|ICMP Router Discovery Protocol (DISC)]]
 - [[Interior Gateway Protocol, IGP (Network)|Interior Gateway Protocol (IGP)]]
 - [[Internet Service Provider, ISP (Network)|Internet Service Provider (ISP)]]
+- [[Internet Registry System (Network)|Internet Registry System]]
 - [[IP Class (Network)|IP Class]]
-- [[Regional Internet Registry, RIR (Network)|Regional Internet Registry (RIR)]]
 - [[Split Horizon (Network)|Split Horizon]]
 - [[Variable Length Subnet Mask, VLSM (Network)|Variable Length Subnet Mask (VLSM)]]
 

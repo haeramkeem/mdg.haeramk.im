@@ -20,7 +20,7 @@ date: 2024-05-26
 > - 그냥 이해의 편의를 위한 한 예시로 AS 를 기관으로 생각하면 좋다는 것.
 
 - 각 AS 는 *AS Number (ASN)* 이라는 고유한 식별자로 구분되며, AS 가 자율적으로 운용할 수 있는 IP addr block 을 갖게 된다.
-	- 저 ASN 과 IP addr block 은 모두 인터넷 생태계에서 자원이므로, 이것은 [[National Internet Registry, NIR (Network)|NIR]] 와 같은 곳으로부터 할당받는다.
+	- 저 ASN 과 IP addr block 은 모두 인터넷 생태계에서 자원이므로, 이것은 [[Internet Registry System (Network)]] 와 같은 곳으로부터 할당받는다.
 
 ## Provider/Customer
 
