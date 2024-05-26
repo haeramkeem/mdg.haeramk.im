@@ -30,7 +30,7 @@ tags:
 	- 이건 딱히 정해진 방법이 없다. 뭐 스팸메일을 이용하건, 자기가 발로 뛰어서 직접 갖다놓던지 간에 그냥 컴퓨터 하나가 네트워크 안에 준비되어 있기만 하면 된다.
 5. 이후에 *victim* 이 `{data}.tun.evilsite.com` 에 대한 DNS query 를 보내서 *malserver* 에 데이터를 보낸다. 구체적으로는:
 	1. 해당 DNS query 는 네트워크 안의 DNS resolver 로 가게 되고,
-	2. DNS resolver 는 ([[How DNS Works - Iterative or Recursive (DNS)|여기]] 에서 설명한 일련의 과정을 거친 뒤에) 해당 query 를 *malserver* 에 보내게 된다.
+	2. DNS resolver 는 ([[Resolver (DNS)|여기]] 에서 설명한 일련의 과정을 거친 뒤에) 해당 query 를 *malserver* 에 보내게 된다.
 	3. 그럼 query 는 네트워크의 방화벽을 별 탈 없이 뚫고 *malserver* 에 도달하게 된다.
 	4. *malserver* 는 원하는 데이터를 담아 DNS response 를 보내게 된다.
 	5. 결과적으로, DNS resolver 를 사이에 두고 *victim* 과 *malserver* 가 데이터를 주고 받는 connection 이 생기게 된다.

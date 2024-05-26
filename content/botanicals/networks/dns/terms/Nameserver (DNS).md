@@ -27,8 +27,9 @@ tags:
 
 - Frontend nameserver 라고 생각하면 된다.
 - 여러 host 들로 부터 DNS query 를 가장 먼저 받아들여서,
-- 자기 자신에는 많은 정보를 저장하지 않고, 다른 DNS nameserver 들로 query 를 forward 해 IP 를 받아와 host 들에게 응답하고 (이 부분은 [[How DNS Works - Iterative or Recursive (DNS)|이 문서]] 에서 좀 더 자세히 알아보자)
+- 자기 자신에는 많은 정보를 저장하지 않고, 다른 DNS nameserver 들로 query 를 forward 해 IP 를 받아와 host 들에게 응답하고 (이 부분은 [[Resolver (DNS)|이 문서]] 에서 좀 더 자세히 알아보자)
 - 해당 IP 를 caching 하여 다음번의 query 에 빠르게 응답하는 역할의 server 이다.
+- Google 의 8.8.8.8(8.8.4.4) 나 Cloudflare 의 1.1.1.1(1.0.0.1) 같은 애들이다.
 
 ### Root Nameserver
 

@@ -91,7 +91,7 @@ date: 2024-05-26
 
 ### NS
 
-- [[How DNS Works - Iterative or Recursive (DNS)|Iterative resolve]] 를 할때 상위 [[Zone (DNS)|zone]] 은 하위 zone 의 정보를 알려줘야 하기 때문에 하위 zone 의 [[Nameserver (DNS)|nameserver]] 들을 알고 있어야 한다.
+- [[Resolver (DNS)|Iterative resolve]] 를 할때 상위 [[Zone (DNS)|zone]] 은 하위 zone 의 정보를 알려줘야 하기 때문에 하위 zone 의 [[Nameserver (DNS)|nameserver]] 들을 알고 있어야 한다.
 - 따라서 상위 zone 은 이 `NS` 레코드 타입으로 해당 정보를 저장하고 query 가 왔을 때 응답해주게 된다.
 
 ```

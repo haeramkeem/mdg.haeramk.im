@@ -33,8 +33,6 @@
 
 - 논문
 	- [[논문 - A comprehensive survey on DNS tunnel detection|(Draft) A comprehensive survey on DNS tunnel detection]]
-- 스토리
-	- [[How DNS Works - Iterative or Recursive (DNS)|How DNS Works - Iterative or Recursive]]
 - 용어집
 	- [[Cache Poisoning (DNS)|Cache Poisoning]]
 	- [[DNS Tunneling (DNS)|DNS Tunneling]]
@@ -43,6 +41,7 @@
 	- [[Nameserver (DNS)|Nameserver]]
 	- [[Namespace (DNS)|Namespace]]
 	- [[Partially Qualified Domain Name, PQDN (DNS)|Partially Qualified Domain Name, PQDN]]
+	- [[Resolver (DNS)|Resolver]]
 	- [[Resource Record, RR (DNS)|Resource Record (RR)]]
 	- [[Top Level Domain, TLD (DNS)|Top Level Domain, TLD]]
 	- [[Zone (DNS)|Zone]]

@@ -49,6 +49,7 @@ tags:
 	- 여기서는 컴퓨터 내의 dns cache 를 수행하고,
 	- cache 에 없으면 외부로 query 를 proxy 한다.
 	- 뭐 [systemd-resolved](https://wiki.archlinux.org/title/systemd-resolved) 같은 애들이 이것의 일종이라고 할 수 있다.
+	- *Stub* 이라고도 한다.
 - 그리고 그 다음에는 *Caching/Forwarding Resolver* 가 받아서 처리하게 되는데,
 	- 얘는 뭐 사내 DNS 백업처럼 해당 기관 내에서의 DNS cache 를 해주는 놈이다.
 - 다음에는 *Recursive Resolver* 가 받아서 처리한다.
