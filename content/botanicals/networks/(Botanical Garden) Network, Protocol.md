@@ -11,10 +11,10 @@
 - [[Dynamic Host Configuration Protocol, DHCP (Network)|Dynamic Host Configuration Protocol (DHCP)]]
 - [[ICMP Router Discovery Protocol, DISC (Network)|ICMP Router Discovery Protocol (DISC)]]
 - [[Interior Gateway Protocol, IGP (Network)|Interior Gateway Protocol (IGP)]]
-- [[Internet Service Provider, ISP (Network)|Internet Service Provider (ISP)]]
 - [[Internet Registry System (Network)|Internet Registry System]]
+- [[Internet Service Provider, ISP (Network)|Internet Service Provider (ISP)]]
 - [[IP Class (Network)|IP Class]]
-- [[Split Horizon (Network)|Split Horizon]]
+- [[Split Horizon Problem, Route Loop (Network)|Split Horizon Problem, Route Loop]]
 - [[Variable Length Subnet Mask, VLSM (Network)|Variable Length Subnet Mask (VLSM)]]
 
 ### BGP

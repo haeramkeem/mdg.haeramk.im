@@ -103,6 +103,7 @@ date: 2024-05-26
 
 - `NSDNAME`: Nameserver 의 domain name 를 저장한다.
 	- 즉, nameserver 의 IP 주소가 아닌 domain 을 저장하기에, 해당 domain 에 대한 [[#A, AAAA|A]] 레코드도 상위 zone 이 함께 갖고 있게 된다.
+	- 자세한 것은 [[Zone Delegation (DNS)|Zone Delegation]] 문서를 참고하자.
 
 ### CNAME
 
