@@ -1,6 +1,8 @@
 ---
 tags:
-  - PKIX
+  - 스토리
+  - PKC
+date: 2024-01-10
 ---
 > [!info] [참고한 문서 - Quora](https://www.quora.com/Why-does-TLS-use-symmetric-encryption)
 

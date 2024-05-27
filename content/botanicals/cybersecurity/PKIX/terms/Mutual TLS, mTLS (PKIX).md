@@ -2,6 +2,7 @@
 tags:
   - 용어집
   - PKIX
+date: 2023-12-21
 ---
 > [!info] [참고한 글](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)
 ## 용어 설명

@@ -1,7 +1,6 @@
 ---
 tags:
   - 용어집
-  - Security
   - PKC
 date: 2024-05-27
 ---

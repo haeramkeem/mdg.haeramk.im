@@ -2,6 +2,7 @@
 tags:
   - PKIX
   - 용어집
+date: 2024-01-10
 ---
 > [!info] 참고 [문서](https://www.techtarget.com/searchsecurity/definition/certificate-authority)
 

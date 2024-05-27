@@ -2,6 +2,7 @@
 tags:
   - 용어집
   - PKIX
+date: 2023-12-11
 ---
 > [!info] 참고 [문서](https://support.dnsimple.com/articles/what-is-ssl-san/)
 

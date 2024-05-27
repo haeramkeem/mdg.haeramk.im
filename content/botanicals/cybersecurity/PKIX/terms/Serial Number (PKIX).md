@@ -2,6 +2,7 @@
 tags:
   - "#용어집"
   - PKIX
+date: 2023-12-11
 ---
 > [!info] 참고할만한 [공식문서](https://www.rfc-editor.org/rfc/rfc5280#section-4.1.2.2)
 ## 용어 설명
