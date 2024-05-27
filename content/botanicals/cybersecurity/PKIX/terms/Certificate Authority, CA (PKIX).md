@@ -4,11 +4,12 @@ tags:
   - 용어집
 date: 2024-01-10
 ---
-> [!info] 참고 [문서](https://www.techtarget.com/searchsecurity/definition/certificate-authority)
+> [!info]- 참고한 것들
+> - [TechTarget 문서](https://www.techtarget.com/searchsecurity/definition/certificate-authority)
 
 ## 용어 설명
 
-- "인증서를 발급해주는 신뢰할 수 있는 기관"
+- "[[Certificate (PKIX)|인증서]]를 발급해주는 신뢰할 수 있는 기관"
 - 그럼 이딴게 왜 필요하지? 싶을 수 있는데, CA 가 필요한 이유를 [[index|메디쏜 디지딸 갈든]] 에 접속하고자 하는 김해람씨의 상황으로 이해해 보자.
 	- 김해람씨는 '메디쏜 디지딸 갈든'의 아주 멋진 작물들을 구경하기 위해 접속을 한다.
 	- 그럼 이제 서버는 김해람씨에게 "내가 진짜 '메디쏜 디지딸 갈든' 서버가 맞아" 라는 것을 확신시켜 주기 위해 서버 인증서를 제시하게 된다.

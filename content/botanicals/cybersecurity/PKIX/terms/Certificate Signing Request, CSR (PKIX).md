@@ -8,7 +8,7 @@ date: 2024-01-11
 
 ## 용어 설명
 
-- 별거 없다 - Certificate (인증서) Signing (서명) Request (요청), 즉, 이 파일에 담긴 내용을 가지고 인증서를 하나 생성해 달라는 일종의 신청서 같은 것이라 보면 된다.
+- 별거 없다 - [[Certificate (PKIX)|Certificate]] (인증서) Signing (서명) Request (요청), 즉, 이 파일에 담긴 내용을 가지고 인증서를 하나 생성해 달라는 일종의 신청서 같은 것이라 보면 된다.
 - 이 파일에는 크게 두 종류의 정보가 담긴다:
 	- 서버 정보
 		- [[Common Name, CN (PKIX)|Common Name (CN)]] 부터 해서, Organization (O), Organization Unit (OU) 등의 요청하는 서버에 대한 정보들

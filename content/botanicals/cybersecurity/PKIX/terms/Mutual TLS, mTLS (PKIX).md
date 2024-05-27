@@ -7,7 +7,7 @@ date: 2023-12-21
 > [!info] [참고한 글](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)
 ## 용어 설명
 
-- 기존의 Server cert 로만 암호화 통신을 진행하던 TLS 와 달리,
+- 기존의 Server [[Certificate (PKIX)|cert]] 로만 암호화 통신을 진행하던 [[Transport Layer Security, TLS (Network)|TLS]] 와 달리,
 - Server cert 와 Client cert 모두 사용해서 암호화 통신을 제공하는 방법이다.
 
 ### 장점?

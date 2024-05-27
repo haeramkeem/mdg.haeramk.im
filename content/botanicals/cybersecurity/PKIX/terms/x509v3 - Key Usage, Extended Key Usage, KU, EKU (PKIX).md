@@ -8,7 +8,7 @@ date: 2024-01-10
 
 ## 개요
 
-- 인증서 생성시에 명시할 Key Usage 와 Extended Key Usage 들에 대해 정리해 보자.
+- [[Certificate (PKIX)|인증서]] 생성시에 명시할 Key Usage 와 Extended Key Usage 들에 대해 정리해 보자.
 	- 물론, 모두 정리하지는 않고 사용해본 애들을 추가하며 정리해나갈 예정.
 
 ## 이런게 왜 필요하지?

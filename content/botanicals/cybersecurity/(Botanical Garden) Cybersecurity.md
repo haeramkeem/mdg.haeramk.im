@@ -11,15 +11,17 @@
 
 ### PKC
 
+- [[Public Key Cryptography, PKC (PKC)|Public Key Cryptography (PKC)]]
 - 스토리
 	- [[Symmetric Key for TLS - TLS 통신에 대칭키를 사용하는 이유 (PKC)|TLS 통신에 대칭키를 사용하는 이유]]
 - 용어집
 	- [[Diffie-Hellman Key Exchange, DH (PKC)|Diffie-Hellman Key Exchange (DH)]]
-	- [[Public Key Cryptography, PKC (PKC)|Public Key Cryptography (PKC)]]
 
 ### PKIX
 
+- [[Public Key Infrastructure X509, PKIX (PKIX)|Public Key Infrastructure X509 (PKIX)]]
 - 용어집
+	- [[Certificate (PKIX)|Certificate]]
 	- [[Certificate Authority, CA (PKIX)|Certificate Authority (CA)]]
 	- [[Certificate Signing Request, CSR (PKIX)|Certificate Signing Request, CSR]]
 	- [[Common Name, CN (PKIX)|Common Name (CN)]]

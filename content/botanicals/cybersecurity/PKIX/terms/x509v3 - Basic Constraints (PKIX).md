@@ -9,7 +9,7 @@ date: 2024-01-10
 ## Basic Constraints
 
 - 간단하다.
-- 이 인증서가 (1) [[Certificate Authority, CA (PKIX)|CA]] 인지, (2) 만일 CA 라면, 자식 Intermediate certificate 를 몇개나 만들 수 있는지 명시하는 부분이다.
+- 이 [[Certificate (PKIX)|인증서]]가 (1) [[Certificate Authority, CA (PKIX)|CA]] 인지, (2) 만일 CA 라면, 자식 Intermediate certificate 를 몇개나 만들 수 있는지 명시하는 부분이다.
 	- (1) 항목은 `cA` 필드를 이용해 명시하고,
 	- (2) 항목은 `pathLenConstraint` 필드를 이용해 명시한다.
 - [RFC5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.9) 에는 이 항목을 다음과 같은 구조체로 정의한다:
