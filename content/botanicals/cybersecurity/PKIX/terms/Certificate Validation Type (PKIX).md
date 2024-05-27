@@ -7,6 +7,7 @@ date: 2024-05-27
 ---
 > [!info]- 참고한 것
 > - [[7. PKC|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
+> - [Digicert](https://www.digicert.com/difference-between-dv-ov-and-ev-ssl-certificates)
 
 ## Certificate 발급의 신뢰도
 

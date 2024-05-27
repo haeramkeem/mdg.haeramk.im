@@ -7,6 +7,9 @@ date: 2024-05-27
 ---
 > [!info]- 참고한 것
 > - [[7. PKC|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
+> - [Keytos 회사 블로그 글 (1)](https://www.keytos.io/blog/pki/what-is-a-ca-hierarchy-and-which-ca-hierarchy-should-i-use.html)
+> - [Keytos 회사 블로그 글 (2)](https://www.keytos.io/blog/pki/what-is-the-difference-between-root-and-issuing-ca)
+> - [GlobalSign](https://support.globalsign.com/ca-certificates/intermediate-certificates/overview-intermediate-certificates)
 
 ## CA Hierarchy, Certificate Chain
 
