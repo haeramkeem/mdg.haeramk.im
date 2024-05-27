@@ -5,6 +5,10 @@
 
 ## 문서집
 
+### 용어집
+
+- [[Hash Message Authentication Code, HMAC (Security)|Hash Message Authentication Code (HMAC)]]
+
 ### PKC
 
 - 스토리
