@@ -40,6 +40,7 @@
 - 용어집
 	- [[Cache Poisoning, Spoofing (DNS)|Cache Poisoning, Spoofing]]
 	- [[DNS Amplification Attack, Reflection Attack (DNS)|DNS Amplification (Reflection) Attack]]
+	- [[DNS over Encryption (DNS)|DNS over Encryption]]
 	- [[DNS Security Extension, DNSSEC (DNS)|DNS Security Extension (DNSSEC)]]
 	- [[DNS Tunneling (DNS)|DNS Tunneling]]
 	- [[Domain Name System, DNS (DNS)|Domain Name System, DNS]]
