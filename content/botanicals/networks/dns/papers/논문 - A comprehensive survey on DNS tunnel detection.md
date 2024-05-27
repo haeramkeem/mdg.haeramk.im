@@ -101,7 +101,7 @@ date: 2024-05-03
 
 ##### (2) Signature of specific DNS tunnel tools
 
-- 일단 중요한 것은 여기서 말하는 Signature 은 [[Signature (PKIX)|TLS Signature]] 은 아니다; 그것보다는 약간 "DNS tunneling 을 암시하는 특정 문자열" 이라고 생각하면 된다.
+- 일단 중요한 것은 여기서 말하는 Signature 은 [[Public Key Cryptography, PKC (PKC)|TLS Signature]] 은 아니다; 그것보다는 약간 "DNS tunneling 을 암시하는 특정 문자열" 이라고 생각하면 된다.
 	- 가령 'OpenSSH' 는 Base64 로 바꾸면 `T3BlblNTSA==` 가 되고, 이러한 문자열은 dns tunneling 의 가능성을 시사하기에 signature 로 볼 수 있는 것.
 - 일부 dns tunneling tool 들은 victim 과 attacker 간의 통신 형식을 맞추기 위해 이러한 특정 문자열을 사용할 때가 있고, 이러한 성질을 이용하는 것이 *Signature-based detection* 이다.
 - 다만 이러한 방법은 Well known signature library 를 구축하는 것에 많은 시간이 소요되고, 알려지지 않았거나 새로운 dns tunneling tool 에 대해서는 감지하지 못한다는 문제가 있다.

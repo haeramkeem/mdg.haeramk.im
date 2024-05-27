@@ -26,7 +26,7 @@ BasicConstraints ::= SEQUENCE {
 - 별로 어려울 건 없다; 이 인증서가 CA 인지를 나타내는 boolean 값이다.
 	- `cA:TRUE` 라면, 이 인증서는 CA 인증서로 사용할 수 있는거고
 	- `cA:FALSE` 라면 그 반대겠지
-- 만일 이 값이 설정돼있지 않거나 `cA:FALSE` 라면, [[x509v3 Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?#Certificate Signing (`keyCertSign`)|keyCertSign]] 또한 설정되면 안되고, 공개키가 인증서 서명을 검증하는데 사용되어서도 안된다고 한다.
+- 만일 이 값이 설정돼있지 않거나 `cA:FALSE` 라면, [[x509v3 - Key Usage, Extended Key Usage, KU, EKU (PKIX)#Certificate Signing (`keyCertSign`)|keyCertSign]] 또한 설정되면 안되고, 공개키가 인증서 서명을 검증하는데 사용되어서도 안된다고 한다.
 
 ### `pathLenConstraint`
 
@@ -35,4 +35,4 @@ BasicConstraints ::= SEQUENCE {
 - 다만, 여기에는 인증서 체인의 마지막 non-CA 인증서 (End-entity certificate) 은 포함되지 않는다.
 	- 즉, `pathLenConstraint` 값이 `0` 이라면, 이 인증서를 이용해 자식 인증서를 생성할 때 CA 는 생성하지 못하지만 CA 가 아닌 인증서는 생성할 수 있다는 소리이다.
 	- 주의할 점은 (비록 흔하진 않지만) 마지막 인증서가 CA 일 경우에는 포함이 된다는 것이다.
-- 이 값이 효력이 있기 위해서는 [[x509v3 Basic Constraints extension explained - Basic Constraints 란?#`cA`|cA]] 가 `TRUE` 여야 하고 [[x509v3 Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?#Certificate Signing (`keyCertSign`)|keyCertSign]] 또한 설정되어 있어야 한다.
+- 이 값이 효력이 있기 위해서는 [[x509v3 - Basic Constraints (PKIX)#`cA`|cA]] 가 `TRUE` 여야 하고 [[x509v3 - Key Usage, Extended Key Usage, KU, EKU (PKIX)#Certificate Signing (`keyCertSign`)|keyCertSign]] 또한 설정되어 있어야 한다.

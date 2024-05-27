@@ -36,7 +36,7 @@ keyUsage = 항목들 나열...
 ### Key Encipherment (`keyEncipherment`)
 
 - 암호키를 암호화할 수 있게 하는 것
-	- 인데, 이렇게만 말하면 뭔가 말장난같으니 조금 더 추가하자면, [[Symmetric Key for TLS - TLS 통신에 대칭키를 사용하는 이유|TLS 통신에 사용되는 대칭키를 비대칭 키로 암호화]] 하는 등의 유스케이스를 위한 기능이다.
+	- 인데, 이렇게만 말하면 뭔가 말장난같으니 조금 더 추가하자면, [[Symmetric Key for TLS - TLS 통신에 대칭키를 사용하는 이유 (PKC)|TLS 통신에 사용되는 대칭키를 비대칭 키로 암호화]] 하는 등의 유스케이스를 위한 기능이다.
 
 ### Certificate Signing (`keyCertSign`)
 
@@ -68,4 +68,4 @@ extendedKeyUsage = 항목들 나열...
 
 ### TLS Web Client Authentication (`clientAuth`)
 
-- 일반적인 TLS 에 사용되는 [[x509v3 Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?#TLS Web Server Authentication (`serverAuth`)|Server Auth]] 과 달리, [[Mutual TLS, mTLS (PKIX)|mTLS]] 통신에서 Client 가 CA 의 도움을 받아 자신의 신원을 인증할 수 있도록 하는 기능이다.
+- 일반적인 TLS 에 사용되는 [[x509v3 - Key Usage, Extended Key Usage, KU, EKU (PKIX)#TLS Web Server Authentication (`serverAuth`)|Server Auth]] 과 달리, [[Mutual TLS, mTLS (PKIX)|mTLS]] 통신에서 Client 가 CA 의 도움을 받아 자신의 신원을 인증할 수 있도록 하는 기능이다.

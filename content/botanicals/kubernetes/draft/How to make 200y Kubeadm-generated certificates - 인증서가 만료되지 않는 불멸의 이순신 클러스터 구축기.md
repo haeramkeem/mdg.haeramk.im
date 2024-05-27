@@ -121,10 +121,10 @@ Certificate:
 		- 인증서 생성시, 2048 bit 의 RSA 키쌍을 사용한다는 뜻이다.
 		- `openssl` 명령어의 `-newkey rsa:2048` 옵션을 통해 설정할 수 있다.
 	- 18 번째 줄 - `X509v3 Key Usage: critical`, 19 번째 줄 - `Digital Signature, Key Encipherment, Certificate Sign`
-		- 인증서의 [[x509v3 Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?|Key Usage]] 를 명시하는 부분인데, 주목할 것은 지금 우리가 생성하는 인증서가 CA 이기 때문에 저 [[x509v3 Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?#Certificate Signing (`keyCertSign`)|Certificate Sign]] 이 반드시 포함되어야 한다는 것이다.
+		- 인증서의 [[x509v3 - Key Usage, Extended Key Usage, KU, EKU (PKIX)|Key Usage]] 를 명시하는 부분인데, 주목할 것은 지금 우리가 생성하는 인증서가 CA 이기 때문에 저 [[x509v3 - Key Usage, Extended Key Usage, KU, EKU (PKIX)#Certificate Signing (`keyCertSign`)|Certificate Sign]] 이 반드시 포함되어야 한다는 것이다.
 		- 이것은 `ca.conf` 파일의 `keyUsage = critical, digitalSignature, keyEncipherment, keyCertSign` 를 통해 설정할 수 있다.
 	- 20 번째 줄 - `X509v3 Basic Constraints: critical`, 21 번째 줄 - `CA:TRUE`
-		- 인증서의 [[x509v3 Basic Constraints extension explained - Basic Constraints 란?|Basic Constraints]] 를 명시하는 부분인데, 당연히 CA 인증서이기 때문에 `CA:TRUE` 로 설정되어 있어야 한다.
+		- 인증서의 [[x509v3 - Basic Constraints (PKIX)|Basic Constraints]] 를 명시하는 부분인데, 당연히 CA 인증서이기 때문에 `CA:TRUE` 로 설정되어 있어야 한다.
 		- 이것은 `ca.conf` 파일의 `basicConstraints = critical, CA:TRUE` 부분을 통해 명시할 수 있다.
 	- 22 번째 줄 - `X509v3 Subject Key Identifier`
 		- 인증서의 [[Subject Key Identifier, SKID (PKIX)|SKID]] 를 명시하는 부분이다.

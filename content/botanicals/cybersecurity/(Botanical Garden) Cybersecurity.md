@@ -5,15 +5,21 @@
 
 ## 문서집
 
-- [[Symmetric Key for TLS - TLS 통신에 대칭키를 사용하는 이유|TLS 통신에 대칭키를 사용하는 이유]]
-- [[x509v3 Basic Constraints extension explained - Basic Constraints 란?|Basic Constraints 란?]]
-- [[x509v3 Key Usage and Extended Key Usage extension explained - Key Usage 와 Extended Key Usage 란?|Key Usage 와 Extended Key Usage 란?]]
+### PKC
 
-## 용어집
+- 스토리
+	- [[Symmetric Key for TLS - TLS 통신에 대칭키를 사용하는 이유 (PKC)|TLS 통신에 대칭키를 사용하는 이유]]
+- 용어집
+	- [[Public Key Cryptography, PKC (PKC)|Public Key Cryptography (PKC)]]
 
-- [[Certificate Authority, CA (PKIX)|Certificate Authority (CA)]]
-- [[Certificate Signing Request, CSR (PKIX)|Certificate Signing Request, CSR]]
-- [[Common Name, CN (PKIX)|Common Name (CN)]]
-- [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]
-- [[Serial Number (PKIX)|Serial Number]]
-- [[Subject Alternative Name, SAN (PKIX)|Subject Alternative Name (SAN)]]
+### PKIX
+
+- 용어집
+	- [[Certificate Authority, CA (PKIX)|Certificate Authority (CA)]]
+	- [[Certificate Signing Request, CSR (PKIX)|Certificate Signing Request, CSR]]
+	- [[Common Name, CN (PKIX)|Common Name (CN)]]
+	- [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]
+	- [[Serial Number (PKIX)|Serial Number]]
+	- [[Subject Alternative Name, SAN (PKIX)|Subject Alternative Name (SAN)]]
+	- [[x509v3 - Basic Constraints (PKIX)|x509v3 Basic Constraints]]
+	- [[x509v3 - Key Usage, Extended Key Usage, KU, EKU (PKIX)|x509v3 Key Usage, Extended Key Usage (KU, EKU)]]
