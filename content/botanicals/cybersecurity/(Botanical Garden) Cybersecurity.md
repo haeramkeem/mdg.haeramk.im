@@ -23,8 +23,10 @@
 - 용어집
 	- [[Certificate (PKIX)|Certificate]]
 	- [[Certificate Authority, CA (PKIX)|Certificate Authority (CA)]]
+	- [[Certificate Chain (PKIX)|Certificate Chain]]
 	- [[Certificate Signing Request, CSR (PKIX)|Certificate Signing Request, CSR]]
-	- [[Distinguished Name, DN (PKIX)|Common Name (CN)]]
+	- [[Certificate Validation Type (PKIX)|Certificate Validation Type]]
+	- [[Distinguished Name, DN (PKIX)|Distinguished Name (DN)]]
 	- [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]
 	- [[Serial Number (PKIX)|Serial Number]]
 	- [[Subject Alternative Name, SAN (PKIX)|Subject Alternative Name (SAN)]]

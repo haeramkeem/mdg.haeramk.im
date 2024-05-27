@@ -6,6 +6,7 @@ date: 2024-01-10
 ---
 > [!info]- 참고한 것들
 > - [TechTarget 문서](https://www.techtarget.com/searchsecurity/definition/certificate-authority)
+> - [[7. PKC|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 
 ## 용어 설명
 
@@ -16,6 +17,9 @@ date: 2024-01-10
 	- 근데 김해람씨는 이 인증서를 받아들고 고민에 빠진다: 이게 진짜 '메디쏜 디지딸 갈든' 서버가 맞을까? 혹시 어떤 해커가 사칭하기 위해 '메디 쏜디 지딸 갈든' 으로 가짜 웹사이트를 만들어 뿌린거라면?
 	- 이때 CA 가 등장한다. 김해람씨는 이 인증서를 발급해준 CA 를 (서버 인증서에 이미 포함되어 있는) CA 인증서를 통해 확인하고, 이 CA 가 "이 웹사이트가 진짜 '메디쏜 디지딸 갈든'이 맞아!" 라는 것을 보장해 준다는 것을 알게 된다.
 	- CA 의 보증과 함께 김해람씨는 안심하면서 이 웹사이트에 접속한다.
+
+## 인증서의 CA 확인해보기
+
 - 실제로 '메디쏜 디지딸 갈든' 의 인증서를 확인해 보면 다음처럼 되어 있는 것을 볼 수 있다:
 - 이게 서버 인증서이고:
 
@@ -24,6 +28,8 @@ date: 2024-01-10
 - `Issued By` 항목에 있는 것이 CA 이다: [Let's Encrypt](https://letsencrypt.org/) 라는 기관에서 발급해 준 것임을 알 수 있다.
 
 ![[Pasted image 20240109175501.png]]
+
+## Trusted CA
 
 - 그럼 이런 생각이 들 수 있다: 아니 그럼 CA 는 어떻게 믿어?
 	- 이건 그냥 믿어야 한다. 사실 보안의 끝은 신뢰이기 때문.
@@ -37,3 +43,11 @@ date: 2024-01-10
 ![[Pasted image 20240109181148.png]]
 
 - 물론 자연스럽게 (안전하지 않음) 버튼을 누르며 들어가는 게 습관이 됐지만, 어쨋든 이런 웹사이트는 문제가 있을 수 있으니 조심해야 한다.
+
+## Security Concerns
+
+- CA 입장에서는 server 를 보증하는 입장에 서있기 때문에 아무한테나 인증서를 발급해주면 안된다.
+	- 따라서 [[Certificate Validation Type (PKIX)|여러 방법]] 으로 server 가 정상적인지 확인하는 과정을 거친 뒤 발급해 주거나
+	- CA 가 compromise 되는 것을 막기 위해 [[Certificate Chain (PKIX)|계층형 구조]] 로 CA 를 구성해 보안 수준을 올리는 등의 노력을 한다.
+- 이러한 노력에도 불구하고 CA 를 해킹하거나 속여 가짜 인증서를 발급받는 것 (Spoofing) 과 같은 문제가 지속적으로 발생하고 있다고 한다.
+	- [Let's Encrypt security issue 관련 칼럼](https://www.catalyst2.com/blog/good-bad-lets-encrypt/)
