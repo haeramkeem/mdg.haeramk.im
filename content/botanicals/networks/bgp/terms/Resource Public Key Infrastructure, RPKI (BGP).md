@@ -14,7 +14,7 @@ date: 2024-05-24
 
 ## 개요
 
-- 어떤 자원 (Resource) 를 기존의 [[Public Key Infrastructure, PKI (Security)|PKI]] 를 이용해 인증하는 프레임워크인데
+- 어떤 자원 (Resource) 를 기존의 [[Public Key Infrastructure X509, PKIX (PKIX)|PKI]] 를 이용해 인증하는 프레임워크인데
 - 여기서 자원은 IP Prefix 나 [[Autonomous System, AS (BGP)|AS]] 의 ASN 을의미한다.
 	- 왜 많고 많은 자원중에 하필이면 이것이냐 라고 물어본다면
 	- 이것이 등장하게 된 계기가 [[Border Gateway Protocol, BGP (BGP)|BGP]] 에서의 문제 ([[Route Hijack Attack (BGP)|route hijack]] 과 같은) 를 해결하기 위함이기 때문이다.

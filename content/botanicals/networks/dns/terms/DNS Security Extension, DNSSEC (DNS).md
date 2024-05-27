@@ -16,7 +16,7 @@ date: 2024-05-27
 - [[Domain Name System, DNS (DNS)|DNS]] 에서 [[Resolver (DNS)|resolver]] 의 작동 과정을 보면 authentication 에 대한 고려가 전혀 없다는 것을 알 수 있다.
 	- 즉, resolver 입장에서는 응답받은 [[Resource Record, RR (DNS)|record]] 의 진품여부를 확인할 수가 없는 것.
 	- 따라서 이러한 점을 노려 공격하는 것이 [[Cache Poisoning, Spoofing (DNS)|DNS cache poisoning]] 인 것이다.
-- 그래서 record 의 진품여부를 [[Public Key Infrastructure, PKI (Security)|PKI]] 로 제공하고자 하는 것이 *DNS Security Extension* (*DNSSEC*) 이다.
+- 그래서 record 의 진품여부를 [[Public Key Infrastructure X509, PKIX (PKIX)|PKI]] 로 제공하고자 하는 것이 *DNS Security Extension* (*DNSSEC*) 이다.
     - *Integrity*: [[Nameserver (DNS)|nameserver]] 가 보낸 record 가 중간에 변경되지 않음
     - *Authentication*: nameserver 에 대한 신원 인증
 
