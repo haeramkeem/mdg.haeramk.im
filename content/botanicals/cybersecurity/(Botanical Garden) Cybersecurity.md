@@ -10,6 +10,7 @@
 - 스토리
 	- [[Symmetric Key for TLS - TLS 통신에 대칭키를 사용하는 이유 (PKC)|TLS 통신에 대칭키를 사용하는 이유]]
 - 용어집
+	- [[Diffie-Hellman Key Exchange, DH (PKC)|Diffie-Hellman Key Exchange (DH)]]
 	- [[Public Key Cryptography, PKC (PKC)|Public Key Cryptography (PKC)]]
 
 ### PKIX
