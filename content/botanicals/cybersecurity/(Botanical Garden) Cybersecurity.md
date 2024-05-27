@@ -24,7 +24,7 @@
 	- [[Certificate (PKIX)|Certificate]]
 	- [[Certificate Authority, CA (PKIX)|Certificate Authority (CA)]]
 	- [[Certificate Signing Request, CSR (PKIX)|Certificate Signing Request, CSR]]
-	- [[Common Name, CN (PKIX)|Common Name (CN)]]
+	- [[Distinguished Name, DN (PKIX)|Common Name (CN)]]
 	- [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]
 	- [[Serial Number (PKIX)|Serial Number]]
 	- [[Subject Alternative Name, SAN (PKIX)|Subject Alternative Name (SAN)]]

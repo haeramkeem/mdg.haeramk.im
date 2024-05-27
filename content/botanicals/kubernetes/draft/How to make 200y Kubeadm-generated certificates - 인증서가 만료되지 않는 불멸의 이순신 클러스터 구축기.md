@@ -110,12 +110,12 @@ Certificate:
 		- 인증서의 [[Serial Number (PKIX)|시리얼 번호]] 를 0으로 설정한다는 뜻이다.
 		- `openssl` 명령어의 `-set_serial 0` 옵션을 통해 설정할 수 있다.
 	- 6 번째 줄 - `Issuer: CN = kubernetes`
-		- 인증서를 발급해준 기관의 [[Common Name, CN (PKIX)|CN]].
+		- 인증서를 발급해준 기관의 [[Distinguished Name, DN (PKIX)|CN]].
 		- 이것은 별도로 설정하지 않았다.
 			- 인증서 생성시 서명할 CA 인증서를 지정하지 않으면, 스스로 서명한 (Self-signed) 인증서가 생성되기 때문.
 			- 즉, 여기서의 `Issuer` 는 아래 `Subject` 항목과 동일한 주체이다.
 	- 10 번째 줄 - `Subject: CN = kubernetes`
-		- 인증서 자체에 대한 [[Common Name, CN (PKIX)|CN]].
+		- 인증서 자체에 대한 [[Distinguished Name, DN (PKIX)|CN]].
 		- 이것은 `ca.conf` 파일의 `CN = kubernetes` 항목을 통해 설정할 수 있다.
 	- 13 번째 줄 - `RSA Public-Key: (2048 bit)`
 		- 인증서 생성시, 2048 bit 의 RSA 키쌍을 사용한다는 뜻이다.
