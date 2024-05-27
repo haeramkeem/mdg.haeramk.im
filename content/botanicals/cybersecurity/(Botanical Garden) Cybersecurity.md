@@ -5,9 +5,12 @@
 
 ## 문서집
 
-### 용어집
+### Hash
 
-- [[Hash Message Authentication Code, HMAC (Security)|Hash Message Authentication Code (HMAC)]]
+- [[Hash (Hash)|Hash]]
+- 용어집
+	- [[Hash Message Authentication Code, HMAC (Hash)|Hash Message Authentication Code (HMAC)]]
+	- [[Hash Pointer (Hash)|Hash Pointer]]
 
 ### PKC
 
