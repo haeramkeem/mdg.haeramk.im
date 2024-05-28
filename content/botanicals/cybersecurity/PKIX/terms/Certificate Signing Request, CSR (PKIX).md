@@ -4,7 +4,8 @@ tags:
   - 용어집
 date: 2024-01-11
 ---
-> [!info] 참고 [문서 - GlobalSign](https://www.globalsign.com/en/blog/what-is-a-certificate-signing-request-csr)
+> [!info]- 참고한 것들
+> - [GlobalSign](https://www.globalsign.com/en/blog/what-is-a-certificate-signing-request-csr)
 
 ## 용어 설명
 

@@ -4,7 +4,8 @@ tags:
   - 용어집
 date: 2024-01-10
 ---
-> [!info] 참고 문서 - [RFC5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.9)
+> [!info]- 참고한 것들
+> - [RFC5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.9)
 
 ## Basic Constraints
 

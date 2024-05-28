@@ -5,7 +5,7 @@ tags:
   - Hash
 date: 2024-05-28
 ---
-> [!info]- 참고한 것
+> [!info]- 참고한 것들
 > - [[9. CT|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 
 ## Hash pointer

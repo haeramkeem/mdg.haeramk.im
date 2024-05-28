@@ -4,7 +4,8 @@ tags:
   - PKIX
 date: 2023-12-11
 ---
-> [!info] 참고 [문서](https://support.dnsimple.com/articles/what-is-ssl-san/)
+> [!info]- 참고한 것들
+> - [DNSimple](https://support.dnsimple.com/articles/what-is-ssl-san/)
 
 ## 용어 설명
 

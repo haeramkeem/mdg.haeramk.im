@@ -4,7 +4,8 @@ tags:
   - 용어집
 date: 2024-01-10
 ---
-> [!info] [참고한 문서](https://help.hcltechsw.com/domino/10.0.1/admin/conf_keyusageextensionsandextendedkeyusage_r.html)
+> [!info]- 참고한 것들
+> - [어떤 회사 글](https://help.hcltechsw.com/domino/10.0.1/admin/conf_keyusageextensionsandextendedkeyusage_r.html)
 
 ## 개요
 

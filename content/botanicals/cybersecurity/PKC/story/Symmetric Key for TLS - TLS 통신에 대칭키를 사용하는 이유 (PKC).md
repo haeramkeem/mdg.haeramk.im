@@ -4,7 +4,8 @@ tags:
   - PKC
 date: 2024-01-10
 ---
-> [!info] [참고한 문서 - Quora](https://www.quora.com/Why-does-TLS-use-symmetric-encryption)
+> [!info]- 참고한 것들
+> - [Quora](https://www.quora.com/Why-does-TLS-use-symmetric-encryption)
 
 ## TLS 에서는 비대칭키만 사용하는 것 아녔음??
 

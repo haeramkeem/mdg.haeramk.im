@@ -11,6 +11,7 @@
 - 용어집
 	- [[Hash Message Authentication Code, HMAC (Hash)|Hash Message Authentication Code (HMAC)]]
 	- [[Hash Pointer (Hash)|Hash Pointer]]
+	- [[Merkle Tree (Hash)|Merkle Tree]]
 
 ### PKC
 
@@ -29,6 +30,7 @@
 	- [[Certificate Chain (PKIX)|Certificate Chain]]
 	- [[Certificate Revocation List, CRL (PKIX)|Certificate Revocation List (CRL)]]
 	- [[Certificate Signing Request, CSR (PKIX)|Certificate Signing Request, CSR]]
+	- [[Certificate Transparency, CT (PKIX)|Certificate Transparency (CT)]]
 	- [[Certificate Validation Type (PKIX)|Certificate Validation Type]]
 	- [[Distinguished Name, DN (PKIX)|Distinguished Name (DN)]]
 	- [[Mutual TLS, mTLS (PKIX)|Mutual TLS (mTLS)]]

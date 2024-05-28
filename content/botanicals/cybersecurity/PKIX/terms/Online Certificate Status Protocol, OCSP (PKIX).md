@@ -5,7 +5,7 @@ tags:
   - PKIX
 date: 2024-05-27
 ---
-> [!info]- 참고한 것
+> [!info]- 참고한 것들
 > - [[7. PKC|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 > - [위키피디아](https://en.wikipedia.org/wiki/Online_Certificate_Status_Protocol)
 

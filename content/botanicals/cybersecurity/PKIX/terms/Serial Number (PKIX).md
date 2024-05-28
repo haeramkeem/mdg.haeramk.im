@@ -4,7 +4,8 @@ tags:
   - PKIX
 date: 2023-12-11
 ---
-> [!info] 참고할만한 [공식문서](https://www.rfc-editor.org/rfc/rfc5280#section-4.1.2.2)
+> [!info]- 참고한 것들
+> - [RFC5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.1.2.2)
 
 ## 용어 설명
 
