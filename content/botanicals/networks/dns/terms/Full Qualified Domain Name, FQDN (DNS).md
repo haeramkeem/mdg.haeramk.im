@@ -5,7 +5,7 @@ tags:
   - DNS
 date: 2024-03-24
 ---
-> [!info]- 참고한 것
+> [!info]- 참고한 것들
 > - [[6. DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 > - [[11. Application Layer, DNS#Domain Name Space|충남대 김상하 교수님 컴퓨터네트워크 강의 (Spring 2021)]]
 

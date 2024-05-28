@@ -5,7 +5,7 @@ tags:
   - DNS
 date: 2024-03-24
 ---
-> [!info] 참고한 것들
+> [!info]- 참고한 것들
 > - [어떤 회사 사이트](https://www.cynet.com/attack-techniques-hands-on/how-hackers-use-dns-tunneling-to-own-your-network/)
 
 ## DNS query 를 이용해 데이터를 주고받기

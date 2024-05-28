@@ -5,8 +5,8 @@ tags:
   - DNS
 date: 2024-03-24
 ---
-> [!info] 참고한 것
-> - 컴퓨터 네트워크 특강 (권태경 교수님 '24H1, SNU CSE)
+> [!info]- 참고한 것들
+> - [[6. DNS#DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 > - [불타는 구름](https://www.cloudflare.com/learning/dns/dns-server-types/)
 
 ## 이게 뭐임

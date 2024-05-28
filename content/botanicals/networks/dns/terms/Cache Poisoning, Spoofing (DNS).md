@@ -5,7 +5,7 @@ tags:
   - DNS
 date: 2024-05-27
 ---
-> [!info]- 참고한 것
+> [!info]- 참고한 것들
 > - [Survey on DNS-Specific Security Issues and Solution Approaches](https://www.researchgate.net/publication/343373756_Survey_on_DNS-Specific_Security_Issues_and_Solution_Approaches)
 
 ## 뭔가

@@ -5,7 +5,7 @@ tags:
   - DNS
 date: 2024-05-27
 ---
-> [!info]- 참고한 것
+> [!info]- 참고한 것들
 > - [[6. DNS#DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 > - [RFC6891](https://datatracker.ietf.org/doc/html/rfc6891)
 > - [위키](https://en.wikipedia.org/wiki/Extension_Mechanisms_for_DNS)
