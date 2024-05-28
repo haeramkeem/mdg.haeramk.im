@@ -13,7 +13,7 @@ date: 2024-05-27
 	- 그럼 이 도어락은 DNS query 를 주기적으로 보내게 될 것이고, attacker 는 이것을 모니터링하면 A 씨가 사용하는 도어락이 어느 회사 제품인지 알 수 있게 된다.
 	- 만약 해당 회사 도어락에 어떤 버그가 있다면, attacker 는 이것을 이용해 도어락을 풀어 A 씨의 집에 침입할 수도 있다 (!!)
 	- 물론 극단적이고 비현실적인 예시지만, 어쨋든 이런 비슷한 아이디어로 privacy 를 노출시키는 것은 충분히 가능하다 이거야
-- 그래서 DNS 를 기존의 [[Transport Layer Security, TLS (Network)|TLS]] 와 같은 encryption protocol 위에 올리는 아이디어가 나오게 된 것.
+- 그래서 DNS 를 기존의 [[Transport Layer Security, TLS (TLS)|TLS]] 와 같은 encryption protocol 위에 올리는 아이디어가 나오게 된 것.
 - Encryption 에는 데이터 크기를 맞추기 위해 padding 이 들어가기도 하기에, [[EDNS0 Padding (DNS)|EDNS0 padding option]] 을 같이 사용하기도 한다.
 
 ## 종류

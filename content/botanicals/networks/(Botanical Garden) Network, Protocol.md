@@ -23,9 +23,9 @@
 
 ### BGP
 
+- [[Border Gateway Protocol, BGP (BGP)|Border Gateway Protocol (BGP)]]
 - 용어집
 	- [[Autonomous System, AS (BGP)|Autonomous System (AS)]]
-	- [[Border Gateway Protocol, BGP (BGP)|Border Gateway Protocol (BGP)]]
 	- [[External Gateway Protocol, EGP (BGP)|External Gateway Protocol (EGP)]]
 	- [[Internet Routing Registry, IRR (BGP)|Internet Routing Registry (IRR)]]
 	- [[Network Layer Reachability Information, NLRI (BGP)|Network Layer Reachability Information (NLRI)]]
@@ -35,6 +35,7 @@
 
 ### DNS
 
+- [[Domain Name System, DNS (DNS)|Domain Name System, DNS]]
 - 논문
 	- [[논문 - A comprehensive survey on DNS tunnel detection|(Draft) A comprehensive survey on DNS tunnel detection]]
 - 용어집
@@ -43,7 +44,6 @@
 	- [[DNS over Encryption (DNS)|DNS over Encryption]]
 	- [[DNS Security Extension, DNSSEC (DNS)|DNS Security Extension (DNSSEC)]]
 	- [[DNS Tunneling (DNS)|DNS Tunneling]]
-	- [[Domain Name System, DNS (DNS)|Domain Name System, DNS]]
 	- [[EDNS0 Client Subnet, ECS (DNS)|EDNS0 Client Subnet (ECS)]]
 	- [[EDNS0 Padding (DNS)|EDNS0 Padding]]
 	- [[Extention Mechanisms for DNS, EDNS0 (DNS)|Extention Mechanisms for DNS, EDNS0]]
@@ -57,3 +57,10 @@
 	- [[Top Level Domain, TLD (DNS)|Top Level Domain, TLD]]
 	- [[Zone (DNS)|Zone]]
 	- [[Zone Delegation (DNS)|Zone Delegation]]
+
+### TLS
+
+- [[Transport Layer Security, TLS (TLS)]]
+- 용어집
+	- [[Downgrade Attack (TLS)|Downgrade Attack]]
+	- [[Forward Secrecy (TLS)|Forward Secrecy]]
