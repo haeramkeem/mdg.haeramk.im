@@ -59,4 +59,7 @@ date: 2024-05-25
 
 ## BGP update message
 
+- AS-path
+- Next Hop
+- Unfeasible (Withdrawn) route
 - 
