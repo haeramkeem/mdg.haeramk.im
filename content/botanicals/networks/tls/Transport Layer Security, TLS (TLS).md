@@ -7,6 +7,7 @@ date: 2024-05-29
 ---
 > [!info]- 참고한 것들
 > - [[11. TLS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
+> - [CloudFlare](https://blog.cloudflare.com/rfc-8446-aka-tls-1-3)
 
 ## De-facto Internet Security Standard
 
@@ -16,8 +17,8 @@ date: 2024-05-29
 - 대략적으로 다음과 같이 쪼개어 볼 수 있다고 한다.
 	- Handshake Protocol: 비대칭키를 이용해 대칭키를 교환하기 위한 과정
 	- Record Protocol: 교환한 대칭키를 활용하는 과정
-		- Alert Protocol: 에러 핸들링
-		- Change Cipher Spec Protocol: Handshake 이후 비대칭키 -> 대칭키 로 전환되는 과정
+	- Alert Protocol: 에러 핸들링
+	- Change Cipher Spec Protocol: Handshake 이후 비대칭키 -> 대칭키 로 전환되는 과정
 
 ## 과정 (TLS 1.2 기준)
 
@@ -55,3 +56,39 @@ date: 2024-05-29
 	- 이것을 shared symmetric key 로 암호화해서 서로에게 보내어 비교하는 `Finished` 과정을 거치게 된다.
 - 즉, 이 둘이 같지 않으면 중간에 뭔가 변조가 이루어졌다는 것.
 - `Finished` 과정은 암호화되어 이루어 지기에, attacker 가 이것까지 중간에서 변조해서 발각되는 것을 방지하는 것은 현실적으로 불가능하다.
+
+## TLS 1.3, RFC8446
+
+### 1-RTT mode
+
+- TLS 1.3 에서는 기존의 RTT 를 2번 필요로 하던 것을 1번으로 줄이는 1-RTT 를 지원한다.
+- 가령 기존의 TLS 1.2 에서 [[Diffie-Hellman Key Exchange, DH (PKC)|DH]] 를 사용하는 flow 는 다음과 같다.
+
+![[Pasted image 20240529093309.png]]
+> 출처: [CloudFlare](https://blog.cloudflare.com/rfc-8446-aka-tls-1-3)
+
+- 보면, 첫번째 `ClientHello` 에서 DH 를 사용하자고 server 에게 알렸을 때, server 는 DH key 를 생성해서 전달해 주게 된다.
+- 이것이 TLS 1.3 에서는 아래처럼 바뀐다.
+
+![[Pasted image 20240529093557.png]]
+> 출처: 이것도 [CloudFlare](https://blog.cloudflare.com/rfc-8446-aka-tls-1-3)
+
+- TLS 1.3 에서는 사용할 수 있는 키 알고리즘의 선택의 폭을 확 줄였다. (ECDHE w/ X25519 혹은 P-256) 
+- 따라서 `ClientHello` 에서 version negotiation 과정 없이 바로 사용할 DH pubkey 를 server 에게 전달하고, server 도 DH pubkey 를 전달하게 되어 1번의 RTT 로 key exchange 가 종료된다.
+
+### 0-RTT resumption
+
+- 사용자들은 한번 접속한 웹페이지를 추후에 다시 방문할 가능성이 높다.
+- 따라서, 처음에 connection 을 맺었을 때, *Resumption Main Secret* 이라는 것을 생성하게 되고, 이후에의 재방문에는 이것을 이용해 Key exchange 없이 0번의 RTT 로 바로 암호 연결을 하게 된다.
+
+#### Replay attack
+
+![[Pasted image 20240529095658.png]]
+
+> 출처: [또라우드플레어](https://blog.cloudflare.com/rfc-8446-aka-tls-1-3)
+
+- 이 0-RTT 의 치명적인 단점은 replay attack 이다.
+- 0-RTT 모드에서 server 의 상태를 바꾸는 (예를 들어 DB 의 `INSERT` transaction) 패킷을 보냈다고 해보자.
+- 이때 attack 가 이 패킷을 캡쳐한 뒤 server 에 동일하게 보내면, server 는 이것을 attacker 가 보냈다는 것을 알 수가 없다.
+- 물론 attacker 는 패킷이 암호화되어 있기 때문에 어떤 내용인지는 알 수 없지만, 기존에는 만료된 연결이기에 server 가 거부할 수 있었다면 0-RTT 의 경우에는 불가능해지는 것.
+- 따라서 HTTP `POST` 와 같은 server 의 상태를 바꾸는 요청은 0-RTT 로 보내지 않고, `GET` 같은 요청만을 0-RTT 로 보낸다고 한다.
