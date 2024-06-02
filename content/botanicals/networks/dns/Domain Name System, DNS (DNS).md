@@ -127,4 +127,4 @@ date: 2024-03-25
 - `QTYPE`: Query 할 record type.
 	- 일반적으로는 domain 으로 ip 를 질의하기 때문에 `A`(혹은 `AAAA`) 가 들어간다.
 - `QCLASS`
-	- 몰라도 된다. 어차피 `IN` (Internet, `0`) 만 허용되는 필드이다.
+	- 몰라도 된다. 어차피 `IN` (Internet, `0x0001`) 만 허용되는 필드이다.
