@@ -12,7 +12,7 @@ date: 2024-05-27
 
 ![[Pasted image 20240527020724.png]]
 
-- [[Domain Name System, DNS (DNS)|DNS]] 를 이용한 [[Denial of Service, DoS (Network)|DoS]] 공격의 일종이다.
+- [[Domain Name System (DNS)|DNS]] 를 이용한 [[Denial of Service, DoS (Network)|DoS]] 공격의 일종이다.
 - NXDomain 은 non-existent domain, 즉 존재하지 않는 도메인이라는 뜻이다.
 - 해커가 존재하지 않는 도메인에 대한 쿼리를 잔뜩 날리게 되면 그것은 [[Resolver (DNS)|local DNS resolver]] 를 타고 [[Nameserver (DNS)|authoritative DNS nameserver]] 로 갈텐데 없는 도메인이기 때문에 cache 되지 않고 항상 nameserver 로 가게 된다
 - 이런식으로 nameserver 를 공격해 해당 nameserver 가 관리하는 domain 들을 전부 먹통으로 만드는 공격 방법이다.

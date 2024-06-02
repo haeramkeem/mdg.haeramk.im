@@ -23,7 +23,7 @@ date: 2024-05-28
 
 - 인증서가 로깅되고 모니터링 되어야 CA 가 이상한 짓을 못한다는게 기본 아이디어
 - 이 로깅 작업을 강제하는 것은 browser 의 몫이다:
-	- Browser 는 [[Transport Layer Security, TLS (TLS)|TLS handshake]] 과정에서 이 인증서가 로깅되었다는 증거를 server 에게 요청하는 식으로 인증서가 로깅되는 것을 강제한다.
+	- Browser 는 [[Transport Layer Security (TLS)|TLS handshake]] 과정에서 이 인증서가 로깅되었다는 증거를 server 에게 요청하는 식으로 인증서가 로깅되는 것을 강제한다.
 	- 이 증거를 *SCT* (*Signed Certificate Timestamp*) 라고 부르고, 이것은 인증서에 포함되어 위변조가 불가능하도록 구현된다.
 	- 물론 backward compatibility 때문에 모든 browser 가 이것을 요청하지는 않는다.
 

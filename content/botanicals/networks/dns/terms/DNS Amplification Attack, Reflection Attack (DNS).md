@@ -14,7 +14,7 @@ date: 2024-05-27
 
 ![[Pasted image 20240527021857.png]]
 
-- [[Domain Name System, DNS (DNS)|DNS]] 를 이용한 [[Denial of Service, DoS (Network)|DoS]] 공격의 일종이다.
+- [[Domain Name System (DNS)|DNS]] 를 이용한 [[Denial of Service, DoS (Network)|DoS]] 공격의 일종이다.
 - 우선 이름에서 힌트를 좀 얻어보자.
 	- *Amplification* - 즉, 트래픽을 "증폭" 시킨다는 것이다.
 		- 가령 query 에 `ANY` 와 같은 옵션을 넣어서 간단한 query 를 날려도 음청나게 많은 양의 response 가 오게 한다.

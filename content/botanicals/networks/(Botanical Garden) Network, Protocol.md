@@ -4,10 +4,6 @@
 
 ## 작물들
 
-### 스토리
-
-- [[RFC 읽어보기 - RFC3768, Virtual Router Redundancy Protocol, VRRP (Network)|RFC 읽어보기 - RFC3768, Virtual Router Redundancy Protocol, VRRP]]
-
 ### 용어들
 
 - [[Classless Inter-Domain Routing, CIDR (Network)|Classless Inter-Domain Routing (CIDR)]]
@@ -28,7 +24,7 @@
 
 ### BGP
 
-- [[Border Gateway Protocol, BGP (BGP)|Border Gateway Protocol (BGP)]]
+- [[Border Gateway Protocol (BGP)|Border Gateway Protocol (BGP)]]
 - 용어집
 	- [[Autonomous System, AS (BGP)|Autonomous System (AS)]]
 	- [[External Gateway Protocol, EGP (BGP)|External Gateway Protocol (EGP)]]
@@ -40,7 +36,7 @@
 
 ### DNS
 
-- [[Domain Name System, DNS (DNS)|Domain Name System, DNS]]
+- [[Domain Name System (DNS)|Domain Name System, DNS]]
 - 논문
 	- [[논문 - A comprehensive survey on DNS tunnel detection|(Draft) A comprehensive survey on DNS tunnel detection]]
 - 용어집
@@ -65,14 +61,20 @@
 
 ### HTTP
 
-- [[Hyper Text Transfer Protocol, HTTP (HTTP)|Hyper Text Transfer Protocol (HTTP)]]
+- [[Hyper Text Transfer Protocol (HTTP)|Hyper Text Transfer Protocol (HTTP)]]
 - 용어집
 	- [[Method (HTTP)|HTTP Method]]
 	- [[Representational State Transfer API, ReST (HTTP)|Representational State Transfer API (ReST)]]
 
 ### TLS
 
-- [[Transport Layer Security, TLS (TLS)]]
+- [[Transport Layer Security (TLS)]]
 - 용어집
 	- [[Downgrade Attack (TLS)|Downgrade Attack]]
 	- [[Forward Secrecy (TLS)|Forward Secrecy]]
+
+### VRRP
+
+- [[Virtual Router Redundancy Protocol (VRRP)|Virtual Router Redundancy Protocol (VRRP)]]
+- 용어집
+	- [[Split-brain Scenario (VRRP)|Split-brain Scenario]]

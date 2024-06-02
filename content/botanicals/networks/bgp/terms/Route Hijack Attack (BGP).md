@@ -10,7 +10,7 @@ date: 2024-05-24
 
 ## 개요
 
-- [[Border Gateway Protocol, BGP (BGP)|BGP]] 프로토콜의 문제점 중 하나.
+- [[Border Gateway Protocol (BGP)|BGP]] 프로토콜의 문제점 중 하나.
 
 ## 시나리오
 

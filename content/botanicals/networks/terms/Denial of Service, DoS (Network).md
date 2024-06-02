@@ -36,9 +36,9 @@ date: 2024-05-29
 - *Ping of Death* (*PoD*): ICMP ping 메세지의 최대 크기인 64K 로 ping 을 때리는 것
 - *CharGen attack*: CharGen 은 디버깅 등의 용도로 사용되는 것으로, port 19 로 제공되는 랜덤 문자열을 생성 프로토콜이다.
 	- 따라서 Reflection + Amplification attack 에 사용하기 딱 좋다.
-- *SSL/TLS attack*: [[Public Key Cryptography, PKC (PKC)|PKC]] 에서는 암호화보다 복호화가 더 많은 컴퓨팅 자원을 먹기에 [[Transport Layer Security, TLS (TLS)|TLS handshake]] 는 client 보다 server 가 더 많은 자원을 사용한다.
+- *SSL/TLS attack*: [[Public Key Cryptography, PKC (PKC)|PKC]] 에서는 암호화보다 복호화가 더 많은 컴퓨팅 자원을 먹기에 [[Transport Layer Security (TLS)|TLS handshake]] 는 client 보다 server 가 더 많은 자원을 사용한다.
 	- 따라서 client 가 TLS handshake (version negotiation) 을 계속 반복하면 server 의 CPU 혹은 MEM 자원이 고갈되게 된다.
-	- 물론 [[Transport Layer Security, TLS (TLS)#TLS 1.3, RFC8446|TLS 1.3]] 에서는 이러한 re-negotiation 이 막혀 사용하지 못하는 공격이다.
+	- 물론 [[Transport Layer Security (TLS)#TLS 1.3, RFC8446|TLS 1.3]] 에서는 이러한 re-negotiation 이 막혀 사용하지 못하는 공격이다.
 - *Bilion laughs attack*: server 의 XML 혹은 YAML 같은 parser 를 공격하는 것이다.
 
 ```XML

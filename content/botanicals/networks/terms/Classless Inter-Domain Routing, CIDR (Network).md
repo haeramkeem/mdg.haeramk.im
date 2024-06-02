@@ -23,7 +23,7 @@ date: 2024-05-26
     - Subnetting 이 아닌 Supernetting 이다
         - 즉, 쪼개는 개념이 아니라 합치는 개념이다
 - 그래서 CIDR 가 등장한 배경은 이렇다
-    - [[Border Gateway Protocol, BGP (BGP)|BGP]] 으로 [[Autonomous System, AS (BGP)|AS]] 간 통신을 할때 Border Gateway 는 자신이 속한 AS 의 라우팅 정보를 옆에놈한테 넘겨야되는데
+    - [[Border Gateway Protocol (BGP)|BGP]] 으로 [[Autonomous System, AS (BGP)|AS]] 간 통신을 할때 Border Gateway 는 자신이 속한 AS 의 라우팅 정보를 옆에놈한테 넘겨야되는데
     - AS 안에는 다양한 서브넷이 있으니까 이것을 모두 알려주기에는 오버헤드가 너무 크다 이말이야
     - 그래서 `IP/SUBNET_LEN` 의 형태로 서브넷들을 요약정리해서 옆에놈에게 알려주기 위한 것이 CIDR 이다
     - 이렇게 하면 AS 안의 다양한 서브넷들의 하나의 `IP/SUBNET_LEN` 문자열로 정리되기 때문에 통신의 오버헤드가 적어지고 좋더라

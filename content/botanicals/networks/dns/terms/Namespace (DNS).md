@@ -10,7 +10,7 @@ date: 2024-03-24
 
 ## Domain Tree
 
-- [[Domain Name System, DNS (DNS)|DNS]] 는 *Domain Namespace* 라는 이름의 트리 자료구조 형태를 가진다.
+- [[Domain Name System (DNS)|DNS]] 는 *Domain Namespace* 라는 이름의 트리 자료구조 형태를 가진다.
 
 ![[Pasted image 20240327210443.png]]
 > 출처: 교수님 감사합니다.
