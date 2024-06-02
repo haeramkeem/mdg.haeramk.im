@@ -22,7 +22,7 @@ date: 2024-05-25
 	- 대표적이긴 한데 사실 EGP 에는 BGP 하나밖에 없다.
 - BGP 에서 BG 는 *Border Gateway* 의 약자로 AS 외부와 통신할 수 있는 라우터를 의미한다.
 - 그렇기 때문에 BGP 는 BG 들 간의 경로 탐색 프로토콜이고 따라서 AS 간의 통신에만 관여하는 것이 아니고, AS 내부에서의 BG 간 통신도 BGP 의 일부이다.
-- TCP 위에서 작동한다고 한다.. FYI
+- 179/[[Transmission Control Protocol, TCP (Network)|TCP]] 위에서 작동한다고 한다.. FYI
 
 ## eBGP, iBGP
 
@@ -154,12 +154,13 @@ date: 2024-05-25
 	- 다만 A 와 B 는 직접적으로 연결되어 있지는 않고, 라우터 C 에 의해 간접적으로 연결되어 있다.
 - 그럼 AS 690 에서 35/8 로 보내고자 한다면, D 에서 A 로 보내게 될 것이고, 그럼 A 는 C 로 보내게 될 것이다.
 - 근데 문제는 C 는 이 35/8 에 대한 경로는 모른다는 것이다
+
 ## Best path
 
 - BGP 에서 Best path 를 결정하는 것은 다음과 같은 순서대로 이루어진다
-- Local preference 가 높은 것
-- AS-path 가 짧은 것
-- Origin type 이 작은 것
-- MED 가 작은 것
-- Next hop 으로 가기 위한 IGP 의 비용이 작은 것
-- Next hop 의 router id 가 작은 것
+	- Local preference 가 높은 것
+	- AS-path 가 짧은 것
+	- Origin type 이 작은 것
+	- MED 가 작은 것
+	- Next hop 으로 가기 위한 IGP 의 비용이 작은 것
+	- Next hop 의 router id 가 작은 것
