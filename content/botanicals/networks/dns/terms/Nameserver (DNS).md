@@ -3,14 +3,15 @@ tags:
   - 용어집
   - Network
   - DNS
+date: 2024-03-24
 ---
-> [!info] 참고한 것
-> - 컴퓨터 네트워크 특강 (권태경 교수님 '24H1, SNU CSE)
+> [!info]- 참고한 것들
+> - [[6. DNS#DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 > - [불타는 구름](https://www.cloudflare.com/learning/dns/dns-server-types/)
 
 ## 이게 뭐임
 
-- [[Domain Name System, DNS (DNS)|DNS]] name 와 관련된 작업을 수행하는 server 이다.
+- [[Domain Name System (DNS)|DNS]] name 와 관련된 작업을 수행하는 server 이다.
 	- 조금 더 구체적으로는, 어떤 [[Zone (DNS)|Zone]] 의 domain 에 대한 record 들을 저장하고, 이것에 대한 query 가 들어왔을 때 응답하는 등의 작업을 하는 server 를 말한다.
 - [이 사이트](https://www.dynu.com/en-US/NetworkTools/Delegation) 에 가서 도메인을 입력하면 해당 도메인에 대한 zone 들과 해당 zone 의 nameserver 를 한눈에 볼 수 있다.
 	- [MDG](https://mdg.haeramk.im) 의 경우에는 다음과 같다...

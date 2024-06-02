@@ -11,7 +11,7 @@ date: 2024-05-26
 
 ## Resource Record?
 
-- 간단하게 말하면 [[Domain Name System, DNS (DNS)|DNS]] 가 일종의 Key-value DB 니까 DB entry 정도라고 생각하면 된다.
+- 간단하게 말하면 [[Domain Name System (DNS)|DNS]] 가 일종의 Key-value DB 니까 DB entry 정도라고 생각하면 된다.
 
 ## Structure
 

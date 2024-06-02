@@ -2,8 +2,9 @@
 tags:
   - 용어집
   - Network
+date: 2024-03-24
 ---
-> [!info] 참고한 것:
+> [!info]- 참고한 것들
 > - [어떤 회사 블로그](https://www.catchpoint.com/dns-monitoring/dns-delegation)
 
 ## 이게뭐임?

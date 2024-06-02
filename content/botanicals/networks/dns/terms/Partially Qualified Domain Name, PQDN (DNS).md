@@ -3,8 +3,9 @@ tags:
   - 용어집
   - Network
   - DNS
+date: 2024-03-24
 ---
-> [!info] 참고한 것
+> [!info]- 참고한 것들
 > - [[11. Application Layer, DNS#Domain Name Space|컴퓨터 네트워크 (김상하 교수님 '21H1, CNU CSE)]]
 
 ## 용어 뜻만 간단하게 알고 지나가자

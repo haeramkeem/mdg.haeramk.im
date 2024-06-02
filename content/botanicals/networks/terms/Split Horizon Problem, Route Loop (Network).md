@@ -21,7 +21,7 @@ date: 2024-05-26
 
 ## 실제 프로토콜에서는
 
-- Split Horizon 이 지켜져야 하는 프로토콜은 대표적으로 [[Routing Information Protocol, RIP (Network)|RIP]]/EIGRP 와 [[Border Gateway Protocol, BGP (BGP)|BGP]] 가 있는데 적용방식은 좀 다르다
+- Split Horizon 이 지켜져야 하는 프로토콜은 대표적으로 [[Routing Information Protocol, RIP (Network)|RIP]]/EIGRP 와 [[Border Gateway Protocol (BGP)|BGP]] 가 있는데 적용방식은 좀 다르다
 - RIP/EIGRP 의 경우에는 라우팅 정보가 수신된 인터페이스로는 해당 정보를 송신하지 않는 식으로 Split Horizon 을 지킨다
 - BGP 의 경우에는 라우팅 정보의 출처를 좀 더 넓게 잡는다
     - RIP/EIGRP 의 경우에는 라우팅 정보의 출처를 수신된 인터페이스로 한정해서 그쪽으로는 송신하지 않지만

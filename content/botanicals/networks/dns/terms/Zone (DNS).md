@@ -5,7 +5,7 @@ tags:
   - DNS
 date: 2024-03-25
 ---
-> [!info]- 참고한 것
+> [!info]- 참고한 것들
 > - [[6. DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 > - [네트워크에서 빼놓을 수 없는 'Under attack?' 회사 블로그](https://www.cloudflare.com/learning/dns/glossary/dns-zone/)
 

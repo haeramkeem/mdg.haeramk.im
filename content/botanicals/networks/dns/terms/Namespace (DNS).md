@@ -3,13 +3,14 @@ tags:
   - 용어집
   - Network
   - DNS
+date: 2024-03-24
 ---
-> [!info] 참고한 것
-> - 컴퓨터 네트워크 특강 (권태경 교수님 '24H1, SNU CSE)
+> [!info]- 참고한 것들
+> - [[6. DNS#DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
 
 ## Domain Tree
 
-- [[Domain Name System, DNS (DNS)|DNS]] 는 *Domain Namespace* 라는 이름의 트리 자료구조 형태를 가진다.
+- [[Domain Name System (DNS)|DNS]] 는 *Domain Namespace* 라는 이름의 트리 자료구조 형태를 가진다.
 
 ![[Pasted image 20240327210443.png]]
 > 출처: 교수님 감사합니다.
