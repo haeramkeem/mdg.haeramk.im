@@ -111,3 +111,12 @@ date: 2024-05-29
 - 이때 attack 가 이 패킷을 캡쳐한 뒤 server 에 동일하게 보내면, server 는 이것을 attacker 가 보냈다는 것을 알 수가 없다.
 - 물론 attacker 는 패킷이 암호화되어 있기 때문에 어떤 내용인지는 알 수 없지만, 기존에는 만료된 연결이기에 server 가 거부할 수 있었다면 0-RTT 의 경우에는 불가능해지는 것.
 - 따라서 HTTP `POST` 와 같은 server 의 상태를 바꾸는 요청은 0-RTT 로 보내지 않고, `GET` 같은 요청만을 0-RTT 로 보낸다고 한다.
+
+### Cipher Suites
+
+- TLS 1.3 에서는 다음과 같은 Cipher Suite 를 지원한다고 한다.
+	- `TLS_AES_256_GCM_SHA384`
+	- `TLS_CHACHA20_POLY1305_SHA256`
+	- `TLS_AES_128_GCM_SHA256`
+	- `TLS_AES_128_CCM_8_SHA256`
+	- `TLS_AES_128_CCM_SHA256`
