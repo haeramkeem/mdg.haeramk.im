@@ -4,6 +4,10 @@
 
 ## 작물들
 
+### 스토리
+
+- [[RFC 읽어보기 - RFC3768, Virtual Router Redundancy Protocol, VRRP (Network)|RFC 읽어보기 - RFC3768, Virtual Router Redundancy Protocol, VRRP]]
+
 ### 용어들
 
 - [[Classless Inter-Domain Routing, CIDR (Network)|Classless Inter-Domain Routing (CIDR)]]
