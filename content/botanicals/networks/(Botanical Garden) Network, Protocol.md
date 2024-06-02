@@ -59,6 +59,13 @@
 	- [[Zone (DNS)|Zone]]
 	- [[Zone Delegation (DNS)|Zone Delegation]]
 
+### HTTP
+
+- [[Hyper Text Transfer Protocol, HTTP (HTTP)|Hyper Text Transfer Protocol (HTTP)]]
+- 용어집
+	- [[Method (HTTP)|HTTP Method]]
+	- [[Representational State Transfer API, ReST (HTTP)|Representational State Transfer API (ReST)]]
+
 ### TLS
 
 - [[Transport Layer Security, TLS (TLS)]]

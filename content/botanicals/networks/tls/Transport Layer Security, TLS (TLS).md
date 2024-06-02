@@ -20,6 +20,25 @@ date: 2024-05-29
 	- Alert Protocol: 에러 핸들링
 	- Change Cipher Spec Protocol: Handshake 이후 비대칭키 -> 대칭키 로 전환되는 과정
 
+## 과정 (overview)
+
+- TCP 3-Way Handshake 가 종료되어 Connection established 된 이후에 실행된다.
+1. _Client Hello_ → 클라이언트가 TLS Handshake를 개시하는 단계
+    - 클라이언트가 사용할 수 있는 TLS 버전과 암호 알고리즘 + _Client Random_ 을 송신한다.
+2. _Server Hello_ → 서버가 Client Hello 에 응답하며 인증서를 제공하는 단계
+    - 서버는 Certificate 와 서버가 결정한 (클라이언트가 보낸 알고리즘 중에서 서버가 사용할 수 있고 앞으로의 통신에서 사용할) 암호 알고리즘 + _Server Random_ 을 송신한다.
+3. Authentication → 클라이언트가 수신한 Certificate 를 검증하는 단계
+    - Certificate 를 인증업체에 보내 신뢰할 수 있는 서버인지 확인하고, RSA Pubkey 를 받는다.
+4. The premaster secret → 클라이언트가 서버에게 RSA Pubkey 이용한 문제를 내는 단계
+    - 클라이언트는 _Premaster secret(예비 마스터 암호)_ 를 생성하고 Authenticate 를 통해 알아낸 RSA Pubkey 를 통해 암호화하여 서버한테 보낸다.
+    - 해당 Pubkey 에 대한 Privkey 를 서버가 갖고 있는지 (그걸로 복호화할 수 있는지) 시험하는 것
+5. Session key creation → 클라이언트와 서버가 세션키(대칭키이다)를 생성하는 단계
+    - 세션키는 _Client Random_, _Server Random_, _Premaster secret_ 세가지 값을 이용해 생성된다.
+    - 당연히 서버는 _Premaster secret_ 을 얻기 위해 암호화된 값을 복호화해야 한다.
+6. _Client ready_ → 클라이언트는 _Finished_ 메세지를 세션키로 암호화해서 송신한다.
+7. _Server ready_ → 서버 또한 _Finished_ 메세지를 세션키로 암호화해서 송신한다.
+8. Handshake 가 완료되고 이후의 통신은 전부 세션키로 암호화되어 수행된다.
+
 ## 과정 (TLS 1.2 기준)
 
 ![[Pasted image 20240529015625.png]]
