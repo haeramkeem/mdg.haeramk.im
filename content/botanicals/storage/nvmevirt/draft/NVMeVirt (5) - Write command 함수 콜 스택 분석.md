@@ -135,4 +135,5 @@ NVMeVirt: __le16  appmask;      0000
 - Page: 4Ki (4096byte)
 - LBA: 512byte
 - rmap: reverse maptable
-- nv_parts: namespace partitions
+- nv_parts: namespace partitions -> partition 당 ftl instance 가 하나씩 생기나.. 뭔지 알 수 없어서 1로 변경
+- 
