@@ -77,4 +77,4 @@ gcc -finstrument-functions -ldl -rdynamic main.c
 
 - 이 `dlfcn.h` 는 user space 에서만 사용할 수 있다.
 - Kernel 이나 module 을 개발할 때 넣으면 컴파일할 때 이 헤더파일을 찾을 수 없다는 똥을 던져준다.
-	- 참고에 참고로, 마찬가지의 이유로 진자루 많이 쓰는 `stdio.h` 도 kernel 에서는 사용할 수 없다. 대신 `linux/kernel.h` 의 `printk` 를 사용하면 커널 메세지로 나간다.
+	- 참고에 참고로, 마찬가지의 이유로 진자루 많이 쓰는 `stdio.h` 도 kernel 에서는 사용할 수 없다. 대신 `linux/kernel.h` 의 `printk` 를 사용해서 커널 메세지로 내보낼 수 있다.
