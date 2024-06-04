@@ -6,6 +6,13 @@ tags:
   - Storage
 date: 2024-04-24
 ---
+> [!info]- 참고한 것들
+> - [논문 (FAST '23)](https://www.usenix.org/conference/fast23/presentation/kim-sang-hoon)
+> - [GItHub](https://github.com/snu-csl/nvmevirt)
+> - [유투브 저자직강](https://youtu.be/eV7vQyg46zc?si=USiYITI09Sdz01YZ)
+
+> [!tip] [[NVMeVirt (2) - S.M.A.R.T log 기능 디버깅 기록|이전 글]]
+
 ## 개요
 
 - 어떤 NVMe command 를 날렸을 때, 어떤 함수들이 관여되는지 확인하기 위해 모든 디버그 메세지를 키고 함수 진입 및 탈출마다 커널메세지를 남기도록 설정해 보자.
@@ -64,35 +71,35 @@ date: 2024-04-24
 
 ## 함수 진입 / 탈출 문구 출력
 
-### 결론부터 보기
-
-> [!fail] #draft 최신화 안되어 있음
-
-#### Enter log
-
-- 함수 진입 logging 할 때는 모든 함수 시작에 `NVMEV_DEBUG` 메크로를 끼워넣는 것으로 해결했다.
-- 다음의 스크립트로 끼워넣으면 된다.
-
-```bash
-for c in $(find . -name '*.c'); do
-perl -0777 -i -pe 's/([a-z].+) ([a-z_]+)\((.+)\)\n[{]/$1 $2($3)\n{ NVMEV_DEBUG("enter %p", &$2);/g' $c
-done
-```
-
-#### Exit log
-
-- 함수 종료 logging 을 위해서는 [[C - 함수 진입, 탈출 메세지 출력하기|Instrument Function]] 을 사용하였다.
+- 함수 진입/종료 logging 을 위해서 [[C - 함수 진입, 탈출 메세지 출력하기|Instrument Function]] 을 사용하였다.
+- 근데 user mode 에서는 [[C - 함수 진입, 탈출 메세지 출력하기|dlfnc.h]] 를 사용할 수 있지만 kernel mode 에서는 이것을 사용할 수 없기 때문에 고민고민하던중
+	- `printk()` 의 formatting 중에 function pointer 를 function name 으로 [[C - printk format 정리|바꿔주는 것]] (`%ps`) 이 있길래 사용해 보니 잘 돼서 이걸 사용.
+- 추가적으로 보기 편하게 하려고 함수 진입/탈출 인덴트도 처리했다.
+	- ...근데 multi-thread 로 돌아가서 좀 이상하게 나오긴 함
 - `debug.c` 파일 생성
 
 ```c
 #include "nvmev.h"
 
-__attribute__((no_instrument_function))
-void __cyg_profile_func_enter(void *this_fn, void *call_site) {}
+void __cyg_profile_func_enter(void *this_fn, void *call_site) __attribute__((no_instrument_function));
+void __cyg_profile_func_exit(void *this_fn, void *call_site) __attribute__((no_instrument_function));
 
-__attribute__((no_instrument_function))
+int lv = 0;
+
+void __cyg_profile_func_enter(void *this_fn, void *call_site) {
+  lv++;
+  char buffer[32];
+  for (int i = 0; i < lv; i++)
+    strcat(buffer, " ");
+  printk(KERN_WARNING "%s: %s +enter{func: '%ps'}", NVMEV_DRV_NAME, buffer, this_fn);
+}
+
 void __cyg_profile_func_exit(void *this_fn, void *call_site) {
-	printk(KERN_WARNING "%s exit: {pointer: '%p'}", NVMEV_DRV_NAME, this_fn);
+  char buffer[32];
+  for (int i = 0; i < lv; i++)
+    strcat(buffer, " ");
+  printk(KERN_WARNING "%s: %s -exit{func: '%ps'}", NVMEV_DRV_NAME, buffer, this_fn);
+  lv--;
 }
 ```
 
@@ -115,11 +122,12 @@ nvmev-y += debug.o
 	- `main.c`: `nvmev_proc_dbs`
 	- `pci.c`: `nvmev_signal_irq`
 	- `pci.c`: `nvmev_proc_bars`
-- 이놈들에 대해서는 진입 로그용 `NVMEV_DEBUG` 를 전부 주석처리하고, `__attribute__((no_instrument_function))` 를 전부 달아 탈출 로그도 비활성화하면 된다.
+- 이놈들에 대해서는 `__attribute__((no_instrument_function))` 를 전부 달아 로그를 비활성화하면 된다.
 - 다만, loop 의 영향을 최소화 하고 최대한 많은 로그를 찍게 하기 위해 제외된 함수들에 대해서는 다음과 같은 처리를 하였다.
 	- 세 함수(`__get_io_worker`, `__get_wallclock`, `nvmev_signal_irq`) 들은 Infinite loop 이외에도 사용되고 있어 loop 내에서만 사용할 용도로 `_muted` wrapper function 을 추가적으로 정의했다.
 	- 두 함수(`nvmev_proc_dbs`, `nvmev_proc_bars`) 들은 한번밖에 사용되지 않기 때문에 함수 내부의 `if` 문에 걸리는 부분에만 logging 을 하도록 했다.
-
-```bash
-grep enter: ~/Downloads/nvme-write.log | awk '{print $7":"$9}' | tr -d "'" | tr -d ":" | tr -d "}" | sort -u > ~/Downloads/nvme-write.map
-```
+- 추가적으로... 얘네들도 module init 할때 너무 많은 로그를 찍어서 로깅 비활성화시킴
+	- `ssd_init_nand_page`
+	- `ssd_remove_nand_page`
+	- `ssd_init_nand_blk`
+	- `ssd_remove_nand_blk`

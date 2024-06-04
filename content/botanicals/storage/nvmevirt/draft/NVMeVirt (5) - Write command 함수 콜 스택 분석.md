@@ -136,4 +136,24 @@ NVMeVirt: __le16  appmask;      0000
 - LBA: 512byte
 - rmap: reverse maptable
 - nv_parts: namespace partitions -> partition 당 ftl instance 가 하나씩 생기나.. 뭔지 알 수 없어서 1로 변경
-- 
+- `__get_wp` reversetree
+	- `prepare_write_pointer`
+		- `conv_init_ftl` -> 0000
+			- `conv_init_namespace` ==> DONE!
+	- `advance_write_pointer`
+		- `gc_write_page` -> 0002
+			- `clean_one_block` -> EOT
+			- `clean_one_flashpg`
+				- `do_gc`
+					- `foreground_gc`
+						- `check_and_refill_write_credit`
+							- `conv_write` -> 0001
+		- `conv_write` -> 0001
+			- `conv_proc_nvme_io_cmd`
+	- `get_new_page`
+		- `gc_write_page` -> 0002
+		- `conv_write` -> 0001
+- `init_lines`
+	- `conv_init_ftl` -> 0000
+- `BLKS_PRE_PLN` == Line count == `8192`
+- `(cmd->rw.dsmgmt) >> 16` == RUH ID
