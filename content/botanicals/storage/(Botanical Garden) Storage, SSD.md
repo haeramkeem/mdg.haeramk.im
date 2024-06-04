@@ -44,3 +44,7 @@ date: 2024-04-23
 ### [[논문 - NVMeVirt - A Versatile Software-defined Virtual NVMe Device|NVMeVirt]]
 
 - [[NVMeVirt (1) - 설치 기록|1. 설치 기록]]
+- [[NVMeVirt (2) - S.M.A.R.T log 기능 디버깅 기록|2. S.M.A.R.T log 기능 디버깅 기록]]
+- [[NVMeVIrt (3) - 디버깅 메세지 출력 설정 기록|3. 디버깅 메세지 출력 설정 기록]]
+- [[NVMeVirt (4) - FDP 디버깅 기록|4. FDP 디버깅 기록]]
+- [[NVMeVirt (5) - Write command 함수 콜 스택 분석|5. Write command 함수 콜 스택 분석]]
