@@ -15,6 +15,9 @@ date: 2024-06-04
 
 > [!warning] 이걸 어떻게 정리해야 할지 몰라 끄적이는 메모글입니다.
 
+> [!tip]- Code ref
+> - [깃허브](https://github.com/aos24s-cse-snu-ac-kr/nvmevirt/pull/1)
+
 ## 메모,,
 
 - NVMeVirt 전체 구조
@@ -196,4 +199,3 @@ NVMeVirt: __le16  appmask;      0000
 	- `(#)`: Write 시에 호출됨
 - 추가적으로, 각 line 들을 초기화하는 것은 `init_lines` 에서 담당한다.
 	- ...는 `conv_init_ftl` 에서 호출됨
-
