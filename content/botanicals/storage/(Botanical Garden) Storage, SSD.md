@@ -41,7 +41,7 @@ date: 2024-04-23
 
 - [[Namespace (NVMe)|Namespace]]
 
-### [[논문 - NVMeVirt - A Versatile Software-defined Virtual NVMe Device|NVMeVirt]]
+### NVMeVirt
 
 - [[NVMeVirt (1) - 설치 기록|1. 설치 기록]]
 - [[NVMeVirt (2) - S.M.A.R.T log 기능 디버깅 기록|2. S.M.A.R.T log 기능 디버깅 기록]]
