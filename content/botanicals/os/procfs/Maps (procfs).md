@@ -15,7 +15,7 @@ date: 2024-06-07
 	- 이게 뭔소린지 예를 들어보자.
 	- 만약 주인장이 shell 에서 `cat /proc/self/maps` 를 실행하면, 일단 shell 은 process 를 하나 fork 하고 `cat` 을 exec 하는 식으로 프로세스를 실행시킬 것이야.
 	- 만약에 이 생성된 프로세스의 PID 가 `500` 라면, `/proc/self/maps` 는 `/proc/500/maps` 로 바뀐다.
-	- 그리고 이 `PID:500 cat` 프로세스에 대한 virtual memory mapping 상태를 보여주게 된다.
+	- 그리고 이 `PID:500 (cat)` 프로세스에 대한 virtual memory mapping 상태를 보여주게 된다.
 - 직접 확인해 보자.
 
 ```bash
