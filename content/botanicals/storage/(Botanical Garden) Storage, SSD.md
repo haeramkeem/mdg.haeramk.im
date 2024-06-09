@@ -21,7 +21,7 @@ date: 2024-04-23
 - [[Logical Block Addressing, LBA (Storage)|Logical Block Addressing, LBA]]
 - [[Multi Level Cell, MLC (Storage)|Multi Level Cell, MLC]]
 - [[Multi-stream SSD (Storage)|Multi-stream SSD]]
-- [[Flash Memory, SSD (Storage)|NAND Flash Memory]]
+- [[NAND-based Flash Memory (Storage)|NAND Flash Memory]]
 - [[NOR-based Flash Memory (Storage)|NOR Flash Memory]]
 - [[Open Channel SSD, OCSSD (Storage)|Open Channel SSD, OCSSD]]
 - [[Over Provisioning, OP (Storage)|Over Provisioning, OP]]
