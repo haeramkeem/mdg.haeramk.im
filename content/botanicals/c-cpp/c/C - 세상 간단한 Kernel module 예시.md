@@ -14,20 +14,20 @@ date: 2024-05-16
 #include <linux/kernel.h>
 
 void print_hello(void) {
-  printk(KERN_INFO "Hello, kernel!\n");
+	printk(KERN_INFO "Hello, kernel!\n");
 }
 
 void print_goodbye(void) {
-  printk(KERN_INFO "Goodbye, kernel!\n");
+	printk(KERN_INFO "Goodbye, kernel!\n");
 }
 
 static int __init hello_init(void) {
-  print_hello();
-  return 0;
+	print_hello();
+	return 0;
 }
 
 static void __exit hello_exit(void) {
-  print_goodbye();
+	print_goodbye();
 }
 
 MODULE_LICENSE("GPL");

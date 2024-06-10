@@ -18,15 +18,15 @@ date: 2024-05-22
 #### Background: de-facto standards
 
 - De-facto 가 된 아키텍처는 다음과 같은 키워드로 정리할 수 있다. 이미 다른 문서에서도 여러번 등장했을 테니 간단하게 정리만 해보자.
-- [[Memory Hierarchy (memory)|Memory hierarchy]]:
+- [[Memory Hierarchy (Memory)|Memory hierarchy]]:
 	- 저장 공간은 속도와 크기 간의 trade-off 가 있다.
 	- 즉, 속도가 빠르면 그만큼 비싸고, 따라서 크기를 줄일 수 밖에 없는 것.
 	- 이러한 상황 속에서, 거의 모든 modern computer 는 한 종류의 저장공간만을 사용하는 것이 아닌 빠르되 크기는 작은 저장장치 (즉, 레지스터 같은) 를 상위계층에 두고 느리지만 크기가 큰 저장장치 (즉, 하드디스크같은) 를 하위계층에 두는 등 계층적으로 전체적인 저장공간을 구성하게 된다.
 	- 여기서 계층이 높다는 것은 CPU 와의 거리라고 생각하면 되니라
-- [[Paging (memory)|Uniform page]]:
+- [[Paging (Memory)|Uniform page]]:
 	- 가변 사이즈 정책을 사용하고 [[External Fragment (OS)|External fragment]] 를 유발하는 segment 와 고정 사이즈 정책을 사용하고 [[Internal Fragment (OS)|internal fragment]] 를 유발하는 page 간의 경쟁에서 이긴 것은 page 이다.
 	- 왜 segment 가 아닌 page 기법이 채택되었는지는 본 논문에서도 언급되지 않고 나중에 다른 문서에서 따로 한번 정리를 할 것이기에 여기서는 패스
-- [[Demand Paging (memory)|Demand paging]]:
+- [[Demand Paging (Memory)|Demand paging]]:
 	- Demand paging 은 "page 가 요청되는 시점에, 이미 올라와있지 않은 놈만 상위계층으로 올리는 것" 이다.
 	- 그리고 보통 하나의 page 만 올리는 것이 아닌 "빠른 시일 내로 요청될 것 같은 여러 page" 들을 같이 올리게 된다 (이것이 prefetching 이다.)
 	- 따라서 저장장치의 여유공간이 빠르게 없어지게 되는데, 공간이 부족한 경우에 새로운 page 를 올리기 위해서는 어떤 page 는 하위계층으로 쫒겨나야 한다.

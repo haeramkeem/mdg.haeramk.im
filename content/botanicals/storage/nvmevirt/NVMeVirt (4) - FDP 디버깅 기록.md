@@ -9,9 +9,7 @@ date: 2024-04-24
 > [!info]- 참고한 것들
 > - [창민형 깃허브 메모](https://github.com/salutepop/Notes/blob/master/PM9D3/enable_fdp.md)
 
-> [!tip] [[NVMeVirt (1) - 설치 기록|이전 글]]
-
-> [!fail] 이 글은 #draft 입니다.
+> [!tip] [[NVMeVIrt (3) - 디버깅 메세지 출력 설정 기록|이전 글]]
 
 ## [[Flexible Data Placement, FDP (Storage)|FDP]] 정보 조회
 
@@ -114,20 +112,17 @@ sudo nvme fdp status /dev/nvme*n*
 
 ## 입출력
 
-![[Pasted image 20240425213142.png]]
+- `DTYPE: 2` 이면 `DSPEC` 필드에 FDP 값이 들어간다는 소리이다.
+
+![[Pasted image 20240425214442.png]]
 
 ![[Pasted image 20240425212241.png]]
 > DTYPE - TP 4146
 
-![[Pasted image 20240425213157.png]]
-
-![[Pasted image 20240425214442.png]]
-
-- `DTYPE: 2` (FDP), `DSPEC: 0` (RUH 0)
+- 따라서 `DTYPE: 2` (FDP) 로 설정해주고, `DSPEC: 0` (RUH 0) 와 같은 식으로 RUH 를 명시해주면 된다.
+- Write command 예시
 
 ```bash
 echo 'bhc vs kfc' \
-	| sudo nvme write $(fdp) -z 512 -T 2 -S 0 \
-	&& sudo nvme fdp status $(fdp) \
-	| head -n 16
+	| sudo nvme write $(fdp) -z 512 -T 2 -S 0
 ```
