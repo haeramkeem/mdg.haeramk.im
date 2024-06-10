@@ -248,7 +248,7 @@ tags:
 
 - Segment summary information 으로 live data 를 선별해 내는 과정은 inode map 에 *version number* 필드를 추가하는 것으로 최적화가 가능하다.
 - 해당 필드의 값은 파일이 삭제되거나 파일 사이즈가 0이 되면 증가한다.
-	- 라고 저자는 말하고 있지만 일단은 그냥 말의 의미에 충실하게 파일 데이터가 변경되면 version number 도 올라가는 것으로 생각하자.
+	- 왜인지는... #draft
 - File number 와 version number 를 합친 것을 *UID (Unique ID)* 라고 하고, 이놈을 이용해 liva data 를 더욱 빠르게 선별해 낼 수 있다.
 	- 일단 segment summary information 에 file number 가 아닌 UID 와 block number 를 매칭시켜 놓는다면
 	- 해당 block 이 어떤 file 의 어떤 version 에 mapping 되어 있는지 저장되어 있는 셈이다.
