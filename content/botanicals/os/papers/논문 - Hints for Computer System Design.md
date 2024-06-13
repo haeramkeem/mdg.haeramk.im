@@ -35,6 +35,39 @@ tags:
 - 두 줄로 연결되어 있는 건 같은 슬로건
 - 한줄은 두 슬로건이 연관이 있음
 
+#### Slogan quick view
+
+- Functionality
+	- Separate normal and worst case: 정상 상황과 비정상 상황을 하나의 mechanism 으로 해결하려 하지 말고 분리해서 mechanism 과 policy 를 수립해라
+	- Do one thing well: 인터페이스는 하나의 기능만 정확하게 작동하도록 설계하고 구현해라
+		- Don't generalize: 모든 기능이 담긴 일반화를 하지 말아라
+		- Get it right: 정확하게 작동하게 해라
+	- Don't hide power: HW 적으로 더 강력한 기능을 제공해주는데도 불구하고 느리고 일반적인 interface 만 제공해서 사용자가 이러한 기능을 사용하지 못하게 하는 것을 지양해라
+	- Use procedure arguements: 오름차순정렬, 내림차순정렬 두 기능이 아닌 정렬 기능 하나에 argument 로 오름차순, 내림차순을 정도록 interface 를 설계해라
+	- Leave it to the client: data 를 fetch 하는 함수에 해당 데이터를 어떻게 처리할지에 대한 callback 함수를 인자로 받는 것처럼 하나의 함수에서 너무 많은 기능을 제공해 주기 보다는 일부 기능은 programmable 하게 하여 사용자가 직접 하도록 위임하는 것
+	- Keep basic interfaces stable: 인터페이스를 되도록이면 바꾸지 말라
+	- Keep a place to stand: compatibility 를 고려해라
+	- Plan to throw one away: Revertability (개발의 시작단계에서, 현재 버전은 완전히 폐기될 수도 있다는 것을 감안해라 - 즉, 약간 어차피 폐기될텐데 의 마음가짐으로 좀 더 실험적이고 도전적으로 접근해라는 의미)
+	- Keep secrets: Abstraction (노출될 필요가 없는 내부 구현과 같은 것들은 숨겨라)
+	- Use a good idea again: Reusability (좋은 algorithm 을 이미 구현해 놓았으면 그것을 유사한 상황에서도 재사용해라)
+	- Divide and conquer: 하나의 문제를 해결하기 쉬운 작은 문제들로 쪼개서 합치는 식으로 해결하는 것
+- Speed
+	- Safety first: 아무리 빠르다 하더라도, 그것이 안전하지 않다면 (뭐 error handling 이 안되어있다던지) 제공해서는 안된다.
+	- Shed load: load balancing
+	- End-to-end: 네트워크에서 L2 와 L4 를 생각하면 된다: eth 에서 hop-to-hop error checking 을 하긴 하지만, UDP 와 같이 e2e error checking 을 하지 않으면 문제가 생길 수 있다.
+	- Make it fast: 빠르게 작동하도록 구현할 수 있다면 최대한 빠르게 해라
+	- Split resources: storage network 를 별도로 분리하는 것과 같은 원리다 = 자원을 분리해서 서로간의 영향을 줄여라
+	- Static analysis: 코드 정적 분석을 해서 발생 가능한 에러를 미리 처리해라
+	- Dynamic translation: higher level language 를 runtime 에 low level language 로 번역해서 실 사용환경에 따라 다르게 최적화될 수 있게 해라
+	- Cache answers: 복잡한 계산을 요하는 값이 여러번 사용된다면, 매번 계산하지 말고 캐싱해놔라
+	- Use hints: 이건 multi-stream SSD 나 FDP 같은거 생각하면 된다. SSD 에게 추가적인 정보 (hint) 를 제공해 줘서 SSD 가 이것을 이용해 성능을 향상시킬 수 있게 하는 것.
+	- Use brute force: 빠르지만 엄청 복잡한 알고리즘보다 brute force 를 돌려 다소 느리지만 이해하기 쉽고 구현이 간단한 것을 쓰는 것이 더 좋을 때도 있다.
+	- Compute in background: 말그대로 - 급하지 않고 시간 소모가 많은 일은 background 로 돌려 급한 일이 요청되었을 때 그제서야 이것을 처리하느라 지연되지 않게 해라
+	- Batch processing: 독립적인 작은 작업들을 하나하나 처리하지 말고 모아놓았다가 한번에 처리해라
+- Fault-tolerance
+	- Log updates: journaling 이다 - 로깅해놓았다가 crash 때 이것으로 복구해라
+	- Make actions atomic: 어떤 작업이 atomic 하지 않으면 중간에 crash 날 경우 작업의 중간단계 상태로 계속 머물러 있게 되고, 이것은 시스템의 일관성을 해친다.
+
 ## 2. Functionality
 
 - 당연하게도 시스템은 올바른 기능을 제공해야 하는데

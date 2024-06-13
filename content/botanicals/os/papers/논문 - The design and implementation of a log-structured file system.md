@@ -628,41 +628,14 @@ tags:
 
 > [!danger] Draft 입니다.
 
-> [!tip]- Quiz
-> - Disk traffic will become more and more dominated by (writes)
-> - Too many (small access)
-> - The disk traffic is dominated by (synchronous) metadata writes
-> - Write all the changes to disk in a sequential structure called the (log)
-> - The sequential nature of logs permits much faster (crash recovery)
-> - The locations of the inode map blocks are kept in a fixed (checkpoint region) on disk
-> - The log can be (~~rewritable~~) through clean segments
-> - The transfer time to read/write a whole segment should be much greater than the cost of a (seek to the begining of the segment)
-> - Live if the block is still pointed by (direct/indirect block in inode)
-> - Not live if the file's version number (in the segment summary block) does not match the version number stored in (inode map)
-> - Choose the (least utilized) segments
-> - Choose the segment with the (highest) ratio of benefit to cost
-> - Free space in a (cold) segment is more valuable than free space in a (hot) segment
-> - Produces the (bimodal) distribution of segments
-> - The addresses of all the blocks in (inode map) and (segment usage table)
-> - Adjust the utilizations in the (segment usage table)
-> - (directory operation log) for each directory change
-
+---
 [^active-portion]: 이게 정확히 어떤 것을 의미하는 지는 잘 모르겠음.
-
 [^log-block-pointer]: 뭔소린지 모르겠다.
-
 [^write-large-file-on-thread]: 이것도 모르겠다. Live data block 을 skip 한다면 결국엔 상관없는 것 아닌가.
-
 [^long-lived-data]: 본문에서는 long-lived data 에서의 문제에 대해 다음과 같은 예시로 설명하지만, 뭔소린지 모르겠다: "In the simplest case where the log works circularly across the disk and live data is copied back into the log, all of the longlived files will have to be copied in every pass of the log across the disk." 
-
 [^dirty-block-cache]: 어떤 상황인지 잘 감이 안오긴 한다 그쵸?
-
 [^time-byte]: 어느샌가 time 에서 byte 로 단위가 바꿔었는데 그냥 그런갑다 하자.
-
 [^cold-start]: 이게 뭔지는 잘 모르겠음. Disk capacity utilization 을 바꿨을 때 cold start 를 하지 않는다는 것인가?
-
 [^fraction-of-segments]: 세로축 "Fraction of segments" 뭔지 모르겠음.
-
 [^simulation-result-inspection]: 많은 cold segment 가 threshold 근처에 잔류하는 것과 write cost 가 올라가는 것에 대해 대강 감은 오지만 아직 명확하게 어떤 연관성이 있는지는 와닿지 않는다.
-
 [^reread-sequential]: 왜 seek 이 들어가지?
