@@ -519,7 +519,8 @@ tags:
 	- 변경된 directory entry 에 해당하는 파일의 inode reference count
 - 이 정보들을 이용해 directory entry 와 inode 간에 일관성을 유지한다.
 	- directory entry 변경에 대한 log 는 있지만 inode 나 directory block 가 없다면, roll-forward 시에 directory 혹은 inode 를 생성한다.
-	- 
+- 사실 생각해 보면 LFS 에서 journaling 이라고 할 만한 것이 이거밖에 없다; data block 의 경우에는 journaling 된 변경사항으로 복구하는 개념이 아닌 inode 에 매핑되어 있냐 등으로 버리거나 수락하거나 하는 식
+	- Directory 의 경우에는 sync 가 중요하기 때문에 얘에 대해서는 변경사항들을 logging 하는 것.
 
 ## 5. Experience with the Sprite LFS
 
