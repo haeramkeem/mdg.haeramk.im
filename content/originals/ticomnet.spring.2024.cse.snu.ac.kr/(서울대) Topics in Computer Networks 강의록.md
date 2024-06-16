@@ -6,6 +6,12 @@
 | ------ | ----------------- | ------- | --------- |
 | 대학원 수업 | 서울대학교 공과대학 컴퓨터공학과 | 권태경 교수님 | 2024년 봄학기 |
 
+## Term project
+
+- 프로젝트 진행 중 메모한 것들
+	- [[메모 - ZTMB Evaluation]]
+- [깃허브](https://github.com/comnet24s-cse-snu-ac-kr)
+
 ## 목차
 
 - [[1. Layer Architecture in Internet]]
