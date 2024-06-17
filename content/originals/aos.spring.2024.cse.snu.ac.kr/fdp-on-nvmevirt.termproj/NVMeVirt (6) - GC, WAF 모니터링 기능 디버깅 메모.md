@@ -6,6 +6,9 @@ tags:
   - Storage
 date: 2024-06-04
 ---
+> [!fail] 단순한 메모글입니다.
+
+## GC procedure
 
 - `do_gc`
 	- `foreground_gc`
