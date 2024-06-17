@@ -95,7 +95,9 @@ date: 2024-05-22
 
 - 별거 없다. [[Optimal, Minimum (replacement policy)|OPT]] 가 이론상으로는 가장 좋다는 내용.
 
-## B. Recency
+### B. Recency
+
+## 4. 
 
 
 ---

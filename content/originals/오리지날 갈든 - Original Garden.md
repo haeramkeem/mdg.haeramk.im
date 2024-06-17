@@ -2,10 +2,10 @@
 
 > [!warning] 현재 기존의 Notion 및 Bear 에 기록된 문서들의 Migration 작업이 진행중입니다.
 
-## 서울대 컴퓨터공학과 석박 강의
+## 서울대 컴퓨터공학과 대학원 강의
 
 - [[(서울대) 고급 운영체제 강의록|고급 운영체제]]
-- [[(서울대) 컴퓨터 네트워크 보안 강의록|컴퓨터 네트워크 보안]]
+- [[(서울대) Topics in Computer Networks 강의록|Topics in Computer Networks]]
 
 ## 충남대 컴퓨터공학과 학부 강의
 

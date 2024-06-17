@@ -248,7 +248,7 @@ tags:
 
 - Segment summary information 으로 live data 를 선별해 내는 과정은 inode map 에 *version number* 필드를 추가하는 것으로 최적화가 가능하다.
 - 해당 필드의 값은 파일이 삭제되거나 파일 사이즈가 0이 되면 증가한다.
-	- 라고 저자는 말하고 있지만 일단은 그냥 말의 의미에 충실하게 파일 데이터가 변경되면 version number 도 올라가는 것으로 생각하자.
+	- 왜인지는... #draft
 - File number 와 version number 를 합친 것을 *UID (Unique ID)* 라고 하고, 이놈을 이용해 liva data 를 더욱 빠르게 선별해 낼 수 있다.
 	- 일단 segment summary information 에 file number 가 아닌 UID 와 block number 를 매칭시켜 놓는다면
 	- 해당 block 이 어떤 file 의 어떤 version 에 mapping 되어 있는지 저장되어 있는 셈이다.
@@ -519,7 +519,8 @@ tags:
 	- 변경된 directory entry 에 해당하는 파일의 inode reference count
 - 이 정보들을 이용해 directory entry 와 inode 간에 일관성을 유지한다.
 	- directory entry 변경에 대한 log 는 있지만 inode 나 directory block 가 없다면, roll-forward 시에 directory 혹은 inode 를 생성한다.
-	- 
+- 사실 생각해 보면 LFS 에서 journaling 이라고 할 만한 것이 이거밖에 없다; data block 의 경우에는 journaling 된 변경사항으로 복구하는 개념이 아닌 inode 에 매핑되어 있냐 등으로 버리거나 수락하거나 하는 식
+	- Directory 의 경우에는 sync 가 중요하기 때문에 얘에 대해서는 변경사항들을 logging 하는 것.
 
 ## 5. Experience with the Sprite LFS
 
@@ -628,41 +629,14 @@ tags:
 
 > [!danger] Draft 입니다.
 
-> [!tip]- Quiz
-> - Disk traffic will become more and more dominated by (writes)
-> - Too many (small access)
-> - The disk traffic is dominated by (synchronous) metadata writes
-> - Write all the changes to disk in a sequential structure called the (log)
-> - The sequential nature of logs permits much faster (crash recovery)
-> - The locations of the inode map blocks are kept in a fixed (checkpoint region) on disk
-> - The log can be (~~rewritable~~) through clean segments
-> - The transfer time to read/write a whole segment should be much greater than the cost of a (seek to the begining of the segment)
-> - Live if the block is still pointed by (direct/indirect block in inode)
-> - Not live if the file's version number (in the segment summary block) does not match the version number stored in (inode map)
-> - Choose the (least utilized) segments
-> - Choose the segment with the (highest) ratio of benefit to cost
-> - Free space in a (cold) segment is more valuable than free space in a (hot) segment
-> - Produces the (bimodal) distribution of segments
-> - The addresses of all the blocks in (inode map) and (segment usage table)
-> - Adjust the utilizations in the (segment usage table)
-> - (directory operation log) for each directory change
-
+---
 [^active-portion]: 이게 정확히 어떤 것을 의미하는 지는 잘 모르겠음.
-
 [^log-block-pointer]: 뭔소린지 모르겠다.
-
 [^write-large-file-on-thread]: 이것도 모르겠다. Live data block 을 skip 한다면 결국엔 상관없는 것 아닌가.
-
 [^long-lived-data]: 본문에서는 long-lived data 에서의 문제에 대해 다음과 같은 예시로 설명하지만, 뭔소린지 모르겠다: "In the simplest case where the log works circularly across the disk and live data is copied back into the log, all of the longlived files will have to be copied in every pass of the log across the disk." 
-
 [^dirty-block-cache]: 어떤 상황인지 잘 감이 안오긴 한다 그쵸?
-
 [^time-byte]: 어느샌가 time 에서 byte 로 단위가 바꿔었는데 그냥 그런갑다 하자.
-
 [^cold-start]: 이게 뭔지는 잘 모르겠음. Disk capacity utilization 을 바꿨을 때 cold start 를 하지 않는다는 것인가?
-
 [^fraction-of-segments]: 세로축 "Fraction of segments" 뭔지 모르겠음.
-
 [^simulation-result-inspection]: 많은 cold segment 가 threshold 근처에 잔류하는 것과 write cost 가 올라가는 것에 대해 대강 감은 오지만 아직 명확하게 어떤 연관성이 있는지는 와닿지 않는다.
-
 [^reread-sequential]: 왜 seek 이 들어가지?
