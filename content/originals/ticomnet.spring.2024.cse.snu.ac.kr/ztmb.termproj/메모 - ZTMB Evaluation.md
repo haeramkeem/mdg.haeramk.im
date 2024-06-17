@@ -32,11 +32,11 @@ wget -qO- https://code.kryo.se/iodine/iodine-0.8.0.tar.gz | tar -xz \
 ```
 
 ```bash
-sudo ./iodine-0.8.0/bin/iodined -f 10.0.0.1 -p toor ztmb.io
+sudo ./iodine-0.8.0/bin/iodined -f 10.0.0.1 -P toor ztmb.io
 ```
 
 ```bash
-sudo ./iodine-0.8.0/bin/iodine -f -r 172.16.20.10 ztmb.io -L0 -P toor
+sudo ./iodine-0.8.0/bin/iodine -f -r 172.16.20.10 ztmb.io -P toor
 ```
 
 - Ubuntu 에서 설치시 추가적으로 필요한 것
@@ -68,6 +68,8 @@ sudo iptables -t nat -F
 
 ## dns2tcp 
 
+- 참고
+	- https://www.aldeid.com/wiki/Dns2tcp
 - install
 
 ```bash
