@@ -1,11 +1,11 @@
 ---
-title: "RabbitMQ on Kubernetes - \"Command timed out: '/usr/bin/df -kP ...'\" 에러 해결기"
+title: "RabbitMQ on Kubernetes - \"Command timed out: 'df -kP ...'\" 에러 해결기"
 tags:
   - 삽질록
 ---
 ## 증상
 
-- Kubernetes 에다가 RabbitMQ 공식 이미지를 이용해 StatefulSet 으로 배포해 잘 사용하던 중, 어느날 파드가 `CrashLoopBackOff` 상태가 되며 작동하지 않았다고 한다.
+- 의뢰인인 어떤 백엔드 개고수의 증언에 따르면, Kubernetes 에다가 RabbitMQ 공식 이미지를 이용해 StatefulSet 으로 배포해 잘 사용하던 중에 어느날 파드가 `CrashLoopBackOff` 상태가 되며 작동하지 않았다고 한다.
 - 로그를 확인해 보니 다음과 같은 문구가 있었다: Index 들을 rebuilding 한다는 경고 뒤에, `df` 명령어가 시간초과 되었다는 것.
 
 ```
@@ -19,14 +19,14 @@ tags:
 
 ### 시간 초과난 명령어(`/usr/bin/df -kP …`) 를 직접 실행해 보자.
 
-- 하지만 kubectl exec 으로 직접 실행했을 때에는 그리 오래 걸리지 않았다.
+- 하지만 `kubectl exec` 으로 직접 실행했을 때에는 그리 오래 걸리지 않았다.
 
 ```bash
 time kubectl exec -it rabbitmq-0 -- /usr/bin/df -kP /path/to/data
 ```
 
 ```
-에잉 얼마 안걸리지롱
+결과: 에잉 얼마 안걸리지롱
 ```
 
 ### 에러 관련 서칭: `3.10.8` 버전부터 fix 되었다고 한다.
