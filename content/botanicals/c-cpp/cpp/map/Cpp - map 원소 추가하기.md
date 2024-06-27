@@ -14,5 +14,6 @@ using namespace std;
 int main() {
 	map<string, int> m;
 	m.insert(make_pair("first element", 1));
+	m.emplace("second element", 2);
 }
 ```
