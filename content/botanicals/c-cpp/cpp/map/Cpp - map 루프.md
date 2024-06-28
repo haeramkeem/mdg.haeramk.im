@@ -12,9 +12,12 @@ date: 2024-06-27
 using namespace std;
 
 int main() {
-	for(auto it = m.begin(); it != m.end(); it++) {
-		cout << it->first << endl; // Key 값
-		cout << it->second << endl; // Value 값
+	map<string, int> m;
+    // 고전적인 방식
+	// for(auto it = m.begin(); it != m.end(); it++) {
+	for(const auto& pair : m) {
+		cout << pair->first << endl; // Key 값
+		cout << pair->second << endl; // Value 값
 	}
 }
 ```

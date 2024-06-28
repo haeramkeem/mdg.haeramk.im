@@ -1,7 +1,7 @@
 ---
 tags:
   - cpp
-date: 2024-06-26
+date: 2024-06-28
 ---
 ## TL;DR
 
@@ -13,8 +13,6 @@ using namespace std;
 
 int main() {
 	map<string, int> m;
-	m["first element"] = 1;
-	m.insert(make_pair("second element", 2));
-	m.emplace("thrid element", 3);
+	m.erase("thrid element");
 }
 ```
