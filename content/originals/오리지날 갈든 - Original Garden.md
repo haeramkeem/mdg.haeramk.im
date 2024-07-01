@@ -20,8 +20,8 @@
 ## 온라인 강의
 
 - [[(이화여대) 운영체제 강의록|이화여대 운영체제 온라인 강의]]
-- [[(CMU 15-445) Intro. to Database Systems|CMU - Intro. to Database Systems]]
-- [[(CMU 15-721) Advanced Database Systems|CMU - Advanced Database Systems]]
+- [[(CMU 15-445) Intro. to Database Systems|CMU 온라인 강의 - Intro. to Database Systems]]
+- [[(CMU 15-721) Advanced Database Systems|CMU 온라인 강의 - Advanced Database Systems]]
 
 ## 도서
 
