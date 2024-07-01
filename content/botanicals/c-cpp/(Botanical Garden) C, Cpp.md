@@ -24,3 +24,6 @@
 	- [[Cpp - map 원소 삭제하기|원소 삭제하기]]
 	- [[Cpp - map 원소 존재여부 검사하기|원소 존재여부 검사하기]]
 	- [[Cpp - map 원소 추가하기|원소 추가하기]]
+- Smart pointer
+	- [[Cpp - smart pointer 생성하기|생성하기]]
+	- [[Cpp - smart pointer 소유권 (move)|소유권 (move)]]
