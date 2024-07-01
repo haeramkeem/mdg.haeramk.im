@@ -11,7 +11,7 @@
 
 ## 프로젝트
 
-- [[Bustub 01 - Cpp Primer]]
+- [[(Bustub) Project 01 - Cpp Primer (Task 01)]]
 
 ## 목차
 
