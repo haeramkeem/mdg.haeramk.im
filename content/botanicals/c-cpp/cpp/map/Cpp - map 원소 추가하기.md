@@ -18,3 +18,7 @@ int main() {
 	m.emplace("thrid element", 3);
 }
 ```
+
+- 여기서 주의할 점은 `insert` 와 `emplace` 의 경우에는 원소 overwrite 가 안된다는 것이다.
+	- 즉, overwrite 를 위해서는 `[]` 연산자만을 사용해야 함
+	- [참고](https://stackoverflow.com/a/26549656)
