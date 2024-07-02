@@ -49,11 +49,16 @@ date: 2024-04-23
 	- [[arp - ARP 테이블 확인하기|ARP 테이블 확인하기]]
 - `ca-certificates`
 	- [[ca-certificates - 인증서 신뢰하기|인증서 신뢰하기]]
+- `column`
+	- [[column - 표 깔끔하게 출력하기|표 깔끔하게 출력하기]]
 - `curl`
 	- [[curl - 기본 사용법|기본 사용법]]
 	- [[curl - Redirect 하기|Redirect 하기]]
 	- [[curl - 타임아웃 설정하기|타임아웃 설정하기]]
 	- [[curl - Progress bar 지우기|Progress bar 지우기]]
+- `cut`
+	- [[cut - Delimiter 로 문자열 자르기|Delimiter 로 문자열 자르기]]
+	- [[cut - 마지막 값 알아내기|마지막 값 알아내기]]
 - `df`
 	- [[df - 마운트 현황 출력하기|마운트 현황 출력하기]]
 	- [[df - inode 현황 출력하기|inode 현황 출력하기]]
@@ -91,3 +96,6 @@ date: 2024-04-23
 	- [[tcpdump - 포트 지정하기|포트 지정하기]]
 - `watch`
 	- [[watch - 김해람의 꿀조합|기본 사용법]]
+- `wc`
+	- [[wc - Line 수 세기|Line 수 세기]]
+	- [[wc - 글자수 세기|글자수 세기]]
