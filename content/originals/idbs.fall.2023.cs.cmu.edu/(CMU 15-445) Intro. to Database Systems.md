@@ -13,6 +13,7 @@
 
 - [[(Bustub) Project 00 - Cpp Primer (Task 01)]]
 - [[(Bustub) Project 00 - Cpp Primer (Task 02)]]
+- [[(Bustub) Project 00 - Cpp Primer (Task 03)]]
 
 ## 목차
 
