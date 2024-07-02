@@ -11,9 +11,11 @@
 
 ## 프로젝트
 
-- [[(Bustub) Project 00 - Cpp Primer (Task 01)]]
-- [[(Bustub) Project 00 - Cpp Primer (Task 02)]]
-- [[(Bustub) Project 00 - Cpp Primer (Task 03)]]
+- Project 00
+	- [[(Bustub) Project 00 - Cpp Primer (Task 01)]]
+	- [[(Bustub) Project 00 - Cpp Primer (Task 02)]]
+	- [[(Bustub) Project 00 - Cpp Primer (Task 03)]]
+	- [[(Bustub) Project 00 - Cpp Primer (Task 04)]]
 
 ## 목차
 
