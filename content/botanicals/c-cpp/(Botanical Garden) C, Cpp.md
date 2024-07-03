@@ -18,6 +18,10 @@
 - [[Cpp - Vexing Parse|Vexing Parse]]
 - [[Cpp - 명령줄 인수 (Command-line arguments) 처리하기|명령줄 인수 (Command-line arguments) 처리하기]]
 - [[Cpp - 형변환 (dynamic_cast)|형변환 (dynamic_cast)]]
+- `char`, `std::string`
+	- [[Cpp - char to string 변환|char to string 변환]]
+	- [[Cpp - char 대소문자 변환|대소문자 변환]]
+	- [[Cpp - string 변수를 auto 로 생성하지 말자|문자열 변수를 auto 로 생성하지 말자]]
 - `std::map`
 	- [[Cpp - map 루프|루프]]
 	- [[Cpp - map 원소 삭제하기|원소 삭제하기]]
@@ -27,9 +31,6 @@
 	- [[Cpp - smart pointer 생성하기 (make_, use_count)|생성하기 생성하기 (make_, use_count)]]
 	- [[Cpp - smart pointer 소유권 (move)|소유권 (move)]]
 	- [[Cpp - smart pointer 일반 포인터로 바꾸기 (get)|일반 포인터로 바꾸기 (get)]]
-- `std::string`
-	- [[Cpp - char to string 변환|char to string 변환]]
-	- [[Cpp - string 변수를 auto 로 생성하지 말자|문자열 변수를 auto 로 생성하지 말자]]
 
 ### GDB, LLDB
 
