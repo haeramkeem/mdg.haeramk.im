@@ -86,6 +86,7 @@ date: 2024-04-23
 	- [[openssl - 인증서에서 CSR (Certificate Signing Request) 뽑아내기|인증서에서 CSR (Certificate Signing Request) 뽑아내기]]
 - `tar`
 	- [[TAR vs GZIP - 뭔차이지?]]
+	- [[tar - 다운로드 와 압축해제를 동시에|다운로드 와 압축해제를 동시에]]
 	- [[tar - 파일 압축하기|파일 압축하기]]
 	- [[tar - 파일 압축 풀기|파일 압축 풀기]]
 - `tr`

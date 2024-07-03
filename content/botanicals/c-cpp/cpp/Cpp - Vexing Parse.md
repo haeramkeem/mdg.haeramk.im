@@ -25,19 +25,19 @@ using namespace std;
 
 class Test {
 public:
-  Test(int = 1);
+	Test(int = 1);
 private:
-  int X;
-  const int Y;
+	int X;
+	const int Y;
 };
 
 Test::Test(int v): X(v), Y(2) {}
 
 int main() {
-  const Test t1;
-  const Test t2();
-  const Test t3(3);
-  return 0;
+	const Test t1;
+	const Test t2();
+	const Test t3(3);
+	return 0;
 }
 ```
 

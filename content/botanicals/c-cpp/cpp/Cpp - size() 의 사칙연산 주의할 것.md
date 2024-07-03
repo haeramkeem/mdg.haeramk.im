@@ -30,17 +30,17 @@ date: 2024-05-08
 using namespace std;
 
 int main() {
-    vector<int> vtr;
-    list<int> lst;
-    deque<int> dq;
-    queue<int> q;
-    stack<int> stk;
+	vector<int> vtr;
+	list<int> lst;
+	deque<int> dq;
+	queue<int> q;
+	stack<int> stk;
 
-    cout << (vtr.size() - 1) << endl;
-    cout << (lst.size() - 1) << endl;
-    cout << (dq.size() - 1) << endl;
-    cout << (q.size() - 1) << endl;
-    cout << (stk.size() - 1) << endl;
+	cout << (vtr.size() - 1) << endl;
+	cout << (lst.size() - 1) << endl;
+	cout << (dq.size() - 1) << endl;
+	cout << (q.size() - 1) << endl;
+	cout << (stk.size() - 1) << endl;
 }
 ```
 

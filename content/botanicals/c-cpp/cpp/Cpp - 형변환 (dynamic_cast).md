@@ -78,3 +78,8 @@ int main() {
 	delete derived_b;
 }
 ```
+
+## 번외
+
+- 사용하지 말라고 한다. 이걸 사용해야하는 것 자체가 class 구조를 잘못 짠거라고 한다 ([출처](https://nybot-house.tistory.com/66))
+- 근데 이걸 안쓰는게 말이 되나?

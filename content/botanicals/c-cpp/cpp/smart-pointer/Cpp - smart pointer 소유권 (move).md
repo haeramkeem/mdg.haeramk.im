@@ -32,3 +32,6 @@ int main() {
 	// 그냥 다른 오브젝트로 분리되는 것
 }
 ```
+
+- `shared_ptr` 에서 그냥 copy constructor 를 사용하는 것 보다 `move` 를 사용하면 더 빠르다고 한다.
+	- 당연히 `shared_ptr` 에서의 copy constructor 는 atomic 하게 reference counter 를 증가시켜야 하기 때문에 다소 느려지기 때문 ([출처일세](https://stackoverflow.com/a/41874953))

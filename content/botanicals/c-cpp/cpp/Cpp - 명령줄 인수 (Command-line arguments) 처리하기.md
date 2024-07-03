@@ -21,11 +21,11 @@ date: 2024-05-08
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    // argc: Argument Count (naming convention), Always greater than 0
-    // argv: Argument Value (naming convention), Starts with binary name
-    for (int i = 0; i < argc; i++) {
-        cout << argv[i] << endl;
-    }
+	// argc: Argument Count (naming convention), Always greater than 0
+	// argv: Argument Value (naming convention), Starts with binary name
+	for (int i = 0; i < argc; i++) {
+		cout << argv[i] << endl;
+	}
 }
 ```
 
