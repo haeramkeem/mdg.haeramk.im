@@ -20,3 +20,4 @@
 ## 목차
 
 - [[01. Relational Model and Algebra]]
+- [[02. Modern SQL]]
