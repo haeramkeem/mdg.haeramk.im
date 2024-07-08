@@ -17,7 +17,7 @@ date: 2024-05-08
 
 ### Code reference
 
-- 아래 코드를 실행해 보면 자신있게 모두 -1 이라고 생각할 수 있다.
+- 아래 코드를 실행해 보면 자신있게 출력 결과가 모두 `-1` 이라고 생각할 수 있다.
 
 ```cpp
 #include <iostream>
@@ -30,17 +30,17 @@ date: 2024-05-08
 using namespace std;
 
 int main() {
-    vector<int> vtr;
-    list<int> lst;
-    deque<int> dq;
-    queue<int> q;
-    stack<int> stk;
+	vector<int> vtr;
+	list<int> lst;
+	deque<int> dq;
+	queue<int> q;
+	stack<int> stk;
 
-    cout << (vtr.size() - 1) << endl;
-    cout << (lst.size() - 1) << endl;
-    cout << (dq.size() - 1) << endl;
-    cout << (q.size() - 1) << endl;
-    cout << (stk.size() - 1) << endl;
+	cout << (vtr.size() - 1) << endl;
+	cout << (lst.size() - 1) << endl;
+	cout << (dq.size() - 1) << endl;
+	cout << (q.size() - 1) << endl;
+	cout << (stk.size() - 1) << endl;
 }
 ```
 

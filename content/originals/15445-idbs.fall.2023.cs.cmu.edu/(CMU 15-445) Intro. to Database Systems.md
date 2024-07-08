@@ -11,8 +11,13 @@
 
 ## 프로젝트
 
-- [[Bustub 01 - Cpp Primer]]
+- Project 00
+	- [[(Bustub) Project 00 - Cpp Primer (Task 01)]]
+	- [[(Bustub) Project 00 - Cpp Primer (Task 02)]]
+	- [[(Bustub) Project 00 - Cpp Primer (Task 03)]]
+	- [[(Bustub) Project 00 - Cpp Primer (Task 04)]]
 
 ## 목차
 
 - [[01. Relational Model and Algebra]]
+- [[02. Modern SQL]]

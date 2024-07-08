@@ -1,8 +1,11 @@
 ---
 tags:
   - cpp
+  - cpp-map
 date: 2024-06-28
 ---
+> [!tip] `map` 이나 `unordered_map` 이나 동일하다.
+
 ## TL;DR
 
 ```cpp
