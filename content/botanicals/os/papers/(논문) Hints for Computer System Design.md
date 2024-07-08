@@ -84,7 +84,7 @@ tags:
 	- 일련의 오브젝트들과 그들을 조작하는 작동들을 포함하기 때문
 	- 이러한 면에서 Hoare 의 [프로그래밍 언어 디자인 가이드](https://dl.acm.org/doi/10.5555/892013) 는 interface 디자인에 도움이 될거라고 하네
 - 이 섹션은 대략 아래와 같이 구성되어 있다
-	- [[논문 - Hints for Computer System Design#2.1. Keep it simple|2.1]], [[논문 - Hints for Computer System Design#2.2. Corollaries|2.2]], [[논문 - Hints for Computer System Design#2.3. Continuity|2.3]] 은 Interface 에 대한 내용
+	- [[(논문) Hints for Computer System Design#2.1. Keep it simple|2.1]], [[(논문) Hints for Computer System Design#2.2. Corollaries|2.2]], [[(논문) Hints for Computer System Design#2.3. Continuity|2.3]] 은 Interface 에 대한 내용
 	- [[#2.4. Making implementations work|2.4]] 는 Implementation 에 대한 내용
 	- [[#2.5. Handling all the cases|2.5]] 는 Completeness 에 대한 내용
 ### 2.1. Keep it simple

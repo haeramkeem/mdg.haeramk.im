@@ -111,7 +111,7 @@ tags:
 #### Large files
 
 - 슈퍼컴퓨팅 분야에서는 큰 사이즈의 파일들에 대한 sequential access 가 필요한데, 이들의 성능 저하는 file system design 에 있지는 않다.
-- 이러한 파일들을 인접한 cylinder 에 배치해 적은 seek time 으로 sequential 하게 접근하게 해주는 기술은 이미 존재한다. (아마 [[논문 - A Fast File System for UNIX|FAST FS]] 도 이것의 일종일듯)
+- 이러한 파일들을 인접한 cylinder 에 배치해 적은 seek time 으로 sequential 하게 접근하게 해주는 기술은 이미 존재한다. (아마 [[(논문) A Fast File System for UNIX|FAST FS]] 도 이것의 일종일듯)
 - 이들의 성능을 좌우하는 것은 대역폭과 많이 연관되어 있고, 따라서 LFS 에서는 큰 파일들에 대한 성능 향상은 하드웨어에 맡기고, 작은 파일들에 대한 성능 향상에만 집중했다고 한다.
 
 #### 2.3. Problems with existing file systems
@@ -119,7 +119,7 @@ tags:
 - 당시의 FS 는 두 가지 문제점이 있었다고 한다:
 	- 데이터들이 디스크에 너무 흩뿌려져 있어서 small access 가 많이 발생했고
 	- Write 가 다소 동기적으로 (synchronous) 수행된 것
-- 저자는 [[논문 - A Fast File System for UNIX|UNIX FFS]] 를 대표적인 prior work 으로 잡고 비교를 했으나, 다른 FS 에도 동일하게 적용되는 문제점이었다고 한다.
+- 저자는 [[(논문) A Fast File System for UNIX|UNIX FFS]] 를 대표적인 prior work 으로 잡고 비교를 했으나, 다른 FS 에도 동일하게 적용되는 문제점이었다고 한다.
 
 #### Spread information
 
@@ -165,7 +165,7 @@ tags:
 - 일단 LFS 나 FFS 나 기본적인 데이터 구조는 동일하다:
 	- 동일하게 inode 를 사용하고,
 	- 여기에는 권한같은 metadata 와
-	- [[논문 - A Fast File System for UNIX#Traditional File System - Bell Labs 버전|direct, indirect block]] 들의 주소가 저장됨
+	- [[(논문) A Fast File System for UNIX#Traditional File System - Bell Labs 버전|direct, indirect block]] 들의 주소가 저장됨
 - 따라서 inode 를 찾은 이후에는 (direct 혹은 indirect block 을 따라가서 read 하면 되므로) IO 횟수는 LFS 나 FFS 나 동일하다.
 - 그럼 이제 LFS 의 read 성능을 FFS 와 비슷하게 유지하려면 inode 를 어떻게 찾냐가 관건일 것이다:
 	- 일단 FFS 에서는 inode 의 위치가 정해져 있었다. inode number 를 이용해 간단한 계산으로 inode 의 주소를 계산해 낼 수 있었다.
@@ -530,7 +530,7 @@ tags:
 	- 단지 [[#4.2. Roll-forward|Roll-forward]] 만 구현이 안되어 있었다.
 	- 따라서 30초 간격으로 [[#4.1. Checkpoints|Checkpoint]] 를 생성하게 되고, Reboot 이후에는 checkpoint 에 저장된 내용외에는 전부 다 날라간다.
 - 처음에 개발을 시작할 때에만 해도 LFS 의 구현이 FFS 보다 어려울 것으로 생각했지만, 결과적으로는 그렇지 않았다.
-	- [[#3.3. Segment cleaning mechanism|Segment cleaning]] 의 구현이 까다롭기는 했지만, FFS 의 [[논문 - A Fast File System for UNIX#Bookkeeping Information|Bitmap]] 이 제거되었기에 이것이 상쇄되었고
+	- [[#3.3. Segment cleaning mechanism|Segment cleaning]] 의 구현이 까다롭기는 했지만, FFS 의 [[(논문) A Fast File System for UNIX#Bookkeeping Information|Bitmap]] 이 제거되었기에 이것이 상쇄되었고
 	- Checkpoint 와 roll-forward 는 FFS 의 crash recovery 를 위한 툴인 [fsck](https://en.wikipedia.org/wiki/Fsck) 에 비해 구현이 어렵지 않았다고 한다.
 - 실 production 환경에서는 성능 향상이 그렇게 드라마틱하게 나타나지 않았는데, 이것은 해당 환경에서 디스크에 병목이 생기는 것이 아닌 cpu, mem 측면에서 속도가 나오지 않았기 때문이었다고 한다.
 

@@ -74,7 +74,7 @@ tags:
 - 섹션 [[#2.6. Adaptive Logging|2.6]] 내용
 - F2FS 는 LFS 와 유사하게 random write 를 sequential write 로 변환하여 처리하는데
 - 이때의 단점은 sequential write 의 성능이 보장되기 위해서는 여유 공간이 필요하다는 것이다.
-- 따라서 F2FS 에서는 공간이 부족해 질 경우 성능 저하를 완화하기 위해 [[논문 - The design and implementation of a log-structured file system#Threading|threaded logging]] 을 사용한다.
+- 따라서 F2FS 에서는 공간이 부족해 질 경우 성능 저하를 완화하기 위해 [[(논문) The design and implementation of a log-structured file system#Threading|threaded logging]] 을 사용한다.
 - 즉, internal fragmentation 이 많은 dirty segment 의 free space 에 중간중간의 live block 을 건너뛰며 sequential write 하는 것.
 - 이렇게 함으로써 cleaning 에 소요되는 오버헤드를 공간이 부족한 상황에서 줄일 수 있다.
 
@@ -113,7 +113,7 @@ tags:
 
 ##### Checkpoint (CP)
 
-- 기본적으로는 [[논문 - The design and implementation of a log-structured file system#4.1. Checkpoints|LFS 의 Checkpoint region]] 과 유사한 기능을 한다.
+- 기본적으로는 [[(논문) The design and implementation of a log-structured file system#4.1. Checkpoints|LFS 의 Checkpoint region]] 과 유사한 기능을 한다.
 - 다음과 같은 것들이 저장된다:
 	- File system 상태
 	- [[#Node Address Table (NAT)|NAT]], [[#Segment Information Table (SIT)|SIT]] 들에 대한 valid 를 나타내는 bitmap
@@ -126,18 +126,18 @@ tags:
 
 ##### Segment Information Table (SIT)
 
-- 이것은 기본적으로는 [[논문 - The design and implementation of a log-structured file system#3.6. Segment usage table|LFS 의 Segment Usage Table]] 과 유사한 역할을 한다.
+- 이것은 기본적으로는 [[(논문) The design and implementation of a log-structured file system#3.6. Segment usage table|LFS 의 Segment Usage Table]] 과 유사한 역할을 한다.
 - 즉, [[#Main Area]] 의 valid block 들에 대해 그의 개수와 bitmap 을 담고 있다.
 - 이러한 정보들은 Cleaning 에 사용되는 것
 
 ##### Node Address Table (NAT)
 
-- 기본적으로는 [[논문 - The design and implementation of a log-structured file system#Index structure - inode map|LFS 의 Inode map]] 과 유사하다.
+- 기본적으로는 [[(논문) The design and implementation of a log-structured file system#Index structure - inode map|LFS 의 Inode map]] 과 유사하다.
 - 즉, inode number 를 이용해 해당 inode 가 저장된 위치를 찾을 수 있게 하는 역할이다.
 
 ##### Segment Summary Area (SSA)
 
-- 기본적으로는 [[논문 - The design and implementation of a log-structured file system#Segment summary information|LFS 의 Segment Summary Information]] 과 유사하다.
+- 기본적으로는 [[(논문) The design and implementation of a log-structured file system#Segment summary information|LFS 의 Segment Summary Information]] 과 유사하다.
 - 즉, [[#Main Area]] 의 block 들이 어느 inode 에 연결되어 있는지 (ownership) 을 매핑해 놓은 것
 - 이러한 정보 또한 Cleaning 에 사용된다.
 
