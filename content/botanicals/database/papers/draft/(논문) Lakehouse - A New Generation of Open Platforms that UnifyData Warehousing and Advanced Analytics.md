@@ -2,7 +2,6 @@
 tags:
   - Database
   - CMU-15445
-date: 2024-07-08
 ---
 > [!info] 본 글은 논문 [Lakehouse - A New Generation of Open Platforms that UnifyData Warehousing and Advanced Analytics (CIDR '21)](https://www.cidrdb.org/cidr2021/papers/cidr2021_paper17.pdf) 를 읽고 정리한 글입니다.
 
