@@ -2,12 +2,9 @@
 tags:
   - 스토리
   - Kubernetes
-draft: "true"
+date: 2024-01-04
 ---
 > [!warning] 적고 보니 글이 좀 기네요. 마음의 평정심을 갖고 차근차근 해봅시다.
-
-> [!fail]- 본 글은 #draft 상태입니다.
-> - [ ] 내용 정리
 
 ## Pain point - 왜 이런짓을?
 
@@ -348,3 +345,44 @@ sudo cp etcd-ca.key /etc/kubernetes/pki/etcd/ca.key
 sudo ./kubeadm-custrom certs renew all
 ```
 
+- 이후에는 controlplane component 들을 재시작해준다.
+
+> [!warning] #draft 설명 추가!
+
+## Step 4. Kubelet 설정하기
+
+> [!warning] #draft 설명 추가!
+
+- 위의 과정이 끝나면, `kube-apiserver`, `etcd`, `kube-controller-manager` 등의 component 들은 다 살아날 것이다.
+- 근데 각 node 의 kubelet 이 먹통이 된다.
+	- 이것은 kubelet 이 사용하는 인증서의 CA 와 새로 생성한 CA 가 (당연히) 다르기 때문.
+- 따라서 각 노드를 클러스터에서 제외했다가 새로 합류하거나,
+- 혹은 아래의 방법으로 Kubelet 이 사용할 인증서를 새로 발급해 주면 된다.
+	- 아래의 방법에는 새로 발급한 CA 인증서가 필요하니, 이 인증서를 `rsync` 같은 걸로 복사해 와서 발급하면 된다.
+
+```bash
+#!/bin/bash
+
+# Create CSR (Certificate Signing Request) config file
+cat << EOF > kubelet-client.cnf
+[req]
+distinguished_name = cert_dn
+x509_extensions = v3_req
+prompt = no
+
+[cert_dn]
+CN = system:node:$(hostname)
+O = system:nodes
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth
+basicConstraints = critical, CA:FALSE
+subjectKeyIdentifier = hash
+EOF
+
+# Create cert and sign w/ ca cert
+openssl req -new -nodes -newkey rsa:2048 -keyout kubelet-client.key -out kubelet-client.csr -config kubelet-client.cnf
+sudo openssl x509 -req -in kubelet-client.csr -extensions v3_req -extfile kubelet-client.cnf -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out kubelet-client.crt -days 36500 -sha256
+cat kubelet-client.crt kubelet-client.key > kubelet-client-$(date +%Y-%m-%d-%H-%M-%S).pem
+```
