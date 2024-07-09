@@ -1,3 +1,10 @@
+---
+tags:
+  - 쉘스크립트
+  - bash-tar
+date: 2024-01-30
+---
+
 > [!info] [출처](https://www.tutorialspoint.com/difference-between-gzip-and-tar)
 
 ## `.tar.gz` 의 정체

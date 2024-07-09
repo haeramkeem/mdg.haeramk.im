@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-if
+date: 2024-03-05
 ---
 > [!info] [출처](https://linuxhint.com/bash_if_else_examples)
 

@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - 디스크에 파일 형태로 저장된 [[Document (ElasticSearch)|문서]] 를 읽어들이는 API 인데

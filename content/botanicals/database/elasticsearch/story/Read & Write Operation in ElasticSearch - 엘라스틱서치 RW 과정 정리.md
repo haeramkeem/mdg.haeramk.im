@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 읽기
 
 1. [[Read API (Lucene)|Lucene Read]] 를 통해 파일로 저장된 [[Document (ElasticSearch)|문서]] 를 메모리로 올림

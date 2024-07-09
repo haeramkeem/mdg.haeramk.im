@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-openssl
+date: 2024-05-26
 ---
 > [!info]- 참고한 것들
 > - [스댕](https://stackoverflow.com/q/8343894)

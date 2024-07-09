@@ -3,6 +3,7 @@ tags:
   - 쉘스크립트
   - apt
   - linux-kernel
+  - bash-apt
 date: 2024-04-24
 ---
 > [!info]- 참고한 것들

@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-substitution
+date: 2024-03-05
 ---
 > [!info] [출처](https://tldp.org/LDP/abs/html/parameter-substitution.html)
 

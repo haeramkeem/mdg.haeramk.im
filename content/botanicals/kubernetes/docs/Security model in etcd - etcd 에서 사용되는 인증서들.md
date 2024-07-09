@@ -1,4 +1,11 @@
+---
+tags:
+  - Kubernetes
+  - etcd
+date: 2024-12-21
+---
 > [!info] 참고한 [공식 문서](https://etcd.io/docs/v3.5/op-guide/security/)
+
 ## 개요
 
 - [[Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기|이 글]] 을 적다가 etcd 에서 사용되는 인증서들 용도가 헷갈려서 직접 확인해본 내용들.

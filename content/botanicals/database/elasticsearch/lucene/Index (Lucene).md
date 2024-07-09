@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Index (Lucene)|Lucene Index]] 는 이제 [[Segment (Lucene)|Lucene Segment]] 들의 집합인데

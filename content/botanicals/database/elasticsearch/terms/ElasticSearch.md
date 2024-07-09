@@ -1,1 +1,7 @@
-## 용어 설명
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
+> [!fail]- 본 글은 #draft 상태입니다.
+> - [ ] 내용 정리

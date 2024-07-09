@@ -3,8 +3,9 @@ tags:
   - 용어집
   - algorithm
   - sort
+date: 2024-04-06
 ---
-> [!fail]- 본 글은 #draft 상태입니다.
+> [!warning]- 본 글은 #draft 상태입니다.
 > - [ ] 그림 추가
 > - [ ] 예제 코드 추가
 

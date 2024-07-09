@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Segment (Lucene)|Lucene Segment]] 는 [[Document (ElasticSearch)|문서 파일]] 들의 집합이다

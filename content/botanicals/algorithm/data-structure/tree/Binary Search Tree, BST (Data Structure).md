@@ -3,8 +3,9 @@ tags:
   - 용어집
   - data-structure
   - tree
+date: 2024-04-06
 ---
-> [!fail]- 본 글은 #draft 상태입니다.
+> [!warning]- 본 글은 #draft 상태입니다.
 > - [ ] 내용 보강하기
 > - [ ] 그림 추가하기
 

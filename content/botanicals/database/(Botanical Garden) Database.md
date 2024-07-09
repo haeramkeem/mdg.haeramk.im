@@ -1,6 +1,6 @@
 ## 개요
 
-- 주인장 김해람씨는 2024년 3월 11일 중대한 과오를 저질러 Cloud Engineer 에서 DB 분야로 전직하게 된다. 이에 따라 [RocksDB 와 같은 돌을 굴리게 되는데..](https://en.wikipedia.org/wiki/The_Myth_of_Sisyphus)
+- 주인장 김해람씨는 2024년 3월 11일 중대한 과오를 저질러 Cloud Engineer 에서 DB 분야로 전직하게 된다. 이에 따라 [RocksDB 라는 돌을 굴리게 되는데..](https://en.wikipedia.org/wiki/The_Myth_of_Sisyphus)
 
 ## 작물들
 
@@ -31,22 +31,23 @@
 - [[_id (ElasticSearch)|_id]]
 - [[Apache Lucene|Lucene]]
 - [[Cluster (ElasticSearch)|Cluster]]
-- [[Commit API (Lucene)]]
 - [[Coordinating Node (ElasticSearch)|Coordinating Node]]
 - [[Data Node (ElaticSearch)|Data Node]]
 - [[Document (ElasticSearch)|Document]]
 - [[Flush (ElasticSearch)|Flush]]
-- [[Flush API (Lucene)]]
 - [[Index (ElasticSearch)|Index]]
-- [[Index (Lucene)]]
 - [[Indexing (ElasticSearch)|Indexing]]
 - [[Master Node (ElasticSearch)|Master Node]]
-- [[Merge (Lucene)]]
 - [[Node (ElasticSearch)|Node]]
 - [[Primary Shard (ElasticSearch)|Primary Shard]]
-- [[Read API (Lucene)]]
 - [[Refresh (ElasticSearch)|Refresh]]
 - [[Replication Shard (ElasticSearch)|Replication Shard]]
-- [[Segment (Lucene)]]
 - [[Shard (ElasticSearch)|Shard]]
 - [[Type (ElasticSearch)|Type]]
+- Lucene
+	- [[Segment (Lucene)]]
+	- [[Read API (Lucene)]]
+	- [[Merge (Lucene)]]
+	- [[Index (Lucene)]]
+	- [[Flush API (Lucene)]]
+	- [[Commit API (Lucene)]]

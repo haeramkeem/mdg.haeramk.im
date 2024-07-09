@@ -2,8 +2,9 @@
 tags:
   - 용어집
   - Storage
+date: 2024-03-16
 ---
-> [!info] 참고한 자료
+> [!info]- 참고한 것들
 > - [누군가의 블로그](https://dhkoo.github.io/2019/02/26/multistream/)
 > - [ZNS 논문의 background 파트 (ATC '21)](https://www.usenix.org/system/files/atc21-bjorling.pdf)
 

@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Flush API (Lucene)|Lucene Flush]] 는 시스템의 페이지 캐시에 데이터를 넘겨주는 것까지만 한다

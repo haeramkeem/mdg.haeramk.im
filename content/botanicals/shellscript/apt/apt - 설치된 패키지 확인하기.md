@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-apt
+date: 2024-01-11
 ---
 > [!info] [출처](https://askubuntu.com/a/17829)
 

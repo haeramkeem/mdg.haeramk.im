@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Segment (Lucene)|Lucene Segment]] 의 불변성 때문에 그 갯수가 계속 늘어나게 되는데, 무한정 늘어날 수는 없기 때문에 적당한 시점에 수행하는 병합 과정을 [[Merge (Lucene)|Lucene Merge]] 라고 한다

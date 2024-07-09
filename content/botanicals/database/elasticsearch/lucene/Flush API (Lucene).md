@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - 메모리 버퍼에 임시로 저장된 [[Document (ElasticSearch)|Document]] 를 디스크로 내려보내는 [[Apache Lucene|Lucene]] 의 API

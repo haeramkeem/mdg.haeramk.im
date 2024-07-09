@@ -2,8 +2,9 @@
 tags:
   - 용어집
   - Storage
+date: 2024-03-16
 ---
-> [!info] 참고한 자료
+> [!info]- 참고한 것들
 > - [블로그 글](https://metar.tistory.com/entry/NAND-flash%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
 > - [어떤 회사 블로그 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/)
 > - [어떤 글](https://codecapsule.com/2014/02/12/coding-for-ssds-part-2-architecture-of-an-ssd-and-benchmarking/)

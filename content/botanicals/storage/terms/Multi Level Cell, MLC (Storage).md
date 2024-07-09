@@ -2,8 +2,9 @@
 tags:
   - 용어집
   - Storage
+date: 2024-03-30
 ---
-> [!info] 참고한 자료
+> [!info]- 참고한 것들
 > - [카카오 테크 블로그](https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2)
 > - [고급운영체제 (김진수 교수님 '24H1, SNU CSE)](http://csl.snu.ac.kr/courses/4190.568/2024-1/)
 

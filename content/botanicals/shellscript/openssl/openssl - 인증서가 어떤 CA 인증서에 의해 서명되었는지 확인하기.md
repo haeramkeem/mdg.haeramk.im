@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-openssl
+date: 2024-01-11
 ---
 > [!info] [출처](https://security.stackexchange.com/a/232028)
 

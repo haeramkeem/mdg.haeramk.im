@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-alias
+date: 2024-03-05
 ---
 > [!info] [출처](https://askubuntu.com/a/325380)
 

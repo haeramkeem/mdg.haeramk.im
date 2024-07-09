@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-tcpdump
+date: 2023-12-21
 ---
 > [!info] [출처](https://serverfault.com/a/805008)
 ## 개요

@@ -3,6 +3,7 @@ tags:
   - 용어집
   - OS
   - Memory
+date: 2024-05-26
 ---
 > [!info]- 참고한 것들
 > - [[09. Segmentation#Replacement Policy|충남대 류재철 교수님 운영체제 강의 (Spring 2021)]]

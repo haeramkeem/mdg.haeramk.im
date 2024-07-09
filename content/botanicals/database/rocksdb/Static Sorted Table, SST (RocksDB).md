@@ -3,6 +3,7 @@ tags:
   - 용어집
   - Database
   - RocksDB
+date: 2024-04-14
 ---
 > [!info]- 참고한 것들
 > - [RocksDB 공식문서 - Static Sorted Table](https://github.com/facebook/rocksdb/wiki/A-Tutorial-of-RocksDB-SST-formats)

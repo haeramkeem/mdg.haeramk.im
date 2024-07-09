@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - 얘는 약간 Proxy 의 기능을 하는 [[Node (ElasticSearch)|Node]] Role 중 하나다

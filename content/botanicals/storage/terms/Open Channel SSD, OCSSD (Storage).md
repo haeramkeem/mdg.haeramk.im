@@ -2,8 +2,9 @@
 tags:
   - 용어집
   - Storage
+date: 2024-03-30
 ---
-> [!info] 참고한 자료
+> [!info]- 참고한 것들
 > - [위키피디아](https://en.wikipedia.org/wiki/Open-channel_SSD)
 
 ## 이건 또 뭐야
