@@ -52,9 +52,12 @@ ex2_from_ex1
 	- 함수 이름은 `operator=` 이어야 한다.
 	- 동 class object 는 value type 도 되고 [[Cpp - Reference 타입|reference type]] 도 된다.
 	- 다만, 인자는 `const` 타입이면 안된다고 한다.
-- 다만 주의할 것은, Copy assignment operator 는 (당연히) constructor 가 아니라는 점이다.
+
+## Copy construct 와 Copy assignment operator
+
+- 주의할 것은, Copy assignment operator 는 (당연히) constructor 가 아니라는 점이다.
 	- 따라서 object 선언시에 초기화를 위한 `=` 는 copy assignment operator 가 아니라 [[Cpp - class Copy constructor, 복사 생성자|copy constructor]] 가 호출되고
-	- Constructor 에서 사용할 수 있는 `: var_name(var_name)` 와 같은 문법은 여기서는 사용하지 못한다는 점이다.
+	- Constructor 에서 사용할 수 있는 `: var_name(var_name)` 와 같은 [[Cpp - class Constructor, 생성자#Member Initializer List|member initializer list]] 는 여기서는 사용하지 못한다는 점이다.
 - 가령, 다음의 예시에서는:
 
 ```cpp
