@@ -26,6 +26,7 @@
 - `class`
 	- [[Cpp - class const 메소드|const 메소드]]
 	- [[Cpp - class Constructor, 생성자|Constructor, 생성자]]
+	- [[Cpp - class Copy assignment operator, 복사 대입 연산자|Copy assignment operator, 복사 대입 연산자]]
 	- [[Cpp - class Copy constructor, 복사 생성자|Copy constructor, 복사 생성자]]
 	- [[Cpp - class Destructor, 소멸자|Destructor, 소멸자]]
 - `std::map`
