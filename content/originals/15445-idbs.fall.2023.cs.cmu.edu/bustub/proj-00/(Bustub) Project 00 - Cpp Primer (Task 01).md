@@ -90,5 +90,5 @@ date: 2024-07-01
 - [[Cpp - map 원소 존재여부 검사하기]]
 - [[Cpp - 형변환 (dynamic_cast)]]
 - [[Cpp - smart pointer 생성하기 (make_, use_count)]]
-- [[Cpp - smart pointer 소유권 (move)]]
+- [[Cpp - 소유권 (move)]]
 - [[Cpp - smart pointer 일반 포인터로 바꾸기 (get)]]
