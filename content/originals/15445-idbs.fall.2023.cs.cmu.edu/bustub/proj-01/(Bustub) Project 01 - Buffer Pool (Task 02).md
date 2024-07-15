@@ -47,7 +47,7 @@ date: 2024-07-11
 - [[Cpp - optional 소개]]
 - [[Cpp - optional 객체 사용하기 (bugprone-unchecked-optional-access 에러)]]
 - [[Cpp - optional 객체 생성하기]]
-- `std::promise`
+- [[Cpp - promise, future 사용법]]
 - [[Cpp - class Constructor, 생성자]]
 - [[Cpp - class Copy assignment operator, 복사 대입 연산자]]
 - [[Cpp - class Copy constructor, 복사 생성자]]

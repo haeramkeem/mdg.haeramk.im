@@ -30,6 +30,7 @@
 	- [[Cpp - class Copy assignment operator, 복사 대입 연산자|Copy assignment operator, 복사 대입 연산자]]
 	- [[Cpp - class Copy constructor, 복사 생성자|Copy constructor, 복사 생성자]]
 	- [[Cpp - class Destructor, 소멸자|Destructor, 소멸자]]
+	- [[Cpp - class friend 키워드|friend 키워드]]
 	- [[Cpp - class Move constructor, 이동 생성자|Move constructor, 이동 생성자]]
 - `std::map`
 	- [[Cpp - map 루프|루프]]
@@ -41,11 +42,11 @@
 - [[Cpp - optional 소개|optional]]
 	- [[Cpp - optional 객체 사용하기 (bugprone-unchecked-optional-access 에러)|객체 사용하기 (bugprone-unchecked-optional-access 에러)]]
 	- [[Cpp - optional 객체 생성하기|객체 생성하기]]
+- `std::promise`
+	- [[Cpp - promise, future 사용법|사용법]]
 - Smart pointer
 	- [[Cpp - smart pointer 생성하기 (make_, use_count)|생성하기 생성하기 (make_, use_count)]]
 	- [[Cpp - smart pointer 일반 포인터로 바꾸기 (get)|일반 포인터로 바꾸기 (get)]]
-
-- [[optional/]]
 
 ### GDB, LLDB
 

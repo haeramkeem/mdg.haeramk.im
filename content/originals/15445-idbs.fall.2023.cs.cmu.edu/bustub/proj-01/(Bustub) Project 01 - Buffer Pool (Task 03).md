@@ -192,5 +192,5 @@ date: 2024-07-12
 
 ## C++ 관련 삽질
 
-- `friend` keyword
+- [[Cpp - class friend 키워드]]
 
