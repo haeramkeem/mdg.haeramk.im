@@ -1,3 +1,9 @@
+---
+tags:
+  - Kubernetes
+  - Conference
+date: 2024-01-04
+---
 > [!warning] 세미나에 참석하며 적은 내용들이라 다소 글이 어수선합니다.
 
 > [!info] [DevOcean 행사 소개](https://devocean.sk.com/events/view.do?id=160)

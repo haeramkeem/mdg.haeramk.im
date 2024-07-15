@@ -1,3 +1,9 @@
+---
+tags:
+  - Kubernetes
+  - TLS
+date: 2023-12-21
+---
 > [!info] [이 공식 문서](https://kubernetes.io/docs/setup/best-practices/certificates)를 주로 참고했지요
 
 ## 어떤게 있을까?

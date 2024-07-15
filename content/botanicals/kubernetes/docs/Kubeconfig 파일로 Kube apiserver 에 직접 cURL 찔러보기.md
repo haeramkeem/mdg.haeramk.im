@@ -1,3 +1,9 @@
+---
+tags:
+  - Kubernetes
+  - kube-apiserver
+date: 2024-01-08
+---
 ## 개요
 
 - 물논 [kubectl](https://kubernetes.io/docs/reference/kubectl/) 을 사용하면 간편하게 Kube apiserver 에 API 를 찔러서 기능들을 활용할 수 있지만,

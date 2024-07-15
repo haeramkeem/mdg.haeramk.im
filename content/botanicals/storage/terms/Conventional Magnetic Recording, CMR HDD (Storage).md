@@ -2,6 +2,7 @@
 tags:
   - 용어집
   - Storage
+date: 2024-05-26
 ---
 > [!info]- 참고한 것들
 > - [서울대 김진수 교수님 고급운영체제 강의(Spring 2024)](http://csl.snu.ac.kr/courses/4190.568/2024-1/)

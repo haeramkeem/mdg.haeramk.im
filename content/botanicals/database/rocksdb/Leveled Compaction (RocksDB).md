@@ -3,6 +3,7 @@ tags:
   - 용어집
   - Database
   - RocksDB
+date: 2024-04-14
 ---
 > [!info]- 참고한 것들
 > - [RocksDB 공식 문서](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction)

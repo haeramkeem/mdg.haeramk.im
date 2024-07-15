@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Flush API (Lucene)|Lucene 의 Flush]] 와 이름이 같아서 헷갈리긴 한데

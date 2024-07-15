@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-curl
+date: 2024-01-30
 ---
 > [!info] [cURL 공홈](https://curl.se/)
 ## 개요

@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 > [!warning] DEPRECATED 된 개념임
 
 ## 용어 설명

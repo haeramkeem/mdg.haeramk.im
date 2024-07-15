@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Document (ElasticSearch)|문서]] 가 변경되었을 때, 이것을 [[Flush API (Lucene)|디스크에 반영]] 하고 파일을 다시 open 하여 검색 결과에 반영되도록 하는 과정

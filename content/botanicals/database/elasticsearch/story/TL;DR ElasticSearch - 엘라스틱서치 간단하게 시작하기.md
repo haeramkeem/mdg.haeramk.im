@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## Docker container 띄우기
 
 - [github://deviantony/docker-elk](https://github.com/deviantony/docker-elk) 레포지토리를 이용하면 편하다

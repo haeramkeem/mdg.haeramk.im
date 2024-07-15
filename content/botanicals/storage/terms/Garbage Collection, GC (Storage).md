@@ -2,8 +2,9 @@
 tags:
   - 용어집
   - Storage
+date: 2024-03-30
 ---
-> [!info] 참고한 자료
+> [!info]- 참고한 것들
 > - [어떤 회사 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/)
 > - [어떤 블로그 글](https://medium.com/@reefland/over-provisioning-ssd-for-increased-performance-and-write-endurance-142feb015b4e)
 > - [카카오 테크 블로그](https://tech.kakao.com/2016/07/15/coding-for-ssd-part-3)

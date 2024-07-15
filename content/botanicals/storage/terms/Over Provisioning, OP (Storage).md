@@ -2,8 +2,9 @@
 tags:
   - Storage
   - 용어집
+date: 2024-03-30
 ---
-> [!info] 참고한 자료
+> [!info]- 참고한 것들
 > - [카카오 테크 블로그](https://tech.kakao.com/2016/07/16/coding-for-ssd-part-4/)
 
 ## 초과해서 (Over) 공급하다 (Provisioning)

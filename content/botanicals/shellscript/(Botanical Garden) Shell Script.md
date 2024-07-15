@@ -14,7 +14,8 @@ date: 2024-04-23
 
 ### 스토리
 
-- [[Shell story - 디스크 마운트하기|새로 구매한 디스크 마운트하기]]
+- [[TAR vs GZIP - 뭔차이지?]]
+- [[디스크 마운트하기]]
 
 ### `bash` 내장 기능
 
@@ -59,6 +60,11 @@ date: 2024-04-23
 - `cut`
 	- [[cut - Delimiter 로 문자열 자르기|Delimiter 로 문자열 자르기]]
 	- [[cut - 마지막 값 알아내기|마지막 값 알아내기]]
+- `date`
+	- [[date - ISO8601 포맷으로 시간 표시|ISO8601 포맷으로 시간 표시]]
+	- [[date - UTC 시간 표시|UTC 시간 표시]]
+	- [[date - 시간 설정|시간 설정]]
+	- [[date - 출력 포맷|출력 포맷]]
 - `df`
 	- [[df - 마운트 현황 출력하기|마운트 현황 출력하기]]
 	- [[df - inode 현황 출력하기|inode 현황 출력하기]]
@@ -66,9 +72,30 @@ date: 2024-04-23
 	- [[expr - 사칙연산하기|사칙연산하기]]
 - `fdisk`
 	- [[fdisk - 디스크 확인하기|디스크 확인하기]]
+- `find`
+	- [[find - File type 으로 탐색|File type 으로 탐색]]
+	- [[find - Script 실행하기|Script 실행하기]]
+	- [[find - Wildcard 탐색|Wildcard 탐색]]
+- `ip`
+	- [[ip - NIC 에서 IP 지우기|NIC 에서 IP 지우기]]
 - `iptables`
 	- [[iptables - 리다이렉션 하기|리다이렉션 하기]]
+	- [[iptables - 설정 파일로 저장하기|설정 파일로 저장하기]]
 	- [[iptables - 테이블 비우기|테이블 비우기]]
+- `ipvsadm`
+	- [[ipvsadm - 설정 모두 지우기|설정 모두 지우기]]
+	- [[ipvsadm - 설정 확인하기|설정 확인하기]]
+- `less`
+	- [[less - Color code 보여주기|Color code 보여주기]]
+- `ln`
+	- [[ln - Symlink 삭제하기|Symlink 삭제하기]]
+	- [[ln - Symlink 생성하기|Symlink 생성하기]]
+- `ls`
+	- [[ls - Color code 비활성화하기|Color code 비활성화하기]]
+- `ncat`
+	- [[ncat - Port open 확인|Port open 확인]]
+	- [[ncat - TCP socket 열기|TCP socket 열기]]
+	- [[ncat - TCP 메세지 보내기|TCP 메세지 보내기]]
 - `nvme-cli`
 	- [[nvme-cli - 데이터 기본 입출력하기|데이터 기본 입출력하기]]
 	- [[nvme-cli - 디바이스 조회하기|디바이스 조회하기]]
@@ -84,10 +111,13 @@ date: 2024-04-23
 	- [[openssl - 인증서 상세 정보 확인하기|인증서 상세 정보 확인하기]]
 	- [[openssl - 인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기|인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기]]
 	- [[openssl - 인증서에서 CSR (Certificate Signing Request) 뽑아내기|인증서에서 CSR (Certificate Signing Request) 뽑아내기]]
+	- [[openssl - 파일 hash 하기|파일 hash 하기]]
+- `ping`
+	- [[ping - 1개만 보내기|1개만 보내기]]
+	- [[ping - Timeout 설정하기|Timeout 설정하기]]
 - `tar`
-	- [[TAR vs GZIP - 뭔차이지?]]
 	- [[tar - 다운로드 와 압축해제를 동시에|다운로드 와 압축해제를 동시에]]
-	- [[tar - 파일 압축하기|파일 압축하기]]
+	- [[tar - 파일 압축 하기|파일 압축하기]]
 	- [[tar - 파일 압축 풀기|파일 압축 풀기]]
 - `tr`
 	- [[tr - 문자 지우기|문자 지우기]]

@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Cluster (ElasticSearch)|Cluster]] 전체를 관리하는 기능을 수행하는 [[Node (ElasticSearch)|Node]] Role 중 하나다

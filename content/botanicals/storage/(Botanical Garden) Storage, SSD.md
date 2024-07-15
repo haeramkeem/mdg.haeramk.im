@@ -7,7 +7,7 @@ date: 2024-04-23
 
 ## 작물들
 
-### 이론/용어
+### 용어들
 
 - [[Conventional Magnetic Recording, CMR HDD (Storage)|Conventional Magnetic Recording HDD, CMR HDD]]
 - [[Data Chunk (Storage)|Data Chunk]]
@@ -39,4 +39,5 @@ date: 2024-04-23
 
 ### NVMe
 
+- [[Doorbell (NVMe)|Doorbell]]
 - [[Namespace (NVMe)|Namespace]]

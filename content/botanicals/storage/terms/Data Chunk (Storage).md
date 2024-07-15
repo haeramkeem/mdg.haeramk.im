@@ -2,6 +2,7 @@
 tags:
   - Storage
   - 용어집
+date: 2024-03-16
 ---
 ## 데이터 청크, Data Chunk
 

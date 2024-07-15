@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Document (ElasticSearch)]] 의 ID

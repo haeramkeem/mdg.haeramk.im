@@ -3,6 +3,7 @@ tags:
   - 용어집
   - data-structure
   - tree
+date: 2024-04-06
 ---
 > [!info] 참조한 것들
 > - [어떤 B-Tree 소개 블로그 글](https://rebro.kr/169?category=484170)

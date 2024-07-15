@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-curl
+date: 2024-01-30
 ---
 > [!info] [출처](https://stackoverflow.com/a/7373922)
 

@@ -3,6 +3,7 @@ tags:
   - 용어집
   - Database
   - RocksDB
+date: 2024-04-14
 ---
 > [!info]- 참고한 것들
 > - [RocksDB 공식 문서 - Compaction](https://github.com/facebook/rocksdb/wiki/Compaction)
@@ -19,7 +20,7 @@ tags:
 - LSM 의 기본 아이디어는 다음과 같다:
 
 1. *Log-structured (sequential write)* 를 통해 write 성능을 개선한다.
-	- 일반적으로 sequential write 는 write 성능을 개선하는 것으로 알려져 있다. ([[논문 - The design and implementation of a log-structured file system|참고 사례 - LFS]])
+	- 일반적으로 sequential write 는 write 성능을 개선하는 것으로 알려져 있다. ([[(논문) The design and implementation of a log-structured file system|참고 사례 - LFS]])
 2. *Sorting + Level* 을 통해 read 를 최적화 한다.
 	- Sorting 되어 있으면 binary search 를 통해 key 에 대한 value 를 빨리 찾을 수 있기 때문.
 3. *Compaction* 을 통해 log-structured 에서 발생하는 데이터 중복 문제를 해소한다.

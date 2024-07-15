@@ -2,8 +2,9 @@
 tags:
   - 용어집
   - Storage
+date: 2024-03-16
 ---
-> [!info] 참고한 자료
+> [!info]- 참고한 것들
 > - [어떤 회사 글](https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/)
 > - [위키피디아](https://en.wikipedia.org/wiki/Wear_leveling)
 

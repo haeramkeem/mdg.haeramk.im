@@ -1,6 +1,8 @@
 ---
 tags:
   - 쉘스크립트
+  - bash-ca-certificates
+date: 2024-03-05
 ---
 > [!info] [출처](https://superuser.com/a/719047)
 

@@ -2,8 +2,9 @@
 tags:
   - 용어집
   - Storage
+date: 2024-05-26
 ---
-> [!info] 참고 한 것들
+> [!info]- 참고 한 것들
 > - [ZNS: Avoiding the Block Interface Tax for Flash-based SSDs (ATC '21) 섹션 2.3 내용](https://www.usenix.org/system/files/atc21-bjorling.pdf)
 > - [Zoned Storage Initiative 문서](https://zonedstorage.io/docs/introduction/zoned-storage)
 

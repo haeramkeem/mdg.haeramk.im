@@ -1,3 +1,8 @@
+---
+tags:
+  - elasticsearch
+date: 2023-11-06
+---
 ## 용어 설명
 
 - [[Index (ElasticSearch)|Index]] 를 여러 [[Node (ElasticSearch)|Node]] 에 분산시켜 저장하게 되는데, 이때 한 [[Node (ElasticSearch)|Node]] 에 저장되는 단위
