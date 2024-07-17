@@ -8,6 +8,7 @@ date: 2024-07-17
 > [!info]- 참고한 것들
 > - [공문](https://en.cppreference.com/w/cpp/thread/unique_lock)
 > - [공문 (Lock tag)](https://en.cppreference.com/w/cpp/thread/lock_tag)
+> - [어떤 블로그](https://dydtjr1128.github.io/cpp/2020/04/05/Cpp-lock.html)
 
 ## 란?
 
