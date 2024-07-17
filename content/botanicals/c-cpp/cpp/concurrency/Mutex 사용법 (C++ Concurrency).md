@@ -1,6 +1,7 @@
 ---
 tags:
   - cpp
+  - cpp-concurrency
   - cpp-mutex
 date: 2024-07-03
 ---

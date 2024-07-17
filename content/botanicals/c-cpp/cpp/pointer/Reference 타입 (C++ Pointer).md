@@ -1,6 +1,7 @@
 ---
 tags:
   - cpp
+  - cpp-pointer
 date: 2024-07-12
 ---
 ## 란?

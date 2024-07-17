@@ -40,6 +40,6 @@ Copy constructor called: this(ex_copied), other(ex)
 ```
 
 - 위 예제에서 보다시피, copy constructor 에서 copy 된 놈은 이름 뒤에 `"_copied"` 를 붙이도록 되어 있고, 따라서 `ex_cp` object 의 이름이 `"ex_copied"` 가 된다.
-- Copy constructor 는 문법은 [[Cpp - class Constructor, 생성자|constructor]] 와 유사하지만, 인자는 "반드시":
+- Copy constructor 는 문법은 [[Constructor, 생성자 (C++ Class)|constructor]] 와 유사하지만, 인자는 "반드시":
 	- 동 class 에 대한
-	- [[Cpp - Reference 타입|Reference type]] 이어야 한다.
+	- [[Reference 타입 (C++ Pointer)|Reference type]] 이어야 한다.

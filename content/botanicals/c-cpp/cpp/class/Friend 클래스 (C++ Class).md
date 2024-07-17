@@ -4,6 +4,9 @@ tags:
   - cpp-class
 date: 2204-07-15
 ---
+> [!info]- 참고한 것들
+> - [위키독스](https://wikidocs.net/21185)
+
 ## 란?
 
 - 한 클래스에서 다른 한 class 의 private member 에 접근해야 할 필요가 있을 때도 있다.

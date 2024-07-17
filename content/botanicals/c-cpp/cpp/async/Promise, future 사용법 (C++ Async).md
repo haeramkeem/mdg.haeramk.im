@@ -1,7 +1,7 @@
 ---
 tags:
   - cpp
-  - cpp-promise
+  - cpp-async
 date: 2024-07-13
 ---
 > [!info]- 참고한 것들

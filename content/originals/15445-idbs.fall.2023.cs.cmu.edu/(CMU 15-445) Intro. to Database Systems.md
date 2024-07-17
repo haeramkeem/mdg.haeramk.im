@@ -22,6 +22,7 @@
 	- [[(Bustub) Project 01 - Buffer Pool (Task 01)]]
 	- [[(Bustub) Project 01 - Buffer Pool (Task 02)]]
 	- [[(Bustub) Project 01 - Buffer Pool (Task 03)]]
+	- [[(Bustub) Project 01 - Buffer Pool (Task 04 - Leaderboard)]]
 
 ## 목차
 

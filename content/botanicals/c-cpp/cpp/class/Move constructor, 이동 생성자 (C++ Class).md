@@ -48,13 +48,13 @@ ex_moved
 
 - 위 예시는 `"{{ move 당한놈의 이름 }}_moved"` 로 이름을 바꾸며 move 를 하는 것이다.
 - 보다시피 기본 문법은
-	- [[Cpp - class Constructor, 생성자|일반 생성자]] 와 유사하나
+	- [[Constructor, 생성자 (C++ Class)|일반 생성자]] 와 유사하나
 	- 동 class object 를 인자로 하되, `&&` 타입으로 선언해야만 한다.
 	- 다만 default parameter 는 받을 수 있다고 한다.
 - 주의할 점은:
-	- [[Cpp - class Constructor, 생성자#Member Initializer List|Member initializer list]] 를 사용할 때 소유권이 넘어갈 수 있음을 고려해야 한다는 것이다.
-		- 예시에서 `other.name_` 이 출력되지 않는 것은 [[Cpp - class Constructor, 생성자#Member Initializer List|member initializer list]] 에서 `std::move(other.name_)` 를 호출하며 `other.name_` 에 대한 소유권이 날아갔기 때문이다.
-	- Move constructor 가 선언되어 있으면 default [[Cpp - class Copy constructor, 복사 생성자|copy constructor]] 와 [[Cpp - class Copy assignment operator, 복사 대입 연산자|copy assignment operator]] 가 "암묵적으로" 삭제된다는 것이다.
+	- [[Constructor, 생성자 (C++ Class)#Member Initializer List|Member initializer list]] 를 사용할 때 소유권이 넘어갈 수 있음을 고려해야 한다는 것이다.
+		- 예시에서 `other.name_` 이 출력되지 않는 것은 [[Constructor, 생성자 (C++ Class)#Member Initializer List|member initializer list]] 에서 `std::move(other.name_)` 를 호출하며 `other.name_` 에 대한 소유권이 날아갔기 때문이다.
+	- Move constructor 가 선언되어 있으면 default [[Copy constructor, 복사 생성자 (C++ Class)|copy constructor]] 와 [[Copy assignment operator, 복사 대입 연산자 (C++ Class)|copy assignment operator]] 가 "암묵적으로" 삭제된다는 것이다.
 		- 따라서 위 예제에서 주석처리된 24번째 줄은 주석 해제시 컴파일 에러가 난다.
 
 ```
