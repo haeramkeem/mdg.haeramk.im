@@ -1,0 +1,83 @@
+---
+tags:
+  - Database
+  - 논문
+date: 2024-07-17
+---
+> [!info] 본 글은 논문 [BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)](https://dl.acm.org/doi/10.1145/3589263) 를 읽고 정리한 글입니다.
+
+> [!info] 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다.
+
+> [!fail] 본 문서는 아직 #draft 상태입니다. 읽을 때 주의해 주세요.
+
+## 1. Abstract & Intro.
+
+### 1-1. Data warehousing is moving to the cloud.
+
+- 엄청나게 많은 양의 데이터를 저장하는 것과 그것들을 연산하여 방법에 대한 요즘 근황의 제일 큰 특징은 다음의 두 가지이다:
+	- 데이터의 "저장" 과 "연산" 을 분리한다.
+	- Cloud 생태계를 이용한다.
+- 즉, 데이터는 cloud 가 제공하는 object storage 에 저장되고, 연산은 cloud 가 제공하는 compute instance 를 이용해 compute power 를 on-demand 로 변경할 수 있게 한다는 것이다.
+- 그리고 이런 저장과 연산을 통짜로 제공하는 *Data Warehouse* 또한 cloud 가 제공해, 많은 기업들에서 사용하는 추세이다.
+
+### 1-2. Data warehouses can become proprietary data traps.
+
+- Cloud-native data warehouse 에서는 analytical query 최적화를, 지금까지는 주로 "연산" 에 집중하여 수행해 왔었다.
+	- 가령, Vectorized processing [^vectorized-processing] 이나 Compilation [^compilation] 을 최적화하는 등.
+- 하지만, 데이터를 "저장" 하는 부분에 대한 최적화가 본 논문의 specialty 이다.
+- 이 모든 data warehouse 들은 object storage 에 저장할 때 compressed columnar data 형태로 저장한다.
+- 하지만 대부분의 시스템들은 다른 시스템과는 호환되지 않는 데이터 형식 (즉, *proprietary data format*) 을 사용해 왔고, 이것은 데이터들이 하나의 시스템이나 서비스 제공자에게 종속되도록 했다.
+- 또한 AI-ML 분야에서의 (SQL 와 같은) 정형화된 형태가 아닌 데이터의 경우에는 커다란 크기의 데이터를 불러와 연산하는 경우가 부지기수였고, 이것은 비쌀 뿐 아니라 비효율적이었다.
+	- 가령 어떤 경우에는 데이터가 storage 에 이미 있는데도 불구하고, 데이터들을 불필요하게 복사하며 비용과 효율성을 안좋게 했다.
+
+### 1-3. Data lakes and open storage formats.
+
+- Data lake 는 Data warehouse 에서의 "다른 시스템과의 호환되지 않는 데이터 형식" 에서 벗어나, 여러 시스템에서 호환되는 데이터 형식으로 object storage 에 데이터를 때려 넣고 그 "데이터의 호수" 에 여러 analytical system 을 붙여 사용하도록 하였다.
+	- 이 "여러 시스템에서 호환되는 데이터 형식" 이 [ORC](https://github.com/apache/orc) 나 [Parquet](https://github.com/apache/parquet-java/) 이다.
+- 하지만 이 개념은 제시된지 오래되었음에도 불구하고 [^data-lake-proposal], 아직까지 proprietary system 들이 더 흔하게 사용되는데 그 이유는:
+	1) Data lake 와 anaytical system 간의 네트워크가 너무 느리다 [^data-lake-network-bottleneck].
+	2) Data format 들이 다른 proprietary solution 들에 비해 scan throughput 도 안나오고, 별로 compression ratio 가 높지도 않다.
+		- 그래서 보통은 다른 compression solution 과 엮어서 Parquet + [Snappy](https://github.com/google/snappy) 나 Parquet + [Zstd](https://github.com/facebook/zstd) 로 사용한다고 한다.
+- 논문의 저자들은 위 두가지 문제점 중에서 (1) 은 해결된 것으로 보고 (가령 요즘의 AWS EC2 들은 100G 네트워크도 제공해주니까), (2) 에 집중한다.
+
+### 1-4. BtrBlocks
+
+- 그래서 제시한 것이 이 비띠알블럭인데, 이놈의 특징은:
+	- 높은 압축률
+		- 즉, 네트워크 대역폭 + object storage 용량을 덜 먹음.
+	- 빠른 decompression
+		- 즉, analytical system 에의 적은 CPU 부하
+- 이라고 한다. 이것을 위해서 BtrBlock 은 각 block 에 대해 7가지 기존의 compression 알고리즘과 1가지 새로운 알고리즘 중에 하나를 자동으로 선택한다고 한다.
+	- 이 알고리즘들은 모두 decompression 이 매우 빠르고, 연속해서 실행할 수 있다 (cascade).
+	- 즉, BtrBlock 을 한마디로 정리하면, data lake 를 위한 새로운 data compression scheme 을 제시하고 이것과 기존의 scheme 을 adaptive 하게 선택하는 algorithm 을 제시했다고 할 수 있겠다.
+- 그 결과 BtrBlock 은 상당히 좋은 결과를 냈는데, evaluation 에 대한 스포를 하자면:
+
+![[Pasted image 20240717164138.png]]
+
+- 일단 그래프는 가로축은 scan throughput 이기에 당연히 클 수록 좋고, 세로축은 1$ 당 몇번 scan 을 할 수 있냐 이기 때문에 클 수록 가성비가 좋은 셈이다.
+	- 즉, 오른쪽 위로 갈 수록 좋다는 것.
+- 대략 봐도 Parquet 를 사용했을 때 보다 더 좋다는 것을 알 수 있죠?
+
+### 1-5. Related Work and Contributions
+
+- 기존의 연구들은 대략:
+	- 정수값에 대한 encoding 이 주로 연구되어 왔고, 문자열이나 실수값에 대한 encoding 은 흔치 않았다.
+	- 또한, 한 알고리즘에 대한 대안책을 제시하고, 이들 간에 어떤 것을 선택할지에 대한 알고리즘을 제시하는 연구[^end-to-end] 는 극히 적었다고 한다.
+- 그래서 BtrBlock 의 contribution 은 다음과 같다:
+	1) 주어진 data 에 대한 최적의 compression algorithm 을 선택하는, sampling-based algorithm.
+	2) 새로운 실수값 encoding scheme: *Pseudodecimal Encoding*
+	3) 그리고 위의 것들을 포괄하는 complete, one-size-fits-all compression solution.
+	4) 마지막으로 이것에 대한, 실제 비즈니스 데이터에 대한 Public BI Benchmark 방법론.
+
+## 2. Background
+
+### 2-1. Parquet & ORC
+
+- 
+
+---
+[^vectorized-processing]: 이게 뭔지는 모르겠지만 논문에서 별로 중요해 보이지는 않는다. 일단은 넘어가자.
+[^compilation]: 아마도 anaytical query compilation 일 것 같다. 즉, query optimization, plan 과 관련된 부분일듯.
+[^data-lake-proposal]: [[(논문) Lakehouse - A New Generation of Open Platforms that UnifyData Warehousing and Advanced Analytics|CMU 15721 수업 논문]] 인듯?
+[^data-lake-network-bottleneck]: Data warehouse 의 경우에는 (적어도) 같은 벤더사 내에서의 네트워크이기 때문에 이러한 점이 문제가 되지 않았던 것인가?
+[^end-to-end]: 논문에서는 이러한 것을 "End-to-end research" 라고 칭한다.
