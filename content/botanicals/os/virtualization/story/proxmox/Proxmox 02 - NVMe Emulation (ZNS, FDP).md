@@ -8,9 +8,19 @@ date: 2024-04-23
 > [!info]- 참고한 것들
 > - [QEMU 공식문서](https://qemu-project.gitlab.io/qemu/system/devices/nvme.html)
 
+> [!info]- 넋두리
+> - 종종 구글링하다 보면 대학원생이 쓴 것 같은 설정기들이 종종 보이는데
+> - 옛날에는 사람들이 이런걸 왜 적나 했다: 현업 엔지니어도 아닌 사람이 끄적여 놓은 글 볼바에는 공식 문서나 적어도 회사 테크블로그를 (개인적으로는 더 신뢰하기 때문에) 보기 때문.
+> - 하지만 막상 주인장도 대학원생이 되니 이런 글 적고 있다. 그냥 개인 기록용이니 usecase 정도로만 생각하고 신뢰하지는 말자.
+
+> [!info]- 전체 스토리
+> - [[Proxmox 01 - Basic Setup Journal]]
+> - [[Proxmox 02 - NVMe Emulation (ZNS, FDP)]]
+> - [[Proxmox 03 - NVMe Emulation for VM]]
+
 ## 개요
 
-- [[Proxmox - NVMe Emulation for VM|지난번]] 에 이어서 [[Zoned Namespaces, ZNS (Storage)|ZNS SSD]] 와 [[Flexible Data Placement, FDP (Storage)|FDP SSD]] 도 emulate 해보자
+- [[Proxmox 03 - NVMe Emulation for VM|지난번]] 에 이어서 [[Zoned Namespaces, ZNS (Storage)|ZNS SSD]] 와 [[Flexible Data Placement, FDP (Storage)|FDP SSD]] 도 emulate 해보자
 - 깔끔하게 하기 위해 List 로 parameter 들을 주입해 주었는데 그러니까 qemu parameter string 을 qm arg 로 인식해서 다음와 같은 꼼수를 사용했다:
 
 ```bash
