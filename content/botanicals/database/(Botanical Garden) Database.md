@@ -8,6 +8,18 @@
 
 - [[Database - 어떤 언어가 하탈까?]]
 
+### 용어집
+
+- [[Database Management System, DBMS (Database)|Database Management System]]
+- [[Data Model (Database)|Data Model]]
+	- [[Data Manipulation Language, DML (Database)|Data Manipulation Language, DML]]
+	- [[Schema (Database)|Schema]]
+	- [[Document Data Model (Database)|Document Data Model]]
+	- [[Relational Data Model (Database)|Relational Data Model]]
+		- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
+		- [[Private Key, PK (Relational Model)|Private Key, PK]]
+		- [[Relation (Relational Model)|Relation]]
+
 ### RocksDB
 
 - 용어집
