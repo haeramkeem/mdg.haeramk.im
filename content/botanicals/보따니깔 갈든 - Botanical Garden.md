@@ -14,6 +14,5 @@ date: 2024-04-23
 - [[(Botanical Garden) Kubernetes|쿠버네티스]]
 - [[(Botanical Garden) Network, Protocol|네트워크]]
 - [[(Botanical Garden) Operating Systems, Linux|운영체제]]
-- [[(Botanical Garden) Proxmox, VM-related|Proxmox, 가상화]]
 - [[(Botanical Garden) Shell Script|쉘스크립트]]
 - [[(Botanical Garden) Storage, SSD|스토리지]]

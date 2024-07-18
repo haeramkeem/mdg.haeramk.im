@@ -15,6 +15,7 @@
 	- [[Data Manipulation Language, DML (Database)|Data Manipulation Language, DML]]
 	- [[Schema (Database)|Schema]]
 	- [[Document Data Model (Database)|Document Data Model]]
+	- [[Transaction, ACID (Database)|Transaction, ACID]]
 	- [[Relational Data Model (Database)|Relational Data Model]]
 		- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
 		- [[Private Key, PK (Relational Model)|Private Key, PK]]
