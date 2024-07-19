@@ -12,44 +12,45 @@ date: 2024-07-17
 
 ## 1. Abstract & Intro.
 
-### 1-1. Data warehousing is moving to the cloud.
+### 1.1. Data warehousing is moving to the cloud.
 
-- 엄청나게 많은 양의 데이터를 저장하는 것과 그것들을 연산하여 방법에 대한 요즘 근황의 제일 큰 특징은 다음의 두 가지이다:
-	- 데이터의 "저장" 과 "연산" 을 분리한다.
+- 엄청나게 많은 양의 데이터를 저장하는 것과 그것들을 연산하는 방법에 대한 요즘 근황의 제일 큰 특징은 다음의 두 가지이다:
 	- Cloud 생태계를 이용한다.
-- 즉, 데이터는 cloud 가 제공하는 object storage 에 저장되고, 연산은 cloud 가 제공하는 compute instance 를 이용해 compute power 를 on-demand 로 변경할 수 있게 한다는 것이다.
-- 그리고 이런 저장과 연산을 통짜로 제공하는 *Data Warehouse* 또한 cloud 가 제공해, 많은 기업들에서 사용하는 추세이다.
+		- 사용자들은 데이터를 cloud 가 제공하는 data warehouse solution 들을 이용하여 데이터를 저장하고 분석한다.
+	- 데이터의 "저장" 과 "연산" 을 분리한다.
+		- 데이터를 저장하는 것은 cloud 의 object storage 에, 데이터 분석을 위한 연산은 on-demand 로 computing power 를 변경할 수 있는 computing instance 를 사용한다.
 
-### 1-2. Data warehouses can become proprietary data traps.
+### 1.2. Data warehouses can become proprietary data traps.
 
-- Cloud-native data warehouse 에서는 analytical query 최적화를, 지금까지는 주로 "연산" 에 집중하여 수행해 왔었다.
-	- 가령, Vectorized processing [^vectorized-processing] 이나 Compilation [^compilation] 을 최적화하는 등.
-- 하지만, 데이터를 "저장" 하는 부분에 대한 최적화가 본 논문의 specialty 이다.
+- Cloud-native data warehouse 에서는 analytical query 의 "연산" 부분이 최적화 되어 왔다.
+	- 가령, Vectorized processing [^vectorized-processing] 이나 Compilation [^compilation] 으로 최적화하는 등.
+- 근데 이 논문의 저자들은 "연산" 부분이 아닌 "저장" 부분을 최적화 하려는 갑다.
 - 이 모든 data warehouse 들은 object storage 에 저장할 때 compressed columnar data 형태로 저장한다.
 - 하지만 대부분의 시스템들은 다른 시스템과는 호환되지 않는 데이터 형식 (즉, *proprietary data format*) 을 사용해 왔고, 이것은 데이터들이 하나의 시스템이나 서비스 제공자에게 종속되도록 했다.
 - 또한 AI-ML 분야에서의 (SQL 와 같은) 정형화된 형태가 아닌 데이터의 경우에는 커다란 크기의 데이터를 불러와 연산하는 경우가 부지기수였고, 이것은 비쌀 뿐 아니라 비효율적이었다.
 	- 가령 어떤 경우에는 데이터가 storage 에 이미 있는데도 불구하고, 데이터들을 불필요하게 복사하며 비용과 효율성을 안좋게 했다.
 
-### 1-3. Data lakes and open storage formats.
+### 1.3. Data lakes and open storage formats.
 
-- Data lake 는 Data warehouse 에서의 "다른 시스템과의 호환되지 않는 데이터 형식" 에서 벗어나, 여러 시스템에서 호환되는 데이터 형식으로 object storage 에 데이터를 때려 넣고 그 "데이터의 호수" 에 여러 analytical system 을 붙여 사용하도록 하였다.
+- Data lake 는 Data warehouse 에서의 "다른 시스템과의 호환되지 않는 데이터 형식" 에서 벗어나, 여러 시스템에서 호환되는 데이터 형식으로 object storage 에 데이터를 때려 넣고 그 "데이터의 호수" 에 여러 analytical system 을 붙여 사용할 수 있게
 	- 이 "여러 시스템에서 호환되는 데이터 형식" 이 [ORC](https://github.com/apache/orc) 나 [Parquet](https://github.com/apache/parquet-java/) 이다.
 - 하지만 이 개념은 제시된지 오래되었음에도 불구하고 [^data-lake-proposal], 아직까지 proprietary system 들이 더 흔하게 사용되는데 그 이유는:
-	1) Data lake 와 anaytical system 간의 네트워크가 너무 느리다 [^data-lake-network-bottleneck].
+	1) Data lake 와 analytical system 간의 네트워크가 너무 느리다 [^data-lake-network-bottleneck].
 	2) Data format 들이 다른 proprietary solution 들에 비해 scan throughput 도 안나오고, 별로 compression ratio 가 높지도 않다.
-		- 그래서 보통은 다른 compression solution 과 엮어서 Parquet + [Snappy](https://github.com/google/snappy) 나 Parquet + [Zstd](https://github.com/facebook/zstd) 로 사용한다고 한다.
+		- 즉, compression ratio 가 낮으면 compression, decompression speed 라도 빨라야 하는데 딱히 그렇지도 않다는 것.
+		- 그래서 보통은 다른 general-purpose compression solution 과 엮어서 Parquet + [Snappy](https://github.com/google/snappy) 나 Parquet + [Zstd](https://github.com/facebook/zstd) 와 같이 사용한다고 한다.
 - 논문의 저자들은 위 두가지 문제점 중에서 (1) 은 해결된 것으로 보고 (가령 요즘의 AWS EC2 들은 100G 네트워크도 제공해주니까), (2) 에 집중한다.
 
-### 1-4. BtrBlocks
+### 1.4. BtrBlocks
 
 - 그래서 제시한 것이 이 비띠알블럭인데, 이놈의 특징은:
 	- 높은 압축률
 		- 즉, 네트워크 대역폭 + object storage 용량을 덜 먹음.
 	- 빠른 decompression
 		- 즉, analytical system 에의 적은 CPU 부하
-- 이라고 한다. 이것을 위해서 BtrBlock 은 각 block 에 대해 7가지 기존의 compression 알고리즘과 1가지 새로운 알고리즘 중에 하나를 자동으로 선택한다고 한다.
+- 이라고 한다. 이것을 위해서 BtrBlock 은 각 block 을 compress 하기 위해 7가지 기존의 compression 알고리즘과 1가지 새로운 알고리즘 총 8개 중에 하나를 자동으로 선택한다고 한다.
 	- 이 알고리즘들은 모두 decompression 이 매우 빠르고, 연속해서 실행할 수 있다 (cascade).
-	- 즉, BtrBlock 을 한마디로 정리하면, data lake 를 위한 새로운 data compression scheme 을 제시하고 이것과 기존의 scheme 을 adaptive 하게 선택하는 algorithm 을 제시했다고 할 수 있겠다.
+	- 즉, BtrBlock 을 한마디로 정리하면, data lake 를 위한 새로운 data compression scheme 을 제시하고 이것과 기존의 scheme 들을 포함한 것들 중에 하나를 adaptive 하게 선택하는 algorithm 을 제시했다고 할 수 있겠다.
 - 그 결과 BtrBlock 은 상당히 좋은 결과를 냈는데, evaluation 에 대한 스포를 하자면:
 
 ![[Pasted image 20240717164138.png]]
@@ -58,11 +59,15 @@ date: 2024-07-17
 	- 즉, 오른쪽 위로 갈 수록 좋다는 것.
 - 대략 봐도 Parquet 를 사용했을 때 보다 더 좋다는 것을 알 수 있죠?
 
-### 1-5. Related Work and Contributions
+### 1.5. Related Work and Contributions
 
 - 기존의 연구들은 대략:
 	- 정수값에 대한 encoding 이 주로 연구되어 왔고, 문자열이나 실수값에 대한 encoding 은 흔치 않았다.
-	- 또한, 한 알고리즘에 대한 대안책을 제시하고, 이들 간에 어떤 것을 선택할지에 대한 알고리즘을 제시하는 연구[^end-to-end] 는 극히 적었다고 한다.
+	- 또한, 한 알고리즘에 대한 대안책을 제시하고, 이들 간에 어떤 것을 선택할지에 대한 알고리즘을 제시하는 연구는 극히 적었다고 한다.
+
+> [!tip] 논문에서의 표현
+> - 논문에서는 이러한 여러 scheme 들 중에 하나를 동적으로 선택하여 encoding 하는 방식을 *Complete* 혹은 *End-to-end* 라고 표현한다.
+
 - 그래서 BtrBlock 의 contribution 은 다음과 같다:
 	1) 주어진 data 에 대한 최적의 compression algorithm 을 선택하는, sampling-based algorithm.
 	2) 새로운 실수값 encoding scheme: *Pseudodecimal Encoding*
@@ -71,13 +76,159 @@ date: 2024-07-17
 
 ## 2. Background
 
-### 2-1. Parquet & ORC
+### 2.1. Existing Open File Formats
 
-- 
+#### 2.1.1. Parquet & ORC.
+
+- Apache 의 Parquet 와 ORC 는 모두 OLAP 에서 사용하기 위한 오픈소스 column data format 이다.
+- 이들 (그리고 대부분의 column data format 들이) block 단위 compression 을 진행한다고 한다.
+- 논문에서는, 이 둘 중 Parquet 가 더 많이 사용되고 유명하기 때문에 이놈에 집중했다고 한다.
+
+#### 2.1.2. Column encoding in Parquet.
+
+- Parquet 에서는 이렇게 data compression (encoding) 을 한다고 한다:
+	- RLE, Dictionary, Bit-packing, Delta Encoding 중 하나를 유저가 static 하게 선택하거나, 아니면 하드코딩된 규칙에 따라 선택된다고 한다.
+- 여러 column 에 대한 chunk 들을 encoding 한 뒤에는 이것을 *Rowgroup* 라는 이름으로 묶고, 그리고 이 *Rowgroup* 들이 모으고 뒤에 footer 를 붙여 하나의 *Parquet File* 를 만든다.
+
+#### 2.1.3. Metadata & Statistics
+
+- 위에서 말한 것 처럼, *Parquet File* 의 맨 뒤에는 footer 가 붙고, 여기에는 metadata, statistics, 그리고 lightweight index 가 들어간다.
+- 근데 이것은 좀 별로이다.
+	- 이러한 정보들이 footer 에 들어가 있기 때문에 만약에 statistics 와 index 를 이용해 데이터를 지우고자 한다면, 무조건 파일을 끝까지 읽어 footer 를 찾아야 한다.
+	- 하지만 가령 low latency 환경에서는 파일을 끝까지 읽는 것이 굉장한 부담이기 때문에, 파일을 읽기 전에 이런 statistics 와 index 에 접근할 수 있다면 더 좋다는 것.
+	- 따라서 BtrBlock 에서는 이것을 해결하기 위해 compressed block 과 나머지 metadata 등을 분리했다고 한다.
+		- 즉, 이 metadata 등의 정보들은 header, footer 어디든 붙일 수 있고 아니면 아예 별도로 관리할 수도 있게 했다.
+
+#### 2.1.4. Additional general-purpose compression.
+
+- 기존의 Parquet 가 사용하는 compression scheme 들은 너무 선택지가 적고, 이 선택지 중에 하나를 선택하는 방법 또한 너무나 단순하다.
+	- 가령, Dictionary compression 을 하는 경우에는 압축 중에 dictionary 가 너무 커지면 그냥 데이터를 압축되지 않은 상태로 냅둔다고 한다.
+- 따라서 순정의 Parquet 의 경우에는 compression ratio 가 너무나 작고, 따라서 일반적으로 Parquet file 을 general purpose compression scheme 으로 한번 더 압축한다.
+	- 이 scheme 들에는 [Snappy](https://github.com/google/snappy), [Brotli](https://github.com/google/brotli), [Zstd](https://github.com/facebook/zstd), [Gzip](https://www.gnu.org/software/gzip/), [LZ4](https://github.com/lz4/lz4), [LZO](https://www.oberhumer.com/opensource/lzo/), [BZip2](https://sourceware.org/bzip2/) 가 있다.
+- 하지만 이들은 모두 decompression overhead 가 너무 크거나 compression ratio 가 너무 적다고 한다.
+	- 이것에 관해서는, overhead <-> ratio 간의 trade-off 양 극단에 위치한 Zstd 와 Snappy 를 BtrBlock 와 비교했다고 한다.
+
+#### 2.1.5. A better way to compress.
+
+- 저자들은 *Parquet File* 생성시에 이미 한 가지 방법으로 encoding 하였기에, 이것을 또 다시 다른 compression scheme 으로 압축하는 것은 decompression overhead 측면에서 비효율적인 것을 확인했다고 한다.
+- 따라서, BtrBlock 에서는 이런 짓을 하지 않고, Parquet 에 선택할 수 있는 compression scheme 을 늘리고 (+ 심지어 하나는 더 개발해서 추가하고) 그들 중에 적절한 것을 선택할 수 있는 알고리즘과 compression scheme 을 연속해서 적용하는 방법에 대해 제시한다.
+
+### 2.2. Compression Schemes Used In BtrBlocks
+
+#### 2.2.1. Combining fast encodings.
+
+- BtrBlock 은 위에서 설명한 대로 일련의 encoding scheme 들을 조합해 compression 을 진행한다.
+- 이 encoding scheme 들은 모두 커버하는 자료형이 정해져 있다.
+	- 즉, 어떤 알고리즘은 정수만 처리하고, 어떤 알고리즘은 문자열만 처리하는 등.
+	- 각 encoding 과 궁합이 잘 맞는 Data distribution 이 각 encoding 마다 상이하기 때문에, 각 encoding 들은 서로에게 영향을 주지 않고 따라서 여러 encoding 을 연달아 적용하는 것이 가능하다.
+	- 이것은 결과적으로 decompression speed 의 손해를 보지 않고 compression ratio 는 늘릴 수 있게 해준다.
+
+> [!tip] *Data Distribution* 이란?
+> - 잘 감이 안온다면, 값들이 연속적인지, 중복된 값들이 많이 있는지 등의 데이터 특성이라고 생각하자.
+
+- 그리고 encoding 하는 단위는 column 을 고정된 크기로 나눈 block 이다.
+	- 여기서 block 은 storage 에서의 block 과는 다른 단위이다; 기본적으로 64,000 entry 를 하나의 block 으로 묶어 처리한다고 한다.
+	- 이렇게 block 단위로 encoding 하는 것에는 다음과 같은 장점이 있다:
+		1) 각 block 의 data distribution 에 따라 다른 encoding 을 선택할 수 있게 해준다.
+			- 즉, 하나의 큰 data 보다 그것을 잘게 쪼갠 단위에 대해서는 더 올바른 최적화가 가능하기 때문.
+		2) 여러 block 을 한번에 처리할 수 있다 (parallel).
+
+![[Pasted image 20240718194834.png]]
+
+- 위 표는 BtrBlock 에서 사용하는 8개의 encoding scheme 을 나타낸 것이다. 이제 이것들에 대해 (자체 개발한 pseudodecimal 을 제외하고) 하나하나 살펴보자.
+
+#### 2.2.2. RLE & One Value.
+
+- *Run Length Encoding* (*RLE*) ([코드](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/RLE.hpp)) 은 말 그대로 "연속된 개수" 로 encoding 하는 것이다.
+	- 가령 `{42, 42, 42}` 의 경우에는 `(42, 3)` 으로 줄이는 방식이다.
+	- 따라서 이 방식은 자료형에 상관 없이 universal 하게 사용할 수 있다.
+- 그리고 *One Value* ([코드](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/string/OneValue.cpp)) 는 한 block 의 entry 들이 모두 동일한 값을 가지는 특수한 경우에만 사용할 수 있는 encoding [^one-value] 이다.
+
+#### 2.2.3. Dictionary
+
+- *Dictionary Encoding* 은 `[원본:대체]` 의 mapping 인 *Dictionary* (가령 C++ 문법으로 설명하자면, `std::map<원본, 대체>`) 을 가지고 해당 `원본` 값들을 `대체` 값으로 전부 대체하는 encoding 방법이다.
+	- 당연히 `대체` 의 데이터 크기는 `원본` 보다 작도록 하기 때문에, 더 많이 대체할 수록 더 많이 압축된다.
+
+> [!tip] 논문에서의 표현
+> - 논문에서는 이 `[원본:대체]` 가 `[distinct:code]` 로 표현된다.
+
+- 이때 저 `대체` 를 어떤 것으로 할지, *Dictionary* 로 어떤 자료구조를 쓸 지는 encoding 대상에 따라 다르다.
+	- 만약 column data 가 고정 크기라면 (가령, `VARCHAR(255)` 등), 배열로서 Dictionary 를 구현한다.
+		- 이때는 당연히 저 `대체` 는 배열의 index 가 될 것이다.
+	- 만약 가변크기라면, offset 이 있는 문자열 풀 [^string-pool] 을 이용한다.
+
+#### 2.2.4. Frequency
+
+- *Frequency Encoding* 은 *Dictionary Encoding* 이랑 유사하지만, 어떤 값이 등장하는 빈도에 따라 추가적인 최적화가 들어간 것이다.
+- 여기서의 `대체` 는 고정 크기의 값이 아니고, 빈도가 많은 값에 대해서는 적은 크기의 `대체` 로 대체하고, 반대로 빈도가 적은 값에 대해서는 큰 크기의 `대체` 로 대체한다.
+- 가령 다음처럼 구현할 수 있다.
+	- 가령 가장 빈번하게 등장하는 두 값의 경우에는, `대체` 를 1bit 로 구성할 수 있고, 따라서 해당 값들은 1bit 로 대체할 수 있다.
+	- 그 다음으로 빈도가 높은 8개 (3등 ~ 10등) 까지는, `대체` 를 3bit 로 구성해 대체하고,
+	- 나머지의 빈도는 그냥 Dictionary 처럼 배열 index (offset) 으로 배체하는 방식
+- 이 방법은 처음에 [IBM DB2 BLU 논문](https://www.vldb.org/pvldb/vol6/p1080-barber.pdf) 에서 제시되었는데, BtrBlock 에서는 여기에 추가적으로 최적화를 했다고 한다:
+	- 현실의 데이터를 분석해본 결과, 값의 빈도가 대략 지수적 (exponentially) 감소한다는 관찰에 따라서,
+	- 빈도가 높은 몇개의 값과 비트맵 등을 저장한다고 한다 [^freq-end]
+
+#### 2.2.5. FOR & Bit-packing
+
+- *Frame of Reference* (*FOR*) 는 기준값을 바꾸는 것이다.
+	- 이게 뭔이야기인고 하니, 일반 정수값은 따지고 보면 0과의 차이 이다.
+	- 이때 이 기준값을 바꾼다면, 해당 값들을 더 작게 만들 수 있을 것이다.
+- 그리고 값들이 더 작아지게 되면, *Bit-packing* 을 이용해 더 적은 bit 로 해당 값들을 표현할 수 있다.
+	- 가령 `[105, 101, 113]` 를 기준값을 100 으로 FOR 를 하면, `[5, 1, 13]` 으로 표현될 수 있다.
+	- 이때 *Bit-packing* 을 하게 되면 $8 * 3 = 24bit$ 로 표현되던 것이 각각 4bit 씩 $4 * 3 = 12bit$ 로 표현될 수 있다.
+- 하지만 위 방식에서는 돌발상황이 생길 수 있다.
+	- 만일 위 예시에서 118 이 튀어나온 다면, 18 은 4bit 으로는 표현하지 못하기 때문에 모든 값들을 5bit 으로 바꿔야 한다.
+	- 이러한 문제를 막기 위해 저런 돌발상황에 대해서는 별도로 관리하여 bitbase 를 올리지 않아도 되게 할수 있다.
+		- 이것을 *Patched FOR* (*PFOR*) 라고 부르고, 이 아이디어를 SIMD 에 적용한 알고리즘인 *SIMD- FastPFOR* 와 *SIMD-FastBP128* [^simd] 이 BtrBlock 에 적용됐다고 한다.
+- 보다시피 이 encoding scheme 은 당연히 정수값에 대해서만 사용할 수 있다.
+
+#### 2.2.6. FSST
+
+- *Fast Static Symbol Table* (*FSST*) 도 *Dictionary Encoding* 와 유사한 원리를 가진다:
+	- String 의 8byte 길이의 (즉, 문자 8개) substring 을 1byte `대체` 로 바꾸는 것이다.
+- 이때의 dictionary 는 *Symbol Table* 이라고 불리는데, 빈도가 높은 순서대로 $2^{8} = 256$ 개의 substring 을 entry 로 넣어 관리한다.
+	- 그리고 이 *Symbol Table* 은 block 당 하나를 생성한다고 한다.
+- 당연히 저 *Symbol Table* 을 구성하기 위해 빈도 높은 순서대로 정렬하고 막 해야 할 것이기 때문에, compression 과정은 다소 오래걸린다.
+- 하지만, decompression 에 대해서는 그냥 치환만 하면 되기 때문에, 아주 빠르다.
+
+#### 2.2.7. NULL Storage Using Roaring Bitmaps.
+
+- *Roaring Bitmap* 은 bitmap 을 압축하기 위한 algorithm 이다.
+	- 이놈을 요약하면 전체 bitmap 을 일정 크기의 chunk 로 자르고, 해당 chunk 에 1이 얼마나 있냐를 가지고 동적으로 해당 chunk 를 저장할 자료구조를 선택하는 방식으로 작동한다고 한다.
+	- 오픈소스 Roaring Bitmap 라이브러리는 HW-aware optimization 이 들어가 있고 (가령 bit 를 세는 것은 x86 이나 ARM 에서 하나의 instruction 으로 제공해 준다고 한다), BtrBlock 에서는 이것을 활용한다고 한다.
+- 따라서 block 의 `NULL` entry 를 bitmap 으로 표현한 뒤, 이것을 압축하는 형태인 것으로 보인다 [^roaring-bitmap].
+	- `NULL` 말고도 다른 [[#2.2.4. Frequency|Frequency Encoding]] 에서의 예외사항 들에 대해서도 이 방식으로 추적한다고 한다.
+
+#### 2.2.8. Cascading Compression
+
+- *Cascading Compression* 은 [[#2.2.5. FOR & Bit-packing|FOR & Bit-packing]] 에서 처럼 하나의 compression output 을 다른 compression 의 input 으로 넣는 것을 의미한다.
+- [이 논문](https://dl.acm.org/doi/abs/10.1145/3323991) 에서는 여러 compression algorithm 들을 분류하고, 이들을 어떻게 cascading 할 수 있을지에 대해 제시했다.
+	- 여기서는 algorithm 들을 logical, physical 두가지 분류로 나누고,
+	- Gray-box cost model 이라는 것을 통해 정수값 compression 을 위한 algorithm 선택법을 제시했다.
+- 하지만 위 논문에서 제시한 것은 정수값에 대한, 최대 2가지 algorithm 을 조합하는 방법이기에, 저자들은 n 가지 algorithm 을 조합하며 type 또한 정수에 한정되지 않는 방법을 개발했다고 한다.
+	- 또한 이 개발한 방법은 cost model 을 사용하지 않고, sampling-based 이기에 더 확장성이 좋다고 한다. 자세한 것은 더 읽어보자.
+
+## 3. Scheme Selection & Compression
+
+#### 3.0. Overview
+
+#### 3.0.1 Scheme selection algorithms.
+
+- Data 에 맞는 compression scheme 을 고르는 알고리즘은 당연히 중요하다.
+	- 각 compression scheme 은 대상으로 하는 자료형도 다르고, 어떤 data distribu
+
+### 3.1. Estimating Compression Ratio with Samples
+
+### 3.2. Cascading
 
 ---
-[^vectorized-processing]: 이게 뭔지는 모르겠지만 논문에서 별로 중요해 보이지는 않는다. 일단은 넘어가자.
-[^compilation]: 아마도 anaytical query compilation 일 것 같다. 즉, query optimization, plan 과 관련된 부분일듯.
+[^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
+[^compilation]: ([논문](https://www.vldb.org/pvldb/vol4/p539-neumann.pdf)) Query engine 최적화 논문이다.
 [^data-lake-proposal]: [[(논문) Lakehouse - A New Generation of Open Platforms that UnifyData Warehousing and Advanced Analytics|CMU 15721 수업 논문]] 인듯?
 [^data-lake-network-bottleneck]: Data warehouse 의 경우에는 (적어도) 같은 벤더사 내에서의 네트워크이기 때문에 이러한 점이 문제가 되지 않았던 것인가?
-[^end-to-end]: 논문에서는 이러한 것을 "End-to-end research" 라고 칭한다.
+[^one-value]: #draft 이거 감 안온다. 코드 보고 확인하자.
+[^string-pool]: #draft 이것도 뭔지 감이 잘 안온다. 코드 보고 확인해야 할듯.
+[^freq-end]: #draft 이것도 코드 보고 확인하자.
+[^simd]: #draft 구체적인 이야기는 하지 않는다. [논문](https://onlinelibrary.wiley.com/doi/10.1002/spe.2203) 참고해서 확인하자.
+[^roaring-bitmap]: #draft 주인장의 추측이다. 논문에서는 column 의 NULL 값을 bitmap 으로 어떻게 표현하는지에 대한 설명은 되어 있지 않다.
