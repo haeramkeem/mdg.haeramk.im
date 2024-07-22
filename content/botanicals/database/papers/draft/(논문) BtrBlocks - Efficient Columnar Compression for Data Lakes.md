@@ -457,7 +457,7 @@ MANT: 1111101011100001010001111010111000010100011110101110
 	- $±inf$ 혹은 $±NaN$ 는 당연히 decimal tuple 로 변환되지 않을 것이므로 이놈들이 *Exception* 가 되고
 	- *Sign* 이 `digit` 에 들어가기 때문에 [^sign-digit] $-0$ 에 대해서도 *Exception* 으로 처리한다고 한다.
 - *Exception* 처리는 그냥 단순하다. $exp = 23$ 로 해놓고, 그냥 input double 그대로 세번째 field 에 처박아놓으면 된다.
-- 따라서 결과적으로 *Pseudodecimal Encoding* 을 거치게 되면 decimal column 두개, double column 하나가 나오게 된다.
+- 따라서 결과적으로 *Pseudodecimal Encoding* 을 거치게 되면 decimal column 두개, double column (*Patch* column) 하나가 나오게 된다.
 	- 이때 *Significant* column 의 경우에는 32bit,
 	- *Exponent* column 의 경우에는 5bit 을 사용한다고 한다.
 
@@ -465,11 +465,25 @@ MANT: 1111101011100001010001111010111000010100011110101110
 
 #### 4.2.1. Cascading to integer encoding schemes.
 
-- 
+- 위에서 말한 것처럼, 결과적으로 *Significant*, *Exponent* decimal column 두개와 하나의 *Patch* double column 이 나오게 된다.
+- 그리고 이것들이 cascading 되어 새로 encoding 되게 되는 것.
+- 가령, 다음의 예시 (여기서 선택된 cascading encoding scheme 또한 당연히 예시이다) 처럼 된다는 것.
+
+![[Pasted image 20240722211346.png]]
+
+> [!tip] 위 그림에 대한 첨언
+> - 여기서 Input 은 세로방향이고, 그 옆의 Significant, Exponent, Patch 는 가로방향이다.
+> - 즉, `0.989` 가 Significant 의 첫 원소 (`99`), Exponent 의 첫 원소 (`2`) 로 변환되는 것.
 
 #### 4.2.2. When to choose Pseudodecimal Encoding.
 
-- 
+- [[#3.1.2. Estimating compression ratio.|Section 3.1.2]] 에서 heuristic 으로 compression scheme 을 걸러낸다고 했는데, 그럼 *Pseudodecimal Encoding* 의 경우에는 언제 걸러질까?
+	1) 첫번째는 *Exception* 이 너무나 많을 때이다.
+		- 이 경우에 *Pseudodecimal Encoding* 을 사용하면 compression ratio 는 살짝 증가하긴 하지만, *Exception* 처리가 너무 빈번해져 decompression overhead 가 너무 커지게 된다.
+		- 따라서 *Exception* 이 50% 이 넘어가게 되면, 이놈이 제외된다.
+	2) 두번째는 unique value 가 너무 적을 때이다. 이때에는 [[#2.2.3. Dictionary|Dictionary]] 를 사용하는 것이 훨씬 더 decompression overhead 가 적기 때문에, unique value 가 10% 이하로 떨어지면 이놈이 제외된다.
+
+## 5. Fast Decompression
 
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
