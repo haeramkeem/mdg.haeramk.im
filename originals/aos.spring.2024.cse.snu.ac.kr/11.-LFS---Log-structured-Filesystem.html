@@ -15,7 +15,7 @@
 </blockquote>
 <h2 id="lfs-a-log-structured-filesystem">LFS, A Log-structured Filesystem<a aria-hidden="true" tabindex="-1" href="#lfs-a-log-structured-filesystem" class="internal"> §</a></h2>
 <ul>
-<li>자세한 Background, problem statement 내용은 <a href="../../botanicals/os/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system" class="internal" data-slug="botanicals/os/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">논문 리뷰</a> 에서 확인하자
+<li>자세한 Background, problem statement 내용은 <a href="../../botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system" class="internal" data-slug="botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">논문 리뷰</a> 에서 확인하자
 <ul>
 <li>간단하게 말하면 (1) small file write 가 너무 많아 FFS 의 cylinder group 을 사용해도 operation time 대부분이 seek time 로 도배되어 버리는 것과 (2) 이 small file 의 대부분인 metadata (directory, inode) 는 synchronous 하게 작동한다는 것이다.</li>
 <li>LFS 가 핵심적으로 해결하려고 하는 문제는 write overhead 이다; read 는 memory size 가 커짐에 따라 이곳을 cache 로 사용하게 되며 오버헤드가 그리 크지 않다고 한다.</li>
@@ -147,7 +147,7 @@
 <li>Cleaning 에 필요한 overhead (즉, cleaning 에 필요한 read 와 write) 를 추가하여 값을 산정</li>
 </ul>
 </li>
-<li>자세한건 <a href="../../botanicals/os/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system" class="internal" data-slug="botanicals/os/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">논문 리뷰</a> 에서 확인하고, 몇가지만 적어보면
+<li>자세한건 <a href="../../botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system" class="internal" data-slug="botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">논문 리뷰</a> 에서 확인하고, 몇가지만 적어보면
 <ul>
 <li>u 가 live block 이면, (1 - u) 가 dead block 이고 결과적으로 2 / (1 - u) 가 되는 것</li>
 <li>여기서 segment 를 전부 read 한다고 가정했는데</li>

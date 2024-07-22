@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html><head><title>(논문) F2FS - A New File System for Flash Storage</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) F2FS - A New File System for Flash Storage"/><meta property="og:description" content="본 논문은 F2FS: A New File System for Flash Storage (FAST &amp;#039;15) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 본 문서는 아직 #draft 상태입니다. 읽을 때 주의해 주세요."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="본 논문은 F2FS: A New File System for Flash Storage (FAST &amp;#039;15) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 본 문서는 아직 #draft 상태입니다. 읽을 때 주의해 주세요."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="botanicals/os/fs/papers/(논문)-F2FS---A-New-File-System-for-Flash-Storage"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) F2FS - A New File System for Flash Storage</h1><p class="content-meta ">Jul 22, 2024, 35 min read</p><ul class="tags "><li><a href="../../../../tags/논문" class="internal tag-link">#논문</a></li><li><a href="../../../../tags/os" class="internal tag-link">#os</a></li><li><a href="../../../../tags/snu_cse_ms_aos24s" class="internal tag-link">#snu_cse_ms_aos24s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 논문은 <a href="https://www.usenix.org/conference/fast15/technical-sessions/presentation/lee" class="external">F2FS: A New File System for Flash Storage (FAST '15)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="failure">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 문서는 아직 #draft 상태입니다. 읽을 때 주의해 주세요. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="1-abstract-introduction">1. Abstract, Introduction<a aria-hidden="true" tabindex="-1" href="#1-abstract-introduction" class="internal"> §</a></h2>
+<h3 id="요약">요약<a aria-hidden="true" tabindex="-1" href="#요약" class="internal"> §</a></h3>
+<ul>
+<li>F2FS 는 flash storage 에서 사용하기 위해 고안된 file system 이다.</li>
+<li>Sequential write, append-only logging 을 이용한다.</li>
+<li>기존의 EXT4 file system 보다 더 나은 성능을 보여준다고 한다.</li>
+</ul>
+<h3 id="배경---flash-media">배경 - Flash Media<a aria-hidden="true" tabindex="-1" href="#배경---flash-media" class="internal"> §</a></h3>
+<ul>
+<li>Flash memory 는 erase-before-write 나 sequential write, P/E cycle 등의 특징이 있다.</li>
+<li>요즘은 여러개의 NAND flash chip 들을 controller 에 bus 로 연결해서 사용한다.</li>
+<li>Controller 펌웨어에는 FTL 이 들어있고, 여기에서 이런 Flash memory 의 특징들을 generic block interface 로 변환한다.</li>
+</ul>
+<h3 id="기존의-문제점">기존의 문제점<a aria-hidden="true" tabindex="-1" href="#기존의-문제점" class="internal"> §</a></h3>
+<ul>
+<li>빈번한 random write 는 internal fragment 를 유발해 성능이 나빠지게 만든다.</li>
+<li>이러한 random write 는 실제 사용 환경에서 생각보다 자주 일어나고 특히 자원이 한정적인 모바일 환경에서 더 문제가 된다.</li>
+<li>실 환경을 테스트한 이전 연구에 따르면, 다음과 같은 결과가 나왔다고 한다.
+<ul>
+<li>Facebook 앱의 경우 sequential write 에 비해 150% 더 많은 random write 를 수행한다고 한다.</li>
+<li>또한 전체 IO 의 80% 가 random write 였고, 70% 의 random write 가 <code>fsync</code> syscall 에 의해 수행된다는 것을 알았다.</li>
+<li>이런 <code>fsync</code> syscall 은 SQLite 에 의해 수행되는 경우가 많다고 한다.</li>
+</ul>
+</li>
+<li>이런 random write 의 문제는 LFS 나 copy-on-write 를 사용하면 줄일 수 있다.
+<ul>
+<li>BTRFS: copy-on-write 방식의 FS</li>
+<li>NILFS2: LFS 방식의 FS</li>
+</ul>
+</li>
+<li>하지만 위와 같은 fs 들은 flash media 에 최적화되어 있지 않고, 따라서 다소 성능과 수명의 측면에서 비효율적이라고 한다.</li>
+</ul>
+<h3 id="f2fs-란">F2FS 란?<a aria-hidden="true" tabindex="-1" href="#f2fs-란" class="internal"> §</a></h3>
+<ul>
+<li>F2FS 는 위와 같은 문제점을 해결하기 위해, 기존의 LFS 를 flash media 에 최적화시켰다고 한다.</li>
+<li>또한 generic block interface 도 제공한다.</li>
+</ul>
+<h3 id="디자인-고려사항">디자인 고려사항<a aria-hidden="true" tabindex="-1" href="#디자인-고려사항" class="internal"> §</a></h3>
+<h4 id="flash-friendly-on-disk-layout">Flash-friendly on-disk layout<a aria-hidden="true" tabindex="-1" href="#flash-friendly-on-disk-layout" class="internal"> §</a></h4>
+<ul>
+<li>섹션 <a href="#21-on-disk-layout" class="internal">2.1</a> 내용</li>
+<li>데이터에 segment 단위로 block 을 할당해 zone 에 저장한다</li>
+<li>cleaning 은 section 단위로 수행한다</li>
+<li>이러한 단위들은 FTL 의 작업 단위에 맞춰서 불필요한 copy 과정을 줄인다.</li>
+</ul>
+<h4 id="cost-effective-index-structure">Cost-effective index structure<a aria-hidden="true" tabindex="-1" href="#cost-effective-index-structure" class="internal"> §</a></h4>
+<ul>
+<li>섹션 <a href="#22-file-structure" class="internal">2.2</a> 내용</li>
+<li>LFS 에서는 data block 과 inode 의 index block 가 변경되었을 경우 새로운 공간에 write 한다.</li>
+<li>파일의 사이즈가 큰 경우, 파일 마지막 쯤의 data block 은 inode 상에서 여러 indirect block index 를 타고 내려가다가 마지막 direct block index 에 해당 data block 의 위치가 저장될 것이다.</li>
+<li>이때 이 파일이 수정될 경우를 inode block tree 에서 bottom-up 으로 살펴보자.
+<ol>
+<li>일단 수정된 block 은 다른 장소에 write 될 것이다.</li>
+<li>그럼 이때 해당 block 의 direct index block 또한 수정하기 위해 다른 곳에 새로 write 할 것이고,</li>
+<li>해당 direct index block 의 indirect block 또한 수정하기 위해 다른곳에 새로 write 하는 작업이 반복될 것이다.</li>
+</ol>
+</li>
+<li>따라서 많은 양의 write 가 수반되고, 이것을 wandering tree 문제라고 한다.</li>
+<li>이것을 막기 위해 F2FS 에서는 node address table 을 사용한다.</li>
+</ul>
+<h4 id="multi-head-logging">Multi-head logging<a aria-hidden="true" tabindex="-1" href="#multi-head-logging" class="internal"> §</a></h4>
+<ul>
+<li>섹션 <a href="#24-multi-head-logging" class="internal">2.4</a> 내용</li>
+<li>여러개의 segment 를 사용해 하나의 segment 에만 sequential write 하는 것이 아닌 여러개에 하게 되는데</li>
+<li>여기서 예상되는 수정 빈도에 따라 data 와 metadata 를 다른 segment 에 저장해 hot-cold separation 을 수행한다.</li>
+</ul>
+<h4 id="adaptive-logging">Adaptive Logging<a aria-hidden="true" tabindex="-1" href="#adaptive-logging" class="internal"> §</a></h4>
+<ul>
+<li>섹션 <a href="#26-adaptive-logging" class="internal">2.6</a> 내용</li>
+<li>F2FS 는 LFS 와 유사하게 random write 를 sequential write 로 변환하여 처리하는데</li>
+<li>이때의 단점은 sequential write 의 성능이 보장되기 위해서는 여유 공간이 필요하다는 것이다.</li>
+<li>따라서 F2FS 에서는 공간이 부족해 질 경우 성능 저하를 완화하기 위해 <a href="../../../../botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system#threading" class="internal" data-slug="botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">threaded logging</a> 을 사용한다.</li>
+<li>즉, internal fragmentation 이 많은 dirty segment 의 free space 에 중간중간의 live block 을 건너뛰며 sequential write 하는 것.</li>
+<li>이렇게 함으로써 cleaning 에 소요되는 오버헤드를 공간이 부족한 상황에서 줄일 수 있다.</li>
+</ul>
+<h4 id="fsync-acceleration-with-roll-forward-recovery"><code>fsync</code> acceleration with roll-forward recovery<a aria-hidden="true" tabindex="-1" href="#fsync-acceleration-with-roll-forward-recovery" class="internal"> §</a></h4>
+<ul>
+<li>섹션 <a href="#27-checkpointing-and-recovery" class="internal">2.7</a> 내용</li>
+<li>Metadata write 는 small synchronize write 로 수행되는데 이는 성능을 저하시키기에 metadata write 를 최소화하고 효율적인 roll-forward recovery mechanism 으로 복구할 수 있는 기능을 F2FS 에 추가했다고 한다.</li>
+</ul>
+<h3 id="실험-방법">실험 방법<a aria-hidden="true" tabindex="-1" href="#실험-방법" class="internal"> §</a></h3>
+<ul>
+<li>F2FS 는 널리 사용되는 세 file system (EXT4 와 BTRFS, NILFS2) 와 비교하여 그의 성능을 측정했다.</li>
+<li>측정할 때는 mobile, server 두 부류로 나눠서 진행했다고 하며,</li>
+<li>Server 의 경우에는 SATA SSD 와 PCIe SSD 두 세부 부류로 또 나눠서 진행했다고 한다.</li>
+</ul>
+<h2 id="2-design-and-implementation-of-f2fs">2. Design and Implementation of F2FS<a aria-hidden="true" tabindex="-1" href="#2-design-and-implementation-of-f2fs" class="internal"> §</a></h2>
+<h3 id="21-on-disk-layout">2.1. On-Disk Layout<a aria-hidden="true" tabindex="-1" href="#21-on-disk-layout" class="internal"> §</a></h3>
+<h4 id="단위-segment-section-zone">단위: Segment, Section, Zone<a aria-hidden="true" tabindex="-1" href="#단위-segment-section-zone" class="internal"> §</a></h4>
+<ul>
+<li>일단 F2FS 의 모든 단위는 FTL 의 작업 단위에 맞게 설계되어 있다.</li>
+<li><em>Segment</em>: Volume 공간 전체를 동일한 크기의 segment 로 나눈 것.
+<ul>
+<li>Segment 는 F2FS 의 최소 관리 단위이다. 그리고 FS 초기화시에 레이아웃을 잡는 데에 사용된다.</li>
+</ul>
+</li>
+<li><em>Section</em>: Segment 가 모인 것</li>
+<li><em>Zone</em>: Section 이 모인 것</li>
+</ul>
+<h4 id="layout">Layout<a aria-hidden="true" tabindex="-1" href="#layout" class="internal"> §</a></h4>
+<ul>
+<li>F2FS 에서는 전체 volume 을 다음의 6개의 구역으로 구분한다:</li>
+</ul>
+<p><img src="../../../../images/Pasted-image-20240411093843.png" width="auto" height="auto"/></p>
+<h5 id="superblock-sb">Superblock (SB)<a aria-hidden="true" tabindex="-1" href="#superblock-sb" class="internal"> §</a></h5>
+<ul>
+<li>여기에는 storage partition format 시에 결정되는 (따라서 변경이 불가능한) partition information 이나 default parameter 들이 저장된다.</li>
+</ul>
+<h5 id="checkpoint-cp">Checkpoint (CP)<a aria-hidden="true" tabindex="-1" href="#checkpoint-cp" class="internal"> §</a></h5>
+<ul>
+<li>기본적으로는 <a href="../../../../botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system#41-checkpoints" class="internal" data-slug="botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">LFS 의 Checkpoint region</a> 과 유사한 기능을 한다.</li>
+<li>다음과 같은 것들이 저장된다:
+<ul>
+<li>File system 상태</li>
+<li><a href="#node-address-table-nat" class="internal">NAT</a>, <a href="#segment-information-table-sit" class="internal">SIT</a> 들에 대한 valid 를 나타내는 bitmap</li>
+<li>미아상태가 된 inode list</li>
+<li>현재 사용되고 있는 segment 들에 대한 summary entry</li>
+</ul>
+</li>
+<li>CP 에는 두 checkpoint pack 이 저장된다.
+<ul>
+<li>Checkpoint pack 에는 특정 시점에의 일관된 F2FS 상태가 저장되어 있고, crash recovery 에 사용된다.</li>
+<li>이 두 checkpoint pack 은 두 segment (0번과 1번) 에 각각 저장된다</li>
+<li>둘 중 하나의 checkpoint pack 에는 현재의 상태가 작성되고, 하나의 checkpoint pack 에는 이전 상태가 작성 완료된 상태로 보관된다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="segment-information-table-sit">Segment Information Table (SIT)<a aria-hidden="true" tabindex="-1" href="#segment-information-table-sit" class="internal"> §</a></h5>
+<ul>
+<li>이것은 기본적으로는 <a href="../../../../botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system#36-segment-usage-table" class="internal" data-slug="botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">LFS 의 Segment Usage Table</a> 과 유사한 역할을 한다.</li>
+<li>즉, <a href="#main-area" class="internal">Main Area</a> 의 valid block 들에 대해 그의 개수와 bitmap 을 담고 있다.</li>
+<li>이러한 정보들은 Cleaning 에 사용되는 것</li>
+</ul>
+<h5 id="node-address-table-nat">Node Address Table (NAT)<a aria-hidden="true" tabindex="-1" href="#node-address-table-nat" class="internal"> §</a></h5>
+<ul>
+<li>기본적으로는 <a href="../../../../botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system#index-structure---inode-map" class="internal" data-slug="botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">LFS 의 Inode map</a> 과 유사하다.</li>
+<li>즉, inode number 를 이용해 해당 inode 가 저장된 위치를 찾을 수 있게 하는 역할이다.</li>
+</ul>
+<h5 id="segment-summary-area-ssa">Segment Summary Area (SSA)<a aria-hidden="true" tabindex="-1" href="#segment-summary-area-ssa" class="internal"> §</a></h5>
+<ul>
+<li>기본적으로는 <a href="../../../../botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system#segment-summary-information" class="internal" data-slug="botanicals/os/fs/papers/(논문)-The-design-and-implementation-of-a-log-structured-file-system">LFS 의 Segment Summary Information</a> 과 유사하다.</li>
+<li>즉, <a href="#main-area" class="internal">Main Area</a> 의 block 들이 어느 inode 에 연결되어 있는지 (ownership) 을 매핑해 놓은 것</li>
+<li>이러한 정보 또한 Cleaning 에 사용된다.</li>
+</ul>
+<h5 id="main-area">Main Area<a aria-hidden="true" tabindex="-1" href="#main-area" class="internal"> §</a></h5>
+<ul>
+<li>여기에는 실제 데이터가 들어가는 공간으로, 4KB block 들로 구성되어 있다.</li>
+<li>Block 에는 두가지 종류가 있다:
+<ul>
+<li>Node block: 여기에는 inode 혹은 direct/indirect index 가 저장된다.</li>
+<li>Data block: 여기에는 file 이나 directory 가 저장된다.</li>
+</ul>
+</li>
+<li>하나의 section 에는 node block 과 data block 이 섞여있을 수 없다고 한다.</li>
+</ul>
+<h4 id="파일을-찾는-여정">파일을 찾는 여정<a aria-hidden="true" tabindex="-1" href="#파일을-찾는-여정" class="internal"> §</a></h4>
+<ul>
+<li><code>/dir/file</code> 을 찾는다고 해보자.</li>
+</ul>
+<ol>
+<li><code>/</code>
+<ol>
+<li>우선 NAT 를 이용해 <code>/</code> 에 대한 inode 를 찾고 <sup><a href="#user-content-fn-root-dir-inode" id="user-content-fnref-root-dir-inode" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup></li>
+<li>그 inode 에서 index block 을 따라가 내용물을 찾고</li>
+<li>해당 내용물에서 <code>dir</code> 에 대한 inode number 를 얻어낸다.</li>
+</ol>
+</li>
+<li><code>dir</code>
+<ol>
+<li>NAT 와 <code>dir</code> 에 대한 inode number 로 inode 를 찾고</li>
+<li>그 inode 에서 index block 을 따라가 내용물을 찾은 뒤</li>
+<li>내용물에서 <code>file</code> 에 대한 inode number 를 얻어낸다.</li>
+</ol>
+</li>
+<li><code>file</code>
+<ol>
+<li>NAT 와 <code>file</code> 에 대한 inode number 로 inode 를 찾고</li>
+<li>그 inode 에서 index block 을 따라가 내용물을 찾으면 끝.</li>
+</ol>
+</li>
+</ol>
+<h3 id="22-file-structure">2.2. File Structure<a aria-hidden="true" tabindex="-1" href="#22-file-structure" class="internal"> §</a></h3>
+<h4 id="node-node-id-nat">Node, Node ID, NAT<a aria-hidden="true" tabindex="-1" href="#node-node-id-nat" class="internal"> §</a></h4>
+<ul>
+<li>F2FS 에서는 <em>Node</em> 라는 것을 사용하는데, 이것을 LFS 와 비교하며 살펴보자.</li>
+<li>LFS 의 경우에는
+<ul>
+<li>Inode 에 direct block, indirect block 들의 <u>포인터</u>가 저장되고</li>
+<li>File content 를 찾을 때에는 (1) Inode map 와 inode number 로 inode 를 찾고, (2) 여기 저장되어 있는 <u>포인터</u>로 data block 들을 찾아가는 방식을 사용한다.</li>
+</ul>
+</li>
+<li>하지만 이 방식은 Wandering tree 문제가 있다.
+<ul>
+<li>Inode, indirect block 들은 block 단위로 log 에 저장되는데</li>
+<li>Inode - indirect block - data block 이 모두 <u>포인터</u>로 연결되어 있어</li>
+<li>Data block 이 변경되어 새로 append 되면 주소가 바뀌니까 indirect block 또한 변경되어야 하고,</li>
+<li>이것은 또 indirect block 이 append 되어 주소가 바뀌기에 이것에 영향받는 또 다른 indirect block 이나 inode 가 append 되어야 하기 때문에</li>
+<li>결국에는 data block 의 변경이 연관된 모든 block 을 변경을 야기하는 “Propagation” 이 일어나게 된다.</li>
+</ul>
+</li>
+<li>따라서 F2FS 에서는 이것을 <em>Node</em> 라는 것을 도입해 해결한다.</li>
+</ul>
+<p><img src="../../../../images/Pasted-image-20240411093804.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 문제가 되는 것이 block 들을 포인터로 연결해 놓는 것이기 때문에 포인터를 줄이고 그 대신 <em>Node ID</em> 와 <a href="#node-address-table-nat" class="internal">NAT</a> 을 이용한다.</li>
+<li>우선 <em>Node</em> 는 (1) Inode 뿐 아니라 (2) Indirect block, 그리고 (3) indirect block 의 자식으로 data block 의 포인터를 저장하는 direct block 까지를 전부 <em>Node</em> 라고 부른다.</li>
+<li>그리고 각각의 Node 에는 Node ID 가 부여되어 있고, 이 Node ID - Node addr 변환을 <a href="#node-address-table-nat" class="internal">NAT</a> 가 해주는 것.</li>
+<li>즉, Node 간의 연결을 pointer 로 바로 하기 보다는 한단게 추상화 시켜서 ID 로 연결되게 하고, 실제 주소는 NAT 로 알 수 있게 해서</li>
+<li>Data block 가 update 되어 주소가 변경되었을 때 그에 영향받는 Node 를 전부 update 하는 것이 아닌 Direct node 와 NAT 만 update 하는 방법으로 wandering problem 을 해결한 것.</li>
+<li>연결방식을 정리해 보면 다음과 같다.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>SRC</th><th>DEST.</th><th>CONN</th></tr></thead><tbody><tr><td>Inode (direct pointer field)</td><td>Data block</td><td>Ponter</td></tr><tr><td>Inode (single-indirect field)</td><td>Direct node</td><td>Node ID + NAT</td></tr><tr><td>Inode (double, triple-indirect field)</td><td>Indirect node</td><td>Node ID + NAT</td></tr><tr><td>Direct node</td><td>Data block</td><td>Pointer</td></tr><tr><td>Indirect node</td><td>Direct node</td><td>Node ID + NAT</td></tr></tbody></table>
+<ul>
+<li>이때 변경 과정을 비교해 보자.
+<ul>
+<li>아래의 과정은 sequential write 의 관점에서 봤을 때이다; inode map, NAT 등의 random write 는 카운트하지 않았다.</li>
+</ul>
+</li>
+<li>파일의 크기가 8MB 에서 4GB 일 때, Inode 의 Single indirect field 가 사용되고, 이때 data block 이 변경되면
+<ul>
+<li>LFS 의 경우에는 direct block -> inode block 순서로 총 두개가 변경되고</li>
+<li>F2FS 의 경우에는 direct node 하나만 변경되면 된다.</li>
+</ul>
+</li>
+<li>파일의 크기가 4GB 를 넘어가면, Inode 의 Double indirect field 가 사용되고, 이때 data block 이 변경되면
+<ul>
+<li>LFS 의 경우에는 direct block -> indirect block -> inode block 순서로 총 세개가 변경되고</li>
+<li>F2FS 의 경우에는 마찬가지로 direct node 하나만 변경하면 된다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="전체-파일-구조">전체 파일 구조<a aria-hidden="true" tabindex="-1" href="#전체-파일-구조" class="internal"> §</a></h4>
+<ul>
+<li>위 그림에서 보이듯이, inode 에는 다음과 같은 field 가 있다.
+<ul>
+<li>Metadata: 뭐 파일 권한 등의 메타데이터가 저장되어 있는 공간이다.</li>
+<li>Direct pointers: 10개까지의 data block pointer 를 저장하는 공간이다.</li>
+<li>Single-indirect: Direct node 를 한번 거쳐 data block 을 연결하는 공간이다. 여기에는 두개의 direct node ID 를 저장할 수 있다.</li>
+<li>Double-indirect: Indirect node + direct node 총 두번을 거쳐 data block 을 연결하는 공간이다. 여기에는 두개의 indirect node ID 를 저장할 수 있다.</li>
+<li>Triple-indirect: Indirect node + indirect node + direct node 총 세번을 거쳐 data block 을 연결하는 공간이다. 여기에는 한개의 indirect node ID 를 저장할 수 있다.</li>
+</ul>
+</li>
+<li>그리고 Inline 어쩌고 하는 field 가 있는데
+<ul>
+<li>Inline data:
+<ul>
+<li>Direct pointer 에 data block 의 pointer 를 저장할 수도 있지만,</li>
+<li>파일 사이즈가 작다면 pointer 로 연결하지 않고 이 공간에 data 를 직접 넣을 수도 있다.</li>
+<li>파일 사이즈가 3692 byte 보다 작으면 이곳에 넣을 수 있다.</li>
+</ul>
+</li>
+<li>inline xattrs (inline extended attributes):
+<ul>
+<li>추가적인 임의의 attribute <sup><a href="#user-content-fn-attribute" id="user-content-fnref-attribute" data-footnote-ref aria-describedby="footnote-label" class="internal">2</a></sup> 들을 저장할 수 있는 곳이라고 한다.</li>
+<li>Attribute 사이즈가 200 byte 보다 작으면 이곳에 넣을 수 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="23-directory-structure">2.3. Directory Structure<a aria-hidden="true" tabindex="-1" href="#23-directory-structure" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="failure">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 이 섹션은 추후에 다시 정리될 예정입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<ul>
+<li>하나의 directory file 은 여러 4KB 짜리 <em>directory entry (dentry)</em> 로 구성되어 있고</li>
+<li>여기에는 bitmap 과 slot-name pair 를 저장하는 두 array 로 구성되어 있다.</li>
+<li>이 bitmap 어떤 slot 에 대해 유효한지 아닌지 나타내게 되고</li>
+<li>slot 에는 hash, inode number, file name length, file type 이 들어간다.</li>
+<li>directory 파일은 multi-level hash table 을 이용해 이 dentry 들을 관리한다.</li>
+<li>F2FS 에서는 directory file 에서 file name 에 해당하는 dentry 를 찾을 때</li>
+<li>우선 file name 을 hash 해</li>
+<li>directory inode 안에 있는 hash table 을 level 0 부터 max level 까지 돌아다니며 찾는다.</li>
+<li>각 level 에서는 2개에서 4개까지의 dentry block 으로 구성된 bucket 하나를 스캔한다</li>
+<li>N 이 dentry 의 개수라고 할 때 O(log(N)) 의 시간이 걸린다고 한다.</li>
+<li>dentry 를 더 빨리 찾기 위해 bitmap, hash 값, file name 순서대로 찾는다고 한다.</li>
+<li>Server 와 같은 dentry 가 많이 필요한 환경에서는 dentry 를 위한 공간을 더 많이 잡아놓을 수 있다</li>
+<li>hash table 의 low level (level 0 에 가까운) 의 사이즈가 커지면 dentry 에 더 빨리 도달할 수 있다.</li>
+</ul>
+<h3 id="24-multi-head-logging">2.4. Multi-head Logging<a aria-hidden="true" tabindex="-1" href="#24-multi-head-logging" class="internal"> §</a></h3>
+<h4 id="hot-warm-cold-separation">Hot-warm-cold separation<a aria-hidden="true" tabindex="-1" href="#hot-warm-cold-separation" class="internal"> §</a></h4>
+<ul>
+<li>LFS 에서는 하나의 큰 log area 만 사용했다면,</li>
+<li>F2FS 에서는 기본적으로 6개의 log area 를 지원하고, 데이터의 접근 빈도 (hot-cold) 에 따라 다른 log area 에 저장한다.</li>
+<li>F2FS 에서는 node 와 data 에 따라 다르게 접근 빈도를 hot, warm, cold 세 단계로 구분한다.</li>
+</ul>
+<p><img src="../../../../images/Pasted-image-20240411095410.png" width="auto" height="auto"/></p>
+<ul>
+<li>우선 node 부터 보면
+<ul>
+<li>Direct node 가 cold 가 아닌 이유는 NAT 를 사용한다 하더라도 data block 이 변경되었을 때 무조건 변경되기 때문이다.
+<ul>
+<li>그 중에서도 directory 는 더욱 변경이 빈번하기 때문에 hot 으로,</li>
+<li>일반 파일은 상대적으로 덜 빈번하기 때문에 warm 으로 분류되는 것.</li>
+</ul>
+</li>
+<li>그리고 indirect node 는 direct node 가 추가되거나 삭제되는 경우가 아니면 변경되지 않기에 cold 로 분류한다.</li>
+</ul>
+</li>
+<li>Data 의 경우에는,
+<ul>
+<li>위에서도 말한 것처럼 directory 는 변경이 잦기 때문에 dentry block 은 hot 으로 분류,</li>
+<li>일반 사용자의 파일은 변경이 상대적으로 덜하므로 warm 으로 분류,</li>
+<li>cleaning 에서 살아남거나, 사용자에 의해 cold 라고 명시되거나 이미지나 비디오 같은 애들 (얘네는 확장자로 식별) 은 거의 안바뀌므로 cold 로 분류한다.</li>
+</ul>
+</li>
+<li>Log area 는 기본적으로 6개가 구성되는데, 여기에 node 와 data 의 hot, warm, cold 이 각각 저장된다.</li>
+<li>이것은 4개나 2개로도 조정 가능한데,
+<ul>
+<li>4개일 때는 warm 과 cold 를 구분하지 않고 저장하고 (node-hot, node-warm-cold, data-hot, data-warm-cold)</li>
+<li>2개일 때는 node 와 data 만 구분해서 저장한다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="ftl-compatibility">FTL Compatibility<a aria-hidden="true" tabindex="-1" href="#ftl-compatibility" class="internal"> §</a></h4>
+<blockquote class="callout" data-callout="failure">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 이 섹션은 추후에 다시 정리될 예정입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<ul>
+<li>FTL 을 고려하지 않고 위와 같은 hot-warm-cold 구분을 해버리면 추후에 GC 가 발생해 이것이 다 섞여버릴 수 있기 때문에 F2FS 에서는 FTL 과 호환되도록 zone 을 구성한다.</li>
+<li>FTL 은 크게 다음과 같은 알고리즘을 사용한다.
+<ul>
+<li>block associative: 하나의 data flash block</li>
+<li>set associative: 연속된 여러개의 data flash block</li>
+<li>fully associative: 모든 data flash block</li>
+</ul>
+</li>
+<li>최근의 FTL 들은 random write 를 처리하기 위해 fully associative 혹은 set associative 를 사용한다.</li>
+<li>그리고 FTL 의 GC 가 다른 log area 의 내용을 섞어버리는 것을 방지하기 위해, log 를 다른 zone 에 저장한다.</li>
+<li>이 방식은 set associative FTL 에 더 효과적이라고 한다.</li>
+</ul>
+<h3 id="25-cleaning">2.5. Cleaning<a aria-hidden="true" tabindex="-1" href="#25-cleaning" class="internal"> §</a></h3>
+<ul>
+<li>Cleaning 은 section 단위로 흩뿌려져 있는 invalid block 들을 모아서 free 상태로 만들어 logging 이 가능한 segment 를 확보하는 작업이다.</li>
+<li>cleaning 은 storage 의 용량이 채워지고 나면 수행되기에, cleaning overhead 를 제한하는 것은 일관된 성능을 제공하는 것에 필수적이다.
+<ul>
+<li>즉, 예측 가능한 성능을 제공할 수 있는 것.</li>
+</ul>
+</li>
+<li>Cleaning 은 두 가지로 구분될 수 있다.
+<ul>
+<li><em>Foreground cleaning</em>: Free section 이 부족해졌을 때에만 수행</li>
+<li><em>Background cleaning</em>: 주기적으로 kernel thread 가 생성돼 수행</li>
+</ul>
+</li>
+</ul>
+<h4 id="victim-selection">Victim selection<a aria-hidden="true" tabindex="-1" href="#victim-selection" class="internal"> §</a></h4>
+<ul>
+<li>Cleaning 은 non-empty section 에서 cleaning 의 대상 (victim) segment 을 선정하는 것에서부터 시작한다.</li>
+<li>선정하는 방법은 LFS 에서의 greedy 와 cost-benefit 방식을 그대로 사용한다.</li>
+<li>각각의 방식을 언제 사용하는지는 정리해보면 다음과 같다.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Policy</th><th>Cleaning</th></tr></thead><tbody><tr><td>Greedy Policy</td><td>Foreground Cleaning</td></tr><tr><td>Cost-benefit Policy</td><td>Background Cleaning</td></tr></tbody></table>
+<h5 id="foreground-cleaning---greedy">Foreground Cleaning - Greedy<a aria-hidden="true" tabindex="-1" href="#foreground-cleaning---greedy" class="internal"> §</a></h5>
+<ul>
+<li>LFS 에서도 말했듯이, Greedy policy 는 util 이 낮은 순서대로 수행한다.
+<ul>
+<li>이 방식의 장점은 valid block 이 적은 segment 를 선택하기에, copy 하는 오버헤드가 상대적으로 적다는 것이다.</li>
+</ul>
+</li>
+<li>이 방식에서는 비교적 많은 segment 가 한번에 정리되기 때문에 application 레벨에서 느껴지는 latency 가 많이 줄어들기에 foreground 에서 수행한다고 한다.
+<ul>
+<li>즉, Foreground cleaning 은 공간이 거의 다 찬 비상상황이기 때문에 free segment 를 빨리 마련해주기 위해 greedy 를 사용한다는 것.</li>
+</ul>
+</li>
+<li>F2FS 에서는 5% 의 여유 공간을 구비해 놓아 cleaning 에서 사용될 수 있도록 한다.</li>
+</ul>
+<h5 id="background-cleaning---cost-benefit">Background Cleaning - Cost-benefit<a aria-hidden="true" tabindex="-1" href="#background-cleaning---cost-benefit" class="internal"> §</a></h5>
+<ul>
+<li>Background 에서는 age 도 고려되는 cost-benefit 을 이용한다</li>
+<li>Section age 는 <a href="#segment-information-table-sit" class="internal">SIT</a> 에서 가져온 segment 마지막 변경 시간들을 평균내어 산출한다.</li>
+<li>이 방식이 일반 상황에서는 더 좋고, log area 내에서도 자연스럽게 hot-cold 를 나눌 수 있기에 사용하는듯.</li>
+</ul>
+<h4 id="valid-block-identification-and-migration">Valid block identification and migration<a aria-hidden="true" tabindex="-1" href="#valid-block-identification-and-migration" class="internal"> §</a></h4>
+<ul>
+<li>Section 내의 valid block 식별하는 것은 SIT 내의 valid bitmap 과 SSA 의 block 참조 여부를 사용한다.
+<ul>
+<li>우선 SIT 내에 segment 의 valid bitmap 을 사용해 valid block 을 식별해 내고,</li>
+<li>그 다음에는 <a href="#segment-summary-area-ssa" class="internal">SSA</a> 를 참조해 해당 block 이 node 에서 참조되는지 검사한다 <sup><a href="#user-content-fn-validity-doublecheck" id="user-content-fnref-validity-doublecheck" data-footnote-ref aria-describedby="footnote-label" class="internal">3</a></sup>.</li>
+</ul>
+</li>
+<li>Foreground 에서는 valid block 을 옮길 때 실제로 IO 작업을 하지는 않는다.
+<ul>
+<li>대신 이들을 page cache 에 올려두고 dirty 로 마킹해둔다.</li>
+<li>이들은 page cache 에 있다가 추후에 kernel 에 의해 다시 storage 로 flush 될 것이다.
+<ul>
+<li>이러한 방식은 <em>lazy migration</em> 라고 부르는데, IO 를 수행할 때의 오버헤드를 나중으로 미뤄 foreground cleaning 의 임팩트를 줄인다.</li>
+<li>또한 이러한 방식을 사용하면 page cache 의 small write 와 합쳐져 더 큰 단위로 IO 를 수행할 수 있게 해 성능 저하를 방지할 수 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Background cleaning 은 foreground cleaning 이 수행될 때에는 수행되지 않는다.</li>
+</ul>
+<h4 id="post-cleaning">Post-cleaning<a aria-hidden="true" tabindex="-1" href="#post-cleaning" class="internal"> §</a></h4>
+<ul>
+<li>모든 valid block 이 옮겨지면 해당 section 은 free 가 되기 위한 이전 단계인 <em>candidate</em> (<em>pre-free</em>) 상태가 된다.</li>
+<li>이 상태의 section 은 checkpoint 가 생성된 이후에 free 로 바뀐다.</li>
+<li>이전에 생성된 checkpoint 는 여전히 이 공간을 참조하고 있기 때문에, checkpoint 이전에 free 로 바뀌면 이전의 checkpoint 에서는 참조하지 못하기 때문이다.</li>
+</ul>
+<h3 id="26-adaptive-logging">2.6. Adaptive Logging<a aria-hidden="true" tabindex="-1" href="#26-adaptive-logging" class="internal"> §</a></h3>
+<ul>
+<li>LFS 에서도 등장한 normal logging 과 threaded logging 두 방식을 F2FS 에서도 사용한다.</li>
+<li>가용 공간이 많을 때에는 normal logging 으로 작동하며, clean segment 에 random write 를 sequential write 로 변환하여 저장한다.</li>
+<li>하지만 가용 공간이 없을 때에는 cleaning overhead 가 점점 커지므로, 가용 공간이 특정 임계값보다 작아지게 되면 threaded logging 으로 전환된다.
+<ul>
+<li>이 특정 임계값은 조정 가능하며, 기본으로는 전체 section 갯수의 5% 로 설정된다.</li>
+</ul>
+</li>
+<li>Threaded logging 상황에서는, dirty segment 내의 invalid block (hole) 들에 logging 을 하게 된다.
+<ul>
+<li>즉, logging 와중에 valid block 을 만나면 다음 invalid block 까지 뛰어넘은 다음에 계속 logging 되는 것.</li>
+</ul>
+</li>
+<li>이 방식에서는 cleaning 가 필요하지는 않지만 중간중간 뛰어넘는 것 때문에 random write 가 발생하게 되어 normal write 에 비해 성능은 다소 떨어지게 된다.
+<ul>
+<li>하지만 이때의 random write 는 그냥 일반적인 (LFS 계열이 아닌 FS 에서의) random write 에 비해서는 spatial locality 가 높다고 한다 <sup><a href="#user-content-fn-threaded-locality" id="user-content-fnref-threaded-locality" data-footnote-ref aria-describedby="footnote-label" class="internal">4</a></sup>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="27-checkpointing-and-recovery">2.7. Checkpointing and Recovery<a aria-hidden="true" tabindex="-1" href="#27-checkpointing-and-recovery" class="internal"> §</a></h3>
+<ul>
+<li>LFS 에서와 유사하게, F2FS 도 Checkpoint 를 생성하여 crash recovery 에 사용하게 된다.</li>
+<li>Checkpoint 가 필요한 상황 <sup><a href="#user-content-fn-checkpoint-condition" id="user-content-fnref-checkpoint-condition" data-footnote-ref aria-describedby="footnote-label" class="internal">5</a></sup> (<code>sync</code>, <code>umount</code> 와 같은 syscall 이 불리거나 foreground cleaning 을 하는 등) 이 오면 다음과 같이 checkpoint 를 생성한다.
+<ol>
+<li><em>Flush</em>: Page cache 에 있던 dirty node 나 dentry block 들을 flush 한다.</li>
+<li><em>Suspend</em>: 모든 writing (syscall 을 포함한) 을 보류한다.</li>
+<li><em>Metadata write</em>: NAT, SIT, SSA 또한 storage 로 write 된다.</li>
+<li><em>Checkpointing</em>: <a href="#checkpoint-cp" class="internal">CP area</a> 에 checkpoint pack 을 write 한다.</li>
+</ol>
+</li>
+<li><em>Checkpoint pack</em> 은 다음과 같은 정보를 담고 있다.
+<ol>
+<li><em>Header, footer</em>: Checkpoint pack 앞뒤에는 header 와 footer 가 적힌다.
+<ul>
+<li>Checkpoint pack 을 write 할 때, 우선 header 부터 적고, write 가 완료된 다음에는 footer 를 적게 되는데</li>
+<li>앞뒤로 적는 이유는 해당 checkpoint pack 가 write 완료되었는지 검증하기 위한 것이다.
+<ul>
+<li>즉, footer 가 없다면 write 가 완료된 것이 아닌 것으로 판단해 recovery 에서 사용하지 않는다.</li>
+</ul>
+</li>
+<li>그리고 여기에는 checkpoint version 이 들어가 최신의 checkpoint 인지 파악하는데 사용하게 된다.</li>
+</ul>
+</li>
+<li><em>NAT, SIT bitmap</em>: NAT 와 SIT 들 중 유효한 것을 표시하는 bitmap 이다.
+<ul>
+<li>Checkpoint pack 생성 도중 NAT 혹은 SIT 가 변경되는 상황에 대응하기 위해 NAT 와 SIT 각각을 두개씩 사용한다 (NAT 두개, SIT 두개).</li>
+<li>그리고 그 두개 중에 어떤 것이 유효한지를 이 bitmap 으로 표시하게 되는데,</li>
+<li>만일 어떤 변경사항이 있으면 유효하지 않은 NAT 혹은 SIT 를 변경한 뒤, bitmap 을 바꿔 변경된 놈이 유효하다고 알려주게 된다.</li>
+</ul>
+</li>
+<li><em>NAT, SIT journal</em>: NAT 와 SIT 에서 최근에 변경된 entry 들을 적는다.
+<ul>
+<li>만일 checkpoint pack 생성 도중 NAT 혹은 SIT 에서 적은 수의 entry 들이 빈번하게 변경된다면, 해당 entry 의 4KB block 이 빈번하게 변경될 것이다.</li>
+<li>이것은 checkpoint pack 생성과정을 느리게 할 것이기에, checkpoint pack 내에 마치 버퍼처럼 일정 갯수의 entry update 를 모아놓게 하여 지연을 방지한다 <sup><a href="#user-content-fn-nat-sit-journal" id="user-content-fnref-nat-sit-journal" data-footnote-ref aria-describedby="footnote-label" class="internal">6</a></sup>.</li>
+</ul>
+</li>
+<li><em>Summary blocks of active segments</em>: 메모리에 적재되어 추후에 flush 될 것이었던 SSA 내용들이 적힌다.</li>
+<li><em>Orphan blocks</em>: <em>Orphan inode</em> 들을 저장하는 공간이다.
+<ul>
+<li><em>Orphan inode</em> 는 inode 가 close 되기 전에 delete 되었을 때 생기게 된다.
+<ul>
+<li>가령 두 process 가 동일한 파일을 열고 한 process 가 이것을 지우면 이렇게 된다고 한다.</li>
+<li>한 process 가 delete 하여 directory 에서 unlink 했을 때 나머지 한 process 말고는 이 파일에 link 한 process 나 directory 가 없다면 process 가 해당 파일을 close 한 다음에 진짜로 삭제해야 될 것이다.</li>
+<li>하지만 process 가 갑자기 죽어버린다면 이것이 남아있게 되기에 orphan inode 로 분류하고 recovery 시점에 날려버리는 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>NAT, SIT update </p></div>
+                  
+                </div>
+<ul>
+<li>조심하자: <a href="#layout" class="internal">Layout</a> 을 참고하면 NAT 와 SIT 는 sequential write 가 아닌 random update 가 수행되는 것을 알 수 있다.</li>
+</ul>
+</blockquote>
+<ul>
+<li>완성된 checkpoint pack 를 적어도 하나는 갖고 있기 위해, checkpoint pack 은 두개를 유지한다.
+<ul>
+<li>이렇게 해서 한 checkpoint pack 을 write 하고 있을 때 crash 가 나더라도 이전의 checkpoint pack 은 남아있기 때문에 해당 시점으로 돌아가는 것이 가능하기 때문.</li>
+</ul>
+</li>
+</ul>
+<h4 id="271-roll-back-recovery">2.7.1. Roll-Back Recovery<a aria-hidden="true" tabindex="-1" href="#271-roll-back-recovery" class="internal"> §</a></h4>
+<ul>
+<li>갑작스러운 전원 종료 이후 F2FS 는 이 checkpoint 를 이용해 해당 시점으로 복구하게 된다.</li>
+<li>Recovery 하는 것은 다음처럼 진행된다.
+<ol>
+<li>우선 두 checkpoint pack 중 유효하고 더 최신의 것을 고른다.
+<ul>
+<li>위에서 말한 것처럼, 유효성은 header 와 footer 가 같은 version number 를 갖고 있는지 파악하는 것으로 가능하고</li>
+<li>최신의 것은 version number 가 더 높은 것으로 선택한다.</li>
+</ul>
+</li>
+<li>Orphan inode block 이 있는지 없는지 확인하고, 있다면 처리한다.
+<ul>
+<li>Recovery 시점에 ophan inode block 이 존재한다면, inode block 과 data block 을 전부 날려버린다.</li>
+<li>즉, 어디에서도 link 되어 있지 않지만 공간은 차지하고 있기 때문에 정리하는 것.</li>
+</ul>
+</li>
+<li><a href="#272-roll-forward-recovery" class="internal">Roll-forward</a> 를 진행한다.</li>
+<li>최신의 NAT, SIT 상태로 FS 가 서비스되도록 한다.</li>
+</ol>
+</li>
+</ul>
+<h4 id="272-roll-forward-recovery">2.7.2. Roll-Forward Recovery<a aria-hidden="true" tabindex="-1" href="#272-roll-forward-recovery" class="internal"> §</a></h4>
+<blockquote class="callout" data-callout="failure">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 이 섹션은 추후에 다시 정리될 예정입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<ul>
+<li>SQLite 같은 db 는 주기적으로 <code>fsync</code> syscall 을 해 storage 에 영구적으로 반영한다.</li>
+<li>일반적인 <code>fsync</code> 과정은 checkpointing 을 수행해 <code>fsync</code> 시점을 완벽하게 언제든 복구 가능하게 하는 것이다.</li>
+<li>하지만 이것은 db 와 무관한 node 나 dentry block 을 전부 flush 하기에 아주 비효율적이다.</li>
+<li>따라서 F2FS 에서는 <code>fsync</code> 성능을 높이기 위한 효율적인 roll-forward recovery 를 사용하다.</li>
+<li>핵심 아이디어는 다음과 같다:
+<ul>
+<li><code>fsync</code> 를 했을 때 checkpointing 과정 전부를 수행하는 것 대신, data block 과 이것을 가리키는 direct node block 만 storage 에 write 하는 것이다.</li>
+<li>따라서 Checkpointing 에 수행되는 NAT, SIT, SSA 등은 write 하지 않기 때문에, <code>fsync</code> 에 소요되는 시간은 줄어들게 된다.</li>
+</ul>
+</li>
+<li>하지만 이때 crash 가 나게 되면 storage 의 NAT 에는 이동된 direct node block 을 참조하지 않기 때문에 data block 을 찾을 수 없게 된다.</li>
+<li>이것을 방지하기 위해 이런 상황 (NAT 에는 반영되지 않은 direct node block 의 이동) 을 direct node block 에 플래그로 표시해 둔다.</li>
+<li>Roll forward 는 다음과 같은 방식으로 진행된다.
+<ul>
+<li>만일 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 이 latest stable checkpoint pack 에 반영된 log 의 위치이고</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 이후에 추가된 log (즉, latest stable checkpoint pack 에는 반영되지 않은 log) 라고 한다면,</li>
+</ul>
+<ol>
+<li>N ~ N + n 에 위치한 플래그가 표시된 direct node block 들을 전부 찾고</li>
+<li>해당 node 들의 정보도 전부 찾고</li>
+<li>그 정보들로 최근에 write 된 node block 들을 전부 page cache 로 올리고</li>
+<li>N + n 와 N-n 을 비교해 data indices</li>
+<li>둘이 다르다면 N+n 의 정보로 page cache 에 있는 N-n data indices 을 업데이트한다</li>
+<li>N+n 은 dirty 라고 마킹한다.</li>
+<li>완료된 다음에는 checkpointing 을 수행해 새로 checkpoint pack 생성되도록 한다.</li>
+</ol>
+</li>
+</ul>
+<h2 id="evaluation">Evaluation<a aria-hidden="true" tabindex="-1" href="#evaluation" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="failure">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 이 섹션은 추후에 작성될 예정입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h3 id="31-experimental-setup">3.1. Experimental Setup<a aria-hidden="true" tabindex="-1" href="#31-experimental-setup" class="internal"> §</a></h3>
+<h3 id="32-results">3.2. Results<a aria-hidden="true" tabindex="-1" href="#32-results" class="internal"> §</a></h3>
+<h4 id="321-performance-on-the-mobile-system">3.2.1. Performance on the Mobile System<a aria-hidden="true" tabindex="-1" href="#321-performance-on-the-mobile-system" class="internal"> §</a></h4>
+<h4 id="322-performance-on-the-server-system">3.2.2 Performance on the Server System<a aria-hidden="true" tabindex="-1" href="#322-performance-on-the-server-system" class="internal"> §</a></h4>
+<h4 id="323-multi-head-logging-effect">3.2.3. Multi-head Logging Effect<a aria-hidden="true" tabindex="-1" href="#323-multi-head-logging-effect" class="internal"> §</a></h4>
+<h4 id="324-cleaning-cost">3.2.4. Cleaning Cost<a aria-hidden="true" tabindex="-1" href="#324-cleaning-cost" class="internal"> §</a></h4>
+<h4 id="325-adaptive-logging-performance">3.2.5. Adaptive Logging Performance<a aria-hidden="true" tabindex="-1" href="#325-adaptive-logging-performance" class="internal"> §</a></h4>
+<h2 id="4-related-work">4. Related Work<a aria-hidden="true" tabindex="-1" href="#4-related-work" class="internal"> §</a></h2>
+<h3 id="41-log-structured-file-systems">4.1. Log-Structured File Systems<a aria-hidden="true" tabindex="-1" href="#41-log-structured-file-systems" class="internal"> §</a></h3>
+<h3 id="42-flash-memory-file-systems">4.2. Flash Memory File Systems<a aria-hidden="true" tabindex="-1" href="#42-flash-memory-file-systems" class="internal"> §</a></h3>
+<h3 id="43-ftl-optimizations">4.3. FTL Optimizations<a aria-hidden="true" tabindex="-1" href="#43-ftl-optimizations" class="internal"> §</a></h3>
+<h2 id="5-concluding-remarks">5. Concluding Remarks<a aria-hidden="true" tabindex="-1" href="#5-concluding-remarks" class="internal"> §</a></h2>
+<hr/>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-root-dir-inode">
+<p>Root directory 에 대한 inode number 는 보통 정해져 있다. EXT4 의 경우에는 2 이다. <a href="#user-content-fnref-root-dir-inode" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-attribute">
+<p>이게 뭔지는 잘 모르겠다. <a href="#user-content-fnref-attribute" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-validity-doublecheck">
+<p>아마 bitmap 에는 참조 여부와는 다른 정보를 담고 있는 것인지 아니면 더블체크 목적인지 모르겠다. <a href="#user-content-fnref-validity-doublecheck" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-threaded-locality">
+<p>하나의 dirty segment 의 hole 들이 채워진 다음에 다른 dirty segment 를 찾기 때문이라고 한다. 잘 이해는 안된다. <a href="#user-content-fnref-threaded-locality" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-checkpoint-condition">
+<p>주기적으로 checkpoint 를 생성하는지는 의문. <a href="#user-content-fnref-checkpoint-condition" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-nat-sit-journal">
+<p>이렇게 하는 것이 진짜 checkpoint pack 생성과정을 빠르게 해주는 지 잘 모르겠다. 4KB block 단위로 작업하지 않기 때문인건가. <a href="#user-content-fnref-nat-sit-journal" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#1-abstract-introduction" data-for="1-abstract-introduction">1. Abstract, Introduction</a></li><li class="depth-1"><a href="#요약" data-for="요약">요약</a></li><li class="depth-1"><a href="#배경---flash-media" data-for="배경---flash-media">배경 - Flash Media</a></li><li class="depth-1"><a href="#기존의-문제점" data-for="기존의-문제점">기존의 문제점</a></li><li class="depth-1"><a href="#f2fs-란" data-for="f2fs-란">F2FS 란?</a></li><li class="depth-1"><a href="#디자인-고려사항" data-for="디자인-고려사항">디자인 고려사항</a></li><li class="depth-1"><a href="#실험-방법" data-for="실험-방법">실험 방법</a></li><li class="depth-0"><a href="#2-design-and-implementation-of-f2fs" data-for="2-design-and-implementation-of-f2fs">2. Design and Implementation of F2FS</a></li><li class="depth-1"><a href="#21-on-disk-layout" data-for="21-on-disk-layout">2.1. On-Disk Layout</a></li><li class="depth-1"><a href="#22-file-structure" data-for="22-file-structure">2.2. File Structure</a></li><li class="depth-1"><a href="#23-directory-structure" data-for="23-directory-structure">2.3. Directory Structure</a></li><li class="depth-1"><a href="#24-multi-head-logging" data-for="24-multi-head-logging">2.4. Multi-head Logging</a></li><li class="depth-1"><a href="#25-cleaning" data-for="25-cleaning">2.5. Cleaning</a></li><li class="depth-1"><a href="#26-adaptive-logging" data-for="26-adaptive-logging">2.6. Adaptive Logging</a></li><li class="depth-1"><a href="#27-checkpointing-and-recovery" data-for="27-checkpointing-and-recovery">2.7. Checkpointing and Recovery</a></li><li class="depth-0"><a href="#evaluation" data-for="evaluation">Evaluation</a></li><li class="depth-1"><a href="#31-experimental-setup" data-for="31-experimental-setup">3.1. Experimental Setup</a></li><li class="depth-1"><a href="#32-results" data-for="32-results">3.2. Results</a></li><li class="depth-0"><a href="#4-related-work" data-for="4-related-work">4. Related Work</a></li><li class="depth-1"><a href="#41-log-structured-file-systems" data-for="41-log-structured-file-systems">4.1. Log-Structured File Systems</a></li><li class="depth-1"><a href="#42-flash-memory-file-systems" data-for="42-flash-memory-file-systems">4.2. Flash Memory File Systems</a></li><li class="depth-1"><a href="#43-ftl-optimizations" data-for="43-ftl-optimizations">4.3. FTL Optimizations</a></li><li class="depth-0"><a href="#5-concluding-remarks" data-for="5-concluding-remarks">5. Concluding Remarks</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../botanicals/os/(Botanical-Garden)-Operating-Systems,-Linux" class="internal">(Botanical Garden) Operating Systems, Linux</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>
