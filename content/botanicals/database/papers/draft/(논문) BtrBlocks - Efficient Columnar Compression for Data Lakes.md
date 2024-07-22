@@ -74,6 +74,9 @@ date: 2024-07-17
 	3) 그리고 위의 것들을 포괄하는 complete, one-size-fits-all compression solution.
 	4) 마지막으로 이것에 대한, 실제 비즈니스 데이터에 대한 Public BI Benchmark 방법론.
 
+> [!tip] BI 란?
+> - BI 는 *Business Intelligence*, 즉 실제 비즈니스 환경에서 수집되고 사용되는 정보들을 일컫는다.
+
 ## 2. Background
 
 ### 2.1. Existing Open File Formats
@@ -350,6 +353,19 @@ date: 2024-07-17
 
 #### 3.2.4. The encoding scheme pool.
 
+- [[#3.2.1. Recursive application of schemes.|Section 3.2.1]] 에 소개한 scheme pool 은 public BI dataset 을 이용해 선택되었다고 한다.
+- 다음의 과정을 거쳐서 선택되었다:
+	1) BI dataset 에서 compression ratio 가 (Bzip2 와 같은) 무거운 scheme [^heavyweight-scheme] 에 비해 더 안좋은 column 을 찾는다.
+	2) 해당 column 의 데이터들의 특성을 분석한다.
+	3) 해당 특성과 잘 맞는 compression scheme 을 도입하고
+	4) Compression ratio 가 높지 않거나 decompression overhead 가 큰 scheme 은 제외한다.
+- 위와 같은 과정을 통해 multi-level cascading 이 가능하고 확장성이 좋은 scheme pool 을 만들수 있었다고 한다.
+- 이 pool 에 들어갈 scheme 을 고르는 것은 BtrBlock 성능 전체에 영향을 미치기에, 아주 중요하다.
+	- 가령 scheme 을 pool 에 너무 많이 추가하면 sample evaluation 에 너무나 많은 시간이 소요되지만 compression ratio 는 늘어나는 장단점이 있고,
+	- Compression ratio 가 높지만 decompression overhead 가 큰 scheme 의 경우에도 마찬가지의 장단점이 있기 때문.
+
+## 4. Pseudodecimal Encoding
+
 - 
 
 ---
@@ -362,3 +378,4 @@ date: 2024-07-17
 [^freq-end]: #draft 이것도 코드 보고 확인하자.
 [^simd]: #draft 구체적인 이야기는 하지 않는다. [논문](https://onlinelibrary.wiley.com/doi/10.1002/spe.2203) 참고해서 확인하자.
 [^roaring-bitmap]: #draft 주인장의 추측이다. 논문에서는 column 의 NULL 값을 bitmap 으로 어떻게 표현하는지에 대한 설명은 되어 있지 않다.
+[^heavyweight-scheme]: 여기 "무거운 (heavyweight)" 이 어떤 측면에서 말하는 것인지는 확실하지 않다. 만약 compression ratio 가 일반적으로 낮은 scheme 을 지칭하는 것이라면 일리가 있으나 decompression overhead 가 안좋은 것을 지칭하는 것이라면 decompression overhead 와 compression ratio 모두 좋은 scheme 을 새로 찾아야 하는 것인데, 쉽지는 않았을 듯. 근데 문맥상으로 보면 후자인 것 같다.
