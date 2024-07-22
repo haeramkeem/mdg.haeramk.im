@@ -11,6 +11,8 @@
 
 ## 프로젝트
 
+<img src="https://raw.githubusercontent.com/cmu-db/bustub/master/logo/bustub-whiteborder.svg" alt="BusTub Logo" height="200">
+
 - Project 00
 	- [[(Bustub) Project 00 - Cpp Primer (Task 01)]]
 	- [[(Bustub) Project 00 - Cpp Primer (Task 02)]]
@@ -19,6 +21,8 @@
 - Project 01
 	- [[(Bustub) Project 01 - Buffer Pool (Task 01)]]
 	- [[(Bustub) Project 01 - Buffer Pool (Task 02)]]
+	- [[(Bustub) Project 01 - Buffer Pool (Task 03)]]
+	- [[(Bustub) Project 01 - Buffer Pool (Task 04 - Leaderboard)]]
 
 ## 목차
 

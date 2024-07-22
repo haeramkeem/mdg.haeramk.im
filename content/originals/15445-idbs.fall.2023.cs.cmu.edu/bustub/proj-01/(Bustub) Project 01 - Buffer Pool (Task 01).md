@@ -11,6 +11,9 @@ date: 2024-07-08
 > [!info]- CodeRef (인데 private 이라 주인장만 볼 수 있음)
 > - [Github PR05](https://github.com/haeramkeem/bustub-private.idbs.fall.2023.cs.cmu.edu/pull/5)
 
+> [!warning]- 이 task 의 구현은 이후에 부분적으로 변경되었습니다.
+> - [[(Bustub) Project 01 - Buffer Pool (Task 04 - Leaderboard)|Thread-safe]]
+
 ## Design and Implementation of LRU-K Replacement Algorithm
 
 - LRU-K RA 는 *Backward K-Distance* (너무 기니까 줄여서 *BKD* 라고 부르자) 가 최대가 되는 frame 을 방출하는 것이다.

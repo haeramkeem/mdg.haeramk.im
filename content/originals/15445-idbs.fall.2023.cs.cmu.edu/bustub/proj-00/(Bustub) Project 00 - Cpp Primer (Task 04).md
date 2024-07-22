@@ -45,4 +45,4 @@ date: 2024-07-02
 
 ## 삽질
 
-- [[Cpp - string 변수를 auto 로 생성하지 말자]]
+- [[String 변수를 auto 로 생성하지 말자 (C++ String)]]

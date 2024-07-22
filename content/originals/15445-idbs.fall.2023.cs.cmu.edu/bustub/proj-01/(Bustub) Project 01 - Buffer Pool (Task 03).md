@@ -11,6 +11,9 @@ date: 2024-07-12
 > [!info]- CodeRef (인데 private 이라 주인장만 볼 수 있음)
 > - [Github PR07](https://github.com/haeramkeem/bustub-private.idbs.fall.2023.cs.cmu.edu/pull/7)
 
+> [!warning]- 이 task 의 구현은 이후에 부분적으로 변경되었습니다.
+> - [[(Bustub) Project 01 - Buffer Pool (Task 04 - Leaderboard)|Thread-safe]]
+
 ## Design and Implementation of Buffer Pool Manager
 
 - Buffer Pool Manager (BPM), 즉 이름 그대로 "버퍼 풀" 을 관리하는 컴포넌트를 구현하는 것이다.
@@ -192,5 +195,4 @@ date: 2024-07-12
 
 ## C++ 관련 삽질
 
-- [[Cpp - class friend 키워드]]
-
+- [[Friend 클래스 (C++ Class)]]
