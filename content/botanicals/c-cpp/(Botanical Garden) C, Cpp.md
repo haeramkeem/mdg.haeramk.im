@@ -40,7 +40,7 @@
 	- [[Shared mutex (C++ Concurrency)|Shared mutex]]
 	- [[Unique lock (C++ Concurrency)|Unique lock]]
 - Number
-	- [[Float, Double Point (C++ Number)|Float, Double Point]]
+	- [[Float, Double Point, IEEE 754 (C++ Number)|Float, Double Point]]
 	- [[Integer (C++ Number)|Integer]]
 - [[Optional 소개 (C++ Optional)|optional]]
 	- [[Optional 객체 사용하기, bugprone-unchecked-optional-access 에러 (C++ Optional)|객체 사용하기 (bugprone-unchecked-optional-access 에러)]]

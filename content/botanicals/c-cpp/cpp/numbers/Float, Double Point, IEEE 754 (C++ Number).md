@@ -7,6 +7,7 @@ date: 2024-07-22
 > [!info]- 참고한 것들
 > - [어떤 회사 글](https://www.log2base2.com/storage/how-float-values-are-stored-in-memory.html)
 > - [어떤 블로그 글](https://velog.io/@hi_potato/Java%EC%9D%98-%EC%A0%95%EC%84%9D-%EC%8B%A4%EC%88%98%ED%98%95-float-double)
+> - [IEEE 754](https://ieeexplore.ieee.org/document/8766229)
 
 ## Bitwise
 
