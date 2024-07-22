@@ -214,7 +214,10 @@ date: 2024-07-17
 
 ## 3. Scheme Selection & Compression
 
-#### 3.0. Overview
+#### 3.0. *Overview*
+
+> [!tip] [[#3.0. *Overview*|Section 3.0]] Overview
+> - ... 는 논문에는 없는 section 이고, 형식상 주인장이 끼워 넣은 것이다.
 
 #### 3.0.1 Scheme selection algorithms.
 
@@ -366,6 +369,106 @@ date: 2024-07-17
 
 ## 4. Pseudodecimal Encoding
 
+### 4.0. *Overview*
+
+> [!tip] [[#4.0. *Overview*|Section 4.0]] Overview
+> - ... 는 논문에는 없는 section 이고, 형식상 주인장이 끼워 넣은 것이다.
+
+#### 4.0.1. Floating-point numbers in relational data.
+
+- 기존까지는 floating-point number 에 대한 encoding 방법이 몇개 없었다고 하는데, 이것은 다음과 같은 이유에서였다.
+	- 기존의 RDBMS 에서는 floating-point 를 별로 사용하지 않고, 정수의 형태인 `DECIMAL` 이나 `NUMBER` 을 사용했기 때문.
+- 하지만 이 기조는 Data Lake 으로 넘어오며 많이 바뀌게 된다.
+	- RDBMS 뿐 아니라 NoSQL 에서는 이런 floating-point number 를 많이 사용하고,
+	- 그리고 AI-ML 에서도 이런 값들을 많이 사용하는데
+	- 이 값들이 Data Lake 에 흘러들어오기 때문이다.
+	- 가령 [여기에](https://dl.acm.org/doi/10.1145/3209950.3209952) 따르면, [Tableau](https://www.tableau.com/) 에서 내부적으로 사용하는 분석시스템의 경우에도, 모든 "숫자" 들을 floating-point 로 저장한다고 한다.
+
+#### 4.0.2. Pseudodecimal Encoding.
+
+- [[#3.2.1. Recursive application of schemes.|Section 3]] 에 나온 compression scheme 들 중 일부는 floating-point number 를 encoding 하는 것이 가능했지만,
+- [[#2.2.5. FOR & Bit-packing|Bit-packing]] 이나 [[#2.2.6. FSST|FSST]] 을 적용하는 것은 효율적이지 못했고, 따라서 새로운 *Pseudodecimal Encoding* 을 고안하게 됐다고 한다.
+
+### 4.1. Compressing Floating-Point Numbers
+
+#### 4.1.1. Challenges.
+
+- 우선 public BI dataset 을 분석하여 나온 결론은 다음과 같다:
+	- 많은 경우 float (fixed-precision floating point) 로 충분한 데이터들이 double (double-precision floating point) 로 표현되고 있다는 것이다.
+		- 가령 금액을 나타내는 경우 (예를 들어 $0.99) 에는 float 로도 충분하다.
+- 보기에는 이러한 값들이 compression 이 간단할 것 같지만, 여기에는 두 가지 문제가 있다.
+	1) 우선 [IEEE-754](https://ieeexplore.ieee.org/document/8766229) 표준 (1bit sign + 11bit exponent + 52bit mantissa) 을 따르는 값들이 [[#2.2.5. FOR & Bit-packing|FOR + Bit-packing]] 으로 encoding 되기 어렵다는 것이다.
+		- 왜냐면 수치상으로는 근접한 두 값이라 할 지라도 bit 로 표현되는 수치는 매우 차이가 크기 때문이다.
+		- 가령 `0.99` 는 `00111111011111010111000010100100` 인 반면, `3.25` 는 `01000000010100000000000000000000` 이다.
+	2) 두번째는 binary encoding 의 문제다.
+		- 어떤 double 값은 이진수로 딱 떨어지지 않고, 따라서 그의 근사치로 저장되는데 이때의 Mantissa 값이 아주 흉악스럽기 때문이다.
+		- 따라서 최대한 압축하되 
+- 두번째 문제를 좀 더 자세히 살펴보자. 가령, `0.99` 는 IEEE-754 로 변환하면 다음처럼 바뀐다.
+
+```
+0011111111101111101011100001010001111010111000010100011110101110
+```
+
+- 이것을 다시 double 로 바꿔보자. 각각의 field 들로 쪼개면 이렇게 된다.
+
+```
+SIGN: 0
+EXPN: 01111111110
+MANT: 1111101011100001010001111010111000010100011110101110
+```
+
+- 그리고 여기에서 실질적인 값을 꺼내보면 다음과 같다.
+	- Exponent - Bias = $01111111110_{2} - 1023_{10}$ = $1022_{10} - 1023_{10}$ = $-1$
+	- Mantissa = $1_{2} + 0.1111101011100001010001111010111000010100011110101110_{2}$ = $1.97999999999999998224_{10}$
+- 즉, $1.97999999999999998224 * 2^{-1}$ = $0.98999999999999999112$ 라는 요사스러운 값이 나오게 된다.
+- $0.99$ 대신 저런 흉악범이 저장되기 때문에, 
+
+#### 4.1.2. Floating-point numbers as integer tuples.
+
+- *Pseudodecimal* 이라는 말에서 알 수 있듯이, 이 encoding 은 double 을 두개의 decimal (*Significant with sign* 와 *Exponent*) 로 쪼개게 된다.
+	- *Significant with sign* 은 *Mantissa* 와 비슷한 역할이다: "정수로 표현되는 가수" 정도로 말할 수 있다.
+	- 즉, `3.25` 는 `[325, 2]` 로 표현된다.
+- 그럼 이때 precision 문제는 어떻게 해결할까?
+	- `0.99` 의 실제 bitwise, 가령 `0.9899...` 을 가지고 `[9898..., 17]` 로 저장할 수도 있지만
+	- 그냥 `[99, 2]` 로 저장해도 충분하다.
+		- 왜냐면 어차피 decompression 시에 이것은 다시 `0.99` 가 되어 bitwise 로는 `0.9899...` 가 될것이기 때문.
+- 이를 위해, compressing 과정에서는 다음의 두 작업을 한다고 할 수 있다. ([[#4.1.2. Encoding Algorithm.|다음 Section]] 에서 볼 수 있듯이, 이 두개를 순서대로 하는 것은 아니다.)
+	1) IEEE-754 floating point 를 두 decimal 로 나누기
+	2) *Compact decimal representation* 생성하기
+
+> [!tip] *Compact decimal representation* 란?
+> - 여기서 *Compact decimal representation* 는 위에서 말한 "binary representation 에 의한 오차를 decimal representation 으로 없애기" 정도로 이해하면 된다.
+
+#### 4.1.2. Encoding Algorithm.
+
+![[Pasted image 20240722201253.png]]
+
+- 그래서, *Pseudodecimal Encoding* 의 전체적인 pseudo-code 는 위와 같다.
+- 일단 큰 흐름은 다음과 같다.
+	1) `digit` 변수: `input` 값에다 $10^{exp}$ 를 곱한 뒤, 소수점을 날린다.
+		- 여기서 $10^{exp}$ 를 곱하고 나누고 하는 것은 전부 pre-calculated array `frac10[]` 를 이용한다. 그냥 매번 계산하는 것을 막고자 요래 했다고 하네.
+	2) `orig` 변수: `digit` 변수를 다시 $10^{exp}$ 으로 나눈다.
+	3) `input` 변수와 `orig` 변수를 비교한다.
+		1. 이때, 만약 두 변수의 값이 다르다면 (1) 과정에서 날라간 소수점이 있다는 소리이다. 즉, 아직 *Mantissa* 가 완벽히 정수 *Significant* 로 변환되지 않았다는 소리이기 때문에, $exp$ 을 증가시켜서 다시 (1) 로 돌아간다.
+			- 말로만 설명하니까 좀 그런데, 예를 들어 `3.25` 에서 `exp = 1` 이면 `orig = 3.2` 일 것이므로 일치하지 않는다. 이것은 `0.05` 가 날라갔기 때문이고, 예상하는 결과는 `[32, 1]` 이 아니라 `[325, 2]` 이기 때문에 `exp` 을 1 증가시켜 다시 시도하는 것.
+		2. 만약 두 변수의 값이 같다면, `input` 이 완벽하게 `digit * 10^exp` 로 표현된 것이기에 `[digit, exp]` 를 반환한다.
+		3. 만약 두 변수가 $exp = 23$ 가 될 때까지 같아지지 않는다면, $±inf$ 혹은 $±NaN$ 로 판단해 exception 으로 처리한다.
+- 여기서 decimal tuple 로 변환되지 않는 것은 *Exception* 으로 처리한다.
+	- $±inf$ 혹은 $±NaN$ 는 당연히 decimal tuple 로 변환되지 않을 것이므로 이놈들이 *Exception* 가 되고
+	- *Sign* 이 `digit` 에 들어가기 때문에 [^sign-digit] $-0$ 에 대해서도 *Exception* 으로 처리한다고 한다.
+- *Exception* 처리는 그냥 단순하다. $exp = 23$ 로 해놓고, 그냥 input double 그대로 세번째 field 에 처박아놓으면 된다.
+- 따라서 결과적으로 *Pseudodecimal Encoding* 을 거치게 되면 decimal column 두개, double column 하나가 나오게 된다.
+	- 이때 *Significant* column 의 경우에는 32bit,
+	- *Exponent* column 의 경우에는 5bit 을 사용한다고 한다.
+
+### 4.2. Pseudodecimal Encoding in BtrBlocks
+
+#### 4.2.1. Cascading to integer encoding schemes.
+
+- 
+
+#### 4.2.2. When to choose Pseudodecimal Encoding.
+
 - 
 
 ---
@@ -379,3 +482,4 @@ date: 2024-07-17
 [^simd]: #draft 구체적인 이야기는 하지 않는다. [논문](https://onlinelibrary.wiley.com/doi/10.1002/spe.2203) 참고해서 확인하자.
 [^roaring-bitmap]: #draft 주인장의 추측이다. 논문에서는 column 의 NULL 값을 bitmap 으로 어떻게 표현하는지에 대한 설명은 되어 있지 않다.
 [^heavyweight-scheme]: 여기 "무거운 (heavyweight)" 이 어떤 측면에서 말하는 것인지는 확실하지 않다. 만약 compression ratio 가 일반적으로 낮은 scheme 을 지칭하는 것이라면 일리가 있으나 decompression overhead 가 안좋은 것을 지칭하는 것이라면 decompression overhead 와 compression ratio 모두 좋은 scheme 을 새로 찾아야 하는 것인데, 쉽지는 않았을 듯. 근데 문맥상으로 보면 후자인 것 같다.
+[^sign-digit]: #draft Pseudo-code 만 보면 input 이 무조건 양수로 바뀐다. 음수는 어떻게 처리되는지 몰것네
