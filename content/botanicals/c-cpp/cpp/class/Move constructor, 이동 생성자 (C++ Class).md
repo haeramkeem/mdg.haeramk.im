@@ -9,7 +9,7 @@ date: 2024-07-12
 
 ## 코드 예제
 
-- *Move constructor* (*이동 생성자*) 는 [[Cpp - 소유권 (move)|move]] 시에 호출되는 생성자이다.
+- *Move constructor* (*이동 생성자*) 는 [[소유권, move (C++)|move]] 시에 호출되는 생성자이다.
 - 아래 예시를 보자.
 
 ```cpp {9, 13-16}

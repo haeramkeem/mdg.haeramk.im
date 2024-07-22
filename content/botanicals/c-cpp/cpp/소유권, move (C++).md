@@ -9,7 +9,7 @@ date: 2024-07-01
 - Cpp 에는 "소유" 라는 개념이 있고, `std::move` 함수로 이 소유권을 변경할 수 있다.
 - 다음의 예시로 살펴보자 [^comment].
 
-```cpp {17}
+```cpp {18}
 #include <iostream>
 #include <memory>
 

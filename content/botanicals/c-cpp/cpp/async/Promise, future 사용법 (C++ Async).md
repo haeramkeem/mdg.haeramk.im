@@ -81,7 +81,7 @@ std::thread t(Waiting, &prom);
 - 기본적인 `std::promise` 생성법인데,
 - 주의할 것은 `std::promise` 는 non-copiable 이라는 것이다.
 	- 따라서 위 예시처럼 포인터를 사용하거나,
-	- 아니면 [[Cpp - 소유권 (move)|std::move]] 를 이용해 전달해 주어야 한다.
+	- 아니면 [[소유권, move (C++)|std::move]] 를 이용해 전달해 주어야 한다.
 
 ```cpp title="Line: 8"
 prom->set_value(12345);

@@ -14,10 +14,10 @@
 
 ### C++
 
-- [[Cpp - Vexing Parse|Vexing Parse]]
-- [[Cpp - 명령줄 인수 (Command-line arguments) 처리하기|명령줄 인수 (Command-line arguments) 처리하기]]
-- [[Cpp - 소유권 (move)|소유권 (move)]]
-- [[Cpp - 형변환 (dynamic_cast)|형변환 (dynamic_cast)]]
+- [[Vexing Parse 문제 (C++)|Vexing Parse 문제]]
+- [[명령줄 인수 (Command-line arguments) 처리하기 (C++)|명령줄 인수 (Command-line arguments) 처리하기]]
+- [[소유권, move (C++)|소유권 (move)]]
+- [[형변환, dynamic_cast (C++)|형변환 (dynamic_cast)]]
 - Async
 	- [[Promise, future 사용법 (C++ Async)|Promise, future 사용법]]
 - Char, String
