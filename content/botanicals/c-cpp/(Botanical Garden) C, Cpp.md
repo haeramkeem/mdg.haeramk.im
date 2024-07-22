@@ -39,6 +39,9 @@
 	- [[Mutex 사용법 (C++ Concurrency)|Mutex 잡고 놓기]]
 	- [[Shared mutex (C++ Concurrency)|Shared mutex]]
 	- [[Unique lock (C++ Concurrency)|Unique lock]]
+- Number
+	- [[Float, Double Point (C++ Number)|Float, Double Point]]
+	- [[Integer (C++ Number)|Integer]]
 - [[Optional 소개 (C++ Optional)|optional]]
 	- [[Optional 객체 사용하기, bugprone-unchecked-optional-access 에러 (C++ Optional)|객체 사용하기 (bugprone-unchecked-optional-access 에러)]]
 	- [[Optional 객체 생성하기 (C++ Optional)|객체 생성하기]]
