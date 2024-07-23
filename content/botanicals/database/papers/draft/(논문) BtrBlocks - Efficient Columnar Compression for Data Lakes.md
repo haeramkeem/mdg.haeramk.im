@@ -402,7 +402,7 @@ date: 2024-07-17
 		- 가령 `0.99` 는 `00111111011111010111000010100100` 인 반면, `3.25` 는 `01000000010100000000000000000000` 이다.
 	2) 두번째는 binary encoding 의 문제다.
 		- 어떤 double 값은 이진수로 딱 떨어지지 않고, 따라서 그의 근사치로 저장되는데 이때의 Mantissa 값이 아주 흉악스럽기 때문이다.
-		- 따라서 최대한 압축하되 
+		- 동일한 값이 여러개 있거나 아니면 범위 내의 비슷한 애들이 많아야 encoding scheme 을 적용하기가 용이한데, 저런 흉악범이 포함돼 있으면 적용하기가 쉽지 않은 것.
 - 두번째 문제를 좀 더 자세히 살펴보자. 가령, `0.99` 는 IEEE-754 로 변환하면 다음처럼 바뀐다.
 
 ```
@@ -421,7 +421,7 @@ MANT: 1111101011100001010001111010111000010100011110101110
 	- Exponent - Bias = $01111111110_{2} - 1023_{10}$ = $1022_{10} - 1023_{10}$ = $-1$
 	- Mantissa = $1_{2} + 0.1111101011100001010001111010111000010100011110101110_{2}$ = $1.97999999999999998224_{10}$
 - 즉, $1.97999999999999998224 * 2^{-1}$ = $0.98999999999999999112$ 라는 요사스러운 값이 나오게 된다.
-- $0.99$ 대신 저런 흉악범이 저장되기 때문에, 
+- $0.99$ 대신 저런 조악스러운 것이 저장되기 때문에, encoding 이 쉽지 않은 것.
 
 #### 4.1.2. Floating-point numbers as integer tuples.
 
@@ -623,11 +623,24 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 
 #### 5.0.6. Fusing RLE and Dictionary decompression.
 
-- 
+- [[#2.2.3. Dictionary|Dictionary Encoding]] 의 결과로 나온 code sequence 는 decimal array 이기에, 꽤나 종종 RLE 로 cascading 된다.
+- 그래서 이놈에 대한 decompression 을 최적화할 수 있으면 아주 좋을것이리라.
+- 기존에는 이 경우에 대해 (1) RLE 를 풀어 다시 code sequence 로 되돌리고 (2) code sequence 를 dictionary 로 원상복구 하는 과정을 거친다.
+- 하지만 이때 중간에 code sequence 가 불필요하게 발생하기 때문에, 이런식으로 decompression 을 진행해 code sequence 의 생성을 제거한다.
+	1) RLE 에다가 먼저 dictionary 를 적용해 runs of code sequence 를 runs of values 로 변환한다.
+	2) 그다음에 이것을 풀어 원래의 값으로 원상복구하는 것.
+- 이때에도 SIMD 를 이용해 최적화를 진행했다 [^fuse-rle-simd].
+- 하지만 이 방법을 항상 적용하는 것은 아니다. Run length 가 평균 3 이상은 되어야 이 방법을 사용한다고 한다.
+	- 왜냐면 구체적으로 이유를 언급하지는 않았지만 3보다 작은 경우에는 성능이 오히려 나빠졌다고 한다.
+- 이 방법을 적용해, *End-to-end* evaluation 에서 7% 정도의 성능 향상이 있음을 확인했다고 한다.
 
 #### 5.0.7. FSST.
 
+- 
+
 #### 5.0.8. Pseudodecimal.
+
+- 
 
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
@@ -644,3 +657,4 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 [^fixed-size-dict]: SIMD 를 사용했는데 생각보다 개선률이 적다. 왜인지는 모르겠다. 다만, [코드상](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/FixedDictionary.hpp)에서 Fixed Dictionary 에 대해서는 SIMD 를 사용하는 부분이 보이지 않고 위의 코드는 Dynamic Dictionary 에서 확인된다는 점이 좀 의심스럽다.
 [^string-dict]: #draft 이렇게만 하면 실제 string 으로 변환하는 부분은 어디에서 담당할까? 변환하지 않고 그냥 `char array` 로 냅두는 것일까? 코드 보고 확인해야 할 듯,, 관련있어 보이는 코드는 [이거임](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/VarDictionary.hpp#L71-L93)
 [^string-dict-simd]: #draft 구체적으로 어떤 내용인지는 논문에 나오지 않는다. 이것도 코드 보고 판단해야됨.
+[^fuse-rle-simd]: #draft 이것도 구체적으로 어떻게 했는지는 논문에 안나온다. 코드 참고하자.
