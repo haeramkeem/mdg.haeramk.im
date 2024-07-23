@@ -527,6 +527,17 @@ MANT: 1111101011100001010001111010111000010100011110101110
 
 ![[Pasted image 20240723112702.png]]
 
+> [!info] 원본 코드: [BtrBlocks](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/RLE.hpp#L165-L184)
+
+> [!info]- SIMD 함수 [Reference](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#techs=AVX_ALL)
+> - `_mm256_set1_epi32`
+> 
+> ![[Pasted image 20240723145325.png]]
+> 
+> - `_mm256_storeu_si256`
+> 
+> ![[Pasted image 20240723145348.png]]
+
 - 위 그림이 decimal RLE 에 대한 pseudo code 이다. 찬찬히 읽어보자.
 	- 우선 parameter 는 다음과 같다.
 		- 일단 `dst` 는 현재 처리중인 주소이다. 이놈을 iterator 처럼 쭉 이동시키며 값을 써넣는다.
@@ -553,11 +564,66 @@ MANT: 1111101011100001010001111010111000010100011110101110
 
 #### 5.0.4. Dictionaries for fixed-size data.
 
-- 
+- 이것은 decimal 이나 double 와 같은 fix-size data type 을 가지는 block 을 dictionary 로 encoding 했을 때 decompression 하는 것이다.
+- 일반적인 dictionary 는 그냥 code sequence 를 쭉 훑으며 각 code 를 원래의 value 로 교체하는 것이다.
+- 근데 [[#5.0.3. Run Length Encoding.|위의 RLE]] 에서와 마찬가지로, SIMD 를 사용하여 이것을 가속할 수 있다.
+	- 즉, 한번에 하나의 code 를 교체하는 것이 아니고, 8개의 code 를 교체하는 것.
+
+![[Pasted image 20240723142738.png]]
+
+- 그래서 위와 같은 pseudo code 가 되는데,, 저기 variable naming 이 좀 그지가치 돼있으니까 이걸 좀 고쳐 써보면 이래된다.
+
+```cpp
+void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
+	int idx = 0 // not shown: 4x loop unroll
+	if (cnt >= 8)
+		while (idx < cnt-7)
+			__m256i codes_m = _mm256_loadu_si256(codes)
+			__m256i values_m = _mm256_i32gather_epi32(values, codes_m, 4)
+			_mm256_storeu_si256(dst, values_m)
+			dst += 8; codes += 8; idx += 8
+	for (;idx < cnt; idx++)
+		*dst++ = values[*codes++]
+```
+
+> [!info] 원본 코드: [BtrBlocks](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/DynamicDictionary.hpp#L127-L153)
+
+> [!info]- SIMD 함수 [Reference](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#techs=AVX_ALL)
+> - `_mm256_loadu_si256`
+> 
+> ![[Pasted image 20240723145037.png]]
+> 
+> - `_mm256_i32gather_epi32`
+> 
+> ![[Pasted image 20240723145153.png]]
+
+- 찬찬히 읽어보자.
+	- 인자를 먼저 보자.
+		- `dst`: 결과를 저장하는 위치를 나타내는 포인터다. 즉, Iterator 로, 이놈이 움직이며 값이 써내려져 간다.
+		- `codes`: 얘는 code sequence 이다. 이놈도 Iterator 로, `dst` 와 같이 움직이며 처리된다.
+		- `values`: 얘가 dictionary 이다.
+		- `cnt`: 얘는 code sequence entry 개수를 의미한다.
+	- 일단 [[#5.0.3. Run Length Encoding.|이전]] 과는 다르게, 이번에는 overflow 를 사용하지 않고 그냥 짜투리 부분은 별도의 loop 으로 SIMD 를 사용하지 않고 처리한다. (맨 아래 `for` 문)
+	- 이제 SIMD 를 사용하는 부분을 보면, 일단 decimal dictionary 이기 때문에 한번에 8개씩 처리하고 있는 모습을 볼 수 있다.
+	- 그리고 한번 처리할 때:
+		- `_mm256_loadu_si256` 로 code sequence 에서 8개의 code 를 읽어오고,
+		- `_mm256_i32gather_epi32` 로 읽어온 8개의 code 에 대해 dictionary 에서 찾아 변환한다.
+		- 마지막으로 `_mm256_storeu_si256` 로 변환한 것을 `dst` 에 심는 것으로 마무리된다.
+- 원본 코드를 보면 알겠지만, 실제로는 위 코드가 4번 반복된다 (`4x loop unroll`).
+	- 가령 `code_0` ~ `code_3` 4개를 선언하는 등.
+- 위와 같은 방법으로 cascading 에 decimal dictionary 가 포함된 경우에 대해 18%, 그리고 double dictionary 가 포함된 경우에 대해서는 8% 의 성능 향상이 있었다고 한다 [^fixed-size-dict].
 
 #### 5.0.5. String Dictionaries
 
+- String dictionary 의 경우에는 decompression 시에 string 값을 복사하는 것을 피했다고 한다.
+- 어떤 code 를 대응하는 string 으로 바꾼 것이 아니고, 그 string 의 길이 (`std::string::size()`) 와 그 스트링의 dictionary 내에서의 *Offset* (즉, 포인터) 두 값으로 바꾼다 [^string-dict].
+- 근데 이때 이 두 값이 64bit 이기 때문에, 이러한 변환 작업은 [[#5.0.4. Dictionaries for fixed-size data.|Double dictionary]] 와 동일하게 SIMD 로 처리될 수 있다.
+- 이렇게 string copy 를 피하는 것 만으로도, 중복되는 값이 많은 (즉, low cardinality) block 에 대해 최대 10배 (!!) 의 성능차이가 나는 것을 확인할 수 있었다.
+- 또한 추가적인 SIMD 최적화를 수행해 [^string-dict-simd], *End-to-end* evaluation 에서 13% 정도의 성능 개선이 있었다고 한다.
+
 #### 5.0.6. Fusing RLE and Dictionary decompression.
+
+- 
 
 #### 5.0.7. FSST.
 
@@ -575,3 +641,6 @@ MANT: 1111101011100001010001111010111000010100011110101110
 [^roaring-bitmap]: #draft 주인장의 추측이다. 논문에서는 column 의 NULL 값을 bitmap 으로 어떻게 표현하는지에 대한 설명은 되어 있지 않다.
 [^heavyweight-scheme]: 여기 "무거운 (heavyweight)" 이 어떤 측면에서 말하는 것인지는 확실하지 않다. 만약 compression ratio 가 일반적으로 낮은 scheme 을 지칭하는 것이라면 일리가 있으나 decompression overhead 가 안좋은 것을 지칭하는 것이라면 decompression overhead 와 compression ratio 모두 좋은 scheme 을 새로 찾아야 하는 것인데, 쉽지는 않았을 듯. 근데 문맥상으로 보면 후자인 것 같다.
 [^sign-digit]: #draft Pseudo-code 만 보면 input 이 무조건 양수로 바뀐다. 음수는 어떻게 처리되는지 몰것네
+[^fixed-size-dict]: SIMD 를 사용했는데 생각보다 개선률이 적다. 왜인지는 모르겠다. 다만, [코드상](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/FixedDictionary.hpp)에서 Fixed Dictionary 에 대해서는 SIMD 를 사용하는 부분이 보이지 않고 위의 코드는 Dynamic Dictionary 에서 확인된다는 점이 좀 의심스럽다.
+[^string-dict]: #draft 이렇게만 하면 실제 string 으로 변환하는 부분은 어디에서 담당할까? 변환하지 않고 그냥 `char array` 로 냅두는 것일까? 코드 보고 확인해야 할 듯,, 관련있어 보이는 코드는 [이거임](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/VarDictionary.hpp#L71-L93)
+[^string-dict-simd]: #draft 구체적으로 어떤 내용인지는 논문에 나오지 않는다. 이것도 코드 보고 판단해야됨.
