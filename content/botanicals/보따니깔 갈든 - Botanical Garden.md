@@ -8,6 +8,7 @@ date: 2024-04-23
 ## 재배 작물들
 
 - [[(Botanical Garden) Algorithm, Data Structure|알고리즘, 자료구조]]
+- [[(Botanical Garden) Computer Architectures|컴퓨터 구조]]
 - [[(Botanical Garden) C, Cpp|C, C++]]
 - [[(Botanical Garden) Cybersecurity|사이버보안]]
 - [[(Botanical Garden) Database|데이터베이스]]
