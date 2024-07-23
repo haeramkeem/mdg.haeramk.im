@@ -65,7 +65,7 @@ date: 2024-07-17
 	- 정수값에 대한 encoding 이 주로 연구되어 왔고, 문자열이나 실수값에 대한 encoding 은 흔치 않았다.
 	- 또한, 한 알고리즘에 대한 대안책을 제시하고, 이들 간에 어떤 것을 선택할지에 대한 알고리즘을 제시하는 연구는 극히 적었다고 한다.
 
-> [!tip] 논문에서의 표현
+> [!tip] *Complete*, *End-to-end* 란?
 > - 논문에서는 이러한 여러 scheme 들 중에 하나를 동적으로 선택하여 encoding 하는 방식을 *Complete* 혹은 *End-to-end* 라고 표현한다.
 
 - 그래서 BtrBlock 의 contribution 은 다음과 같다:
@@ -484,6 +484,84 @@ MANT: 1111101011100001010001111010111000010100011110101110
 	2) 두번째는 unique value 가 너무 적을 때이다. 이때에는 [[#2.2.3. Dictionary|Dictionary]] 를 사용하는 것이 훨씬 더 decompression overhead 가 적기 때문에, unique value 가 10% 이하로 떨어지면 이놈이 제외된다.
 
 ## 5. Fast Decompression
+
+### 5.0. *Overview*
+
+> [!tip] [[#5.0. *Overview*|Section 5.0]] Overview
+> - 마찬가지로 논문에는 없는 section 이고, 형식상 주인장이 끼워 넣은 것이다.
+
+#### 5.0.1 Decompression speed is vital.
+
+- Decompression speed 는 중요하다. 근데 왜?
+- Cloud 에서 compute node 는 드럽게 비싸고 이놈의 사용시간을 줄이는 것이 비용최적화에 핵심이 된다.
+- 이 드럽게 비싼 compute node 의 사용시간을 줄이는 것은 compression 의 관점에서 보자면 (1) compression ratio 를 늘려 Data Lake 에서 받아오는 속도를 빠르게 하는 것과 (2) 받아온 것을 빠르게 decompression 하는 것일 것이다.
+	- 근데 왜 decompression 만 생각할까? 그것은 OLAP 의 관점에서 봤을 때 decompression 만 하기 때문이다.
+	- Compression 작업은 뭐 OLTP 가 할 수도 있고 다른 누군가가 할 수도 있다. 어차피 Data Lake 이기 때문에 누군가가 compression 해서 여기에 투척하기만 하면 된다.
+	- 중요한 것은 이 데이터를 사용하려고 할 때는 OLAP 이 직접 decompression 해야 한다는 것이다.
+- 어쨋든 (1) 는 위에서 충분히 설명 했고, 본 section 에서는 (2) 에 집중하려고 한다.
+
+#### 5.0.2. Improving decompression speed.
+
+- [[#2.2.1. Combining fast encodings.|Section 2.2.1]] 의 표를 참고하면, SIMD-FastPFOR, SIMD-FastBP128, FSST, Roaring 은 이미 공개된, 최적화된 구현체를 사용했다고 한다.
+- 따라서 여기서는 나머지 scheme 들 (RLE, One-value, Dictionary, Frequency, Pseudodecimal) 에 대한 fast implementation 에 대해 이야기 해보려고 한다.
+- 최적화를 위한 evaluation 은 다음의 고려사항이 있다고 한다.
+	- Dataset 은 (저자가 진짜 질리도록 강조하는 것 같은데) public BI dataset 을 사용했다고 한다.
+	- Evaluation 은 *End-to-end* 방식으로 진행됐다고 한다.
+		- 즉, 어떤 scheme `B` 를 최적화 하는 과정에서 만약 `A-B-C` 의 순서로 cascading 이 진행됐다면, `B` 하나만의 시간을 측정한 것이 아니라 `A-B-C` 전체 시간을 측정해서 어느정도 개선되었는지를 비교했다고 한다.
+		- 더 쉽게 말하면 `A-B-C` 와 `A-B'-C` 간에 총 시간을 비교해서 개선율을 계산했다는 것.
+		- BtrBlock 에서 모든 scheme 들이 cascading 될 수 있기 때문에, 개선한 scheme 이 cascading 되는 상황에서의 개선율을 계산한 것으로 보인다.
+
+#### 5.0.3. Run Length Encoding.
+
+- [[#2.2.2. RLE & One Value.|RLE]] 을 decompression 하는 것은 단순하게 생각하면 그냥 어떤 값을 해당 횟수 반복하기만 하면 될 것이다.
+- 근데 당연히 이것은 최적화가 *들* 된것이다. 요즘은 21세기라, SIMD 라는 더 좋은 방법이 있기 때문.
+	- 간단히 말하면, SIMD 는 여러 데이터를 하나의 instruction 에서 처리하는 기술이다.
+	- 즉, 여기서는 하나의 instruction 으로 여러 값을 set 해버리기 위해 사용한 것.
+- BtrBlock 에서는 AVX2 instruction 을 사용하여, decimal 의 경우에는 한번에 8개, floating-point 의 경우에는 한번에 4개를 처리한다.
+	- AVX2 의 경우에는 256bit 의 레지스터를 사용한다.
+	- 따라서 32bit decimal 의 경우에는 한번에 8개를 처리할 수 있고,
+	- 64bit double 의 경우에는 한번에 4개를 처리할 수 있는 것.
+- 하지만 문제는 block 내 데이터들이 항상 8개 혹은 4개로 딱 떨어지지는 않는다는 것.
+	- 딱 떨어지지 않는 짜투리 부분에 대해서는 별도로 처리할 수 있겠지만, 그렇게 하면 당연히 값비싼 branch instruction 을 사용해야 한다.
+	- 따라서 overflow 로 이것을 해결한다. 즉, 만약 decimal 값을 29번 반복하는 경우에는, SIMD 로 8개씩 4번을 반복해서 32 개를 만들고, 크기가 29 인 버퍼에 넣어서 overflow 를 이용해 뒤를 자르는 것이다.
+
+![[Pasted image 20240723112702.png]]
+
+- 위 그림이 decimal RLE 에 대한 pseudo code 이다. 찬찬히 읽어보자.
+	- 우선 parameter 는 다음과 같다.
+		- 일단 `dst` 는 현재 처리중인 주소이다. 이놈을 iterator 처럼 쭉 이동시키며 값을 써넣는다.
+		- `runlen` 과 `value` 는 RLE 의 run length 와 value 가 담긴 배열이다.
+			- 즉, `value[i]` 에는 $i$ 번째 value 가, `runlen[i]` 에는 해당 value 에 대한 run length 가 담겨있는 것.
+		- `runcnt` 는 위 두 배열의 크기이다.
+	- 그리고 여기서 loop 을 돌며 처리하는데,
+		- `target` 은 끝 주소이다.
+			- C++ STL 에서 `.end()` 함수와 비슷한 역할을 한다고 생각하면 된다.
+			- 시작주소인 `dst` 에 run length 를 더해 끝 주소를 지정해 놓는 것.
+		- 그리고 `vals` 에다가 값들을 전부 채워넣고,
+		- 다음 loop 에서 `vals` 를 복사하며 `dst` 에 8개씩 값을 채워넣는다.
+			- 이 loop 은 `dst` 를 8씩 움직이고, `dst` 가 `target` 을 넘어가면 멈추게 된다.
+				- 여기서 당연히 `dst` 는 `target` 을 넘어갈 수 있다. 위에서 말한 것처럼, run length 는 8의 배수가 아닐 수도 있기 때문.
+		- 그리고 마지막으로 `dst` 를 `target` 으로 세팅한다.
+			- 이부분이 위에서 말한 overflow 부분이다. `dst` 를 `target` 으로 설정함으로써, 넘어간 부분에 대해서는 다음 iteration 에서 overwrite 될 수 있게 한다.
+- 위와 같은 SIMD 를 활용한 RLE 는 꽤나 성능이 좋았다고 한다.
+	- 일단 *End-to-end* evaluation 을 했을 때, 평균적으로 76% 성능 향상이 있었고,
+	- Decimal 의 경우에는 128% (!!) 성능 향상이 있었다.
+		- 이것은 [[#3. Scheme Selection & Compression|Section 3]] 에서 설명한 scheme selection algorithm 에 의해 RLE 가 선택된 것이기 때문에,
+		- 반대로 생각하면 해당 block 은 RLE 를 적용하기 아주 좋은 형태인 것이고 따라서 이러한 극적인 성능 향상이 가능했던 것이다.
+	- String dictionary 의 경우에도 code sequence (즉, 이놈은 dictionary 를 통해 string sequence 에서 decimal sequence 로 바뀐 것이다.) 에 RLE 를 cascading 했을 때, 78% 의 성능 향상이 있었다.
+	- 마지막으로, double 의 경우에는 14% 정도의 성능 향상이 있었다고 한다.
+
+#### 5.0.4. Dictionaries for fixed-size data.
+
+- 
+
+#### 5.0.5. String Dictionaries
+
+#### 5.0.6. Fusing RLE and Dictionary decompression.
+
+#### 5.0.7. FSST.
+
+#### 5.0.8. Pseudodecimal.
 
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
