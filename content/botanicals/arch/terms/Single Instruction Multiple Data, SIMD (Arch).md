@@ -4,9 +4,11 @@ tags:
 date: 2024-07-23
 ---
 > [!info]- 참고한 것들
-> - [위키](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data)
+> - [SIMD 위키](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data), [MMX 위키](https://en.wikipedia.org/wiki/MMX_(instruction_set)), [AVX 위키](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions), [SSE 위키](https://en.wikipedia.org/wiki/Streaming_SIMD_Extensions), 
 > - [어떤 깃헙 블로그](https://stonzeteam.github.io/SIMD-%EB%B3%91%EB%A0%AC-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D/)
 > - [FASOO 회사 블로그](https://blog.naver.com/fs0608/221650925743)
+> - [Intel 공식 문서](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html)
+> - 
 
 ## 란?
 
@@ -50,6 +52,7 @@ date: 2024-07-23
 - 그래서 이 instruction 들을 함수 형태로 wrapping 해놓은 것을 제공해 주는데, 그것이 바로 *Intrinsic* 이다.
 	- Wrapping 한 것이기에 instruction count 는 매우 적긴 하지만, 1개는 아니라고 한다.
 	- 함수 호출 등의 instruction 이 좀 추가되긴 한다는 듯.
+- 물론 여기 소개해놓은 것들은 모두 Intel x86 기준이다.
 
 ### 자료형
 
@@ -88,3 +91,4 @@ _mm{register bit 수}_{연산}_{vector 원소의 크기와 자료형}
 	- `_mm256_set1_epi32`: parameter 로 받은 32bit 정수 8개로 register 를 채운다.
 	- `_mm256_storeu_si256`: register 의 정수값들 총 265bit 를 memory 로 내린다.
 	- `_mm256_loadu_si256`: memory 의 정수값들 총 256bit 를 register 로 올린다.
+- 더 많은 함수들과 parameter 설명 등은 [Intel 공식 문서](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html) 를 참고하자.
