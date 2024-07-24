@@ -661,6 +661,48 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 	- 따라서 이 *Exception* 들에 대해서는 [[#2.2.7. NULL Storage Using Roaring Bitmaps.|Roaring Bitmap]] 을 이용해 관리를 하고, 이 bitmap 을 확인했을 때 *Exception* 이 없다면 SIMD 로, 있다면 그냥 하나하나 decompression 하게 된다.
 		- "하나하나 decompression" 은 구체적으로 그냥 double 의 경우에는 $Significant * 10^{Exponent}$ 로 계산하고, exception 에 대해서는 *Patch* 값을 사용하는 것을 의미한다.
 
+## 6. Evaluation
+
+### 6.0. *Setup*
+
+> [!tip] [[#6.0. *Setup*|Section 6.0.]] Setup
+> - 마찬가지로 논문에는 없는 section 이고, 형식상 주인장이 끼워 넣은 것이다.
+
+#### 6.0.1. Test setup
+
+- 100Gpbs 네트워크를 제공하는 이점이 있는 AWS EC2 `c5n` 인스턴스 (`c5n.18xlarge`) 를 사용했다.
+- 하드웨어 정보는:
+
+| CLASS        | INFO                                       |
+| ------------ | ------------------------------------------ |
+| CPU          | Intel Xen Pantium 8000 series (Skylake-SP) |
+| Core/clock   | 36C 72T (3.5GHz)                           |
+| SIMD support | AVX2, AVX512                               |
+| Memory       | 192GiB                                     |
+
+- 그리고 SW dependency 정보는:
+
+| CLASS    | INFO                         |
+| -------- | ---------------------------- |
+| Compiler | GCC 10.3.1                   |
+| OS       | Amazon Linux 2 (kernel 5.10) |
+
+- 추가적으로...
+	- TBB library 를 이용해 병렬처리
+	- Hyperthreading 은 비활성화
+	- Evaluation 전에 모든 메모리 공간에 접근해 실험 도중 page fault 가 나지 않도록 했다.
+	- 여러번 실험 후 평균내어 caching 과 CPU frequency ramp-up 이라는 것도 방지했다고 한다.
+
+#### 6.0.2. Parquet test setup
+
+- 일단 실험을 위해 Parquet file 을 생성하는 것은 [Apache Arrow](https://github.com/apache/arrow) (`pyarrow 9.0.0`) 와 [Apache Spark](https://github.com/apache/spark) (`pyspark 3.3.0`) 모두를 사용했다고 한다.
+	- 위의 것들을 사용하면서 변경한 설정은 Arrow 에서 Parquet file 의 rowgroup 사이즈를 $2^{17}$ 로 변경한 것 외에는 없다고 한다.
+	- 이유는 그냥 이게 더 빨라서.
+- 그리고 이렇게 생성한 Parquet file 과 Arrow C++ library 를 이용해 구현한 BtrBlock 에 대한 실험을 진행했다고 한다.
+	- Arrow C++ library 는 Arrow 의 여러 클래스 (구조체) 를 제공하는 high-level API 와 Parquet file 을 직접 건드릴 수 있게 해주는 low-level API 두 가지를 제공하는데,
+	- High-level API 의 경우에는 너무 느려서 low-level API 만을 사용했다고 한다.
+- 그리고 rowgroup 과 column 에 대해 decompression 하는 과정을 병렬로 처리되도록 했다고 한다.
+
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
 [^compilation]: ([논문](https://www.vldb.org/pvldb/vol4/p539-neumann.pdf)) Query engine 최적화 논문이다.
