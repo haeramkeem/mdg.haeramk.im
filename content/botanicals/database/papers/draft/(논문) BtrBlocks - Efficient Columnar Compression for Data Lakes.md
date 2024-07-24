@@ -838,13 +838,60 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 
 #### 6.3.1. Sampling research questions.
 
-- 
+- BtrBlock 에서는 sample 을 바탕으로 scheme selection 을 하기 때문에, "어떻게 sample 을 추출하냐 (*Sampling Strategy*)"에 따라 "scheme selection 의 정확도"가 올라간다.
+- 여기서 "어떻게 sample 을 추출하냐" 는 다음과 같은 research question 으로 정리될 수 있다.
+	1) Sample 사이즈를 고정시켰을 때, 어떻게 sample 을 추출하는 것이 좋을까? 작게 여러개? 아니면 크게 하나?
+	2) Sample 사이즈가 변화함에 따라, scheme selection 의 정확도는 어떻게 변화할까?
+- 그리고 이 research question 에 대한 답을 하기위한 척도, 즉 "scheme selection 의 정확도" 는 다음과 같이 계산할 수 있다.
+	1) 일단 모든 column 의 첫번째 block 들에 대해 scheme pool 의 모든 scheme 을 적용시킨다.
+		- BtrBlock 에는 8개의 scheme 이 있으므로, column 당 8개의 결과가 나올 것이다.
+	2) 그리고, cascading 을 위해, 이 결과들에 대해 적용하지 않은 scheme 을 하나씩 적용시켜본다.
+		- 즉, 8개의 scheme 중 하나가 적용되어 있고 나머지 7개가 남아 이것을 적용시키는 것이기 때문에, column 당 총 $8 * 7 = 56$ 개의 결과가 나올 것이다.
+	3) 이 64개 ($8 + 8 * 7 = 64$) 의 결과들 중에, compression ratio 가 작은 놈을 고른다. 이것을 *Optimal Scheme* 이라고 부르자.
+	4) 그리고 한 *Sampling Strategy* 을 선택해 위의 과정을 반복하되, block 전체가 아닌, 이 *Sampling Strategy* 를 통해 선택된 sample 을 이용해 수행한다. 이 결과로 선택된 scheme 을 *Sampling Scheme* 이라고 부르자.
+	5) 만약 *Sampling Scheme* 이 *Optimal Scheme* 과 같거나 혹은 2% 내의 성능 하락만이 있는 경우에 대해 올바르게 scheme 을 선택했다고 간주할 때, 이 *Sampling Strategy* 가 올바르게 scheme 을 선택한 비율을 계산한다. 이것이 "scheme selection 의 정확도" 이다.
+		- "2% 내의 성능 하락" 이라는 허용범위를 둔 것은, 가령 (Dict -> RLE) 와 (RLE -> Dict) 와 같이 사실상 동일한 경우 또한 올바름으로 인정하기 위해서이다.
+- 이제 이렇게 정의한 "정확도" 에 따라 첫번째 research question 에 대한 답을 해보자.
 
 #### 6.3.2. Best strategy for a fixed sample size.
 
+![[Pasted image 20240724154045.png]]
+
+- 이게 그 결과다. 일단 legend 부터 확인해 보자.
+	- 기본적인 것은 [[#3.1.1. Choosing samples.|Section 3.1.1.]] 에서 설명한 것과 동일하다.
+		- 즉, 전체 block 을 *Partition* 으로 나누고, 그 안에서 랜덤한 위치에서 시작해 일정 개수의 연속된 *Entry* 들을 고르는 것.
+	- `NxM` 에서 `N` 은 *Partition* 의 갯수이고, `M` 은 *Partition* 당 *Entry* 의 갯수이다.
+		- 즉, `640x1` 은 한 block 을 640 개의 *Partition* 으로 나누고, 그 *Partition* 에서 1개의 *Entry* 를 선택한다는 것이다.
+	- 따라서 `640x1` 은 그냥 개별 랜덤 선택 (*Random individual tuples* - 청록색) 과 같고, `1x640` 은 그냥 하나의 덩어리를 선택 (*Single tuple range* - 보라색) 와 같다.
+- 결과는:
+	- 예상대로 *Random individual tuples* 가 가장 구렸다. 아마 locality 를 고려하지 못하기 때문이리라.
+	- 그리고 *Single tuple range* 는 생각보다는 선방했지만 그래도 구렸다. 이건 아마 distribution 을 고려하지 못하기 때문이리라.
+	- 위의 결과가 시사하는 바는 (`320x2` 를 제외하면) 여러 *Partition* 에서 적당한 개수의 *Entry* 를 선택하는 것이 locality 와 distribution 의 토끼를 모두 잡게 해준다는 것이다.
+
 #### 6.3.3. Impact of sample size.
 
+![[Pasted image 20240724154100.png]]
+
+- 위의 그래프는 두번째 research question 인, sample size 와 "정확도" 간의 상관관계다.
+	- 다만 여기서는 저 *Data SIze* 가 "정확도" 의 척도가 된다.
+	- 즉, 저 *Data Size* 는 compression result 의 사이즈를 일컫는 것으로,
+	- *Optimal Scheme* 으로 compression 했을 때를 기준치 (*optimum*) 로 했을 때 sample 사이즈를 변경해 가며 *Sampling Scheme* 으로 compression 한 결과와의 차이를 나타내고 있는 것.
+	- 따라서 *optimum* 에 가까울 수록 "정확한" 것이 된다.
+- 세로축에 대한 이야기는 위의 설명으로 얼추 된 것 같고, 이제 가로축 얘기를 해보자.
+	- 보면 *optimum* 에 가까울 수록 "정확" 하긴 하지만, sample 의 사이즈는 점차 커지는 것을 볼 수 있다.
+	- Sample 의 크기가 커진다는 얘기는 당연히 compression 시에 CPU 를 많이 사용한다는 것이고, 따라서 이 가로축은 "CPU 사용률" 을 대변할 수 있게 된다.
+- 즉, 정리하면 sample 을 작게 잡으면 정확도는 떨어지지만 (즉, compression ratio 는 작아지지만), CPU 사용량은 적게 먹게 되고, 반대로 크게 잡으면 정확도는 높아지지만 CPU 사용량이 커지는 trade-off 가 있는 것.
+
 #### 6.3.4. Samping in BtrBlocks
+
+- 위 실험 결과가 [[#3.1.1. Choosing samples.|Section 3.1.1]] 에서 제시한 설정값들에 대한 근거가 된다.
+- 위같은 실험 결과에 의해, BtrBlock 은 10개의 *Partition* 과 64개의 *Entry per Partition* 을 사용해 sampling 을 하고, 그 결과 CPU 사용량을 전체 과정 대비 1.2% 만 소모하고도 scheme selection 이 가능해 졌다.
+
+### 6.4. Compression
+
+#### 6.4.1. Compression ratio.
+
+#### 6.4.2. Compression speed.
 
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
