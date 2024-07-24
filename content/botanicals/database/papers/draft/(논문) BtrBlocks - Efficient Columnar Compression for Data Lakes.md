@@ -188,6 +188,10 @@ date: 2024-07-17
 
 #### 2.2.6. FSST
 
+![[Pasted image 20240724100253.png]]
+
+> 출처: [FSST: fast random access string compression, PVLDB'20](https://dl.acm.org/doi/10.14778/3407790.3407851)
+
 - *Fast Static Symbol Table* (*FSST*) 도 *Dictionary Encoding* 와 유사한 원리를 가진다:
 	- String 의 8byte 길이의 (즉, 문자 8개) substring 을 1byte `대체` 로 바꾸는 것이다.
 - 이때의 dictionary 는 *Symbol Table* 이라고 불리는데, 빈도가 높은 순서대로 $2^{8} = 256$ 개의 substring 을 entry 로 넣어 관리한다.
@@ -636,11 +640,26 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 
 #### 5.0.7. FSST.
 
-- 
+- FSST open source implementation 이 제공하는 decompression API 를 이용하면 compressed string element 하나에 대해 decompression 이 가능하다.
+	- 이 decompression API 에는 원하는 compressed string element 의 compressed string sequence 에서의 offset 과 length 를 parameter 로 전달해서 수행한다.
+	- 즉, symbol table 과 compressed string sequence 는 이미 알고 있다고 전제하고, string offset 을 전달해 sequence 에서의 decompression 시작점을 알려주고, string length 도 전달해 종료지점 또한 알려주는 것.
+	- 참고로 이 점은 FSST 의 장점이기도 하다. string sequence 전체를 decompression 할 필요 없이 하나의 string 만을 decompression 할 수 있는 이른바 *Random Access* 가 되기 때문.
+- 단순하게는 loop 를 돌며 각 string 들을 decompression 할 수 있겠지만, 이렇게 하면 문제가 있다고 한다.
+	- FSST 의 decompression 은 최적화가 되어 있기 때문에, loop 를 돌게 되면 "최적화된 구간" <-> "최적화 안된 구간" 을 반복적으로 왔다갔다 하게 된다.
+- 따라서 BtrBlock 에서는 전체를 그냥 하나의 string 으로 생각해서, offset 은 첫 string 의 offset, length 는 모든 string length 의 합으로 decompression API 를 실행한다.
+	- 이렇게 하면 위에서 말한 구간 전환 없이 한번의 "최적화된 구간" 으로 쭉 진행할 수 있게 된다.
+- 결과적으로, 각각의 string element 를 loop 을 돌며 decompression 할 때보다 string element 1개 당 50 instruction 을 줄일 수 있게 된다.
+- 추가적으로, 어차피 첫 string element offset 을 offset parameter 로 넘겨주고 string length 합을 length parameter 로 넘겨주기 때문에, 이들을 저장할 필요 없이 그냥 uncompressed string length 만 저장한하는 것으로도 충분하다고 한다.
 
 #### 5.0.8. Pseudodecimal.
 
-- 
+- [[#4. Pseudodecimal Encoding|Pseudodecimal Encoding]] 만큼이나 decompression 하기 쉬운 것은 없다.
+	- 그냥 $Significant * 10^{Exponent}$ 만 계산해주면 되기 때문.
+	- 그리고 이것 또한 SIMD 를 이용해서 64bit-double 4개를 한번에 계산하는 방법으로 착착 찍어내 주면 훨씬 빨라진다.
+- 근데 문제는 *Exception* 이다.
+	- 그냥 SIMD 를 이용해서 4개씩 쭉쭉 계산하고 싶은데, 중간에 저 *Exception* 이 끼어있으면 그렇게 못하기 때문이다.
+	- 따라서 이 *Exception* 들에 대해서는 [[#2.2.7. NULL Storage Using Roaring Bitmaps.|Roaring Bitmap]] 을 이용해 관리를 하고, 이 bitmap 을 확인했을 때 *Exception* 이 없다면 SIMD 로, 있다면 그냥 하나하나 decompression 하게 된다.
+		- "하나하나 decompression" 은 구체적으로 그냥 double 의 경우에는 $Significant * 10^{Exponent}$ 로 계산하고, exception 에 대해서는 *Patch* 값을 사용하는 것을 의미한다.
 
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
