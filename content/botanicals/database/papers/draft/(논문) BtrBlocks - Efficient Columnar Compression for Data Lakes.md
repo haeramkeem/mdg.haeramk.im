@@ -891,7 +891,23 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 
 #### 6.4.1. Compression ratio.
 
+![[Pasted image 20240724163659.png]]
+
+- BtrBlock 의 compression ratio 는 위 그림 하나로 정리될 수 있다.
+	- 일단 BtrBlock 은 relational column store 을 전제로 한 compression scheme 이다. 따라서 대표적인 relation column store 4개와도 compression ratio 를 비교했으며, 위 그래프에서 System A~D 로 표현되어 있다 [^system-a-d].
+		- 보다시피 전부 BtrBlock 에 비해 나약하다.
+	- 그리고 대표적인 column data format 인 Parquet 와, 그것에 여러 compression 을 적용한 애들 (Parquet + LZ4, Snappy, Zstd) 과의 비교 또한 수행하였다.
+		- 여기서는 Parquet + Zstd 를 제외하면 모두 이겨버리는 것을 볼 수 있다.
+		- Parquet + Zstd 를 이기지 못하긴 했지만, 이놈은 heavyweight 라는 치명적인 단점이 있다.
+
 #### 6.4.2. Compression speed.
+
+![[Pasted image 20240724180608.png]]
+
+- 앞서 말한 것처럼, compression 과정은 OLAP 에서 이루어지기 때문에 compression speed 에 대해서는 크게 신경쓰지 않는다.
+- 다만, compression speed 가 다른 것들과 비교해서 나쁘지 않다는 것을 피력하기 위한 것인 걸로 보인다.
+- 어쨋든, compression 과정은 (1) CSV 파일을 읽어 memory 로 올리고, (2) memory 에서 binary data 를 처리하는 두 단계로 나눌 수 있고, 각 단계를 시작점으로 해서 속도가 얼마나 나오는지 실험했다고 한다.
+- 그 결과는 위에서 볼 수 있듯이, (1) 에서 시작했을 때는 Parquet 를 사용했을 때와 유사한 수준이었고, (2) 에서 시작한 것은 훨씬 더 빠른 속도를 보여주었다.
 
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
@@ -911,3 +927,4 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 [^fuse-rle-simd]: #draft 이것도 구체적으로 어떻게 했는지는 논문에 안나온다. 코드 참고하자.
 [^compression-ratio]: #draft 단위가 뭔지 모르겠다. 이것도 코드 보고 확인해야 할 듯.
 [^numeric-range]: 원문에는 *Numeric range*, *One size range* 라는 말로서 표현되는데, 이것이 정확히 어떤 의미인지는 파악이 안된다.
+[^system-a-d]: #draft 원문상에도 System A~D 로만 표현되어 있고, 어떤 솔루션인지는 정확하게 나와있지 않다. 코드 뒤지다 보면 찾을 수 있을지도.
