@@ -703,6 +703,66 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 	- High-level API 의 경우에는 너무 느려서 low-level API 만을 사용했다고 한다.
 - 그리고 rowgroup 과 column 에 대해 decompression 하는 과정을 병렬로 처리되도록 했다고 한다.
 
+### 6.1. Real-World Datasets
+
+#### 6.1.1. Synthetic data.
+
+- TPC-H 나 TPC-DS 와 같은 데이터셋은 전통적인 DBMS 혹은 cloud DBMS 들에 대해 query engine 성능 측정에 아주 효과적이라고 알려져 있다.
+- 하지만 얘네들이 생성해주는 데이터셋은 현실에서 볼 수 있는 데이터와는 조금 거리가 있다는 것 또한 알려져 있는 사실이다.
+	- 이 데이터들은 완벽하게 정규화되어 있고,
+	- 균일하고 독립적인 데이터 분포를 이루고
+	- 정수 데이터들이 대부분이기 때문에
+	- (특히 Data Lake 에서는) 현실의 데이터와는 거리가 있다는 것.
+- 따라서 BtrBlock 에서는 이런 인공적인 (*Synthetic*) 데이터보다는 현실적인 데이터를 사용했다고 한다.
+
+#### 6.1.2. The Public BI Benchmark.
+
+- 그래서 BtrBlock 에서 사용하는 데이터셋은 *Public BI Benchmark* 이다.
+- 여기에는, [Tableau 사](https://www.tableau.com/) 에서 공개한 46 개의 Tableau Workbook 에 의해 추출된 데이터들이 포함되어 있다고 한다.
+- 따라서 이 데이터들은 완벽하지 않다는 점에서 훨씬 더 현실과 유사하다고 할 수 있다:
+	- 왜곡된 데이터들
+	- 정규화되지 않은 테이블들
+	- 잘못 사용된 데이터 타입들
+		- 가령 실수값을 문자열로 저장하는 등
+	- 잘못된 `NULL` 표현
+		- 가령 `NULL` 을 문자열로 저장하는 등
+- 또한, Tableau 만의 특징도 있었는데, 그것은 Tablaeu 에서는 decimal 을 floating-point number 로 저장한다는 것이었다.
+	- Floating number 는 위에서도 말했다시피, 다소 효율적이지 못한 방식으로 저장되고 있는 반면에
+	- AI, ML 분야에서는 빈번하게 사용되고 있는 자료형이다.
+- 그래서 일단 이 데이터셋이 어떤 특징을 가지고 있는지부터 살펴보자.
+
+#### 6.1.3. Public BI vs. TPC-H.
+
+![[Pasted image 20240724113849.png]]
+
+- 위 표는 Public BI 와 TPC-H 의 여러 자료형의 데이터에 대해 여러가지 compression 방법을 적용했을 때를 나타낸다.
+- 일단 가로축부터:
+	- 뭐 *datatype* 이나 *dataset* 은 별로 설명할 필요가 없을 것 같고
+	- *metric* 의 경우에는 `sh` 와 `cr` 로 나뉜다.
+		- `sh` 는 전체 데이터 사이즈에서 해당 데이터가 차지하는 비율 (%) 을 뜻한다.
+			- 가령 표의 왼쪽 위에 있는 71.5% 는 전체 PBI 데이터셋 중에서 String data 가 71.5% 라는 것을 의미한다.
+			- 뭐 TPC-H 에서는 여러 사이즈의 데이터셋을 생성할 수 있기 때문에, 절대적인 수치가 아닌 상태 비율로 표현했다고 하네
+		- `cr` 은 *compression ratio* 이다.
+			- 어떤 compression 방법을 적용했을 때와 적용하지 않았을 때 (*Binary*) 의 데이터 사이즈를 비교해서 계산된 값이다.
+- 그리고 세로축은:
+	- *Binary* 는 압축되지 않은 날것의 상태이고,
+		- 즉, 메모리에 적재된 binary column data
+		- 이것을 가지고 Parquet file 을 만들고 BtrBlock 을 적용하고 지지고 볶고 하는 것.
+	- *Parquet* 는 *Binary* 를 Parquet file 로 인코딩한 것,
+	- 그 아래의 *LZ4*, *Snappy*, *Zstd* 는 Parquet file 을 해당 compression tool 로 압축한 것을 의미한다.
+	- 그리고 마지막에 *BtrBlock* 을 적용했을 때의 결과인 것.
+- 자 그럼 이 값들에 대해 더 깊게 살펴보자.
+
+#### 6.1.4. Public BI vs. TPC-H: Strings.
+
+- 
+
+#### 6.1.5. Public BI vs. TPC-H: Doubles.
+
+#### 6.1.6. Public BI vs. TPC-H: Integers.
+
+#### 6.1.7. Adapting for evaluation.
+
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
 [^compilation]: ([논문](https://www.vldb.org/pvldb/vol4/p539-neumann.pdf)) Query engine 최적화 논문이다.
