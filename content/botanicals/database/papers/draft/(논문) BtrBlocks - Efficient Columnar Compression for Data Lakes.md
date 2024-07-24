@@ -909,6 +909,48 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 - 어쨋든, compression 과정은 (1) CSV 파일을 읽어 memory 로 올리고, (2) memory 에서 binary data 를 처리하는 두 단계로 나눌 수 있고, 각 단계를 시작점으로 해서 속도가 얼마나 나오는지 실험했다고 한다.
 - 그 결과는 위에서 볼 수 있듯이, (1) 에서 시작했을 때는 Parquet 를 사용했을 때와 유사한 수준이었고, (2) 에서 시작한 것은 훨씬 더 빠른 속도를 보여주었다.
 
+### 6.5. Pseudodecimal Encoding
+
+#### 6.5.1. Evaluation outside of BtrBlocks.
+
+- 앞서 설명한 대로, [[#4. Pseudodecimal Encoding|PDE]] 는 double 수치를 위해 BtrBlock 에서 새로 제안한 것이고 따라서 BtrBlock 과 별개의 evaluation 을 수행하면 더욱 객관적인 비교가 될 것이다.
+- 하지만 문제는 PDE 는 그 자체로는 compression 을 수행하지 않는다:
+	- 마치 [[#2.2.5. FOR & Bit-packing|FOR]] 이후에 bit 수를 줄이기 위해 [[#2.2.5. FOR & Bit-packing|Bit-packing]] 을 수행하는 것처럼,
+	- PDE 도 double 을 decimal 로 바꿔서 더욱 compression 하기 편한 형태로 만들 뿐 그 자체로는 데이터의 사이즈가 줄어들지는 않는다.
+- 따라서 이것을 evaluation 하기 위해서 *Fixed two-level cascade* 을 가정한다:
+	- 즉, *무조건* PDE 다음에는 FastBP128 이 cascading 되어 실질적인 compression 은 이것을 통해 하는 것.
+
+#### 6.5.2. Comparing to existing double schemes.
+
+![[Pasted image 20240724202136.png]]
+
+- 위의 표는 PDE 의 성능을 객관적으로 보기 위해, 이것과 다른 4개의 floating-point encoding scheme ([FPC](https://ieeexplore.ieee.org/document/4148768), [Gorilla](https://dl.acm.org/doi/10.14778/2824032.2824078), [Chimp-Chimp128](https://dl.acm.org/doi/abs/10.14778/3551793.3551852)) 들에 대해 compression ratio 를 비교해 본 것이다.
+	- 여기서 대상이 된 column 들은 데이터들이 아주 많고, *non-trivial data* 들이 들어 있다고 한다.
+
+> [!tip] *Non-trivial data* 란?
+> - 대략 "중복되는 값이 너무 많지 않은 데이터" 정도로 생각하면 될 것 같다.
+
+- 일단 보면 Chimp128 과 서로 우열을 다루고 있는 모습을 확인할 수 있다.
+	- 하지만, Chimp128 이 우세한 경우는 대부분 근소한 차이인 반면
+	- `CommonGov.-26, 31, 40` 같은 column 을 보면 무친듯이 ratio 가 좋다는 점에서 [^pde-commongov] PDE 가 다른 encoding 에 비해 좋다고 말할 수 있을 것이다.
+- 다만, `NYC-29` 의 경우에는 compression ratio 가 꼴찌로 선정되는 수모를 겪었는데, 이건 PDE 가 high-precision value 에 대해서는 불리하기 때문이다.
+	- 즉, high-precision 의 경우에는 exponent 가 너무 커져 많은 경우 patch 로 빠지고, 따라서 거의 compression 이 되지 않는 안타까움이 발생하기 때문이다.
+		- 이것이 [[#4.2.2. When to choose Pseudodecimal Encoding.|Section 4.2.2.]] 에서 설명한 첫번째 heuristic 의 근거가 된다.
+	- `NYC-29` 에는 위도, 경도값이 들어 있기에 이런 안좋은 결과가 나온 것.
+
+#### 6.5.3. Effectiveness inside BtrBlocks.
+
+![[Pasted image 20240724204115.png]]
+
+- 추가적으로 수행된 실험은, BtrBlock 의 다른 scheme 들과 경쟁해, PDE 를 BtrBlock 의 double 전문 scheme 으로 포함시킬만 한지 검증하는 것이었다.
+	- 만일 다른 자료형과 무관한 scheme 들로도 충분히 double 을 compression 할 수 있다면, 굳이 이것이 BtrBlock 에 포함할 이유가 없기 때문이다.
+- 결과는 위의 표와 같다:
+	- 보면, 일부 `column` 들에 대해서는 PDE 가 밀리는 것을 볼 수 있는데,
+		- 왼쪽의 일부 `column` 들이 PDE 보다 RLE 가 더 좋은 경우에 대해서는, run 이 너무 많아서 RLE 가 더 효율적이기 때문이고,
+		- 오른쪽의 일부 `column` 들이 PDE 보다 Dictionary 가 더 좋은 경우에 대해서는, unique value 가 너무 적어 Dictionary 가 더 효율이기 때문이다.
+		- 위 상황들이 모두 [[#4.2.2. When to choose Pseudodecimal Encoding.|Section 4.2.2.]] 에서 설명한 두번째 heuristic 의 근거가 된다.
+	- 위 상황을 제외하면 PDE 가 우세한 것을 확인할 수 있다.
+
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
 [^compilation]: ([논문](https://www.vldb.org/pvldb/vol4/p539-neumann.pdf)) Query engine 최적화 논문이다.
@@ -928,3 +970,4 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 [^compression-ratio]: #draft 단위가 뭔지 모르겠다. 이것도 코드 보고 확인해야 할 듯.
 [^numeric-range]: 원문에는 *Numeric range*, *One size range* 라는 말로서 표현되는데, 이것이 정확히 어떤 의미인지는 파악이 안된다.
 [^system-a-d]: #draft 원문상에도 System A~D 로만 표현되어 있고, 어떤 솔루션인지는 정확하게 나와있지 않다. 코드 뒤지다 보면 찾을 수 있을지도.
+[^pde-commongov]: #draft 얘네들은 도대체 뭐가 좋아서 무친듯이 뛰는건지 확인해 볼 필요가 있다.
