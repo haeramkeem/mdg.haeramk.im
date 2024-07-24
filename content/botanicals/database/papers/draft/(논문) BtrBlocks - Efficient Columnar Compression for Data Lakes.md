@@ -799,9 +799,52 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 
 #### 6.2.1. Measuring the impact of individual techniques.
 
+- 각 Cascading 단계에서 각 compression scheme 이 미치는 영향을 실험해 보았을 때, 전반적으로 compression ratio 와 decompression speed 사이에는 trade-off 가 있는 것으로 나타났다.
+- 이 영향도를 실험하기 위해서, 어떤 compression scheme 을 scheme pool 에 하나씩 추가하며 compression ratio 와 decompression speed 가 어떻게 달라지는지 확인했다고 한다.
+	- 즉, 이후에 나올 그래프에 나온 scheme 순서가 추가한 순서인 것.
+- 그리고 decompression 의 경우에는 concurrency control 에 의해 발생하는 지연 (가령 lock 을 잡고 놓는 등의) 을 막기 위해 스레드를 하나만 사용했다고 한다.
+
 #### 6.2.2. Impact on compression ratio.
 
+> [!tip] 그래프 읽기
+> - 여기서의 compression scheme 순서는 scheme pool 에 추가된 순서이고, 이렇게 추가됨에 따라 compression ratio 가 어떻게 변화하냐를 나타낸 것이다.
+> - 주의할 것은 이 순서대로 cascading 되었다는 것이 아니라는 점이다.
+
+![[Pasted image 20240724141458.png]]
+
+- Double 먼저 보자.
+	- 여기에서 가장 크게 향상을 이뤄낸 scheme 은 [[#2.2.3. Dictionary|Dictionary]] 와 [[#4. Pseudodecimal Encoding|Pseudodecimal]] 이다. (각각 95%, 20%)
+	- 하지만 보다시피, double 은 본질적으로 compression 이 힘들기 때문에, 다른 자료형에 비해 compression ratio 가 낮은 것을 확인할 수 있다.
+- Integer 는 별 설명이 없다... 특별할게 없기 때문인듯.
+- String 의 경우에는,
+	- 일단 세 자료형 중에 가장 compression ratio 가 좋은 것을 볼 수 있다.
+	- Dictionary 가 추가됐을 때 7배 가까이 compression ratio 가 뛰는 것을 볼 수 있고,
+	- Dictionary 가 FSST 를 같이 사용하도록 하면 Dictionary 에 비해 51% 더 증진되는 것을 볼 수 있다.
+	- 그리고 FSST 가 추가되는 경우 (*Raw FSST*) 에 compression ratio 가 좀 더 증진되었다.
+- OneValue 는 위 그래프에서는 별로 두각을 드러내지 못했다.
+	- 아마 block 전체가 하나의 값을 가지는 경우가 드물어서 그러리라.
+	- 하지만 뒤에서 설명하겠지만, 만약 이것이 적용된다면 (64,000개가 하나의 값으로 쪼그라들기 때문에) 엄청난 compression ratio 를 달성하게 된다.
+
 #### 6.2.3. Impact on decompression speed.
+
+![[Pasted image 20240724141520.png]]
+
+- OneValue 가 double 과 integer 의 경우에 가장 decompression speed 가 빨랐다.
+	- 이것은 OneValue 의 경우에 아마 SIMD 같은걸로 쭉쭉 써내려갈 수 있기 때문이리라.
+- 그리고 string 의 경우에는 Dictionary 가 가장 빨랐는데,
+	- 이것은 위에서 설명한 것처럼 Dictionary 에서 문자열을 복사하는 방식이 아닌 pointer 를 복사하는 방식이기에 가능한 것이었다.
+
+### 6.3. Sampling Algorithm
+
+#### 6.3.1. Sampling research questions.
+
+- 
+
+#### 6.3.2. Best strategy for a fixed sample size.
+
+#### 6.3.3. Impact of sample size.
+
+#### 6.3.4. Samping in BtrBlocks
 
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
