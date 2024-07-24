@@ -743,7 +743,7 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 			- 가령 표의 왼쪽 위에 있는 71.5% 는 전체 PBI 데이터셋 중에서 String data 가 71.5% 라는 것을 의미한다.
 			- 뭐 TPC-H 에서는 여러 사이즈의 데이터셋을 생성할 수 있기 때문에, 절대적인 수치가 아닌 상태 비율로 표현했다고 하네
 		- `cr` 은 *compression ratio* 이다.
-			- 어떤 compression 방법을 적용했을 때와 적용하지 않았을 때 (*Binary*) 의 데이터 사이즈를 비교해서 계산된 값이다.
+			- 어떤 compression 방법을 적용했을 때와 적용하지 않았을 때 (*Binary*) 의 데이터 사이즈를 비교해서 계산된 값이다 [^compression-ratio].
 - 그리고 세로축은:
 	- *Binary* 는 압축되지 않은 날것의 상태이고,
 		- 즉, 메모리에 적재된 binary column data
@@ -755,13 +755,53 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 
 #### 6.1.4. Public BI vs. TPC-H: Strings.
 
-- 
+- 위의 표에서 확인할 수 있는 문자열 관점에서의 PBI 와 TPC-H 의 차이점은 크게 두가지이다.
+1) 일단 PBI 에서가 TPC-H 보다 전체 데이터 중 문자열이 차지하는 비중이 더 컸다.
+2) 평균 compression ratio 가 PBI 보다 TPC-H 가 더 크다 (즉, 더 많이 압축된다).
+	- 이것은 왜냐면 PBI 에서는 대부분의 문자열이 구조적인 경향이 있기 때문이다.
+		- "구조적인" 이라는 말이 좀 어색할 수 있는데, 가령 웹페이지 URL 나, 아니면 제품 코드처럼 비슷한 형태를 띄고 있다는 것이다.
+		- 얘네들은 동일한 prefix 를 사용하는 (가령 `https://` 처럼) 경우가 종종 있기 때문에, 더 압축이 많이 되는 것.
+	- 반면에 TPC-H 에서는 test data pool 에서 무작위 선택을 하기 때문에, 이러한 경향성을 보이지 않아 압축이 덜되는 것이다.
+	- 결과적으로 PBI 의 경우에는 10.2 정도의 압축률을 보이는 반면, TPC-H 의 경우에는 3.3 정도의 압축률밖게 안나오게 된다.
 
 #### 6.1.5. Public BI vs. TPC-H: Doubles.
 
+- Double 의 경우에는 [[#6.1.4. Public BI vs. TPC-H Strings.|문자열]] 과는 반대의 양상을 보였다.
+1) 우선 TPC-H 에서 double 이 차지하는 비중이 더 컸고, ($14.4 ≤ 19.5$)
+2) 압축률도 TPC-H 에서 더 컸다. ($1.99 ≤ 2.78$)
+	- 이것은 TPC-H 에서 double 값들의 범위가 한정되어 있기 때문이다.
+		- TPC-H 에서는 대부분의 double 이 금액 (*price data*) 를 나타내는 데 사용되었기 때문에, 이 값들의 범위가 한정되어 있다 [^numeric-range].
+		- 따라서 compression 을 적용하기에 더 용이 (특히 [[#4. Pseudodecimal Encoding|Pseudodecimal Encoding]] 는 더욱 더) 하기에 이런 결과가 나오는 것이다.
+
 #### 6.1.6. Public BI vs. TPC-H: Integers.
 
+- 정수의 경우에는:
+1) 비중은 TPC-H 가 더 컸다. ($14.1 ≤ 18.7$)
+2) 하지만 compression ratio 는 PBI 가 훨씬 더 크게 나왔다. ($5.42 ≤ 1.60$)
+	- 이건 TPC-H 의 데이터들이 비현실적으로 완벽하게 정규화되어 있는 데에서 비롯된다.
+		- TPC-H 의 데이터에서 정수값은 대부분 Primary (Unique), Foreign Key 이기에 `SEQUENCE` 인 경우가 잦았다.
+		- 따라서 중복되는 값이 거의 없기에, [[#2.2.2. RLE & One Value.|RLE]] 와 같은 애들을 사용하기에 용이하지 않은 것.
+		- 이러한 것들은 그들의 깃허브 ([1](https://github.com/cwida/public_bi_benchmark/blob/master/benchmark/CommonGovernment/samples/CommonGovernment_1.sample.csv), [2](https://github.com/cwida/public_bi_benchmark/blob/master/benchmark/Generico/samples/Generico_1.sample.csv)) 에 공개한 데이터셋에서 확인할 수 있다고 한다.
+
 #### 6.1.7. Adapting for evaluation.
+
+- BtrBlock 에서는 이러한 PBI 데이터셋을 그대로 이용한 것이 아니고, 이것들 중 일부만을 사용했다.
+- 선택 혹은 배제된 데이터들은 다음과 같다:
+	1) 일단 데이터셋의 여러 테이블 중 가장 크기가 큰 테이블 하나만을 사용했다.
+		- 이것은 같은 데이터셋에 속한 여러 테이블들은 유사성을 보이기 때문이다.
+		- 가령 한 테이블 데이터로부터 다른 테이블 데이터가 산출되기도 하고, 이런 점이 이 테이블들을 유사하게 만든다.
+	2) 또한 사이즈가 너무 작은 데이터셋 (`IUBLibrary`, `IGlocations`, `Hatred1`) 과 `date`, `timestamp` 와 같은 column 들도 제외했다고 한다.
+- 이렇게 골라낸 결과는 메모리에 적재된 양 기준 총 119.5GB 크기였다고 한다.
+	- 여기에는 43개의 table 이 포함되고, 각 테이블은 6 ~ 519 (평균 57) column 들을 가지고 있으며 총 2451 column 으로 이루어진다고 한다.
+- 그리고, 다른 논문들과의 비교를 위해, TPC-H 를 이용해서도 evaluation 을 진행했다고 한다.
+
+### 6.2. The Compression Scheme Pool
+
+#### 6.2.1. Measuring the impact of individual techniques.
+
+#### 6.2.2. Impact on compression ratio.
+
+#### 6.2.3. Impact on decompression speed.
 
 ---
 [^vectorized-processing]: ([논문](https://www.cidrdb.org/cidr2005/papers/P19.pdf)) Query engine 최적화 논문이다.
@@ -779,3 +819,5 @@ void decodeDictAVX (int *dst, const int *codes, const int *values, int cnt)
 [^string-dict]: #draft 이렇게만 하면 실제 string 으로 변환하는 부분은 어디에서 담당할까? 변환하지 않고 그냥 `char array` 로 냅두는 것일까? 코드 보고 확인해야 할 듯,, 관련있어 보이는 코드는 [이거임](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/VarDictionary.hpp#L71-L93)
 [^string-dict-simd]: #draft 구체적으로 어떤 내용인지는 논문에 나오지 않는다. 이것도 코드 보고 판단해야됨.
 [^fuse-rle-simd]: #draft 이것도 구체적으로 어떻게 했는지는 논문에 안나온다. 코드 참고하자.
+[^compression-ratio]: #draft 단위가 뭔지 모르겠다. 이것도 코드 보고 확인해야 할 듯.
+[^numeric-range]: 원문에는 *Numeric range*, *One size range* 라는 말로서 표현되는데, 이것이 정확히 어떤 의미인지는 파악이 안된다.
