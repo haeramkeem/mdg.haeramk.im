@@ -57,7 +57,7 @@ date: 2024-07-17
 - 그리고 이렇게 생성한 Parquet file 과 Arrow C++ library 를 이용해 구현한 BtrBlock 에 대한 실험을 진행했다고 한다.
 	- Arrow C++ library 는 Arrow 의 여러 클래스 (구조체) 를 제공하는 high-level API 와 Parquet file 을 직접 건드릴 수 있게 해주는 low-level API 두 가지를 제공하는데,
 	- High-level API 의 경우에는 너무 느려서 low-level API 만을 사용했다고 한다.
-- 그리고 rowgroup 과 column 에 대해 decompression 하는 과정을 병렬로 처리되도록 했다고 한다.
+- 그리고 rowgroup 과 column 에 대해 decompression 하는 과정을 병렬로 처리되도록 했다고 한다 [^rowgroup-column-decompression].
 
 ### 6.1. Real-World Datasets
 
@@ -222,6 +222,7 @@ date: 2024-07-17
 - 결과는:
 	- 예상대로 *Random individual tuples* 가 가장 구렸다. 아마 locality 를 고려하지 못하기 때문이리라.
 	- 그리고 *Single tuple range* 는 생각보다는 선방했지만 그래도 구렸다. 이건 아마 distribution 을 고려하지 못하기 때문이리라.
+		- *Single tuple range* 가 데이터의 특성을 제대로 반영하지 못한다는 것의 예시가 궁금하면, [[#6.6.5. Per-column performance.|Section 6.6.5.]] 의 `Value Example` column 을 보자.
 	- 위의 결과가 시사하는 바는 (`320x2` 를 제외하면) 여러 *Partition* 에서 적당한 개수의 *Entry* 를 선택하는 것이 locality 와 distribution 의 토끼를 모두 잡게 해준다는 것이다.
 
 #### 6.3.3. Impact of sample size.
@@ -307,7 +308,78 @@ date: 2024-07-17
 		- 위 상황들이 모두 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (4. Pseudodecimal encoding)#4.2.2. When to choose Pseudodecimal Encoding.|Section 4.2.2.]] 에서 설명한 두번째 heuristic 의 근거가 된다.
 	- 위 상황을 제외하면 PDE 가 우세한 것을 확인할 수 있다.
 
+### 6.6. Decompression
+
+#### 6.6.1. Open source formats.
+
+- [[#6.4.1. Compression ratio.|Section 6.4.1.]] 에서는 proprietary system 들에 BtrBlock 을 적용해서 실험을 할 수 있었으나, decompression 에 대해서는 해당 service provider 에서 허가해주지 않아 실험을 진행할 수 없었다고 한다.
+- 따라서 [[#6.0.2. Parquet test setup|Section 6.0.2.]] 에서 설명한 Parquet 에 추가적으로, ORC 에 BtrBlock 을 진행하여 실험을 수행했다고 한다.
+
+#### 6.6.2. ORC test setup.
+
+- ORC file 을 생성하는 것은 Apache Arrow (`pyarrow 9.0.0`) 를 사용했다.
+	- Apache Spark 는 사용하지 않았다고 한다.
+- 그냥 기본 설정을 사용하려고 했으나, 기본 설정을 사용하면 ORC file 이 너무 커져 병렬처리가 불가능해지는 문제가 있었다. 그래서 다음과 같은 설정을 바꿨다고 한다:
+	- `dictionary_key_size_threshold` 값을 기본값 (`0`) 에서 [Apache Hive](https://github.com/apache/hive) 의 기본값 (`0.8`) 으로 변경했다.
+	- 또한 LZ4 의 compression strategy configuration 도 기본값 (`DEFAULT`) 에서 `COMPRESSION` 으로 변경했다.
+- [[#6.0.2. Parquet test setup|Section 6.0.2]] 에서는 Parquet 의 rowgroup size 를 변경했으나, ORC 의 저것과 동일한 설정인 stripe size 는 변경하지 않았다.
+	- 이유는 빨라지지 않아서.
+- 이렇게 만든 ORC file 로 benchmark 하는 것은 ORC C++ Library 를 사용했으나, 파일을 메모리로부터 읽어오는 기능 [^orc-mem-readfile] 을 지원하지 않아 이 부분 (코드상으로는 `orc::InputStream`) 만 커스텀했다고 한다.
+- Parquet 에서와 마찬가지로 ORC 에서도 stripe 와 column 에 대해 병렬로 decompression 을 하여 실험했다 [^rowgroup-column-decompression].
+
+#### 6.6.3. In-memory Public BI decompression throughput.
+
+![[Pasted image 20240725140448.png]]
+
+- 위 그래프는 PBI 를 이용해 decompression 을 실험한 결과를 보여준다.
+	- 이미 여러번 언급한 것처럼 decompression throughput 와 compression ratio 간에는 trade-off 가 존재하고, 따라서 이 둘을 각각 Y 축과 X 축에 놓아 다른 방법들과 2차원적인 비교를 해보았다.
+		- Decompression throughput 과 compression ratio 모두 좋은 것이 좋기 때문에 당연히 오른쪽 위일수록 좋은 방법이라 할 수 있다.
+	- 참고로 decompression throughput 은 $DecompressedSize / DecompressionTime$  로 산출했다고 한다.
+- 그 결과는 BtrBlock 은 다른 어떤 방법들보다 decompression throughput 이 월등히 좋았다.
+	- Parquet 에 비하면 2.6배, Parquet + Snappy 에 비하면 3.6배, Parquet + Zstd 에 비하면 3.8배 더 좋았다고 한다.
+	- 이것은 Parquet, ORC file 을 Zstd 로 compression 했을 때 ratio 가 BtrBlock 보다 좋은 점을 커버해 준다.
+		- 즉, compression ratio 가 Zstd 보다 뒤지긴 하지만, 그만큼 decompression throughput 이 월등하기 때문에 경쟁력이 있다는 것.
+
+#### 6.6.4. Decompression of Parquet vs. ORC.
+
+- BtrBlock 과는 무관하지만, PBI 를 사용한 것이 이 논문의 contribution 중 하나이기 때문에, PBI 를 사용했을 때 Parquet 와 ORC 의 성능도 한번 비교해 보자.
+- 결론적으로, 전반적으로 Parquet 가 더 좋았다.
+	- Decompression throughput:
+		- Vanilla, +Snappy, +Zstd 에 대해 Parquet 가 ORC 보다 각각 4.1배, 4.2배, 2.4배 더 throughput 이 잘나왔다.
+	- Compression ratio:
+		- 보면 Snappy 나 Zstd 를 추가하면 ORC 가 Parquet 보다 좀 더 compression ratio 가 좋아기긴 한다.
+		- 근데 이것은 애초에 Vanilla 상태에서 비교했을 때 ORC 가 Parquet 에 비해 file size 가 28% 더 크기 때문이라고 한다.
+		- File size 는 28% 가 차이나는데, compression ratio 는 기껏해야 8% 정도밖에 차이나지 않기 때문에 Parquet 가 더 우세하다는 논리인듯.
+
+#### 6.6.5. Per-column performance.
+
+![[Pasted image 20240725142830.png]]
+
+> [!tip] 표 읽기
+> - 각 ID 가 어떤 column 인지 아래에 나와 있다 (join 표시). Column 까지 같이 적으면 너무 가독성이 떨어져서 table 을 분리한듯.
+
+- 위 표는 PBI 에서 랜덤으로 선택한 column 들에 대해 BtrBlocks 와 Parquet + Zstd 를 비교해놓은 것이다.
+	- Decompression speed: 보면 진짜 BtrBlock 이 월등하게 빠르긴 하다.
+	- Compression ratio: 이건 전반적으로 Zstd 가 더 좋긴 하다. 근데 그 차이가 decompression speed 에서의 차이만큼이나 극적이진 않다는 것을 볼 수 있다.
+	- Scheme: 이건 BtrBlock 에서 첫 cascading 시에 선택된 scheme 을 보여준다.
+		- 보면 OneValue 와 PDE 를 사용했을 때 Zstd 보다 compression ratio 가 더 잘 나온다는 점에서 이 둘은 충분히 BtrBlocks 의 scheme pool 에 추가될 가치가 있다는 것을 알 수 있다.
+	- Value Example: 이건 block 의 첫 20개의 entry 를 예시로서 보여준 것이다.
+		- 여기서 [[#6.3.2. Best strategy for a fixed sample size.|Section 6.3.2]] 에서 언급한 *Single tuple range* 의 문제점을 다시금 확인할 수 있다.
+		- 첫 20개의 entry 만 보면 OneValue 가 적합해 보이는 것이 여럿 있지만, 실제로는 OneValue 가 선택되지 않았다는 점에서 이 연속된 entry 로만 판단하는 것이 꽤나 부정확하다는 것을 확인할 수 있다.
+
+#### 6.6.6. In-memory TPC-H decompression throughput.
+
+![[Pasted image 20240725141559.png]]
+
+- [[#6.6.3. In-memory Public BI decompression throughput.|Section 6.6.3]] 에서는 PBI 를 이용해 실험을 했고, 다른 논문과의 비교를 위해 TPC-H 에 대한 실험 결과도 같이 수행했다고 한다.
+- 결과는:
+	- 일단 [[#6.6.3. In-memory Public BI decompression throughput.|Section 6.6.3]] 에 비해 양상이 크게 바뀌지는 않았다. 여전히 BtrBlock 이 더 throughput 이 잘나왔고, 심지어는 compression ratio 는 Parquet + Zstd 를 앞서기까지 한다.
+		- 수치적으로는, throughput 이 Parquet, +Snappy, +Zstd 에 대해 각각 2.6배, 3.9배, 4.2배 더 좋아졌다고 한다.
+	- 그리고 전반적으로 throughput 이 감소했다. 이것은 [[#6.1.1. Synthetic data.|Section 6.1.1]] 에서 설명한 것처럼, TPC-H 가 PBI 에 비해 데이터들이 훨씬 비현실적이기 때문이다.
+
+[^rowgroup-column-decompression]: #draft Parquet 의 구조가 아직 파악이 안돼서 그런 것 같은데, 저 둘을 병렬적으로 decompression 한다는게 어떤건지 감이 안온다.
 [^compression-ratio]: #draft 단위가 뭔지 모르겠다. 이것도 코드 보고 확인해야 할 듯.
 [^numeric-range]: 원문에는 *Numeric range*, *One size range* 라는 말로서 표현되는데, 이것이 정확히 어떤 의미인지는 파악이 안된다.
-[^system-a-d]: #draft 원문상에도 System A~D 로만 표현되어 있고, 어떤 솔루션인지는 정확하게 나와있지 않다. 코드 뒤지다 보면 찾을 수 있을지도.
+[^system-a-d]: #draft 원문상에도 System A~D 로만 표현되어 있고, 어떤 솔루션인지는 정확하게 나와있지 않다. 아마 proprietary system (cloud data warehouse solution) 인듯. 코드 뒤지다 보면 찾을 수 있을지도 모르겠다.
 [^pde-commongov]: #draft 얘네들은 도대체 뭐가 좋아서 무친듯이 뛰는건지 확인해 볼 필요가 있다.
+[^orc-mem-readfile]: #draft 메모리로부터 파일을 직접 읽어오는 것이 어떤 의미인지 모르겠다. 대강 memory buffer 에 우선 파일을 올려놓은 뒤에 벤치를 돌리고 싶은데 그러지 못한다는 얘기인것 같은데, 코드 보면서 확인해야 할 듯.
