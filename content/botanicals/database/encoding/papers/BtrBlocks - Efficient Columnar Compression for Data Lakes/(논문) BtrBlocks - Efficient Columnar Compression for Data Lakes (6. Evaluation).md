@@ -377,9 +377,154 @@ date: 2024-07-17
 		- 수치적으로는, throughput 이 Parquet, +Snappy, +Zstd 에 대해 각각 2.6배, 3.9배, 4.2배 더 좋아졌다고 한다.
 	- 그리고 전반적으로 throughput 이 감소했다. 이것은 [[#6.1.1. Synthetic data.|Section 6.1.1]] 에서 설명한 것처럼, TPC-H 가 PBI 에 비해 데이터들이 훨씬 비현실적이기 때문이다.
 
+### 6.7. End-to-End Cloud Cost Evaluation
+
+> [!tip] [[#6.7. End-to-End Cloud Cost Evaluation|Section 6.7.]] 의 구조
+> - 본 섹션은 크게 네 덩어리로 나눌 수 있다.
+> 1) [[#6.7.1. Is Parquet decompression fast enough?|6.7.1]] 과 [[#6.7.2 Decompression throughput and network bandwidth.|6.7.2]] 는 cloud 가 제공하는 네트워크의 대역폭 관점에서 BtrBlock 의 정당성을 검포하기 위한 새로운 metric 인 $T_{c}$ 를 제시한다.
+> 2) [[#6.7.3. Measuring end-to-end cost.|6.7.3]] 과 [[#6.7.4. End-to-end cost test setup.|6.7.4]] 는 evaluation 을 위한 환경 설정에 대한 것이다.
+> 3) [[#6.7.5. Loading individual columns.|6.7.5]] 와 [[#6.7.6. Cost comparability.|6.7.6]] 은 일종의 시행착오에 대한 것이고,
+> 4) [[#6.7.7. Loading entire datasets.|6.7.7]] 과 [[#6.7.8. Cost of loading full datasets.|6.7.8]] 에 결론이 나온다.
+
+#### 6.7.1. Is Parquet decompression fast enough?
+
+- [[#6.6.3. In-memory Public BI decompression throughput.|Section 6.6.3.]] 의 그래프를 보다 보면 Parquet 를 사용했을 때 전부 throughput 이 50GB/s 를 넘는다는 것을 볼 수 있다.
+- 이것은 [[#6.0.1. Test setup|Section 6.0.1.]] 에서 소개한 `c5n.18xlarge` instance 의 100Gbps (즉, 12.5GB/s) 네트워크를 고려하면, 무히려 네트워크가 병목이 되기 때문에 decompression throughput 이 아무리 좋아도 별 쓸데가 없다고 생각할 수 있다.
+	- 생각해보면 맞는말인것 같긴 하다: 어차피 한 뭉탱이를 죽이는 속도로 decompression 한다고 해도, Data Lake 에서 가져오는 것이 느리기 때문에 가져오는 시간동안 기다리고 있어야 할테니까 결론적으로는 전체적인 throughput 은 네트워크 병목에 걸려버리는 것 아닐까?
+- 근데 이것은 틀렸습니다.
+- 왜? 인지 본 section 에서 알아보자.
+
+#### 6.7.2 Decompression throughput and network bandwidth.
+
+- 위 오해는 어떤 값의 단위만 보고, 그 값이 어떤 것을 대상으로 하는지 고려하지 않았기에 생긴 것이다.
+- Decompression throughput 는 decompressed data 를 대상으로 한다.
+	- 이것은 $T_{u} = DecompressedSize / DecompressionTime$ 으로 계산되기 때문.
+- 하지만 network bandwidth 는 compressed data 를 대상으로 한다.
+	- 네트워크를 통해 전송되는 것은 compressed data 이기 때문.
+- 따라서 decompressed throughput 의 $DecompressedSize$ 는 네트워크와는 아무 상관이 없고, 진짜로 네트워크가 병목인지를 확인하기 위해서는 $CompressedSize$ 를 고려해야 한다.
+- 따라서 새로운 metric $T_{c}$ 를 하나 다음과 같이 정의해 보자.
+
+$$
+T_{c} = CompressedSize/DecompressionTime
+$$
+
+- 이놈이 갖는 의미를 한 문장으로 요약해 보면 대략: "1초간 decompression 하기 위해 필요한 compressed data 의 양" 정도로 생각해 볼 수 있다.
+- 이 값을 decompression throughput ($T_{u}$) 로 나타내 보면, decompression throughput 을 compression ratio 로 나눈 값이 된다.
+
+$$
+T_{c} = T_{u} * (CompressedSize / DecompressedSize) = T_{u} / CompressionRatio
+$$
+
+- 그럼 이 값이 갖는 상관관계를 생각해 보자.
+	- 만약 이 값이 크다면:
+		- 네트워크를 통해 전송해야 되는 양 ($CompressedSize$) 이 많거나 (= $CompressionRatio$ 가 크거나)
+		- Decompression 에 소요되는 시간 ($DecompressionTime$) 이 적음 (= decompression 이 빠름 = $T_{u}$ 가 큼) 을 의미하는 것이다.
+	- 이 값이 작다면 위와 반대의 경우겠지.
+- 이 값을 network bandwidth 와 비교했을 때, 크거나 작은 경우에 대해 다음처럼 해석할 수 있다.
+	- 만약 이 값이 network bandwidth 보다 크다면, 그것은 네트워크의 병목을 의미하는게 맞고, 따라서 이 BtrBlocks 가 제공하는 빠른 decompression 이 의미가 없다는 것은 설득력이 있다.
+	- 하지만 이 값이 network bandwidth 보다 작다면, 그것은 네트워크가 아닌 CPU 에 병목이 있다는 것을 의미하고, 따라서 빠른 decompression 으로 CPU 에 부담을 줄여주는 BtrBlocks 은 정당성이 있다.
+- [[#6.7.8. Cost of loading full datasets.|뒤]] 에서도 말할 결론을 미리 말하자면, 이 $T_{c}$ 값은 network bandwidth 보다 작았다. 즉, 기존 Parquet 를 사용했을 때의 문제는 network bottleneck 이 아니라 CPU bound 에 기인한 것이 맞았다는 소리이다.
+
+#### 6.7.3. Measuring end-to-end cost.
+
+- S3 scan 과 관련된 지출은 크게 두가지로 나눌 수 있다.
+	1) 당연히 scan 을 수행할 EC2 인스턴스가 필요하다. 실험에 사용된 `c5n.18xlarge` 인스턴스 기준, 시간당 $3.89 가 필요하다.
+	2) S3 에 대해서는, 1000개의 `GET` 요청 당 $0.0004 가 지출된다.
+		- 이때, 응답으로 오는 데이터의 크기는 상관없다. 이는 아마 한번의 응답에 전송되는 데이터의 크기가 제한되어 있기 때문이리라.
+- 따라서 scan 에 소모되는 지출은 (1) decompression time 과 (2) request count 를 통해 구할 수 있다.
+- 이 실험에서 S3 `GET` response 의 데이터 사이즈는 16MB 이다.
+	- 이건 S3 에서 최대의 대역폭을 얻기 위해서는 한번에 8MB 혹은 16MB 크기의 *chunk* 를 받는 것이 좋다는 권고사항에 따른 것이다.
+	- 따라서 BtrBlock 의 경우에는, 총 사이즈가 16MB 에 근접하도록 여러 block 을 묶은 chunk 를 받는다.
+	- BtrBlock 과 비교하기 위한 Parquet 의 경우에는:
+		- 당연히 이놈도 여러 파일로 나눠서 저장하는데, 각 파일의 사이즈를 조정하는 것이 불가능했다.
+		- 각 파일의 크기는 5.5 ~ 24MB 정도 되고 마찬가지로 이것을 16MB 에 근접하게 맞춘 chunk 를 받는다 [^parquet-file-size].
+- 또한 어떤 데이터셋의 경우에는 크기가 너무 작아 의미있는 throughput 측정이 불가능했다고 한다.
+	- 그래서 CSV 파일의 크기가 6GB 이하인 table 의 경우에는 실험에서 제외했다.
+
+#### 6.7.4. End-to-end cost test setup.
+
+- 전체적으로는 S3 C++ SDK 를 통해 S3 로부터 chunk 를 받은 뒤, 메모리 상에서 decompression 을 하는 것으로 구성된다.
+- S3 C++ SDK 는 stream 이라는 것을 사용하는데, 이것이 별로 효율적이지도 않고 메모리에 있는 데이터를 decompression 하는 것을 분리하여 측정하기 위해, 별도의 memory pool 을 직접 구현했다고 한다 [^memory-pool].
+	- 여기서는 나름의 삽질을 한 결과, S3 로부터 받은 chunk 하나 당 하나의 thread 를 생성해 처리하는 것이 효율적인 것을 알아내 그렇게 구현되어 있고,
+	- S3 에 요청을 보내는 것은 비동기적으로 이루어져 보낸 뒤에 global queue 에 넣는 식으로 구현해 최대 대역폭을 낼 수 있도록 했다고 한다.
+
+#### 6.7.5. Loading individual columns.
+
+- OLAP query 에서는 전체 table 을 전부 읽는 경우는 거의 없고, 여러 테이블에서 여러 column 들을 골라 읽게 된다.
+- 따라서 각 column 을 S3 에서 가져와 decompression 하는 실험을 진행하였다.
+	- 실험은 PBI 에서 사이즈가 가장 큰 5개의 데이터셋을 대상으로 random query 를 해 해당 query 에서 필요로 하는 column 만을 S3 에서 불러들여 decompression 하는 식으로 진행됐다.
+- 결과적으로 BtrBlock 은 다음의 비용을 절감하는 것으로 보였다고 한다.
+	- PBI 데이터셋 기준: Parquet + Compression 한것에 비해 9배, Vanilla Parquet 에 비해서는 20배 더 저렴하고
+	- TPC-H 기준: Parquet + Snappy 기준 3.6배, Parquet + Zstd 기준 2.8배, Parquet 기준 5.5배 더 저렴한것으로 보였다고 한다.
+- 다만 여기서 "보인다" 라는 워딩에 집중하자. [[#6.7.6. Cost comparability.|다음 section]] 에서 설명하겠지만, 이 실험 결과는 BtrBlock 의 디자인에 기인한 것이 아닌, 다른 곳에 원인이 있다.
+
+#### 6.7.6. Cost comparability.
+
+- 위에서도 살짝 언급한 것처럼, 위의 실험 결과는 BtrBlock 의 디자인 때문이 아닌 metadata handling 때문에 성능 차이가 나는 것이다.
+- 우선 Parquet 의 metadata handling 을 보자.
+	- Parquet 에서는 여러 column 을 하나의 Parquet file 로 만들고, column offset (column 들을 구분하는 delimiter 라고 생각하자.) 를 file 맨 뒤에 metadata footer 로 달아놓는다.
+	- 따라서 이러한 구조의 Parquet file 에서 하나의 column 을 가져오는 것은 다음과 같은 세번의 요청으로 수행할 수 있다.
+		1) Metadata footer 의 길이를 읽어오고,
+		2) 그 길이만큼의 데이터를 읽어 metadata footer 자체를 읽어오고,
+		3) 그 metadata footer 를 통해 원하는 column 이 어디부터 어디까진지 알아내어 column data 를 읽어온다.
+	- 이렇게 하거나, 아니면 그냥 Parquet file 전체를 읽어온 다음에 column 을 분리해내는 방법을 사용할 수 있고, 이 방식이 때로는 위의 방식보다 더 빨랐다고 한다.
+- 하지만 BtrBlock 은 다른식으로 metadata 를 handling 한다.
+	- BtrBlock 은 Parquet 와 다르게, 하나의 column 으로 file 을 만든다.
+	- 그리고 metadata 는 별도의 file 로, table 당 하나를 생성한다.
+- 이렇듯 metadata handling 이 두 format 간에 차이가 있고, 이 차이점이 유발하는 [[#6.7.5. Loading individual columns.|위]] 와 같은 실험 결과는 논리적이지 못한 것.
+- 다만, [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.1.3. Metadata & Statistics|Section 2.1.3.]] 에서도 언급한 것처럼, 이러한 metadata handling 은 본 논문에서 다루고자 하는 논지가 아니다.
+- 따라서 실제 OLAP query 의 처리 과정과는 다르더라도, 객관적인 비용 비교를 위해 다른 방식으로 실험을 진했다고 한다.
+
+#### 6.7.7. Loading entire datasets.
+
+- 따라서 [[#6.7.5. Loading individual columns.|위]] 에서처럼 각 column 을 load 하는 방식이 아닌, 데이터셋 전체를 load 하여 computing time 과 request cost 를 측정했다.
+	- 이렇게 함으로써 metadata handling 을 생략할 수 있고, decompression speed 에만 집중할 수 있었다.
+- 방식은 [[#6.7.5. Loading individual columns.|위]] 에서의 5개의 데이터셋을 각각 10,000 번씩 load + decompression 하여 그때의 cost 를 측정하는 것으로 이루어졌다.
+
+#### 6.7.8. Cost of loading full datasets.
+
+![[Pasted image 20240726104929.png]]
+
+- 위 표가 최종 실험 결과이다.
+	- Cost 에 대해서는, Parquet 에 비해서는 대략 2.6배, Parquet + Compression 에 비해서는 대략 1.8 배 정도 저렴한 것을 알 수 있다.
+	- 그리고 $T_{c}$ 에 대해서는, BtrBlock 이 제일 높게 나온 것과, 전부 다 `c5n.18xlarge` 의 network bandwidth limit 인 100Gbps 보다 작은 것을 확인할 수 있다.
+		- 다만, 이 "100Gbps" 라는 수치는 spec 에 따른 것이고, 실제로는 그것보다 더 작을 수도 있다.
+		- 따라서 EC2 <-> S3 간 대역폭을 측정해 보았고, 결과는 91Gbps 정도로 여전히 위 표에 제시된 것들보다는 큼을 알 수 있다.
+	- 이 $T_{c}$ 의 결과를 통해 [[#6.7.2 Decompression throughput and network bandwidth.|6.7.2]] 에 나온 의혹을 잠재울 수 있다.
+		- 즉, Parquet 에 문제가 있는 것이 아닌 network bandwidth 가 작기 때문이 아니냐는 의혹은,
+		- 실제로는 위의 결과가 시사하는 바에 따라 network bandwidth 를 최대로 사용하고 있지 않음을 확인할수 있다.
+		- 따라서 결론적으로 network bandwidth 가 아닌 Parquet 가 유발하는 CPU bound 가 문제인 것.
+- 이것을 그래프로 표현한 것이 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (1. Abstract, Intro)#1.4. BtrBlocks|Section 1.4.]] 에 등장한 아래의 그래프이다.
+
+![[Pasted image 20240717164138.png]]
+
+- 가로축은 이 $T_{c}$ 값을 나타내고 (S3 scan limit 이 91Gbps 에 그어져 있는 것을 확인할 수 있다.)
+- 세로축은 Scan cost 을 역수로 바꿔 $1 당 수행할 수 있는 scan 을 나타낸 것이다.
+- 마지막으로, 위의 실험에는 단순히 load + decompression 만 포함되어 있고, query processing 은 포함되어 있지 않기 때문에, BtrBlock 으로 실제로 절감되는 비용은 이것보다 더 클 것이라고 한다.
+
+### 6.8. Result Discussion
+
+#### 6.8.1. Is BtrBlocks only fast because of SIMD?
+
+- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (5. Fast decompression)|Section 5.]] 에는 SIMD 를 활용한 low-level optimization 이 많이 들어가 있는 것을 확인할 수 있다.
+- 그러면 자연스레 "BtrBlock 이 아닌 SIMD 에 의해 이런 성능 향상이 있었던 것이 아니냐" 라는 의문이 들 수 있다.
+	- 즉, SIMD 만으로 이뤄낸 성능 향상이라면 BtrBlock 을 사용할 필요 없이 그냥 Parquet 에 SIMD 를 적용하면 되기 때문.
+- 따라서 SIMD 를 사용하지 않는 버전도 만들어서, [[#6.6. Decompression|Section 6.6.]] 의 실험을 반복해 봤다고 한다.
+- 결과는 SIMD 를 사용했을 때에 비해 17% 정도 성능 하락이 있었지만, 그럼에도 불구하고 Parquet variant 에 비해 2.3배 더 빨랐다고 한다.
+
+#### 6.8.2. Update the standard or create a new format?
+
+- 당연히, Parquet 와 같은 널리 사용되는 format 에 BtrBlock 이 녹아들어가는 것이 좋다.
+	- 그럼 사용자 입장에서는 이 BtrBlock 에서의 이점을 누리기 위해 data migration 을 하거나,
+	- 관련된 코드를 고칠 일이 없을 것이기 때문.
+- 하지만 [[#6.8.1. Is BtrBlocks only fast because of SIMD?|Section 6.8.1]] 이 보여주고 있는 것과 같이, SIMD 와 같은 low-level optimization 만으로는 불충분하고, high-level design 이 바뀌어야 하기에 Parquet 에 흡수된다 한들 version compatibility 문제가 생길 것이다.
+- 따라서 이런 알려진 format 에 통합하기 보다는, 지금으로서는 BtrBlock 을 open source 로 공개해 추후에 통합하는 방법을 찾아 보는 것으로 마무리 지었다고 한다.
+
 [^rowgroup-column-decompression]: #draft Parquet 의 구조가 아직 파악이 안돼서 그런 것 같은데, 저 둘을 병렬적으로 decompression 한다는게 어떤건지 감이 안온다.
 [^compression-ratio]: #draft 단위가 뭔지 모르겠다. 이것도 코드 보고 확인해야 할 듯.
 [^numeric-range]: 원문에는 *Numeric range*, *One size range* 라는 말로서 표현되는데, 이것이 정확히 어떤 의미인지는 파악이 안된다.
 [^system-a-d]: #draft 원문상에도 System A~D 로만 표현되어 있고, 어떤 솔루션인지는 정확하게 나와있지 않다. 아마 proprietary system (cloud data warehouse solution) 인듯. 코드 뒤지다 보면 찾을 수 있을지도 모르겠다.
 [^pde-commongov]: #draft 얘네들은 도대체 뭐가 좋아서 무친듯이 뛰는건지 확인해 볼 필요가 있다.
 [^orc-mem-readfile]: #draft 메모리로부터 파일을 직접 읽어오는 것이 어떤 의미인지 모르겠다. 대강 memory buffer 에 우선 파일을 올려놓은 뒤에 벤치를 돌리고 싶은데 그러지 못한다는 얘기인것 같은데, 코드 보면서 확인해야 할 듯.
+[^parquet-file-size]: 본문에는 BtrBlock 처럼 16MB 로 맞춰서 받는 이야기는 없다. 주인장의 예상임.
+[^memory-pool]: #draft 이쪽 전반이 감이 잘 안온다. 코드 보면서 파악해야 될 것.

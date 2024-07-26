@@ -41,6 +41,7 @@ date: 2024-07-17
 	- 하지만 가령 low latency 환경에서는 파일을 끝까지 읽는 것이 굉장한 부담이기 때문에, 파일을 읽기 전에 이런 statistics 와 index 에 접근할 수 있다면 더 좋다는 것.
 	- 따라서 BtrBlock 에서는 이것을 해결하기 위해 compressed block 과 나머지 metadata 등을 분리했다고 한다.
 		- 즉, 이 metadata 등의 정보들은 header, footer 어디든 붙일 수 있고 아니면 아예 별도로 관리할 수도 있게 했다.
+- 근데 이런 metadata 는 BtrBlock 에서는 핵심적인 내용은 아니다. 다만 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (6. Evaluation)#6.7.6. Cost comparability.|Evaluation]] 에서 위와 같은 차이점이 영향을 미치는 경우가 있어 참고 정도로 알아두자.
 
 #### 2.1.4. Additional general-purpose compression.
 
