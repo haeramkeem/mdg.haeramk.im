@@ -19,7 +19,11 @@
 - [[제 4회 테크 데이 - Kubernetes Korea Group 커뮤니티 기술 세미나 참석 기록]]
 - [[Security model in etcd - etcd 에서 사용되는 인증서들|etcd 에서 사용되는 인증서들]]
 
-## 병든놈 고치기
+### 병든놈 고치기
 
 - [[Ingress NGINX - "upstream sent too large http2 frame 4740180" 에러 해결기]]
 - [[RabbitMQ on Kubernetes - Troubleshooting error "Command df timed out"|RabbitMQ on Kubernetes - "Command timed out: 'df -kP ...'" 에러 해결기]]
+
+### 오리지널 시리즈
+
+- [[쿠버네티스 교육자료 (SI Analytics, Jan. 2023)]]
