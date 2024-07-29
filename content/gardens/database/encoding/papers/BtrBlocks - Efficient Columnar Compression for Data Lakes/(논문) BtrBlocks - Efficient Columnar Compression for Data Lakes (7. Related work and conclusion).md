@@ -29,6 +29,7 @@ date: 2024-07-17
 
 > [!info] 참고
 > - [MS SQL Server Columnstore Index](https://learn.microsoft.com/en-us/sql/relational-databases/indexes/columnstore-indexes-overview)
+> - [SIGMOD'10](https://dl.acm.org/doi/pdf/10.1145/1989323.1989448)
 
 - MS 의 SQL Server 에서 제공하는 columnar data format 을 *Columnstore Index* 라고 한다.
 - 여기서는 table 의 최대 1,048,576 개의 row 를 모아 *Rowgroup* 을 만들고, 이때의 각 column data 들을 *Column Segment* 라고 한다.
@@ -49,7 +50,18 @@ date: 2024-07-17
 
 #### 7.0.2. DB2 BLU.
 
-- 
+> [!info] 참고
+> - [VLDB'13](https://www.vldb.org/pvldb/vol6/p1080-barber.pdf)
+
+- IBM 의 DB2 에는 columnar store compression 을 위해 *BLU* 라는 방법이 추가되었다.
+- 이놈은 대략 다음과 같이 한다:
+	- 여러 *Column Segment* 들을 하나의 고정된 크기의 page 에 저장한다.
+		- 참고로 [[#7.0.1. SQL Server.|SQL Server]] 에서는 이렇게 안한다고 하네.
+	- 각 Column Segment 들은 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.4. Frequency|Frequency encoding]] 으로 압축된다.
+	- 이후에 data distribution 에 따라 한번 더 local dictionary [^local-directory] 나 offset-coding [^offset-coding] 으로 압축될 수도 있다고 한다.
+- 이놈의 장단점은 다음과 같다.
+	- 우선 장점은, ([[#7.0.1. SQL Server.|SQL Server]] 도 마찬가진데) decompression 하지 않고 range query 가 가능하도록 디자인 되어 있다.
+	- 하지만 단점은, bitwise-operation 이 되어 있기 때문에 point acccess (random access 라고 생각하자) 는 decompression 을 동반한다고 한다.
 
 #### 7.0.3. SIMD decompression and selective scans.
 
@@ -62,3 +74,5 @@ date: 2024-07-17
 ## 8. Conclusion
 
 [^sql-server-short-string]: 구체적으로 어떻게 되는지는 모르겠지만, 별로 중요한건 아니니 나중에 궁금하면 찾아보자.
+[^local-directory]: 이게 뭔지 (그냥 Dictionary 와는 뭐가 다른지) 정확히는 모르겠다. 
+[^offset-coding]: 이것도 뭔지 모르겠다. 느낌으로는 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.5. FOR & Bit-packing|FOR]] 하고 비슷해보인다.
