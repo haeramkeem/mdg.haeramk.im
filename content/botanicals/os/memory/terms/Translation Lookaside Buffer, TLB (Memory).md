@@ -17,7 +17,7 @@ date: 2024-05-13
 
 ### 얘를 이용해 address translation을 하는 방법
 
-![%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image10.png](originals/os.spring.2021.cse.cnu.ac.kr/images/8/image10.png)
+![%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB08%20-%20%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%BC%E1%84%86%E1%85%A6%E1%84%86%E1%85%A9%E1%84%85%E1%85%B5%2048fbd51ffbd241b6acc55a40c98ab65f/image10.png](botanicals/os/originals/os.spring.2021.cse.cnu.ac.kr/images/8/image10.png)
 
 1. Page table의 일부분을 저 TLB로 올린다
 2. 이제 가상주소 하나를 translation할 때 page# 을 저기 TLB에 먼저 넣어본다
