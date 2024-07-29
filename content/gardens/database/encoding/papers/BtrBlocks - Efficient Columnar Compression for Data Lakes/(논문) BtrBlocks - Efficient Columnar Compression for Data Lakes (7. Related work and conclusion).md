@@ -61,18 +61,64 @@ date: 2024-07-17
 	- 이후에 data distribution 에 따라 한번 더 local dictionary [^local-directory] 나 offset-coding [^offset-coding] 으로 압축될 수도 있다고 한다.
 - 이놈의 장단점은 다음과 같다.
 	- 우선 장점은, ([[#7.0.1. SQL Server.|SQL Server]] 도 마찬가진데) decompression 하지 않고 range query 가 가능하도록 디자인 되어 있다.
-	- 하지만 단점은, bitwise-operation 이 되어 있기 때문에 point acccess (random access 라고 생각하자) 는 decompression 을 동반한다고 한다.
+	- 하지만 단점은, bitwise-operation 이 되어 있기 때문에 point acccess 는 decompression 을 동반한다고 한다.
+
+> [!tip] *Point Access* 란?
+> - 그냥 Random access 라고 생각하면 된다.
+> - 특정 (혹은 적은 수의) tuple 에 접근하는 것을 일컫는다.
 
 #### 7.0.3. SIMD decompression and selective scans.
 
+- SIMD 를 이용해 연산을 최적화 하는 것은 BtrBlock 뿐 아니라 이전에도 많이 연구되어 왔었다고 한다.
+1) [이 논문](https://dl.acm.org/doi/10.1145/2771937.2771943) 에서는 흔한 자료구조들에 대한 연산을 SIMD 로 바꾸고, 이때의 성능 향상에 대해 연구했었다.
+2) [이 논문](https://adms-conf.org/2013/muller_adms13.pdf) 과 [이 논문](https://dl.acm.org/doi/10.14778/1687627.1687671) 에서는 column store 에 대한 predicate evaluation, decompression 을 SIMD 로 바꿨을 때를 연구했고,
+
+> [!tip] *Predicate* 란?
+> - 간단하게 말하면 SQL 에서 `WHERE` 절을 의미한다고 생각하면 된다.
+> - [[01. Relational Model and Algebra#*Select* ($ sigma$)|CMU-15445]] 를 참고하자.
+
+3) [이 논문](https://dl.acm.org/doi/10.1145/2463676.2465322) 과 [이 논문](https://dl.acm.org/doi/10.1145/2723372.2747642) 에서는 세로로 값을 저장하고 SIMD 를 적용해 더 빠르게 predicate evaluation 을 했다고 한다.
+	- 저 "세로로 값을 저장" 하는 것은 64bit 값을 하나의 address 가 아닌 64개의 address 에 저장해, 여러 값들에 대한 $k$ 번째 bit 가 하나의 address 에 들어오도록 한 것을 의미한다 [^kth-bit-adjacent].
+4) [이 논문](https://dl.acm.org/doi/abs/10.14778/1453856.1453925) 에서는 predicate 에서 일반적으로 여러 column 이 evaluation 된다는 생각에, 여러 column 에 대한 값들을 하나의 "word" 에 집어넣고 이 "word" 에 대해 SIMD 로 최적화한 operation 을 돌리는 방식을 제안했다.
+
 #### 7.0.4. Compressed data processing in BtrBlocks.
+
+- [[#7.0.2. DB2 BLU.|Section 7.0.2]] 에서 말한 것 처럼, 어떤 포맷들은 compression 상태에서도 어느 정도의 query 를 할 수 있도록 디자인 되어있다.
+- 하지만 얘네들의 경우에는 computing 과 storage 가 통합되어 있는 proprietary system 에서나 유용하고, Data Lake 에서는 이것보다는 decompression speed 가 더 유의미하다고 한다 [^decompression-speed].
+	- Decompression speed 가 빠르면 query 를 바꾸지 않고도 성능 향상을 이뤄낼 수 있기 때문.
+- 물론 근데 사용된 scheme 이 그것을 지원하기만 한다면, 이론적으로는 compressed data 에서 query 를 하는 것이 가능하기는 하다고 한다.
 
 #### 7.0.5. HyPer Data Blocks.
 
+- [HyPer](https://hyper-db.de/) 이라는 인메모리 HTAP 시스템에서는 cold data 접근을 최적화하기 위해 *Data Block* 이라는 것을 제안했다. ([논문](https://dl.acm.org/doi/pdf/10.1145/2882903.2882925))
+- HTAP 이라는 것은 OLTP 와 OLAP 를 모두 제공해 줘야 한다는 소리이고, 이것은 OLTP 의 hot data point access 와 OLAP 의 all data range access 를 모두 충족해야한다는 소리이다.
+- 따라서 *Data Block* 에서는 다음과 같은 최적화를 진행했다.
+1) 일단 point-access 를 위해 byte-addressable 한 compression scheme 만을 사용했는데 여기에는:
+	1. [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.2. RLE & One Value.|One Value]]
+	2. *Ordered Dictionary Encoding*
+		- 얘는 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.3. Dictionary|dictionary]] 와 유사한데 dictionary 를 정렬해 압축된 상태에서도 range query 가 가능한 방법이다.
+		- 그리고 dictionary size 에 따라 code 의 bit length 를 동적으로 정한다고 한다.
+	3. *Truncate*
+		- 얘는 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.5. FOR & Bit-packing|FOR]] 과 유사한데 이때의 기준치가 block 내 값들의 최소값인 방법이다.
+	- 이 scheme 들을 선정하는 것은 statistics 를 이용한다고 한다.
+2) 각 block 에는 lightweight index 와 SMA (Small Materialized Aggregate) 를 담고 있어, point access 를 돕는다고 한다.
+
+> [!tip] Small Materialized Aggregate (SMA) 란?
+> - 작은 사이즈의 [[Data Cube (Database)|Data Cube]] 라고 생각하자.
+> - [이 논문](https://www.vldb.org/conf/1998/p476.pdf) 에서 제시된 것이다.
+
+- 뭐 결과는 5배 정도의 compression ratio 향상이 있었다고 한다.
+
 #### 7.0.6. SAP BRPFC.
+
+- 
+
+#### 7.0.7. Latency on data lakes.
 
 ## 8. Conclusion
 
 [^sql-server-short-string]: 구체적으로 어떻게 되는지는 모르겠지만, 별로 중요한건 아니니 나중에 궁금하면 찾아보자.
 [^local-directory]: 이게 뭔지 (그냥 Dictionary 와는 뭐가 다른지) 정확히는 모르겠다. 
 [^offset-coding]: 이것도 뭔지 모르겠다. 느낌으로는 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.5. FOR & Bit-packing|FOR]] 하고 비슷해보인다.
+[^kth-bit-adjacent]: 주인장의 생각이다. 원본 논문 읽어보면 더 정확하게 알 수 있긴 한데, 일단 패스.
+[^decompression-speed]: 근거는 제시하지 않는다. 그냥 의견을 주장하는 것이다.
