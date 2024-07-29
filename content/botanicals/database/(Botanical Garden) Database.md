@@ -4,22 +4,47 @@
 
 ## 작물들
 
-### 스토리
+### Common
 
-- [[Database - 어떤 언어가 하탈까?]]
+- 스토리
+	- [[Database - 어떤 언어가 하탈까?]]
+- 용어집
+	- [[Database Management System, DBMS (Database)|Database Management System]]
+	- [[Transaction, ACID (Database)|Transaction, ACID]]
 
-### 용어집
+### Data Model
 
-- [[Database Management System, DBMS (Database)|Database Management System]]
 - [[Data Model (Database)|Data Model]]
+- 용어집
 	- [[Data Manipulation Language, DML (Database)|Data Manipulation Language, DML]]
 	- [[Schema (Database)|Schema]]
 	- [[Document Data Model (Database)|Document Data Model]]
-	- [[Transaction, ACID (Database)|Transaction, ACID]]
 	- [[Relational Data Model (Database)|Relational Data Model]]
 		- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
 		- [[Private Key, PK (Relational Model)|Private Key, PK]]
 		- [[Relation (Relational Model)|Relation]]
+
+### Encoding
+
+- 논문들
+	- BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)
+		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (1. Abstract, Intro)|1. Abstract, Intro]]
+		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)|2. Background]]
+		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (3. Scheme selection and compression)|3. Scheme selection and compression]]
+		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (4. Pseudodecimal encoding)|4. Pseudodecimal encoding]]
+		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (5. Fast decompression)|5. Fast decompression]]
+		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (6. Evaluation)|6. Evaluation]]
+		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (7. Related work and conclusion)|7. Related work and conclusion]]
+
+### Modern DBMS
+
+- 용어집
+	- [[Data Cube (Database)|Data Cube]]
+	- [[Data Lake, Data Lakehouse (Database)|Data Lake, Data Lakehouse]]
+	- [[Data Warehouse (Database)|Data Warehouse]]
+	- [[Extract-Transform-Load, ETL (Database)|Extract-Transform-Load (ETL)]]
+	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing (OLAP)]]
+	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing (OLTP)]]
 
 ### RocksDB
 
@@ -28,35 +53,3 @@
 	- [[LSM Tree (RocksDB)|LSM Tree]]
 	- [[Memtable (RocksDB)|Memtable]]
 	- [[Static Sorted Table, SST (RocksDB)|Static Sorted Table, SST]]
-
-### ElasticSearch
-
-- 스토리
-	- [[TL;DR ElasticSearch - 엘라스틱서치 간단하게 시작하기|엘라스틱서치 간단하게 시작하기]]
-	- [[ElasticSearch Architecture - 엘라스틱서치 아키텍처|엘라스틱서치 아키텍처]]
-	- [[Read & Write Operation in ElasticSearch - 엘라스틱서치 RW 과정 정리|엘라스틱서치 RW 과정 정리]]
-- 용어집
-	- [[_doc (ElasticSearch)|_doc]]
-	- [[_id (ElasticSearch)|_id]]
-	- [[Apache Lucene|Lucene]]
-	- [[Cluster (ElasticSearch)|Cluster]]
-	- [[Coordinating Node (ElasticSearch)|Coordinating Node]]
-	- [[Data Node (ElaticSearch)|Data Node]]
-	- [[Document (ElasticSearch)|Document]]
-	- [[Flush (ElasticSearch)|Flush]]
-	- [[Index (ElasticSearch)|Index]]
-	- [[Indexing (ElasticSearch)|Indexing]]
-	- [[Master Node (ElasticSearch)|Master Node]]
-	- [[Node (ElasticSearch)|Node]]
-	- [[Primary Shard (ElasticSearch)|Primary Shard]]
-	- [[Refresh (ElasticSearch)|Refresh]]
-	- [[Replication Shard (ElasticSearch)|Replication Shard]]
-	- [[Shard (ElasticSearch)|Shard]]
-	- [[Type (ElasticSearch)|Type]]
-- Lucene
-	- [[Segment (Lucene)]]
-	- [[Read API (Lucene)]]
-	- [[Merge (Lucene)]]
-	- [[Index (Lucene)]]
-	- [[Flush API (Lucene)]]
-	- [[Commit API (Lucene)]]

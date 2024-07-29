@@ -26,7 +26,7 @@ date: 2024-07-11
 - 다만, queue element type 이 `std::optional` 이기 때문에 여기서 좀 애를 먹긴 했다.
 	- `DiskRequest` 를 `std::optional<DiskRequest>` 로 변환할 때 `call to implicitly-deleted copy constructor` 에러가 계속 나는 것이 문제였다.
 	- 그래서 뭐 `DiskRequest` 에 [[Copy constructor, 복사 생성자 (C++ Class)|copy constructor]] 도 구현해 보고 별 짓을 다 해봤지만
-	- 결론적으로 말하면 `DiskRequest` 의 member 인 `callback_` 이 `std::promise` 여서 [[Copy constructor, 복사 생성자 (C++ Class)|copy constructor]] 나 [[Copy assignment operator, 복사 대입 연산자 (C++ Class)|copy assignment operator]] 를 지원하지 않아 [[Cpp - 소유권 (move)|move]] 를 해줌으로써 해결했다.
+	- 결론적으로 말하면 `DiskRequest` 의 member 인 `callback_` 이 `std::promise` 여서 [[Copy constructor, 복사 생성자 (C++ Class)|copy constructor]] 나 [[Copy assignment operator, 복사 대입 연산자 (C++ Class)|copy assignment operator]] 를 지원하지 않아 [[소유권, move (C++)|move]] 를 해줌으로써 해결했다.
 
 ## `DiskScheduler::StartWorkerThread`
 

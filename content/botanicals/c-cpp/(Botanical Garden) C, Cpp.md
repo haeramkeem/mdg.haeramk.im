@@ -14,10 +14,10 @@
 
 ### C++
 
-- [[Cpp - Vexing Parse|Vexing Parse]]
-- [[Cpp - 명령줄 인수 (Command-line arguments) 처리하기|명령줄 인수 (Command-line arguments) 처리하기]]
-- [[Cpp - 소유권 (move)|소유권 (move)]]
-- [[Cpp - 형변환 (dynamic_cast)|형변환 (dynamic_cast)]]
+- [[Vexing Parse 문제 (C++)|Vexing Parse 문제]]
+- [[명령줄 인수 (Command-line arguments) 처리하기 (C++)|명령줄 인수 (Command-line arguments) 처리하기]]
+- [[소유권, move (C++)|소유권 (move)]]
+- [[형변환, dynamic_cast (C++)|형변환 (dynamic_cast)]]
 - Async
 	- [[Promise, future 사용법 (C++ Async)|Promise, future 사용법]]
 - Char, String
@@ -39,6 +39,9 @@
 	- [[Mutex 사용법 (C++ Concurrency)|Mutex 잡고 놓기]]
 	- [[Shared mutex (C++ Concurrency)|Shared mutex]]
 	- [[Unique lock (C++ Concurrency)|Unique lock]]
+- Number
+	- [[Float, Double Point, IEEE 754 (C++ Number)|Float, Double Point]]
+	- [[Integer (C++ Number)|Integer]]
 - [[Optional 소개 (C++ Optional)|optional]]
 	- [[Optional 객체 사용하기, bugprone-unchecked-optional-access 에러 (C++ Optional)|객체 사용하기 (bugprone-unchecked-optional-access 에러)]]
 	- [[Optional 객체 생성하기 (C++ Optional)|객체 생성하기]]
