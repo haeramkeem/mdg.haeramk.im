@@ -16,5 +16,6 @@ date: 2024-04-23
 - [[(Botanical Garden) Network, Protocol|네트워크]]
 - [[(Botanical Garden) Operating Systems, Linux|운영체제]]
 - [[(Botanical Garden) Programming Language, Compiler|프로그래밍 언어, 컴파일러]]
+- [[(Botanical Garden) Python|파이썬]]
 - [[(Botanical Garden) Shell Script|쉘스크립트]]
 - [[(Botanical Garden) Storage, SSD|스토리지]]

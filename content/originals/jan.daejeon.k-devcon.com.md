@@ -2,6 +2,7 @@
 tags:
   - Conference
 title: 2024-01-27) K-DevCon 대전 강연 기록
+date: 2024-01-27
 ---
 > [!info] 2024-01-27 에 대전에서 열린 "K-DevCon" 기록입니다.
 
