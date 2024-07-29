@@ -4,6 +4,11 @@
 
 ## 작물들
 
+### 오리지널 시리즈
+
+- [[(CMU 15-445) Intro. to Database Systems]]
+- [[(CMU 15-721) Advanced Database Systems]]
+
 ### Common
 
 - 스토리
