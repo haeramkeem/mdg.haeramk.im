@@ -27,9 +27,29 @@ date: 2024-07-17
 
 #### 7.0.1. SQL Server.
 
-- 
+> [!info] 참고
+> - [MS SQL Server Columnstore Index](https://learn.microsoft.com/en-us/sql/relational-databases/indexes/columnstore-indexes-overview)
+
+- MS 의 SQL Server 에서 제공하는 columnar data format 을 *Columnstore Index* 라고 한다.
+- 여기서는 table 의 최대 1,048,576 개의 row 를 모아 *Rowgroup* 을 만들고, 이때의 각 column data 들을 *Column Segment* 라고 한다.
+- 이 *Column Segment* 단위로 compression 을 진행하는데, 다음과 같은 순서로 진행한다고 한다:
+1) 모든 값을 정수로 표현하기
+	- 각 자료형별로는 이렇게 정수로 바꾼다고 한다:
+	1. String: 이놈은 dictionary 를 사용한다.
+		- 최근 버전에서는 4byte `int` 로 변환하는 것이 아닌 short string 을 사용해서 더욱 최적화했다고 한다 [^sql-server-short-string].
+	2. Double: 이놈에게는 smallest common exponent 를 찾아 그것을 곱하여 정수로 바꾼다고 한다.
+		- 가령 $123 * 2^{-3}$ 과 $456 * 2^{-5}$ 두 값이 있을 때, $2^{5}$ 를 곱해서 $492$ 와 $456$ 로 만든다.
+	3. Integer: 이놈은 leading zero ($12300$ 에서 $00$) 를 지우고, [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.5. FOR & Bit-packing|FOR]] 를 적용한다.
+2) *Rowgroup* 내의 row 들을 재배치하여 compression 하기 쉽게 변환
+	- Row 를 재배치하는 이유는 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.2. RLE & One Value.|RLE]] 를 위해서이다; compression scheme 를 적용할 때에는 순서를 바꿔 run length 가 최대가 되게 하면 좋기 때문.
+	- 또한 column 단위가 아니고 row 단위로 재배치하는 이유는 column data 들을 재배치할 경우 row 방향으로 읽었을 때 다른 값이 읽일 수 있기 떄문이다.
+	- RLE 말고 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.5. FOR & Bit-packing|Bit-packing]] 를 적용하기도 한다.
+3) Compress
+- 구체적인 과정은 공개되어있지 않고, MS 내부 데이터로 실험한 결과 5.1배 더 compression ratio 가 좋았다고 한다.
 
 #### 7.0.2. DB2 BLU.
+
+- 
 
 #### 7.0.3. SIMD decompression and selective scans.
 
@@ -40,3 +60,5 @@ date: 2024-07-17
 #### 7.0.6. SAP BRPFC.
 
 ## 8. Conclusion
+
+[^sql-server-short-string]: 구체적으로 어떻게 되는지는 모르겠지만, 별로 중요한건 아니니 나중에 궁금하면 찾아보자.
