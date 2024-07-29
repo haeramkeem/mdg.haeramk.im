@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html><head><title>09. Virtual Memory</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="09. Virtual Memory"/><meta property="og:description" content="이화여자대학교 컴퓨터공학과 반효경 교수님의 &amp;quot;운영체제 (KOCW)&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 문서를 이전하는 과정에서, 이미지 데이터가 유실되어 문서상에 보이지 않습니다. Demand Paging § 얘는 페이지를 모두 메모리에 올리는 것이 페이지가 필요한 시점에 메모리에 올리는 방법을 의미한다 장점은 IO 감소 한번 올릴때 페이지 단위로 올리니까 Memory 사용량 감소 필요한 페이지만 올리니까 예외처리코드같은 자주 실행되지 않는 코드들이 메모리에 불필요하게 올라가지 않음 빠른 응답시간 여러개의 프로세스가 작동하는 경우에 하나의 프로세스 전체가 메모리에 올라가고 나머지는 아주 일부분만 올라간다면 모두 올라와있는 놈은 빠르지만 나머지는 IO 가 많아져 느림 하지만 Demand Paging 을 사용하면 각 프로세스의 필요한 부분만 올라와있기 때문에 프로세스 전체가 메모리에 올라와있는 것보다는 느릴 수 있겠지만 전체적인 응답시간은 빨라진다 더 많은 사용자 수용 프로세스당 실시간으로 사용하는 메모리의 양이 적으므로 그래서 프로세스가 메모리에 올라가게 되는 전체적인 모습을 보면 아래와 같다 (사진 사라짐) 제일 왼쪽은 가상 메모리 공간을 할당받고 프로세스가 페이지별로 나뉘어진 모습이다 A ~ F 까지는 가상 메모리 공간에서 프로세스가 실제로 차지하는 페이지들이고 G ~ H 는 프로세스가 차지하지 않는 빈 페이지임 그리고 오른쪽의 두 그림처럼 메모리에 적재되었다고 한다면 페이지 A, C, F 만 Demand Paging 에 의해 실제 메모리에 적재되었고 나머지 페이지들은 디스크에 스왑되어있는 상황 그때 Page Table 은 왼쪽 두번째와 같다 실제 메모리에 적재되어있는 페이지는 프레임 번호가 적히고 Valid 로 표시된다 그리고 적재되어있지 않는 페이지는 Invalid 로 표시된다 가상 메모리 공간에서 프로세스가 차지하지 않는 빈 페이지도 Invalid 로 표시됨 당연한 이야기지만 프로세스가 처음 생성되었을때에는 Page Table 이 전부 Invalid 로 표시되어 있고 프로세스가 실행됨에 따라 필요한 페이지가 차츰 올라가며 Valid 로 바뀌게 된다 Page Fault § 근데 Demand Paging 을 하려면 어떤 페이지가 필요해서 OS 에 올려달라고 요청할 수 있어야 되는데 이를 위한 것이 바로 Page Fault 이다 간단히 말하면 MMU 가 주소를 바꿀때 해당 주소가 Invalid 한 페이지에 있다면 트랩을 걸어 OS 로 하여금 해당 페이지를 적재할 수 있도록 하는 것 Page Fault 의 처리 과정은 다음과 같다 (사진 사라짐) Invalid 페이지를 참조 MMU 는 이때 유효한 주소인지, Protection Violation 등이 없는지 추가적으로 체크한다 (MMU 에 의해) Page Fault Trap 이 걸려서 OS 로 CPU가 넘어감 실제 메모리에서 비어있는 프레임 (Free Frame) 을 할당함 → 이미 모든 프레임이 하나 사용중이면 하나를 디스크로 스왑시켜서 빈 프레임을 만들어낸다 디스크에서 해당 페이지를 가져오고 빈 프레임에다가 페이지를 채움 3, 4번 과정은 Disk IO 과정이기 때문에 당연히 해당 프로세스는 Block 되어 다른 프로세스로 CPU 가 넘어간다 Page Table 에다가 Frame 번호 및 Valid/Invalid 를 업데이트함 Ready 상태로 있다가 CPU 를 받으면 멈췄던 Instruction 부터 다시 실행 Page Fault Rate § (사진 사라짐) Page Fault Rate p 를 위와 같이 정의한다면 즉, 0이면 Page Fault 가 절대 나지 않음 1이면 모든 참조에서 Page Fault 가 발생 p 는 실제 시스템에서 0."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="이화여자대학교 컴퓨터공학과 반효경 교수님의 &amp;quot;운영체제 (KOCW)&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 문서를 이전하는 과정에서, 이미지 데이터가 유실되어 문서상에 보이지 않습니다. Demand Paging § 얘는 페이지를 모두 메모리에 올리는 것이 페이지가 필요한 시점에 메모리에 올리는 방법을 의미한다 장점은 IO 감소 한번 올릴때 페이지 단위로 올리니까 Memory 사용량 감소 필요한 페이지만 올리니까 예외처리코드같은 자주 실행되지 않는 코드들이 메모리에 불필요하게 올라가지 않음 빠른 응답시간 여러개의 프로세스가 작동하는 경우에 하나의 프로세스 전체가 메모리에 올라가고 나머지는 아주 일부분만 올라간다면 모두 올라와있는 놈은 빠르지만 나머지는 IO 가 많아져 느림 하지만 Demand Paging 을 사용하면 각 프로세스의 필요한 부분만 올라와있기 때문에 프로세스 전체가 메모리에 올라와있는 것보다는 느릴 수 있겠지만 전체적인 응답시간은 빨라진다 더 많은 사용자 수용 프로세스당 실시간으로 사용하는 메모리의 양이 적으므로 그래서 프로세스가 메모리에 올라가게 되는 전체적인 모습을 보면 아래와 같다 (사진 사라짐) 제일 왼쪽은 가상 메모리 공간을 할당받고 프로세스가 페이지별로 나뉘어진 모습이다 A ~ F 까지는 가상 메모리 공간에서 프로세스가 실제로 차지하는 페이지들이고 G ~ H 는 프로세스가 차지하지 않는 빈 페이지임 그리고 오른쪽의 두 그림처럼 메모리에 적재되었다고 한다면 페이지 A, C, F 만 Demand Paging 에 의해 실제 메모리에 적재되었고 나머지 페이지들은 디스크에 스왑되어있는 상황 그때 Page Table 은 왼쪽 두번째와 같다 실제 메모리에 적재되어있는 페이지는 프레임 번호가 적히고 Valid 로 표시된다 그리고 적재되어있지 않는 페이지는 Invalid 로 표시된다 가상 메모리 공간에서 프로세스가 차지하지 않는 빈 페이지도 Invalid 로 표시됨 당연한 이야기지만 프로세스가 처음 생성되었을때에는 Page Table 이 전부 Invalid 로 표시되어 있고 프로세스가 실행됨에 따라 필요한 페이지가 차츰 올라가며 Valid 로 바뀌게 된다 Page Fault § 근데 Demand Paging 을 하려면 어떤 페이지가 필요해서 OS 에 올려달라고 요청할 수 있어야 되는데 이를 위한 것이 바로 Page Fault 이다 간단히 말하면 MMU 가 주소를 바꿀때 해당 주소가 Invalid 한 페이지에 있다면 트랩을 걸어 OS 로 하여금 해당 페이지를 적재할 수 있도록 하는 것 Page Fault 의 처리 과정은 다음과 같다 (사진 사라짐) Invalid 페이지를 참조 MMU 는 이때 유효한 주소인지, Protection Violation 등이 없는지 추가적으로 체크한다 (MMU 에 의해) Page Fault Trap 이 걸려서 OS 로 CPU가 넘어감 실제 메모리에서 비어있는 프레임 (Free Frame) 을 할당함 → 이미 모든 프레임이 하나 사용중이면 하나를 디스크로 스왑시켜서 빈 프레임을 만들어낸다 디스크에서 해당 페이지를 가져오고 빈 프레임에다가 페이지를 채움 3, 4번 과정은 Disk IO 과정이기 때문에 당연히 해당 프로세스는 Block 되어 다른 프로세스로 CPU 가 넘어간다 Page Table 에다가 Frame 번호 및 Valid/Invalid 를 업데이트함 Ready 상태로 있다가 CPU 를 받으면 멈췄던 Instruction 부터 다시 실행 Page Fault Rate § (사진 사라짐) Page Fault Rate p 를 위와 같이 정의한다면 즉, 0이면 Page Fault 가 절대 나지 않음 1이면 모든 참조에서 Page Fault 가 발생 p 는 실제 시스템에서 0."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/originals/os.bahn.ewha.kocw.net/09.-Virtual-Memory"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">09. Virtual Memory</h1><p class="content-meta ">Jul 29, 2024, 20 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>이화여자대학교 컴퓨터공학과 반효경 교수님의 &quot;운영체제 (KOCW)&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="failure">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+                  <div class="callout-title-inner"><p>문서를 이전하는 과정에서, 이미지 데이터가 유실되어 문서상에 보이지 않습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="demand-paging">Demand Paging<a aria-hidden="true" tabindex="-1" href="#demand-paging" class="internal"> §</a></h2>
+<ul>
+<li>
+<p>얘는 페이지를 모두 메모리에 올리는 것이 페이지가 필요한 시점에 메모리에 올리는 방법을 의미한다</p>
+</li>
+<li>
+<p>장점은</p>
+<ul>
+<li>IO 감소
+<ul>
+<li>한번 올릴때 페이지 단위로 올리니까</li>
+</ul>
+</li>
+<li>Memory 사용량 감소
+<ul>
+<li>필요한 페이지만 올리니까 예외처리코드같은 자주 실행되지 않는 코드들이 메모리에 불필요하게 올라가지 않음</li>
+</ul>
+</li>
+<li>빠른 응답시간
+<ul>
+<li>여러개의 프로세스가 작동하는 경우에 하나의 프로세스 전체가 메모리에 올라가고 나머지는 아주 일부분만 올라간다면 모두 올라와있는 놈은 빠르지만 나머지는 IO 가 많아져 느림</li>
+<li>하지만 Demand Paging 을 사용하면 각 프로세스의 필요한 부분만 올라와있기 때문에 프로세스 전체가 메모리에 올라와있는 것보다는 느릴 수 있겠지만 전체적인 응답시간은 빨라진다</li>
+</ul>
+</li>
+<li>더 많은 사용자 수용
+<ul>
+<li>프로세스당 실시간으로 사용하는 메모리의 양이 적으므로</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>그래서 프로세스가 메모리에 올라가게 되는 전체적인 모습을 보면 아래와 같다</p>
+<p>(<em>사진 사라짐</em>)</p>
+<ul>
+<li>제일 왼쪽은 가상 메모리 공간을 할당받고 프로세스가 페이지별로 나뉘어진 모습이다
+<ul>
+<li>A ~ F 까지는 가상 메모리 공간에서 프로세스가 실제로 차지하는 페이지들이고</li>
+<li>G ~ H 는 프로세스가 차지하지 않는 빈 페이지임</li>
+</ul>
+</li>
+<li>그리고 오른쪽의 두 그림처럼 메모리에 적재되었다고 한다면
+<ul>
+<li>페이지 A, C, F 만 Demand Paging 에 의해 실제 메모리에 적재되었고</li>
+<li>나머지 페이지들은 디스크에 스왑되어있는 상황</li>
+</ul>
+</li>
+<li>그때 Page Table 은 왼쪽 두번째와 같다
+<ul>
+<li>실제 메모리에 적재되어있는 페이지는 프레임 번호가 적히고 Valid 로 표시된다</li>
+<li>그리고 적재되어있지 않는 페이지는 Invalid 로 표시된다</li>
+<li>가상 메모리 공간에서 프로세스가 차지하지 않는 빈 페이지도 Invalid 로 표시됨</li>
+</ul>
+</li>
+<li>당연한 이야기지만 프로세스가 처음 생성되었을때에는 Page Table 이 전부 Invalid 로 표시되어 있고 프로세스가 실행됨에 따라 필요한 페이지가 차츰 올라가며 Valid 로 바뀌게 된다</li>
+</ul>
+</li>
+</ul>
+<h2 id="page-fault">Page Fault<a aria-hidden="true" tabindex="-1" href="#page-fault" class="internal"> §</a></h2>
+<ul>
+<li>
+<p>근데 Demand Paging 을 하려면 어떤 페이지가 필요해서 OS 에 올려달라고 요청할 수 있어야 되는데 이를 위한 것이 바로 <em><strong>Page Fault</strong></em> 이다</p>
+</li>
+<li>
+<p>간단히 말하면 MMU 가 주소를 바꿀때 해당 주소가 Invalid 한 페이지에 있다면 트랩을 걸어 OS 로 하여금 해당 페이지를 적재할 수 있도록 하는 것</p>
+</li>
+<li>
+<p>Page Fault 의 처리 과정은 다음과 같다</p>
+<p>(<em>사진 사라짐</em>)</p>
+<ol>
+<li>Invalid 페이지를 참조
+<ul>
+<li>MMU 는 이때 유효한 주소인지, Protection Violation 등이 없는지 추가적으로 체크한다</li>
+</ul>
+</li>
+<li>(MMU 에 의해) <em><strong>Page Fault Trap</strong></em> 이 걸려서 OS 로 CPU가 넘어감</li>
+</ol>
+</li>
+<li>
+<p>실제 메모리에서 비어있는 프레임 (Free Frame) 을 할당함 → 이미 모든 프레임이 하나 사용중이면 하나를 디스크로 스왑시켜서 빈 프레임을 만들어낸다</p>
+<ol>
+<li>디스크에서 해당 페이지를 가져오고</li>
+<li>빈 프레임에다가 페이지를 채움
+<ul>
+<li>3, 4번 과정은 Disk IO 과정이기 때문에 당연히 해당 프로세스는 Block 되어 다른 프로세스로 CPU 가 넘어간다</li>
+</ul>
+</li>
+<li>Page Table 에다가 Frame 번호 및 Valid/Invalid 를 업데이트함</li>
+<li>Ready 상태로 있다가 CPU 를 받으면 멈췄던 Instruction 부터 다시 실행</li>
+</ol>
+</li>
+</ul>
+<h3 id="page-fault-rate">Page Fault Rate<a aria-hidden="true" tabindex="-1" href="#page-fault-rate" class="internal"> §</a></h3>
+<p>(<em>사진 사라짐</em>)</p>
+<ul>
+<li><em><strong>Page Fault Rate</strong></em> <code>p</code> 를 위와 같이 정의한다면
+<ul>
+<li>즉, 0이면 Page Fault 가 절대 나지 않음</li>
+<li>1이면 모든 참조에서 Page Fault 가 발생</li>
+</ul>
+</li>
+<li>p 는 실제 시스템에서 0.01 정도로 아주 낮게 나온다 → Page Fault 가 앵간하면 일어나지 않는다는 의미</li>
+</ul>
+<h2 id="page-replacement">Page Replacement<a aria-hidden="true" tabindex="-1" href="#page-replacement" class="internal"> §</a></h2>
+<ul>
+<li>위에서 Page Fault 루틴 설명할 때 빈 프레임이 없으면 기존의 프레임에 있는 페이지를 swap out 시켜서 빈 프레임을 만들어낸다고 했는데 그것을 <em><strong>Page Replacement</strong></em> 라고 한다</li>
+</ul>
+<p>(<em>사진 사라짐</em>)</p>
+<ul>
+<li>위 그림이 Page Replacement 의 과정인데
+<ol>
+<li>희생양을 정하고 Swap out 한다
+<ul>
+<li>이때는 페이지에 변화가 없을 때에는 그냥 냅둬서 Overwrite 되게 할 수 있지만</li>
+<li>만일 페이지 내용에 변화가 있을 때에는 변화된 내용을 디스크에 반영해주는 IO 가 필요하다</li>
+</ul>
+</li>
+<li>Page Table 에서 Swap out 한 페이지의 Validity 를 업데이트한다</li>
+<li>요청된 페이지를 Swap in 한다</li>
+<li>Page Table 에서 Swap in 한 페이지의 Validity 를 업데이트한다</li>
+</ol>
+</li>
+<li>당연히 Page Replacement 를 할 때에는 Page Fault Rate 가 최소화되도록 프레임을 선택해야 되는데</li>
+<li>이것을 위한 알고리즘이 <em><strong>Replacement Algorithm</strong></em> 이다</li>
+</ul>
+<h3 id="optimal-algorithm-beladys-algorithm">Optimal Algorithm (Belady’s Algorithm)<a aria-hidden="true" tabindex="-1" href="#optimal-algorithm-beladys-algorithm" class="internal"> §</a></h3>
+<ul>
+<li>
+<p>다시는 참조되지 않거나 가장 먼 미래에 참조될 페이지를 Replace 하자는 생각</p>
+</li>
+<li>
+<p>하지만 미래의 일은 알 수 없기 때문에 비현실적이다 → 이에 따라 Optimal <em><strong>Offline</strong></em> Algorithm 이라고도 불림</p>
+</li>
+<li>
+<p>다만, 이 알고리즘이 Page Fault 를 최소화한다는 것이 증명되어 있으므로 다른 알고리즘들의 성능에 대한 척도를 제공해주는 역할을 한다</p>
+</li>
+<li>
+<p>아래의 예제를 보면</p>
+<p>(<em>사진 사라짐</em>)</p>
+<ul>
+<li>위 시나리오에서 일단 첫 4번은 어쩔 수 없다 → 페이지가 없으니 어쩔 수 없이 Page Fault 가 발생</li>
+<li>5번째 Page Fault 에서는 4번 페이지가 가장 나중에 사용되므로 4번이 5번으로 Replace</li>
+<li>6번째 Page Fault 에서는 5번만 나중에 사용되므로 사용되지 않는 페이지 아무거나 Replace</li>
+</ul>
+</li>
+</ul>
+<h3 id="fifo-first-in-first-out-algorithm">FIFO (First In First Out) Algorithm<a aria-hidden="true" tabindex="-1" href="#fifo-first-in-first-out-algorithm" class="internal"> §</a></h3>
+<ul>
+<li>
+<p>선입선출이다</p>
+</li>
+<li>
+<p>얘는 <em><strong>FIFO (혹은 Belady’s) Anomaly</strong></em> 라는게 있는데 이게 뭐냐면</p>
+<ul>
+<li>일반적으로 Frame 수가 늘어나면 Page Fault 는 줄어드는 것이 일반적인데</li>
+<li>FIFO 방식을 사용하면 Frame 수가 늘어났을 때 Page Fault 가 늘어날 수도 있다는 것이다</li>
+<li>아래 예시 보면 됨</li>
+</ul>
+<p>(<em>사진 사라짐</em>)</p>
+</li>
+</ul>
+<h2 id="lru-lfu-algorithm">LRU, LFU Algorithm<a aria-hidden="true" tabindex="-1" href="#lru-lfu-algorithm" class="internal"> §</a></h2>
+<h3 id="lru-least-recently-used-algorithm">LRU (Least Recently Used) Algorithm<a aria-hidden="true" tabindex="-1" href="#lru-least-recently-used-algorithm" class="internal"> §</a></h3>
+<ul>
+<li>
+<p>가장 오래전에 참조된 것을 지우는 것</p>
+</li>
+<li>
+<p>최근에 참조된 것이 다시 참조될 가능성이 높다는 성질을 이용</p>
+</li>
+<li>
+<p>FIFO 와의 차이점은 FIFO 의 경우 가장 오래전에 입장한놈을 지운다면 LRU 는 가장 오래전에 마지막으로 참조된 것을 지운다</p>
+<p>(<em>사진 사라짐</em>)</p>
+</li>
+</ul>
+<h3 id="lfu-least-frequently-used-algorithm">LFU (Least Frequently Used) Algorithm<a aria-hidden="true" tabindex="-1" href="#lfu-least-frequently-used-algorithm" class="internal"> §</a></h3>
+<ul>
+<li>가장 덜 빈번하게 참조된 것을 지우는 것</li>
+<li>빈번하게 참조된 것이 다시 참조될 가능성이 높다는 성질을 이용</li>
+</ul>
+<h3 id="lru-vs-lfu">LRU vs LFU<a aria-hidden="true" tabindex="-1" href="#lru-vs-lfu" class="internal"> §</a></h3>
+<p>(<em>사진 사라짐</em>)</p>
+<ul>
+<li>LRU 랑 LFU 의 장단점을 극단적으로 보여주기 위한 예시인데 누가 개같이 쫒겨날지는 직접 해보면 알 수 있음</li>
+<li>이걸 토대로 LRU 랑 LFU 를 비교해보면</li>
+<li>LRU 는 제일 나중에 참조된 것을 내쫒긴 하지만 그놈이 제일 많이 참조된 놈이어서 참조 빈도에 대한 고려는 안된다는 단점이 있고</li>
+<li>LFU 는 제일 적게 참도된 놈을 내쫒았는데 마지막 참조 시점의 고려가 되지 않는다는 단점이 있다
+<ul>
+<li>위의 예시에서는 하필 그놈이 제일 최근에 들어온 놈이어서 연속 참조에 장애가 걸리는 문제가 발생한다</li>
+</ul>
+</li>
+</ul>
+<h3 id="구현">구현<a aria-hidden="true" tabindex="-1" href="#구현" class="internal"> §</a></h3>
+<p>(<em>사진 사라짐</em>)</p>
+<ul>
+<li>LRU: 얘는 Linked List 형태로 구현한다
+<ul>
+<li>즉, 참조되면 그놈을 제일 아래로 내려 제일 높은 우선순위를 갖게 하고</li>
+<li>내쫒을때는 제일 위에 있는 제일 낮은 우선순위를 내쫒음</li>
+<li>따라서 시간복잡도는 O(1) 이 됨</li>
+</ul>
+</li>
+<li>LFU: 얘는 Heap 을 이용하여 구현한다
+<ul>
+<li>참조 시점이 아니라 빈도가 중요하므로 다른 놈들과의 비교를 해야되는데</li>
+<li>비교할때는 Linked List 를 이용해 일렬로 비교하며 따라가는 것 보다는 Heap 을 이용해 Leaf 까지 따라가며 비교횟수를 줄이는 것이 좋기 때문</li>
+</ul>
+</li>
+</ul>
+<h3 id="한계">한계<a aria-hidden="true" tabindex="-1" href="#한계" class="internal"> §</a></h3>
+<ul>
+<li>실제로는 LRU, LFU 알고리즘을 이용해 Page Replacement 를 할 수는 없다</li>
+<li>왜냐하면 MMU 가 하드웨어 유닛이기 때문에 Page Reference 는 OS 의 관여 없이 기계적으로 일어나기 때문</li>
+<li>OS 가 관여하는 부분은 Page Fault 가 발생했을 당시이므로 어떤 페이지가 언제 혹은 얼마나 참조되었는지는 OS 가 알 수 없다</li>
+</ul>
+<h2 id="clock-algorithm">Clock Algorithm<a aria-hidden="true" tabindex="-1" href="#clock-algorithm" class="internal"> §</a></h2>
+<ul>
+<li>
+<p>위에서 제시한 LRU, LFU 알고리즘의 한계를 극복하기 위해 등장한 알고리즘</p>
+</li>
+<li>
+<p>다음과 같이 작동한다</p>
+<p>(<em>사진 사라짐</em>)</p>
+<ol>
+<li>일단 시계에서 네모는 각 페이지를 의미한다</li>
+<li>그리고 숫자는 <em><strong>Reference Bit</strong></em> 으로, 최근에 해당 페이지가 참조되었음을 나타낸다
+<ul>
+<li>Reference Bit 은 MMU 에 의해 1로 바뀌고 OS 에 의해 0으로 바뀐다</li>
+</ul>
+</li>
+<li>Page Fault 가 발생하면 OS 는 시계방향으로 Reference Bit 가 0인 페이지를 찾는다
+<ul>
+<li>Reference Bit 가 1이라면 OS 가 0으로 바꾸고 다음 페이지로 넘어간다</li>
+</ul>
+</li>
+<li>Reference Bit 이 0인 페이지를 찾으면 해당 페이지를 Swap out 한다</li>
+</ol>
+</li>
+<li>
+<p>이렇게 하면 다음과 같은 효과가 난다</p>
+<ul>
+<li>Page Fault 가 일어나지 않는 동안은 MMU 가 Reference Bit 을 관리하며 참조되었던 페이지들을 표시한다</li>
+<li>Page Fault 가 일어나면 OS 가 MMU 가 표시한 Reference Bit 을 이용해 참조되지 않았던 페이지를 찾아 swap out 한다</li>
+<li>이때 swap out 되는 페이지는 OS 에 의해 0으로 바뀐 뒤에 시침이 한바퀴를 돌아 다시 돌아올 때 까지 한번도 참조되지 않았던 것이 보장되므로 충분히 옛날에 마지막으로 참조되었던 것으로 생각할 수 있다
+<ul>
+<li>따라서 이것은 LRU 와 비슷하다고 할 수 있다</li>
+<li>즉, <em><strong>LRU 의 근사 (approximation) 알고리즘</strong></em></li>
+<li>공통점 → 마지막 참조 시점을 기준으로 페이지를 고름</li>
+<li>차이점 → 마지막 참조 시점이 가장 오래된 놈이라고 할 수는 없음</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>이놈은 다음과 같은 이름으로도 불린다</p>
+<ul>
+<li><em><strong>Second Chance Algorithm</strong></em>: Reference Bit 이 1이면 한번 봐주고 다음 페이지로 넘어감</li>
+<li><em><strong>NUR(Not Used Recently)</strong></em> 혹은 <em><strong>NRU(Not Recently Used)</strong></em>: LRU 에서 Least 가 Not 으로 바뀜</li>
+</ul>
+</li>
+<li>
+<p>Reference Bit 이외에도 <em><strong>Modified Bit</strong></em> 을 이용해 더욱 개선할 수도 있다</p>
+<ul>
+<li><em><strong>Modified Bit (Dirty Bit)</strong></em> 을 이용해 페이지가 변경되지 않았으면 IO 없이 swap out 하여 Overwrite 되게 함</li>
+</ul>
+</li>
+</ul>
+<h2 id="page-frame-allocation">Page Frame Allocation<a aria-hidden="true" tabindex="-1" href="#page-frame-allocation" class="internal"> §</a></h2>
+<ul>
+<li>이것은 프로세스 하나에게 몇개의 Frame 을 할당할 것이냐인데</li>
+<li>이것이 중요한 이유는 다음과 같다
+<ul>
+<li>프로세스는 실행코드 말고도 데이터와 협력해야되는 경우가 많으므로 여러 페이지에 동시에 참조할 일이 빈번하다</li>
+<li>또한 Loop 의 경우에는 해당 코드를 담은 페이지가 전부 올라와 있어야 Page Fault 가 안난다
+<ul>
+<li>만약 Frame Allocation 이 2개인데 Loop 의 코드가 3 frame 을 필요로 한다면 1개의 페이지가 계속해서 Page Fault 가 날 것이기 때문</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>다음과 같은 방법으로 할당할 수 있다
+<ul>
+<li><em><strong>Equal Allocation</strong></em>: 모두 똑같은 개수 할당</li>
+<li><em><strong>Proportional Allocation</strong></em>: 프로세스 크기에 따라 할당</li>
+<li><em><strong>Priority Allocation</strong></em>: CPU 우선순위에 따라 할당</li>
+</ul>
+</li>
+<li>이렇게 할당해 놓고 Replace 를 할때에는 해당 프로세스의 페이지 내에서만 Replace 되게 하는 방법을 <em><strong>Local Replacement</strong></em> 라고 한다</li>
+<li>하지만 프레임의 개수를 할당하지 않고 Replace Algorithm 에 따라 프로세스간 프레임을 경쟁하도록 하여 프레임 할당을 유동적으로 관리하는 것을 <em><strong>Global Replacement</strong></em> 라고 한다
+<ul>
+<li>이렇게 하면 자연스레 프레임을 많이 필요로 하는 프로세스는 다른 프로세스의 페이지를 방출시켜 많이 차지하게 하고 해당 프로세스가 종료되면 자연스레 방출되어 다른 프로세스가 프레임을 차지할 수 있도록 할 수 있다</li>
+</ul>
+</li>
+</ul>
+<h2 id="thrashing">Thrashing<a aria-hidden="true" tabindex="-1" href="#thrashing" class="internal"> §</a></h2>
+<p>(<em>사진 사라짐</em>)</p>
+<ul>
+<li>일반적으로 메모리에 많은 프로세스가 올라오면 (= Degree of Multiprogramming 이 증가하면) CPU Utilization 은 올라간다</li>
+<li>하지만 어느 수준이 되면 프로세스 하나당 충분한 프레임이 확보되지 않아 Page Fault 가 너무 빈번하게 일어나 CPU Utilization 이 떨어지게 된다 → 이 시점을 <em><strong>Thrashing</strong></em> 이라고 한다
+<ul>
+<li>이 구간에는 CPU Utilization 이 낮아 OS 가 더 많은 프로세스를 메모리에 올리려고 하고, 그러면 Page Fault 가 더 빈번하게 일어나는 악순환이 계속됨</li>
+</ul>
+</li>
+<li>따라서 이것을 막기 위해서는 Degree of Multiprogramming 을 조절할 필요가 있다</li>
+</ul>
+<h3 id="working-set-algorithm">Working Set Algorithm<a aria-hidden="true" tabindex="-1" href="#working-set-algorithm" class="internal"> §</a></h3>
+<ul>
+<li>
+<p>페이지를 참조할때는 특정 시점에 빈번하게 참조하는 페이지가 한정되어있다는 Locality 에 착안해서</p>
+</li>
+<li>
+<p>빈번하게 참조하는 페이지들의 집합을 Working Set 이라고 부르고 WS 의 크기가 할당된 프레임의 개수보다 크면 그냥 해당 프로세스 전체를 Swap out 시켜버리는 알고리즘이다</p>
+<p>(<em>사진 사라짐</em>)</p>
+</li>
+<li>
+<p>저 WS 를 구하기 위해 <em><strong>Working Set Window</strong></em> 라는 것을 이용하는 데 이것은 페이지 참조 시퀀스에서 특정 시점의 최근 n 개의 참조 페이지를 의미한다</p>
+<ul>
+<li>위 그림의 예시로는 n 이 10이라고 할 수 있는 것</li>
+<li>이 Working Set Window 만큼의 페이지들을 집합으로 만들어 그의 개수를 기준으로 프로세스를 방출할지 말지 결정하는 알고리즘</li>
+</ul>
+</li>
+</ul>
+<h3 id="pff-page-fault-frequency-scheme">PFF (Page-Fault Frequency) Scheme<a aria-hidden="true" tabindex="-1" href="#pff-page-fault-frequency-scheme" class="internal"> §</a></h3>
+<p>(<em>사진 사라짐</em>)</p>
+<ul>
+<li>얘는 Page Fault Frequency 를 추적해서 Page Fault Rate 가 일정 수준이 유지될 수 있도록 하는 것이다</li>
+<li>그래서 위 그림에서 보이는 것 처럼 상한 (Upper Bound) 와 하한 (Lower Bound) 를 정해놓고 상한보다 올라가면 프레임 할당을 더 증가시키고 하한보다 내려가면 프레임 할당을 줄여주는 방식</li>
+</ul>
+<h3 id="page-size">Page Size<a aria-hidden="true" tabindex="-1" href="#page-size" class="internal"> §</a></h3>
+<ul>
+<li>Page 사이즈가 너무 작다면
+<ul>
+<li>장점
+<ul>
+<li>Internal Fragmentation 의 감소</li>
+<li>필요한 정보만 메모리에 올라옴</li>
+</ul>
+</li>
+<li>단점
+<ul>
+<li>페이지 테이블 크기가 증가</li>
+<li>Disk Transfer 의 효율성 감소 (디스크에서 데이터를 찾는 것에서의 효율성)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>요즘 트랜드는 Page 사이즈를 크게 하는 것이랜다 (현재는 4Kb 정도)</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#demand-paging" data-for="demand-paging">Demand Paging</a></li><li class="depth-0"><a href="#page-fault" data-for="page-fault">Page Fault</a></li><li class="depth-1"><a href="#page-fault-rate" data-for="page-fault-rate">Page Fault Rate</a></li><li class="depth-0"><a href="#page-replacement" data-for="page-replacement">Page Replacement</a></li><li class="depth-1"><a href="#optimal-algorithm-beladys-algorithm" data-for="optimal-algorithm-beladys-algorithm">Optimal Algorithm (Belady’s Algorithm)</a></li><li class="depth-1"><a href="#fifo-first-in-first-out-algorithm" data-for="fifo-first-in-first-out-algorithm">FIFO (First In First Out) Algorithm</a></li><li class="depth-0"><a href="#lru-lfu-algorithm" data-for="lru-lfu-algorithm">LRU, LFU Algorithm</a></li><li class="depth-1"><a href="#lru-least-recently-used-algorithm" data-for="lru-least-recently-used-algorithm">LRU (Least Recently Used) Algorithm</a></li><li class="depth-1"><a href="#lfu-least-frequently-used-algorithm" data-for="lfu-least-frequently-used-algorithm">LFU (Least Frequently Used) Algorithm</a></li><li class="depth-1"><a href="#lru-vs-lfu" data-for="lru-vs-lfu">LRU vs LFU</a></li><li class="depth-1"><a href="#구현" data-for="구현">구현</a></li><li class="depth-1"><a href="#한계" data-for="한계">한계</a></li><li class="depth-0"><a href="#clock-algorithm" data-for="clock-algorithm">Clock Algorithm</a></li><li class="depth-0"><a href="#page-frame-allocation" data-for="page-frame-allocation">Page Frame Allocation</a></li><li class="depth-0"><a href="#thrashing" data-for="thrashing">Thrashing</a></li><li class="depth-1"><a href="#working-set-algorithm" data-for="working-set-algorithm">Working Set Algorithm</a></li><li class="depth-1"><a href="#pff-page-fault-frequency-scheme" data-for="pff-page-fault-frequency-scheme">PFF (Page-Fault Frequency) Scheme</a></li><li class="depth-1"><a href="#page-size" data-for="page-size">Page Size</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/os/memory/draft/Page-Replacement-(Memory)" class="internal">Page Replacement (Memory)</a></li><li><a href="../../../../gardens/os/originals/os.bahn.ewha.kocw.net/(이화여대)-운영체제-강의록" class="internal">(이화여대) 운영체제 강의록</a></li><li><a href="../../../../gardens/os/replacement-policy/papers/(논문)-ARC---A-Self-Tuning,-Low-Overhead-Replacement-Cache" class="internal">(논문) ARC - A Self-Tuning, Low Overhead Replacement Cache</a></li><li><a href="../../../../gardens/os/replacement-policy/terms/Least-Frequently-Used,-LFU-(replacement-policy)" class="internal">Least Frequently Used, LFU (replacement policy)</a></li><li><a href="../../../../gardens/os/replacement-policy/terms/Least-Recently-Used,-LRU-(replacement-policy)" class="internal">Least Recently Used, LRU (replacement policy)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

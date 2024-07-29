@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html><head><title>Border Gateway Protocol (BGP)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Border Gateway Protocol (BGP)"/><meta property="og:description" content="참고한 것들 BGP의 개념 (Border Gateway Protocol) BGP란? (Boarder Gateway Protocol) 서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024) #draft 내용이 정리가 안돼있슴다 Border Gateway Protocol, BGP § 우선 Internet 생태계의 구조를 간단하게 살펴보자."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../static/icon.png"/><meta name="description" content="참고한 것들 BGP의 개념 (Border Gateway Protocol) BGP란? (Boarder Gateway Protocol) 서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024) #draft 내용이 정리가 안돼있슴다 Border Gateway Protocol, BGP § 우선 Internet 생태계의 구조를 간단하게 살펴보자."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/network/bgp/Border-Gateway-Protocol-(BGP)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Border Gateway Protocol (BGP)</h1><p class="content-meta ">May 25, 2024, 12 min read</p><ul class="tags "><li><a href="../../../tags/용어집" class="internal tag-link">#용어집</a></li><li><a href="../../../tags/network" class="internal tag-link">#network</a></li><li><a href="../../../tags/bgp" class="internal tag-link">#bgp</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://ddongwon.tistory.com/97" class="external">BGP의 개념 (Border Gateway Protocol)</a></li>
+<li><a href="https://blog.naver.com/PostView.naver?blogId=taeheon714&amp;logNo=222384978033&amp;parentCategoryNo=&amp;categoryNo=6&amp;viewDate=&amp;isShowPopularPosts=true&amp;from=search" class="external">BGP란? (Boarder Gateway Protocol)</a></li>
+<li><a href="../../../archives/ticomnet.spring.2024.cse.snu.ac.kr/3.-BGP" class="internal" data-slug="archives/ticomnet.spring.2024.cse.snu.ac.kr/3.-BGP">서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 내용이 정리가 안돼있슴다 </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="border-gateway-protocol-bgp">Border Gateway Protocol, BGP<a aria-hidden="true" tabindex="-1" href="#border-gateway-protocol-bgp" class="internal"> §</a></h2>
+<ul>
+<li>우선 Internet 생태계의 구조를 간단하게 살펴보자.
+<ul>
+<li>Internet 은 <a href="../../../gardens/network/bgp/terms/Autonomous-System,-AS-(BGP)" class="internal" data-slug="gardens/network/bgp/terms/Autonomous-System,-AS-(BGP)">AS</a> 들이 독립적으로 내부 네트워킹을 구축 관리하고, 이 AS 들 간의 통신을 가능하게 해 전체적인 네트워킹이 이루어지도록 되어 있다.</li>
+<li>따라서 internet 은 <em>Network of Networks</em> 라고도 표현한다.</li>
+</ul>
+</li>
+<li>이때 하나의 AS 내에서 라우터들 간의 경로를 정하는 프로토콜이 <a href="../../../gardens/network/terms/Interior-Gateway-Protocol,-IGP-(Network)" class="internal" data-slug="gardens/network/terms/Interior-Gateway-Protocol,-IGP-(Network)">IGP</a> 이고 그중 <a href="../../../gardens/network/draft/Open-Shortest-Path-First,-OSPF-(Network)" class="internal" data-slug="gardens/network/draft/Open-Shortest-Path-First,-OSPF-(Network)">OSPF</a> 가 대표적이라면</li>
+<li>AS 간의 경로를 정하는 프로토콜을 <a href="../../../gardens/network/bgp/terms/External-Gateway-Protocol,-EGP-(BGP)" class="internal" data-slug="gardens/network/bgp/terms/External-Gateway-Protocol,-EGP-(BGP)">EGP</a> 라 하고 그 중 BGP 가 대표적이다.
+<ul>
+<li>대표적이긴 한데 사실 EGP 에는 BGP 하나밖에 없다.</li>
+</ul>
+</li>
+<li>BGP 에서 BG 는 <em>Border Gateway</em> 의 약자로 AS 외부와 통신할 수 있는 라우터를 의미한다.</li>
+<li>그렇기 때문에 BGP 는 BG 들 간의 경로 탐색 프로토콜이고 따라서 AS 간의 통신에만 관여하는 것이 아니고, AS 내부에서의 BG 간 통신도 BGP 의 일부이다.</li>
+<li>179/<a href="../../../gardens/network/terms/Transmission-Control-Protocol,-TCP-(Network)" class="internal" data-slug="gardens/network/terms/Transmission-Control-Protocol,-TCP-(Network)">TCP</a> 위에서 작동한다고 한다.. FYI</li>
+</ul>
+<h2 id="ebgp-ibgp">eBGP, iBGP<a aria-hidden="true" tabindex="-1" href="#ebgp-ibgp" class="internal"> §</a></h2>
+<p><img src="../../../images/Pasted-image-20240526142656.png" width="auto" height="auto"/></p>
+<blockquote>
+<p>그림 출처: Cisco</p>
+</blockquote>
+<ul>
+<li><em>eBGP</em>: External BGP - AS 외부의 BG 간의 통신
+<ul>
+<li><em>eBGP</em> 로 통신하는 구간은 <em>DMZ</em> 라고 한다</li>
+<li>eBGP 의 경우에는 (1) peer 와 직접적으로 연결되어 있어야 하며 - 즉, 다른 router 를 거처가는 것이 아닌 (2) 당연히 모든 BG 와 연결할 필요 없이 peer 하려는 BG 와만 연결되어 있으면 된다</li>
+</ul>
+</li>
+<li><em>iBGP</em>: Internal BGP - AS 내부의 BG 간의 통신
+<ul>
+<li>iBGP 의 경우에는 (1) peer 와 직접적으로 연결될 필요는 없다 - 패킷 전달은 IGP 가 대신 해줄테니 (2) 모든 iBGP peer 와 연결되어 있어야 한다 (full mesh)</li>
+</ul>
+</li>
+<li>설정할 때 Local ASN 에는 자신의 ASN 을 적고, Remote ASN 에다가 peering 을 할 ASN 을 적으면 되는데
+<ul>
+<li>만일 Local ASN 과 Remote ASN 을 동일하게 적으면 iBGP 로 설정된다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="bgp-작동-원리">BGP 작동 원리<a aria-hidden="true" tabindex="-1" href="#bgp-작동-원리" class="internal"> §</a></h2>
+<h3 id="용어들">용어들<a aria-hidden="true" tabindex="-1" href="#용어들" class="internal"> §</a></h3>
+<ul>
+<li><em>Neighbor</em> (<em>Peer</em>): 인접한 BG 를 의미한다.
+<ul>
+<li><em>eBGP peer</em> (<em>external peer</em>) 는 AS 간의 BGP peer 를 말하는거고</li>
+<li><em>iBGP peer</em> (<em>internal peer</em>) 는 같은 AS 내의 peer 를 말한다.
+<ul>
+<li>얘도 마찬가지로 라우팅 정보를 공유한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em><a href="../../../gardens/network/bgp/terms/Network-Layer-Reachability-Information,-NLRI-(BGP)" class="internal" data-slug="gardens/network/bgp/terms/Network-Layer-Reachability-Information,-NLRI-(BGP)">NLRI</a></em> (<em>Prefix</em>): AS 에 할당된 IP prefix 로, ASN 와 IP prefix 의 조합이다.</li>
+<li><em>Route</em> (<em>Path</em>): neighbor 에 announce 한 NLRI 를 의미한다.
+<ul>
+<li>이 메세지를 <em>Update message</em> 라고 한다.</li>
+</ul>
+</li>
+<li><em>Router ID</em>: 라우터에 설정된 여러 IP 들 중 highest IP 를 일컫는다.
+<ul>
+<li>Router 의 primary IP 라고 생각하면 될듯</li>
+<li>Highest IP 가 정확이 뭔지는 잘 모르겠음.</li>
+</ul>
+</li>
+</ul>
+<h3 id="간단-요약">간단 요약<a aria-hidden="true" tabindex="-1" href="#간단-요약" class="internal"> §</a></h3>
+<ul>
+<li>AS 각각은 NLRI 을 갖고 있고</li>
+<li>이 NLRI 를 neighbor 간에 공유한다.</li>
+<li>공유된 정보에 따라 최적의 경로를 정해 router 의 route table 에 저장하고 그에 따라 routing 한다.</li>
+<li>추가적으로, 일부 패킷은 AS 내부의 사정에 따라 route policy 를 static 하게 정해 routing 할 수도 있다.</li>
+</ul>
+<h2 id="as-path-next-hop">AS-path, Next Hop<a aria-hidden="true" tabindex="-1" href="#as-path-next-hop" class="internal"> §</a></h2>
+<p><img src="../../../images/Pasted-image-20240529115436.png" width="auto" height="auto"/></p>
+<ul>
+<li><em>AS-path</em> 는 어떤 AS 에 도달하기까지 거쳐가야 할 AS 들을 의미한다.
+<ul>
+<li>즉, 역으로는 이 NLRI 가 어떤 AS 에서 출발해서 자신에게까지 오기까지 거쳐온 AS 들인 것.</li>
+<li>위의 예시를 보면 AS 300 에 도착한 메세지에는 <code>160.10.0.0/16</code> (AS 100) 에 대해 AS-path 가 <code>200 100</code> 으로 되어 있고, 이것은 AS 300 에서 AS 100 으로 가기 위해서는 AS 200 -> AS 100 의 경로를 타야 한다는 것을 의미한다.</li>
+<li>이 AS-path 값은 어떤 BGP update msg 를 전파할 때 모든 NLRI 의 AS-path 에 자신의 ASN 을 넣어주는 것으로 설정하게 된다.</li>
+</ul>
+</li>
+<li><em>Next-hop</em> 은 어떤 NLRI 의 AS 에 보내기 위해 “지금 당장에” 패킷을 보내야 할 BGP peer IP 을 의미한다.
+<ul>
+<li>위의 예시에서는 <code>160.10.0.0/16</code> (AS 100) 으로 패킷을 보내기 위해서는 AS 300 입장에서는 AS 200 의 라우터 C (<code>192.10.1.1</code>) 로 패킷을 보내야 한 다는 것을 보여주고 있다.</li>
+<li>따라서 BGP peer 에게 update msg 를 전파할 때에는, 이 값을 BGP update msg 가 빠져나가는 본인 AS 의 Router IP 로 적으면 되는 것.</li>
+<li>다만, 이 Next-hop 은 iBGP 통신에서는 바뀌지 않는다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="unfeasible-withdrawn-route">Unfeasible (Withdrawn) route<a aria-hidden="true" tabindex="-1" href="#unfeasible-withdrawn-route" class="internal"> §</a></h2>
+<p><img src="../../../images/Pasted-image-20240529120748.png" width="auto" height="auto"/></p>
+<ul>
+<li>한 AS 의 NLRI 에 해당하는 네트워크 대역이 다운되어, 여기로 패킷을 보내지 마라는 것을 전파하는 것은 <em>Unfeasible (Withdrawn) route</em> field 를 활용한다.</li>
+<li>BGP update msg 에는 이 field 가 있어 주변으로 전파되며 이 NLRI 를 무효화 시킨다.</li>
+</ul>
+<h2 id="routing-information-base-rib">Routing Information Base (RIB)<a aria-hidden="true" tabindex="-1" href="#routing-information-base-rib" class="internal"> §</a></h2>
+<ul>
+<li>BGP update msg 로 외부에서 오거나 IGP/iBGP 로 내부에서 온 route 정보는 <em>Routing Information Base</em> (<em>RIB</em>) 에 정리된다.</li>
+<li>RIB 에는 대강 아래와 같은 형식으로 정리된다:</li>
+</ul>
+<p><img src="../../../images/Pasted-image-20240529121913.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 맨 처음에 있는 것은 <em>BGP Status Code</em> 이다.
+<ul>
+<li>몇가지만 보면</li>
+<li><code>*</code>: Valid - 유효한 path 이다.</li>
+<li><code>></code>: Best - best path 로서, routing table 에 추가되었다.</li>
+<li><code>r</code>: RIB failure - BGP 로 받은 path 지만, 더 좋은 path 가 있어 routing table 에 넣지는 않았다.</li>
+<li><code>i</code>: Internal - iBGP 로부터 받은 path 이다.</li>
+</ul>
+</li>
+<li>Network 는 IP prefix 이고 Next-hop 항목은 위에서 설명했으니까 넘어가고</li>
+<li>Path 는 AS-path 를 의미하는데, 그냥 ASN 이 적혀있으면 위에서 설명한 것처럼 해당 AS 로부터 왔다는 의미이고, 추가적으로
+<ul>
+<li><code>i</code>: IGP 로 전달된 것, 즉 본인 AS 내부의 라우터가 보내온 것이라는 의미다.</li>
+<li><code>?</code>: IGP 를 iBGP 로 전달된 것, 즉 본인 AS 내부의 라우터가 보내온 메세지 (IGP) 를 다른 BG 가 다시 보내온 것 (iBGP) 라는 의미다.</li>
+</ul>
+</li>
+<li>이 RIB 에서 Best path 를 선택하고, 그 중에서도 (1) prefix/length 가 unique 하고 (2) AD 가 가장 짧은 것을 Routing table 에 추가하게 된다.</li>
+</ul>
+<h2 id="inout">In/Out<a aria-hidden="true" tabindex="-1" href="#inout" class="internal"> §</a></h2>
+<ul>
+<li>AS 200 이 AS 100 으로부터 BGP update msg 를 받아 주변으로 뿌리는 상황을 생각해 보자.</li>
+</ul>
+<h3 id="in-process">In-process<a aria-hidden="true" tabindex="-1" href="#in-process" class="internal"> §</a></h3>
+<p><img src="../../../images/Pasted-image-20240529123340.png" width="auto" height="auto"/></p>
+<ul>
+<li>우선 BGP update msg 가 접수되면 이것을 RIB 에 넣고 여러 Status 값들을 설정해 준다.</li>
+<li>따라서 IGP 로부터 받은 route 두개 (<code>160.10.1.0/24</code>, <code>160.10.3.0/24</code>) 에 추가적으로 <code>173.21.0.0/16</code> 이 등록된다.</li>
+</ul>
+<h3 id="out-process">Out-process<a aria-hidden="true" tabindex="-1" href="#out-process" class="internal"> §</a></h3>
+<p><img src="../../../images/Pasted-image-20240529123358.png" width="auto" height="auto"/></p>
+<ul>
+<li>BGP update msg 를 뿌릴 때에는 RIB 에 있는 route 들을 뿌리는데
+<ul>
+<li>Best path 만 전파하는건지 아니면 Routing table 에 추가한 것까지 전파하는 건지는 모르겠는데 아마 best path 를 전파할 것 같음.</li>
+</ul>
+</li>
+<li>Path 에 본인의 ASN (AS 200) 을 추가하여 뿌리게 되는 것.
+<ul>
+<li>IGP route (<code>i</code>) 의 경우에는 당연히 본인에게 속한 것이기 때문에 본인의 ASN (AS 200) 로 바뀐다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="administrative-distance-ad">Administrative Distance (AD)<a aria-hidden="true" tabindex="-1" href="#administrative-distance-ad" class="internal"> §</a></h2>
+<p><img src="../../../images/Pasted-image-20240529130410.png" width="auto" height="auto"/></p>
+<ul>
+<li><em>Administrative Distance</em> (<em>AD</em>) 혹은 <em>Protocol Distance</em> 는 같은 AS 로 향하는 여러 route 들 중에 하나를 결정해야 할 때 “프로토콜 적인 측면” 에서 점수를 매기는 방법이다.
+<ul>
+<li>즉, 이 route 가 어떤 방법으로 라우터에 제공되었냐에 따라 다르게 점수를 메기고, route 선택에 사용하는 것.</li>
+</ul>
+</li>
+<li>각 protocol 에 대한 점수는 위 그림과 같고, 점수가 낮을수록 좋은거디.</li>
+</ul>
+<h2 id="multi-exit-discriminator-med">Multi-Exit Discriminator (MED)<a aria-hidden="true" tabindex="-1" href="#multi-exit-discriminator-med" class="internal"> §</a></h2>
+<ul>
+<li>한 AS 에 대해 BGP peer 로 가는 방법이 여러개일 때, 그 중에서 어떤 방법을 선호할 것인지를 명시하는 것.</li>
+<li>점수가 낮을수록 좋다.</li>
+</ul>
+<h2 id="local-preference">Local Preference<a aria-hidden="true" tabindex="-1" href="#local-preference" class="internal"> §</a></h2>
+<ul>
+<li>뭐 비즈니스적인 이유와 같은 정책으로 인해 route preference 를 조정해야 할 때 사용된다.</li>
+<li>즉, Static preference 이며 우선순위도 제일 높다.</li>
+<li>이 점수는 높을수록 좋다.</li>
+</ul>
+<h2 id="origin">Origin<a aria-hidden="true" tabindex="-1" href="#origin" class="internal"> §</a></h2>
+<ul>
+<li>Route 가 어떤 방법으로 라우터에게 제공되었는지? AD 랑 뭐가 다르노</li>
+</ul>
+<h2 id="community">Community<a aria-hidden="true" tabindex="-1" href="#community" class="internal"> §</a></h2>
+<ul>
+<li>Desctination 을 group 으로 관리하는 tag (마치 k8s 의 label 과 같은) 이다.</li>
+</ul>
+<h2 id="bgp-synchronization">BGP Synchronization<a aria-hidden="true" tabindex="-1" href="#bgp-synchronization" class="internal"> §</a></h2>
+<p><img src="../../../images/Pasted-image-20240529131724.png" width="auto" height="auto"/></p>
+<ul>
+<li>만일 AS 209 의 NLRI 35/8 이 AS 1880 의 라우터 B 로 전파되었다고 해보자.</li>
+<li>이때 AS 1880 의 라우터 A, B 는 iBGP peer 관계에 있다면 A 로 전달될 것이고, A 는 이것을 AS 690 의 D 한테도 알려줄 것이다.
+<ul>
+<li>다만 A 와 B 는 직접적으로 연결되어 있지는 않고, 라우터 C 에 의해 간접적으로 연결되어 있다.</li>
+</ul>
+</li>
+<li>그럼 AS 690 에서 35/8 로 보내고자 한다면, D 에서 A 로 보내게 될 것이고, 그럼 A 는 C 로 보내게 될 것이다.</li>
+<li>근데 문제는 C 는 이 35/8 에 대한 경로는 모른다는 것이다</li>
+</ul>
+<h2 id="best-path">Best path<a aria-hidden="true" tabindex="-1" href="#best-path" class="internal"> §</a></h2>
+<ul>
+<li>BGP 에서 Best path 를 결정하는 것은 다음과 같은 순서대로 이루어진다
+<ul>
+<li>Local preference 가 높은 것</li>
+<li>AS-path 가 짧은 것</li>
+<li>Origin type 이 작은 것</li>
+<li>MED 가 작은 것</li>
+<li>Next hop 으로 가기 위한 IGP 의 비용이 작은 것</li>
+<li>Next hop 의 router id 가 작은 것</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#border-gateway-protocol-bgp" data-for="border-gateway-protocol-bgp">Border Gateway Protocol, BGP</a></li><li class="depth-0"><a href="#ebgp-ibgp" data-for="ebgp-ibgp">eBGP, iBGP</a></li><li class="depth-0"><a href="#bgp-작동-원리" data-for="bgp-작동-원리">BGP 작동 원리</a></li><li class="depth-1"><a href="#용어들" data-for="용어들">용어들</a></li><li class="depth-1"><a href="#간단-요약" data-for="간단-요약">간단 요약</a></li><li class="depth-0"><a href="#as-path-next-hop" data-for="as-path-next-hop">AS-path, Next Hop</a></li><li class="depth-0"><a href="#unfeasible-withdrawn-route" data-for="unfeasible-withdrawn-route">Unfeasible (Withdrawn) route</a></li><li class="depth-0"><a href="#routing-information-base-rib" data-for="routing-information-base-rib">Routing Information Base (RIB)</a></li><li class="depth-0"><a href="#inout" data-for="inout">In/Out</a></li><li class="depth-1"><a href="#in-process" data-for="in-process">In-process</a></li><li class="depth-1"><a href="#out-process" data-for="out-process">Out-process</a></li><li class="depth-0"><a href="#administrative-distance-ad" data-for="administrative-distance-ad">Administrative Distance (AD)</a></li><li class="depth-0"><a href="#multi-exit-discriminator-med" data-for="multi-exit-discriminator-med">Multi-Exit Discriminator (MED)</a></li><li class="depth-0"><a href="#local-preference" data-for="local-preference">Local Preference</a></li><li class="depth-0"><a href="#origin" data-for="origin">Origin</a></li><li class="depth-0"><a href="#community" data-for="community">Community</a></li><li class="depth-0"><a href="#bgp-synchronization" data-for="bgp-synchronization">BGP Synchronization</a></li><li class="depth-0"><a href="#best-path" data-for="best-path">Best path</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../archives/ticomnet.spring.2024.cse.snu.ac.kr/3.-BGP" class="internal">3. BGP</a></li><li><a href="../../../gardens/network/(Garden)-Network,-Protocol" class="internal">(Garden) Network, Protocol</a></li><li><a href="../../../gardens/network/bgp/terms/Autonomous-System,-AS-(BGP)" class="internal">Autonomous System, AS (BGP)</a></li><li><a href="../../../gardens/network/bgp/terms/External-Gateway-Protocol,-EGP-(BGP)" class="internal">External Gateway Protocol, EGP (BGP)</a></li><li><a href="../../../gardens/network/bgp/terms/Resource-Public-Key-Infrastructure,-RPKI-(BGP)" class="internal">Resource Public Key Infrastructure, RPKI (BGP)</a></li><li><a href="../../../gardens/network/bgp/terms/Route-Hijack-Attack-(BGP)" class="internal">Route Hijack Attack (BGP)</a></li><li><a href="../../../gardens/network/bgp/terms/Route-Leak-(BGP)" class="internal">Route Leak (BGP)</a></li><li><a href="../../../gardens/network/terms/Classless-Inter-Domain-Routing,-CIDR-(Network)" class="internal">Classless Inter-Domain Routing, CIDR (Network)</a></li><li><a href="../../../gardens/network/terms/Split-Horizon-Problem,-Route-Loop-(Network)" class="internal">Split Horizon Problem, Route Loop (Network)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../postscript.js" type="module"></script></html>

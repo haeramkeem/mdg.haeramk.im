@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html><head><title>09. HTML API</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="09. HTML API"/><meta property="og:description" content="충남대학교 컴퓨터공학과 이규철 교수님의 &amp;quot;웹 프로그래밍&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Drag &amp;amp; Drop § Overview § Element to drag § 태그의 draggable 속성이 true 로 되어있어야 함 : &amp;lt;tag draggable=&amp;quot;true&amp;quot;&amp;gt; ongradstart 속성에 드래그를 시작할때 호출할 함수를 입력하여 드래그하려는 놈의 id를 Event."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 이규철 교수님의 &amp;quot;웹 프로그래밍&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Drag &amp;amp; Drop § Overview § Element to drag § 태그의 draggable 속성이 true 로 되어있어야 함 : &amp;lt;tag draggable=&amp;quot;true&amp;quot;&amp;gt; ongradstart 속성에 드래그를 시작할때 호출할 함수를 입력하여 드래그하려는 놈의 id를 Event."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/09.-HTML-API"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">09. HTML API</h1><p class="content-meta ">Jul 29, 2024, 5 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 이규철 교수님의 &quot;웹 프로그래밍&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="drag--drop">Drag &amp; Drop<a aria-hidden="true" tabindex="-1" href="#drag--drop" class="internal"> §</a></h2>
+<h3 id="overview">Overview<a aria-hidden="true" tabindex="-1" href="#overview" class="internal"> §</a></h3>
+<h3 id="element-to-drag">Element to drag<a aria-hidden="true" tabindex="-1" href="#element-to-drag" class="internal"> §</a></h3>
+<ul>
+<li>태그의 <code>draggable</code> 속성이 <code>true</code> 로 되어있어야 함 : <code>&lt;tag draggable=&quot;true&quot;></code></li>
+<li><code>ongradstart</code> 속성에 드래그를 시작할때 호출할 함수를 입력하여 드래그하려는 놈의 id를 <code>Event.dataTransfer</code> 에 저장함</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="html" data-theme="default"><code data-language="html" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-string-expression);">script</span><span style="color:var(--shiki-color-text);">></span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">function</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">_func</span><span style="color:var(--shiki-color-text);">(event) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">event</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">dataTransfer</span><span style="color:var(--shiki-token-function);">.setData</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;text&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> #id);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">&lt;/</span><span style="color:var(--shiki-token-string-expression);">script</span><span style="color:var(--shiki-color-text);">></span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-string-expression);">tag</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">ondragstart</span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-token-string-expression);">&quot;_func(event)&quot;</span><span style="color:var(--shiki-color-text);">></span></span></code></pre></div>
+<h3 id="element-for-drop">Element for drop<a aria-hidden="true" tabindex="-1" href="#element-for-drop" class="internal"> §</a></h3>
+<ul>
+<li>드래그된놈이 위에 있을때 <code>ondragover</code> event가 계속 발생하고 그때마다 드래그를 허용해줘야됨
+<ul>
+<li>이건 <code>Event.preventDefault()</code> 로 가능함</li>
+</ul>
+</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="html" data-theme="default"><code data-language="html" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-string-expression);">script</span><span style="color:var(--shiki-color-text);">></span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">function</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">_func</span><span style="color:var(--shiki-color-text);">(event) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">event</span><span style="color:var(--shiki-token-function);">.preventDefault</span><span style="color:var(--shiki-color-text);">();</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">&lt;/</span><span style="color:var(--shiki-token-string-expression);">script</span><span style="color:var(--shiki-color-text);">></span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-string-expression);">tag</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">ondragover</span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-token-string-expression);">&quot;_func(event)&quot;</span><span style="color:var(--shiki-color-text);">></span></span></code></pre></div>
+<ul>
+<li>드롭되었을때 <code>ondrop</code> event가 발생하고 이때 <code>Event.dataTransfer</code> 에 저장한 정보를 갖고옴</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="html" data-theme="default"><code data-language="html" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-string-expression);">script</span><span style="color:var(--shiki-color-text);">></span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">function</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">_func</span><span style="color:var(--shiki-color-text);">(event) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">event</span><span style="color:var(--shiki-token-function);">.preventDefault</span><span style="color:var(--shiki-color-text);">();</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">const</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">_id</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">event</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">dataTransfer</span><span style="color:var(--shiki-token-function);">.getData</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;text&quot;</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">event</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">target</span><span style="color:var(--shiki-token-function);">.appendChild</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">document</span><span style="color:var(--shiki-token-function);">.getElementById</span><span style="color:var(--shiki-color-text);">(_id));</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">&lt;/</span><span style="color:var(--shiki-token-string-expression);">script</span><span style="color:var(--shiki-color-text);">></span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-string-expression);">tag</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">ondrop</span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-token-string-expression);">&quot;_func(event)&quot;</span><span style="color:var(--shiki-color-text);">></span></span></code></pre></div>
+<h3 id="example">Example<a aria-hidden="true" tabindex="-1" href="#example" class="internal"> §</a></h3>
+<p><a href="http://www.w3schools.com/html/tryit.asp?filename=tryhtml5_draganddrop" class="external">Drag &amp; Drop</a></p>
+<h2 id="web-storage">Web storage<a aria-hidden="true" tabindex="-1" href="#web-storage" class="internal"> §</a></h2>
+<h3 id="overview-1">Overview<a aria-hidden="true" tabindex="-1" href="#overview-1" class="internal"> §</a></h3>
+<ul>
+<li><strong>Cookie</strong>는 작은 데이터를 저장하고 서버로 Request를 날릴때 같이 날라감</li>
+</ul>
+<p><img src="../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/images/09_c1db0964d2f443b7b52fc9d8fb8a5aac/image1.png" alt="09%20-%20HTML%20API%20c1db0964d2f443b7b52fc9d8fb8a5aac/image1.png"/></p>
+<ul>
+<li><strong>WebStorage</strong>는 많은 데이터를 저장하고 서버로 날라가지 않음
+<ul>
+<li><strong>LocalStorage</strong>는 도메인 기준으로 데이터가 저장되고 브라우저를 닫아도 없어지지 않아 장기적인 데이터 보관을 위한 것</li>
+<li><strong>SessionStorage</strong>는 세션(탭)기준으로 데이터가 저장되고 탭을 닫으면 없어져 단기적인 데이터 보관을 위한 것</li>
+</ul>
+</li>
+</ul>
+<h3 id="usage">Usage<a aria-hidden="true" tabindex="-1" href="#usage" class="internal"> §</a></h3>
+<ul>
+<li>일단 브라우저가 Storage를 지원하는지 체크</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">typeof</span><span style="color:var(--shiki-color-text);">(Storage) </span><span style="color:var(--shiki-token-keyword);">!==</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;undefined&quot;</span><span style="color:var(--shiki-color-text);">) { </span><span style="color:var(--shiki-token-comment);">/* ... */</span><span style="color:var(--shiki-color-text);"> }</span></span></code></pre></div>
+<ul>
+<li>값 저장</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">localStorage</span><span style="color:var(--shiki-token-function);">.setItem</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;key&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;value&quot;</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">sessionStorage</span><span style="color:var(--shiki-token-function);">.setItem</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;key&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;value&quot;</span><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<ul>
+<li>값 조회</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">localStorage</span><span style="color:var(--shiki-token-function);">.getItem</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;key&quot;</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">sessionStorage</span><span style="color:var(--shiki-token-function);">.getItem</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;key&quot;</span><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<ul>
+<li>값 삭제</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">localStorage</span><span style="color:var(--shiki-token-function);">.removeItem</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;key&quot;</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">sessionStorage</span><span style="color:var(--shiki-token-function);">.removeItem</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;key&quot;</span><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<ul>
+<li>값 전부 삭제</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">localStorage</span><span style="color:var(--shiki-token-function);">.clear</span><span style="color:var(--shiki-color-text);">();</span></span>
+<span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">sessionStorage</span><span style="color:var(--shiki-token-function);">.clear</span><span style="color:var(--shiki-color-text);">();</span></span></code></pre></div>
+<h3 id="example-1">Example<a aria-hidden="true" tabindex="-1" href="#example-1" class="internal"> §</a></h3>
+<ul>
+<li><a href="http://www.w3schools.com/html/tryit.asp?filename=tryhtml5_webstorage_local" class="external">Local Storage</a></li>
+<li><a href="http://www.w3schools.com/html/tryit.asp?filename=tryhtml5_webstorage_session" class="external">Session Storage</a></li>
+</ul>
+<h2 id="web-worker">Web worker<a aria-hidden="true" tabindex="-1" href="#web-worker" class="internal"> §</a></h2>
+<h3 id="overview-2">Overview<a aria-hidden="true" tabindex="-1" href="#overview-2" class="internal"> §</a></h3>
+<ul>
+<li>시간이 오래걸리는 작업을 백그라운드로 돌리는 것</li>
+</ul>
+<p><img src="../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/images/09_c1db0964d2f443b7b52fc9d8fb8a5aac/image2.png" alt="09%20-%20HTML%20API%20c1db0964d2f443b7b52fc9d8fb8a5aac/image2.png"/></p>
+<ul>
+<li>DOM을 조작해 UI를 변경하는 것을 직접적으로 할 수 없음
+<ul>
+<li>UI Thread로 보내 거기서 조작하도록 해야 한다</li>
+</ul>
+</li>
+<li><strong>전용 워커(Dedicated worker)</strong> 는 워커를 생성한 페이지에서만 돌아가는 것</li>
+<li><strong>공유 워커(Shared worker)</strong> 는 페이지와 무관하게 돌아가는 것</li>
+</ul>
+<h3 id="usage-1">Usage<a aria-hidden="true" tabindex="-1" href="#usage-1" class="internal"> §</a></h3>
+<ul>
+<li>Worker 인스턴스를 담을 전역변수 선언</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">var</span><span style="color:var(--shiki-color-text);"> w;</span></span></code></pre></div>
+<ul>
+<li>일단 브라우저가 Worker를 지원하는지 체크</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">typeof</span><span style="color:var(--shiki-color-text);">(Worker) </span><span style="color:var(--shiki-token-keyword);">!==</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;undefined&quot;</span><span style="color:var(--shiki-color-text);">) { </span><span style="color:var(--shiki-token-comment);">/* ... */</span><span style="color:var(--shiki-color-text);"> }</span></span></code></pre></div>
+<ul>
+<li>워커 객체 생성</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">typeof</span><span style="color:var(--shiki-color-text);">(w) </span><span style="color:var(--shiki-token-keyword);">!==</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">undefined</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	w </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">new</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">Worker</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;path-to-js-file.js&quot;</span><span style="color:var(--shiki-color-text);">)</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
+<ul>
+<li>워커에서 값을 보낼때는 <code>postMessage()</code> 를 사용</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">postMessage</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;data-to-send&quot;</span><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<ul>
+<li>UI Thread에서 받았을때는 onmessage event가 발생함</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">w</span><span style="color:var(--shiki-color-text);">.</span><span style="color:var(--shiki-token-function);">onmessage</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> (event) </span><span style="color:var(--shiki-token-keyword);">=></span><span style="color:var(--shiki-color-text);"> { </span><span style="color:var(--shiki-token-constant);">console</span><span style="color:var(--shiki-token-function);">.log</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">event</span><span style="color:var(--shiki-color-text);">.data); }</span></span></code></pre></div>
+<ul>
+<li>Worker 종료시키기</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">w</span><span style="color:var(--shiki-token-function);">.terminate</span><span style="color:var(--shiki-color-text);">();</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">w </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">undefined</span><span style="color:var(--shiki-color-text);">;</span></span></code></pre></div>
+<h3 id="example-2">Example<a aria-hidden="true" tabindex="-1" href="#example-2" class="internal"> §</a></h3>
+<ul>
+<li><a href="https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_webworker" class="external">Dedicated Worker</a></li>
+<li><a href="http://tutorials.jenkov.com/html5/web-workers.html#sharedworker" class="external">Shared Worker</a></li>
+</ul>
+<h2 id="geolocation">Geolocation<a aria-hidden="true" tabindex="-1" href="#geolocation" class="internal"> §</a></h2>
+<h3 id="overview-3">Overview<a aria-hidden="true" tabindex="-1" href="#overview-3" class="internal"> §</a></h3>
+<ul>
+<li>브라우저가 지원하는지 확인</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">navigator</span><span style="color:var(--shiki-color-text);">.geolocation) { </span><span style="color:var(--shiki-token-comment);">/* ... */</span><span style="color:var(--shiki-color-text);"> }</span></span></code></pre></div>
+<ul>
+<li>현재위치 한번 받아오기</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">navigator</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">geolocation</span><span style="color:var(--shiki-token-function);">.getCurrentPosition</span><span style="color:var(--shiki-color-text);">((position) </span><span style="color:var(--shiki-token-keyword);">=></span><span style="color:var(--shiki-color-text);"> {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">console</span><span style="color:var(--shiki-token-function);">.log</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">position</span><span style="color:var(--shiki-color-text);">.</span><span style="color:var(--shiki-token-constant);">coords</span><span style="color:var(--shiki-color-text);">.latitude);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">console</span><span style="color:var(--shiki-token-function);">.log</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">position</span><span style="color:var(--shiki-color-text);">.</span><span style="color:var(--shiki-token-constant);">coords</span><span style="color:var(--shiki-color-text);">.longitude);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">});</span></span></code></pre></div>
+<ul>
+<li>현재위치 주기적으로 받아오기</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">navigator</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">geolocation</span><span style="color:var(--shiki-token-function);">.watchPosition</span><span style="color:var(--shiki-color-text);">((position) </span><span style="color:var(--shiki-token-keyword);">=></span><span style="color:var(--shiki-color-text);"> {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">console</span><span style="color:var(--shiki-token-function);">.log</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">position</span><span style="color:var(--shiki-color-text);">.</span><span style="color:var(--shiki-token-constant);">coords</span><span style="color:var(--shiki-color-text);">.latitude);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">console</span><span style="color:var(--shiki-token-function);">.log</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">position</span><span style="color:var(--shiki-color-text);">.</span><span style="color:var(--shiki-token-constant);">coords</span><span style="color:var(--shiki-color-text);">.longitude);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">});</span></span></code></pre></div>
+<ul>
+<li>주기적으로 받아오는기 취소</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">navigator</span><span style="color:var(--shiki-token-function);">.</span><span style="color:var(--shiki-token-constant);">geolocation</span><span style="color:var(--shiki-token-function);">.clearWatch</span><span style="color:var(--shiki-color-text);">();</span></span></code></pre></div>
+<h3 id="example-3">Example<a aria-hidden="true" tabindex="-1" href="#example-3" class="internal"> §</a></h3>
+<ul>
+<li><a href="https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_geolocation" class="external">Geolocation</a></li>
+</ul>
+<h2 id="file">File<a aria-hidden="true" tabindex="-1" href="#file" class="internal"> §</a></h2>
+<h3 id="overview-4">Overview<a aria-hidden="true" tabindex="-1" href="#overview-4" class="internal"> §</a></h3>
+<ul>
+<li>파일을 수정할 수는 없고 오직 읽기만 가능</li>
+</ul>
+<h3 id="document">Document<a aria-hidden="true" tabindex="-1" href="#document" class="internal"> §</a></h3>
+<h3 id="file-1">File<a aria-hidden="true" tabindex="-1" href="#file-1" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/images/09_c1db0964d2f443b7b52fc9d8fb8a5aac/image3.png" alt="09%20-%20HTML%20API%20c1db0964d2f443b7b52fc9d8fb8a5aac/image3.png"/></p>
+<h3 id="filereader">FileReader<a aria-hidden="true" tabindex="-1" href="#filereader" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/images/09_c1db0964d2f443b7b52fc9d8fb8a5aac/image4.png" alt="09%20-%20HTML%20API%20c1db0964d2f443b7b52fc9d8fb8a5aac/image4.png"/></p>
+<h2 id="editable">Editable<a aria-hidden="true" tabindex="-1" href="#editable" class="internal"> §</a></h2>
+<h3 id="overview-5">Overview<a aria-hidden="true" tabindex="-1" href="#overview-5" class="internal"> §</a></h3>
+<ul>
+<li>특정 요소에 text를 적을 수 있게 해줌</li>
+</ul>
+<h3 id="usage-2">Usage<a aria-hidden="true" tabindex="-1" href="#usage-2" class="internal"> §</a></h3>
+<ul>
+<li><code>&lt;tag contenteditable></code> 요소 하나를 편집 가능하도록 만들기</li>
+<li>페이지 전체를 편집 가능하도록 만들기</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">window</span><span style="color:var(--shiki-color-text);">.</span><span style="color:var(--shiki-token-function);">onload</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> () </span><span style="color:var(--shiki-token-keyword);">=></span><span style="color:var(--shiki-color-text);"> {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">document</span><span style="color:var(--shiki-color-text);">.designMode </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;on&quot;</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
+<ul>
+<li>텍스트 입력 모드 바꾸기</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);">// 앞으로 입력되는 글자를 굵게 표시</span></span>
+<span data-line><span style="color:var(--shiki-token-constant);">document</span><span style="color:var(--shiki-token-function);">.execCommand</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;bold&quot;</span><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<h3 id="document-1">Document<a aria-hidden="true" tabindex="-1" href="#document-1" class="internal"> §</a></h3>
+<ul>
+<li><a href="https://www.w3schools.com/jsref/met_document_execcommand.asp" class="external">HTML DOM execCommand() Method</a></li>
+</ul>
+<h2 id="web-socket">Web socket<a aria-hidden="true" tabindex="-1" href="#web-socket" class="internal"> §</a></h2>
+<h3 id="overview-6">Overview<a aria-hidden="true" tabindex="-1" href="#overview-6" class="internal"> §</a></h3>
+<ul>
+<li>웹 소켓은 http를 이용하는 것이 아닌 ws를 이용하여 서버로 데이터를 주고받는 프로토콜</li>
+<li>실시간 양방향 통신을 위한 것 - 채팅어플만들때 많이 이용한댄다</li>
+</ul>
+<h3 id="usage-3">Usage<a aria-hidden="true" tabindex="-1" href="#usage-3" class="internal"> §</a></h3>
+<ul>
+<li>객체 생성</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">const</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">soc</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">new</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">WebSocket</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;address-to-server&quot;</span><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<ul>
+<li>송신</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">soc</span><span style="color:var(--shiki-token-function);">.send</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-string-expression);">&quot;data-to send&quot;</span><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<ul>
+<li>수신</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="js" data-theme="default"><code data-language="js" data-theme="default"><span data-line><span style="color:var(--shiki-token-constant);">ws</span><span style="color:var(--shiki-color-text);">.</span><span style="color:var(--shiki-token-function);">onmessage</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> (event) </span><span style="color:var(--shiki-token-keyword);">=></span><span style="color:var(--shiki-color-text);"> {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">console</span><span style="color:var(--shiki-token-function);">.log</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">event</span><span style="color:var(--shiki-color-text);">.data);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">};</span></span></code></pre></div>
+<h3 id="document-2">Document<a aria-hidden="true" tabindex="-1" href="#document-2" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/images/09_c1db0964d2f443b7b52fc9d8fb8a5aac/image5.png" alt="09%20-%20HTML%20API%20c1db0964d2f443b7b52fc9d8fb8a5aac/image5.png"/></p>
+<h3 id="example-4">Example<a aria-hidden="true" tabindex="-1" href="#example-4" class="internal"> §</a></h3>
+<ul>
+<li><a href="https://ko.javascript.info/websocket#ref-663" class="external">Web Socket Example</a></li>
+</ul>
+<h2 id="server-sent-event">Server Sent Event<a aria-hidden="true" tabindex="-1" href="#server-sent-event" class="internal"> §</a></h2>
+<ul>
+<li>SetInterval같은거 안쓰고 일정 시간간격을 두고 계속 Request를 보내서 값을 가져오는 방법</li>
+<li><strong>Event Source</strong>라는 객체를 이용</li>
+</ul>
+<p><img src="../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/images/09_c1db0964d2f443b7b52fc9d8fb8a5aac/image6.png" alt="09%20-%20HTML%20API%20c1db0964d2f443b7b52fc9d8fb8a5aac/image6.png"/></p>
+<ul>
+<li>이렇게 하면 되고</li>
+</ul>
+<p><img src="../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/images/09_c1db0964d2f443b7b52fc9d8fb8a5aac/image7.png" alt="09%20-%20HTML%20API%20c1db0964d2f443b7b52fc9d8fb8a5aac/image7.png"/></p>
+<ul>
+<li>이런 이벤트들이 있댄다</li>
+</ul>
+<h3 id="example-5">Example<a aria-hidden="true" tabindex="-1" href="#example-5" class="internal"> §</a></h3>
+<ul>
+<li><a href="http://www.w3schools.com/html/tryit.asp?filename=tryhtml5_sse" class="external">EventSource</a></li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#drag--drop" data-for="drag--drop">Drag &amp; Drop</a></li><li class="depth-1"><a href="#overview" data-for="overview">Overview</a></li><li class="depth-1"><a href="#element-to-drag" data-for="element-to-drag">Element to drag</a></li><li class="depth-1"><a href="#element-for-drop" data-for="element-for-drop">Element for drop</a></li><li class="depth-1"><a href="#example" data-for="example">Example</a></li><li class="depth-0"><a href="#web-storage" data-for="web-storage">Web storage</a></li><li class="depth-1"><a href="#overview-1" data-for="overview-1">Overview</a></li><li class="depth-1"><a href="#usage" data-for="usage">Usage</a></li><li class="depth-1"><a href="#example-1" data-for="example-1">Example</a></li><li class="depth-0"><a href="#web-worker" data-for="web-worker">Web worker</a></li><li class="depth-1"><a href="#overview-2" data-for="overview-2">Overview</a></li><li class="depth-1"><a href="#usage-1" data-for="usage-1">Usage</a></li><li class="depth-1"><a href="#example-2" data-for="example-2">Example</a></li><li class="depth-0"><a href="#geolocation" data-for="geolocation">Geolocation</a></li><li class="depth-1"><a href="#overview-3" data-for="overview-3">Overview</a></li><li class="depth-1"><a href="#example-3" data-for="example-3">Example</a></li><li class="depth-0"><a href="#file" data-for="file">File</a></li><li class="depth-1"><a href="#overview-4" data-for="overview-4">Overview</a></li><li class="depth-1"><a href="#document" data-for="document">Document</a></li><li class="depth-1"><a href="#file-1" data-for="file-1">File</a></li><li class="depth-1"><a href="#filereader" data-for="filereader">FileReader</a></li><li class="depth-0"><a href="#editable" data-for="editable">Editable</a></li><li class="depth-1"><a href="#overview-5" data-for="overview-5">Overview</a></li><li class="depth-1"><a href="#usage-2" data-for="usage-2">Usage</a></li><li class="depth-1"><a href="#document-1" data-for="document-1">Document</a></li><li class="depth-0"><a href="#web-socket" data-for="web-socket">Web socket</a></li><li class="depth-1"><a href="#overview-6" data-for="overview-6">Overview</a></li><li class="depth-1"><a href="#usage-3" data-for="usage-3">Usage</a></li><li class="depth-1"><a href="#document-2" data-for="document-2">Document</a></li><li class="depth-1"><a href="#example-4" data-for="example-4">Example</a></li><li class="depth-0"><a href="#server-sent-event" data-for="server-sent-event">Server Sent Event</a></li><li class="depth-1"><a href="#example-5" data-for="example-5">Example</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/(충남대)-웹-프로그래밍-강의록" class="internal">(충남대) 웹 프로그래밍 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

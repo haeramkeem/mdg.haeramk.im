@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html><head><title>12. 재귀함수</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="12. 재귀함수"/><meta property="og:description" content="충남대학교 컴퓨터공학과 이성호 교수님의 &amp;quot;프로그래밍 언어 개론&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 직간접 호출 § 직접호출(Direct Recursion) : 함수 A가 자기자신인 A를 다시 호출하는것 간접호출(Indirect Recursion) : 함수 A가 일단 다른 함수 B를 먼저 호출하고 그 함수 B가 A를 호출하는것 RCFVAE § RCFVAE는 함수 재귀호출을 지원하는 언어이다 원래 CFVAE에서는 &amp;lt;ㅅx."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 이성호 교수님의 &amp;quot;프로그래밍 언어 개론&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 직간접 호출 § 직접호출(Direct Recursion) : 함수 A가 자기자신인 A를 다시 호출하는것 간접호출(Indirect Recursion) : 함수 A가 일단 다른 함수 B를 먼저 호출하고 그 함수 B가 A를 호출하는것 RCFVAE § RCFVAE는 함수 재귀호출을 지원하는 언어이다 원래 CFVAE에서는 &amp;lt;ㅅx."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/12.-재귀함수"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">12. 재귀함수</h1><p class="content-meta ">Jul 29, 2024, 14 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 이성호 교수님의 &quot;프로그래밍 언어 개론&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="직간접-호출">직간접 호출<a aria-hidden="true" tabindex="-1" href="#직간접-호출" class="internal"> §</a></h2>
+<ul>
+<li><strong>직접호출(Direct Recursion)</strong> : 함수 A가 자기자신인 A를 다시 호출하는것</li>
+<li><strong>간접호출(Indirect Recursion)</strong> : 함수 A가 일단 다른 함수 B를 먼저 호출하고 그 함수 B가 A를 호출하는것</li>
+</ul>
+<h2 id="rcfvae">RCFVAE<a aria-hidden="true" tabindex="-1" href="#rcfvae" class="internal"> §</a></h2>
+<ul>
+<li>RCFVAE는 함수 재귀호출을 지원하는 언어이다</li>
+<li>원래 CFVAE에서는 <code>&lt;ㅅx.e, 시그마></code> 에서 함수 몸체를 계산하는데 필요한 추상메모리가 시그마인데 함수선언시에 이 시그마에 자기자신 함수가 들어있지 않기 때문에 자기자신을 재귀호출할 경우 자기자신은 Free Identifier로 분류되어 Runtime error가 나게 된다</li>
+</ul>
+<h3 id="concrete-syntax">Concrete Syntax<a aria-hidden="true" tabindex="-1" href="#concrete-syntax" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image1.png"/></p>
+<ul>
+<li>일반적인 함수 호출을 지원하는 let fun in구문과 별도로 let rec fun in 구문을 concrete syntax에 추가했다</li>
+</ul>
+<h3 id="abstract-syntax">Abstract Syntax<a aria-hidden="true" tabindex="-1" href="#abstract-syntax" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image2.png"/></p>
+<ul>
+<li>여기에도 마찬가지로 let rec x = e in e 추상문법과 그것을 나타내는 AST를 추가하였다</li>
+</ul>
+<h3 id="bigstep-operational-semantics">Bigstep Operational Semantics<a aria-hidden="true" tabindex="-1" href="#bigstep-operational-semantics" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image3.png"/></p>
+<ul>
+<li>위에꺼가 기존의 일반함수 선언법, 아래꺼가 재귀함수 선언법이다</li>
+<li>일단 재귀함수 호출법에서는 e1을 계산한 결과가 Closure이어야만 하고 그렇지 않은 경우에는 Runtime error를 출력해야 한다</li>
+<li>일단 저 시그마 프라임은 전에 함수를 정의할때처럼 스코프가 함수 내부인, 함수의 몸체를 계산할때 쓰이는 추상메모리 이고</li>
+<li>시그마 투프라임은 재귀함수 호출 구조를 그대로 생각하면 된다
+<ul>
+<li>재귀함수를 정의할 때에 안에 자기자신이 들어가듯이 시그마 투프라임을 정의할 때도 자기자신을 이용하여 재귀적으로 정의한 것</li>
+</ul>
+</li>
+<li>시그마 투프라임 없이 시그마 프라임 하나로만 정의하면 재귀가 한번밖에 돌지 못하는 구조가 된다?
+<ul>
+<li>시그마 투프라임이 없는 경우를 생각해보고 왜 안되는지를 생각할것</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image4.png"/></p>
+<ul>
+<li>이 예시를 보면
+<ul>
+<li>일단 저기 빨간글씨 (-1 &lt; x)는 오타인거같고</li>
+<li><code>시그마 = [sum = &lt;ㅅx.(x&lt;1) 0 (x+(sum(x-1))), 시그마>]</code>의 말뜻은 함수 정의시 시그마에 ”sum = Closure” 를 추가한 시그마를 함수 몸체를 계산할때도 사용하겠다 의 의미가 되는 것이다</li>
+</ul>
+</li>
+</ul>
+<h3 id="ocaml-code">OCaml Code<a aria-hidden="true" tabindex="-1" href="#ocaml-code" class="internal"> §</a></h3>
+<h4 id="1-시그마-투프라임을-그대로-정의해보기">1. 시그마 투프라임을 그대로 정의해보기<a aria-hidden="true" tabindex="-1" href="#1-시그마-투프라임을-그대로-정의해보기" class="internal"> §</a></h4>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image5.png"/></p>
+<ul>
+<li>위처럼 정의하게 되면 우측(RHS - Right Hand Side)의 s’’은 아직 Free Identifier이기 때문에 에러가 난다</li>
+</ul>
+<h4 id="2-rec-키워드-이용해보기">2. Rec 키워드 이용해보기<a aria-hidden="true" tabindex="-1" href="#2-rec-키워드-이용해보기" class="internal"> §</a></h4>
+<ul>
+<li>OCaml에서 함수를 정의할 때 “let 함수이름 인자 = 몸체 in”은 “let 함수이름 = fun 인자 몸체 in”의 Syntactic sugar 이기 때문에 “let rec 무언가 = 무언가 in”도 지원한다는 것을 알 수 있다</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image6.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image6.png"/></p>
+<ul>
+<li>근데 위처럼 정의하면 에러가 난다
+<ul>
+<li>rec 키워드를 사용할때는 조건이 붙기 때문
+<ol>
+<li>일단 RHS가 함수의 정의이고 그 함수의 몸체에서 재귀호출을 하거나</li>
+<li>RHS가 Disjoint Union의 Constructor이고 그의 인자로 재귀호출되며
+<ul>
+<li>이게 무슨말이냐면 위의 예시처럼 ClosureV라는 Disjoint Union(자료형)을 생성하기 위해 “ClosureV (인자)” 형태의 Disjoint Union Constructor (자료형 생성자)를 호출해서 인자를 넣어 ClosureV 자료형의 객체를 생성한것</li>
+</ul>
+</li>
+<li>RHS 가 Function Application 이어서는 안된다</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>위의 예시에서는 세번째 조항때문에 문제가 생기는 것 이다</li>
+</ul>
+<h4 id="3-function-application을-제거해보기">3. Function Application을 제거해보기<a aria-hidden="true" tabindex="-1" href="#3-function-application을-제거해보기" class="internal"> §</a></h4>
+<ul>
+<li>저 insert함수가 그냥 :: 으로 리스트에 추가하는 연산이 전부이기 때문에</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image7.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image7.png"/></p>
+<ul>
+<li>이렇게 표현하면 된다</li>
+<li>하지만 여기서는 이제 에러는 안나지만 Stack Overflow가 일어나게 된다</li>
+<li>왜냐면 Function Application이</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image8.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image8.png"/></p>
+<ul>
+<li>이렇게 정의되었기 때문</li>
+<li>전에 boolean을 생각해보면 boolean을 인자 두개를 받아서 둘 중 하나를 반환하는 함수로 구현을 했는데 이때 반환되지 않는 인자의 값도 계산한다면 낭비일 것이다</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image9.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image9.png"/></p>
+<ul>
+<li>이 예시를 보면 <code>&lt;ㅅy.x, [x → 0]> (sum (-1))</code> 부분에서 y에 (sum (-1))이 담기긴 하지만 반환값은 x이므로 사용되지 않는다
+<ul>
+<li>근데 이제 (sum (-1))을 계산하느라 또 재귀호출이 되고 어차피 -1 &lt; 1이기 때문에 또 0을 반환해야되는데 반환하지도 않을 인자 (sum (-2))를 계산하고</li>
+<li>이런식으로 가다 보니 스택이 터져 오버플로우가 나는 것</li>
+<li>이것을 해결하기 위해 <strong>Expression Freezing</strong> 이 필요하다</li>
+</ul>
+</li>
+</ul>
+<h2 id="expression-freezing-lazy-evaluation">Expression Freezing (Lazy Evaluation)<a aria-hidden="true" tabindex="-1" href="#expression-freezing-lazy-evaluation" class="internal"> §</a></h2>
+<ul>
+<li><strong>Expression Freezing(Lazy Evaluation)</strong> : 어떤 expression을 등장과 동시에 계산하는 것이 아닌 얼려두었다가 값이 필요해지면 그제서야 계산을 하는 방법</li>
+<li>위의 경우처럼 인자의 값 계산을 늦춰 계산할 필요가 없으면 계산하지 않는 것을 지원하기 위해존재한다
+<ul>
+<li>즉, 함수를 먼저 호출하고 인자의 값이 필요해지면 그때 인자의 값을 계산하는 방법</li>
+<li>따라서 <strong>call-by-need</strong> 라고도 부른다</li>
+</ul>
+</li>
+<li>반대개념으로는 <strong>Eager Evaluation</strong> 가 있으며 얘는 반대로 인자를 먼저 계산하고 함수를 호출하는 방식</li>
+<li>대부분의 함수형 언어들은 Eager Evaluation을 주로 사용하지만 이런 Lazy Evaluation또한 지원한다</li>
+</ul>
+<h3 id="예시1">예시1<a aria-hidden="true" tabindex="-1" href="#예시1" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image10.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image10.png"/></p>
+<ul>
+<li>왼쪽이 Eager의 경우고 오른쪽이 Lazy의 경우이다</li>
+<li>보면 “ # 뭐시기 # “가 해당 부분을 얼린다는 의미로</li>
+<li>오른쪽을 보면 # 안의 expression을 계산하기 위해서는 expression 등장 당시의 store도 필요하기 때문에 (나중에 녹여서 계산할랫드니 store가 달라져서 값이 달라지면 안되니까) expression과 store를 같이 얼려놓는 것</li>
+<li>그렇게 인자 두개를 다 얼려놨다가 최종 계산시에 녹여서 계산하게된다</li>
+</ul>
+<h3 id="예시2">예시2<a aria-hidden="true" tabindex="-1" href="#예시2" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image11.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image11.png"/></p>
+<ul>
+<li>아까 무한루프를 돌았던 예시를 다시 보면 0과 sum()을 둘 다 얼려놨다가 마지막에 0을 반환해야되므로 0을 녹여서 반환하는 것을 알 수 있다</li>
+</ul>
+<h3 id="lazy-expression-in-ocaml">Lazy Expression in OCaml<a aria-hidden="true" tabindex="-1" href="#lazy-expression-in-ocaml" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image12.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image12.png"/></p>
+<ul>
+<li><strong>lazy (표현식)</strong> : 으로 표현식을 얼리고</li>
+<li><strong>Lazy.force(변수)</strong> : 로 얼려진 변수를 녹일 수 있다</li>
+</ul>
+<h2 id="expression-freezing을-지원하는-rcfvae">Expression Freezing을 지원하는 RCFVAE<a aria-hidden="true" tabindex="-1" href="#expression-freezing을-지원하는-rcfvae" class="internal"> §</a></h2>
+<ul>
+<li>일단 App의 Semantics를 바꿀 필요가 있고</li>
+<li>얼린 expression도 값이 될 수 있도록 Value domain도 확장시켜줘야 한다</li>
+<li>또한 녹이는 절차도 필요하다 - 값을 꺼내오는 것은 “Id”에서 진행하기 때문에 “Id”의 Semantics도 녹이는 것을 지원하기 위해 변경되어야 한다</li>
+</ul>
+<h3 id="value-domain">Value Domain<a aria-hidden="true" tabindex="-1" href="#value-domain" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image13.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image13.png"/></p>
+<ul>
+<li>얼릴 값과 녹일때 사용하기 위한 얼릴 당시에의 store를 묶은 튜플로 FreezedExpr을 정의하여 추가해준다</li>
+</ul>
+<h3 id="function-application">Function Application<a aria-hidden="true" tabindex="-1" href="#function-application" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image14.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image14.png"/></p>
+<ul>
+<li>값을 바로바로 계산하는 Eager가 아니고 Lazy를 지원해주기 위해 e1을 먼저 Closure로 계산하고 e2를 계산하지 않고 얼려서 x와 매핑하여 시그마에 넣어주는 연산으로 바꿔준다</li>
+</ul>
+<h3 id="id">Id<a aria-hidden="true" tabindex="-1" href="#id" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image15.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image15.png"/></p>
+<ul>
+<li>FreezedExpr가 아니라면 그냥 바로 계산해주고(위에꺼)</li>
+<li>FreezedExpr이라면 거기에서 expression과 store를 꺼내서 얘네들을 계산해서 반환한다</li>
+</ul>
+<h3 id="좀-더-구조적으로-정의">좀 더 구조적으로 정의<a aria-hidden="true" tabindex="-1" href="#좀-더-구조적으로-정의" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image16.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image16.png"/></p>
+<ul>
+<li>Value를 FreezedExpr와 그것이 아닌 NormalValue로 먼저 나누고</li>
+<li>FreezedExpr의 원소인 I는 (e, s)의 형태를 갖고</li>
+<li>NormalValue의 원소인 m은 (정수 or 함수) 인 것으로 정의할 수도 있음</li>
+<li>그것을 가지고 Id를 정의하면 위 그림의 아랫쪽처럼 정의할 수 있다</li>
+<li>저 Id1에서 m대신 v를 쓰면 안된다!! 이렇게 Inference Rule의 Domain을 잘 지켜서 정답써야된다</li>
+</ul>
+<h2 id="recursion-as-syntactic-sugar">Recursion as Syntactic Sugar<a aria-hidden="true" tabindex="-1" href="#recursion-as-syntactic-sugar" class="internal"> §</a></h2>
+<ul>
+<li>일단 <strong>Fixpoint Combinator</strong>를 일아야 한다</li>
+<li><strong>Fixpoint Combinator</strong>의 수식은 다음과 같다</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image17.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image17.png"/></p>
+<ul>
+<li>그리고 이놈의 특징은 다음과 같다</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image18.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image18.png"/></p>
+<ul>
+<li>즉, 임의의 함수 f에 대해 fix f는 f의 <strong>fixed point</strong>이다</li>
+<li>여기서 <strong>fixed point</strong>라는 것은 <strong>x = f(x)</strong> 를 만족하는 x를 의미하고</li>
+<li>따라서 <strong>Fixpoint Combinator</strong>는 임의의 함수 f를 인자로 받아<strong>x = f(x)</strong> 를 만족하는 함수x를 반환하는 함수이다</li>
+<li>뭔말인지 모르것제? 나도 모르겠다</li>
+<li>일단 저 수식이랑 특징만 기억하고 이 아래 예시를 봐라</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image19.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image19.png"/></p>
+<ul>
+<li>일단 저 fix로 어떻게 재귀함수를 만들어내는지 알려드림</li>
+<li>함수 <strong>sum</strong>을 아래 <strong>F</strong>처럼 변형한 뒤 fix에 넣어주면 재귀함수가 된다</li>
+<li>위의 과정을 보면 fix의 특징을 이용해 재귀적으로 함수가 돌아가는 것을 보이는데 이 특징이 저 수식을 통해 유도되는 것이다</li>
+<li>그럼 F는 어떻게 만들어내냐</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image20.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image20.png"/></p>
+<ul>
+<li>이렇게 재귀호출되는 함수를 인자(f)로 받게 해서 함수를 구성하면 된다</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image21.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image21.png"/></p>
+<ul>
+<li>더 간단하게는 <code>ㅅsum.</code> 만 붙이면 된다</li>
+<li>따라서 재귀함수를 Syntactic Sugar를 이용해 표현하고 Desugaring을 하는 과정은 다음과 같다</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image22.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB12%20-%20%E1%84%8C%E1%85%A2%E1%84%80%E1%85%B1%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE%206f02797641314c598291bdccda9abccb/image22.png"/></p>
+<ul>
+<li>걍 저렇게 <strong>fix F</strong> 만 해주면 재귀적으로 함수가 돌아감</li>
+</ul>
+<p><img src="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/images/12_6f02797641314c598291bdccda9abccb/image23.png" alt/></p>
+<ul>
+<li>실제 구현에서는 위와 같은 Fixpoint Combinator를 사용함
+<ul>
+<li>x x가 미리 계산되면 아까처럼 stack overflow가 나기 때문에 x x를 나중에 계산하기 위해 freezing 얼려놓는것</li>
+<li>함수란 것이 결국에는 인자가 들어와야 계산되므로 계산시점을 내가 정할 수 있어 expression freezing이랑 유사한 기능을 한다</li>
+</ul>
+</li>
+<li>정 이해안되면 여기는 <strong>fix의 수식(+구현시 사용되는 수식)과 특징, F를 구성하는법, fix F로 돌리면 재귀함수가 된다는 것</strong> 이거 그냥 외워라</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#직간접-호출" data-for="직간접-호출">직간접 호출</a></li><li class="depth-0"><a href="#rcfvae" data-for="rcfvae">RCFVAE</a></li><li class="depth-1"><a href="#concrete-syntax" data-for="concrete-syntax">Concrete Syntax</a></li><li class="depth-1"><a href="#abstract-syntax" data-for="abstract-syntax">Abstract Syntax</a></li><li class="depth-1"><a href="#bigstep-operational-semantics" data-for="bigstep-operational-semantics">Bigstep Operational Semantics</a></li><li class="depth-1"><a href="#ocaml-code" data-for="ocaml-code">OCaml Code</a></li><li class="depth-0"><a href="#expression-freezing-lazy-evaluation" data-for="expression-freezing-lazy-evaluation">Expression Freezing (Lazy Evaluation)</a></li><li class="depth-1"><a href="#예시1" data-for="예시1">예시1</a></li><li class="depth-1"><a href="#예시2" data-for="예시2">예시2</a></li><li class="depth-1"><a href="#lazy-expression-in-ocaml" data-for="lazy-expression-in-ocaml">Lazy Expression in OCaml</a></li><li class="depth-0"><a href="#expression-freezing을-지원하는-rcfvae" data-for="expression-freezing을-지원하는-rcfvae">Expression Freezing을 지원하는 RCFVAE</a></li><li class="depth-1"><a href="#value-domain" data-for="value-domain">Value Domain</a></li><li class="depth-1"><a href="#function-application" data-for="function-application">Function Application</a></li><li class="depth-1"><a href="#id" data-for="id">Id</a></li><li class="depth-1"><a href="#좀-더-구조적으로-정의" data-for="좀-더-구조적으로-정의">좀 더 구조적으로 정의</a></li><li class="depth-0"><a href="#recursion-as-syntactic-sugar" data-for="recursion-as-syntactic-sugar">Recursion as Syntactic Sugar</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/pl/originals/pl.spring.2021.cse.cnu.ac.kr/(충남대)-프로그래밍-언어-개론-강의록" class="internal">(충남대) 프로그래밍 언어 개론 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

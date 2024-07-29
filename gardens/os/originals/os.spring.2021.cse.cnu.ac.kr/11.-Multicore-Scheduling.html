@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html><head><title>11. Multicore Scheduling</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="11. Multicore Scheduling"/><meta property="og:description" content="충남대학교 컴퓨터공학과 류재철 교수님의 &amp;quot;운영체제 및 실습&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Multiprocessor System의 구조 § Loosley Coupled Multiprocessor § 코어가 자신의 메인 메모리를 따로 갖고있는 코어들로 구성된 것 Distributed혹은 Cluster라고도 불린다 Tightly Coupled Multiprocessor § 모든 코어가 하나의 메인 메모리를 공유하는 구조 대부분의 컴퓨터가 이와 같은 구조를 가진다 이번 강의에서는 이 시스템을 가지고 Multiprocessor의 작동방식을 설명한다 Functionally Specialized Processors § master processor가 하나 있고 그것의 지배를 받는 IO전담 프로세서 등 slave processor가 존재하는 구조 Ready Queue의 구성 § 일단 통합된 하나의 ready queue를 두고 여기에서 프로세스가 하나씩 빠져 프로세서로 들어가는 방식을 Dynamic이라고 한다 왜 Dynamic이라고 하냐면 만약 하나의 프로세스가 실행되다가 timeout이 걸리든 block을 먹든 해서 빠져나왔다가 다시 Ready queue로 들어가면 기존에 실행되던 프로세서에 다시 할당되리라는 보장은 없기 때문에 하나의 프로세스가 여러개의 프로세서를 거쳐 실행된다는 뜻이다 하지만 각 코어마다 ready queue를 두고 프로세스가 이 큐들로 분배되는 방식을 Static이라고 한다 얘같은 경우에는 프로세스가 실행되다가 다시 내려와도 어차피 원래 실행되던 프로세서의 큐로 가기 때문에 이놈은 처음 할당받은 프로세서에서만 실행되다가 종료된다 프로세스 선택 알고리즘 § Uniprocessor일때는 FCFS를 선택했을 때 Convoy effect가 일어나서 average waiting time이 길어질 수가 있었는데 Multiprocessor일때는 어차피 남는 CPU에 할당해주면 되기 때문에 Convoy effect에 대해 크게 신경쓰지 않는다 따라서 FCFS가 알고리즘중에는 가장 공평하므로 FCFS도 많이 이용하게 되는 것 Thread Scheduling § 쓰레드의 경우에 어떻게 할 것인가 - 쓰레드도 각각의 독립적인 개체로 보고 여러 프로세스에게 할당할 수도 있는데 이때 한 프로세스에서 파생된 쓰레드들 중 일부만 프로세서를 잡고 실행되게 되면 쓰레드들 간의 통신이 원활하지 않기 때문에 하나의 프로세스에서 파생된 쓰레드들을 한정된 프로세서들에게만 할당해주는 것도 가능하다? Load Sharing : 쓰레드들을 Dynamic 시스템을 이용해 처리 - 하나의 Ready queue에 넣어서 처리함으로 정해진 프로세서에게만 처리되는 형식이 아닌 것 Gang Scheduling : 한개의 프로세스에서 파생된 쓰레드들에게 하나씩 프로세서를 할당하는 구조 하지만 얘도 하나의 쓰레드가 하나의 프로세서에서만 돌아가지는 않는다 말그대로 쓰레드들이 동시에 실행되기 때문에 게임같은 프로세스를 돌릴때 많이 사용되었다 하지만 쓰레드의 갯수를 세야되고 하는 절차가 존재하기 때문에 옛날에 컴퓨터가 안좋았을 시절에는 많이 사용했지만 요즘은 컴퓨터가 좋아 리소스가 풍부하기 때문에 알고리즘을 단순화시키자는 생각으로 Load sharing을 더 사용한댄다 Dedicated Processor Assignment : Gang Scheduling과 비슷하지만 이제는 하나의 프로세서가 하나의 쓰레드를 전담하는 구조이다 Dynamic Scheduling : 얘는 프로세스의 쓰레드 갯수가 동적으로 바뀌는 상황에 대응하기 위해 만들어진 알고리즘이다 Real-time Systems § Real-Time System은 실시간 시스템을 의미한다 Hard Real-Time : 얘는 앞에서 배운 Deadline이 존재하고 반드시 그걸 지켜야 되는 시스템 을 의미하고 Soft Real-Time : 얘는 Deadline이 존재하지만 권장사항일 뿐 반드시 지켜야되는건 아닌 시스템을 의미한다 얘는 의무사항은 아니어도 Deadline을 되도록이면 지켜야 하기 때문에 deadline이 걸린 프로세스는 메모리에 상주하고 우선순위를 높이게 된다 Real-Time Scheduling § 보면 맨 위에가 프로세스들이 언제 들어오고 얼마만큼의 시간을 필요로 하고 deadline이 언제까지인지를 나타내는 그림이고(편의를 위해 uniprocessor를 기준으로 한다) 두번째는 A프로세스에게 우선권이 있을때의 그림, 세번째는 B프로세스에게 우선권이 있을때의 그림이다 우선순위가 존재할때를 살펴보면 deadline을 지키지 못해 miss가 일어나는 것을 볼 수 있다 - deadline이 존재하는 경우에는 특정 프로세스에게 우선권을 주는 식으로 실행을 하면 miss가 자주 일어나므로 잘 사용하지 않는다 네번째 그림인 Earliest Deadline Scheduling은 deadline이 가장 빠른것(=마감일이 얼마 안남은 것)을 먼저 실행시키는 알고리즘이다 - 이경우에는 miss가 안나는 것을 알 수 있다 이 알고리즘은 프로세스가 하나밖에 없으면 그냥 그걸 실행시키고, 다른 프로세스가 들어오면 둘중에 deadline이 더 빠른놈을 선택하여 실행한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 류재철 교수님의 &amp;quot;운영체제 및 실습&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Multiprocessor System의 구조 § Loosley Coupled Multiprocessor § 코어가 자신의 메인 메모리를 따로 갖고있는 코어들로 구성된 것 Distributed혹은 Cluster라고도 불린다 Tightly Coupled Multiprocessor § 모든 코어가 하나의 메인 메모리를 공유하는 구조 대부분의 컴퓨터가 이와 같은 구조를 가진다 이번 강의에서는 이 시스템을 가지고 Multiprocessor의 작동방식을 설명한다 Functionally Specialized Processors § master processor가 하나 있고 그것의 지배를 받는 IO전담 프로세서 등 slave processor가 존재하는 구조 Ready Queue의 구성 § 일단 통합된 하나의 ready queue를 두고 여기에서 프로세스가 하나씩 빠져 프로세서로 들어가는 방식을 Dynamic이라고 한다 왜 Dynamic이라고 하냐면 만약 하나의 프로세스가 실행되다가 timeout이 걸리든 block을 먹든 해서 빠져나왔다가 다시 Ready queue로 들어가면 기존에 실행되던 프로세서에 다시 할당되리라는 보장은 없기 때문에 하나의 프로세스가 여러개의 프로세서를 거쳐 실행된다는 뜻이다 하지만 각 코어마다 ready queue를 두고 프로세스가 이 큐들로 분배되는 방식을 Static이라고 한다 얘같은 경우에는 프로세스가 실행되다가 다시 내려와도 어차피 원래 실행되던 프로세서의 큐로 가기 때문에 이놈은 처음 할당받은 프로세서에서만 실행되다가 종료된다 프로세스 선택 알고리즘 § Uniprocessor일때는 FCFS를 선택했을 때 Convoy effect가 일어나서 average waiting time이 길어질 수가 있었는데 Multiprocessor일때는 어차피 남는 CPU에 할당해주면 되기 때문에 Convoy effect에 대해 크게 신경쓰지 않는다 따라서 FCFS가 알고리즘중에는 가장 공평하므로 FCFS도 많이 이용하게 되는 것 Thread Scheduling § 쓰레드의 경우에 어떻게 할 것인가 - 쓰레드도 각각의 독립적인 개체로 보고 여러 프로세스에게 할당할 수도 있는데 이때 한 프로세스에서 파생된 쓰레드들 중 일부만 프로세서를 잡고 실행되게 되면 쓰레드들 간의 통신이 원활하지 않기 때문에 하나의 프로세스에서 파생된 쓰레드들을 한정된 프로세서들에게만 할당해주는 것도 가능하다? Load Sharing : 쓰레드들을 Dynamic 시스템을 이용해 처리 - 하나의 Ready queue에 넣어서 처리함으로 정해진 프로세서에게만 처리되는 형식이 아닌 것 Gang Scheduling : 한개의 프로세스에서 파생된 쓰레드들에게 하나씩 프로세서를 할당하는 구조 하지만 얘도 하나의 쓰레드가 하나의 프로세서에서만 돌아가지는 않는다 말그대로 쓰레드들이 동시에 실행되기 때문에 게임같은 프로세스를 돌릴때 많이 사용되었다 하지만 쓰레드의 갯수를 세야되고 하는 절차가 존재하기 때문에 옛날에 컴퓨터가 안좋았을 시절에는 많이 사용했지만 요즘은 컴퓨터가 좋아 리소스가 풍부하기 때문에 알고리즘을 단순화시키자는 생각으로 Load sharing을 더 사용한댄다 Dedicated Processor Assignment : Gang Scheduling과 비슷하지만 이제는 하나의 프로세서가 하나의 쓰레드를 전담하는 구조이다 Dynamic Scheduling : 얘는 프로세스의 쓰레드 갯수가 동적으로 바뀌는 상황에 대응하기 위해 만들어진 알고리즘이다 Real-time Systems § Real-Time System은 실시간 시스템을 의미한다 Hard Real-Time : 얘는 앞에서 배운 Deadline이 존재하고 반드시 그걸 지켜야 되는 시스템 을 의미하고 Soft Real-Time : 얘는 Deadline이 존재하지만 권장사항일 뿐 반드시 지켜야되는건 아닌 시스템을 의미한다 얘는 의무사항은 아니어도 Deadline을 되도록이면 지켜야 하기 때문에 deadline이 걸린 프로세스는 메모리에 상주하고 우선순위를 높이게 된다 Real-Time Scheduling § 보면 맨 위에가 프로세스들이 언제 들어오고 얼마만큼의 시간을 필요로 하고 deadline이 언제까지인지를 나타내는 그림이고(편의를 위해 uniprocessor를 기준으로 한다) 두번째는 A프로세스에게 우선권이 있을때의 그림, 세번째는 B프로세스에게 우선권이 있을때의 그림이다 우선순위가 존재할때를 살펴보면 deadline을 지키지 못해 miss가 일어나는 것을 볼 수 있다 - deadline이 존재하는 경우에는 특정 프로세스에게 우선권을 주는 식으로 실행을 하면 miss가 자주 일어나므로 잘 사용하지 않는다 네번째 그림인 Earliest Deadline Scheduling은 deadline이 가장 빠른것(=마감일이 얼마 안남은 것)을 먼저 실행시키는 알고리즘이다 - 이경우에는 miss가 안나는 것을 알 수 있다 이 알고리즘은 프로세스가 하나밖에 없으면 그냥 그걸 실행시키고, 다른 프로세스가 들어오면 둘중에 deadline이 더 빠른놈을 선택하여 실행한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/11.-Multicore-Scheduling"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">11. Multicore Scheduling</h1><p class="content-meta ">Jul 29, 2024, 8 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 류재철 교수님의 &quot;운영체제 및 실습&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="multiprocessor-system의-구조">Multiprocessor System의 구조<a aria-hidden="true" tabindex="-1" href="#multiprocessor-system의-구조" class="internal"> §</a></h2>
+<h3 id="loosley-coupled-multiprocessor">Loosley Coupled Multiprocessor<a aria-hidden="true" tabindex="-1" href="#loosley-coupled-multiprocessor" class="internal"> §</a></h3>
+<ul>
+<li>코어가 자신의 메인 메모리를 따로 갖고있는 코어들로 구성된 것</li>
+<li><strong>Distributed</strong>혹은 <strong>Cluster</strong>라고도 불린다</li>
+</ul>
+<h3 id="tightly-coupled-multiprocessor">Tightly Coupled Multiprocessor<a aria-hidden="true" tabindex="-1" href="#tightly-coupled-multiprocessor" class="internal"> §</a></h3>
+<ul>
+<li>모든 코어가 하나의 메인 메모리를 공유하는 구조</li>
+<li>대부분의 컴퓨터가 이와 같은 구조를 가진다</li>
+<li>이번 강의에서는 이 시스템을 가지고 Multiprocessor의 작동방식을 설명한다</li>
+</ul>
+<h3 id="functionally-specialized-processors">Functionally Specialized Processors<a aria-hidden="true" tabindex="-1" href="#functionally-specialized-processors" class="internal"> §</a></h3>
+<ul>
+<li>master processor가 하나 있고 그것의 지배를 받는 IO전담 프로세서 등 slave processor가 존재하는 구조</li>
+</ul>
+<h2 id="ready-queue의-구성">Ready Queue의 구성<a aria-hidden="true" tabindex="-1" href="#ready-queue의-구성" class="internal"> §</a></h2>
+<p><img src="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/images/11/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB11%20-%20Multicore%20Scheduling%20a87031ef924d4b89ac2ca4d653b85311/image1.png"/></p>
+<ul>
+<li>일단 통합된 하나의 ready queue를 두고 여기에서 프로세스가 하나씩 빠져 프로세서로 들어가는 방식을 <strong>Dynamic</strong>이라고 한다
+<ul>
+<li>왜 <strong>Dynamic</strong>이라고 하냐면 만약 하나의 프로세스가 실행되다가 timeout이 걸리든 block을 먹든 해서 빠져나왔다가 다시 Ready queue로 들어가면 기존에 실행되던 프로세서에 다시 할당되리라는 보장은 없기 때문에 하나의 프로세스가 여러개의 프로세서를 거쳐 실행된다는 뜻이다</li>
+</ul>
+</li>
+<li>하지만 각 코어마다 ready queue를 두고 프로세스가 이 큐들로 분배되는 방식을 <strong>Static</strong>이라고 한다
+<ul>
+<li>얘같은 경우에는 프로세스가 실행되다가 다시 내려와도 어차피 원래 실행되던 프로세서의 큐로 가기 때문에 이놈은 처음 할당받은 프로세서에서만 실행되다가 종료된다</li>
+</ul>
+</li>
+</ul>
+<h2 id="프로세스-선택-알고리즘">프로세스 선택 알고리즘<a aria-hidden="true" tabindex="-1" href="#프로세스-선택-알고리즘" class="internal"> §</a></h2>
+<ul>
+<li>Uniprocessor일때는 FCFS를 선택했을 때 Convoy effect가 일어나서 average waiting time이 길어질 수가 있었는데</li>
+<li>Multiprocessor일때는 어차피 남는 CPU에 할당해주면 되기 때문에 Convoy effect에 대해 크게 신경쓰지 않는다</li>
+<li>따라서 FCFS가 알고리즘중에는 가장 공평하므로 FCFS도 많이 이용하게 되는 것</li>
+</ul>
+<h2 id="thread-scheduling">Thread Scheduling<a aria-hidden="true" tabindex="-1" href="#thread-scheduling" class="internal"> §</a></h2>
+<ul>
+<li>쓰레드의 경우에 어떻게 할 것인가 - 쓰레드도 각각의 독립적인 개체로 보고 여러 프로세스에게 할당할 수도 있는데 이때 한 프로세스에서 파생된 쓰레드들 중 일부만 프로세서를 잡고 실행되게 되면 쓰레드들 간의 통신이 원활하지 않기 때문에 하나의 프로세스에서 파생된 쓰레드들을 한정된 프로세서들에게만 할당해주는 것도 가능하다?</li>
+<li><strong>Load Sharing</strong> : 쓰레드들을 Dynamic 시스템을 이용해 처리 - 하나의 Ready queue에 넣어서 처리함으로 정해진 프로세서에게만 처리되는 형식이 아닌 것</li>
+<li><strong>Gang Scheduling</strong> : 한개의 프로세스에서 파생된 쓰레드들에게 하나씩 프로세서를 할당하는 구조
+<ul>
+<li>하지만 얘도 하나의 쓰레드가 하나의 프로세서에서만 돌아가지는 않는다</li>
+<li>말그대로 쓰레드들이 동시에 실행되기 때문에 게임같은 프로세스를 돌릴때 많이 사용되었다</li>
+<li>하지만 쓰레드의 갯수를 세야되고 하는 절차가 존재하기 때문에 옛날에 컴퓨터가 안좋았을 시절에는 많이 사용했지만 요즘은 컴퓨터가 좋아 리소스가 풍부하기 때문에 알고리즘을 단순화시키자는 생각으로 Load sharing을 더 사용한댄다</li>
+</ul>
+</li>
+<li><strong>Dedicated Processor Assignment</strong> : Gang Scheduling과 비슷하지만 이제는 하나의 프로세서가 하나의 쓰레드를 전담하는 구조이다</li>
+<li><strong>Dynamic Scheduling</strong> : 얘는 프로세스의 쓰레드 갯수가 동적으로 바뀌는 상황에 대응하기 위해 만들어진 알고리즘이다</li>
+</ul>
+<h2 id="real-time-systems">Real-time Systems<a aria-hidden="true" tabindex="-1" href="#real-time-systems" class="internal"> §</a></h2>
+<ul>
+<li><strong>Real-Time System</strong>은 실시간 시스템을 의미한다</li>
+<li><strong>Hard Real-Time</strong> : 얘는 앞에서 배운 Deadline이 존재하고 반드시 그걸 지켜야 되는 시스템 을 의미하고</li>
+<li><strong>Soft Real-Time</strong> : 얘는 Deadline이 존재하지만 권장사항일 뿐 반드시 지켜야되는건 아닌 시스템을 의미한다
+<ul>
+<li>얘는 의무사항은 아니어도 Deadline을 되도록이면 지켜야 하기 때문에 deadline이 걸린 프로세스는 메모리에 상주하고 우선순위를 높이게 된다</li>
+</ul>
+</li>
+</ul>
+<h3 id="real-time-scheduling">Real-Time Scheduling<a aria-hidden="true" tabindex="-1" href="#real-time-scheduling" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/images/11/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB11%20-%20Multicore%20Scheduling%20a87031ef924d4b89ac2ca4d653b85311/image2.png"/></p>
+<ul>
+<li>보면 맨 위에가 프로세스들이 언제 들어오고 얼마만큼의 시간을 필요로 하고 deadline이 언제까지인지를 나타내는 그림이고(편의를 위해 uniprocessor를 기준으로 한다)</li>
+<li>두번째는 A프로세스에게 우선권이 있을때의 그림, 세번째는 B프로세스에게 우선권이 있을때의 그림이다</li>
+<li>우선순위가 존재할때를 살펴보면 deadline을 지키지 못해 miss가 일어나는 것을 볼 수 있다 - deadline이 존재하는 경우에는 특정 프로세스에게 우선권을 주는 식으로 실행을 하면 miss가 자주 일어나므로 잘 사용하지 않는다</li>
+<li>네번째 그림인 <strong>Earliest Deadline Scheduling</strong>은 deadline이 가장 빠른것(=마감일이 얼마 안남은 것)을 먼저 실행시키는 알고리즘이다 - 이경우에는 miss가 안나는 것을 알 수 있다</li>
+<li>이 알고리즘은 프로세스가 하나밖에 없으면 그냥 그걸 실행시키고, 다른 프로세스가 들어오면 둘중에 deadline이 더 빠른놈을 선택하여 실행한다. 만약 deadline이 동일하다면 기존에 실행시키던 것을 계속 실행시키는 식으로 작동한다</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#multiprocessor-system의-구조" data-for="multiprocessor-system의-구조">Multiprocessor System의 구조</a></li><li class="depth-1"><a href="#loosley-coupled-multiprocessor" data-for="loosley-coupled-multiprocessor">Loosley Coupled Multiprocessor</a></li><li class="depth-1"><a href="#tightly-coupled-multiprocessor" data-for="tightly-coupled-multiprocessor">Tightly Coupled Multiprocessor</a></li><li class="depth-1"><a href="#functionally-specialized-processors" data-for="functionally-specialized-processors">Functionally Specialized Processors</a></li><li class="depth-0"><a href="#ready-queue의-구성" data-for="ready-queue의-구성">Ready Queue의 구성</a></li><li class="depth-0"><a href="#프로세스-선택-알고리즘" data-for="프로세스-선택-알고리즘">프로세스 선택 알고리즘</a></li><li class="depth-0"><a href="#thread-scheduling" data-for="thread-scheduling">Thread Scheduling</a></li><li class="depth-0"><a href="#real-time-systems" data-for="real-time-systems">Real-time Systems</a></li><li class="depth-1"><a href="#real-time-scheduling" data-for="real-time-scheduling">Real-Time Scheduling</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록" class="internal">(충남대) 운영체제 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

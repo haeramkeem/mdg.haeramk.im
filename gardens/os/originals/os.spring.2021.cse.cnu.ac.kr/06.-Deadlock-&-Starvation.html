@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html><head><title>06. Deadlock &amp; Starvation</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="06. Deadlock &amp; Starvation"/><meta property="og:description" content="충남대학교 컴퓨터공학과 류재철 교수님의 &amp;quot;운영체제 및 실습&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Deadlock § 일련의 프로세스가 영원히 블락먹는 상태를 의미한다 어떤 프로세스의 블락상태가 풀리는것이 다른 프로세스의 실행에 달려있는데 이 다른 프로세스조차 블락을 먹어 둘다 영원히 블락을 먹게 되는 경우 이다 예를 들면 이런 상황이다 - 프로세스 P가 D → T의 순서로 리소스를 먹고 Q는 T → D의 순서로 리소스를 먹을때 만약에 P가 D를 먹고 Q로 context change가 일어나 얘가 T를 먹으면 P도 자원을 먹지 못해 블락먹고 Q도 자원을 먹지 못해 블락을 먹으므로 둘 다 블락을 먹게 된다 - 이러한 경우에는 무조건 deadlock을 먹는건 아니므로 deadlock possible이라고 표현한다 - 즉, 무조건 deadlock이 발생하는건 아니지만 아다리가 맞으면 deadlock이 발생하게 되는 경우를 말한다 이러한 경우에 첫번째로는 먹는 순서를 일치시킴으로 해결할 수 있다 - Q도 D → T의 순으로 자원을 먹으면 P가 D를 먹고 context change가 일어나도 Q는 D를 먹지 못하므로 T도 먹을 수 없어 Q는 블락을 먹어도 P는 블락을 안먹어 P가 자원을 뱉은 후 Q가 실행될 수 있게 되는 것이다 Consumable 리소스의 deadlock § Reusable, Consumable § reusable : 프로세스 하나가 먹고 뱉으면 다른 프로세스도 사용할 수 있는 자원 - 대표적으로 cpu가 여기에 해당한다 consumable : 하나의 프로세스가 먹고 나면 뱉어도 없어지기 때문에 다른 프로세스가 이용할 수 없는 자원 - interrupt처럼 처리하고 나면 없어지는 자원을 얘기한다 Deadlock of Consumable resources § 메세지 송수신에서의 deadlock 보면 서로 메세지를 받아서 자신의 메세지를 보내는 과정을 거치는데 순서가 동일하다면 둘 다 메세지를 받아야 전송을 하므로 둘 다 블락을 먹게 된다 - 송신을 해야 반대편이 블락을 안먹는데 송신을 하려면 수신을 해야되고 그건 상대방도 동일하므로 Deadlock of reusable resources § 메모리 공간 할당에서의 deadlock 예를들어서 메모리 총 공간이 200일때 프로세스 P는 80 → 60의 순서로 메모리 할당을 요청하고 프로세스 Q는 70 → 80의 순서로 메모리 할당을 요청할때 만약 P가 80을 먹고 context change가 일어나서 Q가 70을 먹으면 남은 공간은 50이므로 둘 다 원하는 메모리를 전부 먹지 못해 블락을 먹게 된다 이렇듯 deadlock은 context change가 일어나지 않으면 일어나지 않지만 재수없게 context change가 일어나게 되면 일어나게 되는 경우가 많다 프로세스 둘 중 하나의 자원을 뺏던가 아예 kill해버리는 방법으로 자원을 뱉게 하면 해결될 수 있다 그림으로 deadlock 이해하기 - Resource Allocation Graph § 동그라미가 프로세스, 네모가 자원, 네모 안의 검은 점이 이용할 수 있는 자원이다 그리고 동그라미로부터 뻗어나오는 화살표가 자원 요청이고, 점으로부터 뻗어나오는 화살표는 자원 할당을 나타낸 것 이다 왼쪽의 경우를 보면 P1이 Ra의 자원을 요청하나 이미 P2가 먹은 상태이다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 류재철 교수님의 &amp;quot;운영체제 및 실습&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Deadlock § 일련의 프로세스가 영원히 블락먹는 상태를 의미한다 어떤 프로세스의 블락상태가 풀리는것이 다른 프로세스의 실행에 달려있는데 이 다른 프로세스조차 블락을 먹어 둘다 영원히 블락을 먹게 되는 경우 이다 예를 들면 이런 상황이다 - 프로세스 P가 D → T의 순서로 리소스를 먹고 Q는 T → D의 순서로 리소스를 먹을때 만약에 P가 D를 먹고 Q로 context change가 일어나 얘가 T를 먹으면 P도 자원을 먹지 못해 블락먹고 Q도 자원을 먹지 못해 블락을 먹으므로 둘 다 블락을 먹게 된다 - 이러한 경우에는 무조건 deadlock을 먹는건 아니므로 deadlock possible이라고 표현한다 - 즉, 무조건 deadlock이 발생하는건 아니지만 아다리가 맞으면 deadlock이 발생하게 되는 경우를 말한다 이러한 경우에 첫번째로는 먹는 순서를 일치시킴으로 해결할 수 있다 - Q도 D → T의 순으로 자원을 먹으면 P가 D를 먹고 context change가 일어나도 Q는 D를 먹지 못하므로 T도 먹을 수 없어 Q는 블락을 먹어도 P는 블락을 안먹어 P가 자원을 뱉은 후 Q가 실행될 수 있게 되는 것이다 Consumable 리소스의 deadlock § Reusable, Consumable § reusable : 프로세스 하나가 먹고 뱉으면 다른 프로세스도 사용할 수 있는 자원 - 대표적으로 cpu가 여기에 해당한다 consumable : 하나의 프로세스가 먹고 나면 뱉어도 없어지기 때문에 다른 프로세스가 이용할 수 없는 자원 - interrupt처럼 처리하고 나면 없어지는 자원을 얘기한다 Deadlock of Consumable resources § 메세지 송수신에서의 deadlock 보면 서로 메세지를 받아서 자신의 메세지를 보내는 과정을 거치는데 순서가 동일하다면 둘 다 메세지를 받아야 전송을 하므로 둘 다 블락을 먹게 된다 - 송신을 해야 반대편이 블락을 안먹는데 송신을 하려면 수신을 해야되고 그건 상대방도 동일하므로 Deadlock of reusable resources § 메모리 공간 할당에서의 deadlock 예를들어서 메모리 총 공간이 200일때 프로세스 P는 80 → 60의 순서로 메모리 할당을 요청하고 프로세스 Q는 70 → 80의 순서로 메모리 할당을 요청할때 만약 P가 80을 먹고 context change가 일어나서 Q가 70을 먹으면 남은 공간은 50이므로 둘 다 원하는 메모리를 전부 먹지 못해 블락을 먹게 된다 이렇듯 deadlock은 context change가 일어나지 않으면 일어나지 않지만 재수없게 context change가 일어나게 되면 일어나게 되는 경우가 많다 프로세스 둘 중 하나의 자원을 뺏던가 아예 kill해버리는 방법으로 자원을 뱉게 하면 해결될 수 있다 그림으로 deadlock 이해하기 - Resource Allocation Graph § 동그라미가 프로세스, 네모가 자원, 네모 안의 검은 점이 이용할 수 있는 자원이다 그리고 동그라미로부터 뻗어나오는 화살표가 자원 요청이고, 점으로부터 뻗어나오는 화살표는 자원 할당을 나타낸 것 이다 왼쪽의 경우를 보면 P1이 Ra의 자원을 요청하나 이미 P2가 먹은 상태이다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/06.-Deadlock-&amp;-Starvation"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">06. Deadlock &amp; Starvation</h1><p class="content-meta ">Jul 29, 2024, 22 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 류재철 교수님의 &quot;운영체제 및 실습&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="deadlock">Deadlock<a aria-hidden="true" tabindex="-1" href="#deadlock" class="internal"> §</a></h2>
+<ul>
+<li>일련의 프로세스가 영원히 블락먹는 상태를 의미한다</li>
+<li>어떤 프로세스의 블락상태가 풀리는것이 다른 프로세스의 실행에 달려있는데 이 다른 프로세스조차 블락을 먹어 둘다 영원히 블락을 먹게 되는 경우 이다</li>
+<li>예를 들면 이런 상황이다 - 프로세스 P가 D → T의 순서로 리소스를 먹고 Q는 T → D의 순서로 리소스를 먹을때 만약에 P가 D를 먹고 Q로 context change가 일어나 얘가 T를 먹으면 P도 자원을 먹지 못해 블락먹고 Q도 자원을 먹지 못해 블락을 먹으므로 둘 다 블락을 먹게 된다 - 이러한 경우에는 무조건 deadlock을 먹는건 아니므로 <strong>deadlock possible</strong>이라고 표현한다 - 즉, 무조건 deadlock이 발생하는건 아니지만 아다리가 맞으면 deadlock이 발생하게 되는 경우를 말한다</li>
+<li>이러한 경우에 첫번째로는 먹는 순서를 일치시킴으로 해결할 수 있다 - Q도 D → T의 순으로 자원을 먹으면 P가 D를 먹고 context change가 일어나도 Q는 D를 먹지 못하므로 T도 먹을 수 없어 Q는 블락을 먹어도 P는 블락을 안먹어 P가 자원을 뱉은 후 Q가 실행될 수 있게 되는 것이다</li>
+</ul>
+<h2 id="consumable-리소스의-deadlock">Consumable 리소스의 deadlock<a aria-hidden="true" tabindex="-1" href="#consumable-리소스의-deadlock" class="internal"> §</a></h2>
+<h3 id="reusable-consumable">Reusable, Consumable<a aria-hidden="true" tabindex="-1" href="#reusable-consumable" class="internal"> §</a></h3>
+<ul>
+<li><strong>reusable</strong> : 프로세스 하나가 먹고 뱉으면 다른 프로세스도 사용할 수 있는 자원 - 대표적으로 cpu가 여기에 해당한다</li>
+<li><strong>consumable</strong> : 하나의 프로세스가 먹고 나면 뱉어도 없어지기 때문에 다른 프로세스가 이용할 수 없는 자원 - interrupt처럼 처리하고 나면 없어지는 자원을 얘기한다</li>
+</ul>
+<h3 id="deadlock-of-consumable-resources">Deadlock of Consumable resources<a aria-hidden="true" tabindex="-1" href="#deadlock-of-consumable-resources" class="internal"> §</a></h3>
+<ul>
+<li>메세지 송수신에서의 deadlock</li>
+</ul>
+<p><img src="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/images/6/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20Deadlock%20&amp;%20Starvation%205db36cfb9e824a1f84a62f2670e8442b/image1.png"/></p>
+<ul>
+<li>보면 서로 메세지를 받아서 자신의 메세지를 보내는 과정을 거치는데 순서가 동일하다면 둘 다 메세지를 받아야 전송을 하므로 둘 다 블락을 먹게 된다 - 송신을 해야 반대편이 블락을 안먹는데 송신을 하려면 수신을 해야되고 그건 상대방도 동일하므로</li>
+</ul>
+<h3 id="deadlock-of-reusable-resources">Deadlock of reusable resources<a aria-hidden="true" tabindex="-1" href="#deadlock-of-reusable-resources" class="internal"> §</a></h3>
+<ul>
+<li>메모리 공간 할당에서의 deadlock</li>
+</ul>
+<p><img src="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/images/6/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20Deadlock%20&amp;%20Starvation%205db36cfb9e824a1f84a62f2670e8442b/image2.png"/></p>
+<ul>
+<li>예를들어서 메모리 총 공간이 200일때 프로세스 P는 80 → 60의 순서로 메모리 할당을 요청하고 프로세스 Q는 70 → 80의 순서로 메모리 할당을 요청할때 만약 P가 80을 먹고 context change가 일어나서 Q가 70을 먹으면 남은 공간은 50이므로 둘 다 원하는 메모리를 전부 먹지 못해 블락을 먹게 된다</li>
+<li>이렇듯 deadlock은 context change가 일어나지 않으면 일어나지 않지만 재수없게 context change가 일어나게 되면 일어나게 되는 경우가 많다</li>
+<li>프로세스 둘 중 하나의 자원을 뺏던가 아예 kill해버리는 방법으로 자원을 뱉게 하면 해결될 수 있다</li>
+</ul>
+<h2 id="그림으로-deadlock-이해하기---resource-allocation-graph">그림으로 deadlock 이해하기 - Resource Allocation Graph<a aria-hidden="true" tabindex="-1" href="#그림으로-deadlock-이해하기---resource-allocation-graph" class="internal"> §</a></h2>
+<p><img src="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/images/6/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20Deadlock%20&amp;%20Starvation%205db36cfb9e824a1f84a62f2670e8442b/image3.png"/></p>
+<ul>
+<li>동그라미가 프로세스, 네모가 자원, 네모 안의 검은 점이 이용할 수 있는 자원이다</li>
+<li>그리고 동그라미로부터 뻗어나오는 화살표가 자원 요청이고, 점으로부터 뻗어나오는 화살표는 자원 할당을 나타낸 것 이다</li>
+<li>왼쪽의 경우를 보면 P1이 Ra의 자원을 요청하나 이미 P2가 먹은 상태이다. 반면에 P2는 Rb의 자원을 요청하나 얘는 이미 P1이 먹은 상태이다. 따라서 계속 waiting하므로 deadlock이 걸리게 되는 것이다 - 이런식으로 리소스를 일부 먹고 기다리는걸 <strong>hold &amp; wait</strong>라고 한다</li>
+<li>반면에 오른쪽의 경우 P1은 Ra의 자원을 요청하는데 이용가능한 자원이 있으므로 문제없이 먹을 수 있다. 그리고 P2의 경우에도 Rb의 자원을 요청할때 이용가능한 자원이 있으므로 먹을 수 있다. 따라서 이 경우에는 deadlock이 걸리지 않게 된다</li>
+</ul>
+<h2 id="deadlock의-필요조건">Deadlock의 필요조건<a aria-hidden="true" tabindex="-1" href="#deadlock의-필요조건" class="internal"> §</a></h2>
+<ul>
+<li><strong>Mutual Exclusion</strong> : 자원이 상호 배타적으로 접근해야만 정상적으로 작동할 때어떤 자원이 mutual exclusion하지 않으면 그냥 다 먹을 수 있으므로 deadlock이 걸리지 않는다</li>
+<li><strong>Hold &amp; wait</strong> : 프로세스가 자원을 하나 먹고 다른 자원을 먹으려고 기다릴 때 - 어떤 프로세스가 먹고 기다리는게 아닌 먹고 다시 뱉으면 다른 프로세스가 와서 사용할 수 있으므로 deadlock이 걸리지 않는다</li>
+<li><strong>Circular wait</strong> : 자원의 요청, 할당관계 그래프가 화살표를 따라가봤더니 원형으로 그어질 때 - 원형으로 그어지지 않고 프로세스가 전혀 다른 리소스를 요청하는 그런 경우에는 한 프로세스가 블락을 먹어도 그걸 풀어줄 다른 프로세스가 다른 자원을 이용해 블락을 먹지 않게 되므로 블락먹은 프로세스도 풀리게 된다</li>
+<li><strong>No pre-emption</strong> : 프로세스들이 우선순위가 동일해 우선순위에 의한 작동순서를 정할 수 없고 프로세스의 자원을 뺏어오는것도 불가능할때 - 프로세스 두개가 deadlock을 먹었는데 하나의 우선순위가 높아 나머지 하나를 죽여버리면 deadlock이 풀리기 된다</li>
+<li>이 넷중에 하나만 만족하지 않아도 deadlock이 걸리지 않는다 - 즉, 이중에. 일부만 만족하는 것이 무조건적으로 deadlock을 야기하는건 아니다 - Circular wait의 상태여도 deadlock이 무조건 걸리는건 아니다 이말이야 - 원이 있어도 Mutual exclusion하지 않다던지 하는 연유로 프로세스 종료 시나리오가 완성된다면 deadlock이 아닌 것이다</li>
+<li>반면에 circular wait이면 반드시 deadlock이 되는 상황이 있다 - 연관되어 있는 모든 자원이 mutual exclusion, 즉, 한번에 한놈만 접근할 수 있을 때에는 circular wait이 일어나면 반드시 deadlock이 걸리게 된다</li>
+</ul>
+<h2 id="deadlock의-해결">Deadlock의 해결<a aria-hidden="true" tabindex="-1" href="#deadlock의-해결" class="internal"> §</a></h2>
+<h3 id="정보가-있는-경우">정보가 있는 경우<a aria-hidden="true" tabindex="-1" href="#정보가-있는-경우" class="internal"> §</a></h3>
+<ul>
+<li>여기서의 <strong>정보</strong>라는 것은 프로세스가 미래에 어떤 자원을 요청할지에 대한 정보나 자원이 mutual exclusion하다 등의 정보를 말한다. 나중에 프로세스가 어떤 자원을 요청할지를 미리 안다면 지금 내가 누구한테 자원을 줬을때 이것이 결국에는 deadlock을 야기할지 안할지를 알 수 있기 때문</li>
+<li><strong>Avoidance</strong> : 자원의 요청과 할당관계에서 위와 같은 정보가 OS에 전달된다면 OS는 이 상황을 피하도록 대비를 할 수 있다 - 미래를 알고 피하는 것 - 그래서 OS는 deadlock posible 한 상황이면 리소스를 아예 할당해주지 않는다</li>
+</ul>
+<h3 id="정보가-없는-경우">정보가 없는 경우<a aria-hidden="true" tabindex="-1" href="#정보가-없는-경우" class="internal"> §</a></h3>
+<ul>
+<li><strong>Prevention</strong> : 이러한 정보가 없어도 저 4개의 필요조건중 하나라도 피할 수 있도록 잘 조정하는 것을 의미한다 - 미래는 모르지만 미리미리 방지하는 것</li>
+<li><strong>Detection &amp; Recovery</strong> : 프로세스가 deadlock에 걸렸는지 아닌지를 계속 확인하고 걸렸으면 여기에서 빠져나오도록 일부를 kill한다던가 하는 등의 복구작업을 하는 것을 의미한다 - 여기서 deadlock을 탐지하는 방법은 프로세스들을 계속 관찰하면서 이 프로세스가 종료될 수 있는 시나리오가 있느냐를 확인하는 것이다 - 따라서 deadlock인것처럼 보여도 연관된 프로세스가 순차적으로 종료될 수 있는 그런 시나리오가 존재한다면 이것은 deadlock이 아닌 것이다</li>
+</ul>
+<h2 id="prevention-strategy">Prevention strategy<a aria-hidden="true" tabindex="-1" href="#prevention-strategy" class="internal"> §</a></h2>
+<ul>
+<li>아까도 말했지만 4가지 조건들을 회피해 deadlock이 걸리지 않게 하는 것</li>
+<li><strong>간접(Indirect)</strong> 적인 방법 - Circular wait외의 나머지(Mutual exclusion, Hold&amp;Wait, No pre-emption) 이 세가지중 하나라도 발생하지 않도록 조치하는것</li>
+<li><strong>직접(Direct)</strong> 적인 방법 - Circular wait가 일어나지 않게 조치하는 것
+<ol>
+<li>Mutual exclusion의 경우에는 리소스를 상호배타적으로 할당하지 않는 것이다
+<ul>
+<li>하지만 리소스의 특성상 이놈이 상호배타적으로 할당해야만 하는놈인지 아니면 상호배타적으로 안해도 되는지 를OS가 알기가 힘드므로 쉽지 않다</li>
+</ul>
+</li>
+<li>Hold&amp;wait은 방지가 가능하다 - 프로세스가 시작하면 여기에 필요한 자원들을 중간에 끊지 않고 한번에 다 할당시킨다(serial하게)
+<ul>
+<li>하지만 여기에는 몇가지 단점이 있다</li>
+<li>프로세스가 시작하면 거기에 필요한 자원들을 모두 할당하므로 이놈이 사용하지 않을 때 에도 먹고 있게 되어 비효율적이 될 수도 있다</li>
+<li>또한 어떤 리소스가 필요한지 실행시점에 다 알 수 없는 경우도 있다</li>
+<li>따라서 OS는 별로 선호하지 않는 방식이다</li>
+</ul>
+</li>
+<li>No pre-emption : 우선순위가 같은 경우에 OS가 프로세스 하나의 편을 일방적으로 들어서 나머지 프로세스의 리소스를 다 뺏어버리는 방법
+<ul>
+<li>하지만 리소스를 뺏어버리면 그 프로세스는 그만큼 딜레이되는 것이므로 형평성의 문제가 있어 OS입장에서는 간편하지만 문제가 생길 수도 있다</li>
+</ul>
+</li>
+<li>Circular wait : 리소스 할당에 원칙을 매기는 것으로 해결할 수 있다
+<ul>
+<li>예를들면 오름차순으로 먹고 요청하는 것은 가능하지만 내림차순은 안된다고 했을 때 circular wait가 일어나려면 반드시 한번은 내림차순으로 가야되므로 이놈에게 리소스를 할당해주지 않으면 된다</li>
+<li>구체적인 예를 들어보면 프로세스 P가 R1먹고 R2요청하는 것은 오름차순이므로 허용, 다른 프로세스 Q가 R2먹고 R1 요청하는 것은 내림차순이니까 안된다고 했을 때 Circular wait이 성립하지 않으므로 deadlock이 발생하지 않는다</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>prevention strategy는 아주 보수적인 해결방법이다 - avoidance와 다르게 미래를 잘 알지 못하는 상황에서 deadlock이 걸릴지 안걸릴지를 판단해야되므로 보수적으로 할 수밖에 없다</li>
+</ul>
+<h2 id="avoidance-strategy">Avoidance Strategy<a aria-hidden="true" tabindex="-1" href="#avoidance-strategy" class="internal"> §</a></h2>
+<h3 id="deadlock이-걸리지-않는-경우">Deadlock이 걸리지 않는 경우<a aria-hidden="true" tabindex="-1" href="#deadlock이-걸리지-않는-경우" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/images/6/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20Deadlock%20&amp;%20Starvation%205db36cfb9e824a1f84a62f2670e8442b/image4.png"/></p>
+<ul>
+<li><strong>Claim matrix</strong> : 프로세스가 종료되는데 필요한 리소스들의 갯수</li>
+<li><strong>Allocation matrix</strong> : 현제 프로세스들에게 할당된 리소스의 갯수</li>
+<li><strong>C - A</strong> : 프로세스가 종료되기 위해 더 필요한 리소스의 갯수</li>
+<li><strong>Resource vector</strong> : 리소스를 동시에 할당받을 수 있는 프로세스의 통 갯수 - 아까의 allocation graph에서 검은 점의 갯수라고 보면 된다</li>
+<li><strong>Available vector</strong> : 현재 프로세스들이 할당받은 다음 더 할당받을 수 있는 프로세스의 갯수 - 잔여분</li>
+<li>Claim matrix와 Resource vector를 아까말한 정보라고 하는 것이다 - 프로세스가 얼마나 자원을 필요로 할 지, 자원을 얼마까지 할당해줄 수가 있는지에 대한 정보가 존재하기 때문에 OS가 Avoidance strategy를 사용할 수 있는 것</li>
+<li>여기서 보면 P2가 R3를 하나 필요로 하는데 R3도 한개가 남으므로 줄 수 있다. 따라서 얘가 종료되고 남은 리소스를 전부 반환하면 Available vector는 623이 될 것이다. 이제 얘네들을 가지고 P1, P3, P4를 하나씩 끝내보면 모두 종료되는 시나리오가 존재하므로 이 경우에는 deadlock이 걸리지 않을 수 있다</li>
+</ul>
+<h3 id="deadlock이-걸리는-경우">Deadlock이 걸리는 경우<a aria-hidden="true" tabindex="-1" href="#deadlock이-걸리는-경우" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/images/6/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20Deadlock%20&amp;%20Starvation%205db36cfb9e824a1f84a62f2670e8442b/image5.png"/></p>
+<ul>
+<li>윗쪽의 상태를 보면 아직 종료 시나리오가 존재한다 - P2에게 102를 할당해주면 P2가 종료되며 순차적으로 종료될 수 있기 때문 - 이렇게 종료 시나리오가 존재하는 상태를 <strong>safe state</strong>라고 한다</li>
+<li>하지만 P1에게 101을 할당해주면 아래와 같이 종료 시나리오가 나오지 않게 된다</li>
+<li>왜냐면 아래쪽을 보면 모든 프로세스가 R1을 필요로 하는데 R1의 잔고가 하나도 남아있지 않은 상황이다. 따라서 프로세스 종료 시나리오가 나오지 않기 때문에 이 경우 추후에 deadlock이 발생하게 된다</li>
+<li>하지만 아직은 deadlock이 아니다 : 아직 P1이후로는 아무도 리소스를 요청하지 않았기 때문에 deadlock이라고는 할 수 없는것 - 즉, 아직 할당해줄 수 있는 자원이 남았기 때문에 이 범위 안에서 리소스를 요청하게 되면 그것을 수락할 수 있기 때문이다</li>
+<li>그래도 worst case를 가정했을 때 - 만약 저 프로세스들 중 어느 누구라도 R1을 요청하는 상황 - deadlock이 걸리게 되고 따라서 종료시나리오가 나오지 않는 것이라고 판단하는 것이다 - 이렇게 deadlock은 아니지만 종료 시나리오가 나오지 않는 그러한 상태를 <strong>unsafe state</strong>라고 한다</li>
+<li>따라서 OS는 P1한테 101을 주면 unsafe state이 걸린다는것을 알 수 있으므로 P1이 101을 요청해왔을때 이것을 거절하는 식으로 deadlock을 avoid할 수 있다</li>
+<li>이렇게 요청이 들어왔을때 unsafe state로 바뀌는지를 계산해 할당여부를 결정하는 식으로 avoid하게 된다</li>
+<li>이렇게 할당할때 조심스럽게 다 계한하고 위험요소가 없을 때 할당하는 것(worst case를 판단해서 할당여부를 결정하는 것)을 <strong>banker’s algorithm</strong>이라고 한다</li>
+<li>하지만 프로세스가 얼마만큼의 리소스를 필요로 하는지 알기 어렵기 때문에 - 저 claim matrix와 resource vector를 알아내는게 쉬운일이 아니기 때문에 avoid를 하는 것은 쉬운일이 아니다</li>
+<li>avoidance는 미래를 알고 대비하는 것 이기 때문에 보수와 방임의 중간정도이다</li>
+</ul>
+<h2 id="detection-strategy">Detection strategy<a aria-hidden="true" tabindex="-1" href="#detection-strategy" class="internal"> §</a></h2>
+<p><img src="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/images/6/image6.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20Deadlock%20&amp;%20Starvation%205db36cfb9e824a1f84a62f2670e8442b/image6.png"/></p>
+<ul>
+<li>Detection의 경우에는 저 Claim matrix를 알 수가 없고 단지 Request matrix만 알고있는 상황이라는 점에서 Avoidance와는 좀 다르다 - 여기서 <strong>request matrix</strong>는 앞으로 더 요청할 수도 있지만 일단 지금은 요정도 요청한다이런 의미의 표이다</li>
+<li>그래서 Request matrix와 Available vector를 가지고 프로세스 종료 시나리오를 짜봣을때 시나리오가 안나오면 deadlock이라고 판단하게 되는 것 이다 - 시나리오 짜는 방법은 저 request matrix 이후 더 이상 요청을 하지 않고 종료된다는 가정 하에 종료 시나리오를 짜는 방법이다</li>
+</ul>
+<h2 id="recovery-strategy">Recovery strategy<a aria-hidden="true" tabindex="-1" href="#recovery-strategy" class="internal"> §</a></h2>
+<ul>
+<li>프로세스들을 다 죽일수도 있지만 그럼 처음부터 다다시 해야되므로 효율적이지 않다</li>
+<li>방법1 : git reset HEAD^마냥 그 주기적으로 detection을 하고 이전 detection했을때의 상태를 저장해놨다가 deadlock이 발생하면 이 지점으로 다시 돌아가는 방법으로 해결할 수도 있다</li>
+<li>방법2 : deadlock이 풀릴때까지 프로세스를 하나씩 뱉게 하거나 죽여버리는 것이다</li>
+<li>Detection &amp; Recovery는 방임형 해결방법이다 - 걍 냅뒀다가 deadlock이 발생하면 해결하는 것 이므로</li>
+</ul>
+<h2 id="밥먹는-철학자-문제">밥먹는 철학자 문제<a aria-hidden="true" tabindex="-1" href="#밥먹는-철학자-문제" class="internal"> §</a></h2>
+<ul>
+<li>철학자는 스파게티를 먹는데 2개의 포크가 필요하다</li>
+<li>포크 하나를 동시에 두명이 들 수 없다</li>
+<li>이 경우 deadlock이 걸리는 상황은 모든 사람이 왼쪽(혹은 오른쪽)의 포크만 들고 기다리는 상태이다</li>
+<li>해결법1 - 한번에 4명에게만 포크를 들 수 있는 자격을 준다</li>
+<li>해결법2 - 한번에 짝수번째/홀수번째에게만 포크를 들 수 있는 자격을 준다</li>
+<li>해결법3 - 포크를 드는 순서를 다르게 한다 - 기준을 한명 정해서 그사람을 기준으로 짝수번째 위치의 사람은 왼쪽거를 먼저 들고, 홀수번째의 사람은 오른쪽꺼를 먼저들게 하는 식으로 하면</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#deadlock" data-for="deadlock">Deadlock</a></li><li class="depth-0"><a href="#consumable-리소스의-deadlock" data-for="consumable-리소스의-deadlock">Consumable 리소스의 deadlock</a></li><li class="depth-1"><a href="#reusable-consumable" data-for="reusable-consumable">Reusable, Consumable</a></li><li class="depth-1"><a href="#deadlock-of-consumable-resources" data-for="deadlock-of-consumable-resources">Deadlock of Consumable resources</a></li><li class="depth-1"><a href="#deadlock-of-reusable-resources" data-for="deadlock-of-reusable-resources">Deadlock of reusable resources</a></li><li class="depth-0"><a href="#그림으로-deadlock-이해하기---resource-allocation-graph" data-for="그림으로-deadlock-이해하기---resource-allocation-graph">그림으로 deadlock 이해하기 - Resource Allocation Graph</a></li><li class="depth-0"><a href="#deadlock의-필요조건" data-for="deadlock의-필요조건">Deadlock의 필요조건</a></li><li class="depth-0"><a href="#deadlock의-해결" data-for="deadlock의-해결">Deadlock의 해결</a></li><li class="depth-1"><a href="#정보가-있는-경우" data-for="정보가-있는-경우">정보가 있는 경우</a></li><li class="depth-1"><a href="#정보가-없는-경우" data-for="정보가-없는-경우">정보가 없는 경우</a></li><li class="depth-0"><a href="#prevention-strategy" data-for="prevention-strategy">Prevention strategy</a></li><li class="depth-0"><a href="#avoidance-strategy" data-for="avoidance-strategy">Avoidance Strategy</a></li><li class="depth-1"><a href="#deadlock이-걸리지-않는-경우" data-for="deadlock이-걸리지-않는-경우">Deadlock이 걸리지 않는 경우</a></li><li class="depth-1"><a href="#deadlock이-걸리는-경우" data-for="deadlock이-걸리는-경우">Deadlock이 걸리는 경우</a></li><li class="depth-0"><a href="#detection-strategy" data-for="detection-strategy">Detection strategy</a></li><li class="depth-0"><a href="#recovery-strategy" data-for="recovery-strategy">Recovery strategy</a></li><li class="depth-0"><a href="#밥먹는-철학자-문제" data-for="밥먹는-철학자-문제">밥먹는 철학자 문제</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/os/originals/os.spring.2021.cse.cnu.ac.kr/(충남대)-운영체제-강의록" class="internal">(충남대) 운영체제 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

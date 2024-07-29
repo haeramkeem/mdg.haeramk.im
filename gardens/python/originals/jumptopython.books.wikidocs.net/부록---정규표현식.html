@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html><head><title>부록 - 정규표현식</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="부록 - 정규표현식"/><meta property="og:description" content="위키북스 박응용 저 &amp;quot;점프 투 파이썬&amp;quot; 책을 읽고 정리한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 문자 클래스 § [abc] : a, b, c중 하나라도 있으면 매치 [a-e] : a부터 e까지(a, b, c, d, e)중 하나라도 있으면 매치(from-to) [^abc] : a, b, c중 하나라도 있으면 매치되지 않음(not) 어떤 메타기호던지 ^와 -를 제외하면 []안에 검색조건으로 넣을 수 있다 [] : 특정 문자를 찾거나 특정 문자를 배제할 때 주로 사용된다 \ 정규식 § 여기 있는것들은 대문자로 쓰면 not 의 의미가 된다 \d : digit = 숫자와 매치."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="위키북스 박응용 저 &amp;quot;점프 투 파이썬&amp;quot; 책을 읽고 정리한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 문자 클래스 § [abc] : a, b, c중 하나라도 있으면 매치 [a-e] : a부터 e까지(a, b, c, d, e)중 하나라도 있으면 매치(from-to) [^abc] : a, b, c중 하나라도 있으면 매치되지 않음(not) 어떤 메타기호던지 ^와 -를 제외하면 []안에 검색조건으로 넣을 수 있다 [] : 특정 문자를 찾거나 특정 문자를 배제할 때 주로 사용된다 \ 정규식 § 여기 있는것들은 대문자로 쓰면 not 의 의미가 된다 \d : digit = 숫자와 매치."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/python/originals/jumptopython.books.wikidocs.net/부록---정규표현식"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">부록 - 정규표현식</h1><p class="content-meta ">Jul 29, 2024, 9 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>위키북스 박응용 저 &quot;점프 투 파이썬&quot; 책을 읽고 정리한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="문자-클래스">문자 클래스<a aria-hidden="true" tabindex="-1" href="#문자-클래스" class="internal"> §</a></h2>
+<ul>
+<li><code>[abc]</code> : a, b, c중 하나라도 있으면 매치</li>
+<li><code>[a-e]</code> : a부터 e까지(a, b, c, d, e)중 하나라도 있으면 매치(from-to)</li>
+<li><code>[^abc]</code> : a, b, c중 하나라도 있으면 매치되지 않음(not)</li>
+<li>어떤 메타기호던지 <code>^</code>와 <code>-</code>를 제외하면 <code>[]</code>안에 검색조건으로 넣을 수 있다</li>
+<li><code>[]</code> : 특정 문자를 찾거나 특정 문자를 배제할 때 주로 사용된다</li>
+</ul>
+<h2 id="-정규식"><code>\</code> 정규식<a aria-hidden="true" tabindex="-1" href="#-정규식" class="internal"> §</a></h2>
+<ul>
+<li>여기 있는것들은 대문자로 쓰면 not 의 의미가 된다</li>
+<li><code>\d</code> : digit = 숫자와 매치. <code>[0-9]</code>와 같음</li>
+<li><code>\s</code> : space = 스페이스처럼 눈에 안보이는 문자들과 매치</li>
+<li><code>\w</code> : word = 숫자/알파벳과 매치</li>
+<li><code>\b</code> : 단어경계(알파벳과 숫자가 아닌 부분)을 조사함
+<ul>
+<li><code>\babc</code> : abc로 시작하는 단어를 매칭</li>
+</ul>
+</li>
+</ul>
+<h2 id="-정규식-심화"><code>\</code> 정규식 (심화)<a aria-hidden="true" tabindex="-1" href="#-정규식-심화" class="internal"> §</a></h2>
+<ul>
+<li><code>\A</code> : <code>re.MULTILINE</code> 와 상관없이 문자열의 맨 처음만 조사함
+<ul>
+<li><code>\Aabc</code> : 문자열이 <code>abc</code> 로 시작하면 매칭</li>
+</ul>
+</li>
+<li><code>\Z</code> : <code>re.MULTILINE</code> 와 상관없이 문자열의 맨 끝만 조사함
+<ul>
+<li><code>abc\Z</code> : 문자열이 <code>abc</code> 로 끝나면 매칭</li>
+</ul>
+</li>
+<li><code>\W</code> 는 숫자,알파벳이 아닌 부분을 찾아 매치해 소비하고 결과로 반환하지만 <code>\b</code> 는 그 부분을 조사할 뿐 숫자,알파벳이 아닌 부분을 소비해 결과로 반환하지는 않는다</li>
+<li><code>\A</code>, <code>\Z</code> 도 마찬가지로 조사에는 반영되지만 소비되어 결과로 반환되지는 않는다</li>
+<li><code>\A</code>와 <code>^</code>, <code>\Z</code>와 <code>$</code> 의 차이점은 <code>re.MULTILINE</code> 의 영향을 받냐 안받냐 이다. <code>^</code>와 <code>$</code>의 경우 옵션을 주면 줄마다 처음이나 끝을 조사하지만, <code>\A</code>와 <code>\Z</code>는 옵션을 줘도 문자열의 맨 처음/끝만 조사한다</li>
+</ul>
+<h2 id="문자열의-맨-처음과-끝-조사하기">문자열의 맨 처음과 끝 조사하기<a aria-hidden="true" tabindex="-1" href="#문자열의-맨-처음과-끝-조사하기" class="internal"> §</a></h2>
+<ul>
+<li><code>^</code> : 문자열의 맨 처음을 조사함. <code>re.MULTILINE</code> 옵션을 주면 줄바꿈된 모든 줄의 시작점을 조사한다
+<ul>
+<li><code>^abc</code> : 문자열이 <code>abc</code> 로 시작하면 매칭</li>
+</ul>
+</li>
+<li><code>$</code> : 문자열의 맨 끝을 조사함. <code>re.MULTILINE</code> 옵션을 주면 줄바꿈된 모든 줄의 끝점을 조사한다
+<ul>
+<li><code>abc$</code> : 문자열이 <code>abc</code>로 끝나면 매칭</li>
+</ul>
+</li>
+</ul>
+<h2 id="dot-메타기호">DOT 메타기호<a aria-hidden="true" tabindex="-1" href="#dot-메타기호" class="internal"> §</a></h2>
+<ul>
+<li><code>.</code>: 모든 문자와 매칭
+<ul>
+<li><code>a.b</code>: acb, adb, a b 등 a와 b사이에 <code>\n</code>이 아닌 어떠한 문자가 와도 매칭된다</li>
+<li><code>\n</code>도 넣고싶다면 컴파일 옵션으로 <code>re.DOTALL</code> 을 넣으면 된다</li>
+</ul>
+</li>
+</ul>
+<h2 id="반복">반복<a aria-hidden="true" tabindex="-1" href="#반복" class="internal"> §</a></h2>
+<ul>
+<li><code>ab*c</code> : ac, abc, abbc 등 b가 0번 이상 반복되면 매치</li>
+<li><code>ab+c</code> : abc, abbc, abbbc등 b가 1번이상 반복되면 매치</li>
+<li><code>ab{2,4}c</code> : abbc, abbbc, abbbbc처럼 b가 2~4번 반복되면 매치</li>
+<li><code>ab?c</code> : ac, abc처럼 b가 0번이나 1번 등장하면 매치</li>
+<li><code>{,}</code>처럼 인자를 생략할 수도 있다. 앞을 생략하면 0, 뒤를 생략하면 무한대이다</li>
+</ul>
+<h2 id="or연산">OR연산<a aria-hidden="true" tabindex="-1" href="#or연산" class="internal"> §</a></h2>
+<ul>
+<li><code>abc|def</code>: abc나 def가 등장하는 부분과 매치</li>
+</ul>
+<h2 id="그루핑">그루핑<a aria-hidden="true" tabindex="-1" href="#그루핑" class="internal"> §</a></h2>
+<ul>
+<li><code>(abc)</code>: 그루핑 - 여러 정규식들을 소괄호로 묶는 것</li>
+<li><code>(abc)+</code> : abcabcabc같이 abc가 반복되는 부분을 매치</li>
+</ul>
+<h2 id="그룹-인덱스">그룹 인덱스<a aria-hidden="true" tabindex="-1" href="#그룹-인덱스" class="internal"> §</a></h2>
+<pre><code>(그룹1)(그룹2(그룹3))
+</code></pre>
+<ul>
+<li>왼쪽에서 오른쪽으로, 밖에서 안으로 그룹 인덱스가 매겨진다
+<ul>
+<li><code>([a-z]+)\s+(\w+)</code>에서
+<ul>
+<li><code>([a-z]+)</code> : 1번 그룹</li>
+<li><code>(\w+)</code> : 2번 그룹</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>매치객체의 <code>group()</code> 매소드에 인자로 그룹 번호를 넣어주면 해당하는 그룹에 매치된 결과만 소비할 수 있다</li>
+</ul>
+<h2 id="그룹-재참조">그룹 재참조<a aria-hidden="true" tabindex="-1" href="#그룹-재참조" class="internal"> §</a></h2>
+<ul>
+<li><code>\숫자</code>: “숫자”에 해당하는 번째의 그룹을 재참조한다
+<ul>
+<li><code>&quot;abc def ghi ghi&quot;</code>를 <code>&quot;(\w+)\s+\1&quot;</code> 정규식으로 매치해보면 <code>&quot;ghi ghi&quot;</code>가 매치된다.</li>
+<li>즉, 어떤 그룹에 매치된 문자열과 동일한 문자열이 또 등장하면 그룹 재참조로 매치할 수 있다</li>
+</ul>
+</li>
+</ul>
+<h2 id="그룹-네이밍">그룹 네이밍<a aria-hidden="true" tabindex="-1" href="#그룹-네이밍" class="internal"> §</a></h2>
+<ul>
+<li><code>(?P정규식)</code> 을 통해 그룹을 인덱스로 접근하지 않고 키를 통해 접근할 수도 있다</li>
+<li>이때에는 <code>group(&quot;그룹명&quot;)</code> 이렇게 메소드의 인자로 키를 넣어주면 된다</li>
+<li>재참조할때는 <code>(?P=그룹명)</code> 이렇게 해주면 된다</li>
+</ul>
+<h2 id="전방-긍정부정-탐색">전방 긍정/부정 탐색<a aria-hidden="true" tabindex="-1" href="#전방-긍정부정-탐색" class="internal"> §</a></h2>
+<ul>
+<li><code>(?=정규식)</code> : 정규식과 부합하는 부분을 검거</li>
+<li><code>(?!정규식)</code> : 정규식과 부합하지 않는 부분을 검거</li>
+<li>전방 긍정/부정 탐색의 경우 기본적으로 소비되지 않는다. 즉, 검색조건에는 들어가지만 검색결과에 안나오고 다음검색시 제외되지도 않는다는 말이다</li>
+</ul>
+<h2 id="헷갈리지-말자">헷갈리지 말자<a aria-hidden="true" tabindex="-1" href="#헷갈리지-말자" class="internal"> §</a></h2>
+<ul>
+<li><code>^</code>
+<ul>
+<li><code>^정규식</code> :문자열의 맨 처음부터 조사</li>
+<li><code>[^문자]</code> : 해당 문자가 없는지 조사</li>
+</ul>
+</li>
+<li><code>?</code>
+<ul>
+<li><code>ab?</code> : b가 0번이나 1번 등장하는지 조사</li>
+<li><code>(?)</code> : 그루핑 확장기호/전방탐색</li>
+<li><code>ab*?</code> : non-greedy로 작동하게 함</li>
+</ul>
+</li>
+</ul>
+<h2 id="greedy-한-메타기호란">Greedy 한 메타기호란?<a aria-hidden="true" tabindex="-1" href="#greedy-한-메타기호란" class="internal"> §</a></h2>
+<ul>
+<li>어떤 메타기호가 Greedy하다는 것은 이놈이 <em>최대한 많은 문자들을 소비하려고 한다는 것</em> 이다</li>
+<li>Greedy한 메타기호는 <code>*</code>와 <code>+</code>가 있다.
+<ul>
+<li>정규식 <code>&quot;a.*c&quot;</code>을 <code>&quot;abcabcabc&quot;</code>의 문자열에 대입하면 <code>&quot;abc&quot;</code>도 있지만 제일 많은양을 소비할 수 있는 <code>&quot;abcabcabc&quot;</code> 를 소비하게 된다</li>
+</ul>
+</li>
+<li>이것을 막으려면 <code>*</code> 와 <code>+</code>뒤에 <code>?</code>를 붙여주는 것이다. 이것을 붙여주면 최대소비가 아닌 최소소비가 되어 제일 적은양을 소비하는 선택지를 검거 할 것이다
+<ul>
+<li>위의 정규식을 <code>&quot;a.*?c&quot;</code>로 바꿔주면 <code>&quot;abcabcabc&quot;</code>의 문자열에 대입했을 때 <code>&quot;abc&quot;</code>가 매치되게 된다</li>
+</ul>
+</li>
+</ul>
+<h2 id="매칭-소비">매칭? 소비?<a aria-hidden="true" tabindex="-1" href="#매칭-소비" class="internal"> §</a></h2>
+<ul>
+<li>매칭 : 문자열의 특정 부분이 정규식의 <em>조건에 부합하여 검거</em> 하는 것</li>
+<li>소비 : 문자열의 특정 부분이 매칭되면 <em>그부분은 없다고 생각하고</em> 다음 매치를 찾는다
+<ul>
+<li>예를들어 “abcdef”중에서 조건에 부합하여 검거의 대상이 되는 곳이 abc와 bcd라고 해보자</li>
+<li>그러면 먼저 abc를 먼저 매칭할 것이다</li>
+<li>그다음에 다시 매치를 시도해보면 bcd가 매치될거라고 생각하겠지만 bcd는 매치되지 않는다</li>
+<li>왜냐하면 이미 abc가 매치되어서 소비되었기 때문에 남은 def중에서 조건에 부합하는 부분이 있는지 검토하게 되는 것이다</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#문자-클래스" data-for="문자-클래스">문자 클래스</a></li><li class="depth-0"><a href="#-정규식" data-for="-정규식">\ 정규식</a></li><li class="depth-0"><a href="#-정규식-심화" data-for="-정규식-심화">\ 정규식 (심화)</a></li><li class="depth-0"><a href="#문자열의-맨-처음과-끝-조사하기" data-for="문자열의-맨-처음과-끝-조사하기">문자열의 맨 처음과 끝 조사하기</a></li><li class="depth-0"><a href="#dot-메타기호" data-for="dot-메타기호">DOT 메타기호</a></li><li class="depth-0"><a href="#반복" data-for="반복">반복</a></li><li class="depth-0"><a href="#or연산" data-for="or연산">OR연산</a></li><li class="depth-0"><a href="#그루핑" data-for="그루핑">그루핑</a></li><li class="depth-0"><a href="#그룹-인덱스" data-for="그룹-인덱스">그룹 인덱스</a></li><li class="depth-0"><a href="#그룹-재참조" data-for="그룹-재참조">그룹 재참조</a></li><li class="depth-0"><a href="#그룹-네이밍" data-for="그룹-네이밍">그룹 네이밍</a></li><li class="depth-0"><a href="#전방-긍정부정-탐색" data-for="전방-긍정부정-탐색">전방 긍정/부정 탐색</a></li><li class="depth-0"><a href="#헷갈리지-말자" data-for="헷갈리지-말자">헷갈리지 말자</a></li><li class="depth-0"><a href="#greedy-한-메타기호란" data-for="greedy-한-메타기호란">Greedy 한 메타기호란?</a></li><li class="depth-0"><a href="#매칭-소비" data-for="매칭-소비">매칭? 소비?</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/python/originals/jumptopython.books.wikidocs.net/(책)-점프-투-파이썬-정리록" class="internal">(책) 점프 투 파이썬 정리록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html><head><title>07. Address mapping, Multicasting, Error rep</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="07. Address mapping, Multicasting, Error rep"/><meta property="og:description" content="충남대학교 컴퓨터공학과 김상하 교수님의 &amp;quot;컴퓨터 네트워크&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 개요 § ARP와 RARP는 Logical address와 Physical address를 매핑하는 Address mapping에 관련된 부분이고 RARP는 Application layer에 있는 BOOTP라는 놈과 연관이 있댄다 IGMP는 Multicasting에 관한 부분 ICMP는 Error Reposting에 관한 부분이다 - 네트워크상에서 Congestion(혼잡현상)이나 어떤 다른 에러가 일어나는지 알려줌 Address mapping - ARP, RARP (+ BOOTP, DHCP) § ARP § 이미 다 배운내용이니 기억 안나면 이거 확인해라 Two levels of addressing : 12."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 김상하 교수님의 &amp;quot;컴퓨터 네트워크&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 개요 § ARP와 RARP는 Logical address와 Physical address를 매핑하는 Address mapping에 관련된 부분이고 RARP는 Application layer에 있는 BOOTP라는 놈과 연관이 있댄다 IGMP는 Multicasting에 관한 부분 ICMP는 Error Reposting에 관한 부분이다 - 네트워크상에서 Congestion(혼잡현상)이나 어떤 다른 에러가 일어나는지 알려줌 Address mapping - ARP, RARP (+ BOOTP, DHCP) § ARP § 이미 다 배운내용이니 기억 안나면 이거 확인해라 Two levels of addressing : 12."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/07.-Address-mapping,-Multicasting,-Error-rep"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">07. Address mapping, Multicasting, Error rep</h1><p class="content-meta ">Jul 29, 2024, 19 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 김상하 교수님의 &quot;컴퓨터 네트워크&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="개요">개요<a aria-hidden="true" tabindex="-1" href="#개요" class="internal"> §</a></h2>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image1.png"/></p>
+<ul>
+<li><strong>ARP</strong>와 <strong>RARP</strong>는 Logical address와 Physical address를 매핑하는 Address mapping에 관련된 부분이고
+<ul>
+<li><strong>RARP</strong>는 Application layer에 있는 <strong>BOOTP</strong>라는 놈과 연관이 있댄다</li>
+</ul>
+</li>
+<li><strong>IGMP</strong>는 Multicasting에 관한 부분</li>
+<li><strong>ICMP</strong>는 Error Reposting에 관한 부분이다 - 네트워크상에서 Congestion(혼잡현상)이나 어떤 다른 에러가 일어나는지 알려줌</li>
+</ul>
+<h2 id="address-mapping---arp-rarp--bootp-dhcp">Address mapping - ARP, RARP (+ BOOTP, DHCP)<a aria-hidden="true" tabindex="-1" href="#address-mapping---arp-rarp--bootp-dhcp" class="internal"> §</a></h2>
+<h3 id="arp">ARP<a aria-hidden="true" tabindex="-1" href="#arp" class="internal"> §</a></h3>
+<ul>
+<li>이미 다 배운내용이니 기억 안나면 이거 확인해라</li>
+<li>Two levels of addressing : <a href="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/12.-Network-Layer,-Routing" class="internal" data-slug="gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/12.-Network-Layer,-Routing">12. Network Layer, Routing</a></li>
+<li>Address Resolution Protocol : <a href="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/13.-Routing" class="internal" data-slug="gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/13.-Routing">13. Routing</a></li>
+<li>ARP cache &amp; format : <a href="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/부록---실습자료-1)-Network-layer-&amp;-ARP" class="internal" data-slug="gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/부록---실습자료-1)-Network-layer-&amp;-ARP">부록 - 실습자료 1) Network layer &amp; ARP</a></li>
+<li>Proxy ARP : <a href="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/부록---실습자료-2)-Proxy-ARP" class="internal" data-slug="gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/부록---실습자료-2)-Proxy-ARP">부록 - 실습자료 2) Proxy ARP</a></li>
+<li>아래는 생각해봄직한 예시들임</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image2.png"/></p>
+<ul>
+<li>위 그림은 뭐 간단맨함 - 시험에 ARP과정 적으라는거 나올거같으니까 함 쭉 읽어보고 각각 케이스가 어떻게 진행되는지 생각해보라</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image3.png"/></p>
+<ul>
+<li>예시인데 이 과정도 직접 패킷 구조 그림 그려가며 연습해라</li>
+</ul>
+<h3 id="rarp">RARP<a aria-hidden="true" tabindex="-1" href="#rarp" class="internal"> §</a></h3>
+<ul>
+<li>얘는 <strong>Reverse ARP</strong>로 물리주소(MAC 주소)를 알고있을 때 논리주소(IP 주소)를 알아내는 과정이다</li>
+<li><strong>RARP</strong>는 <strong>BOOTP</strong>와 <strong>DHCP</strong>로 진화해 현재는 <strong>DHCP</strong>를 주로 사용하고 <strong>RARP</strong>는 구식이 됐다</li>
+<li>물리주소를 가지고 논리주소를 알아내야 되는 상황은 대표적으로 다음과 같다</li>
+<li><strong>Diskless station</strong>의 경우
+<ul>
+<li>얘는 자신한테 하드디스크가 없고 서버에게 원격접속하여 컴퓨팅을 하는 분산시스템이다</li>
+<li>이때 서버의 물리주소만 알고 얘의 논리주소는 모르기 때문에 알아와야 할 필요가 있는 것</li>
+<li>RARP와 BOOTP가 이러한 상황에 대처하기 위해 만들어졌다</li>
+</ul>
+</li>
+<li>또한 현재의 IP는 IP주소의 고갈을 막기 위해 컴퓨터가 켜지면 IP주소를 빌려오고 컴퓨터가 꺼지면 IP주소를 반납하는 이런 대여시스템으로 작동하는데 이때 IP가 매번 달라지기 때문에 자신이 할당받은 논리주소를 자신의 물리주소를 통해 알아오는 과정이 필요하게 된다
+<ul>
+<li>얘는 DHCP의 등장 배경이 된댄다</li>
+</ul>
+</li>
+</ul>
+<h3 id="작동과정">작동과정<a aria-hidden="true" tabindex="-1" href="#작동과정" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image4.png"/></p>
+<ul>
+<li>위의 예시에는 BOOTP라고 적혀있지만 이 예시가 RARP의 작동과정이랑 동일하댄다</li>
+<li>작동과정은</li>
+<li>일단 요청하는놈(Client)와 응답하는놈(Server)가 있다 - Client는 그냥 일반 호스트이고, Server는 해당 서브넷에 추가적으로 설치되어있는 서버임 - Server는 모든 Client의 논리주소와 물리주소 쌍을 알고 있다</li>
+<li>그래서 Client가 물리주소를 가지고 논리주소를 요청하면 Server가 그에 맞는 논리주소를 응답해주는 아주 단순한 구조이다</li>
+<li>하지만 이러한 구조를 가지면 모든 서브넷마다 Server를 하나씩 설치해야되므로 아주 비효율적 - 이것을 해결하기 위해 BOOTP가 나왔다</li>
+</ul>
+<h3 id="bootp">BOOTP<a aria-hidden="true" tabindex="-1" href="#bootp" class="internal"> §</a></h3>
+<ul>
+<li><strong>뒤에 다시 배운다</strong></li>
+<li>RARP와의 차이점은</li>
+<li>일단 Server와 Client가 있는 것은 RARP와 동일하다</li>
+<li>다만 RARP는 해당 서브넷에 Server가 있어야 했지만, BOOTP의 경우에는 다른 곳에 하나만 있어도 된다는 차이점이 있고</li>
+<li>일단 BOOTP가 위치하는 Layer가 Application layer라는 것과</li>
+<li>UTP를 사용한다는 정도의 차이점이 있다</li>
+<li>작동과정은</li>
+</ul>
+<ol>
+<li>같은 서브넷에 Server가 있을 경우에는 그냥 RARP와 동일하다</li>
+<li>만일 다른 경우에는</li>
+</ol>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image5.png"/></p>
+<ul>
+<li>위의 그림처럼 서브넷에 Server가 아닌 <strong>Relay agent</strong>가 하나씩 있게 된다 - 얘는 BOOTP Server의 위치를 알고있는 놈임</li>
+<li>따라서 Client가 BOOTP Request를 Broadcast로 보내면 Relay agent가 받아서 Unicast로 BOOTP Server에게 보내 응답을 받아와 Client에게 전달해주는 방식으로 진행된다
+<ul>
+<li>즉, Relay agent는 request를 datagram으로 encapsulate하여 BOOTP Server에게 Unicast하게 요청을 보내게 되고</li>
+<li>BOOTP Server는 encapsulated datagram을 받으면 그것에 대한 응답을 생성해 다시 encapsulate 하여 datagram으로 BOOTP Reply를 보내게 된다</li>
+<li>마지막으로 Relay agent가 응답을 받으면 BOOTP Client에게 응답을 보내는 방식으로 이루어진다</li>
+</ul>
+</li>
+</ul>
+<h3 id="dhcp">DHCP<a aria-hidden="true" tabindex="-1" href="#dhcp" class="internal"> §</a></h3>
+<ul>
+<li>RARP와 BOOTP의 경우에는 논리주소와 물리주소가 1:1로 매핑되어 있고 바뀌지 않는다는 가정 하에 가능한 프로토콜이다
+<ul>
+<li>즉, <strong>Deterministic binding</strong>이 되어있는 것</li>
+<li><strong>Dynamic configuration protocol</strong>이 아니다라고도 표현함 - 동적으로 알아낼 수 있는게 아니다 이거야</li>
+</ul>
+</li>
+<li>하지만 현재에 사용되고 있는 IP는 논리주소가 네트워크에 접속할때마다 변경되기 때문에 새로운 프로토콜이 필요하게 되는 것이다</li>
+<li><strong>Dynamic Host Configuration Protocol(DHCP)</strong> 는 Static Address Allocation과 Dynamic Address Allocation을 모두 지원하는 방법이다</li>
+<li>우선, <strong>Static Address Allocation</strong>의 경우에는 BOOTP와 동일하게 작동한다 - 요청을 받으면, DB에서 상응하는 논리주소를 꺼내와 응답하고</li>
+<li><strong>Dynamic Address Allocation</strong>의 경우에는 안쓰는 논리주소를 하나 할당해서 응답해주고 임시적으로 값이 저장되는 또 다른 DB에 저장하게 된다</li>
+<li>결과적으로 다음과 같은 과정이 이루어진다
+<ol>
+<li>Request가 들어오면 일단 Static DB부터 확인한다</li>
+<li>그리고 Static DB에 있으면 그에 맞는 논리즈소를 응답한다</li>
+<li>만약 Static DB에 없으면, <strong>Available pool</strong>(아무도 사용하지 않고 있는 논리주소들의 모음)에서 하나를 꺼내서 응답하고</li>
+<li>Dynamic DB에 추가한다</li>
+</ol>
+</li>
+<li>BOOTP의 경우에는 DB를 변경하려면 Manually하게(관리자가 직접)해야 하는 단점이 있었지만</li>
+<li>DHCP의 경우에는 Static DB는 여전히 Manually하게 변경해야하지만 Dynamic DB은 Automatic하게 변경되게 된다</li>
+</ul>
+<h2 id="error-reporting--icmp">Error reporting : ICMP<a aria-hidden="true" tabindex="-1" href="#error-reporting--icmp" class="internal"> §</a></h2>
+<ul>
+<li>일단 IP에는 Error reporting이랑 Error-correcting에 대한 기능이 없다 - 그래서 ICMP 프로토콜이 추가적으로 필요하게 되는 것</li>
+<li><strong>Internet Control Message Protocol(ICMP)</strong> 는 IP패킷들이 지나가는 과정에서 발생할 수 있는 에러에 대해 Error reporting과 Error correcting을 해주며 관리하는 프로토콜이다</li>
+<li>네트워크상의 자원들을 관리하는 프로토콜은 또 따로 있고 여기서는 IP패킷이 지나가는 과정에서 일어날 수 있는 에러에만 초점 을 맞춘다</li>
+<li>즉, Network layer에 한정해서 일어날 수 있는 문제들을 관리하는 것</li>
+<li>얘가 보내는 메세지에는</li>
+<li><strong>Error reporting message</strong> : 실제로 IP 패킷이 지나갈때 발생할 수 있는 에러들을 알려줌</li>
+<li><strong>Query message</strong> : 이건 자신 옆에 있는 호스트에게 보내는 메세지로 내 옆에 있는 놈이 <strong>누구인가?</strong> 등을 물어볼 수 있는 기능이랜다</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image6.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image6.png"/></p>
+<ul>
+<li>뭐 위에 메세지 포맷은 그냥 참고만 해라</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image7.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image7.png"/></p>
+<ul>
+<li>이것도 뭐 참고만 해라</li>
+</ul>
+<h2 id="ip-multicast--igmp">IP Multicast : IGMP<a aria-hidden="true" tabindex="-1" href="#ip-multicast--igmp" class="internal"> §</a></h2>
+<ul>
+<li>일단 <strong>Multicast</strong>라는 것은 특정 다수에게 패킷을 보내는 방법이다</li>
+<li>뭐 Unicast가 특정 한명이고 Broadcast가 불특정 다수니까</li>
+<li>이걸 위해서는</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image8.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image8.png"/></p>
+<ul>
+<li>첫번째로는 위 그림처럼 메세지를 여러번 보내는 방법이 있다 - <strong>Multiple unicast</strong>라고 함</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image9.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image9.png"/></p>
+<ul>
+<li>그리고 메세지를 <strong>Broadcast</strong>하게 보내고 각 라우터를 지날때는 모든 Interface에 복사를 해서 보내는 식으로 보든 호스트한테 다 보내되, 수신측에서 필터링하는 방법도 있다</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image10.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image10.png"/></p>
+<ul>
+<li>하지만 특별한 <strong>Multicast strategy</strong>를 이용하면 위처럼 원하는애들한테만 골라서 보낼 수 있게 된다</li>
+<li>이 방법을 고안해야 되는 이유는 다음과 같다
+<ul>
+<li><strong>Multiple unicast</strong>의 경우에는 수가 많은 경우 너무 많은 패킷을 보내야 돼 병목현상이 일어날 수 있고</li>
+<li><strong>Broadcast</strong>의 경우에는 원치 않은 애한테도 도달은 하게 된다는 문제가 있기 때문이다</li>
+</ul>
+</li>
+<li>일단 여기서 알아야 할 것은 Router 간 통신에는 <strong>Multicasting Protocol</strong>이라는 것을 사용하고</li>
+<li>Router와 Host간 통신에는 **Internet Group Management Protocol(IGMP)**를 사용한다는 것을 알아한다 - 프로토콜이 구분되어 있다는 것
+<ul>
+<li>이건 왜냐하면 첫번째로는 통신의 특성이 다르기 때문 - Router와 Host의 통신에는 한번 보내면 다 퍼지지만 Router와 Router의 통신은 여러 대상에게 보내기 위해서는 여러번 보내야 하기 때문</li>
+<li>두번째로는 Router와 Host와는 다르게 Router와 Router의 통신은 Network 사업자의 영역이기 때문에 다른 프로토콜을 사용하게 된다 - 뭐 datagram과 virtual circuit할때 사업자랑 고객이랑 다른 프로토콜을 사용했던 것과 같은 이유</li>
+</ul>
+</li>
+<li><strong>Multicasting Protocol</strong>은 나중에 배운댄다</li>
+</ul>
+<h3 id="구조">구조<a aria-hidden="true" tabindex="-1" href="#구조" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image11.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image11.png"/></p>
+<ul>
+<li>뭐 이것도 참고만 하면 된다</li>
+<li>다만 라우터가 주기적으로 Group에 참여하고 싶은 호스트들을 <strong>Query</strong>의 형태로 설문받는데</li>
+<li><strong>Membership report</strong>는 Group에 참여하고 싶음을 알리는 메세지이고</li>
+<li><strong>Leave report</strong>는 Group에서 빠지고 싶음을 알리는 메세지이다</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image12.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image12.png"/></p>
+<ul>
+<li>얘도 그냥 참고만</li>
+</ul>
+<h3 id="igmp-operation">IGMP Operation<a aria-hidden="true" tabindex="-1" href="#igmp-operation" class="internal"> §</a></h3>
+<ul>
+<li>먼저 <strong>Group</strong>과 <strong>Group ID</strong>의 개념을 좀 알 필요가 있음
+<ul>
+<li>예를 들어서 설명하는게 젤 이해 잘되는듯 - <strong>Group</strong>은 무도를 보는 가구의 집합이고 <strong>Group ID</strong>는 무도의 채널번호라고 대략적으로 감 잡으면 된다</li>
+<li>따라서 어떤 가구(호스트)하나가 무도를 보고싶으면 (Group에 속하고 싶으면) 지역 기지국에서 (Router 에서) 보고싶은 채널 설문 조사를 했을 때(<strong>General query</strong>를 날렸을 때) 설문 응답에 무도를 적어 (<strong>Membership report</strong>를 하여) 무도를 우리 지역에도 틀어달라고 요청할 수 있다 (Group에 속할 수 있다)</li>
+<li>그룹에서 빠져나올때는 지역 기지국에(Router에) 연락해(<strong>Leave report</strong>를 하여) 무도를 그만 틀어달라고 요청할 수 있는 것(Group에서 나올 수 있는 것)
+<ul>
+<li>그러면 기지국은(Router는) 제공 채널 목록에서 (<strong>Group id list</strong>에서) 바로 지우는 것이 아니라 다른 가구들의 의견을 물어보고 결정하게 된다(<strong>Group id</strong>를 포함하여 <strong>Special query</strong>를 날려 <strong>Membership report</strong>를 추가적으로 받는다 - 특정 기간동안 기다려도 아무도 Membership report를 하지 않으면 지우지만 누군가가 보내게 되면 지우지 않고 냅두게 되는 것)</li>
+<li>이 과정은 <strong>Monitoring membership</strong>이라고 한다</li>
+</ul>
+</li>
+<li>그래서 <strong>Group ID</strong>는 <strong>Multicast Address</strong>라고도 하는데 이제 라우터한테 해당 **Group ID(Multicast Address)**로 패킷이 도착하면 라우터에 속한 호스트들에게 뿌려주게 되는 것</li>
+<li>위 과정을 유심히 보면 가구 하나가 무도를 신청했으면 다른 가구는 추가적으로 신청하지 않아도 무도를 틀어서 볼 수 있다 - 즉, 호스트 하나가 라우터에게 Membership report를 날렸으면 Multicast packet이 도착했을 때 라우터가 뿌려주게 될 것이므로 다른 호스트들은 Membership report를 날릴 필요가 없이 그냥 받아 보기만 하면 되는 것 - 추가적으로 Membership report를 할 필요가 없다</li>
+</ul>
+</li>
+<li>그리고 <strong>Multicast router</strong>라는 놈에 대해서도 이해를 해야 한다</li>
+<li>얘의 역할은 Multicast packet을 뿌려주는 역할을 하는 라우터인데</li>
+<li>여기서 중요한 것은 Multicast router의 갯수는 네트워크당 여러개가 될 수 있지만 각각 Multicast router에 배정된 group id 리스트는 배타적이어야 된다는 것이다</li>
+<li>이건 왜냐하면 만일 호스트가 하나의 Multicast router에만 연결되어있으면 걔가 모든 Multicast packet을 처리하면 되지만, 여러개의 Multicast router에 연결되어 있을 때 Group id 리스트가 배타적이지 않다면, 교집합에 해당하는 그것에 대한 Multicast packet은 여러개의 Multicast router에서 호스트로 보내기 때문에 호스트가 여러번 받게 되는것 - 비효율적이더라</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image13.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image13.png"/></p>
+<ul>
+<li>그래서 위 그림이 예시임</li>
+<li>A, B, Z는 라우터 R, R1, R2에 연결되어있고 이중에 R이 Multicast router로 역할을 하고 있다</li>
+<li>그리고 R에는 저렇게 Group ID(Multicast Address) List가 있어서 해당 GID로 Multicast packet이 도착하면 R이 패킷을 뿌려주게 되는 것</li>
+</ul>
+<h3 id="delayed-response-strategy">Delayed response strategy<a aria-hidden="true" tabindex="-1" href="#delayed-response-strategy" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/images/07_c11a704f60224a508aaa262ebc6fc3ad/image14.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB07%20-%20Address%20mapping,%20Multicasting,%20Error%20rep%20c11a704f60224a508aaa262ebc6fc3ad/image14.png"/></p>
+<ul>
+<li>위에서 한 얘기를 좀 더 구체적인 과정으로 보여준거긴 한데</li>
+<li>Membership report를 한번만 보낼 수 있도록 하는 알고리즘 인 셈</li>
+<li>R에서 <strong>General query</strong>를 날린 시점이 0초라고 하자</li>
+<li>그럼 각각의 호스트는 <strong>General query</strong>를 받은 시점으로부터 자기가 원하는 GID 각각에 대해 난수를 하나 뽑아서 타이머를 설정해 놓는다
+<ul>
+<li>위의 그림에서 Timer에 해당하는 숫자가 바로 그것임</li>
+</ul>
+</li>
+<li>그리고 타이머가 종료되면 해당 GID에 대해 <strong>Membership report</strong>를 보내게 되고</li>
+<li>해당 GID에 대해 Membership report를 보내려고 했던 다른 호스트는 자기보다 먼저 타이머가 종료되어 Membership report를 보낸 놈이 있다는 것을 알고 타이머가 종료되어도 안보내게 된다
+<ul>
+<li>위의 그림에서는 228.42.0.0에 대한 Membership report는 A가 12초 뒤에 타이머가 끝나므로 보내게 된다</li>
+<li>그럼 B의 경우에는 48초이므로 아직 36초가 남은 상황이겠제</li>
+<li>근데 B는 A가 먼저 보낸 것을 알고 228.42.0.0에 대한 Membership report를 타이머가 종료되어도 보내지 않게 된다(보내야 하는 Membership report 목록에서 지우게 됨)</li>
+<li>마찬가지로 225.14.0.0의 경우에도 A가 먼저 끝나므로 C는 보내지 않고</li>
+<li>230.43.0.0의 경우에도 C가 먼저 끝나므로 A는 보내지 않는 식</li>
+<li>Membership report 보내지는 순서 뭐 이런거 시험에 나올 수 있을듯 - ppt 50페이지 근처 예제 풀어볼것</li>
+</ul>
+</li>
+<li>그리고 <strong>Query router</strong>라는 놈도 있는데 이놈은 Query를 보내게 되면 다량의 Response를 받게 되므로 Query를 보내는 라우터를 따로 하나 지정하고, 나머지 라우터들은 Response를 처리하는 식으로 역할 분담을 해 병목형상을 막는다</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#개요" data-for="개요">개요</a></li><li class="depth-0"><a href="#address-mapping---arp-rarp--bootp-dhcp" data-for="address-mapping---arp-rarp--bootp-dhcp">Address mapping - ARP, RARP (+ BOOTP, DHCP)</a></li><li class="depth-1"><a href="#arp" data-for="arp">ARP</a></li><li class="depth-1"><a href="#rarp" data-for="rarp">RARP</a></li><li class="depth-1"><a href="#작동과정" data-for="작동과정">작동과정</a></li><li class="depth-1"><a href="#bootp" data-for="bootp">BOOTP</a></li><li class="depth-1"><a href="#dhcp" data-for="dhcp">DHCP</a></li><li class="depth-0"><a href="#error-reporting--icmp" data-for="error-reporting--icmp">Error reporting : ICMP</a></li><li class="depth-0"><a href="#ip-multicast--igmp" data-for="ip-multicast--igmp">IP Multicast : IGMP</a></li><li class="depth-1"><a href="#구조" data-for="구조">구조</a></li><li class="depth-1"><a href="#igmp-operation" data-for="igmp-operation">IGMP Operation</a></li><li class="depth-1"><a href="#delayed-response-strategy" data-for="delayed-response-strategy">Delayed response strategy</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/network/originals/comnet.fall.2021.cse.cnu.ac.kr/(충남대)-컴퓨터-네트워크-강의록" class="internal">(충남대) 컴퓨터 네트워크 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

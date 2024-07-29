@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html><head><title>11. Layer Architecture</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="11. Layer Architecture"/><meta property="og:description" content="충남대학교 컴퓨터공학과 김상하 교수님의 &amp;quot;데이터 통신&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Protocol § Protocol : 약속, 규칙 - 통신을 하려면 나혼자만 하는게 아니고 누군가 상대방이 있어야 하기 때문에 그 상대방과 이런식으로 통신을 하자고 약속을 한 것을 프로토콜이라고 하는 것 Standards : Protocol은 그냥 규칙, 약속이기 때문에 많은 프로토콜들이 만들어질 수 있다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 김상하 교수님의 &amp;quot;데이터 통신&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Protocol § Protocol : 약속, 규칙 - 통신을 하려면 나혼자만 하는게 아니고 누군가 상대방이 있어야 하기 때문에 그 상대방과 이런식으로 통신을 하자고 약속을 한 것을 프로토콜이라고 하는 것 Standards : Protocol은 그냥 규칙, 약속이기 때문에 많은 프로토콜들이 만들어질 수 있다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/11.-Layer-Architecture"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">11. Layer Architecture</h1><p class="content-meta ">Jul 29, 2024, 13 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 김상하 교수님의 &quot;데이터 통신&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="protocol">Protocol<a aria-hidden="true" tabindex="-1" href="#protocol" class="internal"> §</a></h2>
+<ul>
+<li><strong>Protocol</strong> : 약속, 규칙 - 통신을 하려면 나혼자만 하는게 아니고 누군가 상대방이 있어야 하기 때문에 그 상대방과 이런식으로 통신을 하자고 약속을 한 것을 프로토콜이라고 하는 것</li>
+<li><strong>Standards</strong> : Protocol은 그냥 규칙, 약속이기 때문에 많은 프로토콜들이 만들어질 수 있다. 하지만 이 프로토콜들이 전부 표준이 되는 것은 아님 - 프로토콜중에 제일 성능이 좋은 것을 하나 골라 표준으로 정하고 대부분의 사람들이 지키도록 만든 프로토콜이 스탠다드인 셈</li>
+<li><strong>Algorithm</strong> : 프로토콜을 알고리즘이란 말하고 섞어서 쓰기도 한다 - 알고리즘은 문제를 풀기 위한 기법인데 프로토콜은 컴퓨터들간의 양방의 문제를 풀기 위한 기법이므로 알고리즘이라는 말과 유사한 의미를 가진 셈 - 일반적으로 말하는 알고리즘은 하나의 컴퓨터에서의 문제를 해결하는 방법인것과는 다르게 프로토콜은 여러대의 컴퓨터들간의 통신에서 일어날 수 있는 문제를 해결한다는 차이점이 있지만 문제를 해결한다는 점에서는 동일하기 때문</li>
+</ul>
+<h3 id="프로토콜의-구성요소">프로토콜의 구성요소<a aria-hidden="true" tabindex="-1" href="#프로토콜의-구성요소" class="internal"> §</a></h3>
+<ul>
+<li><strong>Syntax</strong> : 프레임의 구조, 형식, 포맷, 즉, 첫 몇비트는 뭐고 그다음 몇비트는 뭐고 이런식으로 통신하는데 사용되는 프레임의 틀이라고 생각하면 됨</li>
+<li><strong>Semantics</strong> : 얘는 Syntax로 표현된 형식, 포맷이 어떤 의미를 가지는 지 알려준다 - 즉, 하나의 프레임을 어떻게 자르는 지를 규정하는 것이 Syntax라면, 그 자른 부분들을 어떻게 사용할것인지를 명시하는 것이 Semantics인 것</li>
+<li><strong>Timing</strong> : 얘는 flow control에서처럼 송수신 타이밍을 말한다 - 통신이라는 것이 쌍방이기 때문에 아직 수신자가 받을 준비가 안됐으면 보내면 안되는 등의 통신에 참여한 놈들끼리 이런 시간적인 약속또한 하는 것</li>
+</ul>
+<h2 id="network-modelarchitecture">Network Model(Architecture)<a aria-hidden="true" tabindex="-1" href="#network-modelarchitecture" class="internal"> §</a></h2>
+<ul>
+<li>통신을 하기 위한 소프트웨어를 만드는 일은 그 양이 너무 크고 방대하기 때문에 이것 전체를 한꺼번에 개발하는 것은 불가능하다</li>
+<li>그래서 이 전체 시스템을 여러 계층으로 쪼개어서 분업하자는 생각이 나오게 된 것 - 이것에 네트워크 계층의 시작이다</li>
+<li>따라서 사람들을 자기 분야의 계층만 연구하면 되고, 이것을 이어붙이기만 하면 전체 시스템이 완성되는 방향으로 네트워크 개발이 이루어지고 있다</li>
+<li>이렇게 해서 완성된 모델은 <strong>OSI 7 layer</strong>라고 하는 지금은 잘 사용되지 않지만 그래도 이 네트워크 계층이라는 개념의 근간을 이루고 있는 선언적인 시스템과</li>
+<li>인터넷 네트워크의 표준인 <strong>TCP / IP</strong>가 있다</li>
+</ul>
+<h3 id="layered-architecture">Layered Architecture<a aria-hidden="true" tabindex="-1" href="#layered-architecture" class="internal"> §</a></h3>
+<ul>
+<li>위에서도 말했지만 아주 크로 방대한 것을 계층적으로 잘라 각각을 개발하고 이어붙이는 기법 을 말하는데</li>
+<li>일단 <strong>Layered Architecture(계층적 구조)</strong> 라는 것은 다음과 같은 말이다 - 상위계층에서는 하위계층의 기능을 사용할 수 있지만, 하위계층에서는 상위계층의 기능들을 사용하지 못함</li>
+<li>이 계층들을 구현한 것을 <strong>모듈(module)</strong> 이라고 한다</li>
+<li>그리고 이것을 이어 붙이는 것은 <strong>인터페이스(Interface)</strong> 라는 것을 사용한다 - 얘는 계층들을 이어주는 다리라고도 생각할 수 있으며 인터페이스가 존재함으로써 하나의 계층이 내부적으로도 수정되어도 인터페이스만 동일하다면 이 계층을 사용하는 다른 계층은 수정할 필요가 없다는 장점이 존재한다 - 마치 OOP에서의 추상화처럼</li>
+<li>여기서 <strong>Peer-to-Peer</strong>통신이라는 것은 계층간의 통신을 말한다.
+<ul>
+<li>여기서 계층간의 통신이라는 것은 진짜로 계층간에 회선이 연결되어 계층끼리 통신한다는 소리가 아니다</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/11_18bd81b9338b464e9224a19d4ce717ff/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB11%20-%20Layer%20Architecture%2018bd81b9338b464e9224a19d4ce717ff/image1.png"/></p>
+<ul>
+<li>위의 그림에서 보이는 것 처럼 계층x에서 하위계층으로 어떤 패킷을 내려보내면 다른station의 해당 계층x에서도 동일한 패킷을 받으므로 계층간 통신을 하는 것으로 간주한다는 것</li>
+<li>그리고 다른계층에서 어떤일이 일어나는지는 전혀 상관할 바가 아니기 때문에 그냥 전선 하나 띡 이어져 있는것처럼 생각해도 된다는 소리이다</li>
+<li>이렇게 함으로써 얻을 수 있는 장점은 station간의 통신이라는 거대한 문제를 계층간 통신이라는 작은 문제들로 나눠서 해결하게 되므로 더 쉬워진다는 것이다</li>
+<li>위의 그림에서 볼 수 있듯이 하나의 계층은 상위계층에서 뭔가 전달받으면 그것 전체를 그냥 데이터로 간주해 거기다가 자신의 헤더나 그런것들을 붙여 하위계층으로 내려보내는 거고 하위계층에서 전달받으면 거기에서 상대방이 붙인 헤더만 떼어서 상위계층으로 올려보내는 작업만을 한다</li>
+</ul>
+<h2 id="osi-model">OSI Model<a aria-hidden="true" tabindex="-1" href="#osi-model" class="internal"> §</a></h2>
+<ul>
+<li>IBM이 개발해 표준으로 채택된 모델</li>
+</ul>
+<h3 id="physical-layer">Physical Layer<a aria-hidden="true" tabindex="-1" href="#physical-layer" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/11_18bd81b9338b464e9224a19d4ce717ff/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB11%20-%20Layer%20Architecture%2018bd81b9338b464e9224a19d4ce717ff/image2.png"/></p>
+<ul>
+<li>얘는 이제 최하위 계층으로 상대방의 Physical layer로 최대한 오류가 적게 나는 방법으로 전송하는 것에만 신경쓴다 - 오류가 안난다는 말이 아니고 오류를 최대한 줄여 상대방이 이해할수는 있게</li>
+<li>즉 어떻게 비트들을 인코딩하여 보내고 그렇게 받은 비트들을 어떻게 디코딩하는지에만 집중하는 계층이다</li>
+</ul>
+<h3 id="data-link-layer">Data Link Layer<a aria-hidden="true" tabindex="-1" href="#data-link-layer" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/11_18bd81b9338b464e9224a19d4ce717ff/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB11%20-%20Layer%20Architecture%2018bd81b9338b464e9224a19d4ce717ff/image3.png"/></p>
+<ul>
+<li>Data Link Layer의 역할은 <strong>Reliable Control</strong> 을 수행하는 것인데 이것은 다음처럼 다섯가지로 나눠질 수 있다
+<ol>
+<li><strong>Error Control</strong> : Error Detection하는 일</li>
+<li><strong>Flow Control</strong> : Flow Error를 막기 위해 흐름을 제어하는 것</li>
+<li><strong>Access Control</strong> : 패킷의 충돌을 막기 위해 제어하는 것</li>
+<li><strong>Framing</strong> : 데이터의 크기가 너무 커지면 Redundancy Bit도 너무 커져서 프레임단위로 나누는 것</li>
+<li><strong>Addressing</strong> : 물리주소를 할당하여 패킷이 제대로 도착할 수 있도록 하는 것</li>
+</ol>
+</li>
+<li>이 계층은 오류가 전혀 없는 완전무결한 통신, 즉, <strong>Reliable Control</strong>을 위한 작업만 수행한다</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/11_18bd81b9338b464e9224a19d4ce717ff/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB11%20-%20Layer%20Architecture%2018bd81b9338b464e9224a19d4ce717ff/image4.png"/></p>
+<ul>
+<li>근데 여기서 <strong>Reliable Control</strong>이라는 것은 <strong>Hop-to-Hop Delivery</strong>에서의 완전무결한 전달을 의미한다.</li>
+<li>즉, station하나에서 다른 station으로 갈 때 여러개의 정거장을 거치게 되는데 data link layer가 보장하는 reliable control이라는 것은 station에서 station까지의 완전무결한 통신이 아닌 정거장 하나에 대한 이동(이것을 <strong>Hop-to-Hop</strong>이라고 한다)에 대한 완전무결한 통신인 것이다
+<ul>
+<li>안타깝게도 컴네때 배우겠지만 이렇게 부분구간을 완벽하게 한다고 해서 전체구간이 완벽해지는건 아니랜다</li>
+</ul>
+</li>
+</ul>
+<h3 id="network-layer">Network Layer<a aria-hidden="true" tabindex="-1" href="#network-layer" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/11_18bd81b9338b464e9224a19d4ce717ff/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB11%20-%20Layer%20Architecture%2018bd81b9338b464e9224a19d4ce717ff/image5.png"/></p>
+<ul>
+<li>데이터 링크 계층까지는 hop-to-hop통신을 보장하지만 네트워크 계층은 hop-to-hop통신을 넘어 결과적으로 <strong>Source-to-Destination</strong>까지의 통신을 보장한다</li>
+<li>즉, 단순히 다음 정거장까지 무사히 가는것 뿐만 아니라 원하는 목적지까지 무사히 가는것을 목표로 하는 계층인 셈</li>
+</ul>
+<h2 id="tcp--ip">TCP / IP<a aria-hidden="true" tabindex="-1" href="#tcp--ip" class="internal"> §</a></h2>
+<ul>
+<li>일단 얘는 Physical layer와 data link layer에 대해서는 별로 관심을 갖지 않는다</li>
+<li>그리고 상위 3개의 계층인 Application layer, Presentation layer, Session layer를 하나로 묶어 Application layer로 퉁치고</li>
+<li>그 아래 계층인 Transport layer로 <strong>TCP</strong>를 사용하며</li>
+<li>또 그 아래 계층인 Network layer로 <strong>IP</strong>를 사용하는 프로토콜을 의미한다</li>
+<li>그리고 이런 <strong>IP</strong> 모듈을 사용하는 통신망에 연결했을 때를 우리가 인터넷에 연결되었다 라고 하는 것</li>
+<li>TCP / IP는 OSI 7 layer보다 먼저 나왔다 - 그래서 상위 3개의 계층이 통합된게 아니라 사실은 분리되지 못한셈임</li>
+<li>OSI가 더 구조적으로 이상적인 모습을 하고 있지만 결국에는 TCP / IP에 밀려 사용되지 않았다 - 구조적으로 분리하는 것이 더 알아보기 쉽고 좋지만 그만큼 성능에의 하락이 존재하기 때문</li>
+<li>그리고 물리계층과 데이터 링크 계층에 대해 관심을 갖지 않는다는 것은 어느것을 써도 유연하게 연결이 가능하다는 의미이기도 하다 - 물리계층과 데이터 링크 계층을 어느걸 써도 IP에만 연결되면 인터넷에 연결된 것이라고 하게 된다</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#protocol" data-for="protocol">Protocol</a></li><li class="depth-1"><a href="#프로토콜의-구성요소" data-for="프로토콜의-구성요소">프로토콜의 구성요소</a></li><li class="depth-0"><a href="#network-modelarchitecture" data-for="network-modelarchitecture">Network Model(Architecture)</a></li><li class="depth-1"><a href="#layered-architecture" data-for="layered-architecture">Layered Architecture</a></li><li class="depth-0"><a href="#osi-model" data-for="osi-model">OSI Model</a></li><li class="depth-1"><a href="#physical-layer" data-for="physical-layer">Physical Layer</a></li><li class="depth-1"><a href="#data-link-layer" data-for="data-link-layer">Data Link Layer</a></li><li class="depth-1"><a href="#network-layer" data-for="network-layer">Network Layer</a></li><li class="depth-0"><a href="#tcp--ip" data-for="tcp--ip">TCP / IP</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/(충남대)-데이터-통신-강의록" class="internal">(충남대) 데이터 통신 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html><head><title>Memtable (RocksDB)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Memtable (RocksDB)"/><meta property="og:description" content="참고한 것들 RocksDB 공식문서 Memory Table, Memtable § RocksDB 의 LSM 에서의 in-memory buffer 공간을 일컫는다. 어떤 key-value pair 가 write 되면, 일단 제일 먼저 이곳에 저장되고, read 도 이 공간을 제일 먼저 찾아보게 된다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../static/icon.png"/><meta name="description" content="참고한 것들 RocksDB 공식문서 Memory Table, Memtable § RocksDB 의 LSM 에서의 in-memory buffer 공간을 일컫는다. 어떤 key-value pair 가 write 되면, 일단 제일 먼저 이곳에 저장되고, read 도 이 공간을 제일 먼저 찾아보게 된다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/rocksdb/Memtable-(RocksDB)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Memtable (RocksDB)</h1><p class="content-meta ">Apr 14, 2024, 4 min read</p><ul class="tags "><li><a href="../../../tags/용어집" class="internal tag-link">#용어집</a></li><li><a href="../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../tags/rocksdb" class="internal tag-link">#rocksdb</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/MemTable" class="external">RocksDB 공식문서</a></li>
+</ul>
+</blockquote>
+<h2 id="memory-table-memtable">Memory Table, Memtable<a aria-hidden="true" tabindex="-1" href="#memory-table-memtable" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../gardens/database/rocksdb/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/rocksdb/LSM-Tree-(RocksDB)">RocksDB 의 LSM</a> 에서의 in-memory buffer 공간을 일컫는다.</li>
+<li>어떤 key-value pair 가 write 되면, 일단 제일 먼저 이곳에 저장되고, read 도 이 공간을 제일 먼저 찾아보게 된다.</li>
+<li>여기의 내용은 추후에 memtable 이 꽉 차는 등의 조건이 맞으면 디스크로 flush 된다.</li>
+</ul>
+<h2 id="mutable-immutable-memtable">Mutable, Immutable memtable<a aria-hidden="true" tabindex="-1" href="#mutable-immutable-memtable" class="internal"> §</a></h2>
+<ul>
+<li>디스크로의 flush 과정을 좀 더 세분하게 살펴보자: 메모리 공간에는 <em>Mutable memtable</em> 과 <em>Immutable memtable</em> 이 있다.</li>
+<li>일단 <span class="text-highlight">인메모리 write buffer 로 사용되는 공간은 mutable memtable</span> 이고, 여기에 데이터들이 write 된다.</li>
+<li>그리고 <span class="text-highlight">해당 공간이 다 차게 되면 일단 인메모리에서 immutable memtable 로 전환되고, 추후에 flush</span> 되는 것.</li>
+</ul>
+<h2 id="default-policy">Default Policy<a aria-hidden="true" tabindex="-1" href="#default-policy" class="internal"> §</a></h2>
+<h3 id="skip-list">Skip List<a aria-hidden="true" tabindex="-1" href="#skip-list" class="internal"> §</a></h3>
+<ul>
+<li>일단 Memtable 의 구현은 <a href="../../../gardens/algorithm/draft/Skip-List-(Data-Structure)" class="internal" data-slug="gardens/algorithm/draft/Skip-List-(Data-Structure)">Skip list</a> 로 되어 있어서 read 작업은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">))</span></span></span></span></span> 으로 수행된다.
+<ul>
+<li>Memtable 에 다른 자료구조를 사용할 수도 있다. 하지만 default 로는 skiplist 를 사용하도록 되어 있고, 지원하는 기능도 이게 더 많다.</li>
+<li>가령, 바로 아래에서 설명할 concurrent 기능도 skiplist 에서만 사용 가능하다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="append-only-allow_concurrent_memtable_write-option">Append-only, <code>allow_concurrent_memtable_write</code> Option<a aria-hidden="true" tabindex="-1" href="#append-only-allow_concurrent_memtable_write-option" class="internal"> §</a></h3>
+<ul>
+<li>그리고 여기서의 update 는 in-place 가 아닌 append only (out-place) 로 이루어 진다.
+<ul>
+<li>왜 디스크도 아니고 메모리 공간에 있는 memtable 을 굳이 append only 로 작동하게 만들었을까 의문을 가질 수도 있는데</li>
+<li>이것은 concurrent write 를 가능하기 하기 위함이다.</li>
+<li>In-place update 의 경우에는 여러 thread 가 접근했을 경우에 lock 을 걸며 write 해야 하기 때문에 concurrent 가 불가능하지만</li>
+<li>Append only 를 하면 굳이 이러지 않아도 되기 때문.</li>
+<li>물론 위 내용은 default 설정을 말하는 것이다
+<ul>
+<li>Default 로는 concurrent write (<code>allow_concurrent_memtable_write: true</code>) + append only (<code>inplace_update_support: false</code>) 지만, concurrent 를 비활성화 하고 in-place 를 활성화 할 수도 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="internal-key">Internal Key<a aria-hidden="true" tabindex="-1" href="#internal-key" class="internal"> §</a></h3>
+<ul>
+<li>그럼 skiplist 에서 어떻게 append only 를 할 수 있을 까. 이것은 internal key 를 이용해서 수행한다.
+<ul>
+<li>외부적으로 보여지는 key 에 추가적으로, 내부적으로는 append only 를 위해 internal key 를 사용하게 되는데</li>
+<li>여기에는 key 에 부가적으로 sequence no. 가 들어가 해당 키에 대한 일종의 version 까지 붙여서 skip list 에 넣게 된다.</li>
+</ul>
+</li>
+<li>즉, 겉으로 보기에는 <code>key -> value</code> 형태지만, 실제로 skiplist 에 저장되는 노드는 <code>[key, seq] -> value</code> 인 것.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#memory-table-memtable" data-for="memory-table-memtable">Memory Table, Memtable</a></li><li class="depth-0"><a href="#mutable-immutable-memtable" data-for="mutable-immutable-memtable">Mutable, Immutable memtable</a></li><li class="depth-0"><a href="#default-policy" data-for="default-policy">Default Policy</a></li><li class="depth-1"><a href="#skip-list" data-for="skip-list">Skip List</a></li><li class="depth-1"><a href="#append-only-allow_concurrent_memtable_write-option" data-for="append-only-allow_concurrent_memtable_write-option">Append-only, allow_concurrent_memtable_write Option</a></li><li class="depth-1"><a href="#internal-key" data-for="internal-key">Internal Key</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../gardens/database/(Garden)-Database" class="internal">(Garden) Database</a></li><li><a href="../../../gardens/database/rocksdb/LSM-Tree-(RocksDB)" class="internal">LSM Tree (RocksDB)</a></li><li><a href="../../../gardens/storage/papers/draft/(논문)-ZNS,-Avoiding-the-Block-Interface-Tax-for-Flash-based-SSDs" class="internal">(논문) ZNS, Avoiding the Block Interface Tax for Flash-based SSDs</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../postscript.js" type="module"></script></html>

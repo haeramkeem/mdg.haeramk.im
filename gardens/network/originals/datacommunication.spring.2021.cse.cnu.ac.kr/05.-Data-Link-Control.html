@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html><head><title>05. Data Link Control</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="05. Data Link Control"/><meta property="og:description" content="충남대학교 컴퓨터공학과 김상하 교수님의 &amp;quot;데이터 통신&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Datalink Layer의 목적 § 신뢰도가 높은 - 통신에 있어 단 하나의 에러도 발생기키지 않기 위한 목적 Physical Layer의 경우에는 한번 전송할때 최대한 에러를 적게 내려는게 목표라면 Datalink Layer의 경우에는 재전송하는 한이 있더라도 완벽한 데이터를 받게 하는것이 목표이다 이것을 위해서 프레임, 패킷이라는 단위로 전송을 한다 에러의 종류 § Single-bit Error : 하나의 비트가 잘못 수신되는 것 Burst Error : 여러개의 비트가 뭉탱이로 잘못 수신되는 것 에러처리 § Parity(Redundant, Extra) bit나 data를 추가로 더 보내게 된다 위의 그림 예시를 보면 even parity의 경우에는 extra bit를 하나 추가로 두어서 1의 갯수가 항상 짝수가 되게 만들어주는데 1의 갯수가 홀수면 잘못 수신됐다고 판단할 수 있는 것이다 이때 Error Detection는 오류가 났는지 안났는지를 확인만 하는거고 Error Correction의 경우에는 어디서 에러가 났는지를 알아서 고칠 수 있게 하는 것이다 Detection § detection의 경우에는 잘못 수신된 데이터를 원래의 데이터로 복구는 하지 못한다 - 이렇게 잘못 수신되면 다시 송신하라고 요청해서 제대로 수신될때까지 송신을 반복하게 하는게 detection을 활용한 통신이다 많은 에러를 detection하려면 당연히 많은 비트의 redundancy가 필요하다 Correction § correction의 경우에는 redundancy를 추가해서 unique한 패턴으로 만들어서 보내게 된다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 김상하 교수님의 &amp;quot;데이터 통신&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Datalink Layer의 목적 § 신뢰도가 높은 - 통신에 있어 단 하나의 에러도 발생기키지 않기 위한 목적 Physical Layer의 경우에는 한번 전송할때 최대한 에러를 적게 내려는게 목표라면 Datalink Layer의 경우에는 재전송하는 한이 있더라도 완벽한 데이터를 받게 하는것이 목표이다 이것을 위해서 프레임, 패킷이라는 단위로 전송을 한다 에러의 종류 § Single-bit Error : 하나의 비트가 잘못 수신되는 것 Burst Error : 여러개의 비트가 뭉탱이로 잘못 수신되는 것 에러처리 § Parity(Redundant, Extra) bit나 data를 추가로 더 보내게 된다 위의 그림 예시를 보면 even parity의 경우에는 extra bit를 하나 추가로 두어서 1의 갯수가 항상 짝수가 되게 만들어주는데 1의 갯수가 홀수면 잘못 수신됐다고 판단할 수 있는 것이다 이때 Error Detection는 오류가 났는지 안났는지를 확인만 하는거고 Error Correction의 경우에는 어디서 에러가 났는지를 알아서 고칠 수 있게 하는 것이다 Detection § detection의 경우에는 잘못 수신된 데이터를 원래의 데이터로 복구는 하지 못한다 - 이렇게 잘못 수신되면 다시 송신하라고 요청해서 제대로 수신될때까지 송신을 반복하게 하는게 detection을 활용한 통신이다 많은 에러를 detection하려면 당연히 많은 비트의 redundancy가 필요하다 Correction § correction의 경우에는 redundancy를 추가해서 unique한 패턴으로 만들어서 보내게 된다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/05.-Data-Link-Control"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">05. Data Link Control</h1><p class="content-meta ">Jul 29, 2024, 13 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 김상하 교수님의 &quot;데이터 통신&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="datalink-layer의-목적">Datalink Layer의 목적<a aria-hidden="true" tabindex="-1" href="#datalink-layer의-목적" class="internal"> §</a></h2>
+<ul>
+<li>신뢰도가 높은 - 통신에 있어 단 하나의 에러도 발생기키지 않기 위한 목적</li>
+<li>Physical Layer의 경우에는 한번 전송할때 최대한 에러를 적게 내려는게 목표라면</li>
+<li>Datalink Layer의 경우에는 재전송하는 한이 있더라도 완벽한 데이터를 받게 하는것이 목표이다</li>
+<li>이것을 위해서 <strong>프레임, 패킷</strong>이라는 단위로 전송을 한다</li>
+</ul>
+<h2 id="에러의-종류">에러의 종류<a aria-hidden="true" tabindex="-1" href="#에러의-종류" class="internal"> §</a></h2>
+<ul>
+<li><strong>Single-bit Error</strong> : 하나의 비트가 잘못 수신되는 것</li>
+<li><strong>Burst Error</strong> : 여러개의 비트가 뭉탱이로 잘못 수신되는 것</li>
+</ul>
+<h2 id="에러처리">에러처리<a aria-hidden="true" tabindex="-1" href="#에러처리" class="internal"> §</a></h2>
+<ul>
+<li><strong>Parity(Redundant, Extra)</strong> bit나 data를 추가로 더 보내게 된다</li>
+</ul>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/05_5c5f54354ddd477cb24ecb1e4e13a444/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20Data%20Link%20Control%205c5f54354ddd477cb24ecb1e4e13a444/image1.png"/></p>
+<ul>
+<li>위의 그림 예시를 보면 even parity의 경우에는 extra bit를 하나 추가로 두어서 1의 갯수가 항상 짝수가 되게 만들어주는데 1의 갯수가 홀수면 잘못 수신됐다고 판단할 수 있는 것이다</li>
+<li>이때 <strong>Error Detection</strong>는 오류가 났는지 안났는지를 확인만 하는거고 <strong>Error Correction</strong>의 경우에는 어디서 에러가 났는지를 알아서 고칠 수 있게 하는 것이다</li>
+</ul>
+<h3 id="detection">Detection<a aria-hidden="true" tabindex="-1" href="#detection" class="internal"> §</a></h3>
+<ul>
+<li>detection의 경우에는 잘못 수신된 데이터를 원래의 데이터로 복구는 하지 못한다 - 이렇게 잘못 수신되면 다시 송신하라고 요청해서 제대로 수신될때까지 송신을 반복하게 하는게 detection을 활용한 통신이다</li>
+<li>많은 에러를 detection하려면 당연히 많은 비트의 redundancy가 필요하다</li>
+</ul>
+<h3 id="correction">Correction<a aria-hidden="true" tabindex="-1" href="#correction" class="internal"> §</a></h3>
+<ul>
+<li>correction의 경우에는 redundancy를 추가해서 unique한 패턴으로 만들어서 보내게 된다. 이 경우에는 한 비트가 에러가 나도 금방 원래의 데이터를 추론할 수 있기 때문에 원 데이터로 correction할 수 있다</li>
+<li>예를 들어 01111로 수신됐는데 패턴 중에 01011이 존재한다면 세번째 비트가 오류가 났다는것을 금방 추론하고 01011로 수정해서 상위계층으로 올리게 된다</li>
+</ul>
+<h2 id="frame-packet의-필요성">Frame, Packet의 필요성<a aria-hidden="true" tabindex="-1" href="#frame-packet의-필요성" class="internal"> §</a></h2>
+<ul>
+<li>데이터가 크면 이놈을 위해 필요한 redundancy도 엄청 커지고 이것을 오류가 날때마다 계속 보낸다면 비효율적이다</li>
+<li>따라서 이런 큰 데이터를 송신할때는 작게 잘라 보내게 되는데 이것을 <strong>Framing</strong>이라고 하는 것 이다</li>
+<li>이 나눠진 한 단위를 <strong>Packet</strong>이라고 하며 이것이 데이터 링크를 지날 때에는 <strong>Frame</strong>이라는 이름으로 부른다</li>
+<li><strong>Fixed-size framing</strong>의 경우 크기가 정해져있기 때문에 데이터의 시작과 끝을 구별해내기 쉽지만 데이터가 작을 경우 비트 낭비가 있다는 단점이 있다
+<ul>
+<li>운체에서 internal fragment가 발생하는 원리랑 같은 원리이다</li>
+</ul>
+</li>
+<li><strong>Variable-size framing</strong>의 경우 데이터의 크기에 따라, 그리고 전송매체에 따라 사이즈를 가변적으로 활용할 수 있다는 장점이 있지만 데이터의 시작과 끝을 나타내는 <strong>Delimiter</strong>가 추가로 필요하다는 단점이 있다</li>
+<li>전송매체에 따라서도 자르는 프레임의 크기가 다른 이유는 에러가 적은 전송매체로는 많은양의 데이터를 보내도 괜찮고 에러가 많은 전송매체로는 적은양의 데이터밖에 보낼 수 없기 때문에 이렇게 하나의 데이터를 여러 사이즈로 프레이밍해서 각기 다른 매개체로 병렬적으로 보내게 되는 것 이다</li>
+</ul>
+<h2 id="character-oriented-protocols">Character-Oriented Protocols<a aria-hidden="true" tabindex="-1" href="#character-oriented-protocols" class="internal"> §</a></h2>
+<ul>
+<li>데이터들이 8비트 문자의 묶음 형태로 전송되는 것을 의미</li>
+<li><strong>Flag</strong> : 데이터의 시작과 끝을 나타냄</li>
+<li><strong>Header</strong> : 송수신 주소에 대한 정보를 담고 있음</li>
+<li><strong>Trailer</strong> : redundancy가 담겨있음</li>
+</ul>
+<h3 id="byte-stuffing-unstuffing">Byte Stuffing, Unstuffing<a aria-hidden="true" tabindex="-1" href="#byte-stuffing-unstuffing" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/05_5c5f54354ddd477cb24ecb1e4e13a444/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20Data%20Link%20Control%205c5f54354ddd477cb24ecb1e4e13a444/image2.png"/></p>
+<ul>
+<li>만약에 전송하는 문자열에 flag가 들어있으면 얘는 진짜로 flag인게 아니라 “flag”라는 데이터일 뿐이므로 프레이밍 과정에서 앞에 ESC(escape)문자를 붙인다</li>
+<li>이렇게 데이터를 프레이밍하는 과정에서 ESC를 붙여 뒤에 나오는 놈이 어떤 의미를 갖는 표식이 아닌 그냥 데이터의 일부일 뿐이라는 것을 명시하는 것을 <strong>Byte Stuffing</strong>이라고 한다
+<ul>
+<li>마치 Like 문자열 escape character 와 같다</li>
+</ul>
+</li>
+<li>따라서 ESC 뒤에 있는 놈은 프레임의 구조를 분석할때 제외된다</li>
+<li>프레임에서 데이터를 다시 끄집어 낼 때에는 이 ESC는 다시 지우게 되는데 이 과정을 <strong>Byte Unstuffing</strong>이라고 한다</li>
+<li>근데 이때 데이터에 “ESC”라는 문자열이 들어있으면 얘를 byte stuffing에 의해 추가된 놈이라고 생각해 지울 염려가 있다</li>
+<li>그래서 데이터로써의 “ESC”가 있어도 그 앞에 ESC를 하나 붙여 ESC를 지워도 데이터로써의 “ESC”는 남아있을 수 있도록 한다</li>
+<li>프레이밍을 할때는 ESC를 “ESC”나 “FLAG”앞에 기계적으로 붙이고 다시 데이터를 끄집어낼때는 데이터 내의 ESC를 기계적으로 지우기 때문</li>
+</ul>
+<h2 id="bit-oriented-protocol">Bit-Oriented Protocol<a aria-hidden="true" tabindex="-1" href="#bit-oriented-protocol" class="internal"> §</a></h2>
+<ul>
+<li>사진, 동영상, 음악같은 경우에는 문자로 표현이 안되기 때문에 그냥 커다란 bit 덩어리로 보내게 된다</li>
+<li>따라서 특정한 bit stream을 flag로 지정해 시작과 끝을 나타내게 된다</li>
+</ul>
+<h3 id="bit-stuffing-unstuffing">Bit Stuffing, Unstuffing<a aria-hidden="true" tabindex="-1" href="#bit-stuffing-unstuffing" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/05_5c5f54354ddd477cb24ecb1e4e13a444/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20Data%20Link%20Control%205c5f54354ddd477cb24ecb1e4e13a444/image3.png"/></p>
+<ul>
+<li>얘도 동일한 문제가 발생할 수 있다. 만약에 1이 6개가 연속될때를 flag라고 지정했을 때, data bit에 1이 연속 6개가 들어있으면 얘를 flag로 인식할 수가 있다</li>
+<li>따라서 데이터에 1이 5개가 연속되어 있으면 그 뒤에 0을 무조건 붙이는 방식으로 Bit Stuffing 을 하고</li>
+<li>Unstuffing과정에서는 1이 5개 연속되어있는 다음의 0은 제거하는 방식으로 진행 하면 이런 혼동을 막을 수 있다</li>
+</ul>
+<h2 id="가상의-noiseless-channel에서의-protocol">가상의 Noiseless Channel에서의 Protocol<a aria-hidden="true" tabindex="-1" href="#가상의-noiseless-channel에서의-protocol" class="internal"> §</a></h2>
+<h3 id="simplest-protocol">Simplest Protocol<a aria-hidden="true" tabindex="-1" href="#simplest-protocol" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/05_5c5f54354ddd477cb24ecb1e4e13a444/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20Data%20Link%20Control%205c5f54354ddd477cb24ecb1e4e13a444/image4.png"/></p>
+<ul>
+<li><strong>Simplest protocol</strong> : 아무짓도 안하는 프로토콜</li>
+<li>그냥 redundancy같은거 필요없이 프레임을 주고 받으면 된다</li>
+</ul>
+<h3 id="stop-and-wait-protocol">Stop-and-Wait Protocol<a aria-hidden="true" tabindex="-1" href="#stop-and-wait-protocol" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/05_5c5f54354ddd477cb24ecb1e4e13a444/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20Data%20Link%20Control%205c5f54354ddd477cb24ecb1e4e13a444/image5.png"/></p>
+<ul>
+<li><strong>Flow error</strong> : 프레임이 도착한다고 해서 바로바로 상위계층으로 올라가는게 아니다 - 프레임이 도착하면 버퍼에 저장되어 있다가 이 버퍼를 비우고 다시채우고 하는 과정을 반복하게 되는데 버퍼를 비우는 프로세스가 블락을 먹거나 하는 등의 이슈로 멈추게 되면 새로 들어온 프레임은 기존에 버퍼에 들어있던 프레임을 덮어쓰게 된다. 이렇게 수신자의 처리속도와 송신자의 처리속도의 차이에 의해 에러가 나는것을 <strong>flow error</strong>라고 한다</li>
+<li>따라서 noiseless channel이어도 에러가 날 수 있다는 것</li>
+<li><strong>Stop-and-wait protocol</strong> : 이러한 flow error를 해결하기 위한 프로토콜. 수신자가 수신 완료 후 <strong>ACK</strong>(QSL같은놈 - 수신 잘 됐다는거)날리면 그때서야 다음 프레임을 전송하는 구조</li>
+</ul>
+<h2 id="실제-noisy-channel에서의-protocol">실제 Noisy Channel에서의 Protocol<a aria-hidden="true" tabindex="-1" href="#실제-noisy-channel에서의-protocol" class="internal"> §</a></h2>
+<h3 id="stop-and-wait-arqautomatic-repeat-request">Stop-and-Wait ARQ(Automatic Repeat reQuest)<a aria-hidden="true" tabindex="-1" href="#stop-and-wait-arqautomatic-repeat-request" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/05_5c5f54354ddd477cb24ecb1e4e13a444/image6.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20Data%20Link%20Control%205c5f54354ddd477cb24ecb1e4e13a444/image6.png"/></p>
+<ul>
+<li><strong>Stop-and-Wait ARQ</strong>프로토콜은 기존의 Stop-and-Wait Protocol에서 노이즈에 의해 ACK가 오지 않았을때를 해결하는 프로토콜이다</li>
+</ul>
+<h3 id="프레임-송신중-에러가-날-때">프레임 송신중 에러가 날 때<a aria-hidden="true" tabindex="-1" href="#프레임-송신중-에러가-날-때" class="internal"> §</a></h3>
+<ul>
+<li>이게 수신자가 아직 수신을 못해서 ACK가 안온건지 아니면 에러가 나서 ACK가 안온건지 알 수 없기 때문에 송신자는 일정시간 기다린 후에 이 프레임을 다시 보내게 된다( - automatic repeat의 말 뜻이 이거다)</li>
+</ul>
+<h3 id="ack송신중-에러가-날-때--종합적-통신과정">ACK송신중 에러가 날 때 + 종합적 통신과정<a aria-hidden="true" tabindex="-1" href="#ack송신중-에러가-날-때--종합적-통신과정" class="internal"> §</a></h3>
+<ul>
+<li>하지만 수신자는 잘 받았는데 ACK가 에러가 나서 송신자측에서 프레임을 못받았다고 판단해 다시한번 보내게 되면 중복 데이터가 수신되는 셈이다</li>
+<li>이를 방지하기 위해 프레임에는 <strong>Sequence Number</strong>라는게 존재한다 - 즉, 이 프레임이 몇번째 프레임인지를 나타내는 숫자</li>
+<li>그리고 <strong>ACK Number</strong>는 수신자 측이 잘 받았고 이제 나는 ~번째 프레임이 필요하다 라는 뜻을 가지게 된다</li>
+<li>수신자 측에서는 seqNum이 0인 프레임을 정상적으로 수신해서 ACK 1을 보냈는데 송신자측에서 못알아듣고 seqNum이 0인 프레임을 한번 더 보내면 수신자측은 seqNum을 통해 중복수신이라는 것을 파악하고 seqNum 0인 프레임은 폐기하고 ACK1 를 한번 더 보내게 된다</li>
+<li>그리고 이번엔 프레임 유실이 생겼다고 해보자. ACK1을 송신자가 받아서 S1을 보냈는데 그 다음 ACK가 안오면 잠시 뒤에 S1을 다시 보내게 된다. 그리고 이때 수신자가 받으면 이때에는 자기가 원하던 데이터를 받은 것 이므로 저장하게 된다 - 즉, seqNum은 프레임 유실을 방지하기 위한 숫자는 아니라는 소리</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#datalink-layer의-목적" data-for="datalink-layer의-목적">Datalink Layer의 목적</a></li><li class="depth-0"><a href="#에러의-종류" data-for="에러의-종류">에러의 종류</a></li><li class="depth-0"><a href="#에러처리" data-for="에러처리">에러처리</a></li><li class="depth-1"><a href="#detection" data-for="detection">Detection</a></li><li class="depth-1"><a href="#correction" data-for="correction">Correction</a></li><li class="depth-0"><a href="#frame-packet의-필요성" data-for="frame-packet의-필요성">Frame, Packet의 필요성</a></li><li class="depth-0"><a href="#character-oriented-protocols" data-for="character-oriented-protocols">Character-Oriented Protocols</a></li><li class="depth-1"><a href="#byte-stuffing-unstuffing" data-for="byte-stuffing-unstuffing">Byte Stuffing, Unstuffing</a></li><li class="depth-0"><a href="#bit-oriented-protocol" data-for="bit-oriented-protocol">Bit-Oriented Protocol</a></li><li class="depth-1"><a href="#bit-stuffing-unstuffing" data-for="bit-stuffing-unstuffing">Bit Stuffing, Unstuffing</a></li><li class="depth-0"><a href="#가상의-noiseless-channel에서의-protocol" data-for="가상의-noiseless-channel에서의-protocol">가상의 Noiseless Channel에서의 Protocol</a></li><li class="depth-1"><a href="#simplest-protocol" data-for="simplest-protocol">Simplest Protocol</a></li><li class="depth-1"><a href="#stop-and-wait-protocol" data-for="stop-and-wait-protocol">Stop-and-Wait Protocol</a></li><li class="depth-0"><a href="#실제-noisy-channel에서의-protocol" data-for="실제-noisy-channel에서의-protocol">실제 Noisy Channel에서의 Protocol</a></li><li class="depth-1"><a href="#stop-and-wait-arqautomatic-repeat-request" data-for="stop-and-wait-arqautomatic-repeat-request">Stop-and-Wait ARQ(Automatic Repeat reQuest)</a></li><li class="depth-1"><a href="#프레임-송신중-에러가-날-때" data-for="프레임-송신중-에러가-날-때">프레임 송신중 에러가 날 때</a></li><li class="depth-1"><a href="#ack송신중-에러가-날-때--종합적-통신과정" data-for="ack송신중-에러가-날-때--종합적-통신과정">ACK송신중 에러가 날 때 + 종합적 통신과정</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/(충남대)-데이터-통신-강의록" class="internal">(충남대) 데이터 통신 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

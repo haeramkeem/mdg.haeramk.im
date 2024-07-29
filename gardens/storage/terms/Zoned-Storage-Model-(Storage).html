@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html><head><title>Zoned Storage Model (Storage)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Zoned Storage Model (Storage)"/><meta property="og:description" content="참고 한 것들 ZNS: Avoiding the Block Interface Tax for Flash-based SSDs (ATC ‘21) 섹션 2.3 내용 Zoned Storage Initiative 문서 이건 뭔가 § 이것은 다음과 같은 특성을 가지는 디바이스 (대표적으로 SSD 와 SMR HDD 가 있다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../static/icon.png"/><meta name="description" content="참고 한 것들 ZNS: Avoiding the Block Interface Tax for Flash-based SSDs (ATC ‘21) 섹션 2.3 내용 Zoned Storage Initiative 문서 이건 뭔가 § 이것은 다음과 같은 특성을 가지는 디바이스 (대표적으로 SSD 와 SMR HDD 가 있다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/storage/terms/Zoned-Storage-Model-(Storage)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Zoned Storage Model (Storage)</h1><p class="content-meta ">May 26, 2024, 16 min read</p><ul class="tags "><li><a href="../../../tags/용어집" class="internal tag-link">#용어집</a></li><li><a href="../../../tags/storage" class="internal tag-link">#storage</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고 한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://www.usenix.org/system/files/atc21-bjorling.pdf" class="external">ZNS: Avoiding the Block Interface Tax for Flash-based SSDs (ATC ‘21) 섹션 2.3 내용</a></li>
+<li><a href="https://zonedstorage.io/docs/introduction/zoned-storage" class="external">Zoned Storage Initiative 문서</a></li>
+</ul>
+</blockquote>
+<h2 id="이건-뭔가">이건 뭔가<a aria-hidden="true" tabindex="-1" href="#이건-뭔가" class="internal"> §</a></h2>
+<ul>
+<li>이것은 다음과 같은 특성을 가지는 디바이스 (대표적으로 <a href="../../../gardens/storage/terms/Multi-stream-SSD-(Storage)" class="internal" data-slug="gardens/storage/terms/Multi-stream-SSD-(Storage)">SSD</a> 와 <a href="../../../gardens/storage/terms/Shingled-Magnetic-Recording-HDD,-SMR-HDD-(Storage)" class="internal" data-slug="gardens/storage/terms/Shingled-Magnetic-Recording-HDD,-SMR-HDD-(Storage)">SMR HDD</a> 가 있다.) 를 위한 표준이다.
+<ul>
+<li>Random read 가능</li>
+<li>In-place update 불가능; Read-modify-write 방식으로 데이터 수정</li>
+</ul>
+</li>
+<li>이러한 디바이스들은 기존의 <a href="../../../gardens/storage/terms/Conventional-Magnetic-Recording,-CMR-HDD-(Storage)" class="internal" data-slug="gardens/storage/terms/Conventional-Magnetic-Recording,-CMR-HDD-(Storage)">HDD</a> 와는 근본적인 작동 방식이 다르기 때문에, backward-compatibility 를 어느정도 포기하고 대신 다음과 같은 이점을 가져왔다고 한다:
+<ul>
+<li><a href="../../../gardens/storage/terms/Write-Amplification,-WA-and-Write-Amplication-Factor,-WAF-(Storage)" class="internal" data-slug="gardens/storage/terms/Write-Amplification,-WA-and-Write-Amplication-Factor,-WAF-(Storage)">WAF</a> 감소</li>
+<li>예측가능한 성능</li>
+</ul>
+</li>
+<li>얘는 인터페이스별로 다음과 같이 구현되었다:
+<ul>
+<li><a href="../../../gardens/storage/draft/Parallel-ATA,-AT-Attachment,-Integrated-Drive-Electronics,-PATA,-ATA,-IDE-(Storage)" class="internal" data-slug="gardens/storage/draft/Parallel-ATA,-AT-Attachment,-Integrated-Drive-Electronics,-PATA,-ATA,-IDE-(Storage)">SATA</a> 를 위한 <a href="../../../gardens/storage/draft/Zoned-Device-ATA-Command-Set,-ZAC-(Storage)" class="internal" data-slug="gardens/storage/draft/Zoned-Device-ATA-Command-Set,-ZAC-(Storage)">ZAC</a></li>
+<li><a href="../../../gardens/storage/draft/Small-Computer-Systems-Interface,-SCSI-(Storage)" class="internal" data-slug="gardens/storage/draft/Small-Computer-Systems-Interface,-SCSI-(Storage)">SAS</a> 위한 <a href="../../../gardens/storage/draft/Zoned-Block-Commands,-ZBC-(Storage)" class="internal" data-slug="gardens/storage/draft/Zoned-Block-Commands,-ZBC-(Storage)">ZBC</a></li>
+<li><a href="../../../gardens/storage/nvme/draft/Non-Volatile-Memory-Express,-NVMe-(NVMe)" class="internal" data-slug="gardens/storage/nvme/draft/Non-Volatile-Memory-Express,-NVMe-(NVMe)">NVMe</a> 를 위한 <a href="../../../gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)">ZNS</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="구조-작동-원리">구조, 작동 원리<a aria-hidden="true" tabindex="-1" href="#구조-작동-원리" class="internal"> §</a></h2>
+<h3 id="zone-sequential-write-constraint">Zone, Sequential Write Constraint<a aria-hidden="true" tabindex="-1" href="#zone-sequential-write-constraint" class="internal"> §</a></h3>
+<ul>
+<li>이 모델에서는 <a href="../../../gardens/storage/terms/Logical-Block-Addressing,-LBA-(Storage)" class="internal" data-slug="gardens/storage/terms/Logical-Block-Addressing,-LBA-(Storage)">LBA</a> 공간을 동일한 크기의 <em>Zone</em> 이라는 것으로 나눈다.</li>
+<li>Zone 은 다음과 같은 특성을 가진다. - 이것을 <em>Sequential Write Contstraint</em> 라고 한다.
+<ul>
+<li>Random read 가능</li>
+<li>Sequential write 만 가능</li>
+<li>용량이 다 차서 새로 write 하기 위해서는, zone 전체에 대해 명시적으로 reset 을 수행</li>
+</ul>
+</li>
+<li>Zone 의 이러한 특성은 State machine 과 Write pointer 로 작동 방식이 구현된다.</li>
+</ul>
+<h3 id="state-machine">State Machine<a aria-hidden="true" tabindex="-1" href="#state-machine" class="internal"> §</a></h3>
+<ul>
+<li>Zone 의 State machine 은 다음과 같이 상태가 전이된다:</li>
+</ul>
+<p><img src="../../../images/Pasted-image-20240322112327.png" width="auto" height="auto"/></p>
+<blockquote>
+<p>출처: 주인장 그림솜씨</p>
+</blockquote>
+<ul>
+<li>처음에는 <em>EMPTY</em> 상태이고, zone 에 write 하거나 명시적으로  <code>OPEN ZONE</code> 명령어를 사용하면 <em>OPEN</em> 상태가 되며 zone 이 다 차거나 명시적으로 <code>FINISH ZONE</code> 명령어를 사용하면 <em>FULL</em> 상태가 된다.</li>
+<li>Device 는 <em>OPEN</em> 상태의 zone 개수에 제한을 걸어둘 수 있다. (<a href="#zone-limits" class="internal">Zone Limits</a> 섹션 참고)
+<ul>
+<li>만약 이 개수 제한에 미치지 않았을 때에는, 추가적인 zone 을 맘대로 <em>OPEN</em> 상태로 바꿀 수 있다.</li>
+<li>하지만 이 개수 제한에 걸리게 되면, 어떤 <em>OPEN</em> zone 은 <em>CLOSE</em> 상태로 바꿔야만 다른 zone 을 <em>OPEN</em> 할 수 있다.
+<ul>
+<li>이것은 <code>CLOSE ZONE</code> 명령어를 사용하면 된다.</li>
+<li>zone 을 <em>CLOSE</em> 하게 되면, write buffer 와 같은 자원들을 정리하게 되고 다시 <em>OPEN</em> 되기 전까지는 write 할 수 없다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>OPEN</em>, <em>CLOSE</em>, <em>FULL</em> 상태에서는 reset (<code>RESET ZONE WRITE POINTER</code> 명령어) 을 통해 다시 <em>EMPTY</em> 로 바꿀 수 있다.</li>
+<li>즉, 상태들은 다음과 같이 표로 정리해볼 수 있다:</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>STATE</th><th>DESCRIPTION</th></tr></thead><tbody><tr><td><em>EMPTY</em></td><td>초기 상태</td></tr><tr><td><em>OPEN</em></td><td>데이터를 write 할 수 있는 상태 (자원 할당)</td></tr><tr><td><em>CLOSE</em></td><td>데이터를 write 할 수는 없지만, OPEN 상태로 바꾸면 write 할 수 있는 상태 (자원 반환)</td></tr><tr><td><em>FULL</em></td><td>Zone 의 용량이 다 차서 더 이상 write 하지 못하는 상태</td></tr></tbody></table>
+<ul>
+<li>또한 Command 들을 표로 정리하면 다음과 같다:</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>OPERATION</th><th>DESCRIPTION</th></tr></thead><tbody><tr><td><code>OPEN ZONE</code></td><td>Zone 을 <em>OPEN</em> 상태로 바꾸고 자원을 할당함</td></tr><tr><td><code>CLOSE ZONE</code></td><td>Zone 을 <em>CLOSE</em> 상태로 바꾸고 자원을 해제함</td></tr><tr><td><code>FINISH ZONE</code></td><td>Zone 을 <em>FULL</em> 상태로 바꿈</td></tr><tr><td><code>RESET ZONE WRITE POINTER</code></td><td>Zone 을 <em>EMPRY</em> 상태로 바꾸고 zone 의 데이터를 erase 함</td></tr></tbody></table>
+<ul>
+<li>다만 <a href="https://zonedstorage.io/docs/introduction/zoned-storage#zone-states-and-state-transitions" class="external">Official doc 의 State machine</a> 은 위에 설명한 것과 (뼈대는 비슷하지만) 디테일한 부분에서 약간 차이가 있다.
+<ul>
+<li><code>write</code> 에 의한 <em>OPEN</em> zone 과 <code>open</code> 에 의한 <em>OPEN</em> zone 을 구분짓는다 (<em>IMPLICIT OPEN</em>, <em>EXPLICIT OPEN</em>)</li>
+<li>Device 에서 event 를 보내 특정 zone 을 특수한 상태로 바꿀 수 있다:
+<ul>
+<li><em>READ ONLY</em>: 말그대로 zone 이 읽기만 가능한 상태
+<ul>
+<li>그냥 맘대로 바꿀 수 있는 것은 아니고, 보통 문제상황 - SMR HDD 의 write head 가 망가지는 등 - 에서만 이 상태로 바뀐다고 한다.</li>
+</ul>
+</li>
+<li><em>OFFLINE</em>: zone 이 망가져서 작동하지 않는 상태</li>
+</ul>
+</li>
+<li>왜인지는 모르겠지만 공식문서에서는 <em>CLOSE</em> 상태에서 <code>write</code> 를 통해 <em>FULL</em> 로 바뀔 수 있다고 되어 있다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="write-pointer">Write pointer<a aria-hidden="true" tabindex="-1" href="#write-pointer" class="internal"> §</a></h3>
+<ul>
+<li>Write pointer 는 처음에는 zone LBA 공간의 시작점에서 시작해서</li>
+<li>Write 작업이 이루어짐에 따라 점점 뒤로 밀리다가</li>
+<li><code>RESET ZONE WRITE POINTER</code> 명령어를 사용하면 write pointer 를 zone 의 처음으로 (zone 의 첫 LBA 로) 쭉 땡기고 zone 전체를 erase 한다.</li>
+<li>만일 write pointer 가 가리키는 위치에 write 를 하지 않거나 <em>FULL</em> 상태인 zone 에 write 를 하려할 경우에는 실패한다.</li>
+</ul>
+<h3 id="zone-size-zone-capacity">Zone Size, Zone Capacity<a aria-hidden="true" tabindex="-1" href="#zone-size-zone-capacity" class="internal"> §</a></h3>
+<p><img src="../../../images/Pasted-image-20240322115818.png" width="auto" height="auto"/></p>
+<blockquote>
+<p>출처: <a href="https://zonedstorage.io/docs/introduction/zoned-storage#zone-size-and-zone-capacity" class="external">공식문서</a></p>
+</blockquote>
+<ul>
+<li><em>Zone Size</em> 는 말 그대로 Zone 의 크기이다: 전체 LBA 공간을 동일한 개수의 block 으로 나누는 것.
+<ul>
+<li><em>Zone Size</em> 는 SSD/HDD 제조과정에서 픽스되어서 나오고, 사용자가 임의로 바꿀 수 없다.</li>
+</ul>
+</li>
+<li><em>Zone Capacity</em> 는 Zone 내에서 실제로 사용할 수 있는 공간이다.
+<ul>
+<li>따라서 당연히 <em>Zone Size</em> 보다는 작다.</li>
+</ul>
+</li>
+<li><em>Zone Size</em> 와 <em>Zone Capacity</em> 의 사이즈를 다르게 하는것은 Device 에서 바라보는 zone 의 크기는 모든 zone 에 걸쳐 동일하게 유지하되, Host 에서 바라보는 zone 의 크기는 media 의 특성에 맞게 최적화할 수 있게 하기 위함이라 한다…
+<ul>
+<li><a href="../../../gardens/storage/terms/Flash-Memory,-SSD-(Storage)" class="internal" data-slug="gardens/storage/terms/Flash-Memory,-SSD-(Storage)">Flash device</a> 의 경우에는 이를 통해 erase block 의 사이즈에 맞게 <em>Zone Capacity</em> 를 조정할 수 있게 해준다</li>
+<li><del>고 하는데 잘 모르겠다 - 어차피 Zone 이 block 의 집합이면 이런 것이 왜 필요한지</del></li>
+</ul>
+</li>
+</ul>
+<h3 id="zone-limits">Zone Limits<a aria-hidden="true" tabindex="-1" href="#zone-limits" class="internal"> §</a></h3>
+<ul>
+<li>Write buffer 와 같은 내부 자원들이 한정되어 있어서, 그리고 기타 여러 Device media 들의 특징에 따라 zone 의 개수를 한정해야 할 수도 있다.
+<ul>
+<li>이것은 Zone 을 <em>OPEN</em>/<em>CLOSE</em> 하는 것이 Host 에 의해서 이루어 지기 때문에 더욱이 필요하다.</li>
+<li>Host 는 위와 같은 Device 측면에서의 제약사항을 알지 못하기 때문에, 무분별하게 zone 을 <em>OPEN</em> 할 경우 성능 저하가 발생할 수도 있기 때문.</li>
+</ul>
+</li>
+<li>하지만 이 제한은 Read 에는 아무 영향도 주지 않는다. Data read 는 항상 모든 zone 에 대해 가능하다. (뭐 물론 <em>OFFLINE</em> 이 아니고 data 가 존재한다는 전제 하에.)</li>
+</ul>
+<h4 id="open-zone-limit">Open Zone Limit<a aria-hidden="true" tabindex="-1" href="#open-zone-limit" class="internal"> §</a></h4>
+<ul>
+<li><a href="#state-machine" class="internal">여기</a> 에서 잠깐 언급한 내용이다: Write buffer 가 모자라거나 Device 의 parallel 능력이 부족한 경우를 위해 Writable zone (= Open zone) 의 개수를 제한하는 것이다.
+<ul>
+<li>즉, <em>EXPLITIT OPEN</em> zone 개수 + <em>IMPLICIT OPEN</em> zone 개수</li>
+</ul>
+</li>
+<li>이 한계치에 다다르게 되면 새로운 zone 에 write 하거나 <code>OPEN ZONE</code> 명령어를 실행하기 위해서는 어떤 <em>OPEN</em> zone 은 그 전에 <em>CLOSE</em> 상태가 되어야 하고, 그렇지 않다면 에러가 난다.</li>
+</ul>
+<h4 id="active-zones-limit">Active Zones Limit<a aria-hidden="true" tabindex="-1" href="#active-zones-limit" class="internal"> §</a></h4>
+<ul>
+<li>Host 가 data 를 write 하려고 할 때, 선택할 수 있는 zone 의 개수를 제한하는 기능이다.</li>
+<li><em>OPEN</em> zone 과 <em>CLOSE</em> zone 을 합친 개수를 제한하는 것이다.
+<ul>
+<li>뭐 더 정확하게 말하자면 <em>EXPLICIT OPEN</em> + <em>IMPLICIT OPEN</em> + <em>CLOSE</em> zone 개수이다.</li>
+<li><del>근데 <em>EMPTY</em> 에도 write 할 수 있는데 (물론 이후에 OPEN 으로 변경되지만) <em>EMPTY</em> zone 의 개수는 왜 빠지는지 모르겠다.</del></li>
+</ul>
+</li>
+<li>이 한계치에 다다르게 되면 어떤 zone 은 <code>FINISH ZONE</code> 으로 <em>FULL</em> 상태로 만들거나 <code>RESET ZONE WRITE POINTER</code> 로 <em>EMPTY</em> 상태로 만들어야 한다.</li>
+<li><del>솔직히 용례가 없어서 이것이 왜 필요한지 감이 안오긴 한다.</del></li>
+</ul>
+<h2 id="backward-compatibility">Backward-compatibility<a aria-hidden="true" tabindex="-1" href="#backward-compatibility" class="internal"> §</a></h2>
+<ul>
+<li>여기까지 보면 Zoned Storage Model 은 Regular Block Model 을 따르는 기존의 디바이스들과 호환되지 않는 것처럼 보이고, 실제로 호환되지 않는다</li>
+<li>따라서 이러한 호환성을 위해 몇개의 방안들이 준비되어 있는데, 정리해 보면 아래와 같다.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>MODEL</th><th>DESCRIPTION</th><th>USED ZONE TYPE</th><th>BACKWARD-COMPATIBILITY</th></tr></thead><tbody><tr><td>[[#host-managed-model</td><td>Host-Managed Model]]</td><td>Sequential Write Constraint 가 강제됨</td><td>[[#sequential-write-required-zone</td></tr><tr><td>[[#host-aware-model</td><td>Host-Aware Model]]</td><td>Sequential Write Constraint 를 선택적으로 이용할 수 있음</td><td>[[#sequential-write-prefered-zone</td></tr></tbody></table>
+<h3 id="zone-models">Zone Models<a aria-hidden="true" tabindex="-1" href="#zone-models" class="internal"> §</a></h3>
+<ul>
+<li>Zoned Storage Model 을 사용하는 방법을 <em>Model</em> 이라고 하는데, 두 가지로 나눌 수 있다.</li>
+</ul>
+<h4 id="host-managed-model">Host-Managed Model<a aria-hidden="true" tabindex="-1" href="#host-managed-model" class="internal"> §</a></h4>
+<ul>
+<li>이것은 Zoned Storage Model 을 Host 에 강제하는 방법이다.</li>
+<li>따라서 <a href="#zone-sequential-write-constraint" class="internal">Sequential Write Constraint</a> 에 따라 write 작업을 수행하도록 Host level 의 변경이 필요하다.</li>
+</ul>
+<h4 id="host-aware-model">Host-Aware Model<a aria-hidden="true" tabindex="-1" href="#host-aware-model" class="internal"> §</a></h4>
+<ul>
+<li>이것은 Backward-compatibility 를 위한 방법으로, 약간 하이브리드라고 생각하면 된다.</li>
+<li>즉, Random write 등의 Regular Block Model 의 기능을 사용할 수 있고</li>
+<li>Sequential Write Constraint 를 위한 Zoned Storage Model Command 들을 사용할 수도 있다.</li>
+</ul>
+<h2 id="zone-types">Zone Types<a aria-hidden="true" tabindex="-1" href="#zone-types" class="internal"> §</a></h2>
+<ul>
+<li>Zone 들은 아래와 같은 타입을 가질 수 있다고 한다.</li>
+</ul>
+<h3 id="conventional-zone">Conventional Zone<a aria-hidden="true" tabindex="-1" href="#conventional-zone" class="internal"> §</a></h3>
+<ul>
+<li>여기는 기존의 Reguar Block Model 처럼 사용할 수 있는 Zone이다.
+<ul>
+<li>즉, Sequential Write Constraint 없이, Random Write 밖에 지원되지 않는다는 것.</li>
+</ul>
+</li>
+<li>일반적인 용도 (데이터 저장) 보다는 Metadata 저장 등의 용도로 사용한다고 하며, 전체 Device 내에서 아주 작은 부분을 차지한다고 한다.</li>
+</ul>
+<h3 id="sequential-write-required-zone">Sequential-write-required Zone<a aria-hidden="true" tabindex="-1" href="#sequential-write-required-zone" class="internal"> §</a></h3>
+<ul>
+<li>여기는 Host-Managed Model 을 위한 곳으로, Sequential Write Constriaint 가 빡세게 적용된다.</li>
+</ul>
+<h3 id="sequential-write-preferred-zone">Sequential-write-preferred Zone<a aria-hidden="true" tabindex="-1" href="#sequential-write-preferred-zone" class="internal"> §</a></h3>
+<ul>
+<li>여기는 Host-Aware Model 을 위한 곳이라고 생각하면 된다.</li>
+<li>즉, Random write 도 되고, Zoned Storage Model command 들도 사용할 수 있는 공간이다.</li>
+</ul>
+<h2 id="zone-append">Zone Append<a aria-hidden="true" tabindex="-1" href="#zone-append" class="internal"> §</a></h2>
+<h3 id="필요성">필요성<a aria-hidden="true" tabindex="-1" href="#필요성" class="internal"> §</a></h3>
+<ul>
+<li>일반적으로는, host 가 보낸 write command 의 순서와 device 에 도착해서 처리되는 순서는 동일해야 하고, 변경되어서는 안된다.
+<ul>
+<li>만일 그렇지 않다면, 데이터가 sequential 하게 저장된 것이 아니기에 sequential write constraint 에 위반되어 에러가 발생한다.</li>
+</ul>
+</li>
+<li>하지만 실제로는 이것을 지키는 것이 쉬운 일은 아니다.
+<ul>
+<li>Host 의 IO stack 이 복잡하기도 하고</li>
+<li>Storage adapter 혹은 command transport 가 순서를 보장해주지 않을 수도 있기 때문.</li>
+</ul>
+</li>
+<li>따라서 이 문제를 해결하기 위해 host 에서 zone 당 한번에 1개의 command 만 실행되게 제한을 걸 수도 있지만, 이렇게 하면 병렬처리가 안되기 때문에 성능이 저하될 수 있다.</li>
+<li>정리해 보면, 다음과 같은 필요성에 의해 Zone Append 가 나오게 되었다.
+<ul>
+<li>Write command 순서가 예기치 않게 꼬여도 문제가 생기지 않게 하기 위해</li>
+<li>Write command 들을 동시에 사용하기 위해</li>
+</ul>
+</li>
+</ul>
+<h3 id="zone-append-명령어">Zone Append 명령어<a aria-hidden="true" tabindex="-1" href="#zone-append-명령어" class="internal"> §</a></h3>
+<ul>
+<li>Zone Append 명령어는 한마디로 정리하면 <strong>“host 가 write 명령을 순서에 대한 고려 없이 동시에 device 에게 보낼 수 있게 하는 것”</strong> 이다.</li>
+<li>구체적인 작동 과정은 다음과 같다:
+<ol>
+<li>이 명령어는 기본적으로는 write 명령어와 동일한데, 다만 저장 위치를 write pointer 의 위치가 아닌 zone 의 첫 LBA 에 write 하라고 지시한다.</li>
+<li>Device 에서 이 명령어들을 처리할 때에는, 데이터를 효과적으로 저장할 수 있는 순서로 재배치 하여 write pointer 의 위치부터 데이터를 저장하게 된다.</li>
+<li>처리가 완료된 뒤에는 device 가 host 에게 데이터들이 어떤 순서로 어디에 저장되었는지 host 에게 알려주게 된다.</li>
+</ol>
+</li>
+<li>아래의 예시를 참고하면 감이 올 것이니라</li>
+</ul>
+<h3 id="작동-예시">작동 예시<a aria-hidden="true" tabindex="-1" href="#작동-예시" class="internal"> §</a></h3>
+<ul>
+<li>세 데이터를 write 하려 한다고 해보자:
+<ul>
+<li>W0: A (4K 데이터) write</li>
+<li>W1: B (8K 데이터) write</li>
+<li>W2: C (16K 데이터) write</li>
+</ul>
+</li>
+<li>그럼 일반적인 write (regular write) 의 경우에는 다음처럼 처리된다.</li>
+</ul>
+<p><img src="../../../images/image-6.png" width="auto" height="auto"/></p>
+<ol>
+<li>W0 가 처리되며 A 를 write 하고, WP(Write Pointer) 가 WP0 위치로 움직인다.</li>
+<li>이후 W1 가 처리되며 WP0 위치에 B 를 write 하고, WP 가 WP1로 움직인다.</li>
+<li>마찬가지로 W2 가 처리되며 WP1 위치에 C 를 write 하고, WP 는 최종적으로 WP2 로 움직인다.</li>
+</ol>
+<ul>
+<li>하지만 Zone Append 명령어를 사용할 경우, 다음처럼 처리된다.</li>
+</ul>
+<p><img src="../../../images/image-7.png" width="auto" height="auto"/></p>
+<ol>
+<li>W0, W1, W2 모두 저장 위치를 zone 시작점으로 하여 명령어가 수신된다.</li>
+<li>Device 는 나름의 알고리즘에 따라 A -> C -> B 순서로 data 를 write 하기로 결정하고, 해당 순서대로 sequential write 를 수행한다.</li>
+<li>작업 수행 뒤 Host 에게 A, B, C 가 어디에 저장되었는지 알리게 된다.</li>
+</ol>
+<ul>
+<li>위의 두 과정 모두 WP 는 동일한 위치로 옮겨진다 - A, B, C 데이터 크기 총합은 결국에는 동일하기 때문에</li>
+<li>하지만 regular write 에서는 A, B, C 가 순서대로, 앞선 write 가 종료되어야 다음 write 가 시작되기 때문에 다소 느리지만</li>
+<li>Zone append 에서는 A, B, C 가 동시에 처리되기 때문에 더 빠르게 처리된다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#이건-뭔가" data-for="이건-뭔가">이건 뭔가</a></li><li class="depth-0"><a href="#구조-작동-원리" data-for="구조-작동-원리">구조, 작동 원리</a></li><li class="depth-1"><a href="#zone-sequential-write-constraint" data-for="zone-sequential-write-constraint">Zone, Sequential Write Constraint</a></li><li class="depth-1"><a href="#state-machine" data-for="state-machine">State Machine</a></li><li class="depth-1"><a href="#write-pointer" data-for="write-pointer">Write pointer</a></li><li class="depth-1"><a href="#zone-size-zone-capacity" data-for="zone-size-zone-capacity">Zone Size, Zone Capacity</a></li><li class="depth-1"><a href="#zone-limits" data-for="zone-limits">Zone Limits</a></li><li class="depth-0"><a href="#backward-compatibility" data-for="backward-compatibility">Backward-compatibility</a></li><li class="depth-1"><a href="#zone-models" data-for="zone-models">Zone Models</a></li><li class="depth-0"><a href="#zone-types" data-for="zone-types">Zone Types</a></li><li class="depth-1"><a href="#conventional-zone" data-for="conventional-zone">Conventional Zone</a></li><li class="depth-1"><a href="#sequential-write-required-zone" data-for="sequential-write-required-zone">Sequential-write-required Zone</a></li><li class="depth-1"><a href="#sequential-write-preferred-zone" data-for="sequential-write-preferred-zone">Sequential-write-preferred Zone</a></li><li class="depth-0"><a href="#zone-append" data-for="zone-append">Zone Append</a></li><li class="depth-1"><a href="#필요성" data-for="필요성">필요성</a></li><li class="depth-1"><a href="#zone-append-명령어" data-for="zone-append-명령어">Zone Append 명령어</a></li><li class="depth-1"><a href="#작동-예시" data-for="작동-예시">작동 예시</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../gardens/shellscript/nvme/zns/nvme-cli---ZNS-zone-상태-관리하기" class="internal">nvme-cli - ZNS zone 상태 관리하기</a></li><li><a href="../../../gardens/shellscript/nvme/zns/nvme-cli---ZNS-데이터-입출력하기" class="internal">nvme-cli - ZNS 데이터 입출력하기</a></li><li><a href="../../../gardens/shellscript/nvme/zns/nvme-cli---ZNS-디바이스-조회하기" class="internal">nvme-cli - ZNS 디바이스 조회하기</a></li><li><a href="../../../gardens/storage/(Garden)-Storage,-SSD" class="internal">(Garden) Storage, SSD</a></li><li><a href="../../../gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)" class="internal">Zoned Namespaces, ZNS (Storage)</a></li><li><a href="../../../gardens/storage/papers/draft/(논문)-ZNS,-Avoiding-the-Block-Interface-Tax-for-Flash-based-SSDs" class="internal">(논문) ZNS, Avoiding the Block Interface Tax for Flash-based SSDs</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../postscript.js" type="module"></script></html>

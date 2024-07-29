@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html><head><title>부록 - 시험대비) 싱하형배 데이터통신 모의고사</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="부록 - 시험대비) 싱하형배 데이터통신 모의고사"/><meta property="og:description" content="Physical Layer § Bitrate, Baud rate, Signal Element, Signal Level, Bandwidth의 개념을 설명해보라 Shannon Capacity와 Nyquist Bitrate가 각각 어떤 Channel에 적용되는 공식이냐 Shannon Capacity와 Nyquist Bitrate를 이용해 Signal Level을 구하는 방법을 서술하라 Digital Data를 Digital Signal로 변환할때 Synchronization이 중요한 이유를 설명해보라 Line Coding의 한 종류인 Manchester Scheme에 대해 설명해보아라."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="Physical Layer § Bitrate, Baud rate, Signal Element, Signal Level, Bandwidth의 개념을 설명해보라 Shannon Capacity와 Nyquist Bitrate가 각각 어떤 Channel에 적용되는 공식이냐 Shannon Capacity와 Nyquist Bitrate를 이용해 Signal Level을 구하는 방법을 서술하라 Digital Data를 Digital Signal로 변환할때 Synchronization이 중요한 이유를 설명해보라 Line Coding의 한 종류인 Manchester Scheme에 대해 설명해보아라."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/부록---시험대비)-싱하형배-데이터통신-모의고사"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">부록 - 시험대비) 싱하형배 데이터통신 모의고사</h1><p class="content-meta ">Jul 29, 2024, 13 min read</p></div></div><article class="popover-hint"><p><img src="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/images/extra_9fd6b0747036470db267a9cd81213e7d/image1.png" alt="%E1%84%89%E1%85%B5%E1%86%BC%E1%84%92%E1%85%A1%E1%84%92%E1%85%A7%E1%86%BC%E1%84%87%E1%85%A2%20%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%A5%E1%84%90%E1%85%A9%E1%86%BC%E1%84%89%E1%85%B5%E1%86%AB%20%E1%84%86%E1%85%A9%E1%84%8B%E1%85%B4%E1%84%80%E1%85%A9%E1%84%89%E1%85%A1%209fd6b0747036470db267a9cd81213e7d/image1.png"/></p>
+<h2 id="physical-layer">Physical Layer<a aria-hidden="true" tabindex="-1" href="#physical-layer" class="internal"> §</a></h2>
+<ol>
+<li>Bitrate, Baud rate, Signal Element, Signal Level, Bandwidth의 개념을 설명해보라</li>
+<li>Shannon Capacity와 Nyquist Bitrate가 각각 어떤 Channel에 적용되는 공식이냐</li>
+<li>Shannon Capacity와 Nyquist Bitrate를 이용해 Signal Level을 구하는 방법을 서술하라</li>
+<li>Digital Data를 Digital Signal로 변환할때 Synchronization이 중요한 이유를 설명해보라</li>
+<li>Line Coding의 한 종류인 Manchester Scheme에 대해 설명해보아라. 그리고 이 방식의 단점도 적어라</li>
+<li>Block Coding의 개념에 대해 사용하는 경우, 작동방식을 간단히 지껄여보아라</li>
+<li>PCM Encoder에 대해 어떤 신호에 대해 사용하여 어떤 신호를 생성해내는 과정인지, 그리고 작동 과정을 설명해보아라</li>
+<li>ASK, FSK, PSK, Constellation Diagram 각각의 개념을 말해보아라</li>
+<li>Multiplex의 개념과 사용하는 이유를 말해보아라</li>
+<li>FDM의 작동 원리에 대해 말해보아라</li>
+<li>TDM의 작동 원리에 대해 말해보아라</li>
+<li>Spread Spectrum의 개념과 장단점에 대해 말해보아라</li>
+<li>FHSS의 개념에 대해 설명해보아라. 그리고 이것의 단점을 상쇄할 수 있는 방법도 설명해보아라</li>
+<li>DSSS의 작동원리와 장점에 대해 설명해 보아라</li>
+</ol>
+<h2 id="data-link-layer">Data Link Layer<a aria-hidden="true" tabindex="-1" href="#data-link-layer" class="internal"> §</a></h2>
+<h3 id="data-link-controllogical-link-control">Data Link Control(Logical Link Control)<a aria-hidden="true" tabindex="-1" href="#data-link-controllogical-link-control" class="internal"> §</a></h3>
+<ol>
+<li>Error Detection과 Correction의 차이에 대해 설명해보아라</li>
+<li>Fixed-size Framing과 Variable-size Framing의 차이와 Delimiter에 대해 설명해보아라</li>
+<li>Character-oriented Protocol, Bit-oriented Protocol에 대해 설명해보아라</li>
+<li>Bit-Stuffing과 Bit-Unstuffing에 대해서도 설명해보아라</li>
+<li>Simplest Protocol에서 발생할 수 있는 문제점인 Flow Error에 대해 설명해보아라</li>
+<li>Stop &amp; Wait Protocol에 대해 설명해보아라</li>
+<li>Stop &amp; Wait ARQ Protocol에 대해 설명해보아라</li>
+<li>Stop &amp; Wait ARQ Protocol의 단점에 대해 설명해보고, 이것을 해결하기 위한 Protocol중 하나인 Go-back-N ARQ Protocol에 대해 설명해보거라</li>
+<li>Selective ARQ Protocol 에 대해 설명하고 Go-back-N ARQ와의 차이점에 대해 설명해보아라</li>
+<li>Piggybacking에 대해 설명해보아라</li>
+<li>Go-back-N ARQ와 Selective ARQ에서 Slide Window의 사이즈와 Sequence Number를 어떻게 설정하면 수신 에러가 나는지와 그 이유에 대해 지껄여보거라</li>
+<li>Normal Response Mode의 개념에 대해 설명하고 이때의 Point-to-Point와 Multipoint의 개념에 대해 설명해보아라. 그리고 Asynchronous Balanced Mode의 개념에 대해서도 설명해보아라</li>
+<li>S-frame, I-frame, U-frame의 개념에 대해 설명하고, 각각의 frame header의 Control bit에 대해 구조와 의미를 설명해보아라</li>
+</ol>
+<h3 id="media-access-control">Media Access Control<a aria-hidden="true" tabindex="-1" href="#media-access-control" class="internal"> §</a></h3>
+<ol>
+<li>Media Access Control의 개념에 대해 설명해보시오</li>
+<li>Media Access Control을 크게 세개의 분류로 나누고, 각각에 대해 설명해보아라</li>
+<li>ALOHA 알고리즘의 작동 원리에 대해 씨부려보시오</li>
+<li>ALOHA 알고리즘의 단점에 대해 설명하고, 이것을 해결하기 위한 Slotted ALOHA 알고리즘에 대해 설명하시오</li>
+<li>CSMA 프로토콜의 핵심적인 기능을 CSMA의 말뜻과 함께 설명하시오</li>
+<li>CSMA에서 발생할 수 있는 충돌 중 한가지를 1-persistant를 이용해서 설명해보이소. 그리고 충돌이 일어날 수 있는 나머지 한가지 경우에 대해서도 설명해보이소</li>
+<li>Non-persistant와 p-persistant에 대해서 설명해보이소.</li>
+<li>CSMA / CD에서 CD의 말뜻과 이것의 작동원리, 장점을 설명하시오. 또한 CSMA / CD의 전체적인 작동과정도 설명해보시오</li>
+<li>CSMA / CD에서 충돌이 감지되는 Best Case와 Worst Case에 대해 설명하고, Worst Case를 이용해 CSMA / CD를 사용할 수 있는 조건에 대해 한번 설명해보이소</li>
+<li>CSMA / CD를 무선환경에서 사용하지 못하는 이유와 CSMA / CA의 개념에 대해 설명하시오.</li>
+<li>Polling의 작동방식을 Poll, SEL, ACK, NAK의 개념을 이용해 설명해보아라</li>
+<li>Token Passing의 작동방식을 간단맨하게 설명해보아라</li>
+<li>CDMA의 개념과 작동원리에 대해 설명해보아라. 그리고 Spreading Code를 생성할때 사용되는 Table의 이름을 어디 한번 말해보시오</li>
+</ol>
+<h3 id="ethernet">Ethernet<a aria-hidden="true" tabindex="-1" href="#ethernet" class="internal"> §</a></h3>
+<ol>
+<li>IEEE 802의 개념에 대해 어떤 환경에서 사용하도록 만들어진 표준인지를 포함하여 적으시오. 그리고 여기서는 어떤 프로토콜을 Logical Link Control에서 사용하는지 적으시오.</li>
+<li>Standard Ethernet이 사용하는 Bus Topology에 대해 설명해 보아라</li>
+<li>Standard Ethernet의 최대 / 최소 전송 바이트를 적고 이것이 필요한 이유에 대해 설명하시오</li>
+<li>Standard Ethernet이 사용하는 물리계층의 프로토콜과 MAC 프로토콜을 적어보아라</li>
+<li>Fast Ethernet과 Gigabit Ethernet 에서는 이전버전과의 호환성을 위해 BusCSMA / CD, Bus Topology등을 사용하는 함수들을 전부 삭제시켰다 (O / X)</li>
+<li>Fast Ethernet과 Gigabit Ethernet에서 사용하는 Star Topology에 대해 설명해보시오</li>
+<li>Fast Ethernet과 Gigabit Ethernet의 물리계층에서는 하나로 통일된 encoding방식을 사용한다(O / X)</li>
+</ol>
+<h3 id="wifi">Wifi<a aria-hidden="true" tabindex="-1" href="#wifi" class="internal"> §</a></h3>
+<ol>
+<li>PCF와 DCF, AP의 개념에 대해 설명해보아라. 그리고 PCF와 DCF에서 사용하는 MAC 프로토콜이 무엇인지 적어라</li>
+<li>BSS와 ESS의 개념에 대해 설명해보아라</li>
+<li>SIFS, PIFS, DIFS의 개념을 설명해보아라. 그리고 각각의 길이를 대소비교하고 그 이유에 대해 적어라</li>
+<li>Wifi에서의 CSMA / CA에 등장하는 Virtual Carrier Sensing의 개념에 대해 NAV의 개념과 함께 설명하고, 작동 과정에 대해서도 설명하되 RTS, CTS의 개념과 각 프레임이 수신되었을 때 기다리는 IFS의 종류를 포함하여 설명하라</li>
+<li>Wifi의 통신 전 과정에 대해 Super frame, Beacon, CFP, CP의 개념들도 같이 설명하며 서술해보거라. 그리고 각각의 경우 사용되는 IFS도 같이 서술하여라</li>
+<li>Wifi의 Frame에서 Type을 통해 어떤 종류의 프레임을 구분하는지 서술해보거라</li>
+<li>Intra-BSS와 Inter-BSS의 개념에 대해 서술해보거라</li>
+<li>Intra-BSS환경에서 두 Station이 직접 통신하는 경우와 Inter-BSS의 경우에 대해 통신 과정을 서술해보거라. 이때 프레임 헤더의 To-DS bit와 From-DS bit가 어떻게 설정되는지, 그리고 각각의 경우 Address 1, 2, 3, 4에 어떤 값이 들어가는지를 보여라</li>
+</ol>
+<h3 id="bluetooth">Bluetooth<a aria-hidden="true" tabindex="-1" href="#bluetooth" class="internal"> §</a></h3>
+<ol>
+<li>Bluetooth가 사용하는 ISM band에 대해 간략하게 말해보거라</li>
+<li>Piconet, Scatternet에 대해 간략히 설명해보거라</li>
+<li>Bluetooth의 개발 목적을 간략하게 설명해보거라</li>
+<li>Bluethooth의 계층구조를 Bluetooth Protocol Profile, L2CAP, Audio, Upper Stack Layer, Baseband, Bluetooth Radio, Lower Stack Layer, Host Controller Interface의 용어를 설명해가며 서술해보거라 한번</li>
+<li>Baseband가 사용하는 TDMA 프로토콜에 대해 Hop을 이용해 설명해보거라.</li>
+<li>Baseband의 SCO, ACO모듈에 대해 각각의 경우 Hop의 길이는 어떻게 되는지, 어느 상위 모듈에서 데이터가 들어왔을때 해당 모듈을 사용하는지 구분하여 서술하여라</li>
+<li>블루투스를 이용한 전화를 걸고 받는 과정에 대해 설명해보거라</li>
+</ol>
+<h3 id="layer-architecture">Layer Architecture<a aria-hidden="true" tabindex="-1" href="#layer-architecture" class="internal"> §</a></h3>
+<ol>
+<li>Protocol, Standard의 차이와 Protocol을 Algorithm으로 부르는 이유에 대해 서술해보거라</li>
+<li>프로토콜의 구성요소 세가지에 대해 설명해보거라</li>
+<li>Layer Architecture의 개념과 이유를 설명하여라. 그리고 Module, Interface, Peer-2-Peer의 개념에 대해 말해보고 Interface를 이용하는 것의 장점에 대해 말해보거라</li>
+<li>Data Link Layer의 역할 다섯가지에 대해 말해보거라</li>
+<li>OSI 7 Layer의 각각의 계층의 역할에 대해 설명해보아라</li>
+</ol>
+<h2 id="network-layer">Network Layer<a aria-hidden="true" tabindex="-1" href="#network-layer" class="internal"> §</a></h2>
+<ol>
+<li>Physical Address와 Logical Address의 주 목적과 사용되는 계층에 대해 설명해보아라</li>
+<li>Router(Intermediate Node, Gateway, Next Hop)의 역할과 이것이 사용하는 계층, 작동원리를 설명하리오. 작동 원리는 2-Level Hierarchy의 필요성, netid, routing table을 이용해 설명하거라</li>
+<li>Logical Address의 대표적인 세 Class와 이들 각각에 대해 netid와 hostid를 구분하는 방법에 대해 서술해보거라.</li>
+<li>netid와 hostid를 할당받는 방법에 대해 서술하고 각 Class당 하나의 netid에 몇개의 hostid가 대응되는지를 이용해 어떤 기준으로 netid를 할당하는지 적어보거라</li>
+<li>AS의 개념과 AS는 어떤것을 이용해 경로를 정하는지 적어보거라</li>
+<li>Subnet의 개념과 장점, 작동과정에 대해 설명하시오. 이때 Destination, Subnet Mask, Port Number, Default의 용어를 활용하시오.</li>
+<li>Logical Address 192.168.188.67이 192.168.188.0/26에 해당하는 Port로 빠져나가는지 판단해봐라. 그리고 해당 Port에 몇개의 Station이 연결되어 있는지 판단하여라</li>
+<li>Station에 내장되어 있는 Routing Table을 생성하는 방법에 대해 설명해보거라</li>
+<li>ARP 프로토콜에 대해 설명하고, Logical Address를 알때 ARP Request를 보내고 받는 과정에 대해 설명하여라</li>
+<li>같은 서브넷에 있는 Station에게, 다른 서브넷에 있는 Station에게, 외부망에 있는 Station에게 프레임을 전송하는 전 과정을 서술하거라</li>
+<li>192.168.40.0/24 서브넷에 속하는 Station의 Routing table에서 Subnet Mask를 255.255.255.0에서 255.255.0.0으로 변경했을 경우 동일 서브넷의 Station으로 패킷을 송신했을 때, 다른 서브넷의 Station으로 패킷을 송신했을 때, 외부망의 Station으로 패킷을 송신했을 때 송신이 성공하는지 아닌지 그 이유와 함께 서술하그라</li>
+<li>192.168.40.0/24 서브넷에 속하는 Station의 Routing Table에서 Subnet Mask를 255.255.255.0에서 255.255.255.192로 변경했다고 가정하자. 이때 192.168.40.20에서 같은 서브넷에 속하는 Station인 192.168.40.67로 패킷을 전송하는 과정에 대해 서술해보거라</li>
+</ol></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#physical-layer" data-for="physical-layer">Physical Layer</a></li><li class="depth-0"><a href="#data-link-layer" data-for="data-link-layer">Data Link Layer</a></li><li class="depth-1"><a href="#data-link-controllogical-link-control" data-for="data-link-controllogical-link-control">Data Link Control(Logical Link Control)</a></li><li class="depth-1"><a href="#media-access-control" data-for="media-access-control">Media Access Control</a></li><li class="depth-1"><a href="#ethernet" data-for="ethernet">Ethernet</a></li><li class="depth-1"><a href="#wifi" data-for="wifi">Wifi</a></li><li class="depth-1"><a href="#bluetooth" data-for="bluetooth">Bluetooth</a></li><li class="depth-1"><a href="#layer-architecture" data-for="layer-architecture">Layer Architecture</a></li><li class="depth-0"><a href="#network-layer" data-for="network-layer">Network Layer</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/network/originals/datacommunication.spring.2021.cse.cnu.ac.kr/(충남대)-데이터-통신-강의록" class="internal">(충남대) 데이터 통신 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

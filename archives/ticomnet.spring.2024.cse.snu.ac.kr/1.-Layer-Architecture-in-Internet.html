@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html><head><title>1. Layer Architecture in Internet</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="1. Layer Architecture in Internet"/><meta property="og:description" content="서울대학교 컴퓨터공학과 권태경 교수님의 &amp;quot;Topics in Computer Networks&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Background § 인터넷 탄생 배경 고성능의 컴퓨터에 원격으로 접속해서 사용하기 위해 당시에 사용되던 전화의 경우에는 계층적이고 중앙 시스템이 필요했는데, 이것이 파괴될 경우에 대비해 중앙집권화되지 않은 네트워크 환경이 필요했기 때문 Packet switching → 한 네트워크가 다운이 돼도 다른 네트워크를 타고 가면 됨 링크 계층 프로토콜들을 다양화 하기 위해(?) 전화 혹은 영상(tv) 가 아닌 다양한 데이터 타입을 전송하기 위해 계층화 디자인 Modularity → link layer protocol 이 추가/변경되었을 때 영향을 받지 않게 하는 방법 layer(n) 은 layer(n-1) 과의 소통에만 신경씀 Encapsulation 패킷을 내려보낼 때 패킷을 변경하지 않고 앞에 헤더를 붙이는 방식으로 캡슐화, 올려보낼 때는 해당 계층의 헤더만 보고 처리한 후 헤더를 벗겨서 올려보냄 즉, 동일 계층 간에는 동일한 패킷이 송수신됨 Flexibility (뭐라노) 이 계층화 디자인의 단점."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 권태경 교수님의 &amp;quot;Topics in Computer Networks&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Background § 인터넷 탄생 배경 고성능의 컴퓨터에 원격으로 접속해서 사용하기 위해 당시에 사용되던 전화의 경우에는 계층적이고 중앙 시스템이 필요했는데, 이것이 파괴될 경우에 대비해 중앙집권화되지 않은 네트워크 환경이 필요했기 때문 Packet switching → 한 네트워크가 다운이 돼도 다른 네트워크를 타고 가면 됨 링크 계층 프로토콜들을 다양화 하기 위해(?) 전화 혹은 영상(tv) 가 아닌 다양한 데이터 타입을 전송하기 위해 계층화 디자인 Modularity → link layer protocol 이 추가/변경되었을 때 영향을 받지 않게 하는 방법 layer(n) 은 layer(n-1) 과의 소통에만 신경씀 Encapsulation 패킷을 내려보낼 때 패킷을 변경하지 않고 앞에 헤더를 붙이는 방식으로 캡슐화, 올려보낼 때는 해당 계층의 헤더만 보고 처리한 후 헤더를 벗겨서 올려보냄 즉, 동일 계층 간에는 동일한 패킷이 송수신됨 Flexibility (뭐라노) 이 계층화 디자인의 단점."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="archives/ticomnet.spring.2024.cse.snu.ac.kr/1.-Layer-Architecture-in-Internet"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">1. Layer Architecture in Internet</h1><p class="content-meta ">Mar 04, 2024, 4 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학과 권태경 교수님의 &quot;Topics in Computer Networks&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="background">Background<a aria-hidden="true" tabindex="-1" href="#background" class="internal"> §</a></h2>
+<ul>
+<li>인터넷 탄생 배경
+<ul>
+<li>고성능의 컴퓨터에 원격으로 접속해서 사용하기 위해</li>
+<li>당시에 사용되던 전화의 경우에는 계층적이고 중앙 시스템이 필요했는데, 이것이 파괴될 경우에 대비해 중앙집권화되지 않은 네트워크 환경이 필요했기 때문
+<ul>
+<li>Packet switching → 한 네트워크가 다운이 돼도 다른 네트워크를 타고 가면 됨</li>
+</ul>
+</li>
+<li>링크 계층 프로토콜들을 다양화 하기 위해(?)</li>
+<li>전화 혹은 영상(tv) 가 아닌 다양한 데이터 타입을 전송하기 위해</li>
+</ul>
+</li>
+<li>계층화 디자인
+<ul>
+<li>Modularity → link layer protocol 이 추가/변경되었을 때 영향을 받지 않게 하는 방법
+<ul>
+<li>layer(n) 은 layer(n-1) 과의 소통에만 신경씀</li>
+</ul>
+</li>
+<li>Encapsulation
+<ul>
+<li>패킷을 내려보낼 때 패킷을 변경하지 않고 앞에 헤더를 붙이는 방식으로 캡슐화, 올려보낼 때는 해당 계층의 헤더만 보고 처리한 후 헤더를 벗겨서 올려보냄</li>
+<li>즉, 동일 계층 간에는 동일한 패킷이 송수신됨</li>
+</ul>
+</li>
+<li>Flexibility
+<ul>
+<li>(뭐라노)</li>
+</ul>
+</li>
+<li>이 계층화 디자인의 단점.. trade-offs
+<ul>
+<li>각 계층의 구현은 독립적이기 때문에 error detection 처럼 중복된 기능들이 계층마다 구현될 수 있다 → 이것은 성능 저하의 원인이 됨</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>어떻게 계층화를 하지?
+<ul>
+<li>L7 → Application</li>
+<li>L4 → Endpoint-specific (process routing, port)</li>
+<li>L3 → Endpoint-to-endpoint</li>
+<li>L2 → Hop-to-hop</li>
+</ul>
+</li>
+<li>Fate sharing
+<ul>
+<li>TCP 의 경우에는 패킷 번호를 추적함 (stateful)</li>
+<li>그리고 이것에 대한 대비가 되어 있어서 패킷을 잃는 것은 괜찮음 (재전송)</li>
+<li>하지만 실제로도 그렇냐는데?</li>
+<li>Stateful vs Stateless → 상태가 있냐 없냐
+<ul>
+<li>TCP → 여기서는 State 가 seq num 으로 구현되는 것 → 몇번 패킷이 전송될지 서버와 클리이언트가 모두 알고 있고, state 가 맞지 않으면, 즉, seq num 이 같지 않으면 재전송을 통해 맞춤</li>
+<li>HTTP → stateless → client 가 요청한 것만 주고 client 의 상태를 저장하지 않음</li>
+</ul>
+</li>
+<li>Hard-state vs soft-state → Control message 를 활용하냐 그렇지 않냐
+<ul>
+<li>Hard-state → TCP → Connection 을 시작하고 끝낼 때 Control message 를 주고 받으며 State 개시와 종료를 알린다</li>
+<li>Soft-state → () → Connection 를 시작하고 끝내는 Control packet 을 사용하지 않음 → Master 노드가 주기적으로 heartbeat 를 보내고 이것을 받는 동안 connection 을 유지하다, 이것을 받지 못하면 master 와의 connection 을 끊고 master 가 죽었다고 판단하는 → IoT 같은 곳에서 사용한다고 한다… MQTT 에서도 이랬나?</li>
+<li><a href="http://mercury.lcs.mit.edu/~jnc/tech/hard_soft.html" class="external">“Soft” and “Hard” State</a></li>
+</ul>
+</li>
+<li>IP 로 모든 것을 할 수 있기 때문에</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../archives/ticomnet.spring.2024.cse.snu.ac.kr/(서울대)-Topics-in-Computer-Networks-강의록" class="internal">(서울대) Topics in Computer Networks 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../postscript.js" type="module"></script></html>

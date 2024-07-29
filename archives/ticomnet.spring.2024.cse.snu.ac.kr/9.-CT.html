@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html><head><title>9. CT</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="9. CT"/><meta property="og:description" content="서울대학교 컴퓨터공학과 권태경 교수님의 &amp;quot;Topics in Computer Networks&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Certificate Transparency § #symlink 내용 옮겨짐 Certificate Transparency, CT (PKIX) -한 CA 가 맞는지 인증하는 검증절차를 마련 Certificate Pinning § 믿을 수 있는 ca 리스트를 유지하는 것 static: 브라우저 설치파일에 내장 dynamic: 브라우저 첫 실행시 다운로드 cert update/revocation issue 가 있어 더이상 사용하지 않음 CT § CA 가 인증서를 발급하면 그것을 certificate infrastructure 에 업로드해서 브라우저에서 검증 repository 저장소는 log server 라고 부르고, merkle tree 를 이용해 관리된다 append only 특징 모니터링하는 놈이 있어서 인증서가 잘못 발급되었을 때에는 도메인 holder 가 ca 에게 말해서 어떤 놈이 잘못되었는지를 가리고 잘못된 놈을 revoke 한다 과정은 다음과 같다 ca 는 pre-certifiacte 를 생성해서 그것을 log server 에 보냄 signed certificate timestamp (6page, 14”) SCT: 이 인증서가 log server 에 업로드될 것이라는 약속 (domain holder 가 log server 에 직접 접근하는 게 아니고?) monitor: domain holder 는 monitor 에 돈을 주고 자신의 domain 과 동일한 domain 의 인증서가 log server 에 등록되면 자신에게 알려달라고 함 Merkle Tree § Hash func § #symlink 내용 옮겨짐 Hash (Hash) - 관계없이 output length 는 정해져 있음 입력이 같으면 출력도 같음, 입력이 다르면 출력도 다름 collision: 입력이 다른데 출력이 같은 경우 입력값의 집합 에 비해 출력값의 집합이 더 작기 때문에 이러한 collision 이 당연히 가능하다 하지만 확률이 너무나 작아서 collision 이 발견되기 힘들다 md5 나 sha1 같은 경우에는 collision 이 발견돼서 deprecated 되었고, 다른 sha256 같은 애들이 사용중이다 따라서 hash 함수는 collision 보호가 아주 중요하다 One-way function: digest 를 가지고 원본을 찾을 수는 없다 (불가능하지는 않음; 확률적으로 희박함) hash func 는 비트 하나만 바꿔도 결과가 완전히 달라진다 hash pointer: 입력값 x 에 대한 hash(x) 관계를 이거라고 부르는듯 hash pointer 를 활용한 linked list 가 blockchain 인 것 변경을 감지하기 용이함 Merkle Tree § #symlink 내용 옮겨짐 Merkle Tree (Hash) - list 가 block chain 이라면, hash pointer 의 tree 는 merkle tree 임 leaf 의 데이터가 변경되면 이게 쭉 올라가서 root hash 까지 전부 바뀌게 된다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 권태경 교수님의 &amp;quot;Topics in Computer Networks&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Certificate Transparency § #symlink 내용 옮겨짐 Certificate Transparency, CT (PKIX) -한 CA 가 맞는지 인증하는 검증절차를 마련 Certificate Pinning § 믿을 수 있는 ca 리스트를 유지하는 것 static: 브라우저 설치파일에 내장 dynamic: 브라우저 첫 실행시 다운로드 cert update/revocation issue 가 있어 더이상 사용하지 않음 CT § CA 가 인증서를 발급하면 그것을 certificate infrastructure 에 업로드해서 브라우저에서 검증 repository 저장소는 log server 라고 부르고, merkle tree 를 이용해 관리된다 append only 특징 모니터링하는 놈이 있어서 인증서가 잘못 발급되었을 때에는 도메인 holder 가 ca 에게 말해서 어떤 놈이 잘못되었는지를 가리고 잘못된 놈을 revoke 한다 과정은 다음과 같다 ca 는 pre-certifiacte 를 생성해서 그것을 log server 에 보냄 signed certificate timestamp (6page, 14”) SCT: 이 인증서가 log server 에 업로드될 것이라는 약속 (domain holder 가 log server 에 직접 접근하는 게 아니고?) monitor: domain holder 는 monitor 에 돈을 주고 자신의 domain 과 동일한 domain 의 인증서가 log server 에 등록되면 자신에게 알려달라고 함 Merkle Tree § Hash func § #symlink 내용 옮겨짐 Hash (Hash) - 관계없이 output length 는 정해져 있음 입력이 같으면 출력도 같음, 입력이 다르면 출력도 다름 collision: 입력이 다른데 출력이 같은 경우 입력값의 집합 에 비해 출력값의 집합이 더 작기 때문에 이러한 collision 이 당연히 가능하다 하지만 확률이 너무나 작아서 collision 이 발견되기 힘들다 md5 나 sha1 같은 경우에는 collision 이 발견돼서 deprecated 되었고, 다른 sha256 같은 애들이 사용중이다 따라서 hash 함수는 collision 보호가 아주 중요하다 One-way function: digest 를 가지고 원본을 찾을 수는 없다 (불가능하지는 않음; 확률적으로 희박함) hash func 는 비트 하나만 바꿔도 결과가 완전히 달라진다 hash pointer: 입력값 x 에 대한 hash(x) 관계를 이거라고 부르는듯 hash pointer 를 활용한 linked list 가 blockchain 인 것 변경을 감지하기 용이함 Merkle Tree § #symlink 내용 옮겨짐 Merkle Tree (Hash) - list 가 block chain 이라면, hash pointer 의 tree 는 merkle tree 임 leaf 의 데이터가 변경되면 이게 쭉 올라가서 root hash 까지 전부 바뀌게 된다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="archives/ticomnet.spring.2024.cse.snu.ac.kr/9.-CT"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">9. CT</h1><p class="content-meta ">Apr 01, 2024, 6 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학과 권태경 교수님의 &quot;Topics in Computer Networks&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="certificate-transparency">Certificate Transparency<a aria-hidden="true" tabindex="-1" href="#certificate-transparency" class="internal"> §</a></h2>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>#symlink 내용 옮겨짐 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)">Certificate Transparency, CT (PKIX)</a></li>
+</ul>
+</blockquote>
+<p>-<a href="../../gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)"></a>한 CA 가 맞는지 인증하는 검증절차를 마련</p>
+<h3 id="certificate-pinning">Certificate Pinning<a aria-hidden="true" tabindex="-1" href="#certificate-pinning" class="internal"> §</a></h3>
+<ul>
+<li>믿을 수 있는 ca 리스트를 유지하는 것</li>
+<li>static: 브라우저 설치파일에 내장</li>
+<li>dynamic: 브라우저 첫 실행시 다운로드</li>
+<li>cert update/revocation issue 가 있어 더이상 사용하지 않음</li>
+</ul>
+<h3 id="ct">CT<a aria-hidden="true" tabindex="-1" href="#ct" class="internal"> §</a></h3>
+<ul>
+<li>CA 가 인증서를 발급하면 그것을 certificate infrastructure 에 업로드해서 브라우저에서 검증
+<ul>
+<li>repository</li>
+</ul>
+</li>
+<li>저장소는 log server 라고 부르고, merkle tree 를 이용해 관리된다
+<ul>
+<li>append only 특징</li>
+</ul>
+</li>
+<li>모니터링하는 놈이 있어서 인증서가 잘못 발급되었을 때에는 도메인 holder 가 ca 에게 말해서 어떤 놈이 잘못되었는지를 가리고 잘못된 놈을 revoke 한다</li>
+<li>과정은 다음과 같다
+<ul>
+<li>ca 는 pre-certifiacte 를 생성해서</li>
+<li>그것을 log server 에 보냄</li>
+<li>signed certificate timestamp</li>
+<li>(6page, 14”)</li>
+</ul>
+</li>
+<li>SCT: 이 인증서가 log server 에 업로드될 것이라는 약속</li>
+<li>(domain holder 가 log server 에 직접 접근하는 게 아니고?) monitor: domain holder 는 monitor 에 돈을 주고 자신의 domain 과 동일한 domain 의 인증서가 log server 에 등록되면 자신에게 알려달라고 함</li>
+</ul>
+<h2 id="merkle-tree">Merkle Tree<a aria-hidden="true" tabindex="-1" href="#merkle-tree" class="internal"> §</a></h2>
+<h3 id="hash-func">Hash func<a aria-hidden="true" tabindex="-1" href="#hash-func" class="internal"> §</a></h3>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>#symlink 내용 옮겨짐 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../gardens/cybersecurity/hash/Hash-(Hash)" class="internal" data-slug="gardens/cybersecurity/hash/Hash-(Hash)">Hash (Hash)</a></li>
+</ul>
+</blockquote>
+<p>-<a href="../../gardens/cybersecurity/hash/Hash-(Hash)" class="internal" data-slug="gardens/cybersecurity/hash/Hash-(Hash)"></a> 관계없이 output length 는 정해져 있음</p>
+<ul>
+<li>입력이 같으면 출력도 같음, 입력이 다르면 출력도 다름</li>
+<li>collision: 입력이 다른데 출력이 같은 경우
+<ul>
+<li>입력값의 집합 에 비해 출력값의 집합이 더 작기 때문에</li>
+<li>이러한 collision 이 당연히 가능하다</li>
+<li>하지만 확률이 너무나 작아서 collision 이 발견되기 힘들다</li>
+<li>md5 나 sha1 같은 경우에는 collision 이 발견돼서 deprecated 되었고, 다른 sha256 같은 애들이 사용중이다</li>
+<li>따라서 hash 함수는 collision 보호가 아주 중요하다</li>
+</ul>
+</li>
+<li><strong>One-way function</strong>: digest 를 가지고 원본을 찾을 수는 없다 (불가능하지는 않음; 확률적으로 희박함)</li>
+<li>hash func 는 비트 하나만 바꿔도 결과가 완전히 달라진다</li>
+<li>hash pointer: 입력값 x 에 대한 hash(x) 관계를 이거라고 부르는듯</li>
+<li>hash pointer 를 활용한 linked list 가 blockchain 인 것</li>
+<li>변경을 감지하기 용이함</li>
+</ul>
+<h3 id="merkle-tree-1">Merkle Tree<a aria-hidden="true" tabindex="-1" href="#merkle-tree-1" class="internal"> §</a></h3>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>#symlink 내용 옮겨짐 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../gardens/cybersecurity/hash/terms/Merkle-Tree-(Hash)" class="internal" data-slug="gardens/cybersecurity/hash/terms/Merkle-Tree-(Hash)">Merkle Tree (Hash)</a></li>
+</ul>
+</blockquote>
+<p>-<a href="../../gardens/cybersecurity/hash/terms/Merkle-Tree-(Hash)" class="internal" data-slug="gardens/cybersecurity/hash/terms/Merkle-Tree-(Hash)"></a> list 가 block chain 이라면, hash pointer 의 tree 는 merkle tree 임</p>
+<p><img src="../../images/Pasted-image-20240528005906.png" width="auto" height="auto"/></p>
+<ul>
+<li>leaf 의 데이터가 변경되면 이게 쭉 올라가서 root hash 까지 전부 바뀌게 된다.</li>
+<li>proving membership
+<ul>
+<li>한 데이터와</li>
+<li>해당 데이터가 root hash 까지 올라가는데 필요한 hash 들을 주면</li>
+<li>hash(hash(h(data) + hash1) + hash2) 뭐 이런식으로 해서 root hash 와 같은지 판단해서 해당 tree 에 포함되어 있는지 확인 가능</li>
+</ul>
+</li>
+<li>root hash 가 변경되지 않았다면 leaf data 가 전부 변경되지 않았다는 것이 보장됨</li>
+<li>두 root hash 를 hash 해서 새로운 root hash 를 만드는 방법으로 두 tree 를 병합하는 것이 가능함</li>
+<li>consistency proof: 42”
+<ul>
+<li>변경감지, entity 추가 등의 내용이었던 것 같다</li>
+</ul>
+</li>
+<li>inclusion proof: 위에서 말한 대로 경로상에서 필요한 다른 hash 가 제공되면 가능</li>
+</ul>
+<h2 id="merkle-tree-in-ct">Merkle Tree in CT<a aria-hidden="true" tabindex="-1" href="#merkle-tree-in-ct" class="internal"> §</a></h2>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>#symlink 내용 옮겨짐 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)">Certificate Transparency, CT (PKIX)</a></li>
+</ul>
+</blockquote>
+<p>-<a href="../../gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)"></a>r 에 이런 tree 가 있어서 인증서가 이미 발급되었는지 확인함</p>
+<ul>
+<li>CT 에서 monitor 는 log server 를 계속 확인하면서 client 의 cert 가 생성되었는지 확인하고, client 에게 알려준다</li>
+<li>그 다음에는 client 가 CA 한테 말해서 해당 인증서를 revoke 해달라고 부탁한다</li>
+<li>뭔가 놓침 48”</li>
+<li>CA 는 여러 log server 에 이것을 업로드 해서 (따라서 SCT 도 여러개) HA 구성을 할 수 있다
+<ul>
+<li>즉, 한 log server 가 죽어도 cert validation 이 가능해지는 것</li>
+<li>하지만 이 경우에 당연히 문제가 되는 점은 cert 의 크기가 커지기 때문에 용량이나 전송속도 등에서 불이익을 받을 수 있다</li>
+</ul>
+</li>
+<li>몇개 이상의 log server 에서 approved 받아야 하는지는 브라우저마다 정책이 다르다
+<ul>
+<li>크롬같은 경우에는 만료 기간 180 일을 기준으로, 적으면 2곳, 많으면 3곳</li>
+</ul>
+</li>
+<li>(시험범위는 아니지만) 추가적인 내용들
+<ul>
+<li>browser 가 sct 가 담긴 인증서를 받아 처리를 할 때에는 browser 딴에서는 별로 overhead 가 적지만, (아마?) log server 에 부하가 걸릴 수 있다? → 1’00”</li>
+<li>sct validation for browser 는 optional 하다 - overhead 때문에</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#certificate-transparency" data-for="certificate-transparency">Certificate Transparency</a></li><li class="depth-1"><a href="#certificate-pinning" data-for="certificate-pinning">Certificate Pinning</a></li><li class="depth-1"><a href="#ct" data-for="ct">CT</a></li><li class="depth-0"><a href="#merkle-tree" data-for="merkle-tree">Merkle Tree</a></li><li class="depth-1"><a href="#hash-func" data-for="hash-func">Hash func</a></li><li class="depth-1"><a href="#merkle-tree-1" data-for="merkle-tree-1">Merkle Tree</a></li><li class="depth-0"><a href="#merkle-tree-in-ct" data-for="merkle-tree-in-ct">Merkle Tree in CT</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../archives/ticomnet.spring.2024.cse.snu.ac.kr/(서울대)-Topics-in-Computer-Networks-강의록" class="internal">(서울대) Topics in Computer Networks 강의록</a></li><li><a href="../../gardens/cybersecurity/PKIX/terms/Certificate-Transparency,-CT-(PKIX)" class="internal">Certificate Transparency, CT (PKIX)</a></li><li><a href="../../gardens/cybersecurity/hash/Hash-(Hash)" class="internal">Hash (Hash)</a></li><li><a href="../../gardens/cybersecurity/hash/terms/Hash-Pointer-(Hash)" class="internal">Hash Pointer (Hash)</a></li><li><a href="../../gardens/cybersecurity/hash/terms/Merkle-Tree-(Hash)" class="internal">Merkle Tree (Hash)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../postscript.js" type="module"></script></html>

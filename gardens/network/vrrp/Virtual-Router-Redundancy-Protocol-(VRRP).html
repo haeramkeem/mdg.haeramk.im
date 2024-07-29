@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html><head><title>Virtual Router Redundancy Protocol (VRRP)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Virtual Router Redundancy Protocol (VRRP)"/><meta property="og:description" content="참고한 것들 RFC3768 본 문서는 RFC3768 를 읽고 정리한 글입니다. 글이 좀 깁니다. 1. Why VRRP? § Default gateway (First hop) determination § End-hosts (예를들면 뭐 서버) 는 동적 라우팅 기능이 없기 때문에 일반적으로 L3 스위치나 라우터를 맨 앞에 붙여 default gateway 로 사용하는 방식으로 외부와 통신한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../static/icon.png"/><meta name="description" content="참고한 것들 RFC3768 본 문서는 RFC3768 를 읽고 정리한 글입니다. 글이 좀 깁니다. 1. Why VRRP? § Default gateway (First hop) determination § End-hosts (예를들면 뭐 서버) 는 동적 라우팅 기능이 없기 때문에 일반적으로 L3 스위치나 라우터를 맨 앞에 붙여 default gateway 로 사용하는 방식으로 외부와 통신한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/network/vrrp/Virtual-Router-Redundancy-Protocol-(VRRP)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Virtual Router Redundancy Protocol (VRRP)</h1><p class="content-meta ">Jun 02, 2024, 32 min read</p><ul class="tags "><li><a href="../../../tags/network" class="internal tag-link">#network</a></li><li><a href="../../../tags/스토리" class="internal tag-link">#스토리</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://www.rfc-editor.org/rfc/rfc3768.html" class="external">RFC3768</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="note">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="2" x2="22" y2="6"></line><path d="M7.5 20.5 19 9l-4-4L3.5 16.5 2 22z"></path></svg></div>
+                  <div class="callout-title-inner"><p>본 문서는 <a href="https://www.rfc-editor.org/rfc/rfc3768.html" class="external">RFC3768</a> 를 읽고 정리한 글입니다. 글이 좀 깁니다.</p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="1-why-vrrp">1. Why VRRP?<a aria-hidden="true" tabindex="-1" href="#1-why-vrrp" class="internal"> §</a></h2>
+<h3 id="default-gateway-first-hop-determination">Default gateway (First hop) determination<a aria-hidden="true" tabindex="-1" href="#default-gateway-first-hop-determination" class="internal"> §</a></h3>
+<ul>
+<li>End-hosts (예를들면 뭐 서버) 는 동적 라우팅 기능이 없기 때문에 일반적으로 L3 스위치나 라우터를 맨 앞에 붙여 default gateway 로 사용하는 방식으로 외부와 통신한다.</li>
+<li>그래서 default gateway (혹은 first hop 이라는 용어도 이제 좀 익숙해지자) 의 IP 주소를 알아야 End-host 에 static routing 을 설정해놓을 수 있다.</li>
+</ul>
+<h4 id="방법1-disc---icmp-router-discovery-protocol">방법1) DISC - ICMP Router Discovery Protocol<a aria-hidden="true" tabindex="-1" href="#방법1-disc---icmp-router-discovery-protocol" class="internal"> §</a></h4>
+<ul>
+<li>Default gateway determination 를 위해서는 ICMP 패킷을 이용해 이웃들이 살아있는지 확인하는 방법(DISC, ICMP Router Discovery Client, RFC1256) 을 활용할 수 있다.</li>
+<li>이는 Default gateway 를 ICMP Router Discovery Message 를 보냄으로써 알아내는 방식이다.</li>
+<li>하지만 이를 위해서는 모든 참여자들(End-host 겠제)이 ICMP 를 보내는 등의 작업을 하며 능동적으로 참여해야 하는데, 참여자의 수가 많아질수록 (모든 호스트가 RDM 을 보내야 하므로) 오버헤드가 커지게 된다.</li>
+<li>결과적으로 서비스의 공백기간이 길어질 여지가 많다.</li>
+</ul>
+<blockquote>
+<p>Neighbor or router discovery protocols may require active participation by all hosts on a network, leading to large timer values to reduce protocol overhead in the face of large numbers of hosts. This can result in a significant delay in the detection of a lost (i.e., dead) neighbor, that may introduce unacceptably long “black hole” periods.</p>
+</blockquote>
+<h4 id="방법2-statically-configured-default-route">방법2) Statically configured default route<a aria-hidden="true" tabindex="-1" href="#방법2-statically-configured-default-route" class="internal"> §</a></h4>
+<ul>
+<li>또 하나의 방법은 DHCP(Dynamic Host Configuration Protocol) 을 이용해 IP 를 동적으로 할당하고 Default gateway 도 알려주는 것이다. (마치 NAT 처럼)</li>
+<li>하지만 이것은 Single point of failure 문제를 일으킬 수 있다; Default gateway 가 불능상태가 되면 진입할 수가 없게 되므로</li>
+</ul>
+<blockquote>
+<p>The use of a statically configured default route is quite popular; it minimizes configuration and processing overhead on the end-host and is supported by virtually every IP implementation. This mode of operation is likely to persist as dynamic host configuration protocols [DHCP] are deployed, which typically provide configuration for an end-host IP address and default gateway. However, this creates a single point of failure. Loss of the default router results in a catastrophic event, isolating all end-hosts that are unable to detect any alternate path that may be available.</p>
+</blockquote>
+<h3 id="also-without-vrrp">Also, without VRRP…<a aria-hidden="true" tabindex="-1" href="#also-without-vrrp" class="internal"> §</a></h3>
+<ul>
+<li>위의 두가지 방법 (+ 추가적으로는 무지성으로 Default gateway의 IP주소를 고정해버리고 End-host의 static route에 추가하는 방법도 있다.) 으로는 Default gatewat fault 에 대응하기 힘들다.</li>
+<li>Fault 에 대응하기 위해서 Gateway 를 이중화 한다고 하더라도 결국에는 fault 이후 failover 를 위해 각각의 End-hosts 들의 static route 를 수정해줘야 하기 때문이다.</li>
+</ul>
+<h3 id="however-vrrp-provides">However, VRRP provides…<a aria-hidden="true" tabindex="-1" href="#however-vrrp-provides" class="internal"> §</a></h3>
+<ul>
+<li>VRRP 는 Static default routed environment 환경 (일반적인 동적 라우팅을 지원하지 않는 End-host 들이 default gateway 뒤에 배치되어있는 환경?) 에서 Single point of failure 를 제거하기 위해 개발되었다.</li>
+<li>VRPP 에서는 Election 과정을 거쳐 Packet forwarding 을 담당할 책임을 가지는 Master 를 선정하게 된다.</li>
+<li>그리고 Master 가 불능해졌을 경우 다시 Election 과정을 거쳐 새로운 Master 를 선정하는 방법을 통해 gateway failover 를 지원하게 된다.</li>
+<li>또한 이 라우터들을 묶어 Virtual router 를 생성하게 되므로 Failover가 발생하더라도 default gateway 의 주소는 변경되지 않는다.</li>
+<li>결과적으로 End-hosts 들은 default gateway 의 주소를 static 하게 설정하더라도 장애에 대응할 수 있게 된다.</li>
+</ul>
+<h3 id="similar-protocols">Similar protocols<a aria-hidden="true" tabindex="-1" href="#similar-protocols" class="internal"> §</a></h3>
+<ul>
+<li>CISCO 독점의 HSRP (Hot Standby Router Protocol) 하고 IPSTB (IP Standby Protocol) 이 있댄다.</li>
+</ul>
+<h3 id="scope-of-rfc3768">Scope of RFC3768<a aria-hidden="true" tabindex="-1" href="#scope-of-rfc3768" class="internal"> §</a></h3>
+<ul>
+<li>VRRP 의 소개와 작동과정 (뭐 메세지 포맷 등 까지)</li>
+<li>VRRP 가 가지는 취약점</li>
+<li>IPv6 에서의 작동 과정을 포함하지 않음; RFC3768 에서는 IPv4 의 경우만 논한다.</li>
+</ul>
+<h2 id="2-terminology">2. Terminology<a aria-hidden="true" tabindex="-1" href="#2-terminology" class="internal"> §</a></h2>
+<ul>
+<li>VRRP router: 실제 라우터를 말하는 것인듯
+<ul>
+<li>VRRP 를 작동시키는 실제 라우터</li>
+<li>하나 이상의 Virtual router 로써 참여할 수 있다.</li>
+</ul>
+</li>
+<li>Virtual router: LAN 상에서 Default router(gateway) 로의 역할을 하는 <strong>가상의</strong> 라우터
+<ul>
+<li>Virtual router 의 IP 주소가 Virtual IP (VIP) 이고</li>
+<li>Virtual router 의 MAC 주소가 Virtual MAC 이며</li>
+<li>VRID (Virtual Router ID) 와 여러개의 VIP 로 구성된다.</li>
+</ul>
+</li>
+<li>IP Address Owner
+<ul>
+<li>만약 VIP 가 실제 IP 라면 그 실제 IP 를 가지고 있는 놈이 IP Address Owner 가 된다</li>
+<li>이게 뭔말이냐면 VIP 는 실제 Network Interface 에 할당되지 않는 IP 여도 가능한데, 그렇지 않고 실제 Network Interface 에 할당된 IP 가 VIP 로 등록이 된다면 해당 Network Interface 가 설치된 놈이 IP Address Owner 가 된다 이말이야
+<ul>
+<li>예를 들어보면 VIP 가 <code>192.168.1.10</code> 이고 VRRP Router 의 IP 주소가 <code>192.168.1.101</code> , <code>192.168.1.102</code>, … 라면 IP Address Owner 는 없지만</li>
+<li>VRRP Router의 IP 주소가 위와 같은데 VIP 가 <code>192.168.1.101</code> 라면 <code>192.168.1.101</code> 을 들고있는 VRRP Router 가 IP Address Owner 가 된다 이말이여</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Primary IP Address
+<ul>
+<li>라우터에 붙어있는 Network Interface 들 중에 핵심적인 하나의 IP 주소</li>
+<li>딱히 이놈을 정하는 알고리즘은 없는거 같고 그냥 첫번째 IP 를 이걸로 지정할 수 있댄다</li>
+<li>VRRP Advertisement Packet 의 SRC IP 는 항상 이 Primary IP Address 가 된다.</li>
+</ul>
+</li>
+<li>Virtual Router Master
+<ul>
+<li>Virtual Router 의 IP 에 보내진 패킷들을 Forwarding 할 책임이 있는 VRRP Router 를 말한다.</li>
+<li>Forwarding 은 물론 ARP 까지 응답할 책임이 있다.</li>
+<li>만약 IP Address Owner 가 존재한다면, 이놈은 무조건 Virtual Router Master 가 된다.</li>
+</ul>
+</li>
+<li>Virtual Router Backup
+<ul>
+<li>Virtual Router Master 가 불능상태가 되었을 때 Virtual Router Master 가 될 책임이 있는 VRRP Router 를 말한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-features">3. Features<a aria-hidden="true" tabindex="-1" href="#3-features" class="internal"> §</a></h2>
+<ul>
+<li><strong>IP Address Backup</strong>: (핵심적인 기능인) IP Address Failover</li>
+<li>Minimize the duration of <strong>black holes</strong>: Master down 에 대한 failover 가 신속하게 일어나서 end-host 접근성에 대한 downtime 이 최소화 되어야 한다.</li>
+<li>Minimize the <strong>steady state</strong> bandwidth overhead and processing complexity: 아무런 문제도 발생하지 않은 정상상태에서 대기할 때에도 대역폭이나 연산과정에 부담을 줘서는 안된다
+<ul>
+<li>즉, 과도한 통신이 일어나거나 복잡한 프로세싱이 발생하면 안된다는 것</li>
+</ul>
+</li>
+<li>IP 를 지원하는 여러 Data link layer 프로토콜(Multi Access Control, MAC 을 위한)과의 호환성이 좋아야 한다.</li>
+</ul>
+<blockquote>
+<p>Function over a wide variety of multiaccess LAN technologies capable of supporting IP traffic.</p>
+</blockquote>
+<ul>
+<li>로드밸런싱을 위해 여러개의 Virtual Router 를 선출할 수 있어야 한다.</li>
+</ul>
+<blockquote>
+<p>Provide for election of multiple virtual routers on a network for load balancing.</p>
+</blockquote>
+<ul>
+<li>단일 LAN 환경에서 여러개의 논리 IP Subnet 을 사용하는 경우에도 사용할 수 있어야 한다.
+<ul>
+<li>약간 VLAN 말하는거같은데</li>
+<li>하나의 Virtual router 에 VIP 를 여러개 설정할 수 있도록 하는게 약간 이것때문인거같음</li>
+<li>VIP 여러개 설정해서 여러 Subnet 이 존재해도 Default gateway 를 설정할 수 있게 하는거인듯 → 여러 Subnet 의 IP 대역 당 하나씩 VIP 가 필요할 테니까</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Support of multiple logical IP subnets on a single LAN segment.</p>
+</blockquote>
+<ul>
+<li><strong>Preferred Path Indication</strong>: 여러개의 라우터들 간에 선호하는 (datagram) 경로를 설정할 수 있어야 한다.
+<ul>
+<li>이건 왜냐면 각 라우터들의 환경이 제각각일수도 있기 때문</li>
+<li>가령 대역폭이나 reliability 가 안좋은 라우터의 경우에는 되도록이면 해당 라우터로 경로가 설정되지 않게 하는 것이 바람직하다</li>
+<li>약간 Priority 를 이용하여 이것을 명시할 수 있는듯 → 위와 같은 라우터에는 Priority 를 낮게 잡아서 어쩔 수 없는 상황이 아니면 Master 가 되지 않도록 설정해줄 수 있는 듯하다.</li>
+</ul>
+</li>
+<li><strong>Minimization of Unnecessary Service Disruptions:</strong> 불필요한 서비스의 방해가 있어서는 안된다
+<ul>
+<li>마스터가 제대로 작동하는 한 우선순위가 같거나 낮은 Backup router 에 의한 state change 가 일어나서는 안된다</li>
+<li>하지만 특정 환경에서는 현재 마스터가 제대로 작동하고 있다면 우선순위가 높은 Backup router 가 가용상태가 되었을 때에도 state change 가 일어나지 않게 하는 것이 나을수도 있다네</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Some environments may find it beneficial to avoid the state transition triggered when a router becomes available that is preferred over the current Master. It may be useful to support an override of the immediate convergence to the preferred path.</p>
+</blockquote>
+<ul>
+<li><strong>Efficient Operation over Extended LANs</strong>: Virtual router 의 MAC 주소를 Data link layer 의 송신주소로 사용하고 마스터가 변경된 이후, 그리고 주기적으로 위와 같이 설정된 패킷을 전송하여 ARP 캐시 테이블을 유지해야 한다.
+<ul>
+<li>만일 이렇게 하지 않으면 패킷들이 유실 (flooding) 된다고??</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>The use of the virtual router MAC address in an extended LAN employing learning bridges can have a significant effect on the bandwidth overhead of packets sent to the virtual router. If the virtual router MAC address is never used as the source address in a link level frame then the station location is never learned, resulting in flooding of all packets sent to the virtual router. To improve the efficiency in this environment the protocol should: 1) use the virtual router MAC as the source in a packet sent by the Master to trigger station learning; 2) trigger a message immediately after transitioning to Master to update the station learning; and 3) trigger periodic messages from the Master to maintain the station learning cache.</p>
+</blockquote>
+<h2 id="4-overview">4. Overview<a aria-hidden="true" tabindex="-1" href="#4-overview" class="internal"> §</a></h2>
+<ul>
+<li><strong>IP Multicast datagram</strong> 을 이용한다.
+<ul>
+<li>따라서 IP Multicast 를 지원하는 Data link layer 프로토콜을 모두 사용할 수 있다.</li>
+<li>그리고 <em>Multicast</em> 라는 말에서 알 수 있듯이 VRRP v2 는 Multicast 밖에 사용하지 못한다.</li>
+</ul>
+</li>
+<li>Virtual router MAC 주소로 <strong>Well-known MAC 주소</strong>를 사용한다.
+<ul>
+<li>IEEE 802 48-bit MAC Address (니가 흔히 보던 그 MAC 주소) 포맷을 사용한다.</li>
+<li>마스터가 주기적으로 보내는 VRRP packet 의 송신주소로 사용되어 ARP 캐시 테이블을 유지하도록 한다.</li>
+</ul>
+</li>
+<li>Virtual router 는 <strong>VRID 와 몇개의 IP 들로 선언</strong>된다.</li>
+<li>VRRP router 들은 <strong>인터페이스의 실제 주소 혹은 Virtual router mapping과 우선순위를 이용</strong>해 Virtual router 와 연관될 수 있다.
+<ul>
+<li>(당연하게도) LAN 환경이 다르면 같은 VRID 를 사용할 수 있다.</li>
+<li>즉, Virtual router 의 범위는 하나의 LAN 환경에서만 고유하다는 의미임</li>
+</ul>
+</li>
+<li>네트워크 트래픽을 줄이기 위해 <strong>마스터만이 VRRP Advertisement Packet 을 전송</strong>한다.</li>
+<li>백업 라우터가 더 높은 우선순위를 갖고 있지 않은 한 <strong>절대로 마스터를 뺏으려는 시도를 하지 않는다.</strong>
+<ul>
+<li>Preferred path (=우선순위가 더 높은 VRRP Router) 가 존재할때가 아니면 preemption 을 하지 않게 하여 서비스가 방해받지 않게 한다.</li>
+<li>또한 설정을 통해 (관리자의 권한으로?) preemption 시도를 전부 차단할 수도 있다.</li>
+<li>유일한 예외사항은 Virtual router 의 IP 를 갖고 있는 VRRP router는 항상 마스터가 된댄다.</li>
+</ul>
+</li>
+<li>마스터가 불능해지면 <strong>다음으로 우선순위가 높은 놈이 마스터</strong>로 바뀐다.
+<ul>
+<li>이때 공백기간이 매우 짧기 때문에 서비스에 최소한의 지장만 주게 된다.</li>
+</ul>
+</li>
+<li><strong>두개의 상태(Master 와 Backup)</strong> 만 존재하고 <strong>메시지 타입도 한개(VRRP Advertisement Packet)</strong> 만 존재한다.
+<ul>
+<li>이것은 프로토콜의 복잡성을 줄이기 위한 최적화의 산물이랜다.</li>
+</ul>
+</li>
+<li><strong>두개의 라우터가 서로 상이한 우선순위 (distinct path preference) 를 가지는 상황</strong>을 대표적인 시나리오로 생각하고 설계되었다.
+<ul>
+<li>물론 우선순위가 같은 경우 마스터를 선출하는 짧은 기간동안 같은 우선순위를 가지는 모든 라우터들에게 패킷이 보내진다는 부작용이 있댄다.</li>
+<li>하지만 우선순위를 다르게 설정하는 시나리오가 대부분의 상황을 커버하는 더 일반적인 것이고</li>
+<li>마스터의 손실이 빈번하지 않고 마스터 선출에 걸리는 기간은 1초 미만으로 매우 짧기에 위와 같은 부작용이 미치는 영향은 적을 것이랜다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-sample-configuration">5. Sample Configuration<a aria-hidden="true" tabindex="-1" href="#5-sample-configuration" class="internal"> §</a></h2>
+<h3 id="single-virtual-router">Single Virtual Router<a aria-hidden="true" tabindex="-1" href="#single-virtual-router" class="internal"> §</a></h3>
+<p><img src="../../../images/Pasted-image-20240602201652.png" width="auto" height="auto"/></p>
+<ul>
+<li>이건 Router 1 (<code>Rtr1</code>)은 <code>IP A</code>를 가지고 있고</li>
+<li>Router 2 (<code>Rtr2</code>)는 <code>IP B</code>를 가지고 있는 상태에서</li>
+<li><code>VRID1</code>, <code>IP A</code> 로 구성된 Virtual router 하나만 두는 구성에 대한 것이다.</li>
+<li>Virtual router 의 IP 가 <code>IP A</code> 이기 때문에 각 Host들 (<code>H1</code>, <code>H2</code>, <code>H3</code>, <code>H4</code>)은 <code>IP A</code>를 이용해 default gateway static routing 이 설정되게 된다.</li>
+<li>당연히 Virtual router 의 IP 를 Router 1 이 들고 있기 때문에 이놈이 무조건 Master 가 되고 (<code>MR VRID=1</code>) 따라서 우선순위는 255가 된다.</li>
+<li>그리고 Router 2의 경우에는<code>IP B</code>를 갖고 있기는 하지만 이건 그냥 물리 인터페이스에 할당된 IP 일 뿐 Host 에서 접근할 일은 없는 IP 가 되며 얘는 백업 라우터 (<code>BR VRID=1</code>) 이기 때문에 우선순위는 100을 가진다.
+<ul>
+<li>그래서 <code>IP B</code> 는 백업 IP 가 아닌 그냥 무의미한 IP 가 된다.</li>
+<li>왜냐면 VRRP v2 는 Multicast 밖에 지원하지 않기 때문에 VRRP Advertisement Packet 도 수신 주소가 <code>IP B</code>가 아닌 Multicast 주소로 사용되어 아무데도 사용되지 않기 때문</li>
+<li>주의할점은 백업 라우터랑 백업 IP 랑 헷갈리면 안된다는 거다 → Router 2 는 Virtual router 의 구성원으로써 백업 라우터의 역할을 하지만 <code>IP B</code> 는 <code>IP A</code> 가 사용 불가능하게 되었을 때에 대한 백업 IP 가 아니기 때문</li>
+</ul>
+</li>
+<li>이에 따라 모든 Virtual router로 들어오는 패킷은 Router 1 이 처리하게 되고 Router 2 는 놀다가 Router 1 이 죽었을 때야 비로소 Master 로 승격된 뒤 Virtual router 로 들어오는 패킷을 처리하는 방식으로 작동한다.</li>
+<li>실제 Production 환경에서는 거의 사용할 일이 없는 구성이라는데 왜그런지는 모르겠노</li>
+</ul>
+<h3 id="double-virtual-router">Double Virtual Router<a aria-hidden="true" tabindex="-1" href="#double-virtual-router" class="internal"> §</a></h3>
+<p><img src="../../../images/Pasted-image-20240602201723.png" width="auto" height="auto"/></p>
+<ul>
+<li>이건 Virtual router <code>VRID1</code>은 위의 예제에서와 동일하게 Router 1이 마스터, Router 2 이 백업 상태로 설정되어있으나</li>
+<li><code>IP B</code>를 가지는 Virtual router <code>VRID2</code> 가 추가되어 백업 IP 까지 구성한 모습인거같음</li>
+<li>Virtual router 2의 IP 가 <code>IP B</code> 로 구성되어있기 때문에 Virtual router 1와는 반대로 Router 2 가 마스터(+ 우선순위 255), Router 1이 백업 (+ 우선순위 100)으로 설정된다.</li>
+<li>따라서 Virtual router를 한대만 구성한 것과는 다르게 <code>IP B</code>또한 사용할 수 있는 IP 가 되기 때문에 위의 예제에서는 <code>H1</code>, <code>H2</code>는 <code>IP A</code>로, <code>H3</code>, <code>H4</code>는 <code>IP B</code>로 default gateway static routing 이 설정되어있는 것을 확인할 수 있다.</li>
+<li>위와 같이 구성하는 것이 failover 가 가능한 virtual router 2대가 생기는 격이므로 IP 두개를 이용해 부하를 분산시킴과 동시에 Failover 가 가능한 고가용성의 구성도 가능해 진다는거같음</li>
+</ul>
+<h2 id="6-packet-format">6. Packet Format<a aria-hidden="true" tabindex="-1" href="#6-packet-format" class="internal"> §</a></h2>
+<h3 id="ip-packet-header">IP Packet Header<a aria-hidden="true" tabindex="-1" href="#ip-packet-header" class="internal"> §</a></h3>
+<ul>
+<li>VRRP Advertisement Packet은 IP Packet 의 Data 부분에 들어간다 (즉, IP Packet으로 캡슐화된다는 이야기)</li>
+<li>SRC Address: <strong>Primary IP</strong> 가 들어간다.</li>
+<li>DST Address: <strong>Multicast IP</strong> 가 들어간다.
+<ul>
+<li>IANA에 의해 할당받은 VRRP 전용 Multicast IP 는 <code>224.0.0.18</code>이다.</li>
+<li>즉, (VRRP v2 표준을 따른다면) 수신지 IP 주소는 무조건 <code>224.0.0.18</code> 이 된다.</li>
+</ul>
+</li>
+<li>TTL: <strong>무조건 255</strong> 로 설정된다. 255가 아닌 패킷은 기각된다.</li>
+<li>Protocol: IANA에 의해 할당받은 VRRP 의 프로토콜 번호는 <strong>112</strong>이다.</li>
+</ul>
+<h3 id="packet-format">Packet format<a aria-hidden="true" tabindex="-1" href="#packet-format" class="internal"> §</a></h3>
+<p><img src="../../../images/Pasted-image-20240602201925.png" width="auto" height="auto"/></p>
+<ul>
+<li>Version: VRRP 버전을 의미한다. 당연히 <strong>2</strong>가 들어간다.</li>
+<li>Type: VRRP 패킷의 타입을 의미한다. VRRP v2에 따르면 패킷 타입은 Advertisement type밖에 존재하지 않으므로 <code>ADVERTISE</code> 를 뜻하는 <strong>1</strong>이 들어간다.
+<ul>
+<li>따라서 VRRP v2의 경우 Type이 1이 아닌 패킷은 기각된다.</li>
+</ul>
+</li>
+<li>Virtual Rtr ID: Virtual router 의 <strong>VRID 값</strong>이다. 기본값은 없고 알아서 설정해줘야 한다.</li>
+<li>Priority: 0~255 의 값을 가지는 우선순위이다. 여기에는 다음의 규칙이 지켜져야 한다:
+<ul>
+<li>Virtual router 의 IP 를 들고 있는 VRRP router의 우선순위는 <strong>255</strong>이다. 즉, <strong>마스터의 우선순위는 무조건 255</strong>이어야 한다.</li>
+<li><strong>1~254 의 우선순위는 백업</strong>을 위한 것으로 기본값은 100이다.</li>
+<li><strong>0은 현재의 마스터가 VRRP 에 참여하기를 포기</strong>했다는 것을 의미하는 특별한 값이다.
+<ul>
+<li>따라서 Priority가 0이라면 Back router 는 <strong>Master timeout 등을 기다리지 않고</strong> 신속하게 다음 Master 를 선출해야 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Count IP Addr: 이전에 얘기했듯이 Virtual router 는 하나 이상의 IP 를 갖고있을 수 있는데 이때 <strong>몇개나 갖고있는지</strong>에 대한 값이다.</li>
+<li>Auth type: VRRP v1을 거치며 Authenticate 에 문제가 많다는 것이 확인되었다. 따라서 VRRP v2 는 Authenticate 기능을 지원하지 않으며 <code>NO_AUTHENTICATION</code>을 뜻하는 <strong>0</strong>이 들어간다.
+<ul>
+<li>다만 VRRP v1과의 호환성을 위해 값 1과 2도 가능하다. 이 값들은 이전 버전과의 호환성만을 위해 예약된 값이다 (아무런 의미도 없다는 뜻).</li>
+</ul>
+</li>
+<li>Adver Int: VRRP Advertisement Packet 의 <strong>송신 주기</strong>를 의미한다.</li>
+<li>Checksum: 패킷의 내용을 검증하기 위한 <strong>체크썸</strong>
+<ul>
+<li>Version field부터 끝까지</li>
+<li>Checksum 값은 0으로 설정해서 1의 보수 합을 한 뒤 다시 1의 보수를 계산한 값이랜다.</li>
+</ul>
+</li>
+<li>IP Address (n): Virtual router가 가지고 있는 <strong>IP 들의 목록</strong></li>
+<li>Authentication data: VRRP v2 에서는 Authentication을 지원하지 않기 때문에 이 값들은 전부 <strong>0</strong>으로 설정되어야 한다.</li>
+</ul>
+<h2 id="7-how-it-works--state-machine-explanation">7. How it works → State Machine explanation<a aria-hidden="true" tabindex="-1" href="#7-how-it-works--state-machine-explanation" class="internal"> §</a></h2>
+<h3 id="terminology">Terminology<a aria-hidden="true" tabindex="-1" href="#terminology" class="internal"> §</a></h3>
+<ul>
+<li>VRID, Priority, IP Addresses, Advertisement Interval, Authentication Type, Authentication Data → 이전에 설명한 것과 동일함</li>
+<li><code>Master_Down_Interval</code>: 마스터가 죽었는지 대기하는 시간 → 이 시간이 지나도록 Advertisement Packet 이 도착하지 않으면 마스터가 죽었다고 판단한다.
+<ul>
+<li>계산법: <code>(3 * Advertisement_Interval) + Skew_Time</code></li>
+<li>여기서 <code>Skew_Time</code> 이라는 값이 나오는데 이건 우선순위를 <code>Master_Down_Interval</code> 값에 반영하기 위한 용도이다.</li>
+<li>우선순위가 낮을수록 이 값이 높게 책정되어 <code>Master_Down_Interval</code> 이 늦게 도달해 그만큼 Master election에 늦게 참여한다. 따라서 우선순위가 높은놈이 먼저 Election 에 참여하기 때문에 그놈이 새로운 Master가 되는 방식으로 우선순위를 Election에 반영한다.</li>
+<li>따라서 다음과 같이 계산한다 → <code>( (256 - Priority) / 256 )</code></li>
+</ul>
+</li>
+<li><code>Preempt_Mode</code>: 우선순위가 높은 백업 라우터가 낮은 마스터 라우터를 빼앗을지 말지를 결정하는 플래그.
+<ul>
+<li>기본값은 <code>true</code> 이며 우선순위가 높은놈이 빼앗도록 되어있다.</li>
+<li>다만 Virtual router IP 를 가진 VRRP router 는 이 플래그와 상관없이 무조건 마스터를 빼앗는다.</li>
+</ul>
+</li>
+<li><code>Master_Down_Timer</code>: Advertisement 가 도착하는 시간을 재는 타이머 → 초기값은 <code>Master_Down_Interval</code> 이며 타이머가 0이 되면 마스터가 죽었다고 판단한다.</li>
+<li><code>Adver_Timer</code>: Advertisement 를 언제 보내야 할지 재는 타이머 → 초기값은 <code>Advertisement_Interval</code> 이며 타이머가 0이 되면 Advertisement Packet 을 전송한다.</li>
+</ul>
+<h3 id="state-diagram">State Diagram<a aria-hidden="true" tabindex="-1" href="#state-diagram" class="internal"> §</a></h3>
+<p><img src="../../../images/Pasted-image-20240602202134.png" width="auto" height="auto"/></p>
+<h4 id="initiate-state">Initiate State<a aria-hidden="true" tabindex="-1" href="#initiate-state" class="internal"> §</a></h4>
+<ul>
+<li>흐름
+<ul>
+<li>만약 우선순위가 255일 경우 (즉, Virtual router 의 IP 를 자신이 갖고 있을 경우)
+<ul>
+<li>VRRP Advertisement Packet 을 전송하고</li>
+<li>Gratuitous ARP 를 VRRP 참여자들에게 알려 ARP 캐시 테이블을 채울 수 있도록 하고
+<ul>
+<li>이때 IP 는 당연히 Virtual router IP 일 거고</li>
+<li>MAC주소는 Virtual router MAC 이다 → 마스터의 MAC 주소가 아니다 이거야</li>
+<li>왠지는 나도 몰?루</li>
+</ul>
+</li>
+<li><code>Adver_Timer</code> 값을 <code>Advertisement_Interval</code> 로 설정하고
+<ul>
+<li>자신의 상태를 <em>Master State</em> 로 변경한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>우선순위가 255가 아닐 경우
+<ul>
+<li><code>Master_Down_Timer</code> 값을 <code>Master_Down_Interval</code> 로 설정하고</li>
+<li>자신의 상태를 _Backup State_로 변경한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="backup-state">Backup state<a aria-hidden="true" tabindex="-1" href="#backup-state" class="internal"> §</a></h4>
+<ul>
+<li>책임
+<ul>
+<li>_Backup state_에 있는 VRRP Router 들은 다음의 규칙을 지킬 책임이 있다.
+<ul>
+<li>Virtual router 의 IP 에 대한 ARP 응답을 보내지 말아야 한다.</li>
+<li>Data link frame header의 수신 MAC 주소가 Virtual router 의 MAC 주소로 되어 있는 패킷을 기각해야만 한다.</li>
+<li>IP frame header의 수신 IP 주소가 Virtual router 의 IP 주소로 되어있는 패킷을 기각해야만 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>흐름
+<ul>
+<li>Shutdown Event (라우터의 전원이 꺼지는 것) 이 수신되었을 때:
+<ul>
+<li><code>Master_Down_Timer</code> 를 취소한다.</li>
+<li>자신의 상태를 _Initiate State_로 변경한다.</li>
+</ul>
+</li>
+<li><code>Master_Down_Timer</code> 가 만료되었을 때:
+<ul>
+<li>VRRP Advertisement Packet 을 전송하고</li>
+<li>Gratuitous ARP 를 VRRP 참여자들에게 알려 ARP 캐시 테이블을 채울 수 있도록 하고
+<ul>
+<li>이때 IP 는 당연히 Virtual router IP 일 거고</li>
+<li>MAC주소는 Virtual router MAC 이다 → 마스터의 MAC 주소가 아니다 이거야</li>
+<li>왠지는 나도 몰?루</li>
+</ul>
+</li>
+<li><code>Adver_Timer</code> 값을 <code>Advertisement_Interval</code> 로 설정하고</li>
+<li>자신의 상태를 <em>Master State</em> 로 변경한다.</li>
+</ul>
+</li>
+<li>Advertisement Packet이 수신되었을 때
+<ul>
+<li>만약 Advertisement Packet 의 우선순위가 0이라면
+<ul>
+<li><code>Master_Down_Interval</code>을 <code>Skew_Time</code> 으로 설정한다.</li>
+</ul>
+</li>
+<li>만약 0이 아니라면
+<ul>
+<li>만약 <code>Preempt_Mode</code>가 <code>false</code>이거나(마스터 빼앗기가 비활성화되어있거나) Advertisement Packet의 우선순위가 나와 같거나 더 높을때
+<ul>
+<li><code>Master_Down_Timer</code>의 값을 <code>Master_Down_Interval</code> 로 설정한다.</li>
+</ul>
+</li>
+<li>그렇지 않다면
+<ul>
+<li>기각</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="master-state">Master State<a aria-hidden="true" tabindex="-1" href="#master-state" class="internal"> §</a></h4>
+<ul>
+<li>책임
+<ul>
+<li>Virtual router IP 로 들어온 ARP 요청에 대해 반드시 응답해야 한다.</li>
+<li>Data link frame header 의 수신 MAC 주소가 Virtual router MAC 과 같은 패킷을 반드시 처리(포워드)해야 한다.</li>
+<li>IP frame header 의 수신 IP가 Virtual router IP 일 때, 자신이 IP address owner 일때는 반드시 수신해야 하고 아닐때는 반드시 기각해야 한다.</li>
+</ul>
+</li>
+<li>흐름
+<ul>
+<li>Shutdown Event (라우터의 전원이 꺼지는 것) 이 수신되었을 때:
+<ul>
+<li><code>Adver_Timer</code> 를 취소한다.</li>
+<li>우선순위를 0으로 해서 Advertisement Packet 을 송신한다.</li>
+<li>자신의 상태를 _Initiate State_로 변경한다.</li>
+</ul>
+</li>
+<li><code>Adver_Timer</code> 가 만료되었을 때
+<ul>
+<li>Advertisement Packet 을 송신한다.</li>
+<li><code>Adver_Timer</code>를 <code>Adver_Int</code>로 설정한다.</li>
+</ul>
+</li>
+<li>Advertisement Packet이 수신되었을 때
+<ul>
+<li>만약 수신된 우선순위가 0이라면
+<ul>
+<li>Advertisement Packet 을 송신하고</li>
+<li><code>Adver_Timer</code> 값을 <code>Adver_Int</code>로 설정함</li>
+</ul>
+</li>
+<li>만약 그렇지 않다면
+<ul>
+<li>우선순위가 더 높은 Advertisement Packet 이 수신되었다면</li>
+<li>혹은 우선순위가 같은데 Primary IP 가 더 높은 Advertisement Packet 이 수신되었다면
+<ul>
+<li><code>Adver_Timer</code> 를 취소한다.</li>
+<li><code>Master_Down_Timer</code>의 값을 <code>Master_Down_Interval</code>로 설정한다.</li>
+<li>_Backup State_로 상태를 변경한다.</li>
+</ul>
+</li>
+<li>만약 그렇지 않다면
+<ul>
+<li>Advertisement를 기각한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="packet-verification">Packet Verification<a aria-hidden="true" tabindex="-1" href="#packet-verification" class="internal"> §</a></h3>
+<h4 id="receiving-advertisement-packet">Receiving Advertisement Packet<a aria-hidden="true" tabindex="-1" href="#receiving-advertisement-packet" class="internal"> §</a></h4>
+<ul>
+<li>에러가 발생한 경우 → 이때에는 패킷을 기각해야 하고(MUST) 로그를 남겨야 하며(SHOULD) 에러가 발생한 사실을 네트워크 매니저에게 알릴 수 있다(MAY).
+<ul>
+<li>IP TTL 이 255가 아니거나</li>
+<li>VRRP Version이 2가 아니거나</li>
+<li>누락된 Packet field가 있거나</li>
+<li>패킷이 수신된 인터페이스에 VRID가 다르게 설정되어 있거나</li>
+<li>내가 IP Address Owner 이거나 (우선순위 255)</li>
+<li>Auth type이 나한테 설정되어있는 Auth type과 다르게 설정되어 있거나</li>
+<li>명시된 Auth type 에 의거해 Authentication을 수행했을 때 성공하지 못했을 때</li>
+</ul>
+</li>
+<li>설정이 잘못된 경우 → 이때에는 패킷을 기각해야 하고(MUST) 로그를 남겨야 하며(SHOULD) 설정이 잘못되어있음(misconfiguration)을 네트워크 매니저에게 알릴 수 있다(MAY).
+<ul>
+<li>나한테 설정되어 있는 <code>Adver_Int</code> 가 패킷에 적혀있는 거랑 다를때</li>
+</ul>
+</li>
+<li>치명적이지 않은 설정 오류를 발견했을 때 → 이때에는 로그를 남겨야 하며(SHOULD) 설정이 잘못되어있음(misconfiguration)을 네트워크 매니저에게 알릴 수 있다(MAY).
+<ul>
+<li>나한테 설정된 Virtual router IP 주소들과 수신된 패킷의 <code>Count_IP_Addrs</code> 필드 및 <code>IP_Addresses</code> 필드의 정보가 일치하지 않을 때</li>
+</ul>
+</li>
+<li>유효하지 않은 패킷이 수신되었을 때 → 이때에는 패킷을 기각해야만 한다(MUST)
+<ul>
+<li>우선순위 255를 가지는 IP Address Owner 가 보낸 Advertisement 패킷이 아닐 때</li>
+</ul>
+</li>
+</ul>
+<h4 id="transmitting-advertisement-packet">Transmitting Advertisement Packet<a aria-hidden="true" tabindex="-1" href="#transmitting-advertisement-packet" class="internal"> §</a></h4>
+<ul>
+<li>패킷의 필드를 Virtual Router 설정에 맞게 전부 채운다.</li>
+<li>VRRP Checksum 을 계산한다.</li>
+<li>Data link frame header 의 송신지 MAC 주소를 Virtual router MAC 주소로 설정한다.</li>
+<li>IP frame header 의 송신지 IP 주소를 네트워크 인터페이스의 Primary IP 주소로 설정한다.</li>
+<li>IP frame header 의 Protocol 을 112(VRRP) 로 설정한다.</li>
+<li>VRRP IP Multicast Group 에게 VRRP 패킷을 송신한다.</li>
+</ul>
+<h4 id="virtual-router-mac-address">Virtual Router MAC Address<a aria-hidden="true" tabindex="-1" href="#virtual-router-mac-address" class="internal"> §</a></h4>
+<ul>
+<li>Virtual Router의 MAC 주소는 다음과 같아야 한다:</li>
+</ul>
+<pre><code>00-00-5E-00-01-${VRID}
+</code></pre>
+<ul>
+<li><code>00-00-05</code>는 IANA에서 지정한 값이고</li>
+<li><code>00-01</code>은 VRRP 에게 할당된 값이고</li>
+<li>마지막 <code>${VRID}</code>에 Virtual router ID 가 들어간다
+<ul>
+<li>이때문에 하나의 LAN 환경에서는 Virtual router 가 255개 이하로 존재해야 한다.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#1-why-vrrp" data-for="1-why-vrrp">1. Why VRRP?</a></li><li class="depth-1"><a href="#default-gateway-first-hop-determination" data-for="default-gateway-first-hop-determination">Default gateway (First hop) determination</a></li><li class="depth-1"><a href="#also-without-vrrp" data-for="also-without-vrrp">Also, without VRRP…</a></li><li class="depth-1"><a href="#however-vrrp-provides" data-for="however-vrrp-provides">However, VRRP provides…</a></li><li class="depth-1"><a href="#similar-protocols" data-for="similar-protocols">Similar protocols</a></li><li class="depth-1"><a href="#scope-of-rfc3768" data-for="scope-of-rfc3768">Scope of RFC3768</a></li><li class="depth-0"><a href="#2-terminology" data-for="2-terminology">2. Terminology</a></li><li class="depth-0"><a href="#3-features" data-for="3-features">3. Features</a></li><li class="depth-0"><a href="#4-overview" data-for="4-overview">4. Overview</a></li><li class="depth-0"><a href="#5-sample-configuration" data-for="5-sample-configuration">5. Sample Configuration</a></li><li class="depth-1"><a href="#single-virtual-router" data-for="single-virtual-router">Single Virtual Router</a></li><li class="depth-1"><a href="#double-virtual-router" data-for="double-virtual-router">Double Virtual Router</a></li><li class="depth-0"><a href="#6-packet-format" data-for="6-packet-format">6. Packet Format</a></li><li class="depth-1"><a href="#ip-packet-header" data-for="ip-packet-header">IP Packet Header</a></li><li class="depth-1"><a href="#packet-format" data-for="packet-format">Packet format</a></li><li class="depth-0"><a href="#7-how-it-works--state-machine-explanation" data-for="7-how-it-works--state-machine-explanation">7. How it works → State Machine explanation</a></li><li class="depth-1"><a href="#terminology" data-for="terminology">Terminology</a></li><li class="depth-1"><a href="#state-diagram" data-for="state-diagram">State Diagram</a></li><li class="depth-1"><a href="#packet-verification" data-for="packet-verification">Packet Verification</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../gardens/network/(Garden)-Network,-Protocol" class="internal">(Garden) Network, Protocol</a></li><li><a href="../../../gardens/network/vrrp/terms/Split-brain-Scenario-(VRRP)" class="internal">Split-brain Scenario (VRRP)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../postscript.js" type="module"></script></html>

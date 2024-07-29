@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html><head><title>05. 클래스 모델링</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="05. 클래스 모델링"/><meta property="og:description" content="충남대학교 컴퓨터공학과 김현수 교수님의 &amp;quot;소프트웨어 공학&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. UML § 객체지향 소프트웨어를 모델링하기 위한 표준 그래픽 언어 종류 § 클래스 다이어그램 : 클래스들과 그들의 관계 상호작용 다이어그램 : 객체(인스턴스)들이 상호작용하는 방식에 대해 그들의 동작을 표현 상태 / 활동 다이어그램 : 시스템으로 어떻게 행동하는지를 보여줌 - 객체(인스턴스)들이 상호작용할때가 아닌 내부적으로 어떻게 행동하는지를 말하는 거인듯 컴포넌트 / 배치 다이어그램 : 시스템을 구성하는 컴포넌트와 그들이 (논리적으로 혹은 물리적으로)배치되는 방식 기능 § 각각의 표기법(도형, 선 등등)마다 의미(Semantics)를 가지고 있음 확장 매커니즘을 가지고 있음 - 뭐 새로운 Semantic을 정의해서 사용한다던지 이런게 가능함 관련 텍스트 언어가 있음 방법론이 아니고 개발을 돕는 하나의 툴이다 모델이란 § 일단 UML등의 모델링이 필요한 이유는 지금까지 한 요구사항 수집, 명세, 유스케이스 명세 등의 과정은 Real World에서의 일들을 기술하기 위한 것이었다면 이제는 위에서 명세한 저러한 것을을 Computer World에서 분석하고 명세하기 위한 모델링이 시스템 모델링이고 이들중 하나가 UML인 것이다 이 과정을 거치게 되면 그 다음에는 설계과정을 뒤이어 하게 되고 그 다음에는 구현을 하게 되는 것이다 위의 그림이나 읽어봐라 클래스 § 뭔지는 알제? 자료 타입으로 Property와 Method로 구성됨 속성, Property 같은말이고 Method, Operation 같은말인거 당연히 알고있어야되고 맨 위에 클래스 이름, 중간에 프로퍼티, 마지막에 메소드가 들어간다 가시성(Visibility) 표현 : -는 private, + 는 public, # 는 protected이다 프로퍼티는 이름: 타입으로 명시한다 메소드는 이름(인자: 타입): 반환타입으로 명시한다 참고로 프로퍼티와 메소드를 생략하고 클래스의 이름만 적는 것도 가능 하다 추상 클래스 § 뭐 당연히 알겠지만 추상 오퍼레이션(메소드) 는 정의만 있고 구현이 없는 것을 의미하고 추상 클래스는 인스턴스를 만들지 못하는 클래스를 의미함 또한 인터페이스는 추상 클래스와 비슷하게 구현된 메소드가 없고 인스턴스를 생성하지 못하는 경우를 의미한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 김현수 교수님의 &amp;quot;소프트웨어 공학&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. UML § 객체지향 소프트웨어를 모델링하기 위한 표준 그래픽 언어 종류 § 클래스 다이어그램 : 클래스들과 그들의 관계 상호작용 다이어그램 : 객체(인스턴스)들이 상호작용하는 방식에 대해 그들의 동작을 표현 상태 / 활동 다이어그램 : 시스템으로 어떻게 행동하는지를 보여줌 - 객체(인스턴스)들이 상호작용할때가 아닌 내부적으로 어떻게 행동하는지를 말하는 거인듯 컴포넌트 / 배치 다이어그램 : 시스템을 구성하는 컴포넌트와 그들이 (논리적으로 혹은 물리적으로)배치되는 방식 기능 § 각각의 표기법(도형, 선 등등)마다 의미(Semantics)를 가지고 있음 확장 매커니즘을 가지고 있음 - 뭐 새로운 Semantic을 정의해서 사용한다던지 이런게 가능함 관련 텍스트 언어가 있음 방법론이 아니고 개발을 돕는 하나의 툴이다 모델이란 § 일단 UML등의 모델링이 필요한 이유는 지금까지 한 요구사항 수집, 명세, 유스케이스 명세 등의 과정은 Real World에서의 일들을 기술하기 위한 것이었다면 이제는 위에서 명세한 저러한 것을을 Computer World에서 분석하고 명세하기 위한 모델링이 시스템 모델링이고 이들중 하나가 UML인 것이다 이 과정을 거치게 되면 그 다음에는 설계과정을 뒤이어 하게 되고 그 다음에는 구현을 하게 되는 것이다 위의 그림이나 읽어봐라 클래스 § 뭔지는 알제? 자료 타입으로 Property와 Method로 구성됨 속성, Property 같은말이고 Method, Operation 같은말인거 당연히 알고있어야되고 맨 위에 클래스 이름, 중간에 프로퍼티, 마지막에 메소드가 들어간다 가시성(Visibility) 표현 : -는 private, + 는 public, # 는 protected이다 프로퍼티는 이름: 타입으로 명시한다 메소드는 이름(인자: 타입): 반환타입으로 명시한다 참고로 프로퍼티와 메소드를 생략하고 클래스의 이름만 적는 것도 가능 하다 추상 클래스 § 뭐 당연히 알겠지만 추상 오퍼레이션(메소드) 는 정의만 있고 구현이 없는 것을 의미하고 추상 클래스는 인스턴스를 만들지 못하는 클래스를 의미함 또한 인터페이스는 추상 클래스와 비슷하게 구현된 메소드가 없고 인스턴스를 생성하지 못하는 경우를 의미한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/05.-클래스-모델링"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">05. 클래스 모델링</h1><p class="content-meta ">Jul 29, 2024, 12 min read</p></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 김현수 교수님의 &quot;소프트웨어 공학&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="uml">UML<a aria-hidden="true" tabindex="-1" href="#uml" class="internal"> §</a></h2>
+<ul>
+<li>객체지향 소프트웨어를 모델링하기 위한 표준 그래픽 언어</li>
+</ul>
+<h3 id="종류">종류<a aria-hidden="true" tabindex="-1" href="#종류" class="internal"> §</a></h3>
+<ul>
+<li><strong>클래스 다이어그램</strong> : 클래스들과 그들의 관계</li>
+<li><strong>상호작용 다이어그램</strong> : 객체(인스턴스)들이 상호작용하는 방식에 대해 그들의 동작을 표현</li>
+<li><strong>상태 / 활동 다이어그램</strong> : 시스템으로 어떻게 행동하는지를 보여줌 - 객체(인스턴스)들이 상호작용할때가 아닌 내부적으로 어떻게 행동하는지를 말하는 거인듯</li>
+<li><strong>컴포넌트 / 배치 다이어그램</strong> : 시스템을 구성하는 컴포넌트와 그들이 (논리적으로 혹은 물리적으로)배치되는 방식</li>
+</ul>
+<h3 id="기능">기능<a aria-hidden="true" tabindex="-1" href="#기능" class="internal"> §</a></h3>
+<ul>
+<li>각각의 표기법(도형, 선 등등)마다 의미(Semantics)를 가지고 있음</li>
+<li>확장 매커니즘을 가지고 있음 - 뭐 새로운 Semantic을 정의해서 사용한다던지 이런게 가능함</li>
+<li>관련 텍스트 언어가 있음</li>
+<li>방법론이 아니고 개발을 돕는 하나의 툴이다</li>
+</ul>
+<h3 id="모델이란">모델이란<a aria-hidden="true" tabindex="-1" href="#모델이란" class="internal"> §</a></h3>
+<ul>
+<li>일단 UML등의 모델링이 필요한 이유는</li>
+<li>지금까지 한 요구사항 수집, 명세, 유스케이스 명세 등의 과정은 Real World에서의 일들을 기술하기 위한 것이었다면</li>
+<li>이제는 위에서 명세한 저러한 것을을 Computer World에서 분석하고 명세하기 위한 모델링이 <strong>시스템 모델링</strong>이고 이들중 하나가 <strong>UML</strong>인 것이다</li>
+<li>이 과정을 거치게 되면 그 다음에는 설계과정을 뒤이어 하게 되고 그 다음에는 구현을 하게 되는 것이다</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image1.png"/></p>
+<ul>
+<li>위의 그림이나 읽어봐라</li>
+</ul>
+<h2 id="클래스">클래스<a aria-hidden="true" tabindex="-1" href="#클래스" class="internal"> §</a></h2>
+<ul>
+<li>뭔지는 알제? 자료 타입으로 Property와 Method로 구성됨</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image2.png"/></p>
+<ul>
+<li>속성, Property 같은말이고</li>
+<li>Method, Operation 같은말인거 당연히 알고있어야되고</li>
+<li>맨 위에 클래스 이름, 중간에 프로퍼티, 마지막에 메소드가 들어간다</li>
+<li><strong>가시성(Visibility)</strong> 표현 : <code>-</code>는 private, <code>+</code> 는 public, <code>#</code> 는 protected이다</li>
+<li>프로퍼티는 <strong>이름: 타입</strong>으로 명시한다</li>
+<li>메소드는 <strong>이름(인자: 타입): 반환타입</strong>으로 명시한다</li>
+<li>참고로 프로퍼티와 메소드를 생략하고 클래스의 이름만 적는 것도 가능 하다</li>
+</ul>
+<h3 id="추상-클래스">추상 클래스<a aria-hidden="true" tabindex="-1" href="#추상-클래스" class="internal"> §</a></h3>
+<ul>
+<li>뭐 당연히 알겠지만</li>
+<li><strong>추상 오퍼레이션(메소드)</strong> 는 정의만 있고 구현이 없는 것을 의미하고</li>
+<li><strong>추상 클래스</strong>는 인스턴스를 만들지 못하는 클래스를 의미함</li>
+<li>또한 <strong>인터페이스</strong>는 추상 클래스와 비슷하게 구현된 메소드가 없고 인스턴스를 생성하지 못하는 경우를 의미한다.</li>
+</ul>
+<h2 id="연관관계">연관관계<a aria-hidden="true" tabindex="-1" href="#연관관계" class="internal"> §</a></h2>
+<ul>
+<li>클래스와 객체(인스턴스) 사이의 연관 관계</li>
+<li><strong>실선</strong>으로 이어 둘 간의 관계가 있음을 표현하게 된다</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image3.png"/></p>
+<ul>
+<li>일단 위의 그림에는 안나와있지만 <strong>관계 이름</strong>을 지어줄 수 있다 - 선 위에다가 동사나 동사구로 지어준다</li>
+<li>그리고 <strong>다중성</strong>은 위에서 보다시피 연관되는 인스턴스의 갯수를 의미한다</li>
+<li><strong>일반화</strong>라는 것은 클래스들간의 상속관계를 말함</li>
+<li><strong>역할 이름</strong>은 클래스에 의해 수행되는 역할이라는데 걍 위 그림보고 감잡는게 좋다 - 걍 변수(프로퍼티)이름임</li>
+<li><strong>방향성</strong>은 뭐 별거 없음 - 위 그림에서 보는거처럼 저런식으로 연관성의 방향을 명시하는게 가능하다 이거야
+<ul>
+<li>방향성에서의 화살표 방향이 헷갈린다면 이렇게 생각하면 된다 - PhoneBook에서는 PhoneNumber를 참조할 수 있으니까 화살표 방향이 저래되어있는 것</li>
+<li>연관관계의 방향성은 기본적으로 양방향 관계이다. 그리고 화살표를 통해 방향을 제한해주는 셈</li>
+</ul>
+</li>
+</ul>
+<h3 id="다중성multiplicity">다중성(Multiplicity)<a aria-hidden="true" tabindex="-1" href="#다중성multiplicity" class="internal"> §</a></h3>
+<ul>
+<li>뭐 <strong>Cardinality Constraint</strong>와 비슷하다</li>
+<li>왜 클래스가 아니고 인스턴스라고 표현하는지 궁금하다면 배열에는 클래스가 아닌 객체가 들어가기 때문이다</li>
+<li>다중성은 표현하지 않으면 1로 간주된다</li>
+<li>그리고 임의의 다수를 표현할때는 <code>*</code> 를 이용하고</li>
+<li><strong>일대일(One-to-One)</strong> 은 만약 A와 B가 일대일의 관계라면, A는 반드시 하나의 B와 관게를 맺어야되고 반대로 B또한 반드시 하나의 A와 관계를 맺어야 할때이다</li>
+<li><strong>다대다(Many-to-Many)</strong> 은 만약 A와 B가 다대다의 관계라면, A는 여러개의 B와 관계를 맺을 수 있고 반대로 B도 여러개의 A와 관계를 맺을 수 있을 때이다</li>
+<li>얘는 예시로 감을 잡는게 좋음</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image4.png"/></p>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image5.png"/></p>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image6.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image6.png"/></p>
+<ul>
+<li>범위를 지정할때는 예를들어 1이상이면 <code>1 … *</code> 로 표현하고 3이상 5이하면 <code>3 … 5</code> 이런식으로 표현한다</li>
+<li>불필요한 일대일 관계를 제거하고 그 둘을 그냥 하나의 클래스로 묶는 것이 더 좋다는 점 주의할것</li>
+</ul>
+<h3 id="연관-클래스">연관 클래스<a aria-hidden="true" tabindex="-1" href="#연관-클래스" class="internal"> §</a></h3>
+<ul>
+<li><strong>연관 클래스</strong>는 언제 사용하면 되냐면 두 클래스가 연동되었을때 의미가 있는 속성들에 대해 해당 속성을 클래스로 감싸면 된다</li>
+<li>예를들면</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image7.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image7.png"/></p>
+<ul>
+<li>학생과 수업 두개의 클래스가 있을 때 학생이 수업을 수강해야 해당 과목에 대한 학점이 나오기 때문에 이때 수강 클래스에 학점이라는 속성을 둘 수 있는 것</li>
+</ul>
+<h3 id="재귀-연관관계">재귀 연관관계<a aria-hidden="true" tabindex="-1" href="#재귀-연관관계" class="internal"> §</a></h3>
+<ul>
+<li>클래스 자신과 연관관계를 맺되 해당 관계의 선후가 있는 경우</li>
+<li>예를들면</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image8.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image8.png"/></p>
+<ul>
+<li>과목 A는 과목 B의 선행과목일때 A와 B는 모두 과목이므로 과목 클래스를 재귀 연관관계로 표현해줄 수 있는 것</li>
+</ul>
+<h3 id="인스턴스-다이어그램">인스턴스 다이어그램<a aria-hidden="true" tabindex="-1" href="#인스턴스-다이어그램" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image9.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image9.png"/></p>
+<ul>
+<li>위 그림처럼 클래스만 명시하는 것이 아닌 클래스로 생성되는 인스턴스들간의 관계도 명시할 수 있다</li>
+<li>그리고 반드시 해줘야할 것이 <code>인스턴스명:클래스명</code> 의 형식을 지켜주는 것이다</li>
+<li>즉, <code>:</code> 로 클래스명과 인스턴스 명을 구분해주고 밑줄을 그어줘야 인스턴스 다이어그램으로 인식한다는 소리임</li>
+</ul>
+<h3 id="전체--부분-관계">전체 / 부분 관계<a aria-hidden="true" tabindex="-1" href="#전체--부분-관계" class="internal"> §</a></h3>
+<ul>
+<li><strong>Aggregation</strong>관계는 전체와 부분(Whole-Part)관계를 나타내는 특수한 연관관계이다</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image10.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image10.png"/></p>
+<ul>
+<li>전체에 해당하는 놈을 <strong>Aggregate</strong> 혹은 <strong>Assembly</strong> 라고 부른다</li>
+<li>뭐 그리고 당연한 내용이지만 전체를 제어하거나 소유하면 부분도 제어하거나 소유한다</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image11.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image11.png"/></p>
+<ul>
+<li>그리고 다른 관계와는 다르게 이런식으로 계층구조로 표현할 수도 있다</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image12.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image12.png"/></p>
+<ul>
+<li>그리고 Aggregation이 강한 경우에는 <strong>Composition</strong> 이라고 부른다</li>
+<li>즉, 전체가 소멸되면 부품도 소멸되게 되고</li>
+<li>A가 B에 포함되면 A는 B와 무관한 C에 포함될 수는 없다 - 온전히 전체에 포함되는 경우</li>
+</ul>
+<h3 id="일반화">일반화<a aria-hidden="true" tabindex="-1" href="#일반화" class="internal"> §</a></h3>
+<ul>
+<li>클래스들간의 상속관계</li>
+<li>뭐 뭔지 알제? - 공통부분을 묶어 수퍼클래스로 만드는 것은 <strong>일반화</strong>, 수퍼클래스의 자식으로 서브클래스를 구체화하는 것을 <strong>구체화</strong>, <strong>상세화</strong>, <strong>Specialization</strong>이라고 한다</li>
+<li>불필요한 상속을 피해야 한다는 점에 주의하라 - 상속을 한다는 것은 수퍼클래스와 다른점이 있다는 것인데 다른점이 없으면 굳이 할 필요가 없다는 것</li>
+<li>또한 어찌보면 당연한얘긴데 인스턴스는 클래스가 변경되어서는 안된다</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image13.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image13.png"/></p>
+<ul>
+<li>위와 같은 예시일때</li>
+<li>FullTime을 뛰다가 PartTime으로 옮겨가면 클래스가 변경되는 것이므로 문제가 됨</li>
+<li>이때는 FullTime이냐 PartTime이냐를 상태로 두고 상태의 변경으로 처리하는게 맞다</li>
+<li>이렇듯 상태와 상속을 혼동하면 안된다</li>
+</ul>
+<h2 id="object-constraint-languageocl">Object Constraint Language(OCL)<a aria-hidden="true" tabindex="-1" href="#object-constraint-languageocl" class="internal"> §</a></h2>
+<ul>
+<li>이건 소프트웨어 모듈의 제약사항을 명세하기 위한 용도로 만들어진 언어이다</li>
+<li>시스템에 대한 논리적인 사실(참인 명제들)만을 나타냄</li>
+<li><strong>side-effect</strong>가 없음 - 참이나 거짓이 아닌 결과를 낼 수 없으며 데이터(상태)를 수정하지도 않음</li>
+<li>속성값이 무엇인지, 연관관계가 존재해야 하는지 등에 대해 명세할 수 있음</li>
+</ul>
+<p><img src="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/05_d6bec56bc0fd401486099d6bbd487f80/image14.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB06%20-%20%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%20d6bec56bc0fd401486099d6bbd487f80/image14.png"/></p></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#uml" data-for="uml">UML</a></li><li class="depth-1"><a href="#종류" data-for="종류">종류</a></li><li class="depth-1"><a href="#기능" data-for="기능">기능</a></li><li class="depth-1"><a href="#모델이란" data-for="모델이란">모델이란</a></li><li class="depth-0"><a href="#클래스" data-for="클래스">클래스</a></li><li class="depth-1"><a href="#추상-클래스" data-for="추상-클래스">추상 클래스</a></li><li class="depth-0"><a href="#연관관계" data-for="연관관계">연관관계</a></li><li class="depth-1"><a href="#다중성multiplicity" data-for="다중성multiplicity">다중성(Multiplicity)</a></li><li class="depth-1"><a href="#연관-클래스" data-for="연관-클래스">연관 클래스</a></li><li class="depth-1"><a href="#재귀-연관관계" data-for="재귀-연관관계">재귀 연관관계</a></li><li class="depth-1"><a href="#인스턴스-다이어그램" data-for="인스턴스-다이어그램">인스턴스 다이어그램</a></li><li class="depth-1"><a href="#전체--부분-관계" data-for="전체--부분-관계">전체 / 부분 관계</a></li><li class="depth-1"><a href="#일반화" data-for="일반화">일반화</a></li><li class="depth-0"><a href="#object-constraint-languageocl" data-for="object-constraint-languageocl">Object Constraint Language(OCL)</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/(충남대)-소프트웨어-공학-강의록" class="internal">(충남대) 소프트웨어 공학 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

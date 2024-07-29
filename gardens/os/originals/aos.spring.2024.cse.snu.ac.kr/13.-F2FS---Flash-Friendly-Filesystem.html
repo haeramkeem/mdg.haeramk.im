@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html><head><title>13. F2FS - Flash Friendly Filesystem</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="13. F2FS - Flash Friendly Filesystem"/><meta property="og:description" content="서울대학교 컴퓨터공학과 김진수 교수님의 &amp;quot;고급 운영체제&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. F2FS, Flash Friendly Filesystem § LFS 에 Flash 를 끼얹음 - 기존 LFS 와의 차이점이 중요하다 구조 변화 Inode Design (NAT, Node ID) Multi-head logging Adaptive logging (Threaded) Fsync-aware roll forward crash recovery 이제는 android os 의 기본 fs 가 되면서 여기에의 요구사항에 맞춘 기능들이 많이 추가되고 있다고 한다 Structure overview § Segment: 가장 작은 단위 - 이놈은 2MB 로 하드코딩되어 있다더라 Section: cleaning 단위 - 이것은 FTL 의 GC 의 단위와 같다 몇개의 segment 을 section 으로 할지 등은 parameter 로 받는다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 김진수 교수님의 &amp;quot;고급 운영체제&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. F2FS, Flash Friendly Filesystem § LFS 에 Flash 를 끼얹음 - 기존 LFS 와의 차이점이 중요하다 구조 변화 Inode Design (NAT, Node ID) Multi-head logging Adaptive logging (Threaded) Fsync-aware roll forward crash recovery 이제는 android os 의 기본 fs 가 되면서 여기에의 요구사항에 맞춘 기능들이 많이 추가되고 있다고 한다 Structure overview § Segment: 가장 작은 단위 - 이놈은 2MB 로 하드코딩되어 있다더라 Section: cleaning 단위 - 이것은 FTL 의 GC 의 단위와 같다 몇개의 segment 을 section 으로 할지 등은 parameter 로 받는다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/originals/aos.spring.2024.cse.snu.ac.kr/13.-F2FS---Flash-Friendly-Filesystem"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">13. F2FS - Flash Friendly Filesystem</h1><p class="content-meta ">Apr 16, 2024, 10 min read</p><ul class="tags "><li><a href="../../../../tags/강의록" class="internal tag-link">#강의록</a></li><li><a href="../../../../tags/snu_cse_ms_aos24s" class="internal tag-link">#snu_cse_ms_aos24s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학과 김진수 교수님의 &quot;고급 운영체제&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="f2fs-flash-friendly-filesystem">F2FS, Flash Friendly Filesystem<a aria-hidden="true" tabindex="-1" href="#f2fs-flash-friendly-filesystem" class="internal"> §</a></h2>
+<ul>
+<li>LFS 에 Flash 를 끼얹음 - 기존 LFS 와의 차이점이 중요하다
+<ul>
+<li>구조 변화</li>
+<li>Inode Design (NAT, Node ID)</li>
+<li>Multi-head logging</li>
+<li>Adaptive logging (Threaded)</li>
+<li>Fsync-aware roll forward crash recovery</li>
+</ul>
+</li>
+<li>이제는 android os 의 기본 fs 가 되면서 여기에의 요구사항에 맞춘 기능들이 많이 추가되고 있다고 한다</li>
+</ul>
+<h2 id="structure-overview">Structure overview<a aria-hidden="true" tabindex="-1" href="#structure-overview" class="internal"> §</a></h2>
+<p><img src="../../../../images/Pasted-image-20240611133736.png" width="auto" height="auto"/></p>
+<ul>
+<li><em>Segment</em>: 가장 작은 단위 - 이놈은 2MB 로 하드코딩되어 있다더라</li>
+<li><em>Section</em>: cleaning 단위 - 이것은 FTL 의 GC 의 단위와 같다
+<ul>
+<li>몇개의 segment 을 section 으로 할지 등은 parameter 로 받는다.</li>
+<li>cleaning 시에 valid 를 모은 다음 해당 section 을 TRIM 해서 FTL 에서 GC 할 수 있게 함 - 그래서 section 과 FTL GC unit 이 같아야 하는 것</li>
+</ul>
+</li>
+<li>Zone: multi-head logging 의 단위
+<ul>
+<li>set-associative 의 set 이 공유하는 log block 을 고려해서 zone 이라는 개념을 넣음?</li>
+<li>hybrid mapping 과 연관된 내용이다</li>
+</ul>
+</li>
+<li>Random write 구역을 앞으로 몰아버린것도 LFS 와의 차이점
+<ul>
+<li>기존 LFS 에서는 segment (F2FS 의 segment 와 헷갈리지 말것..) 별로 metadata random write 가 있었는데 F2FS 는 storage 앞에 몰아넣었다.
+<ul>
+<li>F2FS 는 random write 를 몰아넣고 이부분에 대해서는 page mapping 을 하고, 뒤의 sequential write 를 하는 <em>Main area</em> 는 block mapping 을 하는 식의 hybrid mapping 을 사용한다.</li>
+<li>그리고 아마 HDD 에 비해 NAND flash 에서는 sequential write 가 확실히 이점이 있기 때문에 contiguous sequential write area 를 최대한 많이 가져가려 함이 아닐까</li>
+</ul>
+</li>
+<li><em>Segment Info Table</em> (<em>SIT</em>): LFS 의 segment usage table 에 대응</li>
+<li><em>Segment Summary Area</em> (<em>SSA</em>): LFS 의 segment summary table 대응</li>
+</ul>
+</li>
+</ul>
+<h2 id="inode-design">Inode Design<a aria-hidden="true" tabindex="-1" href="#inode-design" class="internal"> §</a></h2>
+<ul>
+<li>우선 inode 가 4K 로 증량되었다.
+<ul>
+<li>남는 공간에는 xattrs 를 저장할 수 있도록 함
+<ul>
+<li>원래 POSIX 표준에는 file 에 추가적인 임의의? metadata 를 넣을 수 있는 xattrs 기능이 있고</li>
+<li>이것을 지원하기 위한 것</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="wandering-problem">Wandering Problem<a aria-hidden="true" tabindex="-1" href="#wandering-problem" class="internal"> §</a></h3>
+<ul>
+<li>원래 inode 에서는 (checkpoint region)-(inode map)-(file inode)-(indirect block)-(direct block)-(data block) 으로 연결되어 있는데
+<ul>
+<li>(data block) 이 바뀌면 저것 전체가 다 바뀐다</li>
+<li>뭐가 하나 변경되면 새로 append 되어 포인터가 바뀌므로 Root 까지 올라가며 연쇄적으로 업데이트해야 되는 것과 invalid block 을 나중에는 지워야 하는 등의 문제가 있다</li>
+<li><em>Cascade update problem</em> 이라고도 불림</li>
+</ul>
+</li>
+</ul>
+<h3 id="nat-node-id">NAT, Node ID<a aria-hidden="true" tabindex="-1" href="#nat-node-id" class="internal"> §</a></h3>
+<ul>
+<li>F2FS 에서는 이것을 해결하기 위해 <em>Node</em> 와 <em>NAT</em> 를 도입한다.
+<ul>
+<li>Inode 만 ID 와 주소를 mapping (inode map) 하는 것이 아니라,</li>
+<li>Direct block 과 Indirect block 도 전부 <em>Node</em> 라는 이름으로 퉁치고 이것을 ID-주소 매핑 (이것이 <em>Node Address Table</em> 이다.) 을 하여 위치를 찾아가는 방식을 사용하자는 것.</li>
+<li>그럼 append 로 인해 주소가 바뀌어도 이 NAT 에서만 바꾸면 되니까 아주 나이스</li>
+</ul>
+</li>
+<li>조금 추상화해서 표현해보면, 기존의 방식은 physical address 만 사용했다고 할 수 있다.
+<ul>
+<li>그리고 f2fs 에서는 이 physical address 와 logical address 를 섞어 쓰자는 아이디어</li>
+<li>logical address 만 쓰면 또 mapping 의 크기가 너무 커지는 등의 문제가 있다.</li>
+<li>그래서 적당히 끊고 거기서부터 logical &lt;-> physical 을 전환하는 것이고</li>
+<li>f2fs 에서는 direct node 에서 끊어서 direct node 를 참조할때는 logical, 이것에서 data block 을 참조할 때는 physical address 를 사용하는 것</li>
+<li>생각해 봐야 할 것은 flash level 의 pba ppa 를 fs 이 알수는 없으니 여기서의 physical addr 은 lba 를 말한다
+<ul>
+<li>그리고 logical addr 는 이 lba 를 한번 더 추상화 한 것이라 생각하면 될듯</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>direct node 는 어쩔 수 없이 append update 를 해야 한다
+<ul>
+<li>마찬가지로 data block 이 inode 에 바로 붙어있으면 inode 도 바꾸긴 해야 한다</li>
+<li>이때도 근데 nat 의 inode addr mapping entry 만 바꾸면 됨</li>
+</ul>
+</li>
+<li>대부분은 data block 이기 때문에 node 의 개수는 그렇게 많지 않고, 따라서 NAT 도 사이즈가 그리 크지 않다</li>
+</ul>
+<h2 id="adaptive-logging">Adaptive Logging<a aria-hidden="true" tabindex="-1" href="#adaptive-logging" class="internal"> §</a></h2>
+<ul>
+<li>Logging 방식을 용량에 따라 다르게 선택하는 방법.
+<ul>
+<li>용량이 많을 때는 그냥 sequential 하게 쭉쭉 쓰지만 (normal log, append log)</li>
+<li>용량이 부족하면 어쩔 수 없이 중간중간의 hole 에 채워넣는 threaded logging 을 수행해 overwrite 를 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="multi-head-logging">Multi-head Logging<a aria-hidden="true" tabindex="-1" href="#multi-head-logging" class="internal"> §</a></h2>
+<ul>
+<li>FTL 수준에서는 정보가 별로 없기 때문에 hot cold 구분이 힘들지만</li>
+<li>FS 수준에서는 metadata, file type, file extension 등의 구분이 가능하기 때문에 여기서 더 효과적으로 hot cold 구분을 할 수 있다.</li>
+<li>따라서 F2FS에서는 metadata 와 data 각각에 대해 hot-warm-cold 로 구분해 다른 zone 에 logging 을 한다.
+<ul>
+<li>이것도 LFS 와의 차이점이다</li>
+<li>LFS 에서는 하나의 큰 logging 공간을 사용했지만, F2FS 에서는 logging 공간을 파일 타입과 hotness 에 따라 6개의 종류를 사용하는 것.</li>
+<li>그리고 그 단위가 zone 이 되는 것이다.</li>
+</ul>
+</li>
+<li>이것은 디스크를 사용할 때는 힘들고, ssd 라서 가능한 것이다.
+<ul>
+<li>만약 디스크에서 multi head 를 하게 되면 다른 종류의 log 을 찾으러 가는 seek 이 계속 발생하기 때문에 이것이 힘들지만</li>
+<li>SSD 에서는 die 나 plane 이 있기 때문에 parallel 이 가능하다</li>
+<li>다만 page mapping 의 경우에는 overwrite 시에 다른 type 의 zone 으로 옮겨 zone 간의 데이터가 다 섞이기 때문에 hotness 구분이 의미가 없다.
+<ul>
+<li>즉, multi-head log 는 hybrid mapping 이기 때문에 가능한 거랜다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="fsync-aware-roll-forward">Fsync-aware Roll Forward<a aria-hidden="true" tabindex="-1" href="#fsync-aware-roll-forward" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 이부분 LFS 와 같이 좀 더 봐야 한다.. </p></div>
+                  
+                </div>
+</blockquote>
+<ul>
+<li>crash recovery - lfs 와 거의 유사
+<ul>
+<li>fsync 등이 되면 checkpoint 생성, checkpoint 도 2개 유지해서 checkpoint gen fail 방어</li>
+<li>nat, sit journal - 자주 바뀌는 nat 와 sit 의 entry 의 경우에는 nat, sit 를 바로 바꾸는 것이 아니고 변경점을 journaling 해놓았다가 checkpoint 생성시에 같이 저장
+<ul>
+<li>그리고 어느 시점에 nat, sit 에 반영</li>
+<li>memory copy 에는 전부 반영이 되고 이것을 storage 에 반영하지 않는 상태로 두다가 나중에 journal 이 너무 커지면 그때 반영?</li>
+</ul>
+</li>
+<li>nat, sit 도 각각 2개씩 유지하고 어느것이 최신인지 bitmap 으로 관리</li>
+</ul>
+</li>
+<li>fsync
+<ul>
+<li>SQLite 에서는 fsync 로 commit 을 하는데</li>
+<li>fsync 에서는 checkpoint 를 생성하며 너무나 시간이 많이 걸리는 상황이 발생</li>
+<li>sync 가 내려오면 일관된 상태를 전부 맞추기 위해 checkpoint 가 필요하지만</li>
+<li>fsync 에서는 굳이 checkpoint 를 생성할 필요는 없다고 한다.</li>
+<li>fsync 가 주로 내려오기 때문에 불필요한 metadata sync 는 배제하고 나중에 recovery 시에 반영하는게 주요 아이디어이다.</li>
+<li>fsync 가 내려오면 변경된 node block 에는 <code>fsync</code> flag 를 세워 놓고 nat 등에는 반영하지 않고</li>
+<li>나중에 recovery 시에 살펴보면서 복구할 수 있는 것은 복구하고 뭔가 이상하면 전부 버리기</li>
+<li>ext4 에서는 data block 만 fsync flag 를 하면 되지만 f2fs 에서는 data block 과 direct node 를 모두 fsync flag 를 찍기 때문에 더 성능이 나빠질 수도 있다더라</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#f2fs-flash-friendly-filesystem" data-for="f2fs-flash-friendly-filesystem">F2FS, Flash Friendly Filesystem</a></li><li class="depth-0"><a href="#structure-overview" data-for="structure-overview">Structure overview</a></li><li class="depth-0"><a href="#inode-design" data-for="inode-design">Inode Design</a></li><li class="depth-1"><a href="#wandering-problem" data-for="wandering-problem">Wandering Problem</a></li><li class="depth-1"><a href="#nat-node-id" data-for="nat-node-id">NAT, Node ID</a></li><li class="depth-0"><a href="#adaptive-logging" data-for="adaptive-logging">Adaptive Logging</a></li><li class="depth-0"><a href="#multi-head-logging" data-for="multi-head-logging">Multi-head Logging</a></li><li class="depth-0"><a href="#fsync-aware-roll-forward" data-for="fsync-aware-roll-forward">Fsync-aware Roll Forward</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/os/originals/aos.spring.2024.cse.snu.ac.kr/(서울대)-고급-운영체제-강의록" class="internal">(서울대) 고급 운영체제 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>
