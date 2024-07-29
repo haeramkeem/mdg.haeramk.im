@@ -111,14 +111,33 @@ date: 2024-07-17
 
 #### 7.0.6. SAP BRPFC.
 
-- 
+- [SAP](https://www.sap.com/) 이 제시한 string encoding 은 *Block-based Re-Pair Front Coding* (*BRPFC*) 이다.
+	- 이건 SAP HANA 의 dictionary string pool 이 전체 메모리의 28% 나 차지하기에 이것을 줄이기 위해 제시된 것이다.
+- 우선 이놈은 string dictionary 를 최적화하는 것으로, 두 개념으로 쪼개볼 수 있다.
+1) *Block-based Front Coding*: 이건 정렬된 dictionary 가 주어졌을 때, 앞선 문자열과의 공통된 prefix 를 prefix length 로 교체하는 것이다.
+	- 가령 `[SIGMM, SIGMOBILE, SIGMOD]` 는
+	- 각 원소를 이전 원소와 비교하면 `[SIGMM, (SIGM)OBILE, (SIGMO)D]` 와 같이 되기 때문에,
+	- 결과적으로 `[SIGMM, (4)OBILE, (5)D]` 가 된다.
+2) *Re-Pair*: 이건 각 block 에 대해 동적으로 생성된 grammar 를 이용해 substring 을 치환하는 방법 [^brpfc-repair] 이다.
+- 여기에서도 SIMD 를 이용해 decompression 을 최적화했는데, BtrBlock 의 저자들은 그래도 너무 느려서 BtrBlock 에는 이 방법을 추가하지 않았다고 한다.
 
 #### 7.0.7. Latency on data lakes.
 
+- [[#7.0.6. SAP BRPFC.|BRPFC]] 는 SAP HANA 와 같은 인메모리 상황에서 per-string access latency 를 최소화하기 위함이었다.
+- 하지만 Data Lake 에 데이터가 저장되고 이것을 네트워크에 태워 한꺼번에 가져오는 상황은 이와는 꽤 다르고, 따라서 BRPFC 기법은 별로 도움이 안됐다.
+- 결과적으로 throughput 과 decompression latency 를 줄이는 것이 access latency 보다 더 중요해 이것을 중점적으로 최적화했다고 한다.
+
 ## 8. Conclusion
+
+- 드디어 BtrBlock 의 결론을 내려보자.
+- BtrBlock 은 Data Lake 를 위한 Columnar compression format 이고,
+- PBI 를 이용해 evaluation 하며 compression scheme pool 을 선정하였으며,
+- Floating point encoding 을 위한 새로운 방법인 PDE 또한 scheme pool 에 추가하였으며,
+- Sample-based selection 을 통해 decompression speed 와 compression ratio 모두 월등한 새로운 compression 방법을 제시할 수 있었다고 한다.
 
 [^sql-server-short-string]: 구체적으로 어떻게 되는지는 모르겠지만, 별로 중요한건 아니니 나중에 궁금하면 찾아보자.
 [^local-directory]: 이게 뭔지 (그냥 Dictionary 와는 뭐가 다른지) 정확히는 모르겠다. 
 [^offset-coding]: 이것도 뭔지 모르겠다. 느낌으로는 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.5. FOR & Bit-packing|FOR]] 하고 비슷해보인다.
 [^kth-bit-adjacent]: 주인장의 생각이다. 원본 논문 읽어보면 더 정확하게 알 수 있긴 한데, 일단 패스.
 [^decompression-speed]: 근거는 제시하지 않는다. 그냥 의견을 주장하는 것이다.
+[^brpfc-repair]: 몰?루 일단은 넘어가고 나중에 다시 보자.
