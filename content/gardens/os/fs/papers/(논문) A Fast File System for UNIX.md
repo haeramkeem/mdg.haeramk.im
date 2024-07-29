@@ -334,7 +334,7 @@ tags:
 
 ## 4. Performance
 
-> [!fail] 성능 좋겠지 뭐; 시간이 없어서 일단 패스..
+> [!fail] #draft 성능 좋겠지 뭐; 시간이 없어서 일단 패스..
 
 ## 5. File System Functional Enhancements
 
@@ -369,4 +369,4 @@ tags:
 
 ### 5.2. File Locking
 
-> [!fail] Timeout... 시간이 없어서 이후로는 읽지 못했습니다.
+> [!fail] #draft Timeout... 시간이 없어서 이후로는 읽지 못했습니다.

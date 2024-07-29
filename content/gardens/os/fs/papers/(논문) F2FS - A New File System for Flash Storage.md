@@ -413,9 +413,9 @@ tags:
 	6. N+n 은 dirty 라고 마킹한다.
 	7. 완료된 다음에는 checkpointing 을 수행해 새로 checkpoint pack 생성되도록 한다.
 
-## Evaluation
+> [!fail] #draft 이후 내용은 아직 정리 못했습니다..
 
-> [!fail] #draft 이 섹션은 추후에 작성될 예정입니다.
+## Evaluation
 
 ### 3.1. Experimental Setup
 
@@ -441,7 +441,6 @@ tags:
 
 ## 5. Concluding Remarks
 
----
  [^root-dir-inode]: Root directory 에 대한 inode number 는 보통 정해져 있다. EXT4 의 경우에는 2 이다.
 [^attribute]: 이게 뭔지는 잘 모르겠다.
 [^validity-doublecheck]: 아마 bitmap 에는 참조 여부와는 다른 정보를 담고 있는 것인지 아니면 더블체크 목적인지 모르겠다.

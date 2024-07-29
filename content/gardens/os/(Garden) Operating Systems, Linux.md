@@ -55,7 +55,7 @@ date: 2024-07-29
 	- [[Least Frequently Used, LFU (replacement policy)|Least Frequently Used (LFU)]]
 	- [[Least Recently Used, LRU (replacement policy)|Least Recently Used (LRU)]]
 - 논문들
-	- [[(논문) ARC - A Self-Tuning, Low Overhead Replacement Cache|ARC - A Self-Tuning, Low Overhead Replacement Cache (FAST '03)]]
+	- [[(논문) ARC - A Self-Tuning, Low Overhead Replacement Cache|(Draft) ARC - A Self-Tuning, Low Overhead Replacement Cache (FAST '03)]]
 
 ### Virtualization
 

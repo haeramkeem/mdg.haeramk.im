@@ -449,7 +449,7 @@ tags:
 
 ### 3.6. Segment usage table
 
-> [!danger] Draft 입니다.
+> [!danger] #draft 입니다.
 
 - Cost-benefit policy 를 지원하기 위해, *Segment Usage Table* 이 추가되었다
 - segment usage table 에는 segment 의 ==live byte count 와 last modified time== 이 들어간다
@@ -463,7 +463,7 @@ tags:
 
 ### 4. Crash Recovery
 
-> [!danger] Draft 입니다.
+> [!danger] #draft 입니다.
 
 - 일반적으로 crash 가 발생하게 되면 reboot 중에 이것을 다 고치게 되는데
 - Logging 기능이 없던 UNIX FS 의 경우에는 어쩔 수 없이 모든 metadata 를 뒤지며 파일이 정상적으로 존재하는지, 누락된 데이터는 없는 지 등을 체크한다.
@@ -473,7 +473,7 @@ tags:
 
 ### 4.1. Checkpoints
 
-> [!danger] Draft 입니다.
+> [!danger] #draft 입니다.
 
 - Checkpoint 는 한 시점에서의 로그를 가리키고, 이 시점에서는 모든 FS 의 구조와 데이터들이 일관되고 완료되었다는 의미를 가진다.
 	- 말이 좀 모호하긴 한데 이상하게 생각할 것은 없다; 그냥 언제든 이 시점으로 돌아와도 정상작동한다고 정도로 생각하자
@@ -496,7 +496,7 @@ tags:
 
 ### 4.2. Roll-forward
 
-> [!danger] Draft 입니다.
+> [!danger] #draft 입니다.
 
 - 문제가 생겼을 때 재부팅을 해서 checkpoint 로 돌아가는 것은 간단하고 빠른 해결방법이지만 checkpoint 이후의 데이터는 손실될 가능성이 있다
 - 따라서 마지막 checkpoint 이후의 log 를 보면서 추가적인 복구를 하는 것이 roll-forward 이다
@@ -510,7 +510,7 @@ tags:
 
 #### Directory operation log
 
-> [!danger] Draft 입니다.
+> [!danger] #draft 입니다.
 
 - directory 내용이 변경되었을 경우 LFS 는 *Directory Operation Log* 라는 특별한 record 를 log 에 추가한다.
 	- 어떤 작업인지 (operation code)
@@ -588,7 +588,7 @@ tags:
 
 ### 5.2. Cleaning overheads
 
-> [!danger] Draft 입니다.
+> [!danger] #draft 입니다.
 
 - [[#5.1. Micro-benchmarks|5.1]] 섹션에서의 벤치마크는 cleaning 이 돌지 않았기에, write cost 가 1인 최적의 상태를 보여줬다.
 	- 따라서 이 벤치마크는 *"Optimistic benchmark"* 라고 할 수 있다.
@@ -615,21 +615,14 @@ tags:
 
 ### 5.3. Crash recovery
 
-> [!danger] Draft 입니다.
+> [!fail] #draft 이후 내용은 시간 없어서 패스..
 
 ### 5.4. Other overheads in Sprite LFS
 
-> [!danger] Draft 입니다.
-
 ## 6. Related work
-
-> [!danger] Draft 입니다.
 
 ## 7. Conclusion
 
-> [!danger] Draft 입니다.
-
----
 [^active-portion]: 이게 정확히 어떤 것을 의미하는 지는 잘 모르겠음.
 [^log-block-pointer]: 뭔소린지 모르겠다.
 [^write-large-file-on-thread]: 이것도 모르겠다. Live data block 을 skip 한다면 결국엔 상관없는 것 아닌가.
