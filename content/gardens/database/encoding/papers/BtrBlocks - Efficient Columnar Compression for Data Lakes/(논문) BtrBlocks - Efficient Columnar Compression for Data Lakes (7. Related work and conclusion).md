@@ -27,6 +27,8 @@ date: 2024-07-17
 
 #### 7.0.1. SQL Server.
 
+- 
+
 #### 7.0.2. DB2 BLU.
 
 #### 7.0.3. SIMD decompression and selective scans.
