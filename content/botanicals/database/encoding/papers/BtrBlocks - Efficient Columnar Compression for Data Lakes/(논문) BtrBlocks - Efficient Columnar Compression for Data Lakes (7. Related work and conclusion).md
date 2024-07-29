@@ -17,4 +17,24 @@ date: 2024-07-17
 > - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (6. Evaluation)|6. Evaluation]]
 > - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (7. Related work and conclusion)|7. Related work and conclusion (현재 글)]]
 
-> [!fail] 본 문서는 아직 #draft 상태입니다. 읽을 때 주의해 주세요.
+## 7. Related Work
+
+### 7.0. *Overview*
+
+> [!tip] [[#7.0. *Overview*|Section 7.0.]] Overview
+> - 마찬가지로 논문에는 없는 section 이고, 형식상 주인장이 끼워 넣은 것이다.
+> - Column store 과 관련된 것들이 많이 있지만, 여기서는 BtrBlock 과 관련된 애들만 추려서 살펴볼 예정이다.
+
+#### 7.0.1. SQL Server.
+
+#### 7.0.2. DB2 BLU.
+
+#### 7.0.3. SIMD decompression and selective scans.
+
+#### 7.0.4. Compressed data processing in BtrBlocks.
+
+#### 7.0.5. HyPer Data Blocks.
+
+#### 7.0.6. SAP BRPFC.
+
+## 8. Conclusion
