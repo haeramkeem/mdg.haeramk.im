@@ -103,6 +103,10 @@ date: 2024-07-17
 
 #### 2.2.4. Frequency
 
+> [!info] Frequency Encoding
+> - 이놈의 정체가 뭔지 정확히는 모르겠다. 일단 [[Huffman Coding (Encoding)|허프만 코딩]] 과 유사한 놈으로 알고 지나가자.
+> - 참고: [IBM DB2 BLU 가이드](https://www.redbooks.ibm.com/redbooks/pdfs/sg248212.pdf), [코드](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/Frequency.hpp#L50-L97)
+
 - *Frequency Encoding* 은 *Dictionary Encoding* 이랑 유사하지만, 어떤 값이 등장하는 빈도에 따라 추가적인 최적화가 들어간 것이다.
 - 여기서의 `대체` 는 고정 크기의 값이 아니고, 빈도가 많은 값에 대해서는 적은 크기의 `대체` 로 대체하고, 반대로 빈도가 적은 값에 대해서는 큰 크기의 `대체` 로 대체한다.
 - 가령 다음처럼 구현할 수 있다.
