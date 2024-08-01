@@ -133,7 +133,7 @@ date: 2024-07-17
 
 #### 2.2.6. FSST
 
-![[Pasted image 20240724100253.png]]
+![[Pasted image 20240730143409.png]]
 
 > 출처: [FSST: fast random access string compression, PVLDB'20](https://dl.acm.org/doi/10.14778/3407790.3407851)
 
