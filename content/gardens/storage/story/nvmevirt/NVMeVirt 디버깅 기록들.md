@@ -7,4 +7,4 @@
 - [[Flexible Data Placement, FDP (Storage)|FDP]]
 	- [[FDP on NVMeVirt (SNU CSE AOS24s Project)]]
 - KVSSD
-	- [[NVMeVirt KVSSD (01) - 기본 RW]]
+	- [[NVMeVirt - KVSSD 기본 RW 분석]]

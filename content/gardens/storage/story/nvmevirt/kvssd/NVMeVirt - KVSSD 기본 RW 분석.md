@@ -36,13 +36,14 @@ NVMeVirt:     -exit{func: 'nvmev_proc_admin_cq [nvmev]'}
 # NVMe write submission queue
 NVMeVirt:     +enter{func: 'nvmev_proc_io_sq [nvmev]'}
 NVMeVirt:      +enter{func: '__nvmev_proc_io [nvmev]'}
-	## KVSSD process cmd
-	NVMeVirt:       +enter{func: 'kv_proc_nvme_io_cmd [nvmev]'}
-	NVMeVirt:        +enter{func: '__cmd_io_size [nvmev]'}
-	NVMeVirt:        -exit{func: '__cmd_io_size [nvmev]'}
-	NVMeVirt:        +enter{func: '__schedule_io_units [nvmev]'}
-	NVMeVirt:        -exit{func: '__schedule_io_units [nvmev]'}
-	NVMeVirt:       -exit{func: 'kv_proc_nvme_io_cmd [nvmev]'}
+## KVSSD process cmd
+NVMeVirt:       +enter{func: 'kv_proc_nvme_io_cmd [nvmev]'}
+NVMeVirt:        +enter{func: '__cmd_io_size [nvmev]'}
+NVMeVirt:        -exit{func: '__cmd_io_size [nvmev]'}
+NVMeVirt:        +enter{func: '__schedule_io_units [nvmev]'}
+NVMeVirt:        -exit{func: '__schedule_io_units [nvmev]'}
+NVMeVirt:       -exit{func: 'kv_proc_nvme_io_cmd [nvmev]'}
+## Enqueue to worker
 NVMeVirt:       +enter{func: '__enqueue_io_req [nvmev]'}
 NVMeVirt:        +enter{func: '__allocate_work_queue_entry [nvmev]'}
 NVMeVirt:        -exit{func: '__allocate_work_queue_entry [nvmev]'}
@@ -155,9 +156,20 @@ sudo nvme io-passthru ${DEV} \
 - Spec 상으로는 16byte 의 key 를 설정할 수 있지만, NVMeVirt 에서는 `memcpy` 에서 buffer overflow 가 발생해서 15byte 까지만 가능하다.
 	- 이건 아마 c-style string 의 `\0` suffix 때문이지 않을까 싶다.
 
-##### Byte align
+##### Byte 순서
 
-- 
+- 위 스크립트를 보면 CDW 에 문자들이 역순으로 들어가는 것을 (`rev`) 볼 수 있다.
+
+```bash title="store_retrieve.sh:L24-27"
+--cdw12="0x$(echo -n "${KEY0}" | rev | xxd -p)" \
+--cdw13="0x$(echo -n "${KEY1}" | rev | xxd -p)" \
+--cdw14="0x$(echo -n "${KEY2}" | rev | xxd -p)" \
+--cdw15="0x$(echo -n "${KEY3}" | rev | xxd -p)" \
+```
+
+- 이건 아마 각 CDW 에 저장되는 bit 들이 역순이기 때문이지 않을까:
+	- 위의 Key CDW 설명 "Command Dword 2 contains bits 31:00" 에서 보면 bit 가 0-31 이 아니라 31-0 으로 되어 있다.
+	- 물론 확실한 것은 아님; 그냥 추정이고, 더 파볼 수 있지만 일단 패스..
 
 #### Value
 
@@ -172,9 +184,12 @@ printk(KERN_INFO "[%s] data='%s'", __func__, nvmev_vdev->storage_mapped + offset
 ### 콜스택
 
 ```
-NVMeVirt:     -exit{func: 'nvmev_proc_admin_cq [nvmev]'}
+# NVMe KVSSD store
+## IO submission queue
+### Dispatcher
 NVMeVirt:     +enter{func: 'nvmev_proc_io_sq [nvmev]'}
 NVMeVirt:      +enter{func: '__nvmev_proc_io [nvmev]'}
+<-- Enter KV FTL (@dispatcher_kvftl)
 NVMeVirt:       +enter{func: 'kv_proc_nvme_io_cmd [nvmev]'}
 NVMeVirt:        +enter{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:        -exit{func: 'cmd_value_length [nvmev]'}
@@ -183,20 +198,23 @@ NVMeVirt:        -exit{func: '__schedule_io_units [nvmev]'}
 NVMeVirt:        +enter{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:        -exit{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:       -exit{func: 'kv_proc_nvme_io_cmd [nvmev]'}
+Exit KV FTL -->
 NVMeVirt:       +enter{func: '__enqueue_io_req [nvmev]'}
 NVMeVirt:        +enter{func: '__allocate_work_queue_entry [nvmev]'}
 NVMeVirt:        -exit{func: '__allocate_work_queue_entry [nvmev]'}
 NVMeVirt:        +enter{func: '__insert_req_sorted [nvmev]'}
 NVMeVirt:        -exit{func: '__insert_req_sorted [nvmev]'}
-NVMeVirt:         +enter{func: 'kv_identify_nvme_io_cmd [nvmev]'}
 NVMeVirt:        -exit{func: '__enqueue_io_req [nvmev]'}
 NVMeVirt:        +enter{func: '__reclaim_completed_reqs [nvmev]'}
-NVMeVirt:        -exit{func: 'kv_identify_nvme_io_cmd [nvmev]'}
 NVMeVirt:        -exit{func: '__reclaim_completed_reqs [nvmev]'}
-NVMeVirt:        +enter{func: 'kv_perform_nvme_io_cmd [nvmev]'}
 NVMeVirt:       -exit{func: '__nvmev_proc_io [nvmev]'}
-NVMeVirt:        +enter{func: '__do_perform_kv_io [nvmev]'}
 NVMeVirt:       -exit{func: 'nvmev_proc_io_sq [nvmev]'}
+### Worker
+<-- Enter KV FTL (@worker_kvftl)
+NVMeVirt:         +enter{func: 'kv_identify_nvme_io_cmd [nvmev]'}
+NVMeVirt:        -exit{func: 'kv_identify_nvme_io_cmd [nvmev]'}
+NVMeVirt:        +enter{func: 'kv_perform_nvme_io_cmd [nvmev]'}
+NVMeVirt:        +enter{func: '__do_perform_kv_io [nvmev]'}
 NVMeVirt:        +enter{func: 'get_mapping_entry [nvmev]'}
 NVMeVirt:        +enter{func: 'cmd_key_length [nvmev]'}
 NVMeVirt:        -exit{func: 'cmd_key_length [nvmev]'}
@@ -221,16 +239,23 @@ NVMeVirt:        -exit{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:       -exit{func: 'new_mapping_entry [nvmev]'}
 NVMeVirt:      -exit{func: '__do_perform_kv_io [nvmev]'}
 NVMeVirt:     -exit{func: 'kv_perform_nvme_io_cmd [nvmev]'}
+Exit KV FTL -->
 NVMeVirt:     +enter{func: '__fill_cq_result [nvmev]'}
 NVMeVirt:     -exit{func: '__fill_cq_result [nvmev]'}
 NVMeVirt:     +enter{func: '__process_msi_irq [nvmev]'}
 NVMeVirt:      +enter{func: '__signal_irq [nvmev]'}
 NVMeVirt:      -exit{func: '__signal_irq [nvmev]'}
 NVMeVirt:     -exit{func: '__process_msi_irq [nvmev]'}
+## IO completion queue
 NVMeVirt:      +enter{func: 'nvmev_proc_io_cq [nvmev]'}
 NVMeVirt:     -exit{func: 'nvmev_proc_io_cq [nvmev]'}
+---
+# NVMe KVSSD retrieve
+## IO submission queue
+### Dispatcher
 NVMeVirt:     +enter{func: 'nvmev_proc_io_sq [nvmev]'}
 NVMeVirt:      +enter{func: '__nvmev_proc_io [nvmev]'}
+<-- Enter KV FTL (@dispatcher_kvftl)
 NVMeVirt:       +enter{func: 'kv_proc_nvme_io_cmd [nvmev]'}
 NVMeVirt:        +enter{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:        -exit{func: 'cmd_value_length [nvmev]'}
@@ -239,21 +264,24 @@ NVMeVirt:        -exit{func: '__schedule_io_units [nvmev]'}
 NVMeVirt:        +enter{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:        -exit{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:       -exit{func: 'kv_proc_nvme_io_cmd [nvmev]'}
+Exit KV FTL -->
 NVMeVirt:       +enter{func: '__enqueue_io_req [nvmev]'}
 NVMeVirt:        +enter{func: '__allocate_work_queue_entry [nvmev]'}
 NVMeVirt:        -exit{func: '__allocate_work_queue_entry [nvmev]'}
 NVMeVirt:        +enter{func: '__insert_req_sorted [nvmev]'}
 NVMeVirt:        -exit{func: '__insert_req_sorted [nvmev]'}
-NVMeVirt:         +enter{func: 'kv_identify_nvme_io_cmd [nvmev]'}
 NVMeVirt:        -exit{func: '__enqueue_io_req [nvmev]'}
-NVMeVirt:        -exit{func: 'kv_identify_nvme_io_cmd [nvmev]'}
 NVMeVirt:        +enter{func: '__reclaim_completed_reqs [nvmev]'}
-NVMeVirt:        +enter{func: 'kv_perform_nvme_io_cmd [nvmev]'}
 NVMeVirt:        -exit{func: '__reclaim_completed_reqs [nvmev]'}
-NVMeVirt:         +enter{func: '__do_perform_kv_io [nvmev]'}
 NVMeVirt:        -exit{func: '__nvmev_proc_io [nvmev]'}
-NVMeVirt:         +enter{func: 'get_mapping_entry [nvmev]'}
 NVMeVirt:        -exit{func: 'nvmev_proc_io_sq [nvmev]'}
+### Worker
+<-- Enter KV FTL (@worker_kvftl)
+NVMeVirt:         +enter{func: 'kv_identify_nvme_io_cmd [nvmev]'}
+NVMeVirt:        -exit{func: 'kv_identify_nvme_io_cmd [nvmev]'}
+NVMeVirt:        +enter{func: 'kv_perform_nvme_io_cmd [nvmev]'}
+NVMeVirt:         +enter{func: '__do_perform_kv_io [nvmev]'}
+NVMeVirt:         +enter{func: 'get_mapping_entry [nvmev]'}
 NVMeVirt:         +enter{func: 'cmd_key_length [nvmev]'}
 NVMeVirt:        -exit{func: 'cmd_key_length [nvmev]'}
 NVMeVirt:        +enter{func: 'get_hash_slot [nvmev]'}
@@ -267,13 +295,18 @@ NVMeVirt:       +enter{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:       -exit{func: 'cmd_value_length [nvmev]'}
 NVMeVirt:      -exit{func: '__do_perform_kv_io [nvmev]'}
 NVMeVirt:     -exit{func: 'kv_perform_nvme_io_cmd [nvmev]'}
+Exit KV FTL -->
 NVMeVirt:     +enter{func: '__fill_cq_result [nvmev]'}
 NVMeVirt:     -exit{func: '__fill_cq_result [nvmev]'}
 NVMeVirt:     +enter{func: '__process_msi_irq [nvmev]'}
 NVMeVirt:      +enter{func: '__signal_irq [nvmev]'}
 NVMeVirt:      -exit{func: '__signal_irq [nvmev]'}
 NVMeVirt:     -exit{func: '__process_msi_irq [nvmev]'}
+## IO completion queue
 NVMeVirt:     +enter{func: 'nvmev_proc_io_cq [nvmev]'}
+NVMeVirt:     -exit{func: 'nvmev_proc_io_cq [nvmev]'}
 ```
 
-
+- KVSSD FTL Tag 들 (위 callstack 에 달아놨음)
+	- `@dispatcher_kvftl`: Data size 에 따라 종료시점만 계산
+	- `@worker_kvftl`: 내부적으로 구현된 hash table 을 이용해 key 로 value 의 memory offset 을 매핑하고 이것으로 값을 반환, 아마 GC 같은것도 이쪽에서 이루어지는 것 같다.
