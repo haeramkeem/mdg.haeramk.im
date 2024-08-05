@@ -87,18 +87,12 @@ date: 2024-05-22
 
 #### Summary of evaluation
 
-> [!fail] #draft 나중에,,
+> [!fail] #draft 이후 내용은 나중에 정리하겠슴다..
 
 ## 2. Prior work: A brief review
 
 ### A. Offline Optimal
 
-- 별거 없다. [[Optimal, Minimum (replacement policy)|OPT]] 가 이론상으로는 가장 좋다는 내용.
-
 ### B. Recency
 
-## 4. 
-
-
----
 [^lru-capacity]: 사실 이부분은 주인장의 주관적인 해석이다. 뒤에 읽다 보면 알겠지 뭐

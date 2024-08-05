@@ -13,7 +13,6 @@ date: 2024-04-23
 - [[Data Chunk (Storage)|Data Chunk]]
 - [[Flash Memory, SSD (Storage)|Flash Memory, SSD]]
 - [[Flash Translation Layer, FTL (Storage)|Flash Translation Layer, FTL]]
-- [[Flexible Data Placement, FDP (Storage)|Flexible Data Placement, FDP]]
 - [[Garbage Collection, GC (Storage)|Garbage Collection, GC]]
 - [[Hot Cold Separation (Storage)|Hot Cold Separation]]
 - [[Input Output per second, IOps (storage)|IOps]]
@@ -35,9 +34,28 @@ date: 2024-04-23
 - [[TRIM, Deallocation (Storage)|TRIM, Deallocation]]
 - [[Wear Leveling (Storage)|Wear Leveling]]
 - [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|Write Amplification, Write Amplication Factor (WA, WAF)]]
-- [[Zoned Storage Model (Storage)|Zoned Storage Model]]
+
+### Computational Storage Device (CSD)
+
+> [!info] 범위
+> - NVMe Computational Programs Command Set 에 추가적으로,
+> - NVMe Subsystem Local Memory Command Set 에 대한 내용도 여기 적어야지
+
+- [[Computational Storage Device, CSD (Storage)|Computational Storage Device, CSD]]
+
+### Flexible Data Placement (FDP)
+
+- [[Flexible Data Placement, FDP (Storage)|Flexible Data Placement, FDP]]
 
 ### NVMe
 
-- [[Doorbell (NVMe)|Doorbell]]
-- [[Namespace (NVMe)|Namespace]]
+> [!info] 범위
+> - NVMe Base Specification 에 대한 내용들입니다.
+
+- 용어들
+	- [[Doorbell (NVMe)|Doorbell]]
+	- [[Namespace (NVMe)|Namespace]]
+
+### Zoned Storage Model (ZSM)
+
+- [[Zoned Storage Model (Storage)|Zoned Storage Model]]

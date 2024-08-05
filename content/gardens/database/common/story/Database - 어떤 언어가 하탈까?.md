@@ -14,5 +14,5 @@ date: 2024-07-04
 | In-memory       | [Redis](https://github.com/redis/redis)<br>[Memcached](https://github.com/memcached/memcached)   | [CachLib](https://github.com/facebook/CacheLib)                                                                                              |                                                                                                               |
 | Engine/KV Store | [Wildtiger](https://github.com/wiredtiger/wiredtiger)                                            | [RocksDB](https://github.com/facebook/rocksdb)<br>[LevelDB](https://github.com/google/leveldb)                                               |                                                                                                               |
 
-- 혹시나 했는데 Go 거의 없다.
+- 혹시나 했는데 Go 는 Go의 없다.
 - [[(Garden) C, Cpp|C, C++]] 나 열심히 하자.

@@ -74,7 +74,7 @@ tags:
 - 이것을 제공하는 힌트들을 상당 부분 interface 와 연관되어 있다
 	- 당신이 아는 그 interface 맞다
 	- 실제 implementation 과 구분돼서 두 프로그램이 상호작용하기 위한 창
-- Interface 들은 [[#assumption]] 들로 구성된다
+- Interface 들은 assumption [^assumption] 들로 구성된다
 	- 이들은 프로그램이 의도한대로 작동하는 것을 확인하기 위해 필요한 것? 뭐라노
 - 그리고 이 interface 들은 아래의 세 상충하는 요구사항을 만족시켜야 하기 때문에 설계하기 까다롭다
 	- simple: interface 는 간단해야 한다
@@ -166,7 +166,7 @@ tags:
 
 - 인터페이스라는 것은 많은 외부 컴포넌트들과 연관되어 있기 때문에 인터페이스를 바꾸는 것은 정말 큰 문제를 초래할 수 있다
 - 더군다나 타입체크가 없는 프로그래밍 언어를 사용할 때에는 client 입장에서 인터페이스가 변경되었다는 것을 알기 정말 어렵기 때문에 권고되지 않는다
-- [Mesa](https://en.wikipedia.org/wiki/Mesa_(programming_language)) 같은 빡센 타입체킹이 들어가 있는 프로그래밍 언어를 사용하면 인터페이스 변경을 감지하는 것이 한층 편하지만 그럼에도 불구하고 [[#assumption]] 을 맞춰야 됨에는 변화가 없다
+- [Mesa](https://en.wikipedia.org/wiki/Mesa_(programming_language)) 같은 빡센 타입체킹이 들어가 있는 프로그래밍 언어를 사용하면 인터페이스 변경을 감지하는 것이 한층 편하지만 그럼에도 불구하고 assumption [^assumption] 을 맞춰야 됨에는 변화가 없다
 - 또한 25만 줄에 달하는 코드로 이루어진 시스템의 경우에는 변경에 시간이 너무 오래 걸려 바꾸지 못하기도 한다
 
 #### Keep a place to stand
@@ -189,12 +189,12 @@ tags:
 
 #### Keep secrets
 
-- Secret 이란 건 Client program 이 생성해서는 안될 [[#assumption]] 이다
+- Secret 이란 건 Client program 이 생성해서는 안될 assumption [^assumption] 이다
 - 그리고 따라서, 이 정보는 언제든 바뀔 수 있는 값이다
 	- 이건 인터페이스와는 다소 대조적임; 인터페이스는 (특별한 경우가 아니라면) 변경되어서는 안될 정보이다
-- [[#assumption]] 이 적으면 프로그램의 구현 혹은 변경이 용이하지만 여러 문제점이 있다
-	- 시스템을 디자인하기가 어려워진다 - [[#Don't hide power]] 원칙을 적용해서 interface 에서 power 를 숨기지 않으면 그만큼 [[#assumption]] 은 늘어나기 때문
-	- 그리고 [[#assumption]] 이 늘어나 코드 재사용성이 높아지면 성능도 더 빨라진다... 라고 말하고 싶어하는 듯
+- assumption [^assumption] 이 적으면 프로그램의 구현 혹은 변경이 용이하지만 여러 문제점이 있다
+	- 시스템을 디자인하기가 어려워진다 - [[#Don't hide power]] 원칙을 적용해서 interface 에서 power 를 숨기지 않으면 그만큼 assumption [^assumption] 은 늘어나기 때문
+	- 그리고 assumption [^assumption] 이 늘어나 코드 재사용성이 높아지면 성능도 더 빨라진다... 라고 말하고 싶어하는 듯
 
 #### Divide and conquer
 
@@ -261,15 +261,6 @@ tags:
 
 - 하드웨어 비용이 점점 낮아지면서 소요되는 사이클 수는 높지만 간단하고 쉽게 분석할 수 있는 솔루션이 사이클 수는 낮지만 복잡하고 작동이 보장되지 않는 솔루션보다는 낫다
 
+> [!fail] #draft 이후 내용은 아직 정리하지 못했슴다..
 
-
-## 4. Fault-tolerance
-
-## 5. Conclusion
-
----
-## Terminology - 나름 정리해본 용어들
-
-### assumption
-
-- Interface 를 통해 상호작용하는 두 프로그램 간의 합의? Synchronize? 정도로 생각하면 될듯 싶다
+[^assumption]: Interface 를 통해 상호작용하는 두 프로그램 간의 합의? Synchronize? 정도로 생각하면 될듯 싶다

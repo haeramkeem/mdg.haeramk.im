@@ -175,7 +175,6 @@ date: 2024-05-13
 
 ### 6.3. Best-case benefits due to superpages
 
----
 [^application-footprint]: 가 뭔지 모르겠다.
 [^paging-traffic]: 도 뭔지 모르겠다.
 [^pathological-situation]: 이 뭔지 모르겠다.
