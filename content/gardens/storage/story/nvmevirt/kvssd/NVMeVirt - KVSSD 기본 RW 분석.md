@@ -4,6 +4,9 @@ tags:
   - nvme-kvssd
 date: 2024-08-01
 ---
+> [!info]- 참고한 것들
+> - [NVMe 공식문서](https://nvmexpress.org/wp-content/uploads/NVM-Express-Key-Value-Command-Set-Specification-1.0d-2024.01.03-Ratified.pdf)
+
 ## 일반 NVMe write command 보내보기
 
 - 일반 NVMe write command 실행시 call stack 을 보면 [[NVMeVirt (5) - Write command 함수 콜 스택 분석|고급운영체제 프로젝트]] 에서와 유사하게 나온다.
