@@ -11,7 +11,7 @@
 <li><a href="https://zonedstorage.io/docs/tools/zns" class="external">Zoned Storage 공식 문서</a></li>
 </ul>
 </blockquote>
-<h2 id="zns-지원-기기-목록-출력"><a href="../../../../gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)">ZNS</a> 지원 기기 목록 출력<a aria-hidden="true" tabindex="-1" href="#zns-지원-기기-목록-출력" class="internal"> §</a></h2>
+<h2 id="zns-지원-기기-목록-출력"><a href="../../../../gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)">ZNS</a> 지원 기기 목록 출력<a aria-hidden="true" tabindex="-1" href="#zns-지원-기기-목록-출력" class="internal"> §</a></h2>
 <div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">nvme</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">zns</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">list</span></span></code></pre></div>
 <blockquote class="callout is-collapsible is-collapsed" data-callout="example" data-callout-fold>
 <div class="callout-title">
@@ -56,7 +56,7 @@
                 </div>
 <p><img src="../../../../images/Pasted-image-20240423191530.png" width="auto" height="auto"/></p>
 </blockquote>
-<h2 id="zone-상태-확인"><a href="../../../../gardens/storage/terms/Zoned-Storage-Model-(Storage)#state-machine" class="internal" data-slug="gardens/storage/terms/Zoned-Storage-Model-(Storage)">Zone 상태</a> 확인<a aria-hidden="true" tabindex="-1" href="#zone-상태-확인" class="internal"> §</a></h2>
+<h2 id="zone-상태-확인"><a href="../../../../gardens/storage/zsm/Zoned-Storage-Model-(Storage)#state-machine" class="internal" data-slug="gardens/storage/zsm/Zoned-Storage-Model-(Storage)">Zone 상태</a> 확인<a aria-hidden="true" tabindex="-1" href="#zone-상태-확인" class="internal"> §</a></h2>
 <div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">nvme</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">zns</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">report-zones</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/dev/nvme1n1</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-d</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">10</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-v</span></span></code></pre></div>
 <ul>
 <li>옵션 정리

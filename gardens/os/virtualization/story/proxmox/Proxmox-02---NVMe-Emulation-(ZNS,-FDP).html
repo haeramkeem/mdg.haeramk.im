@@ -41,7 +41,7 @@
 </blockquote>
 <h2 id="개요">개요<a aria-hidden="true" tabindex="-1" href="#개요" class="internal"> §</a></h2>
 <ul>
-<li><a href="../../../../../gardens/os/virtualization/story/proxmox/Proxmox-03---NVMe-Emulation-for-VM" class="internal" data-slug="gardens/os/virtualization/story/proxmox/Proxmox-03---NVMe-Emulation-for-VM">지난번</a> 에 이어서 <a href="../../../../../gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)">ZNS SSD</a> 와 <a href="../../../../../gardens/storage/terms/Flexible-Data-Placement,-FDP-(Storage)" class="internal" data-slug="gardens/storage/terms/Flexible-Data-Placement,-FDP-(Storage)">FDP SSD</a> 도 emulate 해보자</li>
+<li><a href="../../../../../gardens/os/virtualization/story/proxmox/Proxmox-03---NVMe-Emulation-for-VM" class="internal" data-slug="gardens/os/virtualization/story/proxmox/Proxmox-03---NVMe-Emulation-for-VM">지난번</a> 에 이어서 <a href="../../../../../gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)">ZNS SSD</a> 와 <a href="../../../../../gardens/storage/fdp/Flexible-Data-Placement,-FDP-(Storage)" class="internal" data-slug="gardens/storage/fdp/Flexible-Data-Placement,-FDP-(Storage)">FDP SSD</a> 도 emulate 해보자</li>
 <li>깔끔하게 하기 위해 List 로 parameter 들을 주입해 주었는데 그러니까 qemu parameter string 을 qm arg 로 인식해서 다음와 같은 꼼수를 사용했다:</li>
 </ul>
 <div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sh</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-c</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;qm set ${VMID} --args '$(</span><span style="color:var(--shiki-token-function);">echo</span><span style="color:var(--shiki-token-string-expression);"> ${PARAMS[@]})'&quot;</span></span></code></pre></div>
@@ -68,8 +68,8 @@
 <ul>
 <li>NVMe Subsystem 에 <code>fdp=on</code> 설정을 넣어줘야 FDP SSD 가 되기 때문에 NVMe Subsysem, NVMe Namespace, NVMe 총 3개의 device 생성
 <ul>
-<li>여기서는 <a href="../../../../../gardens/storage/terms/Flexible-Data-Placement,-FDP-(Storage)#reclaim-unit-handle-ruh" class="internal" data-slug="gardens/storage/terms/Flexible-Data-Placement,-FDP-(Storage)">RUH</a> 개수는 16개,</li>
-<li><a href="../../../../../gardens/storage/terms/Flexible-Data-Placement,-FDP-(Storage)#reclaim-group-rg" class="internal" data-slug="gardens/storage/terms/Flexible-Data-Placement,-FDP-(Storage)">RG</a> 개수는 8개,</li>
+<li>여기서는 <a href="../../../../../gardens/storage/fdp/Flexible-Data-Placement,-FDP-(Storage)#reclaim-unit-handle-ruh" class="internal" data-slug="gardens/storage/fdp/Flexible-Data-Placement,-FDP-(Storage)">RUH</a> 개수는 16개,</li>
+<li><a href="../../../../../gardens/storage/fdp/Flexible-Data-Placement,-FDP-(Storage)#reclaim-group-rg" class="internal" data-slug="gardens/storage/fdp/Flexible-Data-Placement,-FDP-(Storage)">RG</a> 개수는 8개,</li>
 <li>NVMe Namespace 에는 RUH 0~7 총 8개를 할당하였다.</li>
 </ul>
 </li>

@@ -23,7 +23,7 @@
 <li>OS 가 OCSSD 에 접근할 수 있게 해주는 인터페이스로 <a href="http://lightnvm.io/" class="external">LightNVM</a> 이 구현되어 있다.</li>
 </ul>
 </li>
-<li>다만, OCSSD 는 <a href="../../../gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)">ZNS</a> 의 등장에 따라 현재에는 거의 사용되지 않는다고 한다.</li>
+<li>다만, OCSSD 는 <a href="../../../gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)">ZNS</a> 의 등장에 따라 현재에는 거의 사용되지 않는다고 한다.</li>
 </ul>
 <h2 id="좋은-점">좋은 점<a aria-hidden="true" tabindex="-1" href="#좋은-점" class="internal"> §</a></h2>
 <ul>
@@ -32,7 +32,7 @@
 <li>데이터를 어디에 저장하냐가 GC 오버헤드에 영향을 주고</li>
 <li>데이터의 저장 위치를 정하는 것에는 Host 가 알고 있는 정보들을 활용하는 것이 도움이 된다고 한다.
 <ul>
-<li>이에 대해서는 <a href="../../../gardens/storage/terms/Flexible-Data-Placement,-FDP-(Storage)" class="internal" data-slug="gardens/storage/terms/Flexible-Data-Placement,-FDP-(Storage)">FDP 문서</a> 나 <a href="../../../gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)">ZNS 문서</a>, <a href="../../../gardens/storage/terms/Multi-stream-SSD-(Storage)" class="internal" data-slug="gardens/storage/terms/Multi-stream-SSD-(Storage)">Multi-stream SSD</a> 에서도 여러번 언급했으니 모르겠으면 가서 보도록 하자.</li>
+<li>이에 대해서는 <a href="../../../gardens/storage/fdp/Flexible-Data-Placement,-FDP-(Storage)" class="internal" data-slug="gardens/storage/fdp/Flexible-Data-Placement,-FDP-(Storage)">FDP 문서</a> 나 <a href="../../../gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)">ZNS 문서</a>, <a href="../../../gardens/storage/terms/Multi-stream-SSD-(Storage)" class="internal" data-slug="gardens/storage/terms/Multi-stream-SSD-(Storage)">Multi-stream SSD</a> 에서도 여러번 언급했으니 모르겠으면 가서 보도록 하자.</li>
 </ul>
 </li>
 <li>따라서 OCSSD 에서는 FTL 자체를 Host 로 넘겨 Host 가 알고 있는 정보를 활용하자는 아이디어이다.</li>
@@ -42,7 +42,7 @@
 <h2 id="나쁜-점">나쁜 점<a aria-hidden="true" tabindex="-1" href="#나쁜-점" class="internal"> §</a></h2>
 <ul>
 <li>생각보다 RAM 을 많이 먹는다 - 4KB 의 write 작업이 지속적으로 들어오는 환경에서 SSD 용량이 1TB 라면 3GB 의 RAM 을 먹는다고 한다.</li>
-<li>또한 OS 에서 모든 종류의 SSD 에 대응하는 인터페이스를 구현해야 되고, 이것이 핵심적인 문제가 되어 지금은 <a href="../../../gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/draft/Zoned-Namespaces,-ZNS-(Storage)">ZNS</a> 로 대체되었다.</li>
+<li>또한 OS 에서 모든 종류의 SSD 에 대응하는 인터페이스를 구현해야 되고, 이것이 핵심적인 문제가 되어 지금은 <a href="../../../gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)" class="internal" data-slug="gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)">ZNS</a> 로 대체되었다.</li>
 </ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
 	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
 	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562

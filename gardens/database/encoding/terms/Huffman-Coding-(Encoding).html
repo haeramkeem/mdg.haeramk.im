@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html><head><title>Huffman Coding (Encoding)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Huffman Coding (Encoding)"/><meta property="og:description" content="참고한 것들 왜 BBC에서 이런 글을 적는지는 나도 모른다. 우끽피디아 허프만 코딩 § 유명한 Lossless compression 기법이다. 기본 아이디어 § 가령 어떤 문자열을 저장할 때, 좀 더 공간사용량을 줄이고 싶다고 해보자. 첫번째 아이디어는 적은 수의 bit 를 사용하는 것이다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="참고한 것들 왜 BBC에서 이런 글을 적는지는 나도 모른다. 우끽피디아 허프만 코딩 § 유명한 Lossless compression 기법이다. 기본 아이디어 § 가령 어떤 문자열을 저장할 때, 좀 더 공간사용량을 줄이고 싶다고 해보자. 첫번째 아이디어는 적은 수의 bit 를 사용하는 것이다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/encoding/terms/Huffman-Coding-(Encoding)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Huffman Coding (Encoding)</h1><p class="content-meta ">Jul 30, 2024, 10 min read</p><ul class="tags "><li><a href="../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../tags/db-encoding" class="internal tag-link">#db-encoding</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://www.bbc.co.uk/bitesize/guides/zd88jty/revision/10" class="external">왜 BBC에서 이런 글을 적는지는 나도 모른다.</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Huffman_coding" class="external">우끽피디아</a></li>
+</ul>
+</blockquote>
+<h2 id="허프만-코딩">허프만 코딩<a aria-hidden="true" tabindex="-1" href="#허프만-코딩" class="internal"> §</a></h2>
+<ul>
+<li>유명한 Lossless compression 기법이다.</li>
+</ul>
+<h3 id="기본-아이디어">기본 아이디어<a aria-hidden="true" tabindex="-1" href="#기본-아이디어" class="internal"> §</a></h3>
+<ul>
+<li>가령 어떤 문자열을 저장할 때, 좀 더 공간사용량을 줄이고 싶다고 해보자.</li>
+</ul>
+<h4 id="첫번째-아이디어는-적은-수의-bit-를-사용하는-것이다">첫번째 아이디어는 적은 수의 bit 를 사용하는 것이다.<a aria-hidden="true" tabindex="-1" href="#첫번째-아이디어는-적은-수의-bit-를-사용하는-것이다" class="internal"> §</a></h4>
+<ul>
+<li>그럼 문자 하나는 1byte, 즉 8bit 인데 문자열에 포함된 문자의 종류가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span></span></span></span></span> 개가 아니라면 굳이 8bit 전부를 사용할 필요가 없을 것이다.
+<ul>
+<li>만약 문자열에 등장하는 문자의 개수가 8개라면, 3bit 로도 충분할테니까.</li>
+</ul>
+</li>
+<li>따라서 문자의 개수에 따라 기존의 8bit 가 아닌 더 적은 수의 bit 를 사용하여 문자를 표현한다면, 데이터의 사이즈가 훨씬 줄어들게 된다.</li>
+</ul>
+<h4 id="두번째-아이디어는-빈도-frequency-이다">두번째 아이디어는 “빈도 (Frequency)” 이다.<a aria-hidden="true" tabindex="-1" href="#두번째-아이디어는-빈도-frequency-이다" class="internal"> §</a></h4>
+<ul>
+<li>만약 자주 등장하는 문자는 더 적은 bit 로 표현하고, 덜 자주 등장하는 문자는 비교적 많은 bit 로 표현하면 위의 아이디어에서 더욱 데이터 사이즈를 줄일 수 있을 것이다.</li>
+<li>가령 문자열에서 ‘E’ 가 가장 빈도가 높다면 이것을 <code>1</code> 로 표현하고, 만약 두번째로 빈도가 높은 문자가 ‘S’ 라면 이것을 <code>01</code> 로 표현하는 식으로 할 수 있을 것이다.</li>
+</ul>
+<h4 id="세번째-아이디어는-minheap-과-binary-tree-를-이용한-prefix-code-생성이다">세번째 아이디어는 minheap 과 binary tree 를 이용한 prefix code 생성이다.<a aria-hidden="true" tabindex="-1" href="#세번째-아이디어는-minheap-과-binary-tree-를-이용한-prefix-code-생성이다" class="internal"> §</a></h4>
+<ul>
+<li>(2) 에서 말한 것을 보면 뭔가 좀 이상하다고 생각할 수 있다.
+<ul>
+<li>만약 ‘E’, ‘S’, ‘A’ 순서대로 빈도가 높아, 각각 <code>1</code>, <code>01</code>, <code>101</code> 로 표현하기로 해보자.</li>
+<li>그럼 만약 <code>101</code> 를 보고 이것을 ‘A’ 라고 판단해야 할까 아니면 ‘ES’ 라고 판단해야 할까?</li>
+</ul>
+</li>
+<li>이런 모호함이 없는 code (치환될 bit) 를 생성해야만 (2) 번의 “빈도” 아이디어가 성립할 것이다.</li>
+<li>이때 이런 모호함이 없는 code 기법중 하나가 <em><a href="../../../../gardens/database/encoding/terms/Prefix-Code-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Prefix-Code-(Encoding)">Prefix code</a></em> 이다.
+<ul>
+<li>이것은 <em>Prefix Free Code</em> 라고도 불리는데, 쉽게 말하면 “한 code 가 다른 code 의 prefix 로 들어가지 않게 하는 것” 를 의미한다.</li>
+<li>가령 위에서의 <code>101</code> 예시를 보자.
+<ul>
+<li>여기서 저런 모호함이 생긴 이유는 ‘E’ 의 <code>1</code> 과 ‘A’ 의 <code>101</code> 이 prefix 가 <code>1</code> 로 동일하기 때문이다.</li>
+<li>만약 ‘A’ 를 <code>001</code> 로 표현한다면, 이놈의 prefix 인 (<code>0</code>, <code>00</code>, <code>001</code>) 와 일치하는 code 가 없기 때문에 모호함이 발생하지 않는다.</li>
+<li>즉, <code>001</code> 는 (’<code>0</code>S’ 라는 억지를 부리지 않는 한) ‘A’ 로 밖에 해석될 수 없다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>근데 이런 <em>Prefix Code</em> 는 어떻게 생성할까? 문자의 개수가 적으면 사람이 짱구를 굴려 할 수 있겠지만, 문자의 종류가 많거나 가변적이어서 동적으로 이 code 를 생성해줘야 한다면?
+<ul>
+<li>이것에 대한 해답이 저 <em>Minheap</em> 와 <em>Binary Tree</em> 이다. 이건 아래 과정을 보면서 이해해 보자.</li>
+</ul>
+</li>
+</ul>
+<h2 id="bbc-bitesize-예시">BBC BITESIZE 예시<a aria-hidden="true" tabindex="-1" href="#bbc-bitesize-예시" class="internal"> §</a></h2>
+<ul>
+<li>여럿 글을 뒤져본 결과 <a href="https://www.bbc.co.uk/bitesize/guides/zd88jty/revision/10" class="external">이 글</a>이 제일 알기 쉬웠다.</li>
+<li>일단 다음의 문자열을 담가본다고 해보자.</li>
+</ul>
+<pre><code>BBC_BITESIZE
+</code></pre>
+<h3 id="minheap-으로-prefix-code-생성하기">Minheap 으로 Prefix Code 생성하기<a aria-hidden="true" tabindex="-1" href="#minheap-으로-prefix-code-생성하기" class="internal"> §</a></h3>
+<ul>
+<li>그럼 이때 각 문자들의 빈도를 내림차순으로 하여 minheap 을 구성하면 다음과 같다고 할 수 있다.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>CHAR</th><th>CNT</th></tr></thead><tbody><tr><td><code>B</code></td><td>3</td></tr><tr><td><code>E</code></td><td>2</td></tr><tr><td><code>I</code></td><td>2</td></tr><tr><td><code>Z</code></td><td>1</td></tr><tr><td><code>S</code></td><td>1</td></tr><tr><td><code>T</code></td><td>1</td></tr><tr><td><code>_</code></td><td>1</td></tr><tr><td><code>C</code></td><td>1</td></tr></tbody></table>
+<ul>
+<li>그리고 여기서 각각의 <em>CHAR</em> 에 대한 binary tree 를 하나 그려보자.
+<ul>
+<li>일단 아래와 같이 모두 parent 없이 <sup><a href="#user-content-fn-parent" id="user-content-fnref-parent" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup> child node 만 있다고 생각하자. 어떻게 Parent 가 구성되는지는 바로 다음에 나온다.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="mermaid">graph TB
+	B(B)
+	E(E)
+	I(I)
+	Z(Z)
+	S(S)
+	T(T)
+	_(_)
+	C(C)
+</code></pre>
+<ul>
+<li>여기서 가장 빈도가 낮은 2놈을 합친다.
+<ul>
+<li>즉, 저 <code>_</code> 와 <code>C</code> 를 합쳐 보자.</li>
+<li>이때, <em>CHAR</em> 은 둘을 합친 <code>_C</code> 가 되고, <em>CNT</em> 는 두 <em>CNT</em> 값을 더한 2 가 된다.</li>
+</ul>
+</li>
+<li>그럼 이제 새로 함쳐진 놈에 대해 새로 minheap 와 binary tree 를 그려보자.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>CHAR</th><th>CNT</th></tr></thead><tbody><tr><td><code>B</code></td><td>3</td></tr><tr><td><code>E</code></td><td>2</td></tr><tr><td><code>I</code></td><td>2</td></tr><tr><td><code>_C</code></td><td>2</td></tr><tr><td><code>Z</code></td><td>1</td></tr><tr><td><code>S</code></td><td>1</td></tr><tr><td><code>T</code></td><td>1</td></tr></tbody></table>
+<pre><code class="mermaid">graph TB
+	B(B)
+	E(E)
+	I(I)
+	_C(_C) -. 0 .-> C(_)
+	_C(_C) -. 1 .-> _(C)
+	Z(Z)
+	S(S)
+	T(T)
+</code></pre>
+<ul>
+<li>보면 어떻게 parent node 가 구성되는지 알 수 있을 것이다.
+<ul>
+<li>두 node 가 합쳐지면 합쳐진 놈은 parent 로, 원래의 node 가 child 로 들어간다.</li>
+<li>그리고 각 child node 로 가는 화살표에는 0, 1 을 붙인다. 편의를 위해 왼쪽은 0, 오른쪽은 1 이라고 하자.</li>
+</ul>
+</li>
+<li>한번 더 해보자.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>CHAR</th><th>CNT</th></tr></thead><tbody><tr><td><code>B</code></td><td>3</td></tr><tr><td><code>E</code></td><td>2</td></tr><tr><td><code>I</code></td><td>2</td></tr><tr><td><code>_C</code></td><td>2</td></tr><tr><td><code>ST</code></td><td>2</td></tr><tr><td><code>Z</code></td><td>1</td></tr></tbody></table>
+<pre><code class="mermaid">graph TB    
+	B(B)
+	E(E)
+	I(I)
+	_C(_C) -. 0 .-> _(_)
+	_C(_C) -. 1 .-> C(C)
+	ST(ST) -. 0 .-> S(S)
+	ST(ST) -. 1 .-> T(T)
+	Z(Z)
+</code></pre>
+<ul>
+<li>마지막으로 한번만 더 해보자.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>CHAR</th><th>CNT</th></tr></thead><tbody><tr><td><code>B</code></td><td>3</td></tr><tr><td><code>STZ</code></td><td>3</td></tr><tr><td><code>E</code></td><td>2</td></tr><tr><td><code>I</code></td><td>2</td></tr><tr><td><code>_C</code></td><td>2</td></tr></tbody></table>
+<pre><code class="mermaid">graph TB
+	B(B)
+	STZ(STZ) -. 0 .-> ST(ST)
+	STZ(STZ) -. 1 .-> Z(Z)
+	ST(ST) -. 0 .-> S(S)
+	ST(ST) -. 1 .-> T(T)
+	E(E)
+	I(I)
+	_C(_C) -. 0 .-> _(_)
+	_C(_C) -. 1 .-> C(C)
+</code></pre>
+<ul>
+<li>이런식으로 계속 하다 보면 결과적으로 다음과 같이 된다.</li>
+</ul>
+<pre><code class="mermaid">graph TB
+	I_CBSTZE(I_CBSTZE) -. 0 .-> I_CB(I_CB)
+	I_CBSTZE(I_CBSTZE) -. 1 .-> STZE(STZE)
+	I_CB(I_CB) -. 0 .-> I_C(I_C)
+	I_CB(I_CB) -. 1 .-> B(B)
+	I_C(I_C) -. 0 .-> I(I)
+	I_C(I_C) -. 1 .-> _C(_C)
+	_C(_C) -. 0 .-> _(_)
+	_C(_C) -. 1 .-> C(C)
+	STZE(STZE) -. 0 .-> STZ(STZ)
+	STZE(STZE) -. 1 .-> E(E)
+	STZ(STZ) -. 0 .-> ST(ST)
+	STZ(STZ) -. 1 .-> Z(Z)
+	ST(ST) -. 0 .-> S(S)
+	ST(ST) -. 1 .-> T(T)
+</code></pre>
+<ul>
+<li>이것을 가지고 어떤 문자의 Prefix code 를 찾는 것은 root 에서 시작해 해당 문자가 나올때 까지 binary tree 를 따라 내려오면 된다.</li>
+<li>가령, <code>C</code> 의 prefix code 는 다음과 같은 과정을 통해 <code>0011</code> 가 되는 것을 알 수 있다.</li>
+</ul>
+<pre><code class="mermaid">graph TB
+	I_CBSTZE(I_CBSTZE) == 0 ==> I_CB(I_CB)
+	I_CBSTZE(I_CBSTZE) -. 1 .-> STZE(STZE)
+	I_CB(I_CB) == 0 ==> I_C(I_C)
+	I_CB(I_CB) -. 1 .-> B(B)
+	I_C(I_C) -. 0 .-> I(I)
+	I_C(I_C) == 1 ==> _C(_C)
+	_C(_C) -. 0 .-> _(_)
+	_C(_C) == 1 ==> C(C)
+	STZE(STZE) -. 0 .-> STZ(STZ)
+	STZE(STZE) -. 1 .-> E(E)
+	STZ(STZ) -. 0 .-> ST(ST)
+	STZ(STZ) -. 1 .-> Z(Z)
+	ST(ST) -. 0 .-> S(S)
+	ST(ST) -. 1 .-> T(T)
+</code></pre>
+<ul>
+<li>마찬가지의 과정으로 모든 prefix code 를 전부 계산해 보면 이렇게 된다.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>CHAR</th><th>CNT</th><th>CODE</th></tr></thead><tbody><tr><td><code>B</code></td><td>3</td><td><code>01</code></td></tr><tr><td><code>E</code></td><td>2</td><td><code>11</code></td></tr><tr><td><code>I</code></td><td>2</td><td><code>000</code></td></tr><tr><td><code>Z</code></td><td>1</td><td><code>101</code></td></tr><tr><td><code>S</code></td><td>1</td><td><code>1000</code></td></tr><tr><td><code>T</code></td><td>1</td><td><code>1001</code></td></tr><tr><td><code>_</code></td><td>1</td><td><code>0010</code></td></tr><tr><td><code>C</code></td><td>1</td><td><code>0011</code></td></tr></tbody></table>
+<ul>
+<li>보다시피 완벽하게 prefix-free 하고, frequency 가 클수록 적은 bit 로 표현된 것을 볼 수 있다.</li>
+</ul>
+<h3 id="prefix-code-로-compression-하기">Prefix code 로 compression 하기<a aria-hidden="true" tabindex="-1" href="#prefix-code-로-compression-하기" class="internal"> §</a></h3>
+<ul>
+<li>이것으로 주어진 문자열을 compression 해보면 결과적으로 다음과 같이 된다.</li>
+</ul>
+<pre><code>01010011001001000100111100000010111
+</code></pre>
+<h3 id="binary-tree-로-decompression-하기">Binary tree 로 decompression 하기<a aria-hidden="true" tabindex="-1" href="#binary-tree-로-decompression-하기" class="internal"> §</a></h3>
+<ul>
+<li>반대로 이것을 decompression 하는 것은 어떻게 할까.</li>
+<li>저 bit stream 을 그대로 binary tree 에 집어넣으면 된다.</li>
+<li>Root 부터 따라가 보자. 일단 첫번째 <code>0</code> 부터:</li>
+</ul>
+<pre><code class="mermaid">graph TB
+	I_CBSTZE(I_CBSTZE) == 0 ==> I_CB(I_CB)
+	I_CBSTZE(I_CBSTZE) -. 1 .-> STZE(STZE)
+	I_CB(I_CB) -. 0 .-> I_C(I_C)
+	I_CB(I_CB) -. 1 .-> B(B)
+	I_C(I_C) -. 0 .-> I(I)
+	I_C(I_C) -. 1 .-> _C(_C)
+	_C(_C) -. 0 .-> _(_)
+	_C(_C) -. 1 .-> C(C)
+	STZE(STZE) -. 0 .-> STZ(STZ)
+	STZE(STZE) -. 1 .-> E(E)
+	STZ(STZ) -. 0 .-> ST(ST)
+	STZ(STZ) -. 1 .-> Z(Z)
+	ST(ST) -. 0 .-> S(S)
+	ST(ST) -. 1 .-> T(T)
+</code></pre>
+<ul>
+<li>그리고 다음은 <code>1</code> 이다.</li>
+</ul>
+<pre><code class="mermaid">graph TB
+	I_CBSTZE(I_CBSTZE) == 0 ==> I_CB(I_CB)
+	I_CBSTZE(I_CBSTZE) -. 1 .-> STZE(STZE)
+	I_CB(I_CB) -. 0 .-> I_C(I_C)
+	I_CB(I_CB) == 1 ==> B(B)
+	I_C(I_C) -. 0 .-> I(I)
+	I_C(I_C) -. 1 .-> _C(_C)
+	_C(_C) -. 0 .-> _(_)
+	_C(_C) -. 1 .-> C(C)
+	STZE(STZE) -. 0 .-> STZ(STZ)
+	STZE(STZE) -. 1 .-> E(E)
+	STZ(STZ) -. 0 .-> ST(ST)
+	STZ(STZ) -. 1 .-> Z(Z)
+	ST(ST) -. 0 .-> S(S)
+	ST(ST) -. 1 .-> T(T)
+</code></pre>
+<ul>
+<li>Leaf node 인 <code>B</code> 에 다다른 것을 알 수 있다. 따라서 지금까지의 <code>01</code> 는 <code>B</code> 로 바뀐다.</li>
+</ul>
+<pre><code>(01)010011001001000100111100000010111
+(B) 010011001001000100111100000010111
+</code></pre>
+<ul>
+<li>그럼 이제 다시 root 로 돌아가 반복한다.
+<ul>
+<li>또 다시 <code>01</code> 이 나오기 때문에 자동으로 그 다음 것도 <code>B</code> 로 바뀐다.</li>
+</ul>
+</li>
+</ul>
+<pre><code>(B)(01)0011001001000100111100000010111
+(B)(B) 0011001001000100111100000010111
+</code></pre>
+<ul>
+<li>한번만 더 해보자. 이때도 root 에서 시작해, <code>0</code> -> <code>0</code> -> <code>1</code> -> <code>1</code> 를 타고 <code>C</code> 에 다다른다.</li>
+</ul>
+<pre><code class="mermaid">graph TB
+	I_CBSTZE(I_CBSTZE) == 0 ==> I_CB(I_CB)
+	I_CBSTZE(I_CBSTZE) -. 1 .-> STZE(STZE)
+	I_CB(I_CB) == 0 ==> I_C(I_C)
+	I_CB(I_CB) -. 1 .-> B(B)
+	I_C(I_C) -. 0 .-> I(I)
+	I_C(I_C) == 1 ==> _C(_C)
+	_C(_C) -. 0 .-> _(_)
+	_C(_C) == 1 ==> C(C)
+	STZE(STZE) -. 0 .-> STZ(STZ)
+	STZE(STZE) -. 1 .-> E(E)
+	STZ(STZ) -. 0 .-> ST(ST)
+	STZ(STZ) -. 1 .-> Z(Z)
+	ST(ST) -. 0 .-> S(S)
+	ST(ST) -. 1 .-> T(T)
+</code></pre>
+<ul>
+<li>따라서 <code>0011</code> 을 <code>C</code> 로 바꾼다.</li>
+</ul>
+<pre><code>(B)(B)(0011)001001000100111100000010111
+(B)(B)(C)   001001000100111100000010111
+</code></pre>
+<ul>
+<li>이렇게 하다보면 원래의 문자열로 복구되는 것을 확인할 수 있다.</li>
+</ul>
+<pre><code>(01)(01)(0011)(0010)(01)(000)(1001)(11)(1000)(000)(101)(11)
+(B) (B) (C)   (_)   (B) (I)  (T)   (E) (S)   (I)  (Z)  (E)
+</code></pre>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-parent">
+<p>패드립이라고는 생각하지 말자. <a href="#user-content-fnref-parent" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#허프만-코딩" data-for="허프만-코딩">허프만 코딩</a></li><li class="depth-1"><a href="#기본-아이디어" data-for="기본-아이디어">기본 아이디어</a></li><li class="depth-0"><a href="#bbc-bitesize-예시" data-for="bbc-bitesize-예시">BBC BITESIZE 예시</a></li><li class="depth-1"><a href="#minheap-으로-prefix-code-생성하기" data-for="minheap-으로-prefix-code-생성하기">Minheap 으로 Prefix Code 생성하기</a></li><li class="depth-1"><a href="#prefix-code-로-compression-하기" data-for="prefix-code-로-compression-하기">Prefix code 로 compression 하기</a></li><li class="depth-1"><a href="#binary-tree-로-decompression-하기" data-for="binary-tree-로-decompression-하기">Binary tree 로 decompression 하기</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/database/(Garden)-Database" class="internal">(Garden) Database</a></li><li><a href="../../../../gardens/database/encoding/papers/BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes/(논문)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes-(2.-Background)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)</a></li><li><a href="../../../../gardens/database/encoding/terms/Prefix-Code-(Encoding)" class="internal">Prefix Code (Encoding)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>
