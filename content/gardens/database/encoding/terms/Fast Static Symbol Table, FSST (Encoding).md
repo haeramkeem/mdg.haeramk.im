@@ -68,10 +68,10 @@ date: 2024-07-30
 ![[Pasted image 20240731231714.png]]
 
 - `nSymbols` 는 현재 symbol 의 개수이다.
-
 - `symbols` 는 모든 symbol 들을 모아놓은 배열이다.
 	- 여기서 앞 256 개는 *Pseudo-symbol* 이라고 하고, 해당 index 에 대응되는 ASCII 문자가 들어가 있다.
 		- 얘네는 escape 된 byte 를 일컫는다.
+		- 여기서 볼 수 있듯이, escaped single byte 는 문자열에 등장하는 애들뿐만이 아닌 모든 문자들이 symbol 로서 등록되는 것을 알 수 있다.
 	- 그리고 뒤의 256 개는 진짜 symbol 이다. 즉, `nSymbols` 는 이 "진짜 symbol" 의 개수를 의미한다.
 - `sIndex` 는 "어떤 문자" 로 시작하는 symbol 이 위치한 시작 index 들을 저장하는 놈이다.
 
