@@ -38,6 +38,7 @@ date: 2024-07-29
 	- [[Bit Packing, BP (Encoding)|Bit Packing, BP]]
 	- [[Dictionary Encoding (Encoding)|Dictionary Encoding]]
 	- [[Fast Static Symbol Table, FSST (Encoding)|Fast Static Symbol Table, FSST]]
+	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Prefix Code (Encoding)|Prefix Code]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding (RLE)]]

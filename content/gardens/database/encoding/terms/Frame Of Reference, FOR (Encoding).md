@@ -6,7 +6,7 @@ date: 2024-08-05
 ---
 > [!info]- 참고한 것들
 > - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.5. FOR & Bit-packing|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
-> - [Lemire 교수 블로그](https://lemire.me/blog/2012/02/08/effective-compression-using-frame-of-reference-and-delta-coding/)
+> - [Lemire 교수 블로그 - 이거 진짜 도움 많이 됨](https://lemire.me/blog/2012/02/08/effective-compression-using-frame-of-reference-and-delta-coding/)
 
 ## FOR, BP
 
@@ -18,7 +18,7 @@ date: 2024-08-05
 
 ### 예시
 
-- 다음의 예시 수열 [^example] 를 보자.
+- 다음의 예시 수열을 보자.
 
 ```
 107,108,110,115,120,125,132,132,131,135
@@ -56,10 +56,4 @@ date: 2024-08-05
 1) 아무때나 쓸 수 있는 것이 아니다.
 	- 위의 예시를 보면 알 수 있겠지만, =="원본값을 표현하기 위해 bit 수" 가 "값의 범위를 표현하기 위한 bit 수" 보다 작아야 의미== 가 있다.
 	- 가령 최소값과 최대값의 차이가 254 정도 된다면, 이 값들을 그냥 8bit 로 표현하는 것이나 별 다를바가 없다.
-
-## Patched FOR, PFOR
-
-- 만약에 대부분의 숫자들은 슷비슷비한 범위에 몰려있는데, 어떤 값만 갑자기 튀어서 이 FOR 를 못쓰게 된다면 너무 아까울 것이다.
-- 그래서 이런 튀는 값들에 대해서는 *Exception* 으로 따로 처리하는 방법이 *Patched FOR*, *PFOR* 이다.
-
-[^example]: [예시](https://lemire.me/blog/2012/02/08/effective-compression-using-frame-of-reference-and-delta-coding/) 감사합니다 교수님.
+	- 하지만 만약 이상하게 큰 값이 가끔씩 등장한다면 이 "가끔씩 등장하는 이상한놈" 때문에 FOR 를 포기하는게 너무 아쉬울 것이다. 이를 위해 제안된 것이 [[Patched Frame Of Reference, PFOR (Encoding)|PFOR]] 이다.
