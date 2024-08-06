@@ -43,7 +43,7 @@ date: 2024-07-29
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Patching (Encoding)|Patching]]
 	- [[Prefix Code (Encoding)|Prefix Code]]
-	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding (RLE)]]
+	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
 - 논문들
 	- BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)
 		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (1. Abstract, Intro)|1. Abstract, Intro]]
@@ -60,9 +60,9 @@ date: 2024-07-29
 	- [[Data Cube (Database)|Data Cube]]
 	- [[Data Lake, Data Lakehouse (Database)|Data Lake, Data Lakehouse]]
 	- [[Data Warehouse (Database)|Data Warehouse]]
-	- [[Extract-Transform-Load, ETL (Database)|Extract-Transform-Load (ETL)]]
-	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing (OLAP)]]
-	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing (OLTP)]]
+	- [[Extract-Transform-Load, ETL (Database)|Extract-Transform-Load, ETL]]
+	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing, OLAP]]
+	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing, OLTP]]
 
 ### RocksDB
 
