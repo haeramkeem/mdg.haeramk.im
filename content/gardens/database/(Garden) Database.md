@@ -40,6 +40,7 @@ date: 2024-07-29
 	- [[Fast Static Symbol Table, FSST (Encoding)|Fast Static Symbol Table, FSST]]
 	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
+	- [[Patched Frame Of Reference, PFOR (Encoding)|Patched Frame Of Reference, PFOR]]
 	- [[Prefix Code (Encoding)|Prefix Code]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding (RLE)]]
 - 논문들
