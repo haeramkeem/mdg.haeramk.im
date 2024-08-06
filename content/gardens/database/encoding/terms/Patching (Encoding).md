@@ -7,13 +7,16 @@ date: 2024-08-06
 > [!info]- 참고한 것들
 > - [Decoding billions of integers per second through vectorization, Journal of Softeware: Practice and Experience](https://onlinelibrary.wiley.com/doi/10.1002/spe.2203)
 > - [Super-Scalar RAM-CPU Cache Compression, ICDE'06](https://ieeexplore.ieee.org/document/1617427)
+> - [Lemire 교수님 블로그](https://lemire.me/blog/2012/09/12/fast-integer-compression-decoding-billions-of-integers-per-second/)
 
-## Patched FOR, PFOR
+## Patched + 어쩌고
 
-- 만약에 대부분의 숫자들은 슷비슷비한 범위에 몰려있는데, 어떤 값만 갑자기 튀어서 이 [[Frame Of Reference, FOR (Encoding)|FOR]] 를 못쓰게 된다면 너무 아까울 것이다.
-- 그래서 이런 튀는 값들에 대해서는 *Exception* 으로 따로 처리하는 방법이 *Patched FOR*, *PFOR* 이다.
-	- 이 *Exception* 을 사용하면서, 기존 FOR 에서는 최소값을 base 로 사용했지만 더이상 그럴 필요가 없어졌다.
-	- 즉, 만약에 base 보다 작은 값이 있다면 그 값을 *Exception* 으로 처리해버리면 되기 때문.
+- [[Frame Of Reference, FOR (Encoding)|FOR]] 이나 [[Delta Coding (Encoding)|Delta]] 에서 보면 BP 로 싹 bit 수를 줄이고 싶은데 중간중간 튀는 놈들이 있어 BP 가 어려운 경우를 볼 수 있다.
+- 근데 이런 튀는 값들 때문에 저런 encoding 을 사용하지 못하는 것이 너무 아쉬운 나머지, 얘네들에 대해서는 *Exception* 으로 따로 처리하는 방법이 *Patching* 이다.
+	- *Patching* 을 적용한 FOR 를 PFOR 라고 부르고,
+		- 이 *Exception* 을 사용하면서, 기존 FOR 에서는 최소값을 base 로 사용했지만 더이상 그럴 필요가 없어졌다.
+		- 즉, 만약에 base 보다 작은 값이 있다면 그 값을 *Exception* 으로 처리해버리면 되기 때문.
+	- *Patching* + FOR + Delta 모두 섞어서 PFORDelta 도 있다.
 
 ### 예시
 
@@ -96,5 +99,3 @@ excep: [100110,100000,110100]
 - *Exception section*:
 	- Exception 들이 있는 곳이며, 여기에 있는 애들은 Packing 되지 않고 원본 그대로 있는다.
 	- 얘는 마치 메모리에서 stack 과 heap 마냥 *Code section* 과 반대 방향으로 자란다.
-
-[^exception-section-offset]: 이 값이 왜 필요한지는 잘 모르겠다. 그냥 `excep` array 의 위치를 알려준다고 생각하고 넘어가자.

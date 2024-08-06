@@ -36,11 +36,12 @@ date: 2024-07-29
 
 - 용어집
 	- [[Bit Packing, BP (Encoding)|Bit Packing, BP]]
+	- [[Delta Coding (Encoding)|Delta Coding]]
 	- [[Dictionary Encoding (Encoding)|Dictionary Encoding]]
 	- [[Fast Static Symbol Table, FSST (Encoding)|Fast Static Symbol Table, FSST]]
 	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
-	- [[Patched Frame Of Reference, PFOR (Encoding)|Patched Frame Of Reference, PFOR]]
+	- [[Patching (Encoding)|Patching]]
 	- [[Prefix Code (Encoding)|Prefix Code]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding (RLE)]]
 - 논문들
