@@ -36,6 +36,7 @@ date: 2024-07-29
 
 - 용어집
 	- [[Bit Packing, BP (Encoding)|Bit Packing, BP]]
+	- [[Bitmap (Encoding)|Bitmap]]
 	- [[Delta Coding (Encoding)|Delta Coding]]
 	- [[Dictionary Encoding (Encoding)|Dictionary Encoding]]
 	- [[Fast Static Symbol Table, FSST (Encoding)|Fast Static Symbol Table, FSST]]
@@ -43,6 +44,7 @@ date: 2024-07-29
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Patching (Encoding)|Patching]]
 	- [[Prefix Code (Encoding)|Prefix Code]]
+	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
 - 논문들
 	- BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)
