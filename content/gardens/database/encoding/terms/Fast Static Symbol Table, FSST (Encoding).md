@@ -5,7 +5,7 @@ tags:
 date: 2024-07-30
 ---
 > [!info]- 참고한 것들
-> - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.6 FSST|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
+> - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.6 FSST|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
 
 > [!info] 원본 논문
 > - 이 글은 [FSST: Fast Random Access String Compression, VLDB'20](https://dl.acm.org/doi/pdf/10.14778/3407790.3407851) 에서 핵심 아이디어만 요약한 글입니다.

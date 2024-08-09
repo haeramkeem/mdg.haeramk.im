@@ -5,7 +5,7 @@ tags:
 date: 2024-08-05
 ---
 > [!info]- 참고한 것들
-> - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.5. FOR & Bit-packing|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
+> - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.5. FOR & Bit-packing|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
 > - [Lemire 교수 블로그](https://lemire.me/blog/2012/03/06/how-fast-is-bit-packing/)
 
 ## Bit 포장하기

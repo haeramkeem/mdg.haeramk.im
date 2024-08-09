@@ -12,10 +12,17 @@ date: 2024-08-09
 
 ## 목차
 
-- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (1. Abstract, Intro)|1. Abstract, Intro]]
-- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)|2. Background]]
-- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (3. Scheme selection and compression)|3. Scheme selection and compression]]
-- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (4. Pseudodecimal encoding)|4. Pseudodecimal encoding]]
-- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (5. Fast decompression)|5. Fast decompression]]
-- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (6. Evaluation)|6. Evaluation]]
-- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (7. Related work and conclusion)|7. Related work and conclusion]]
+- [[1. Abstract, Intro (BtrBlocks, SIGMOD 23)|1. Abstract, Intro]]
+- [[2. Background (BtrBlocks, SIGMOD 23)|2. Background]]
+- [[3. Scheme selection and compression (BtrBlocks, SIGMOD 23)|3. Scheme selection and compression]]
+- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)]]
+- [[5. Fast decompression (BtrBlocks, SIGMOD 23)|5. Fast decompression]]
+- [[6. Evaluation (BtrBlocks, SIGMOD 23)|6. Evaluation]]
+- [[7. Related work and conclusion (BtrBlocks, SIGMOD 23)|7. Related work and conclusion]]
+
+- Double
+	- BP
+	- Dyn
+- PDE
+	- Unique < 10% ([Code ref](https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/double/Pseudodecimal.cpp#L476-L483))
+- 
