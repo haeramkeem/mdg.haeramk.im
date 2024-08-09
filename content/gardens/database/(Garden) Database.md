@@ -35,19 +35,19 @@ date: 2024-07-29
 ### Encoding
 
 - 용어집
+	- [[Bit Packing, BP (Encoding)|Bit Packing, BP]]
+	- [[Bitmap (Encoding)|Bitmap]]
+	- [[Delta Coding (Encoding)|Delta Coding]]
 	- [[Dictionary Encoding (Encoding)|Dictionary Encoding]]
+	- [[Fast Static Symbol Table, FSST (Encoding)|Fast Static Symbol Table, FSST]]
+	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
+	- [[Patching (Encoding)|Patching]]
 	- [[Prefix Code (Encoding)|Prefix Code]]
-	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding (RLE)]]
+	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
+	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
 - 논문들
-	- BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)
-		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (1. Abstract, Intro)|1. Abstract, Intro]]
-		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)|2. Background]]
-		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (3. Scheme selection and compression)|3. Scheme selection and compression]]
-		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (4. Pseudodecimal encoding)|4. Pseudodecimal encoding]]
-		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (5. Fast decompression)|5. Fast decompression]]
-		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (6. Evaluation)|6. Evaluation]]
-		- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (7. Related work and conclusion)|7. Related work and conclusion]]
+	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)]]
 
 ### Modern DBMS
 
@@ -55,9 +55,9 @@ date: 2024-07-29
 	- [[Data Cube (Database)|Data Cube]]
 	- [[Data Lake, Data Lakehouse (Database)|Data Lake, Data Lakehouse]]
 	- [[Data Warehouse (Database)|Data Warehouse]]
-	- [[Extract-Transform-Load, ETL (Database)|Extract-Transform-Load (ETL)]]
-	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing (OLAP)]]
-	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing (OLTP)]]
+	- [[Extract-Transform-Load, ETL (Database)|Extract-Transform-Load, ETL]]
+	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing, OLAP]]
+	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing, OLTP]]
 
 ### RocksDB
 

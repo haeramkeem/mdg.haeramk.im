@@ -8,7 +8,6 @@ date: 2024-07-23
 > - [어떤 깃헙 블로그](https://stonzeteam.github.io/SIMD-%EB%B3%91%EB%A0%AC-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D/)
 > - [FASOO 회사 블로그](https://blog.naver.com/fs0608/221650925743)
 > - [Intel 공식 문서](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html)
-> - 
 
 ## 란?
 
@@ -26,6 +25,7 @@ date: 2024-07-23
 	- 그리고 오른쪽이 *SIMD* 의 예시이다. 레지스터 하나에 4개의 값이 들어가고 연산도 이 4개의 데이터에 대해 이루어 진다.
 		- 따라서 동일한 작업이 1번의 `load`, 1번의 `multiply`, 1번의 `save` 만으로도 가능하다.
 - 따라서 하나의 레지스터에 여러 값이 들어가기 때문에, 이것을 *Vector* 라고 표현하기도 한다.
+	- 그리고 이런 병렬연산을 *Vectorization* 라고도 부른다.
 
 ## Instruction set & Registers
 
@@ -39,7 +39,7 @@ date: 2024-07-23
 | AVX     | Advanced Vector Extensions   | 2008 | Sandy Bridge (2011) | 256bit        |
 | AVX2    | Advanced Vector Extensions 2 | 2013 | Haswell (2013)      | 256bit        |
 
-- 물론 이후도 몇개 더 있다. 그건 나중에 필요하면 정리하자 ( #draft ).
+- 물론 이후로도 몇개 더 있다. 그건 나중에 필요하면 정리하자 ( #draft ).
 - 레지스터 사이즈를 자료형에 맞게 쪼개서 사용하면 된다.
 	- 가령, [[Integer (C++ Number)|int]] 와 [[Float, Double Point, IEEE 754 (C++ Number)|float]] 은 32bit,  [[Float, Double Point, IEEE 754 (C++ Number)|double]] 은 64bit 이기 때문에,
 	- AVX family 의 레지스터 256bit 에 float 8개를 담아 사용할 수 있다.
