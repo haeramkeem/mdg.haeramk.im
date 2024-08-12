@@ -12,7 +12,6 @@
 <li><a href="https://stonzeteam.github.io/SIMD-%EB%B3%91%EB%A0%AC-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D/" class="external">어떤 깃헙 블로그</a></li>
 <li><a href="https://blog.naver.com/fs0608/221650925743" class="external">FASOO 회사 블로그</a></li>
 <li><a href="https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html" class="external">Intel 공식 문서</a></li>
-<li></li>
 </ul>
 </blockquote>
 <h2 id="란">란?<a aria-hidden="true" tabindex="-1" href="#란" class="internal"> §</a></h2>
@@ -39,7 +38,11 @@
 </li>
 </ul>
 </li>
-<li>따라서 하나의 레지스터에 여러 값이 들어가기 때문에, 이것을 <em>Vector</em> 라고 표현하기도 한다.</li>
+<li>따라서 하나의 레지스터에 여러 값이 들어가기 때문에, 이것을 <em>Vector</em> 라고 표현하기도 한다.
+<ul>
+<li>그리고 이런 병렬연산을 <em>Vectorization</em> 라고도 부른다.</li>
+</ul>
+</li>
 </ul>
 <h2 id="instruction-set--registers">Instruction set &amp; Registers<a aria-hidden="true" tabindex="-1" href="#instruction-set--registers" class="internal"> §</a></h2>
 <ul>
@@ -94,7 +97,7 @@
 
 <table><thead><tr><th>ACRONYM</th><th>FULL NAME</th><th>YEAR</th><th>ARCH</th><th>REGISTER SIZE</th></tr></thead><tbody><tr><td>MMX</td><td>Matrix Math Extension (비공식)</td><td>1996</td><td>Pentium P5 (1997)</td><td>64bit</td></tr><tr><td>SSE</td><td>Streaming SIMD Extensions</td><td>1999</td><td>Pentium 3 (1999)</td><td>128bit</td></tr><tr><td>SSE2</td><td>Streaming SIMD Extensions 2</td><td>2001</td><td>Pentium 4 (2000)</td><td>128bit</td></tr><tr><td>AVX</td><td>Advanced Vector Extensions</td><td>2008</td><td>Sandy Bridge (2011)</td><td>256bit</td></tr><tr><td>AVX2</td><td>Advanced Vector Extensions 2</td><td>2013</td><td>Haswell (2013)</td><td>256bit</td></tr></tbody></table>
 <ul>
-<li>물론 이후도 몇개 더 있다. 그건 나중에 필요하면 정리하자 (<a href="../../.././../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> ).</li>
+<li>물론 이후로도 몇개 더 있다. 그건 나중에 필요하면 정리하자 (<a href="../../.././../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> ).</li>
 <li>레지스터 사이즈를 자료형에 맞게 쪼개서 사용하면 된다.
 <ul>
 <li>가령, <a href="../../../gardens/c-cpp/cpp/numbers/Integer-(C++-Number)" class="internal" data-slug="gardens/c-cpp/cpp/numbers/Integer-(C++-Number)">int</a> 와 <a href="../../../gardens/c-cpp/cpp/numbers/Float,-Double-Point,-IEEE-754-(C++-Number)" class="internal" data-slug="gardens/c-cpp/cpp/numbers/Float,-Double-Point,-IEEE-754-(C++-Number)">float</a> 은 32bit,  <a href="../../../gardens/c-cpp/cpp/numbers/Float,-Double-Point,-IEEE-754-(C++-Number)" class="internal" data-slug="gardens/c-cpp/cpp/numbers/Float,-Double-Point,-IEEE-754-(C++-Number)">double</a> 은 64bit 이기 때문에,</li>
@@ -195,7 +198,7 @@
 	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
 	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
 	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
-	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#란" data-for="란">란?</a></li><li class="depth-0"><a href="#instruction-set--registers" data-for="instruction-set--registers">Instruction set &amp; Registers</a></li><li class="depth-0"><a href="#intrinsics" data-for="intrinsics">Intrinsics</a></li><li class="depth-1"><a href="#자료형" data-for="자료형">자료형</a></li><li class="depth-1"><a href="#함수" data-for="함수">함수</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../gardens/arch/(Garden)-Computer-Architectures" class="internal">(Garden) Computer Architectures</a></li><li><a href="../../../gardens/database/encoding/terms/Fast-Static-Symbol-Table,-FSST-(Encoding)" class="internal">Fast Static Symbol Table, FSST (Encoding)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#란" data-for="란">란?</a></li><li class="depth-0"><a href="#instruction-set--registers" data-for="instruction-set--registers">Instruction set &amp; Registers</a></li><li class="depth-0"><a href="#intrinsics" data-for="intrinsics">Intrinsics</a></li><li class="depth-1"><a href="#자료형" data-for="자료형">자료형</a></li><li class="depth-1"><a href="#함수" data-for="함수">함수</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../gardens/arch/(Garden)-Computer-Architectures" class="internal">(Garden) Computer Architectures</a></li><li><a href="../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal">Bit Packing, BP (Encoding)</a></li><li><a href="../../../gardens/database/encoding/terms/Fast-Static-Symbol-Table,-FSST-(Encoding)" class="internal">Fast Static Symbol Table, FSST (Encoding)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
 function toggleCallout() {
   const outerBlock = this.parentElement;
   outerBlock.classList.toggle(`is-collapsed`);

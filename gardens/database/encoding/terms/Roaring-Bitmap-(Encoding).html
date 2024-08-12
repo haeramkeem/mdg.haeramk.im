@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html><head><title>Roaring Bitmap (Encoding)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Roaring Bitmap (Encoding)"/><meta property="og:description" content="참고한 것들 BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD’23 Consistently faster and smaller compressed bitmaps with Roaring, Journal of Software: Practice and Experience Better bitmap performance with Roaring bitmaps, Journal of Software: Practice and Experience 어흥 § &amp;gt; 출처: [Roaring Bitmap 공식 사이트의 logo 를 보시라](https://roaringbitmap."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="참고한 것들 BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD’23 Consistently faster and smaller compressed bitmaps with Roaring, Journal of Software: Practice and Experience Better bitmap performance with Roaring bitmaps, Journal of Software: Practice and Experience 어흥 § &amp;gt; 출처: [Roaring Bitmap 공식 사이트의 logo 를 보시라](https://roaringbitmap."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/encoding/terms/Roaring-Bitmap-(Encoding)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Roaring Bitmap (Encoding)</h1><p class="content-meta ">Aug 06, 2024, 17 min read</p><ul class="tags "><li><a href="../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../tags/db-encoding" class="internal tag-link">#db-encoding</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../gardens/database/encoding/papers/BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes/full/2.-Background-(BtrBlocks,-SIGMOD-23)#227-null-storage-using-roaring-bitmaps" class="internal" data-slug="gardens/database/encoding/papers/BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes/full/2.-Background-(BtrBlocks,-SIGMOD-23)">BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD’23</a></li>
+<li><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/spe.2402" class="external">Consistently faster and smaller compressed bitmaps with Roaring, Journal of Software: Practice and Experience</a></li>
+<li><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/spe.2325" class="external">Better bitmap performance with Roaring bitmaps, Journal of Software: Practice and Experience</a></li>
+</ul>
+</blockquote>
+<h2 id="어흥">어흥<a aria-hidden="true" tabindex="-1" href="#어흥" class="internal"> §</a></h2>
+<img src="https://roaringbitmap.org/roaring.jpg"/>
+> 출처: [Roaring Bitmap 공식 사이트의 logo 를 보시라](https://roaringbitmap.org/)
+<ul>
+<li><a href="../../../../gardens/database/encoding/terms/Bitmap-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bitmap-(Encoding)">Bitmap</a> 이 정수 집합 연산을 빠르게 해주니까 좋기는 한데, 몇가지 문제점이 있다.
+<ol>
+<li>집합의 원소가 적으면 (이를 <em>Sparse</em> 하다고 한다) 좀 비효율적이다.
+<ul>
+<li>만약 내가 집합에 하나의 정수 8,388,608 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">23</span></span></span></span></span></span></span></span></span></span></span></span></span>) 를 추가했다고 해보자.</li>
+<li>이게 집합이 아니라 배열이라면, 그냥 정수 하나만 추가하는 것이기에 4byte 의 공간만을 차지한다.</li>
+<li>하지만, bitmap 에서는 이거 하나를 위해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">23</span></span></span></span></span></span></span></span></span></span></span></span></span> 개의 bit, 즉 1MiB 의 공간이 필요하다.</li>
+</ul>
+</li>
+<li>Bitmap 의 사이즈가 커졌을 때, 이것을 압축하여 사이즈를 줄이고 싶은데 지금까지 제안된 압축 방법들은 bitmap 이 제공하는 빠른 연산을 포기해야만 했다.</li>
+</ol>
+</li>
+<li>그때! 혜성같이 등장한 놈이 이것이다; <em>Roaring Bitmap</em> 은 정수 집합을 나타내는 bitmap 이긴 한데, “압축” 되면서 동시에 빠른 연산의 강점을 잃지 않는, 그야말로 최적화된 bitmap 이다.
+<ul>
+<li>이놈은 <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/spe.2325" class="external">Better bitmap performance with Roaring bitmaps</a> 란 논문에서 처음으로 제안되었고</li>
+<li><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/spe.2402" class="external">Consistently faster and smaller compressed bitmaps with Roaring</a> 란 논문에서 여러 집합 연산들을 최적화했다.</li>
+<li>근데 신기하게도 <a href="https://lemire.me/blog/" class="external">Lemire 교수님</a> 이 모두 관여되어 있다. 쌉고수인듯</li>
+<li>각 언어별 라이브러리는 <a href="https://github.com/RoaringBitmap" class="external">깃허브</a> 에 올라와 있다.</li>
+</ul>
+</li>
+<li>그럼 이제 이 <em>Roaring Bitmap</em> 이 어떻게 생겼는지 보자.</li>
+</ul>
+<h2 id="structure">Structure<a aria-hidden="true" tabindex="-1" href="#structure" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>정수 집합 </p></div>
+                  
+                </div>
+<ul>
+<li>Bitmap 은 “정수 집합” 을 나타내기 위한 “표현법” 이다. 따라서 이 <em>Roaring Bitmap</em> 도 “정수 집합의 표현” 으로 간주하면 이해하기가 한결 수월하다.</li>
+</ul>
+</blockquote>
+<h3 id="roaring-bitmap-vs-hash-table">Roaring Bitmap vs Hash Table<a aria-hidden="true" tabindex="-1" href="#roaring-bitmap-vs-hash-table" class="internal"> §</a></h3>
+<ul>
+<li>Roaring Bitmap 의 top-level overview 는 hash table 과 유사하다.</li>
+</ul>
+<p><img src="../../../../images/hash.png" width="auto" height="auto"/></p>
+<blockquote>
+<p>출처: <a href="https://en.wikipedia.org/wiki/Hash_table" class="external">위키피디아 Hash Table</a></p>
+</blockquote>
+<ul>
+<li>Hash table 를 이용해 “Key” 로 “Value” 를 찾는 것은 다음과 같이 정리할 수 있다.
+<ol>
+<li>“Key” 로 “Hash” 를 계산하고,</li>
+<li>그것을 “Bucket” array 의 index 로 하여 특정 entry 로 접근하여,</li>
+<li>그 안에서 올바른 “Value” 를 찾는 식으로 진행되는 것.</li>
+</ol>
+</li>
+<li>이때, Roaring Bitmap 은 다음과 같은 hash table 이라고 할 수 있다:
+<ul>
+<li>“Key”: 어떤 정수</li>
+<li>“Value”: 그 정수가 정수 집합 내에 존재하는지 아닌지에 대한 boolean 값</li>
+<li>“Hash”: 그 정수의 상위 16bit (16 most significant bits, 이제부터는 이것을 <em>16 MSB</em> 라고 부르자.)</li>
+<li>“Bucket” 의 각 entry: 그 정수의 하위 16bit 를 담는 <em>Container</em> (이게 뭔지는 뒤에 나온다.)</li>
+</ul>
+</li>
+<li>물론 근데 Hash Table 과 Roaring Bitmap 은 큰 틀에서는 유사하지만, 실제 작동 방식은 차이가 있다. 이제 이것을 하나하나 알아보자.</li>
+</ul>
+<h3 id="bucket-first-level-index">“Bucket”: First-level index<a aria-hidden="true" tabindex="-1" href="#bucket-first-level-index" class="internal"> §</a></h3>
+<p><img src="../../../../images/Pasted-image-20240807103724.png" width="auto" height="auto"/></p>
+<ul>
+<li>Roaring Bitmap 에서 Hash table 에서 “Bucket” array 에 대응되는 놈은 <em>First-level Index</em> 라고 할 수 있다.
+<ul>
+<li>다만, Hash table 은 “Hash” 를 index 로 하여 배열의 원하는 원소를 찾아가는 방식이었다면,</li>
+<li>Roaring Bitmap 은 16 MSB 들을 sorted array 에 넣어 binary search 로 찾는 방식이다.</li>
+<li>이때의 sorted array 를 <em>First-level Index</em> 라고 부르는 것.</li>
+</ul>
+</li>
+<li><em>First-level Index</em> 의 각 entry 에는 <em>Container</em> 를 가리키는 pointer 가 있어 여기에서 하위 16비트에 대한 무언가를 하게 된다.</li>
+<li>즉, C++ 문법으로 나타내면 대략 이렇게 표현할 수 있는 것.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c++" data-theme="default"><code data-language="c++" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">struct FirstLevelIndexEntry {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	uint16_t _msb;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	Container* _container;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">};</span></span>
+<span data-line><span style="color:var(--shiki-color-text);"></span></span>
+<span data-line><span style="color:var(--shiki-color-text);">std::vector&lt;FirstLevelIndexEntry> first_level_index;</span></span></code></pre></div>
+<h3 id="container">Container<a aria-hidden="true" tabindex="-1" href="#container" class="internal"> §</a></h3>
+<p><img src="../../../../images/Pasted-image-20240807151649.png" width="auto" height="auto"/></p>
+<ul>
+<li>위에서도 잠깐씩 언급했지만, <em>Container</em> 는 어떤 정수의 하위 16bit 를 담는 자료구조이다.
+<ul>
+<li>따라서 16 MSB 가 같은 정수들은 같은 <em>Container</em> 에 담긴다.</li>
+</ul>
+</li>
+<li>근데 왜 16 MSB 일까? 여기에는 나름의 장점이 있다.
+<ul>
+<li>32bit 정수에서, 16 MSB 는 <em>First-level Index</em> 에, 나머지 하위 16bit 는 <em>Container</em> 에 담기게 된다.</li>
+<li>그럼 <em>Container</em> 에 담길 수 있는 최대는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">8</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 이다.</li>
+<li>그런데 근래의 CPU 들의 L1 캐시의 크기는, 서버, PC, 모바일 기기 등등을 모두 고려해 봐도, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">8</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 는 넘는다.
+<ul>
+<li>보통 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">64</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 이고, 작아도 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">32</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 는 된다.</li>
+</ul>
+</li>
+<li>따라서 이 <em>Container</em> 는 가장 사이즈가 작은 L1 캐시에도 통째로 (심지어 여러개도 가능) 들어가 연산될 수 있다. 이것은 cache replacement 와 같은 overhead 에서 자유롭게 해준다.</li>
+</ul>
+</li>
+<li>근데 이놈은 어떤 자료구조일까? Roaring Bitmap 에서 <em>Container</em> 의 핵심은 어떤 고정된 작동 방식이 아닌, 세 가지의 종류가 있고, heuristic 에 따라 어떤 <em>Container</em> 의 형태가 바뀐다는 것이다.</li>
+</ul>
+<h4 id="type-1-sorted-array-container">Type 1: Sorted Array Container<a aria-hidden="true" tabindex="-1" href="#type-1-sorted-array-container" class="internal"> §</a></h4>
+<ul>
+<li>맨 처음에 <em>Container</em> 가 생성되면, 이 <em>Sorted Array Container</em> 형태가 된다.</li>
+<li>이름에서 알 수 있듯이, 여기에는 16bit 정수들이 정렬되게 된다.
+<ul>
+<li>즉, 일반 <code>set</code> 자료구조가 되는 것.</li>
+</ul>
+</li>
+<li>그리고 cardinality (즉, unique value count) 가 4096 이 되면, <a href="#type-2-bitmap-container" class="internal">Bitmap Container</a> 로 변경된다.
+<ul>
+<li>이는 <a href="#%EC%96%B4%ED%9D%A5" class="internal">위</a> 에서 말한 문제점을 해결하기 위해서이다.</li>
+<li>즉, 집합이 <em>Sparse</em> 한 상태라면, 그냥 <code>set</code> 자료형을 쓰는 경우가 더 메모리 사용량이 적을 수도 있기 때문인 것.</li>
+</ul>
+</li>
+<li>따라서 이 <em>Container</em> 에는 정수값들을 담을 공간에 추가적으로, cardinality 를 추적할 counter 가 하나 포함된다. C++ 코드로 표현하자면 이런식임:</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>원본 Java 코드 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/RoaringBitmap/RoaringBitmap/blob/master/RoaringBitmap/src/main/java/org/roaringbitmap/ArrayContainer.java#L36-L38" class="external">깃허브</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c++" data-theme="default"><code data-language="c++" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">struct SortedArrayContainer : public Container {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	uint16_t _cardinality;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	std::vector&lt;uint16_t> _content;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">};</span></span></code></pre></div>
+<ul>
+<li>위의 예제 코드에서 사용한 <code>std::vector</code> 자료구조처럼, 실제로도 저 <code>content</code> 는 가변길이를 가진다.
+<ul>
+<li>내용물이 많아져 더 큰 capacity 가 필요하면, 더 큰 메모리 공간을 할당받은 다음에 내용물을 복사하는 과정을 거친다.</li>
+<li>하지만 위에서 말한것처럼 cardinality limit 이 4096 이기 때문에, 계속 capacity 를 늘리지는 않고, capacity 가 작을 때는 (&lt; 64) 2배씩 증가시키다가, 중간 정도의 크기 (64 ≤ cap &lt; 1067) 에서는 1.5배, 큰 크기 (≥ 1057) 일때는 1.25배씩 증가시킨다.</li>
+</ul>
+</li>
+<li>일반 32bit 정수에서 16 MSB 가 날라간 16bit 정수들을 담고 있기 떄문에, Sorted <a href="../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">Packed</a> Array Container 라고 부르기도 한다.</li>
+</ul>
+<h4 id="type-2-bitmap-container">Type 2: Bitmap Container<a aria-hidden="true" tabindex="-1" href="#type-2-bitmap-container" class="internal"> §</a></h4>
+<ul>
+<li><a href="#type-1-sorted-array-container" class="internal">Sorted Array Container</a> 에서 cardinality 가 커지게 되면, 그때부터는 <a href="../../../../gardens/database/encoding/terms/Bitmap-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bitmap-(Encoding)">일반 bitmap</a> 으로 바뀐다.
+<ul>
+<li>즉, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 번째 bit 로 정수 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 의 존재 유무를 표시하는 방식이 된다.</li>
+</ul>
+</li>
+<li>이 bitmap 은 64bit 배열로 표현된다.
+<ul>
+<li>이 지점에서 <em>Sorted Array Container</em> 와 헷갈릴 수 있다. 어차피 둘 다 내부적으로는 배열이 들어가니까.</li>
+<li>근데 <em>Bitmap Container</em> 의 배열은 “BigInt” 의 개념으로 이해하는 것이 좋다.</li>
+<li>즉, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span></span></span></span></span></span></span></span></span></span> 개의 정수의 존재 유무를 표현하는 bitmap 을 위해서는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span></span></span></span></span> 의 정수가 필요한데, <code>uint65536_t</code> 따위는 없기 때문.</li>
+</ul>
+</li>
+<li>여기서도 <em>Sorted Array Container</em> 와 같이 cardinality 를 세는 counter 가 포함된다.
+<ul>
+<li>이 counter 값은 bitmap 에서 1 인 bit 의 수와 같다.</li>
+<li>이것을 세는 것은 아주 값비싼 연산이긴 하지만, 요즘은 CPU instruction 중에 bit counter 가 있어서 (가령 x86 의 <code>popcnt</code>) 빠르게 수행할 수 있다고 한다.</li>
+</ul>
+</li>
+<li>따라서 C++ 로 표현해 보면:</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>원본 Java 코드 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/RoaringBitmap/RoaringBitmap/blob/master/RoaringBitmap/src/main/java/org/roaringbitmap/BitmapContainer.java#L69-L71" class="external">깃허브</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c++" data-theme="default"><code data-language="c++" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">struct BitmapContainer : public Container {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	uint16_t _cardinality;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	std::array&lt;uint64_t, 1024> _bitmap;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">};</span></span></code></pre></div>
+<ul>
+<li>예시 코드에서도 확인할 수 있듯이, <code>bitmap</code> 을 위해서는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span></span></span></span></span> 가 모두 필요하기 때문에 여기서는 가변크기가 아닌 고정크기 (<code>std::array</code> 와 같이) 배열을 사용한다.</li>
+</ul>
+<h4 id="type-3-run-container">Type 3: Run Container<a aria-hidden="true" tabindex="-1" href="#type-3-run-container" class="internal"> §</a></h4>
+<ul>
+<li><em>Run Container</em> 가 뭘까? 아이디어는 <a href="../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a> 와 유사하다고 생각하면 된다.
+<ul>
+<li>즉, 연속된 정수들이 있을때 “시작 값” 과 “길이” 두개의 tuple 로서 저장하는 방법이다.</li>
+</ul>
+</li>
+<li>하지만 이 RLE 를 이용한 집합의 표현은 데이터의 사이즈는 크게 줄어들지만, 집합 연산의 성능은 꽤 나빠진다는 것이 알려져 있다.</li>
+<li>따라서 위의 <a href="#type-1-sorted-array-container" class="internal">Sorted Array</a> 와 <a href="#type-2-bitmap-container" class="internal">Bitmap</a> container 가 가장 기초가 되는 type 이고, 이 <em>Run Container</em> 는 “특별한 상황” 이 아니면 생성되지 않는다.</li>
+<li>이 “특별한 상황” 에는:
+<ol>
+<li>사용자가 “명시적으로” <code>runOptimize</code> API 를 호출했을 때</li>
+<li>연속된 많은 값들이 insert 되었을 때</li>
+</ol>
+</li>
+<li>근데 이때에도 무조건 바뀌는 것이 아닌, <em>Run Container</em> 로 변경했을 때 더 데이터의 사이즈가 줄어드는지 확인한 다음에 변경하게 된다.</li>
+<li>이 확인 작업을 어떻게 하는지는 일단 생략한다. 다만 <em>Bitmap Container</em> 에 대해서만 아래에 tip 으로 남겨놓는다.</li>
+</ul>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="tip" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Bitmap Container 에서의 <code>runOptimize</code> 당위성 판단</p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li>Bitmap 에서는 <em>Run Container</em> 로 바꿀 수 있는지 없는지 판단하기 위해 run 의 개수를 센다.</li>
+<li>근데 이때 꽤 기발한 bitwise operation 이 들어간다: 연속된 bit 가 1이라면, 그것은 run 을 의미하기 때문에 bitmap 을 1만큼만 shift 한 다음에 exclude 연산을 하면 run 시작지점만 1이 된다. 그럼 이 1 만 <code>popcnt</code> 같은 instruction 으로 세면 되는 것.</li>
+<li>가령 다음의 bitmap 을 보자.</li>
+</ul>
+<pre><code>C = 000111101111001011111011111000001
+</code></pre>
+<ul>
+<li>이놈은 보면 6개의 run 이 있다. 이놈을 1 만 왼쪽으로 shift 해보자.</li>
+</ul>
+<pre><code>C &lt;&lt; 1 = 001111011110010111110111110000010
+</code></pre>
+<ul>
+<li>그리고 <code>C &lt;&lt; 1</code> 에서 <code>C</code> 를 exclude 한다.</li>
+<li>이것은 bitwise operator 중에서 <code>ANDNOT</code> 에 해당한다. 즉, bit 를 비교했을 때 왼쪽 인자의 bit 중 오른쪽 인자의 bit 가 1인 놈들만 0으로 만든다.</li>
+</ul>
+<pre><code>                C = 000111101111001011111011111000001
+           C &lt;&lt; 1 = 001111011110010111110111110000010
+(C &lt;&lt; 1) ANDNOT C = 001000010000010100000100000000010
+</code></pre>
+<ul>
+<li>그리고 이때 1의 개수를 세면 기가막히게 6이 나옴을 알 수 있다.</li>
+</ul>
+</blockquote>
+<h2 id="operation">Operation<a aria-hidden="true" tabindex="-1" href="#operation" class="internal"> §</a></h2>
+<ul>
+<li><a href="#type-3-run-container" class="internal">Run Container</a> 는 제외하고, <a href="#type-1-sorted-array-container" class="internal">Sorted Array Container</a> 와 <a href="#type-2-bitmap-container" class="internal">Bitmap Container</a> 에 대해서만 집합 연산을 어떻게 수행하는지 알아보자.</li>
+</ul>
+<h3 id="insert"><code>insert()</code><a aria-hidden="true" tabindex="-1" href="#insert" class="internal"> §</a></h3>
+<ol>
+<li>일단 공통적으로 16 MSB 를 잘라서 <em>First-level Index</em> 로 접근해 해당 container 를 찾는다.</li>
+<li>그리고는 남은 하위 16bit 정수에 대해, 각 container type 에 따라 다르게 작업한다:
+<ol>
+<li><em>Sorted Array Container</em>: 그냥 배열에 16bit 정수를 정렬하여 추가한다.</li>
+<li><em>Bitmap Container</em>: bitmap 에서 (16bit 정수) 번째 bit 를 1로 만든다.</li>
+</ol>
+</li>
+</ol>
+<h3 id="exist"><code>exist()</code><a aria-hidden="true" tabindex="-1" href="#exist" class="internal"> §</a></h3>
+<ul>
+<li>마찬가지로,</li>
+</ul>
+<ol>
+<li>일단 공통적으로 16 MSB 를 잘라서 <em>First-level Index</em> 로 접근해 해당 container 를 찾는다.</li>
+<li>그리고는 남은 하위 16bit 정수에 대해, 각 container type 에 따라 다르게 작업한다:
+<ol>
+<li><em>Sorted Array Container</em>: 배열이 정렬되어 있기에, binary search 로 값을 찾는다.</li>
+<li><em>Bitmap Container</em>: bitmap 에서 (16bit 정수) 번째 bit 이 1인지 확인한다.</li>
+</ol>
+</li>
+</ol>
+<h3 id="intersect"><code>intersect()</code><a aria-hidden="true" tabindex="-1" href="#intersect" class="internal"> §</a></h3>
+<ul>
+<li>Roaring bitmap 2 개를 교집합하는 것은, 같은 16 MSB 를 가지는 container 끼리의 교집합과 같다.
+<ul>
+<li>왜냐면 <em>First-level Index</em> entry 가 한쪽에만 있다는 뜻은 다른 한쪽에는 해당 16 MSB 를 가지는 정수가 집합에 하나도 포함되어 있지 않다는 뜻이기 때문.</li>
+</ul>
+</li>
+<li>따라서 container 종류별로 어떻게 연산을 하면 되는지만 알면 된다.
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ma</span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ma</span><span class="mord mathnormal">p</span></span></span></span></span>:
+<ul>
+<li>일반 bitmap 과 동일하다. 그냥 bitwise <code>AND</code> 연산을 하면 된다.</li>
+<li>이때, 결과의 cardinality 가 4096 보다 크냐 작냐를 이용해 이것을 <em>Sorted Array</em> 로 만들던지, 아니면 <em>Bitmap</em> 으로 만들던지 하면 된다.</li>
+</ul>
+</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ma</span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.02778em;">rr</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span>:
+<ul>
+<li>얘는 어쩔 수 없다. <em>Sorted Array</em> 를 순회하며 <em>Bitmap</em> 에 이놈이 있냐 없냐를 체크해야 한다.</li>
+<li>근데 주목할 것은 이놈의 결과는 “항상” <em>Sorted Array</em> 가 된다. Intersect 를 했을 때 결과의 cardinality 가 4096 보다 커질 일은 없기 때문.</li>
+</ul>
+</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.02778em;">rr</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.02778em;">rr</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span>:
+<ul>
+<li>얘는 각자의 cardinality 에 따라 다른 방식을 사용한다.</li>
+<li>어떤 것을 선택할 지는 heuristic 으로 결정한다.</li>
+<li>어떤 선택지가 있는지는 생략; <a href="../../../../gardens/algorithm/algorithm/sort/Merge-Sort-(Algorithm)" class="internal" data-slug="gardens/algorithm/algorithm/sort/Merge-Sort-(Algorithm)">Two pointer merge</a> 가 한 선택지이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="union"><code>union()</code><a aria-hidden="true" tabindex="-1" href="#union" class="internal"> §</a></h3>
+<ul>
+<li><a href="#intersect" class="internal">Intersect</a> 에서와 유사하게, container 끼리의 합집합 연산만 고려하면 된다.
+<ul>
+<li>Intersect 에서와 유사한 이유로, 16 MSB 에 대한 container 가 한쪽에만 있으면 그놈은 고대로 포함되기에 그냥 deepcopy 만 해주면 된다.</li>
+</ul>
+</li>
+<li>그럼 container 끼리의 비교는 어떻게 할까?
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ma</span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ma</span><span class="mord mathnormal">p</span></span></span></span></span>:
+<ul>
+<li>일반 bitmap 과 동일하다. 그냥 bitwise <code>OR</code> 연산을 하면 된다.</li>
+<li>그리고 cardinality 는 항상 <em>Bitmap</em> 의 것을 따라간다. 즉, 결과 container 의 type 은 무조건 <em>Bitmap</em> 이다.</li>
+</ul>
+</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ma</span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.02778em;">rr</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span>:
+<ul>
+<li>얘도 어쩔 수 없이 <em>Sorted Array</em> 를 순회하며 <em>Bitmap</em> 에의 bit 를 1로 바꿔줘야 한다.</li>
+<li>이때에도 cardinality 는 항상 <em>Bitmap</em> 의 것을 따라가기에, 결과는 <em>Bitmap Container</em> type 이다.</li>
+</ul>
+</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.02778em;">rr</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.02778em;">rr</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span>:
+<ul>
+<li>그냥 <a href="../../../../gardens/algorithm/algorithm/sort/Merge-Sort-(Algorithm)" class="internal" data-slug="gardens/algorithm/algorithm/sort/Merge-Sort-(Algorithm)">Two pointer merge</a> 를 수행하긴 하는데,</li>
+<li>만약 두놈의 cardinality 합이 4096 보다 작으면 결과의 cardinality 는 절대로 4096 을 넘지 못할 것이다.
+<ul>
+<li>따라서 이때는 <em>Sorted Array Container</em> 가 결과로 나온다.</li>
+</ul>
+</li>
+<li>하지만 그렇지 않다면, 일단 결과는 <em>Bitmap Container</em> 일 것이라고 “가정” 한다. (Optimistic prediction)
+<ul>
+<li>그리고 union 이후 cardinality 를 계산해 4096 보다 작으면 그제서야 <em>Sorted Array Container</em> 로 변환한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#어흥" data-for="어흥">어흥</a></li><li class="depth-0"><a href="#structure" data-for="structure">Structure</a></li><li class="depth-1"><a href="#roaring-bitmap-vs-hash-table" data-for="roaring-bitmap-vs-hash-table">Roaring Bitmap vs Hash Table</a></li><li class="depth-1"><a href="#bucket-first-level-index" data-for="bucket-first-level-index">&quot;Bucket&quot;: First-level index</a></li><li class="depth-1"><a href="#container" data-for="container">Container</a></li><li class="depth-0"><a href="#operation" data-for="operation">Operation</a></li><li class="depth-1"><a href="#insert" data-for="insert">insert()</a></li><li class="depth-1"><a href="#exist" data-for="exist">exist()</a></li><li class="depth-1"><a href="#intersect" data-for="intersect">intersect()</a></li><li class="depth-1"><a href="#union" data-for="union">union()</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/database/(Garden)-Database" class="internal">(Garden) Database</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>
