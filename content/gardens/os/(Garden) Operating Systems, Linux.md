@@ -39,7 +39,7 @@ date: 2024-07-29
 ### Memory
 
 - 용어들
-	- [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer (TLB)]]
+	- [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer, TLB]]
 - 논문
 	- [[(논문) Practical, Transparent Operating System Support for Superpages|(Draft) Juan Navarro et al. Practical, Transparent Operating System Support for Superpages (OSDI '02)]]
 
@@ -52,8 +52,8 @@ date: 2024-07-29
 ### Replacement Policy
 
 - 용어들
-	- [[Least Frequently Used, LFU (replacement policy)|Least Frequently Used (LFU)]]
-	- [[Least Recently Used, LRU (replacement policy)|Least Recently Used (LRU)]]
+	- [[Least Frequently Used, LFU (replacement policy)|Least Frequently Used, LFU]]
+	- [[Least Recently Used, LRU (replacement policy)|Least Recently Used, LRU]]
 - 논문들
 	- [[(논문) ARC - A Self-Tuning, Low Overhead Replacement Cache|(Draft) ARC - A Self-Tuning, Low Overhead Replacement Cache (FAST '03)]]
 

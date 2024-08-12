@@ -5,7 +5,7 @@ tags:
 date: 2024-07-29
 ---
 > [!info]- 참고한 것들
-> - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.2. RLE & One Value.|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
+> - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.2. RLE & One Value.|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
 > - [위킥](https://en.wikipedia.org/wiki/Run-length_encoding)
 
 ## 달리는 길이 변환?
@@ -48,7 +48,7 @@ WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW
 - 당연히 어떤 값이 "연속해서 반복적으로" 등장할 때 좋다.
 - 따라서 어떤 값이 반복적으로 나오긴 하지만 연속해서 나오지는 않을때 (`WBWBWBWBWBWBWB...`) 와
 	- 이 경우 순서를 바꿔도 된다면, 이것을 정렬해버린 다음 encoding 하면 아주 행복할 것이다. (`BBB...WWW...`)
-	- 이렇게 정렬해버리는 꼼수를 [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (7. Related work and conclusion)#7.0.1. SQL Server.|MS SQL Server Columnstore Index]] 에서 사용한다고 한다.
+	- 이렇게 정렬해버리는 꼼수를 [[7. Related work and conclusion (BtrBlocks, SIGMOD 23)#7.0.1. SQL Server.|MS SQL Server Columnstore Index]] 에서 사용한다고 한다.
 - Unique value 가 너무나 많을 때 (`ABCDEFGHIJK...`) 사용하면 쥐약일 것이다.
 	- 이 경우의 대표적인 예가 SQL 에서 [[Private Key, PK (Relational Model)|PK]] 이다.
 

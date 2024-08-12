@@ -5,7 +5,7 @@ tags:
 date: 2024-07-29
 ---
 > [!info]- 참고한 것들
-> - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (2. Background)#2.2.3. Dictionary|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
+> - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.3. Dictionary|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
 > - [위키](https://en.wikipedia.org/wiki/Dictionary_coder)
 
 ## 사전
@@ -58,6 +58,6 @@ dictionary: [USA, Mexico, Canada, Argentina]
 - 이렇게 dictionary 를 만들어서 치환하는 방법을 통칭해서 *Dictionary Encoding* 이라고 한다.
 	- 제곧내; *Substitution Encoding* 라고도 부른다.
 - 근데 이 dictionary 가 생각보다 사이즈가 클 수도 있다.
-	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes (7. Related work and conclusion)#7.0.6. SAP BRPFC.|여기]] 에 따르면 SAP HANA 의 전체 메모리 중 28% 를 dictionary string 이 차지하기도 했다고 한다.
+	- [[7. Related work and conclusion (BtrBlocks, SIGMOD 23)#7.0.6. SAP BRPFC.|여기]] 에 따르면 SAP HANA 의 전체 메모리 중 28% 를 dictionary string 이 차지하기도 했다고 한다.
 - 따라서 많은 최적화된 variant 가 존재한다. 가령,
 	- [[Fast Static Symbol Table, FSST (Encoding)]]

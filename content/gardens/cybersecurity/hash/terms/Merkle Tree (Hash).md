@@ -37,5 +37,4 @@ date: 2024-05-28
 	- 동일한 leaf node 를 하나 더 추가해서 강제로 짝수로 만드는 방법
 - 두 merkle tree 를 merge 할 때는, 두 merkle root 를 hash 해서 새로운 merkle root 를 만드는 방식으로 진행된다.
 
----
 [^add-leaf-node]: 채찍피티가 준 예시라서 정확하지 않을 수 있다.
