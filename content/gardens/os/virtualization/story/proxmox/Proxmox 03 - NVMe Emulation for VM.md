@@ -21,6 +21,7 @@ date: 2024-04-22
 > - [[Proxmox 01 - Basic Setup Journal]]
 > - [[Proxmox 02 - NVMe Emulation (ZNS, FDP)]]
 > - [[Proxmox 03 - NVMe Emulation for VM]]
+> - [[Proxmox 04 - NAT]]
 
 ## TL;DR
 

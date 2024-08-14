@@ -13,6 +13,7 @@ date: 2024-04-21
 > - [[Proxmox 01 - Basic Setup Journal]]
 > - [[Proxmox 02 - NVMe Emulation (ZNS, FDP)]]
 > - [[Proxmox 03 - NVMe Emulation for VM]]
+> - [[Proxmox 04 - NAT]]
 
 ## 개요
 
@@ -42,54 +43,61 @@ date: 2024-04-21
 
 ## Proxmox 설정 기록
 
-- VPC 설정
-	- [Proxmox SDN (Software Defined Network) 설정](https://pve.proxmox.com/wiki/Setup_Simple_Zone_With_SNAT_and_DHCP)
-		- Zone: `zone0`
-		- VNet: `vnet0`
-		- Subnet: `10.0.0.1/24` (DHCP: `10.0.0.100` ~ `10.0.0.255`)
-- HDD 마운트 - 아직 안함
-- VPN (WireGuard) 설정
-	- Host docker + wg
-		- 안됨 - 뭔가 iptables rule 이 꼬이는건지 docker 설치시에 vm 에서 인터넷이 안된다.
-	- LXC docker + wg
-		- LXC 에 docker 를 깔아 wg 설정 + host 에는 port-forward 만 cli 로 수정
-		- [Alpine lxc 생성](https://svrforum.com/os/282701)
-		- [Alpine 에 docker 설치](https://wiki.alpinelinux.org/wiki/Docker)
-		- [wg-easy 설치 참고](https://blog.rhchoi.com/wireguard-seolci/)
-		- [wg-easy github](https://github.com/wg-easy/wg-easy)
-		- [Port-forward 설정 참고](https://wiki.abyssproject.net/en/proxmox/proxmox-with-one-public-ip)
-			- 설정 결과 (`/etc/network/interfaces.d/sdn`):
+### VPC 설정
+
+- [Proxmox SDN (Software Defined Network) 설정](https://pve.proxmox.com/wiki/Setup_Simple_Zone_With_SNAT_and_DHCP)
+	- Zone: `zone0`
+	- VNet: `vnet0`
+	- Subnet: `10.0.0.1/24` (DHCP: `10.0.0.100` ~ `10.0.0.255`)
+
+### HDD 마운트
+
+- 이건 뭐 별로 어려운게 없었음
+
+### VPN (WireGuard) 설정
+
+- Host docker + wg
+	- 안됨 - 뭔가 iptables rule 이 꼬이는건지 docker 설치시에 vm 에서 인터넷이 안된다.
+- LXC docker + wg
+	- LXC 에 docker 를 깔아 wg 설정 + host 에는 port-forward 만 cli 로 수정
+	- [Alpine lxc 생성](https://svrforum.com/os/282701)
+	- [Alpine 에 docker 설치](https://wiki.alpinelinux.org/wiki/Docker)
+	- [wg-easy 설치 참고](https://blog.rhchoi.com/wireguard-seolci/)
+	- [wg-easy github](https://github.com/wg-easy/wg-easy)
+	- [Port-forward 설정 참고](https://wiki.abyssproject.net/en/proxmox/proxmox-with-one-public-ip)
+		- 설정 결과 (`/etc/network/interfaces.d/sdn`):
 
 ```
 auto vnet0
 iface vnet0
-	address 10.0.0.1/24
-	post-up iptables -t nat -A POSTROUTING -s '10.0.0.0/24' -o vmbr0 -j SNAT --to-source 147.46.245.107
-	post-down iptables -t nat -D POSTROUTING -s '10.0.0.0/24' -o vmbr0 -j SNAT --to-source 147.46.245.107
-	post-up iptables -t raw -I PREROUTING -i fwbr+ -j CT --zone 1
-	post-down iptables -t raw -D PREROUTING -i fwbr+ -j CT --zone 1
-	bridge_ports none
-	bridge_stp off
-	bridge_fd 0
-	ip-forward on
-	# Added manually
+	# ... 어쩌고 (생략) ...
+	# 이 아래가 새로 추가한 내용이다:
 	post-up         iptables -t nat -A PREROUTING -i vmbr0 -p udp --dport 51820 -j DNAT --to-destination 10.0.0.2:51820
 	post-down       iptables -t nat -D PREROUTING -i vmbr0 -p udp --dport 51820 -j DNAT --to-destination 10.0.0.2:51820
 	post-up         iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 51821 -j DNAT --to-destination 10.0.0.2:51821
 	post-down       iptables -t nat -D PREROUTING -i vmbr0 -p tcp --dport 51821 -j DNAT --to-destination 10.0.0.2:51821
 ```
 
-- VM 생성
-	- Cloud image 를 사용할 수 없기 때문에 갓절수 없이 깡통 VM 하나 생성해서 복사하면서 쓰기로 한다.
-		- 물론 뭐 cli 로 qcow 이미지 압축해제해서 사용하는 예시들이 인터넷에 많이 있긴 하다.
-	- 사용환경에서는 이놈을 복사해서:
-		1. Hostname 변경
-			- 깡통에 있는 hostname 도 그대로 가져오기 때문에 간지나는걸로 하나 만들어서 바꿔주자.
-- Cloud init 설정 + template 화
-	- 기본적인 NIC 하나 달아주고, dhcp 설정까지 한 후
-	- Cloud init drive 생성해서 달아준 뒤 User, PW, IP Config (DHCP) 설정까지 해주고
-	- 이것을 VM Template 으로 만들어서 clone 할 수 있게 함
-	- Clone 이후에는 hostname 만 변경해주면 된다.
-	- 참고:
-		- [Cloud init + template 블로그 (1)](https://ploz.tistory.com/entry/proxmox-Cloud-init-Template%EC%9C%BC%EB%A1%9C-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0)
-		- [Cloud init + template 블로그 (2)](https://ploz.tistory.com/entry/proxmox-CentOS7-Template-%EB%A7%8C%EB%93%A4%EA%B8%B0)
+### VM 생성
+
+- Cloud image 를 사용할 수 없기 때문에 갓절수 없이 깡통 VM 하나 생성해서 복사하면서 쓰기로 한다.
+	- 물론 뭐 cli 로 qcow 이미지 압축해제해서 사용하는 예시들이 인터넷에 많이 있긴 하다.
+- 사용환경에서는 이놈을 복사해서:
+	1. Hostname 변경
+		- 깡통에 있는 hostname 도 그대로 가져오기 때문에 간지나는걸로 하나 만들어서 바꿔주자.
+
+### Cloud init 설정 + template 화
+
+- Cloud init 생성
+
+```bash
+qm set ${VM_ID} --ide2 local-lvm:cloudinit
+```
+
+- 기본적인 NIC 하나 달아주고, dhcp 설정까지 한 후
+- Cloud init drive 생성해서 달아준 뒤 User, PW, IP Config (DHCP) 설정까지 해주고
+- 이것을 VM Template 으로 만들어서 clone 할 수 있게 함
+- Clone 이후에는 hostname 만 변경해주면 된다.
+- 참고:
+	- [Cloud init + template 블로그 (1)](https://ploz.tistory.com/entry/proxmox-Cloud-init-Template%EC%9C%BC%EB%A1%9C-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0)
+	- [Cloud init + template 블로그 (2)](https://ploz.tistory.com/entry/proxmox-CentOS7-Template-%EB%A7%8C%EB%93%A4%EA%B8%B0)
