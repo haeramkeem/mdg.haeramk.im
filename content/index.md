@@ -24,6 +24,7 @@ title: 매디쏜 디지딸 갈든
 - [[(Garden) Network, Protocol|네트워크]]
 - [[(Garden) Operating Systems, Linux|운영체제]]
 - [[(Garden) Programming Language, Compiler|프로그래밍 언어, 컴파일러]]
+- [[(Garden) Proxmox Virtual Environment|Proxmox VE]]
 - [[(Garden) Python|파이썬]]
 - [[(Garden) Shell Script|쉘스크립트]]
 - [[(Garden) Storage, SSD|스토리지]]
