@@ -136,6 +136,16 @@
 <li>따라서 BtrBlock 에서는 이런 인공적인 (<em>Synthetic</em>) 데이터보다는 현실적인 데이터를 사용했다고 한다.</li>
 </ul>
 <h4 id="612-the-public-bi-benchmark">6.1.2. The Public BI Benchmark.<a aria-hidden="true" tabindex="-1" href="#612-the-public-bi-benchmark" class="internal"> §</a></h4>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>PBI 링크 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cwida/public_bi_benchmark" class="external">깃허브</a></li>
+</ul>
+</blockquote>
 <ul>
 <li>그래서 BtrBlock 에서 사용하는 데이터셋은 <em>Public BI Benchmark</em> 이다.</li>
 <li>여기에는, <a href="https://www.tableau.com/" class="external">Tableau 사</a> 에서 공개한 46 개의 Tableau Workbook 에 의해 추출된 데이터들이 포함되어 있다고 한다.</li>
@@ -662,6 +672,7 @@
 </ol>
 </blockquote>
 <h4 id="671-is-parquet-decompression-fast-enough">6.7.1. Is Parquet decompression fast enough?<a aria-hidden="true" tabindex="-1" href="#671-is-parquet-decompression-fast-enough" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/pg47.png" width="auto" height="auto"/></p>
 <ul>
 <li><a href="#663-in-memory-public-bi-decompression-throughput" class="internal">Section 6.6.3.</a> 의 그래프를 보다 보면 Parquet 를 사용했을 때 전부 throughput 이 50GB/s 를 넘는다는 것을 볼 수 있다.</li>
 <li>이것은 <a href="#601-test-setup" class="internal">Section 6.0.1.</a> 에서 소개한 <code>c5n.18xlarge</code> instance 의 100Gbps (즉, 12.5GB/s) 네트워크를 고려하면, 무히려 네트워크가 병목이 되기 때문에 decompression throughput 이 아무리 좋아도 별 쓸데가 없다고 생각할 수 있다.

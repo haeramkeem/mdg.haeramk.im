@@ -26,7 +26,10 @@ I/O size (minimum/optimal): 4096 bytes / 4096 bytes
 <div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">mount</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/dev/sdb</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/path/to/mount</span></span></code></pre></div>
 <ul>
 <li>물론 <code>/dev/sdb</code> 는 예시이고, <a href="../../../gardens/shellscript/story/디스크-마운트하기#1-일단-fdisk---디스크-확인하기-fdisk-로-디스크가-어디에-인식되었는지-확인한다" class="internal" data-slug="gardens/shellscript/story/디스크-마운트하기">위</a> 에서 확인한 경로를 사용하면 된다.</li>
+<li>그리고 설정을 재부팅할때 날아가지 않게 하기 위해, <code>/etc/fstab</code> 에 다음 문장을 넣어줄 수도 있다.</li>
 </ul>
+<pre><code>/dev/sdb /path/to/mount ext4 errors=remount-ro 0 1
+</code></pre>
 <h4 id="21-마운트시-에러난다면">2.1. 마운트시 에러난다면?<a aria-hidden="true" tabindex="-1" href="#21-마운트시-에러난다면" class="internal"> §</a></h4>
 <ul>
 <li>마운트 했을 때 아래와 같은 에러가 날 수도 있다:</li>
