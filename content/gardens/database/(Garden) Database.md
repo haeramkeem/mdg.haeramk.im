@@ -59,6 +59,7 @@ date: 2024-07-29
 	- [[Data Lake, Data Lakehouse (Database)|Data Lake, Data Lakehouse]]
 	- [[Data Warehouse (Database)|Data Warehouse]]
 	- [[Extract-Transform-Load, ETL (Database)|Extract-Transform-Load, ETL]]
+	- [[Hybrid Transactional and Analytical Processing, HTAP (Database)|Hybrid Transactional and Analytical Processing, HTAP]]
 	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing, OLAP]]
 	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing, OLTP]]
 
