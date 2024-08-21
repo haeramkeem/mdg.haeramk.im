@@ -59,6 +59,7 @@ date: 2024-08-13
 - 우선은 `journalctl -xeu networking` 으로 보니까 NIC 을 찾을 수 없다고 한다.
 	- 그래서 보니까 `/etc/network/interfaces` 에 NIC 이름이 잘못 기입되어 있었다.
 	- 근데 이건 내잘못은 아님; 저 파일은 자동생성되는 놈이다.
+	- 이게 근데 재부팅했을 때 종종 바뀐다. 어떻게 조치를 취해야 되긴 할듯
 
 ### `please reload` 문제
 
