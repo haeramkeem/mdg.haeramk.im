@@ -78,6 +78,7 @@ date: 2024-04-23
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
 - `ip`
 	- [[ip - NIC 에서 IP 지우기|NIC 에서 IP 지우기]]
+	- [[ip - Routing table 보기, 추가하기|Routing table 보기, 추가하기]]
 - `iptables`
 	- [[iptables - 리다이렉션 하기|리다이렉션 하기]]
 	- [[iptables - 설정 파일로 저장하기|설정 파일로 저장하기]]
