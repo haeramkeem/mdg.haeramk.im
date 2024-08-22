@@ -1,6 +1,6 @@
 ---
 tags:
-  - Database
+  - database
 date: 2024-07-04
 ---
 ## 호기심에 찾아보는

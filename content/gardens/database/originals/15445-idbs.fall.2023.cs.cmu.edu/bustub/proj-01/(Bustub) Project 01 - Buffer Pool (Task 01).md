@@ -1,7 +1,7 @@
 ---
 tags:
   - CMU-15445
-  - Database
+  - database
   - Bustub
 date: 2024-07-08
 ---

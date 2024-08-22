@@ -1,6 +1,6 @@
 ---
 tags:
-  - Database
+  - database
 date: 2024-08-21
 ---
 > [!info]- 참고한 것들

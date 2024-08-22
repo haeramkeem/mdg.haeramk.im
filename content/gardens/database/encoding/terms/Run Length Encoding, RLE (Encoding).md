@@ -1,6 +1,6 @@
 ---
 tags:
-  - Database
+  - database
   - db-encoding
 date: 2024-07-29
 ---
