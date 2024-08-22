@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - Storage
+  - storage
 date: 2024-03-16
 ---
 ## 이게 뭐지

@@ -1,7 +1,7 @@
 ---
 tags:
   - 논문
-  - Storage
+  - storage
 ---
 > [!info] 이 글은 USENIX ATC '21 에 소개된 [ZNS: Avoiding the Block Interface Tax for Flash-based SSDs](https://www.usenix.org/system/files/atc21-bjorling.pdf) 논문을 읽고 정리한 것입니다.
 

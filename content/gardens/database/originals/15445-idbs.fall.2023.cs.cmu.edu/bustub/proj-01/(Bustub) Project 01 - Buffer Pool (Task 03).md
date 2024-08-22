@@ -2,7 +2,7 @@
 tags:
   - CMU-15445
   - database
-  - Bustub
+  - bustub
 date: 2024-07-12
 ---
 > [!info]- 참고한 것들

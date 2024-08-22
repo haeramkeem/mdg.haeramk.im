@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - OS
+  - os
   - procfs
 date: 2024-06-07
 ---

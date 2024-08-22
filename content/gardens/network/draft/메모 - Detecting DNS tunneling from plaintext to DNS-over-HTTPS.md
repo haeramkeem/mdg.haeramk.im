@@ -1,7 +1,7 @@
 ---
 tags:
-  - DNS
-  - Network
+  - dns
+  - network
   - SNU_CSE_MS_COMNET24S
   - 메모
 ---

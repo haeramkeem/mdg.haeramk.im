@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - Network
+  - network
 date: 2024-03-24
 ---
 > [!info]- 참고한 것들

@@ -1,8 +1,8 @@
 ---
 tags:
   - 용어집
-  - Network
-  - DNS
+  - network
+  - dns
 date: 2024-05-27
 ---
 ## 소개

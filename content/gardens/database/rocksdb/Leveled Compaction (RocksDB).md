@@ -2,7 +2,7 @@
 tags:
   - 용어집
   - database
-  - RocksDB
+  - rocksdb
 date: 2024-04-14
 ---
 > [!info]- 참고한 것들

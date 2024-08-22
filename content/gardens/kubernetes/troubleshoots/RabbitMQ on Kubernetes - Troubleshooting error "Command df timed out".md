@@ -2,7 +2,7 @@
 title: "RabbitMQ on Kubernetes - \"Command timed out: 'df -kP ...'\" 에러 해결기"
 tags:
   - 삽질록
-  - Kubernetes
+  - kubernetes
   - rabbit-mq
 date: 2024-01-08
 ---

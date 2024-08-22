@@ -1,8 +1,8 @@
 ---
 tags:
   - 쉘스크립트
-  - NVMe
-  - ZNS
+  - nvme
+  - zns
   - nvme-cli
 date: 2024-04-23
 ---

@@ -1,9 +1,9 @@
 ---
 tags:
   - 삽질록
-  - NVMe
-  - NVMeVirt
-  - Storage
+  - nvme
+  - nvmevirt
+  - storage
 date: 2024-04-24
 ---
 > [!info]- 참고한 것들

@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - OS
+  - os
 date: 2024-04-11
 ---
 ## 내부단편화, Internal Fragment

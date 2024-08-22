@@ -1,8 +1,8 @@
 ---
 tags:
   - 용어집
-  - Network
-  - TLS
+  - network
+  - tls
 date: 2024-05-29
 ---
 > [!info]- 참고한 것들

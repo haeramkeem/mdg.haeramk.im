@@ -1,8 +1,8 @@
 ---
 tags:
   - 용어집
-  - Network
-  - HTTP
+  - network
+  - http
 date: 2024-06-02
 ---
 > [!info]- 참고한 것들

@@ -1,6 +1,6 @@
 ---
 tags:
-  - OS
+  - os
   - SNU_CSE_MS_AOS24S
   - 논문
 ---

@@ -1,6 +1,6 @@
 ---
 tags:
-  - Network
+  - network
   - 용어집
 date: 2024-05-26
 ---

@@ -1,7 +1,7 @@
 ---
 tags:
-  - DNS
-  - Network
+  - dns
+  - network
   - 논문
 date: 2024-05-16
 ---

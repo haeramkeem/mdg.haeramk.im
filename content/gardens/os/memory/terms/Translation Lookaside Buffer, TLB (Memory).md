@@ -1,7 +1,7 @@
 ---
 tags:
-  - OS
-  - Memory
+  - os
+  - memory
 date: 2024-05-13
 ---
 > [!info]- 참고한 것들

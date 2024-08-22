@@ -1,8 +1,8 @@
 ---
 tags:
-  - DNS
-  - Network
-  - Security
+  - dns
+  - network
+  - security
   - 논문
   - SNU_CSE_MS_COMNET24S
 date: 2024-05-03

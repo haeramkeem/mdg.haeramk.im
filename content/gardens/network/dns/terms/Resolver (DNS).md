@@ -1,8 +1,8 @@
 ---
 tags:
   - 스토리
-  - Network
-  - DNS
+  - network
+  - dns
 date: 2024-05-26
 ---
 > [!info]- 참고한 것들

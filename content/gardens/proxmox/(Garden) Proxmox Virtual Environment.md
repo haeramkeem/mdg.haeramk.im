@@ -1,6 +1,6 @@
 ---
 tags:
-  - Proxmox
+  - proxmox
 date: 2024-04-21
 ---
 ## 개요

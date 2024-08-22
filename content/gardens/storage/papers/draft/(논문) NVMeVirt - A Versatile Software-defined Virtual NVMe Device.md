@@ -1,11 +1,11 @@
 ---
 tags:
-  - NVMe
-  - OS
+  - nvme
+  - os
   - SNU_CSE_MS_AOS24S
-  - Storage
+  - storage
   - 논문
-  - ZNS
+  - zns
 ---
 > [!fail]- 이 문서는 #draft 입니다.
 > - [ ] 논문 읽고 정리

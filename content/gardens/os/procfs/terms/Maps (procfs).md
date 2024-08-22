@@ -1,8 +1,8 @@
 ---
 tags:
   - 용어집
-  - OS
-  - Memory
+  - os
+  - memory
 date: 2024-06-07
 ---
 > [!info]- 참고한 것들

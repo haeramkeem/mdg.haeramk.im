@@ -1,7 +1,7 @@
 ---
 tags:
-  - OS
-  - Memory
+  - os
+  - memory
 ---
 > [!info]- 참고한 것들
 > - [[08. 가상메모리#Page Replacement|충남대학교 컴퓨터공학과 류재철 교수님 운영체제 강의 (Spring 2021)]]

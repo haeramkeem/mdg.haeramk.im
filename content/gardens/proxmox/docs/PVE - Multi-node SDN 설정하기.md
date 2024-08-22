@@ -1,6 +1,6 @@
 ---
 tags:
-  - Proxmox
+  - proxmox
 date: 2024-08-16
 ---
 > [!info]- 참고한 것들

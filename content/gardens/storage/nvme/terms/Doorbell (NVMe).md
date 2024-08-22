@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - NVMe
+  - nvme
 date: 2024-05-25
 ---
 > [!warning]- 이 문서는 #draft 상태입니당.

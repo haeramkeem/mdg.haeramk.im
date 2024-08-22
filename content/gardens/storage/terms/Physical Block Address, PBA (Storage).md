@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - Storage
+  - storage
 date: 2024-03-30
 ---
 ## 물리 주소 공간
