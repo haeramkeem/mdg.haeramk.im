@@ -1,7 +1,7 @@
 ---
 tags:
   - os
-  - SNU_CSE_MS_AOS24S
+  - snu-aos24s
   - 논문
 date: 2024-05-22
 ---

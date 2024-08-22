@@ -2,7 +2,7 @@
 tags:
   - dns
   - network
-  - SNU_CSE_MS_COMNET24S
+  - snu-comnet24s
   - 메모
 ---
 > [!danger] 의식의 흐름 기법에 따른 메모글 입니다.

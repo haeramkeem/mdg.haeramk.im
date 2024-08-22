@@ -4,7 +4,7 @@ tags:
   - network
   - security
   - 논문
-  - SNU_CSE_MS_COMNET24S
+  - snu-comnet24s
 date: 2024-05-03
 ---
 > [!info] 본 글은 [A comprehensive survey on DNS tunnel detection](https://www.sciencedirect.com/science/article/pii/S1389128621003248) 를 읽고 정리한 글입니다.

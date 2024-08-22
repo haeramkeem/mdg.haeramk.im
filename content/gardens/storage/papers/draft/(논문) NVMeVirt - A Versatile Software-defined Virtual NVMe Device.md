@@ -2,7 +2,7 @@
 tags:
   - nvme
   - os
-  - SNU_CSE_MS_AOS24S
+  - snu-aos24s
   - storage
   - 논문
   - zns

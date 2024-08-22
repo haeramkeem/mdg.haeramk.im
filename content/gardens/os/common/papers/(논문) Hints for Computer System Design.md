@@ -2,7 +2,7 @@
 tags:
   - os
   - 논문
-  - SNU_CSE_MS_AOS24S
+  - snu-aos24s
 ---
 > [!info] 본 글은 ACM SIGOPS 에 게재된 논문 "[Hints for Computer System Design](https://dl.acm.org/doi/10.1145/773379.806614)" 를 읽고 정리한 내용입니다. ([한국어 번역본](https://johngrib.github.io/wiki/clipping/butler-w-lampson/hints-for-computer-system-design/))
 
