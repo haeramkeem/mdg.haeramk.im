@@ -76,6 +76,7 @@ date: 2024-04-23
 	- [[find - File type 으로 탐색|File type 으로 탐색]]
 	- [[find - Script 실행하기|Script 실행하기]]
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
+	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
 - `ip`
 	- [[ip - NIC 에서 IP 지우기|NIC 에서 IP 지우기]]
 	- [[ip - Routing table 보기, 추가하기|Routing table 보기, 추가하기]]
