@@ -20,6 +20,12 @@ date: 2024-07-29
 	- [[Database Management System, DBMS (Database)|Database Management System]]
 	- [[Transaction, ACID (Database)|Transaction, ACID]]
 
+### Benchmark
+
+- TPC
+	- [[TPC-C (DB Benchmark)|TPC-C]]
+	- [[TPC-H (DB Benchmark)|TPC-H]]
+
 ### Data Model
 
 - [[Data Model (Database)|Data Model]]
