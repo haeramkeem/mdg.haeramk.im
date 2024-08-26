@@ -2,7 +2,7 @@
 tags:
   - terms
   - os
-  - procfs
+  - os-procfs
 date: 2024-06-07
 ---
 > [!info]- 참고한 것들
