@@ -55,6 +55,7 @@ date: 2024-04-23
 - 용어들
 	- [[Doorbell (NVMe)|Doorbell]]
 	- [[Namespace (NVMe)|Namespace]]
+	- [[Submission, Completion Queue (NVMe)|Submission, Completion Queue]]
 
 ### Zoned Storage Model (ZSM)
 
