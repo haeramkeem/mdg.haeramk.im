@@ -1,7 +1,7 @@
 ---
 tags:
   - 삽질록
-  - Proxmox
+  - proxmox
 date: 2024-08-13
 ---
 > [!info]- 참고한 것들

@@ -1,6 +1,6 @@
 ---
 tags:
-  - Kubernetes
+  - kubernetes
 date: 2024-08-14
 ---
 ## 1. Containerd (+ Docker) 설치

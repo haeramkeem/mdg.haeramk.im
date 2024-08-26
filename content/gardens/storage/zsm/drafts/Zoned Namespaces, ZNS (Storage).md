@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - Storage
+  - storage
 ---
 > [!info] 참고한 자료
 > - [ZNS: Avoiding the Block Interface Tax for Flash-based SSDs (USENIX ATC '21)](https://www.usenix.org/system/files/atc21-bjorling.pdf)

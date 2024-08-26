@@ -1,8 +1,8 @@
 ---
 tags:
   - 용어집
-  - Security
-  - PKIX
+  - security
+  - pkix
 date: 2024-05-27
 ---
 > [!info]- 참고한 것들

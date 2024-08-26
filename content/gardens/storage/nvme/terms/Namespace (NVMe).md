@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - Storage
+  - storage
 ---
 > [!info] 참고한 자료
 > - [NVMe document](https://nvmexpress.org/resource/nvme-namespaces/)

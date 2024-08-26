@@ -1,6 +1,6 @@
 ---
 tags:
-  - Proxmox
+  - proxmox
   - 스토리
 ---
 ## 개요

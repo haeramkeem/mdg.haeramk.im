@@ -1,7 +1,7 @@
 ---
 tags:
-  - Kubernetes
-  - Conference
+  - kubernetes
+  - conference
 date: 2024-01-04
 ---
 > [!warning] 세미나에 참석하며 적은 내용들이라 다소 글이 어수선합니다.

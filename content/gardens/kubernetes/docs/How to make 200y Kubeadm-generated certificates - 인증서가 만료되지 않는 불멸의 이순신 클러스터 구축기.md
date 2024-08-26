@@ -1,7 +1,7 @@
 ---
 tags:
   - 스토리
-  - Kubernetes
+  - kubernetes
 date: 2024-01-04
 ---
 > [!warning] 적고 보니 글이 좀 기네요. 마음의 평정심을 갖고 차근차근 해봅시다.

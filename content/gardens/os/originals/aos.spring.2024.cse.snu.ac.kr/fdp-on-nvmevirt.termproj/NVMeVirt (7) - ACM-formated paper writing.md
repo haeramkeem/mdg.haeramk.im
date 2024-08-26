@@ -1,7 +1,7 @@
 ---
 tags:
-  - NVMe
-  - NVMeVirt
+  - nvme
+  - nvmevirt
 date: 2024-06-15
 ---
 > [!fail] 단순한 메모글입니다.

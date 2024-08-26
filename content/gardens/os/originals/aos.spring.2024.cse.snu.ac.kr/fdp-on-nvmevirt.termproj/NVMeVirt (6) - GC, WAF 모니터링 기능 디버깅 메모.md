@@ -1,9 +1,9 @@
 ---
 tags:
   - 삽질록
-  - NVMe
-  - NVMeVirt
-  - Storage
+  - nvme
+  - nvmevirt
+  - storage
 date: 2024-06-04
 ---
 > [!fail] 단순한 메모글입니다.

@@ -20,6 +20,12 @@ date: 2024-07-29
 	- [[Database Management System, DBMS (Database)|Database Management System]]
 	- [[Transaction, ACID (Database)|Transaction, ACID]]
 
+### Benchmark
+
+- TPC
+	- [[TPC-C (DB Benchmark)|TPC-C]]
+	- [[TPC-H (DB Benchmark)|TPC-H]]
+
 ### Data Model
 
 - [[Data Model (Database)|Data Model]]
@@ -27,6 +33,12 @@ date: 2024-07-29
 	- [[Data Manipulation Language, DML (Database)|Data Manipulation Language, DML]]
 	- [[Schema (Database)|Schema]]
 	- [[Document Data Model (Database)|Document Data Model]]
+	- [[Multi-Dimensional Data Model (Database)|Multi-Dimensional Data Model]]
+		- [[Cube (Multi-dimensional Model)|Cube]]
+		- [[Dimension, Dimension Table (Multi-dimensional Model)|Dimension, Dimension Table]]
+		- [[Measure, Fact Table (Multi-dimensional Model)|Measure, Fact Table]]
+		- [[Snowflake Schema (Multi-dimensional Model)|Snowflake Schema]]
+		- [[Star Schema (Multi-dimensional Model)|Star Schema]]
 	- [[Relational Data Model (Database)|Relational Data Model]]
 		- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
 		- [[Private Key, PK (Relational Model)|Private Key, PK]]
@@ -49,7 +61,8 @@ date: 2024-07-29
 	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
 - 논문들
-	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)]]
+	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
+	- [[(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code|The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code (VLDB'23)]]
 
 ### Modern DBMS
 
@@ -58,6 +71,7 @@ date: 2024-07-29
 	- [[Data Lake, Data Lakehouse (Database)|Data Lake, Data Lakehouse]]
 	- [[Data Warehouse (Database)|Data Warehouse]]
 	- [[Extract-Transform-Load, ETL (Database)|Extract-Transform-Load, ETL]]
+	- [[Hybrid Transactional and Analytical Processing, HTAP (Database)|Hybrid Transactional and Analytical Processing, HTAP]]
 	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing, OLAP]]
 	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing, OLTP]]
 

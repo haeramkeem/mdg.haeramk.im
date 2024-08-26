@@ -1,8 +1,8 @@
 ---
 tags:
-  - OS
+  - os
   - 논문
-  - SNU_CSE_MS_AOS24S
+  - snu-aos24s
 ---
 > [!info] 본 글은 Bell Labs 의 Dennis M. Ritchie 의 논문 [The Evolution of the Unix Time-sharing System](https://www.bell-labs.com/usr/dmr/www/hist.html) 를 읽고 정리한 글입니다.
 

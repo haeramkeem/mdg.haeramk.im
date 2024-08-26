@@ -1,6 +1,6 @@
 ---
 tags:
-  - Storage
+  - storage
   - 용어집
 date: 2024-04-06
 ---

@@ -1,8 +1,8 @@
 ---
 tags:
-  - CMU-15445
-  - Database
-  - Bustub
+  - cmu-15445
+  - database
+  - bustub
 date: 2024-07-15
 ---
 > [!info]- 참고한 것들

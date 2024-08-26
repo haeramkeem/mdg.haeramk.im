@@ -1,6 +1,6 @@
 ---
 tags:
-  - Database
+  - database
   - data-model
 date: 2024-07-17
 ---

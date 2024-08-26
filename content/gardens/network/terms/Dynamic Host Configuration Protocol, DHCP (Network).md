@@ -1,7 +1,7 @@
 ---
 tags:
   - 용어집
-  - Network
+  - network
 date: 2024-05-26
 ---
 ## 란?

@@ -1,8 +1,8 @@
 ---
 tags:
   - 용어집
-  - Database
-  - RocksDB
+  - database
+  - rocksdb
 date: 2024-04-14
 ---
 > [!info]- 참고한 것들

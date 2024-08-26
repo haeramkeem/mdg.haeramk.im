@@ -1,6 +1,6 @@
 ---
 tags:
-  - NVMe
+  - nvme
   - nvme-cli
   - 쉘스크립트
 date: 2024-04-25

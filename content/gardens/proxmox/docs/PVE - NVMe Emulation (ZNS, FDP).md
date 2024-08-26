@@ -1,7 +1,7 @@
 ---
 tags:
-  - Proxmox
-  - NVMe
+  - proxmox
+  - nvme
 date: 2024-04-23
 ---
 > [!info]- 참고한 것들

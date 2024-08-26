@@ -1,9 +1,9 @@
 ---
 tags:
-  - Storage
+  - storage
   - 삽질록
-  - NVMe
-  - FDP
+  - nvme
+  - fdp
 date: 2024-04-24
 ---
 > [!info]- 참고한 것들

@@ -1,6 +1,6 @@
 ---
 tags:
-  - Kubernetes
+  - kubernetes
   - etcd
 date: 2024-12-21
 ---

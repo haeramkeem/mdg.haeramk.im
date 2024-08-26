@@ -1,6 +1,6 @@
 ---
 tags:
-  - Kubernetes
+  - kubernetes
   - kube-apiserver
 date: 2024-01-08
 ---

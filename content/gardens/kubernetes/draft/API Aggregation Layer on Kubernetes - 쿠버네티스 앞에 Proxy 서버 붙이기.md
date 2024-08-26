@@ -1,7 +1,7 @@
 ---
 tags:
   - 스토리
-  - Kubernetes
+  - kubernetes
 draft: "true"
 ---
 > [!info] 관련된 [공식 문서](https://kubernetes.io/docs/tasks/extend-kubernetes/configure-aggregation-layer/)

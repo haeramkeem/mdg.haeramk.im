@@ -1,8 +1,8 @@
 ---
 tags:
-  - NVMe
+  - nvme
   - nvme-csd
-  - Storage
+  - storage
 date: 2024-08-02
 ---
 > [!info]- 참고한 것들

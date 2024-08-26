@@ -1,7 +1,7 @@
 ---
 tags:
-  - OS
-  - Memory
+  - os
+  - memory
   - 용어집
 date: 2024-05-22
 ---

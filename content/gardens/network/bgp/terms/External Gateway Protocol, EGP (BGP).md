@@ -1,8 +1,8 @@
 ---
 tags:
   - 용어집
-  - Network
-  - BGP
+  - network
+  - bgp
 date: 2024-05-26
 ---
 > [!info]- 참고한 것들
