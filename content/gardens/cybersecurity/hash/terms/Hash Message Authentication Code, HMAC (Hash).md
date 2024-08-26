@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - security
 date: 2024-05-27
 ---

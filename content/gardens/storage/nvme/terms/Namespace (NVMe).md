@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - storage
 ---
 > [!info] 참고한 자료

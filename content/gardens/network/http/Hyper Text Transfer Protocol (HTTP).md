@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - network
   - http
 date: 2024-06-02

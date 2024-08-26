@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - memory
   - os
 ---

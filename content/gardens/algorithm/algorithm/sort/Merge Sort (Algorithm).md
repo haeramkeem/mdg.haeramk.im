@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - algorithm
   - sort
 date: 2024-04-06

@@ -1,7 +1,7 @@
 ---
 tags:
   - storage
-  - 용어집
+  - terms
 date: 2024-04-06
 ---
 > [!info]- 참고한 것들

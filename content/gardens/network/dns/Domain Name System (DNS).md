@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - network
   - dns
 date: 2024-03-25

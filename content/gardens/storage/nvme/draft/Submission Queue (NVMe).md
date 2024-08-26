@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - nvme
 ---
 > [!fail]- 이 문서는 #draft 상태입니당.

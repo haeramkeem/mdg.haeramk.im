@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - database
   - rocksdb
 date: 2024-04-14

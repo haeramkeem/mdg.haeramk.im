@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - security
   - hash
 date: 2024-05-28
