@@ -36,6 +36,11 @@ date: 2024-07-29
 	- [[(논문) F2FS - A New File System for Flash Storage|(Draft) Changman Lee et al. F2FS: A New File System for Flash Storage (FAST '15)]]
 	- [[(논문) The design and implementation of a log-structured file system|(Draft) Mendel Rosenblum - The design and implementation of a log-structured file system (SOSP '91)]]
 
+### IO
+
+- 용어들
+	- [[Memory-mapped File IO, MMAP (OS)|Memory-mapped File IO, MMAP]]
+
 ### Memory
 
 - 용어들

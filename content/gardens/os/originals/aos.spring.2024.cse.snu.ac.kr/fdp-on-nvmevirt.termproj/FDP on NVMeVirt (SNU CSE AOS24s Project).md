@@ -14,4 +14,3 @@ date: 2024-06-14
 - [[NVMeVirt (4) - FDP 디버깅 기록|4. FDP 디버깅 기록]]
 - [[NVMeVirt (5) - Write command 함수 콜 스택 분석|5. Write command 함수 콜 스택 분석]]
 - [[NVMeVirt (6) - GC, WAF 모니터링 기능 디버깅 메모|6. GC, WAF 모니터링 기능 디버깅 메모]]
-- [[NVMeVirt (7) - ACM-formated paper writing|7. ACM-formated paper writing]]
