@@ -3,6 +3,8 @@ tags:
   - os
   - os-memory
 date: 2024-05-13
+aliases:
+  - TLB
 ---
 > [!info]- 참고한 것들
 > - [[08. 가상메모리|충남대 컴퓨터공학과 류재철교수님 운영체제 강의 (Spring 2021)]]
@@ -25,4 +27,4 @@ date: 2024-05-13
 4. 찾으면 Locality를 활용하기 위해 TLB에 이 page를 넣어놓는다 - 또 사용되면 빠르게 hit시키기 위해 → 그리고 translation을 해 frame# 을 얻어내는 것
 5. 하지만 page table에서 봤더니 얘가 메모리에 없을 수도 있다 - 그러면 page fault handling routine이 실행되어 이놈을 갖고오고 처음부터 다시 하게 되는 것
 - 이 방법은 운이 없어서 miss가 뜨면 TLB에 접근하는 시간만큼 손해이긴 하다
-- 하지만 위에서 말한 Locality를 이용하면 hit의 비율을 90퍼센트 이상으로 끌어올릴 수 있고 이러면 serial하게 비교하는 경우가 거의 없기 때문에 아주 빠르게 address translation이 가능하다
+- 하지만 위에서 말한 Locality를 이용하면 hit의 비율을 90퍼센트 이상으로 끌어올릴 수 있고 이러면 serial하게 비교하는 경우가 거의 없기 때문에 아주 빠르게 address translation이 가능하다.
