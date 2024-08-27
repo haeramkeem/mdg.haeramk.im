@@ -4,6 +4,8 @@ tags:
   - nvme
   - terms
 date: 2024-08-26
+aliases:
+  - PRP
 ---
 > [!info]- 참고한 것들
 > - [티스토리](https://kkikyul.tistory.com/28)
