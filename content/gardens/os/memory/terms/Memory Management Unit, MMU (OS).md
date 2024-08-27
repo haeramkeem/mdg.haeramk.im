@@ -12,6 +12,7 @@ aliases:
 ## 핵심 주소 변환 유닛
 
 ![[Pasted image 20240827133539.png]]
+> [출처: 위키피디아](https://en.wikipedia.org/wiki/Memory_management_unit)
 
 - CPU 는 page 단위의 [[Virtual Memory (Memory)|virtual memory address]] 를 사용한다. 그리고 이것을 frame 단위의 실제 physical memory address 로 바꿔주는 HW 가 *Memory Management Unit*, *MMU* 이다.
 - 이때 MMU 를 도와 기존에 translate 한 것들을 캐싱하는 유닛이 [[Translation Lookaside Buffer, TLB (Memory)|TLB]] 이다.
