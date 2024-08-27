@@ -35,6 +35,15 @@ date: 2024-04-23
 - [[Wear Leveling (Storage)|Wear Leveling]]
 - [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|Write Amplification, Write Amplication Factor (WA, WAF)]]
 
+### 스토리
+
+- [[NVMeVirt 디버깅 기록들]]
+
+### PCIe
+
+- 용어들
+	- [[Base Address Register, BAR (PCIe)|Base Address Register, BAR]]
+
 ### Computational Storage Device (CSD)
 
 > [!info] 범위

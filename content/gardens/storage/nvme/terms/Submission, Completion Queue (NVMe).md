@@ -43,7 +43,7 @@ date: 2024-08-26
 
 - SQ/CQ 는 core 마다 한개 이상씩 존재하도록 하여 core 간 lock 을 잡지 않아도 되게 한다.
 - 또한 Admin queue 가 별도로 있어 [[nvme-cli - 디바이스 조회하기|디바이스 조회]] 와 같은 management command 를 별도로 처리한다.
-- 이들은 모두 Host memory 공간에 위치하며, [[DMA Mapping (OS)|DMA 매핑]] 이 되어 있어 device 에서도 host CPU 를 거치지 않고 접근할 수 있다.
+- 이들은 모두 Host memory 공간에 위치하며, [[Direct Memory Access, DMA (OS)|DMA 매핑]] 이 되어 있어 device 에서도 host CPU 를 거치지 않고 접근할 수 있다.
 - Host driver 가 CQ -> SQ 순서로 생성 후 그 정보를 device 에게 알려주는 식으로 초기화되며, 삭제할 때는 반대로 SQ -> CQ 순서로 삭제한다.
 
 ### 처리 flow
