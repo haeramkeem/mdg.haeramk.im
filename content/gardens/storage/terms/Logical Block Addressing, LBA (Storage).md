@@ -3,6 +3,8 @@ tags:
   - terms
   - storage
 date: 2024-03-30
+aliases:
+  - LBA
 ---
 > [!info]- 참고한 것들
 > - [카카오 테크 블로그](https://tech.kakao.com/2016/07/15/coding-for-ssd-part-3/)
