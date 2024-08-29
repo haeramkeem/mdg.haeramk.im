@@ -75,6 +75,12 @@ date: 2024-07-29
 	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing, OLAP]]
 	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing, OLTP]]
 
+### Recovery
+
+- 용어집
+	- [[FORCE, NO_FORCE (Database)|FORCE, NO_FORCE]]
+	- [[STEAL, NO_STEAL (Database)|STEAL, NO_STEAL]]
+
 ### RocksDB
 
 - 용어집
