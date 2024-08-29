@@ -51,6 +51,8 @@ date: 2024-04-23
 > - NVMe Subsystem Local Memory Command Set 에 대한 내용도 여기 적어야지
 
 - [[Computational Storage Device, CSD (Storage)|Computational Storage Device, CSD]]
+- 스토리
+	- [[Xilinx SmartSSD - 설정 기록]]
 
 ### Flexible Data Placement (FDP)
 
