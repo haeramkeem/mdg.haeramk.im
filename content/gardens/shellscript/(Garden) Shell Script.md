@@ -82,6 +82,8 @@ date: 2024-04-23
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
 	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
 - HAProxy
+	- [[HAProxy - Routing rule 설정하기|Routing rule 설정하기]]
+	- [[HAProxy - Statistics page 설정하기|Statistics page 설정하기]]
 	- [[HAProxy - 설치하기|설치하기]]
 - `ip`
 	- [[ip - NIC 에서 IP 지우기|NIC 에서 IP 지우기]]
@@ -118,6 +120,8 @@ date: 2024-04-23
 - `openssl`
 	- [[openssl - AES 암복호화 하기|AES 암복호화 하기]]
 	- [[openssl - Server 인증서 다운로드 하기|Server 인증서 다운로드 하기]]
+	- [[openssl - 간단한 self-signed 인증서 만들기|간단한 self-signed 인증서 만들기]]
+	- [[openssl - 간단한 CA, CA-signed 인증서 만들기|간단한 CA, CA-signed 인증서 만들기]]
 	- [[openssl - 인증서 상세 정보 확인하기|인증서 상세 정보 확인하기]]
 	- [[openssl - 인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기|인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기]]
 	- [[openssl - 인증서에서 CSR (Certificate Signing Request) 뽑아내기|인증서에서 CSR (Certificate Signing Request) 뽑아내기]]
