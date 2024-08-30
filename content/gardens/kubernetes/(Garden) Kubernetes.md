@@ -20,6 +20,7 @@ date: 2024-07-29
 
 - [[Basic Kubernetes installation guide - 기본 설치 가이드|기본 설치 가이드]]
 - [[How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기|인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기]]
+- [[PodNodeSelector admission controller - NS 당 node selector 강제하기|NS 당 node selector 강제하기]]
 - 컴포넌트
 	- [[CNI 설치 (Cilium)|Cilium]]
 	- [[Dashboard 설치 (kubernetes-dashboard)|kubernetes-dashboard]]

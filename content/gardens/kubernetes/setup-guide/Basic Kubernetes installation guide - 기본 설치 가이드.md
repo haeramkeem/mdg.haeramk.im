@@ -1,7 +1,7 @@
 ---
 tags:
   - kubernetes
-  - kube-install
+  - kube-setup
 date: 2024-08-14
 ---
 > [!info]- 참고한 것들
@@ -132,6 +132,7 @@ apiServer:
       pathType: DirectoryOrCreate
 ```
 
+- 저기서 `PodNodeSelector` 는 [[PodNodeSelector admission controller - NS 당 node selector 강제하기|이것]] 을 위한 설정이다.
 - 생성:
 
 ```bash

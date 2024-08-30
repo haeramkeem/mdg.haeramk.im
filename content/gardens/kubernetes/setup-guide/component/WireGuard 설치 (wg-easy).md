@@ -1,8 +1,8 @@
 ---
 tags:
   - kubernetes
-  - kube-install
   - wg-easy
+  - kube-setup
 date: 2024-08-30
 ---
 > [!info]- 참고한 것들
