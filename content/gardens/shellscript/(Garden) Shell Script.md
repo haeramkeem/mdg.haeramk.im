@@ -81,6 +81,8 @@ date: 2024-04-23
 	- [[find - Script 실행하기|Script 실행하기]]
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
 	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
+- HAProxy
+	- [[HAProxy - 설치하기|설치하기]]
 - `ip`
 	- [[ip - NIC 에서 IP 지우기|NIC 에서 IP 지우기]]
 	- [[ip - Routing table 보기, 추가하기|Routing table 보기, 추가하기]]
@@ -102,8 +104,8 @@ date: 2024-04-23
 	- [[ncat - Port open 확인|Port open 확인]]
 	- [[ncat - TCP socket 열기|TCP socket 열기]]
 	- [[ncat - TCP 메세지 보내기|TCP 메세지 보내기]]
-- `nfs`
-	- [[nfs - 설치하기|설치하기]]
+- NFS
+	- [[NFS - 설치하기|설치하기]]
 - `nvme-cli`
 	- [[nvme-cli - 데이터 기본 입출력하기|데이터 기본 입출력하기]]
 	- [[nvme-cli - 디바이스 조회하기|디바이스 조회하기]]
