@@ -38,6 +38,8 @@ controller:
       https: "30443"
   config:
     proxy-body-size: "0"
+  ingressClassResource:
+    default: true
 ```
 
 - Helm repo add
@@ -49,5 +51,5 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 - Helm install:
 
 ```bash
-helm -n system-ingressctl install ingressctl ingress-nginx/ingress-nginx -f ingress.yaml
+helm -n system-ingressctl upgrade --install ingress-nginx ingress-nginx/ingress-nginx -f ingress.yaml
 ```

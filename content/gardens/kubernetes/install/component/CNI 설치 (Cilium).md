@@ -35,5 +35,5 @@ helm repo add cilium https://helm.cilium.io/
 - Helm install:
 
 ```bash
-helm -n system-cilium install cilium cilium/cilium -f cilium.yaml
+helm -n system-cilium upgrade --install cilium cilium/cilium -f cilium.yaml
 ```

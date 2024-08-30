@@ -22,6 +22,7 @@ date: 2024-07-29
 - [[How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기|인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기]]
 - 컴포넌트
 	- [[CNI 설치 (Cilium)|Cilium]]
+	- [[Dashboard 설치 (kubernetes-dashboard)|kubernetes-dashboard]]
 	- [[Ingress Controller 설치 (ingress-nginx)|ingress-nginx]]
 	- [[NFS PV Provisioner 설치 (nfs-subdir-external-provisioner)|nfs-subdir-external-provisioner]]
 	- [[WireGuard 설치 (wg-easy)|WireGuard]]

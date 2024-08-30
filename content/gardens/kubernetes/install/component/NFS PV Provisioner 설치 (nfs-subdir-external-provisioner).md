@@ -48,8 +48,7 @@ helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/
 ```
 
 - Helm install
-	- `-n system-nfs` 는 ns 지정용임 (선택)
 
 ```bash
-helm -n system-nfs install nfs nfs-subdir-external-provisioner/nfs-subdir-external-provisioner -f nfs.yaml
+helm -n system-nfs upgrade --install nfs nfs-subdir-external-provisioner/nfs-subdir-external-provisioner -f nfs.yaml
 ```
