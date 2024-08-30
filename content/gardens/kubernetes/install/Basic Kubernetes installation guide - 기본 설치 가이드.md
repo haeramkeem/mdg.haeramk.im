@@ -1,6 +1,7 @@
 ---
 tags:
   - kubernetes
+  - kube-install
 date: 2024-08-14
 ---
 > [!info]- 참고한 것들
