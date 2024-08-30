@@ -5,6 +5,11 @@ tags:
   - kubernetes-dashboard
 date: 2024-08-30
 ---
+> [!info]- 참고한 것들
+> - [GitHub](https://github.com/kubernetes/dashboard)
+> - [ArtifactHub](https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard)
+> - [Token 생성](https://medium.com/@nikhil.nagarajappa/installing-and-accessing-kubernetes-dashboard-e1b14de3f5db)
+
 > [!tip] 선택의 이유
 > - 물론 Prometheus 같은거 쓰면 더 좋다는거 안다.
 > - 근데
