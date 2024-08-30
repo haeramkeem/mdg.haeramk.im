@@ -24,6 +24,7 @@ date: 2024-07-29
 	- [[CNI 설치 (Cilium)|Cilium]]
 	- [[Ingress Controller 설치 (ingress-nginx)|ingress-nginx]]
 	- [[NFS PV Provisioner 설치 (nfs-subdir-external-provisioner)|nfs-subdir-external-provisioner]]
+	- [[WireGuard 설치 (wg-easy)|WireGuard]]
 
 ### 스토리
 

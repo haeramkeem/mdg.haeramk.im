@@ -2,6 +2,7 @@
 tags:
   - kubernetes
   - kube-install
+  - ingress-nginx
 date: 2024-08-30
 ---
 > [!info]- 참고한 것들
