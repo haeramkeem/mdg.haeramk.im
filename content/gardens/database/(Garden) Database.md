@@ -79,6 +79,9 @@ date: 2024-07-29
 
 - 용어집
 	- [[FORCE, NO_FORCE (Database)|FORCE, NO_FORCE]]
+	- [[Logical Logging (Database)|Logical Logging]]
+	- [[Physical Logging (Database)|Physical Logging]]
+	- [[Physiological Logging (Database)|Physiological Logging]]
 	- [[Redo Log (Database)|Redo Log]]
 	- [[STEAL, NO_STEAL (Database)|STEAL, NO_STEAL]]
 	- [[Undo Log (Database)|Undo Log]]
