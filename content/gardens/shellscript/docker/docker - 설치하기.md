@@ -1,6 +1,7 @@
 ---
 tags:
   - shellscript
+  - bash-docker
   - docker
 date: 2024-08-30
 ---

@@ -102,6 +102,8 @@ date: 2024-04-23
 	- [[ncat - Port open 확인|Port open 확인]]
 	- [[ncat - TCP socket 열기|TCP socket 열기]]
 	- [[ncat - TCP 메세지 보내기|TCP 메세지 보내기]]
+- `nfs`
+	- [[nfs - 설치하기|설치하기]]
 - `nvme-cli`
 	- [[nvme-cli - 데이터 기본 입출력하기|데이터 기본 입출력하기]]
 	- [[nvme-cli - 디바이스 조회하기|디바이스 조회하기]]
