@@ -1,6 +1,6 @@
 ---
 tags:
-  - 쉘스크립트
+  - shellscript
   - bash-tcpdump
 date: 2023-12-21
 ---

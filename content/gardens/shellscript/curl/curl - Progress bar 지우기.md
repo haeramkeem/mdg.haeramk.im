@@ -1,6 +1,6 @@
 ---
 tags:
-  - 쉘스크립트
+  - shellscript
   - bash-curl
 date: 2024-01-30
 ---

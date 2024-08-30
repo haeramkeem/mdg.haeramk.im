@@ -1,6 +1,6 @@
 ---
 tags:
-  - 쉘스크립트
+  - shellscript
   - bash-ip
 date: 2024-08-16
 ---

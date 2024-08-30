@@ -1,6 +1,6 @@
 ---
 tags:
-  - 쉘스크립트
+  - shellscript
   - bash-ipvsadm
 date: 2024-07-09
 ---

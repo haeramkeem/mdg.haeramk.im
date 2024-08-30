@@ -2,7 +2,7 @@
 tags:
   - nvme
   - nvme-cli
-  - 쉘스크립트
+  - shellscript
 date: 2024-04-25
 ---
 ## TL;DR
