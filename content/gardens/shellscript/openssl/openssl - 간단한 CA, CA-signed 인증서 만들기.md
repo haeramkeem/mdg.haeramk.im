@@ -45,6 +45,9 @@ openssl req -x509 -new -nodes \
 
 - `tls.cfg`
 
+> [!tip]- `digitalSignature` 가 없으면?
+> - `digitalSignature` 가 없으면 web 접근시 `ERR_SSL_KEY_USAGE_INCOMPATIBLE` 에러가 날 수 있다. ([참고](https://learn.microsoft.com/en-us/answers/questions/1657834/how-to-fix-the-err-ssl-key-usage-incompatible-micr))
+
 ```
 [req]
 distinguished_name = cert_dn
@@ -55,7 +58,7 @@ prompt = no
 CN = {{ CN 적당히 }}
 
 [v3_req]
-keyUsage = keyEncipherment, dataEncipherment
+keyUsage = keyEncipherment, dataEncipherment, digitalSignature
 extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 
@@ -83,4 +86,3 @@ openssl x509 -req -sha256 \
 	-CAcreateserial \
 	-out tls.crt
 ```
-
