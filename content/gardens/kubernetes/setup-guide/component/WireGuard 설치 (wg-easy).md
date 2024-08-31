@@ -40,6 +40,7 @@ ingress:
           pathType: ImplementationSpecific
 ```
 
+- 여기서 `externalTrafficPolicy: "Local"` 은 성능을 위한 것이다.
 - Helm repo add:
 
 ```bash

@@ -36,12 +36,14 @@ controller:
     nodePorts:
       http: "30080"
       https: "30443"
+    externalTrafficPolicy: "Local"
   config:
     proxy-body-size: "0"
   ingressClassResource:
     default: true
 ```
 
+- 여기서 `externalTrafficPolicy: "Local"` 은 성능을 위한 것이다.
 - Helm repo add
 
 ```bash
