@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html><head><title>Security model in etcd - etcd 에서 사용되는 인증서들</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Security model in etcd - etcd 에서 사용되는 인증서들"/><meta property="og:description" content="참고한 공식 문서 개요 § 이 글 을 적다가 etcd 에서 사용되는 인증서들 용도가 헷갈려서 직접 확인해본 내용들. etcd 클러스터를 직접 구축해봤으면 더 좋았겠지만, 일단 Kubeadm 으로 생성한 쿠버네티스 클러스터 controlplane 의 etcd 클러스터를 이용했다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../static/icon.png"/><meta name="description" content="참고한 공식 문서 개요 § 이 글 을 적다가 etcd 에서 사용되는 인증서들 용도가 헷갈려서 직접 확인해본 내용들. etcd 클러스터를 직접 구축해봤으면 더 좋았겠지만, 일단 Kubeadm 으로 생성한 쿠버네티스 클러스터 controlplane 의 etcd 클러스터를 이용했다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/kubernetes/story/Security-model-in-etcd---etcd-에서-사용되는-인증서들"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Security model in etcd - etcd 에서 사용되는 인증서들</h1><p class="content-meta ">Dec 21, 2024, 11 min read</p><ul class="tags "><li><a href="../../../tags/kubernetes" class="internal tag-link">#kubernetes</a></li><li><a href="../../../tags/etcd" class="internal tag-link">#etcd</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 <a href="https://etcd.io/docs/v3.5/op-guide/security/" class="external">공식 문서</a></p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="개요">개요<a aria-hidden="true" tabindex="-1" href="#개요" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../gardens/kubernetes/story/Kubernetes-Control-Plane-TLS-explained---컨트롤-플레인-인증서-톺아보기" class="internal" data-slug="gardens/kubernetes/story/Kubernetes-Control-Plane-TLS-explained---컨트롤-플레인-인증서-톺아보기">이 글</a> 을 적다가 etcd 에서 사용되는 인증서들 용도가 헷갈려서 직접 확인해본 내용들.</li>
+<li>etcd 클러스터를 직접 구축해봤으면 더 좋았겠지만, 일단 <a href="https://kubernetes.io/docs/reference/setup-tools/kubeadm" class="external">Kubeadm</a> 으로 생성한 쿠버네티스 클러스터 controlplane 의 etcd 클러스터를 이용했다.</li>
+</ul>
+<h2 id="etcd-의-인증서들">etcd 의 인증서들<a aria-hidden="true" tabindex="-1" href="#etcd-의-인증서들" class="internal"> §</a></h2>
+<p><img src="../../../images/etcd_tls.png" width="auto" height="auto"/></p>
+<ul>
+<li>일반적인 서버 프로그램의 인증서 관련 설정 처럼, etcd 에서도 그냥 <code>cert-file</code> 혹은 <code>key-file</code> 이라 한다면 이것은 Client-to-server communication 에서 사용되는 인증서를 일컫는다.
+<ul>
+<li>이들은 <code>2379</code> 포트로 통신할 때 사용되고, 외부 클라이언트가 접근할 용도이다.</li>
+</ul>
+</li>
+<li><em>그런데 말입니다</em> etcd 에는 <code>peer</code> 가 붙은 인증서 관련 설정들이 있는데, 이것은 etcd 가 분산 DB 이기 때문에 각 서버끼리 통신하는 데 사용되는 인증서 설정이다.
+<ul>
+<li>즉, server-to-server 혹은 server-to-cluster 통신에 사용되는 인증서인 것.</li>
+<li>이들은 <code>2380</code> 포트로 통신할 때 사용된다.</li>
+</ul>
+</li>
+<li>그럼 이제 쿠버네티스 클러스터의 controlplane node 중 하나에 ssh 로 접속해서 어떤 식으로 설정되어 있는지, 진짜로 그렇게 작동하는지 등을 확인해 보자.</li>
+</ul>
+<h2 id="client-to-server-communication">Client-to-server communication<a aria-hidden="true" tabindex="-1" href="#client-to-server-communication" class="internal"> §</a></h2>
+<h3 id="관련-설정들">관련 설정들<a aria-hidden="true" tabindex="-1" href="#관련-설정들" class="internal"> §</a></h3>
+<ul>
+<li>먼저, etcd pod 의 관련 설정부터 보면 다음과 같다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="yaml" data-theme="default"><code data-language="yaml" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);"># 파일위치: /etc/kubernetes/manifests/etcd.yaml</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">etcd</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--advertise-client-urls=https://${HOST_IP}:2379</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--cert-file=/etc/kubernetes/pki/etcd/server.crt</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--client-cert-auth=true</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"># 중략...</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--key-file=/etc/kubernetes/pki/etcd/server.key</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--listen-client-urls=https://127.0.0.1:2379,https://${HOST_IP}:2379</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"># 중략...</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt</span></span></code></pre></div>
+<ul>
+<li>Client 가 접근할 진입점에 관한 설정들
+<ul>
+<li><code>--advertise-client-urls</code> : 이 etcd member 가 담당할 클라이언트의 url. 해당 값은 클러스터의 다른 etcd member 에 전파하여 자신이 어떤 Client 를 담당하는지 공유한다.</li>
+<li><code>--listen-client-urls</code> : 클라이언트의 접속을 허용할 IP 와 Port.</li>
+</ul>
+</li>
+<li>인증서와 관련된 설정들
+<ul>
+<li><code>--cert-file</code> : 클라이언트가 접속했을 때, 제시할 Server 인증서.</li>
+<li><code>--client-cert-auth</code> : 이 값이 <code>true</code> 라면, 통신시에 <a href="../../../gardens/cybersecurity/PKIX/terms/Mutual-TLS,-mTLS-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Mutual-TLS,-mTLS-(PKIX)">mTLS</a> 를 강제한다. 즉, 클라이언트도 인증서를 제시해야 한다.</li>
+<li><code>--key-file</code> : 클라이언트가 접속했을 때, 제시할 Server 인증서에 대한 개인키.</li>
+<li><code>--trusted-ca-file</code> : 신뢰할 CA 인증서.</li>
+</ul>
+</li>
+</ul>
+<h3 id="client-인증서를-직접-만들어-요청해보기">Client 인증서를 직접 만들어 요청해보기<a aria-hidden="true" tabindex="-1" href="#client-인증서를-직접-만들어-요청해보기" class="internal"> §</a></h3>
+<ol>
+<li>Configuration 파일 작성 (<code>test-client.conf</code>)</li>
+</ol>
+<pre><code>[req]
+distinguished_name = cert_dn
+x509_extensions = v3_req
+prompt = no
+
+[cert_dn]
+CN = test-client
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth
+basicConstraints = critical, CA:FALSE
+subjectKeyIdentifier = hash
+</code></pre>
+<ol start="2">
+<li>사용할 개인키 (<code>test-client.key</code>) 및 CSR (Certificate Signing Request - <code>test-client.csr</code>) 생성</li>
+</ol>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">req</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-new</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-nodes</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-newkey</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">rsa:2048</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-keyout</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">test-client.key</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-out</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">test-client.csr</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-config</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">test-client.conf</span></span></code></pre></div>
+<ol start="3">
+<li>인증서 생성 (<code>test-client.crt</code>)</li>
+</ol>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">x509</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-req</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-days</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-sha256</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-in</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">test-client.csr</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-extensions</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">v3_req</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-extfile</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">test-client.conf</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-CA</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/ca.crt</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-CAkey</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/ca.key</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-CAcreateserial</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">-out</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">test-client.crt</span></span></code></pre></div>
+<ul>
+<li>그리고 이 인증서를 바탕으로, 2379 포트로 요청을 보내면 정상적으로 응답이 오는 것을 볼 수 있다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">curl</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">--cacert</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/ca.crt</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">--cert</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">test-client.crt</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">--key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">test-client.key</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">https://</span><span style="color:var(--shiki-color-text);">${HOST_IP}</span><span style="color:var(--shiki-token-string);">:2379/version</span></span></code></pre></div>
+<pre><code>{&quot;etcdserver&quot;:&quot;3.5.6&quot;,&quot;etcdcluster&quot;:&quot;3.5.0&quot;}
+</code></pre>
+<h3 id="server-는-어떤-인증서를-제시할까">Server 는 어떤 인증서를 제시할까?<a aria-hidden="true" tabindex="-1" href="#server-는-어떤-인증서를-제시할까" class="internal"> §</a></h3>
+<ul>
+<li><a href="../../../gardens/shellscript/openssl/openssl---Server-인증서-다운로드-하기" class="internal" data-slug="gardens/shellscript/openssl/openssl---Server-인증서-다운로드-하기">openssl s_client</a> 모듈로 Server 가 어떤 인증서를 제시하는지 확인해 보자.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">s_client</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-showcerts</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-connect</span><span style="color:var(--shiki-color-text);"> ${HOST_IP}</span><span style="color:var(--shiki-token-string);">:2379</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-token-string);">/dev/null</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">2></span><span style="color:var(--shiki-token-string);">/dev/null</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">|</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">x509</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-text</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-noout</span></span></code></pre></div>
+<pre><code>Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: ### 어쩌고 ###
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN = etcd-ca
+        Validity
+            Not Before: Jan  0 00:00:00 0000 GMT
+            Not After : Jan  0 00:00:00 0000 GMT
+        Subject: CN = ${HOSTNAME}
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    ### 어쩌고 ###
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication, TLS Web Client Authentication
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Authority Key Identifier:
+                keyid:### 어쩌고 ###
+            X509v3 Subject Alternative Name: 
+                DNS:${HOSTNAME}, DNS:localhost, IP Address:${HOST_IP}, IP Address:127.0.0.1, IP Address:0:0:0:0:0:0:0:1
+    Signature Algorithm: sha256WithRSAEncryption
+         ### 어쩌고 ###
+</code></pre>
+<ul>
+<li>확인해 보면, Issuer 는 etcd-ca 이고, x509 key usage 에 Server auth 가 포함되어 있는 인증서인 것을 알 수 있다.</li>
+<li>근데 설정에 따르면, Server 인증서로 <code>/etc/kubernetes/pki/etcd/server.crt</code> 를 제시하도록 되어 있었다. 아래의 명령어로 실제로 그런지 확인해 보자.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">diff</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string-expression);">&lt;(</span><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">s_client</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">-showcerts</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">-connect</span><span style="color:var(--shiki-token-string-expression);"> ${HOST_IP}</span><span style="color:var(--shiki-token-string);">:2379</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-token-string);">/dev/null</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-keyword);">2></span><span style="color:var(--shiki-token-string);">/dev/null</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-keyword);">|</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">x509</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">-outform</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">PEM</span><span style="color:var(--shiki-token-string-expression);">)</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/server.crt</span></span></code></pre></div>
+<ul>
+<li>실행해보면 아무것도 출력되지 않는 것을 확인할 수 있다. 즉, 둘 간의 차이가 없다는 것을 알 수 있다.</li>
+</ul>
+<h2 id="peer-server-to-server--cluster-communication">Peer (server-to-server / cluster) communication<a aria-hidden="true" tabindex="-1" href="#peer-server-to-server--cluster-communication" class="internal"> §</a></h2>
+<h3 id="관련-설정들-1">관련 설정들<a aria-hidden="true" tabindex="-1" href="#관련-설정들-1" class="internal"> §</a></h3>
+<ul>
+<li>이제 Peer 통신에서 사용하는 인증서를 확인해보자. etcd pod 에서 관련 설정들은 다음과 같다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="yaml" data-theme="default"><code data-language="yaml" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);"># 파일위치: /etc/kubernetes/manifests/etcd.yaml</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">etcd</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"># 중략</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--initial-advertise-peer-urls=https://${HOST_IP}:2380</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--initial-cluster=${HOSTNAME}=https://${HOST_IP}:2380</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"># 중략</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--listen-peer-urls=https://${HOST_IP}:2380</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"># 중략</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--peer-client-cert-auth=true</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--peer-key-file=/etc/kubernetes/pki/etcd/peer.key</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">- </span><span style="color:var(--shiki-token-string-expression);">--peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"># 후략</span></span></code></pre></div>
+<ul>
+<li>etcd member 들의 접근 진입점에 대한 설정들
+<ul>
+<li><code>--initial-advertise-peer-urls</code> : 다른 etcd member 들의 url.</li>
+<li><code>--initial-cluster</code> : 다른 etcd 클러스터에 합류하는 경우, 해당 클러스터의 url (기본값은 자기자신이다).</li>
+<li><code>--listen-peer-urls</code> : 다른 etcd member 의 접근을 허용할 IP 와 Port.</li>
+</ul>
+</li>
+<li>인증서 관련 설정들
+<ul>
+<li><code>--peer-cert-file</code> : etcd member 가 접근했을 때, 제시할 Server 인증서.</li>
+<li><code>--peer-client-cert-auth</code> : etcd member 에 대해 <a href="../../../gardens/cybersecurity/PKIX/terms/Mutual-TLS,-mTLS-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Mutual-TLS,-mTLS-(PKIX)">mTLS</a> 를 강제할 것인지에 대한 여부. 즉, 이 값이 <code>true</code> 라면, etcd member 가 접근할 때에 Client 인증서를 제시해야 한다.</li>
+<li><code>--peer-key-file</code> : etcd member 가 접근했을 때, 제시할 Server 인증서에 대한 개인키.</li>
+<li><code>--peer-trusted-ca-file</code> : 신뢰할 CA 인증서</li>
+</ul>
+</li>
+</ul>
+<h3 id="client-인증서를-직접-만들어-요청해보기-1">Client 인증서를 직접 만들어 요청해보기<a aria-hidden="true" tabindex="-1" href="#client-인증서를-직접-만들어-요청해보기-1" class="internal"> §</a></h3>
+<ul>
+<li>…는 해보려 했으나 잘 안된다. 인증서 관련 문제는 아닌 것 같은데, cURL 로 보내면 <code>EMPTY_RESPONSE</code> 가 오고, <a href="https://github.com/fullstorydev/grpcurl" class="external">grpcurl</a> 로 보내면 timeout 이 발생한다.
+<ul>
+<li>etcd 로그에는 <code>tls: first record does not look like a TLS handshake</code> 에러가 출력된다.</li>
+<li>찾아보니 https 으로 요청을 보내지 않아서 그렇다고 하는데… grpcurl 에는 인증서만 설정하면 https 로 보내는 것 같은데 좀 이상함.</li>
+<li>일단 여기까지 하고 나중에 좀 더 확인해봐야 겠다.</li>
+</ul>
+</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">grpcurl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-cacert</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/ca.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-cert</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/peer.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/peer.key</span><span style="color:var(--shiki-color-text);"> ${HOSTNAME}</span><span style="color:var(--shiki-token-string);">:2380</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">list</span></span></code></pre></div>
+<pre><code>{&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2023-12-21T02:56:29.148Z&quot;,&quot;caller&quot;:&quot;embed/config_logging.go:169&quot;,&quot;msg&quot;:&quot;rejected connection&quot;,&quot;remote-addr&quot;:&quot;$IP:$PORT&quot;,&quot;server-name&quot;:&quot;&quot;,&quot;error&quot;:&quot;tls: first record does not look like a TLS handshake&quot;}
+{&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2023-12-21T02:56:30.150Z&quot;,&quot;caller&quot;:&quot;embed/config_logging.go:169&quot;,&quot;msg&quot;:&quot;rejected connection&quot;,&quot;remote-addr&quot;:&quot;$IP:$PORT&quot;,&quot;server-name&quot;:&quot;&quot;,&quot;error&quot;:&quot;tls: first record does not look like a TLS handshake&quot;}
+{&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2023-12-21T02:56:31.480Z&quot;,&quot;caller&quot;:&quot;embed/config_logging.go:169&quot;,&quot;msg&quot;:&quot;rejected connection&quot;,&quot;remote-addr&quot;:&quot;$IP:$PORT&quot;,&quot;server-name&quot;:&quot;&quot;,&quot;error&quot;:&quot;tls: first record does not look like a TLS handshake&quot;}
+{&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2023-12-21T02:56:33.865Z&quot;,&quot;caller&quot;:&quot;embed/config_logging.go:169&quot;,&quot;msg&quot;:&quot;rejected connection&quot;,&quot;remote-addr&quot;:&quot;$IP:$PORT&quot;,&quot;server-name&quot;:&quot;&quot;,&quot;error&quot;:&quot;tls: first record does not look like a TLS handshake&quot;}
+{&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2023-12-21T02:56:37.999Z&quot;,&quot;caller&quot;:&quot;embed/config_logging.go:169&quot;,&quot;msg&quot;:&quot;rejected connection&quot;,&quot;remote-addr&quot;:&quot;$IP:$PORT&quot;,&quot;server-name&quot;:&quot;&quot;,&quot;error&quot;:&quot;tls: first record does not look like a TLS handshake&quot;}
+</code></pre>
+<h3 id="server-는-어떤-인증서를-제시할까-1">Server 는 어떤 인증서를 제시할까?<a aria-hidden="true" tabindex="-1" href="#server-는-어떤-인증서를-제시할까-1" class="internal"> §</a></h3>
+<ul>
+<li><a href="../../../gardens/kubernetes/story/Security-model-in-etcd---etcd-에서-사용되는-인증서들#server-는-어떤-인증서를-제시할까" class="internal" data-slug="gardens/kubernetes/story/Security-model-in-etcd---etcd-에서-사용되는-인증서들">Client-to-server TLS 실습</a> 에서와 마찬가지로, <a href="../../../gardens/shellscript/openssl/openssl---Server-인증서-다운로드-하기" class="internal" data-slug="gardens/shellscript/openssl/openssl---Server-인증서-다운로드-하기">openssl s_client</a> 모듈로 Server 가 어떤 인증서를 제시하는지 확인해 보자.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">s_client</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-showcerts</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-connect</span><span style="color:var(--shiki-color-text);"> ${HOST_IP}</span><span style="color:var(--shiki-token-string);">:2380</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-token-string);">/dev/null</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">2></span><span style="color:var(--shiki-token-string);">/dev/null</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">|</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">x509</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-text</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-noout</span></span></code></pre></div>
+<pre><code>Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: ### 어쩌고 ###
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN = etcd-ca
+        Validity
+            Not Before: Jan  0 00:00:00 0000 GMT
+            Not After : Jan  0 00:00:00 0000 GMT
+        Subject: CN = ${HOSTNAME}
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    ### 어쩌고 ###
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication, TLS Web Client Authentication
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Authority Key Identifier:
+                keyid:### 어쩌고 ###
+            X509v3 Subject Alternative Name: 
+                DNS:${HOSTNAME}, DNS:localhost, IP Address:${HOST_IP}, IP Address:127.0.0.1, IP Address:0:0:0:0:0:0:0:1
+    Signature Algorithm: sha256WithRSAEncryption
+         ### 어쩌고 ###
+</code></pre>
+<ul>
+<li>그럼 <a href="../../../gardens/kubernetes/story/Security-model-in-etcd---etcd-에서-사용되는-인증서들#server-는-어떤-인증서를-제시할까" class="internal" data-slug="gardens/kubernetes/story/Security-model-in-etcd---etcd-에서-사용되는-인증서들">Client-to-server TLS 실습</a> 에서와 유사하게, Issuer 는 etcd-ca 이고, x509 key usage 에 Server auth 가 포함되어 있는 인증서인 것을 알 수 있다.</li>
+<li>그럼 이 인증서는 과연 <code>--peer-cert-file</code> 로 설정돼 있는 <code>/etc/kubernetes/pki/etcd/peer.crt</code> 와 동일할까? 아래의 명령어로 확인해 보자.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">diff</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string-expression);">&lt;(</span><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">s_client</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">-showcerts</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">-connect</span><span style="color:var(--shiki-token-string-expression);"> ${HOST_IP}</span><span style="color:var(--shiki-token-string);">:2380</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-token-string);">/dev/null</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-keyword);">2></span><span style="color:var(--shiki-token-string);">/dev/null</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-keyword);">|</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">x509</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">-outform</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">PEM</span><span style="color:var(--shiki-token-string-expression);">)</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/peer.crt</span></span></code></pre></div>
+<ul>
+<li>실행해보면 마찬가지로 아무것도 출력되지 않는다. 설정한 대로 잘 작동하고 있다는 뜻이다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#개요" data-for="개요">개요</a></li><li class="depth-0"><a href="#etcd-의-인증서들" data-for="etcd-의-인증서들">etcd 의 인증서들</a></li><li class="depth-0"><a href="#client-to-server-communication" data-for="client-to-server-communication">Client-to-server communication</a></li><li class="depth-1"><a href="#관련-설정들" data-for="관련-설정들">관련 설정들</a></li><li class="depth-1"><a href="#client-인증서를-직접-만들어-요청해보기" data-for="client-인증서를-직접-만들어-요청해보기">Client 인증서를 직접 만들어 요청해보기</a></li><li class="depth-1"><a href="#server-는-어떤-인증서를-제시할까" data-for="server-는-어떤-인증서를-제시할까">Server 는 어떤 인증서를 제시할까?</a></li><li class="depth-0"><a href="#peer-server-to-server--cluster-communication" data-for="peer-server-to-server--cluster-communication">Peer (server-to-server / cluster) communication</a></li><li class="depth-1"><a href="#관련-설정들-1" data-for="관련-설정들-1">관련 설정들</a></li><li class="depth-1"><a href="#client-인증서를-직접-만들어-요청해보기-1" data-for="client-인증서를-직접-만들어-요청해보기-1">Client 인증서를 직접 만들어 요청해보기</a></li><li class="depth-1"><a href="#server-는-어떤-인증서를-제시할까-1" data-for="server-는-어떤-인증서를-제시할까-1">Server 는 어떤 인증서를 제시할까?</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../gardens/kubernetes/(Garden)-Kubernetes" class="internal">(Garden) Kubernetes</a></li><li><a href="../../../gardens/kubernetes/story/Kubernetes-Control-Plane-TLS-explained---컨트롤-플레인-인증서-톺아보기" class="internal">Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기</a></li><li><a href="../../../gardens/kubernetes/story/Security-model-in-etcd---etcd-에서-사용되는-인증서들" class="internal">Security model in etcd - etcd 에서 사용되는 인증서들</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../postscript.js" type="module"></script></html>

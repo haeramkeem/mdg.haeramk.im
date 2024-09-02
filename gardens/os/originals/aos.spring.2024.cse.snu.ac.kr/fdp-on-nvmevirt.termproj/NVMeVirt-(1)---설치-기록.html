@@ -41,7 +41,13 @@
 <li>CPUs: <code>2,3</code></li>
 </ul>
 </li>
+<li>빌드할 때 <code>gcc-12</code> 가 필요하다:</li>
 </ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">apt-get</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">install</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-y</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">gcc-12</span></span></code></pre></div>
+<ul>
+<li>그리고 <code>make tags</code> 할 때 다음과 같은 애들이 필요하다:</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">apt-get</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">install</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-y</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">cscope</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">universal-ctags</span></span></code></pre></div>
 <h3 id="troubleshoot--1-memmap-에러">Troubleshoot # 1: MEMMAP 에러<a aria-hidden="true" tabindex="-1" href="#troubleshoot--1-memmap-에러" class="internal"> §</a></h3>
 <ul>
 <li>다음과 같은 에러 발생:</li>
