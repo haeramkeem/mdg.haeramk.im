@@ -3,6 +3,8 @@ tags:
   - database
   - db-encoding
 date: 2024-08-06
+aliases:
+  - DELTA
 ---
 > [!info]- 참고한 것들
 > - [Lemire 씨 블로그](https://lemire.me/blog/2012/02/08/effective-compression-using-frame-of-reference-and-delta-coding/)

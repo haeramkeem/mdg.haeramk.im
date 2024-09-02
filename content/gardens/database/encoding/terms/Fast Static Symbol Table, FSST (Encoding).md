@@ -3,6 +3,8 @@ tags:
   - database
   - db-encoding
 date: 2024-07-30
+aliases:
+  - FSST
 ---
 > [!info]- 참고한 것들
 > - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.6 FSST|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
