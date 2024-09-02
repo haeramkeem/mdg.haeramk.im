@@ -81,6 +81,8 @@ date: 2024-04-23
 	- [[find - Script 실행하기|Script 실행하기]]
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
 	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
+- `git`
+	- [[git - 이전 commit 다시 sign 하기|이전 commit 다시 sign 하기]]
 - HAProxy
 	- [[HAProxy - Routing rule 설정하기|Routing rule 설정하기]]
 	- [[HAProxy - Statistics page 설정하기|Statistics page 설정하기]]
