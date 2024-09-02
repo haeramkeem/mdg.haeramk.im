@@ -69,7 +69,7 @@ date: 2024-04-23
 	- [[df - 마운트 현황 출력하기|마운트 현황 출력하기]]
 	- [[df - inode 현황 출력하기|inode 현황 출력하기]]
 - `docker`
-	- [[docker - 설치하기|docker - 설치하기]]
+	- [[docker - 설치하기|설치하기]]
 - `du`
 	- [[du - 파일 크기 구하기|파일 크기 구하기]]
 - `expr`
@@ -109,7 +109,7 @@ date: 2024-04-23
 	- [[ncat - TCP socket 열기|TCP socket 열기]]
 	- [[ncat - TCP 메세지 보내기|TCP 메세지 보내기]]
 - NFS
-	- [[NFS - 설치하기|설치하기]]
+	- [[NFS - Server, Client 설치하기|Server, Client 설치하기]]
 - `nvme-cli`
 	- [[nvme-cli - 데이터 기본 입출력하기|데이터 기본 입출력하기]]
 	- [[nvme-cli - 디바이스 조회하기|디바이스 조회하기]]
