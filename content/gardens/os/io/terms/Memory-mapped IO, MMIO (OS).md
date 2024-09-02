@@ -80,6 +80,10 @@ sudo lspci -v
 
 ### `memremap()`
 
+```c
+void *memremap(resource_size_t offset, size_t size, unsigned long flags);
+```
+
 - 근데 [[#`ioremap()`|ioremap()]] 은 좀 문제가 있다고 한다.
 	- 가령 device memory 에 접근할 때 caching 을 하는 것이 좋을 때도 있고 안좋을 때도 있는데 (x86 기준) caching 을 무조건 비활성화 하는 등.
 - 따라서 좀 더 좋은 wrapper 함수가 공개되었는데, 그것이 `memremap()` 이다.

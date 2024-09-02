@@ -31,6 +31,17 @@ date: 2024-04-21
 	- Memmap_start: `4G`
 	- Memmap_size: `4G`
 	- CPUs: `2,3`
+- 빌드할 때 `gcc-12` 가 필요하다:
+
+```bash
+sudo apt-get install -y gcc-12
+```
+
+- 그리고 `make tags` 할 때 다음과 같은 애들이 필요하다:
+
+```bash
+sudo apt-get install -y cscope universal-ctags
+```
 
 ### Troubleshoot # 1: MEMMAP 에러
 

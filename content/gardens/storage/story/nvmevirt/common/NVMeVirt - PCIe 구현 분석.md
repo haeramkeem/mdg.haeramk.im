@@ -5,11 +5,19 @@ tags:
   - nvmevirt
 date: 2024-08-27
 ---
+## PCI Layout
+
+```
+0 <------------------ BAR -----------------> 8Ki <------- MSIX ------->
+0 [ BAR(64byte) ]     4Ki [ DBS(4byte) ]     8Ki [ MSIX(1152byte) ]
+```
+
 ## MMIO 확인
 
 ### MSIx table
 
-- `nvmev_dev->msix_table` = `pci.c`/`__create_pci_bus()`
+- 자료형: `void *`
+- 할당: `nvmev_dev->msix_table` = `pci.c`/`__create_pci_bus()`
 
 ```c
 nvmev_vdev->msix_table =
@@ -19,6 +27,10 @@ nvmev_vdev->msix_table =
 		MEMREMAP_WT
 	);
 ```
+
+- `NR_MAX_IO_QUEUE`: 72
+- `PCI_MSIX_ENTRY_SIZE`: 16byte
+- 1Mi = 1024Ki = 1016Ki + 8Ki
 
 ### BAR
 
@@ -32,6 +44,8 @@ struct nvme_ctrl_regs *bar =
 		MEMREMAP_WT
 	);
 ```
+
+- `sizeof(struct nvme_ctrl_regs)`: 64byte
 
 ### Doorbell
 
