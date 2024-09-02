@@ -1,7 +1,7 @@
 ---
 tags:
-  - 용어집
-  - memory
+  - terms
+  - os-memory
   - os
 ---
 > [!fail]- 본 글은 #draft 상태입니다.

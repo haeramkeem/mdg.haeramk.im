@@ -1,8 +1,8 @@
 ---
 tags:
   - os
-  - memory
-  - 용어집
+  - terms
+  - os-replacement
 date: 2024-05-22
 ---
 > [!info]- 참고한 것들

@@ -1,8 +1,10 @@
 ---
 tags:
-  - 용어집
+  - terms
   - network
 date: 2024-05-27
+aliases:
+  - UDP
 ---
 ## 란?
 

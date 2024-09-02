@@ -1,7 +1,7 @@
 ---
 tags:
-  - 용어집
-  - storage
+  - terms
+  - os-fs
 date: 2024-03-27
 ---
 > [!info] 참고한 문서

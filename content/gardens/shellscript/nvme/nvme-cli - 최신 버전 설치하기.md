@@ -1,7 +1,7 @@
 ---
 tags:
   - nvme
-  - 쉘스크립트
+  - shellscript
   - nvme-cli
 date: 2024-04-25
 ---

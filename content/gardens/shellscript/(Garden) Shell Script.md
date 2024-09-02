@@ -68,6 +68,8 @@ date: 2024-04-23
 - `df`
 	- [[df - 마운트 현황 출력하기|마운트 현황 출력하기]]
 	- [[df - inode 현황 출력하기|inode 현황 출력하기]]
+- `docker`
+	- [[docker - 설치하기|docker - 설치하기]]
 - `du`
 	- [[du - 파일 크기 구하기|파일 크기 구하기]]
 - `expr`
@@ -79,6 +81,10 @@ date: 2024-04-23
 	- [[find - Script 실행하기|Script 실행하기]]
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
 	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
+- HAProxy
+	- [[HAProxy - Routing rule 설정하기|Routing rule 설정하기]]
+	- [[HAProxy - Statistics page 설정하기|Statistics page 설정하기]]
+	- [[HAProxy - 설치하기|설치하기]]
 - `ip`
 	- [[ip - NIC 에서 IP 지우기|NIC 에서 IP 지우기]]
 	- [[ip - Routing table 보기, 추가하기|Routing table 보기, 추가하기]]
@@ -100,6 +106,8 @@ date: 2024-04-23
 	- [[ncat - Port open 확인|Port open 확인]]
 	- [[ncat - TCP socket 열기|TCP socket 열기]]
 	- [[ncat - TCP 메세지 보내기|TCP 메세지 보내기]]
+- NFS
+	- [[NFS - 설치하기|설치하기]]
 - `nvme-cli`
 	- [[nvme-cli - 데이터 기본 입출력하기|데이터 기본 입출력하기]]
 	- [[nvme-cli - 디바이스 조회하기|디바이스 조회하기]]
@@ -112,6 +120,8 @@ date: 2024-04-23
 - `openssl`
 	- [[openssl - AES 암복호화 하기|AES 암복호화 하기]]
 	- [[openssl - Server 인증서 다운로드 하기|Server 인증서 다운로드 하기]]
+	- [[openssl - 간단한 self-signed 인증서 만들기|간단한 self-signed 인증서 만들기]]
+	- [[openssl - 간단한 CA, CA-signed 인증서 만들기|간단한 CA, CA-signed 인증서 만들기]]
 	- [[openssl - 인증서 상세 정보 확인하기|인증서 상세 정보 확인하기]]
 	- [[openssl - 인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기|인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기]]
 	- [[openssl - 인증서에서 CSR (Certificate Signing Request) 뽑아내기|인증서에서 CSR (Certificate Signing Request) 뽑아내기]]

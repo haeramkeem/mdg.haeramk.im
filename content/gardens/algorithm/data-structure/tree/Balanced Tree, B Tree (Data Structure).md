@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - data-structure
   - tree
 date: 2024-04-06

@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - storage
 date: 2024-04-06
 ---

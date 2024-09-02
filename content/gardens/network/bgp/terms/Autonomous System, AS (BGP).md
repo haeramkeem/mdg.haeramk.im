@@ -1,6 +1,6 @@
 ---
 tags:
-  - 용어집
+  - terms
   - network
   - bgp
 date: 2024-05-26

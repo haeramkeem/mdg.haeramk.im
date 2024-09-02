@@ -36,9 +36,16 @@ date: 2024-07-29
 	- [[(논문) F2FS - A New File System for Flash Storage|(Draft) Changman Lee et al. F2FS: A New File System for Flash Storage (FAST '15)]]
 	- [[(논문) The design and implementation of a log-structured file system|(Draft) Mendel Rosenblum - The design and implementation of a log-structured file system (SOSP '91)]]
 
+### IO
+
+- 용어들
+	- [[Memory-mapped File IO, MMAP (OS)|Memory-mapped File IO, MMAP]]
+
 ### Memory
 
 - 용어들
+	- [[Memory Management Unit, MMU (OS)|Memory Management Unit, MMU]]
+	- [[Page Table Base Register, CR3 (Memory)|Page Table Base Register, CR3]]
 	- [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer, TLB]]
 - 논문
 	- [[(논문) Practical, Transparent Operating System Support for Superpages|(Draft) Juan Navarro et al. Practical, Transparent Operating System Support for Superpages (OSDI '02)]]

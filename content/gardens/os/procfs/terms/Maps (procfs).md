@@ -1,8 +1,9 @@
 ---
 tags:
-  - 용어집
+  - terms
   - os
-  - memory
+  - os-memory
+  - os-procfs
 date: 2024-06-07
 ---
 > [!info]- 참고한 것들

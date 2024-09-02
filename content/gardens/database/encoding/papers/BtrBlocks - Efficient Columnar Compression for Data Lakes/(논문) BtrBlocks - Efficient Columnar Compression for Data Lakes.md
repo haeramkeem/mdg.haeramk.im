@@ -7,7 +7,8 @@ date: 2024-08-09
 > [!info] BtrBlocks 링크
 > - [논문](https://dl.acm.org/doi/10.1145/3589263)
 > - [GitHub](https://github.com/maxi-k/btrblocks)
-> - [논문 발표 자료 다운로드 (haeramkim, Aug 10, 2024)](https://raw.githubusercontent.com/haeramkeem/mdg.haeramk.im/main/files/btrblocks.presentation.2024-08-10.dlplab.cse.snu.ac.kr.pdf)
+> - [주인장 논문 발표 영상 (Haeram Kim, Aug 10, 2024)](https://www.youtube.com/watch?v=WrKEhlzo3kU)
+> - [주인장 논문 발표 자료 다운로드 (Haeram Kim, Aug 10, 2024)](https://raw.githubusercontent.com/haeramkeem/mdg.haeramk.im/main/files/btrblocks.presentation.2024-08-10.dlplab.cse.snu.ac.kr.pdf)
 
 ## 개요
 

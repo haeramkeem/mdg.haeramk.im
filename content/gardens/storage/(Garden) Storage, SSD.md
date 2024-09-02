@@ -35,6 +35,15 @@ date: 2024-04-23
 - [[Wear Leveling (Storage)|Wear Leveling]]
 - [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|Write Amplification, Write Amplication Factor (WA, WAF)]]
 
+### 스토리
+
+- [[NVMeVirt 디버깅 기록들]]
+
+### PCIe
+
+- 용어들
+	- [[Base Address Register, BAR (PCIe)|Base Address Register, BAR]]
+
 ### Computational Storage Device (CSD)
 
 > [!info] 범위
@@ -42,6 +51,8 @@ date: 2024-04-23
 > - NVMe Subsystem Local Memory Command Set 에 대한 내용도 여기 적어야지
 
 - [[Computational Storage Device, CSD (Storage)|Computational Storage Device, CSD]]
+- 스토리
+	- [[Xilinx SmartSSD - 설정 기록]]
 
 ### Flexible Data Placement (FDP)
 
@@ -55,6 +66,8 @@ date: 2024-04-23
 - 용어들
 	- [[Doorbell (NVMe)|Doorbell]]
 	- [[Namespace (NVMe)|Namespace]]
+	- [[Physical Region Page, PRP (NVMe)|Physical Region Page, PRP]]
+	- [[Submission, Completion Queue (NVMe)|Submission, Completion Queue]]
 
 ### Zoned Storage Model (ZSM)
 
