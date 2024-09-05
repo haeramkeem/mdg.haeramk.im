@@ -51,7 +51,7 @@ aliases:
 ## Intrinsics
 
 - Instruction 를 그대로 사용할 수도 있지만 그렇게 하면 너무 힘들자나 그치?
-- 그래서 이 instruction 들을 함수 형태로 wrapping 해놓은 것을 제공해 주는데, 그것이 바로 *Intrinsic* 이다.
+- 그래서 이 instruction 들을 함수 형태로 wrapping 해놓은 [[Intrinsic Function (Arch)|intrinsic]] 을 제공한다.
 	- Wrapping 한 것이기에 instruction count 는 매우 적긴 하지만, 1개는 아니라고 한다.
 	- 함수 호출 등의 instruction 이 좀 추가되긴 한다는 듯.
 - 물론 여기 소개해놓은 것들은 모두 Intel x86 기준이다.
