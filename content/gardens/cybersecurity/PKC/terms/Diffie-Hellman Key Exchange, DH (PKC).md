@@ -16,7 +16,7 @@ date: 2024-05-27
 
 ## 동작구 김씨 vs 송파구 서씨
 
-- 동작구 김씨와 송파구 서씨는 이번에는 대칭키를 이용해 [[Public Key Cryptography, PKC (PKC)#암복호화 (Encryption & Decryption)|새벽 세시에 햄버거 맛있게 먹는 방법]] 을 공유하고자 한다.
+- 동작구 김씨와 송파구 서씨는 이번에는 대칭키를 이용해 [[Public Key Cryptography, PKC (PKC)#^patricks-burger|새벽 세시에 햄버거 맛있게 먹는 방법]] 을 공유하고자 한다.
 - 둘 모두 동일한 shared secret 을 갖게 하는 것이 임무이다.
 	- 여기에서 강남구 오씨가 이것을 가로채려 해본다고 가정하자.
 	- 아래 표의 각 셀은 각자가 알고 있는 값을 의미한다.
