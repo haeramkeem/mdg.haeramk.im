@@ -3,6 +3,9 @@ tags:
   - database
   - db-encoding
 date: 2024-08-06
+aliases:
+  - Patching
+  - Horizontal Bit-packing
 ---
 > [!info]- 참고한 것들
 > - [Decoding billions of integers per second through vectorization, Journal of Softeware: Practice and Experience](https://onlinelibrary.wiley.com/doi/10.1002/spe.2203)

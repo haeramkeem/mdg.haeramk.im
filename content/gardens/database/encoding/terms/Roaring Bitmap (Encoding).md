@@ -12,6 +12,7 @@ date: 2024-08-06
 ## 어흥
 
 <img src="https://roaringbitmap.org/roaring.jpg"/>
+
 > 출처: [Roaring Bitmap 공식 사이트의 logo 를 보시라](https://roaringbitmap.org/)
 
 - [[Bitmap (Encoding)|Bitmap]] 이 정수 집합 연산을 빠르게 해주니까 좋기는 한데, 몇가지 문제점이 있다.
