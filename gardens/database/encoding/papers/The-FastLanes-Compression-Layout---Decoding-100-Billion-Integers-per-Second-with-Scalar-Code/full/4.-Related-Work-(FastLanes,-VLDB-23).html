@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html><head><title>(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (4. Related Work)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (4. Related Work)"/><meta property="og:description" content="본 글은 논문 The FastLanes Compression Layout: Decoding &amp;gt; 100 Billion Integers per Second with Scalar Code (VLDB &amp;#039;23) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 The FastLanes Compression Layout: Decoding &amp;gt; 100 Billion Integers per Second with Scalar Code (VLDB &amp;#039;23) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/4.-Related-Work-(FastLanes,-VLDB-23)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (4. Related Work)</h1><p class="content-meta ">Sep 04, 2024, 20 min read</p><ul class="tags "><li><a href="../../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../../tags/db-encoding" class="internal tag-link">#db-encoding</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="https://dl.acm.org/doi/10.14778/3598581.3598587" class="external">The FastLanes Compression Layout: Decoding > 100 Billion Integers per Second with Scalar Code (VLDB '23)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>목차 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/1.-Introduction-(FastLanes,-VLDB-23)" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/1.-Introduction-(FastLanes,-VLDB-23)">1. Introduction</a></li>
+<li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)">2. FastLanes</a></li>
+<li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/3.-Evaluation-(FastLanes,-VLDB-23)" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/3.-Evaluation-(FastLanes,-VLDB-23)">3. Evaluation</a></li>
+<li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/4.-Related-Work-(FastLanes,-VLDB-23)" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/4.-Related-Work-(FastLanes,-VLDB-23)">4. Related Work (현재 글)</a></li>
+<li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/5.-Conclusion-and-Future-Work-(FastLanes,-VLDB-23)" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/5.-Conclusion-and-Future-Work-(FastLanes,-VLDB-23)">5. Conclusion and Future Work</a></li>
+</ul>
+</blockquote>
+<h2 id="4-related-work">4. Related Work<a aria-hidden="true" tabindex="-1" href="#4-related-work" class="internal"> §</a></h2>
+<ul>
+<li>지난 20년 가까이 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 를 이용해 compression, decompression 속도를 늘려 <a href="../../../../../../gardens/database/common/terms/Database-Management-System,-DBMS-(Database)" class="internal" data-slug="gardens/database/common/terms/Database-Management-System,-DBMS-(Database)">DBMS</a> 의 성능을 향상시키려는 노력들이 수행되었다.</li>
+<li>이 section 에서는 그런 노력들이 어떤 것이 있는지, 그리고 그것들에 비해 <em>FastLanes</em> 가 얼마나 좋은지 알아보자.</li>
+</ul>
+<h3 id="41-bit-packing">4.1. Bit-packing<a aria-hidden="true" tabindex="-1" href="#41-bit-packing" class="internal"> §</a></h3>
+<ul>
+<li>일단 전통적인 <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 의 변천사는 다음처럼 정리해 볼 수 있다.
+<ul>
+<li><a href="../../../../../../gardens/database/encoding/terms/Patching-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Patching-(Encoding)">PA봉크 본인의 옛날 논문</a> 에서는 patching 을 이용해 일정한 bit-width 로 <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 하는 방법을 제시했고</li>
+<li><a href="https://dl.acm.org/doi/10.1145/1869389.1869394" class="external">이 논문(29)</a> 에서는 그것을 <em>Horizontal</em> 이라고 불렀으며</li>
+<li><a href="https://dl.acm.org/doi/10.14778/1687627.1687671" class="external">이 논문(35)</a> 에서는 그것을 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a>-friendly 하게 바꾸었다.</li>
+</ul>
+</li>
+<li>근데 <a href="https://dl.acm.org/doi/10.1145/1869389.1869394" class="external">이 논문(29)</a> 에서는 추가적으로 <em>k-way</em> 라는 방법을 새로 제시하였는데,
+<ul>
+<li>이건 <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 된 value 들을 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> -bit 씩 잘라 연속된 memory 공간에 배치하는 방법이다.</li>
+<li>이 방식은 <em>k-way</em> 말고도 <em>Vertical layout</em> 혹은 <em>Interleaving</em> (!!) 이라고도 불린다.</li>
+</ul>
+</li>
+<li><em>FastLanes</em> 에서는 이 아이디어를 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 에 적용하고 이름을 빌려와 <em>Interleaving BP</em> 를 제안하고 있는 것.</li>
+<li>물론 이와 유사한 것이 이전에도 나오긴 했다.
+<ul>
+<li><a href="../../../../../../gardens/database/encoding/papers/BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes/full/2.-Background-(BtrBlocks,-SIGMOD-23)#225-for--bit-packing" class="internal" data-slug="gardens/database/encoding/papers/BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes/full/2.-Background-(BtrBlocks,-SIGMOD-23)">BtrBlocks 에서도 언급한</a> Lemire 아자씨의 SIMD-FastBP128 은 SSE SIMD 에 4-way vertical layout 을 적용하였고,</li>
+<li>그 이후 AVX2, AVX512 가 등장하며 8, 16-way 도 등장했다.</li>
+</ul>
+</li>
+<li>하지만 이들과 <em>FastLanes</em> 에서의 <em>Interleaving BP</em> 와의 차이점은 이전 애들은 특정 SIMD reg 크기에 한정되어있는 방법이라는 것이다.
+<ul>
+<li>따라서 당연히 다른 BP bit-width 를 가지고 있거나 다른 reg 크기를 가지고 있는 시스템에는 적용하지 못하는 방법이라는 것이 주된 차이점이다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240907165222.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그림은 4-way vertical layout 과 interleaved BP 의 차이를 보여주고 있는 것이다.
+<ul>
+<li>일단 4-way 의 경우에는 SSE, AVX2, AVX512 에 대해 register size 가 2배씩 커짐에도 불구하고 성능 차이가 그리 크지 않은 것을 볼 수 있는데</li>
+<li>Interleaved BP 의 경우에는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">4</span><span class="mord">×</span></span></span></span></span> 씩 커지고 있는것을 볼 수 있다… 라고 하는데</li>
+<li>근데 그림을 잘못그린건지 그래프가 좀 이상하다.
+<ul>
+<li>일단 그림을 그대로 해석하면 (세로축은 작을수록 좋기 때문에) SSE 가 제일 좋고, AVX2 는 SSE 보다 4배 안좋으며 AVX512 는 AVX2 보다 2배 좋은 것으로 보인다.</li>
+<li>즉, SSE > (2배) AVX512 > (2배) AVX2 이렇게 성능 차이가 있는 것으로 보이는데</li>
+<li>근데 본문에는 AVX512 > (2배) AVX2 > (2배) SSE 로 설명하고 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>추가적으로, BP 에 관한 선행 연구들에는 decompression speed 말고 다른 것에 집중한 것도 있다고 한다.
+<ul>
+<li><a href="https://dl.acm.org/doi/10.1145/2463676.2465322" class="external">BitWeaving</a> 에서는 HBP 와 VBP 라는 layout 을 제안하는데, 이들은 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 를 활용한 bit-parallelism 을 최대로 활용할 수 있게 해준다고 한다.
+<ul>
+<li>HBP 는 lookup (즉, exact match) 에 최적화되어있는 layout 이고</li>
+<li>VBP 는 filtering 에 최적화되어있는 layout 이다.</li>
+</ul>
+</li>
+<li><a href="https://dl.acm.org/doi/10.1145/2723372.2747642" class="external">ByteSlice</a>: 에서는 위의 BitWeaving 을 bit 단위가 아닌 byte 단위로 적용해 lookup 와 filtering 을 동시에 향상시키는 layout 이다.</li>
+<li>하지만 이들 둘 다 decompression 에 관한 것은 아니며, VBP 에 대한 decompression 방법을 제안한 <a href="https://dl.acm.org/doi/10.1145/2771937.2771943" class="external">이 논문</a> 은 interleaved BP 보다 최대 30배는 더 느렸다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="42-delta">4.2. DELTA<a aria-hidden="true" tabindex="-1" href="#42-delta" class="internal"> §</a></h3>
+<ul>
+<li><a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 는 필요한 bit 수를 줄여준다는 점에서 (<a href="../../../../../../gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)">FOR</a> 처럼) <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 랑 많이 결부되는 방법이다.</li>
+<li>하지만 <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 와 사용했을 때 <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 는 decoding 시에 bottleneck 이 된다고 한다 (data dependency 때문에 parallelism 이 안좋아지므로).</li>
+<li>이것을 타개하기 위해 3가지 정도의 방법이 제시되었다:
+<ul>
+<li>Vertical computation: 이놈은 non-sequential access pattern 에 대응하기 위해 SIMD <code>SCATTER</code>, <code>GATHER</code> instruction 을 사용한다.
+<ul>
+<li>근데 이 instruction 들은 비싼 연산이기 때문에, 성능이 그닥 좋지 않다고 한다.</li>
+</ul>
+</li>
+<li>Horizontal computation: 이놈은 SIMD <code>SHIFT</code> 연산을 사용하여 decoding 의 시간복잡도를 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></span> 에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">))</span></span></span></span></span> 으로 줄였다.
+<ul>
+<li>이놈이 <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> + <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 에서는 SOTA 로 여겨진다.</li>
+<li>SIMD <code>SHIFT</code> 연산은 bit 을 한꺼번에 shift 하는 것인데, 이 <code>SHIFT</code> 연산은 SSE 에만 있다.</li>
+<li>또한 이 연산을 다른 instruction 으로 구현하면 다소 많은 instruction 이 필요하다고 한다.
+<ul>
+<li>가령 <a href="https://www.adms-conf.org/2020-camera-ready/ADMS20_05.pdf" class="external">이 논문</a> 에서 이것을 구현하여 사용했는데, 16개의 value 를 decoding 할 때마다 12개의 instruction 이 필요하다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SIMDized tree computation: 이놈 또한 <code>SCATTER</code>, <code>GATHER</code> instruction 을 사용하여 별로 좋지 않다.</li>
+</ul>
+</li>
+<li>위의 모든 방법은 <em>FastLanes</em> 에서 해결하려고 하는 문제를 완벽하게 해결하고 있지 않다.
+<ul>
+<li>Data dependency 문제는 여전히 남아있고,</li>
+<li>SIMD arch-free 하지 않다는 것.</li>
+</ul>
+</li>
+<li><em>FastLanes</em> 에서 <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 를 그대로 사용하지 않고 layout 을 바꿨듯이, 선행연구 중에도 layout 을 바꾼 것이 존재한다.</li>
+<li>또 Lemire 아저씨가 등장하는데, 이 양반은 (거의 <em>Transposing</em> 의 핵심 힌트라고 해도 될만큼 비슷한) 아이디어를 내놓았다: <code>D4</code> 와 <code>DM</code>.</li>
+<li>이 둘은 <em>Transposing</em> 과 유사하게 value 단위가 아닌 “batch” 단위의 delta 연산을 한다. 우선 <code>D4</code> 는 이래생겼다:</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240907210948.png" width="auto" height="auto"/></p>
+<ul>
+<li>보면 <em>Transposing</em> 과 거의 똑같이 생겼는데, 차이점이라면 tuple 의 순서는 유지된다는 것이다.
+<ul>
+<li>즉, <em>Transposing</em> 에서는 base 를 일정 offset 을 두고 듬성듬성 잡았고,</li>
+<li><code>D4</code> 에서는 base 를 연속되게 잡았다는 차이점이 있다.</li>
+<li>근데 이 차이가 <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 시에는 크게 다가온다: Dependency 가 있는 값들의 거리 (Physical location 이 아닌 logical index) 가 멀어지며 delta 값이 커지게 되는 것.
+<ul>
+<li><em>Transposing</em> 에서 dependent value 들의 index 차이는 여전히 1이었지만,</li>
+<li><code>D4</code> 에서는 (위 그림 기준) 4가 된다.</li>
+<li>따라서 delta 값도 커지게 되는 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그리고 <code>DM</code> 은 이래 생겼다:</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240907211436.png" width="auto" height="auto"/></p>
+<ul>
+<li>이놈은
+<ul>
+<li>바로 이전 batch 의 마지막 값과의 delta 를 계산한다.
+<ul>
+<li>즉, <a href="../../../../../../gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)">FOR</a> 을 batch 단위로 적용한거라고 생각하면 된다.</li>
+</ul>
+</li>
+<li>하지만 이 경우에도 index distance 가 증가하기 때문에 <code>D4</code> 와 마찬가지로 delta 값이 증가한다.</li>
+</ul>
+</li>
+<li>정리하자면, 이 <code>D4</code> 와 <code>DM</code> 모두 delta 가 대략 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1024/</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span>) 배 증가하여 compression ratio 는 대략 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mclose">)</span></span></span></span></span> 배 증가하게 된다.</li>
+<li>또 다른 아이디어는 <em>Four-cursors</em> 라는 것으로, 저자 아짐씨 본인의 <a href="https://homepages.cwi.nl/~boncz/msc/2020-AzimAfroozeh.pdf" class="external">석사 졸업논문</a> 에 제시한 것이다.
+<ul>
+<li>이건 base 를 여러개 사용하는 것으로, <a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)#231-basic-transposition-idea" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)">Section 2.3.1</a> 의 Figure 4c 에 있는 layout 이다.</li>
+<li>사실상 <em>Transposing</em> 의 전신인 셈.</li>
+<li>근데 SIMD vectorize 할 수는 없고, 대신 <a href="../../../../../../gardens/arch/drafts/Instruction-Level-Parallelism,-ILP-(Arch)" class="internal" data-slug="gardens/arch/drafts/Instruction-Level-Parallelism,-ILP-(Arch)">ILP</a> 로 처리할 수 있다고 한다.
+<ul>
+<li>SIMD 의 이점을 볼 수는 없는 이유는 값들이 연속된 메모리 공간에 있지 않기 때문인 것으로 보인다.</li>
+<li>그래서 SIMD 는 사용할 수 없지만 data dependency 는 해결되기 때문에 <a href="../../../../../../gardens/arch/drafts/Instruction-Level-Parallelism,-ILP-(Arch)" class="internal" data-slug="gardens/arch/drafts/Instruction-Level-Parallelism,-ILP-(Arch)">ILP</a> 로는 최적화가 가능할 것이라고 하는 듯.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그래서 전체적으로 정리해보면:</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240907225604.png" width="auto" height="auto"/></p>
+<ul>
+<li>간단하게 설명하면:
+<ul>
+<li>Decompression Cost 는 lane 개수 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span>) 만큼의 tuple 을 decoding 할 때 사용되는 <code>ADD</code> instruction 의 개수를 나타낸 것이다.
+<ul>
+<li>몇개만 살펴보자.</li>
+<li>일단 Scalar 와 Four Cursors 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 다. 위에서 말한 대로 Four Cursors 는 SIMD 가 안되기 때문.</li>
+<li>그리고 Horizontal 은 (비록 이유는 원본 논문에는 설명 안해줬지만) <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 라고 위에서 말한 바 있다.</li>
+<li>마지막으로 <code>D4</code> 와 <em>FastLanes UTL</em> 은 SIMD 로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 개를 한번에 처리하기 떄문에 1 이다.
+<ul>
+<li><code>DM</code> 이 2 인것도 비슷한 맥락에서이다 <sup><a href="#user-content-fn-dm-decompression-cost" id="user-content-fnref-dm-decompression-cost" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Compression Overhead 는 추가적으로 필요한 bit 의 개수를 의미한다.
+<ul>
+<li><em>FastLanes UTL</em> 에서 Compression Overhead 는 위 표에는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1024/</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 라고 되어 있다 <sup><a href="#user-content-fn-utl-compression-overhead" id="user-content-fnref-utl-compression-overhead" data-footnote-ref aria-describedby="footnote-label" class="internal">2</a></sup>.</li>
+</ul>
+</li>
+<li>그리고 Shortcoming 은 해당 scheme 이 해결하지 못한 것들을 의미한다.</li>
+</ul>
+</li>
+<li><em>FastLanes UTL</em> 에서 Compression Overhead 를 좀 생각해 보자.
+<ul>
+<li>일단 chunk 의 value 당 1개의 bit 이 필요하다고 유추할 수 있다. 그 이유는:
+<ul>
+<li>Chunk 의 1024 개의 value 는 각각 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span></span> bit 로 packing 되기에 이들은 총 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1024</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span></span> bit 이다.</li>
+<li>각 base 는 최대 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span> 만큼의 bit 가 필요하고 <sup><a href="#user-content-fn-base-bits" id="user-content-fnref-base-bits" data-footnote-ref aria-describedby="footnote-label" class="internal">3</a></sup>, base 는 lane 개수인 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 만큼 있기 때문에 base 들이 차지하는 bit 는 최대 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span></span> bit 이다.</li>
+<li>즉, chunk 의 value 당 1개의 bit 이 필요한 셈 (chunk value count = base vector bit = 1024).</li>
+</ul>
+</li>
+<li>근데 이건 더욱 줄일 수 있다. Base 값 또한 오름차순이기 때문에, 여기에도 <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 를 적용할 수 있기 때문.
+<ul>
+<li>그렇게 하면 value 하나 당 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span> 의 bit 로 base 를 저장할 수 있다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>저 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span> 라는 수식을 한번 생각해 보자.</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240908010940.png" width="auto" height="auto"/></p>
+<ul>
+<li>주인장이 고민 끝내 내린 결론은 이것이다. (위 그림도 같이 보자)
+<ul>
+<li>일단 한 lane 은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span> 개의 value 가 있고 각 value 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span></span> bit 로 표현된다.
+<ul>
+<li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)#242-basic-idea" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)">Section 2.4.2.</a> 를 생각하면 value 가 8개가 아닌가? 라고 생각할 수 있지만, 이건 <em>Tile</em> 단위로 가로방향을 펼쳐놓아서 그렇지 세로방향으로 합쳐서 세로방향으로 작업한다고 생각하면, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 개의 lane 에 대해서 lane size 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span> 가 맞다. (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span></span>)</li>
+</ul>
+</li>
+<li>그럼 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span> 개의 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span></span> bit 값들을 전부 다 “더하면” 그 값은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span></span></span></span></span> 의 bit 으로 표현될 수 있다.
+<ul>
+<li>왜냐면: value 하나가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span></span> bit 이기 때문에 이거 하나는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 안에 들어온다.</li>
+<li>그럼 얘네들을 전부 더한건 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span></span></span></span></span> 안에 들어올 것이고,</li>
+<li>이것을 bit 로 표현하면 log 를 씌운 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span></span></span></span></span> 개로 표현할 수 있는 것.</li>
+</ul>
+</li>
+<li>따라서 base 들에 대한 delta 또한 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span></span></span></span></span> 개의 bit 로 표현될 수 있다.
+<ul>
+<li>왜냐면: 한 lane 의 base 값 (base 들에 대한 <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 를 씌우기 전의 base 값) 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 라면,</li>
+<li>바로 다음 lane 의 base 값은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9247em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span></span></span></span></span> 에 들어올 것이고,</li>
+<li>Base 간의 delta 값은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 를 뺀 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span></span></span></span></span> 에 들어오게 되어</li>
+<li>마찬가지로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span></span></span></span></span> bit 로 표현될 수 있다.</li>
+</ul>
+</li>
+<li>그럼 이 base 는 lane 개수와 같은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 만큼 존재하기 때문에, Base-delta 를 위해 필요한 총 bit 수는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">))</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 이다.</li>
+<li>여기서 base-delta-base (UTL 의 base 들에 <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 를 씌웠을 때의 base, 즉 base 들의 base) 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> bit 로서 표현될 수 있다고 가정해 보자 <sup><a href="#user-content-fn-s-bit-base" id="user-content-fnref-s-bit-base" data-footnote-ref aria-describedby="footnote-label" class="internal">4</a></sup>.</li>
+<li>그렇게 치면, 총 필요한 bit 수는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 이다.</li>
+<li>이 값을 총 value 개수인 1024 로 나누면 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord">/1024</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span> 가 되는 것.</li>
+</ul>
+</li>
+<li>이제 그럼 실험 결과를 함 보자.</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240908011812.png" width="auto" height="auto"/></p>
+<ul>
+<li>결과는 위와 같다.
+<ul>
+<li>일단 Horizontal 은 결과가 일정한데, 이건 이놈이 SSE 에서만 제공하는 <code>SHIFT</code> 를 사용하여 다른 architecture 에서는 사용하지 못해 그렇게 그려놓은 것이다.</li>
+<li>Four-cursor 는 이것보다 좀 좋아지긴 하지만 별반 다를건 없다.</li>
+<li>그리고 <em>FastLanes</em> 의 <em>UTL</em> 이 가장 좋은 것도 확인할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="43-rle">4.3. RLE<a aria-hidden="true" tabindex="-1" href="#43-rle" class="internal"> §</a></h3>
+<ul>
+<li><a href="../../../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a> 는 <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 나 <a href="../../../../../../gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)">FOR</a> 처럼 값의 크기를 줄이는 것이 아닌 값의 개수를 줄인다는 점에서 다른 방법과는 좀 상이하다.</li>
+<li>그리고 이 점이 parallelism 을 어렵게 만든다: 값의 개수가 유동적이고 lane 수와 align 되지 않을 수 있기 때문.</li>
+<li>그럼에도 불구하고 <a href="../../../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a> 에 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 를 붙이려는 노력이 계속되어 왔고, 현재의 SOTA (이걸 SIMDized RLE 라고 부르자) 는 overwrite 를 사용한다.
+<ul>
+<li>이건 <a href="../../../../../../gardens/database/encoding/papers/BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)#503-run-length-encoding" class="internal" data-slug="gardens/database/encoding/papers/BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)">BtrBlocks</a> 에서도 말한 것처럼, 값들을 overwrite 하여 임의 개수의 값을 복사하는 것이다.</li>
+<li>가령 lane 수는 4개인데 3개의 값을 복사해야 한다면, 4개를 복사한 후 마지막 하나를 다음 값을 복사할 때 overwrite 하는 것.</li>
+</ul>
+</li>
+<li>그래서 이것이랑 비교해서 실험해 봤을 때, 결과는 다음과 같다.</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240908013657.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 결과는 avg. run length 가 3보다 큰 경우 (즉, run 개수가 333 보다 작은 경우) 에 대해 실험을 한 것이다.
+<ul>
+<li>일단 <em>FastLanes-RLE</em> 가 가장 좋은 것을 확인할 수 있다.</li>
+<li>나머지 애들이 안좋은 것을 넘어 점점 더 안좋아 지는 것에 대해서는 두가지 이유를 댈 수 있다.
+<ul>
+<li>첫째는 branch misprediction 때문이다. 매 run 을 처리할 때마다 loop 을 돌기에, loop 을 빠져나오는 순간에 branch misprediction 이 발생하고, run 이 너무 많아지면 이런 현상이 너무나 많이 발생하기 때문.</li>
+<li>둘째는 overwrite 때문이다. Overwrite 한다는 것은 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> lane 을 최대로 활용하고 있지 않다는 것을 의미하기 때문.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>다만 <a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)#244-fastlanes-rle" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)">이전</a> 에도 말했다 시피 avg. run length 가 12 이상이 되면 compression ratio 는 안좋아진다.
+<ul>
+<li>이건 run dictionary 가 너무 커지기 때문 <sup><a href="#user-content-fn-rle-compression-ratio" id="user-content-fnref-rle-compression-ratio" data-footnote-ref aria-describedby="footnote-label" class="internal">5</a></sup>.</li>
+<li>이걸 해결하기 위해 추후의 논문에서는 0-bit <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 를 제안해 해결것이라 한다. (이것도 <a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)#244-fastlanes-rle" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)">이전</a>에 언급했다.)</li>
+</ul>
+</li>
+</ul>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-dm-decompression-cost">
+<p>왜 2임? 1 아닌가? 어디에서 <code>ADD</code> 가 하나 더 필요한지 모르겠다. <a href="#user-content-fnref-dm-decompression-cost" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-utl-compression-overhead">
+<p>왜요? S 개의 base 가 필요하면 S 와 비례하는 overhead 가 있는데 왜 반비례지? <a href="#user-content-fnref-utl-compression-overhead" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-base-bits">
+<p>원문에는 base 한개를 위해 T 가 아니라 W 개의 bit 가 필요한 것으로 나온다. 즉, base 도 delta 와 동일한 bit-width 로 packing 된다는 소리인 것. 근데 이건 납득이 안된다. Delta 값에 대한 packing bit-width 와 base 의 packing bit-width 간에는 연관이 없기 때문.
+원본 문장: “The bit-packed vector with deltas takes W * 1024, and each base W bits, so the overhead is 1 bit per value.” <a href="#user-content-fnref-base-bits" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-s-bit-base">
+<p>이래야 말이 된다. 근데 사실 S bit 로는 부족할 수 있다. S 의 최대값은 16 (즉, T=64) 인데, 64bit 정수 자료형에서의 최소값이 16bit 안에 들어가리라고 장담할 수는 당연히 없다. <a href="#user-content-fnref-s-bit-base" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-rle-compression-ratio">
+<p>원문에는 다른 이유를 댄다. Section 4.2 에서의 수식을 들먹이는데, 주인장이 보기에는 논리적이지 않다. 원문을 보면 고정된 W, T 값에 따라 value 당 1.375bit 의 compression overhead 가 발생하기 때문이라고 하는데, 일단 (1) 수식에서 갑자기 1을 더하는 것도 이상하고 (수식에 따르면 0.375 가 되어야 한다. 근데 갑자기 아래에 등장하는 수식에서는 여기에 1 을 더한다.) (2) 이 수식은 base-delta 를 사용했을 때를 의미하고 그것을 사용하지 않을 때 compression overhead per value 는 1이어야 하는데 1.375 로 설명하고 있는 것도 이상하며 (3) 핵심적으로 value 개수나 W, T 값 모두 FastLanes-RLE 에서는 고정되어 있고 avg. run length 와는 상관없기 때문이다. 즉, 저 compression overhead 가 문제였으면 run length 와 관계 없이 compression ratio 가 나빴어야 한다는 것. 물론 FastLanes-RLE 의 compression ratio 는 꾸준한데 avg. run length 가 12 가 되는 지점에서 다른 RLE 보다 compression ratio 가 교차한다면 말이 되기는 한다. 근데 주인장이 보기에는 그것보다 run dictionary 때문에 안좋아진다고 설명하는게 더 논리적이다. <a href="#user-content-fnref-rle-compression-ratio" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#4-related-work" data-for="4-related-work">4. Related Work</a></li><li class="depth-1"><a href="#41-bit-packing" data-for="41-bit-packing">4.1. Bit-packing</a></li><li class="depth-1"><a href="#42-delta" data-for="42-delta">4.2. DELTA</a></li><li class="depth-1"><a href="#43-rle" data-for="43-rle">4.3. RLE</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/(논문)-The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code" class="internal">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code</a></li><li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/1.-Introduction-(FastLanes,-VLDB-23)" class="internal">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (1. Introduction)</a></li><li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/2.-FastLanes-(FastLanes,-VLDB-23)" class="internal">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (2. FastLanes)</a></li><li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/3.-Evaluation-(FastLanes,-VLDB-23)" class="internal">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (3. Evaluation)</a></li><li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/4.-Related-Work-(FastLanes,-VLDB-23)" class="internal">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (4. Related Work)</a></li><li><a href="../../../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/full/5.-Conclusion-and-Future-Work-(FastLanes,-VLDB-23)" class="internal">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (5. Conclusion and Future Work)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>
