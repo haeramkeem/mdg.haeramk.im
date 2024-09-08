@@ -59,7 +59,7 @@ aliases:
 
 ## Generating Symbol Table: Bottom-Up Symbol Table Construction
 
-> [!warning] TL;DR 실패
+> [!warning] 요약 실패
 > - 짧고 깔끔하게 정리하고 넘어가려 했는데 요약이 잘 안되네요.
 > - 긴 글 참고 읽어봅시다.
 

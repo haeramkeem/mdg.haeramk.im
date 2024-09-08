@@ -3,6 +3,8 @@ tags:
   - database
   - db-encoding
 date: 2024-08-12
+aliases:
+  - BtrBlocks
 ---
 > [!info]- 참고한 것들
 > - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|풀 논문 정리본]]
