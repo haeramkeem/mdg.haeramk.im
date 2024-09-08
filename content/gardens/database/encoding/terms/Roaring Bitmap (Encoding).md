@@ -11,8 +11,13 @@ date: 2024-08-06
 
 ## 어흥
 
-<img src="https://roaringbitmap.org/roaring.jpg"/>
-> 출처: [Roaring Bitmap 공식 사이트의 logo 를 보시라](https://roaringbitmap.org/)
+<a href="https://roaringbitmap.org/">
+    <div align="center">
+        <img src="https://roaringbitmap.org/roaring.jpg" alt="mdg banner image" />
+    </div>
+</a>
+
+> 사진 출처: [Roaring Bitmap 공식 사이트의 logo 를 보시라](https://roaringbitmap.org/)
 
 - [[Bitmap (Encoding)|Bitmap]] 이 정수 집합 연산을 빠르게 해주니까 좋기는 한데, 몇가지 문제점이 있다.
 	1. 집합의 원소가 적으면 (이를 *Sparse* 하다고 한다) 좀 비효율적이다.
@@ -61,7 +66,7 @@ date: 2024-08-06
 - *First-level Index* 의 각 entry 에는 *Container* 를 가리키는 pointer 가 있어 여기에서 하위 16비트에 대한 무언가를 하게 된다.
 - 즉, C++ 문법으로 나타내면 대략 이렇게 표현할 수 있는 것.
 
-```c++
+```cpp
 struct FirstLevelIndexEntry {
 	uint16_t _msb;
 	Container* _container;
@@ -97,7 +102,7 @@ std::vector<FirstLevelIndexEntry> first_level_index;
 > [!tip] 원본 Java 코드
 > - [깃허브](https://github.com/RoaringBitmap/RoaringBitmap/blob/master/RoaringBitmap/src/main/java/org/roaringbitmap/ArrayContainer.java#L36-L38)
 
-```c++
+```cpp
 struct SortedArrayContainer : public Container {
 	uint16_t _cardinality;
 	std::vector<uint16_t> _content;
@@ -125,7 +130,7 @@ struct SortedArrayContainer : public Container {
 > [!tip] 원본 Java 코드
 > - [깃허브](https://github.com/RoaringBitmap/RoaringBitmap/blob/master/RoaringBitmap/src/main/java/org/roaringbitmap/BitmapContainer.java#L69-L71)
 
-```c++
+```cpp
 struct BitmapContainer : public Container {
 	uint16_t _cardinality;
 	std::array<uint64_t, 1024> _bitmap;

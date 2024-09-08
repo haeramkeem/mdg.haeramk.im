@@ -28,4 +28,8 @@ date: 2024-08-21
 
 ## 목차
 
-- [[1. Introduction (FastLanes, VLDB 23)]]
+- [[1. Introduction (FastLanes, VLDB 23)|1. Introduction]]
+- [[2. FastLanes (FastLanes, VLDB 23)|2. FastLanes]]
+- [[3. Evaluation (FastLanes, VLDB 23)|3. Evaluation]]
+- [[4. Related Work (FastLanes, VLDB 23)|4. Related Work]]
+- [[5. Conclusion and Future Work (FastLanes, VLDB 23)|5. Conclusion and Future Work]]

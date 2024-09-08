@@ -3,9 +3,15 @@ tags:
   - database
   - db-encoding
 date: 2024-08-12
+aliases:
+  - BtrBlocks
 ---
 > [!info]- 참고한 것들
 > - [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|풀 논문 정리본]]
+
+> [!info] 원본 논문
+> - 이 글은 [BtrBlocks: Efficient Columnar Compression for Data Lakes](https://dl.acm.org/doi/10.1145/3589263) 에서 핵심 아이디어만 요약한 글입니다.
+> - 별도의 명시가 없으면, 본 논문에서 그림을 가져오거나 주인장이 직접 그렸습니다.
 
 ## 요약정리
 

@@ -3,6 +3,8 @@ tags:
   - terms
   - pkix
 date: 2023-12-21
+aliases:
+  - mTLS
 ---
 > [!info]- 참고한 것들
 > - [구름](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)

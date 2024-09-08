@@ -52,6 +52,7 @@ date: 2024-07-29
 	- [[BtrBlocks (Encoding)|BtrBlocks]]
 	- [[Delta Coding (Encoding)|Delta Coding]]
 	- [[Dictionary Encoding (Encoding)|Dictionary Encoding]]
+	- [[Elias Gamma Coding (Encoding)|Elias Gamma Coding]]
 	- [[Fast Static Symbol Table, FSST (Encoding)|Fast Static Symbol Table, FSST]]
 	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]

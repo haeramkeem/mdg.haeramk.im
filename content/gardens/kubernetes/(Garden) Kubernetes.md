@@ -16,30 +16,31 @@ date: 2024-07-29
 
 ## 작물들
 
-### 구축 기록
+### 용어집
 
-- [[Basic Kubernetes installation guide - 기본 설치 가이드|기본 설치 가이드]]
-- [[How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기|인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기]]
-- [[PodNodeSelector admission controller - NS 당 node selector 강제하기|NS 당 node selector 강제하기]]
-- 컴포넌트
-	- [[CNI 설치 (Cilium)|Cilium]]
-	- [[Dashboard 설치 (kubernetes-dashboard)|kubernetes-dashboard]]
-	- [[Ingress Controller 설치 (ingress-nginx)|ingress-nginx]]
-	- [[NFS PV Provisioner 설치 (nfs-subdir-external-provisioner)|nfs-subdir-external-provisioner]]
-	- [[WireGuard 설치 (wg-easy)|WireGuard]]
+- [[Finalizer (Kubernetes)|Finalizer]]
 
 ### 스토리
 
 - [[Kubeconfig 파일로 Kube apiserver 에 직접 cURL 찔러보기]]
 - [[Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기|컨트롤 플레인 인증서 톺아보기]]
-- [[제 4회 테크 데이 - Kubernetes Korea Group 커뮤니티 기술 세미나 참석 기록]]
 - [[Security model in etcd - etcd 에서 사용되는 인증서들|etcd 에서 사용되는 인증서들]]
-
-### 병든놈 고치기
-
-- [[Ingress NGINX - "upstream sent too large http2 frame 4740180" 에러 해결기]]
-- [[RabbitMQ on Kubernetes - Troubleshooting error "Command df timed out"|RabbitMQ on Kubernetes - "Command timed out: 'df -kP ...'" 에러 해결기]]
+- 구축 기록
+	- [[Basic Kubernetes installation guide - 기본 설치 가이드|기본 설치 가이드]]
+	- [[How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기|인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기]]
+	- [[PodNodeSelector admission controller - NS 당 node selector 강제하기|NS 당 node selector 강제하기]]
+	- 컴포넌트
+		- [[CNI 설치 (Cilium)|Cilium]]
+		- [[Dashboard 설치 (kubernetes-dashboard)|kubernetes-dashboard]]
+		- [[Ingress Controller 설치 (ingress-nginx)|ingress-nginx]]
+		- [[NFS PV Provisioner 설치 (nfs-subdir-external-provisioner)|nfs-subdir-external-provisioner]]
+		- [[WireGuard 설치 (wg-easy)|WireGuard]]
+- 병든놈 고치기
+	- [[Ingress NGINX - "upstream sent too large http2 frame 4740180" 에러 해결기]]
+	- [[RabbitMQ on Kubernetes - Troubleshooting error "Command df timed out"|RabbitMQ on Kubernetes - "Command timed out: 'df -kP ...'" 에러 해결기]]
 
 ### 오리지널 시리즈
 
+- [[쿠버네티스 딥다이브 (Learning Spoons, H1 2023)]]
 - [[쿠버네티스 교육자료 (SI Analytics, Jan. 2023)]]
+- [[제 4회 테크 데이 - Kubernetes Korea Group 커뮤니티 기술 세미나 참석 기록]]

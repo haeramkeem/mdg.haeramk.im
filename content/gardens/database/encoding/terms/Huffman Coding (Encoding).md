@@ -3,6 +3,8 @@ tags:
   - database
   - db-encoding
 date: 2024-07-30
+aliases:
+  - Huffman Coding
 ---
 > [!info]- 참고한 것들
 > - [왜 BBC에서 이런 글을 적는지는 나도 모른다.](https://www.bbc.co.uk/bitesize/guides/zd88jty/revision/10)

@@ -3,6 +3,8 @@ tags:
   - database
   - db-encoding
 date: 2024-07-30
+aliases:
+  - FSST
 ---
 > [!info]- 참고한 것들
 > - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.6 FSST|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
@@ -57,7 +59,7 @@ date: 2024-07-30
 
 ## Generating Symbol Table: Bottom-Up Symbol Table Construction
 
-> [!warning] TL;DR 실패
+> [!warning] 요약 실패
 > - 짧고 깔끔하게 정리하고 넘어가려 했는데 요약이 잘 안되네요.
 > - 긴 글 참고 읽어봅시다.
 
