@@ -7,16 +7,13 @@ date: 2024-04-23
 
 ## 작물들
 
-### 용어들
+### Common
 
-- [[Input Output per second, IOps (storage)|IOps]]
-- [[Latency (Storage)|Latency]]
-- [[Logical Block Addressing, LBA (Storage)|Logical Block Addressing, LBA]]
-- [[Throughput (Storage)|Throughput]]
-
-### 스토리
-
-- [[NVMeVirt 디버깅 기록들]]
+- 용어집
+	- [[Input Output per second, IOps (storage)|IOps]]
+	- [[Latency (Storage)|Latency]]
+	- [[Logical Block Addressing, LBA (Storage)|Logical Block Addressing, LBA]]
+	- [[Throughput (Storage)|Throughput]]
 
 ### Computational Storage Device (CSD)
 
@@ -74,6 +71,8 @@ date: 2024-04-23
 	- [[TRIM, Deallocation (Storage)|TRIM, Deallocation]]
 	- [[Wear Leveling (Storage)|Wear Leveling]]
 	- [[Write Amplification, WA and Write Amplication Factor, WAF (Storage)|Write Amplification, Write Amplication Factor (WA, WAF)]]
+- 스토리
+	- [[NVMeVirt 디버깅 기록들]]
 
 ### Zoned Storage Model (ZSM)
 
