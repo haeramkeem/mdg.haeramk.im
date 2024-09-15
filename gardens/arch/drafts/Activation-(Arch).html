@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html><head><title>Activation (Arch)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Activation (Arch)"/><meta property="og:description" content="참고한 것들 스탠포드 SEE Activation = Instance = Function on running § 우선 함수를 객체지향에서의 비유를 빌려서 설명해 보자면, 함수 (Function) 은 template 일 뿐이고, 그것이 호출되면 그때의 실행 흐름은 Instance 혹은 Activation 이라고 부른다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../static/icon.png"/><meta name="description" content="참고한 것들 스탠포드 SEE Activation = Instance = Function on running § 우선 함수를 객체지향에서의 비유를 빌려서 설명해 보자면, 함수 (Function) 은 template 일 뿐이고, 그것이 호출되면 그때의 실행 흐름은 Instance 혹은 Activation 이라고 부른다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/arch/drafts/Activation-(Arch)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Activation (Arch)</h1><p class="content-meta ">Sep 10, 2024, 7 min read</p><ul class="tags "><li><a href="../../../tags/arch" class="internal tag-link">#arch</a></li><li><a href="../../../tags/story" class="internal tag-link">#story</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://see.stanford.edu/materials/icsppcs107/15-Function-Call-And-Return.pdf" class="external">스탠포드 SEE</a></li>
+</ul>
+</blockquote>
+<h2 id="activation--instance--function-on-running">Activation = Instance = Function on running<a aria-hidden="true" tabindex="-1" href="#activation--instance--function-on-running" class="internal"> §</a></h2>
+<ul>
+<li>우선 함수를 객체지향에서의 비유를 빌려서 설명해 보자면, 함수 (<em>Function</em>) 은 template 일 뿐이고, 그것이 호출되면 그때의 실행 흐름은 <em>Instance</em> 혹은 <em>Activation</em> 이라고 부른다.</li>
+<li>그럼 이때 함수가 어떤 과정을 거쳐서 실행되고 반환되는지, 즉 <em>Activation</em> 의 lifecycle 을 알아보자.</li>
+</ul>
+<h2 id="activation-lifecycle">Activation Lifecycle<a aria-hidden="true" tabindex="-1" href="#activation-lifecycle" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Architecture-specific </p></div>
+                  
+                </div>
+<ul>
+<li>함수 호출, 종료 과정은 architecture 그리고 compiler 의 종류에 따라 다를 수 있습니다.</li>
+<li>여기의 내용은 이것이 정답이라기 보다는 common case 정도로 생각해 주시요.</li>
+</ul>
+</blockquote>
+<h3 id="creation">Creation<a aria-hidden="true" tabindex="-1" href="#creation" class="internal"> §</a></h3>
+<ul>
+<li>Activation 이 생성될 때는 다음의 두가지를 고려해야 한다.
+<ul>
+<li>일단 activation 에게 어떻게 필요한 정보들을 전달할 것인가? 를 고려해야 하고
+<ul>
+<li>즉, 함수 인자 (Parameter) 를 어떻게 전달할 것인가?</li>
+</ul>
+</li>
+<li>그리고 activation 이 종료됐을 때 어디로 돌아와야 하는지 어떻게 명시할까? 도 생각해야 한다.</li>
+</ul>
+</li>
+<li>이들을 해결하는 방법은 그 유명한 <em>Function Call Stack</em> 이다.
+<ul>
+<li>즉, 함수를 호출하고, 그 함수 내에서 또 함수를 호출하고 반환되고, 밥먹고 디저트먹고 하는 이 모든 것이 stack 에서 원소를 빼고 넣고 하는 것과 닮아있기 때문.</li>
+</ul>
+</li>
+<li>이 stack 을 이용해 함수를 호출하는 것은 크게 세 단계로 나눌 수 있다.
+<ol>
+<li>Parameter 저장</li>
+<li>Current context 저장</li>
+<li>Local variable 저장</li>
+</ol>
+</li>
+</ul>
+<h4 id="1-parameter-저장">1. Parameter 저장<a aria-hidden="true" tabindex="-1" href="#1-parameter-저장" class="internal"> §</a></h4>
+<ul>
+<li>일단 caller 는 parameter 를 stack 에 저장하는데, <em>Right-to-left</em> 방식으로 저장한다.
+<ul>
+<li>즉, 우리가 함수를 선언할 때는 <em>left-to-right</em> 순서로 적는데, 이 순서의 반대로 parameter 가 stack 에 쌓인다는 의미.</li>
+<li>다만 이건 C 언어 기준이다. 다른 언어는 그렇지 않을 수도 있음</li>
+<li>이건 다양한 이유가 있는데, 그 중 하나는 unknown-parameter 에 접근하기 쉽게 하기 위해서이다. 이와 관련해서는 <code>printf()</code> 를 생각해 보면 이해하기 쉽다.
+<ul>
+<li><code>printf()</code> 에서는 알다시피 첫번째 인자로 format 을 받고, 그 다음에 임의 개수의 format value 들을 받는다.</li>
+<li>이때 right-to-left 방식으로 stack 에 쌓게 되면 known-parameter 인 format value 들이 역순으로 쭉 쌓인 뒤 마지막에 unknown-parameter 인 format 이 쌓이게 된다.
+<ul>
+<li>여기서 known, unknown 은 쉽게 생각하면 된다. Format value 들은 진짜 “값” 들이고, format 은 이 format value 들을 이용해 완성해야 할 대상이기 때문에, 아직은 unknown 이라고 할 수 있는 것.</li>
+</ul>
+</li>
+<li>그럼 이때 stack pointer (<code>SP</code>) 는 format 을 가리키고 있을 것이다. 그럼 stack pointer 가 가리키고 있는 곳에 바로 접근하면 format 을 가져올 수 있기 때문에 추가적인 address calculation 없이도 가능하다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이때는 이 stack 공간에 값들을 “복사” 해놓는다.
+<ul>
+<li>Parameter mode 와 상관없이 “복사” 된다.</li>
+<li>즉, call-by-value 를 위해서는 값 그 자체가 “복사” 되고,</li>
+<li>Call-by-reference 일 때는 포인터값이 “복사” 되는 것.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Parameter 는 무조건 stack 에 저장될까? </p></div>
+                  
+                </div>
+<ul>
+<li>아니다.</li>
+<li>생각해 보면 parameter 는 함수 내에서 사용하라고 전달해 주는 값인 만큼 여기에 있는 값들은 높은 확률로 함수 실행 직후 사용된다.</li>
+<li>그럼 굳이 느린 메모리 상에 저장할 이유가 있을까? 그래서 RISC 와 같은 architecture 에서는 parameter 를 register 에 저장하고, parameter 가 너무 많아 register 가 부족할 때만 남는애들을 stack 에 저장한다.</li>
+</ul>
+</blockquote>
+<h4 id="2-current-context-저장">2. Current context 저장<a aria-hidden="true" tabindex="-1" href="#2-current-context-저장" class="internal"> §</a></h4>
+<ul>
+<li>함수가 종료되고 다시 원래대로 돌아왔을 때, 실행되기 전과 동일한 상태로 실행되어야 한다.</li>
+<li>그래서 현재의 register 값들 또한 stack 에 저장하는데, 이때 중요한 것은 <a href="../../../gardens/arch/terms/Program-Counter,-PC-(Arch)" class="internal" data-slug="gardens/arch/terms/Program-Counter,-PC-(Arch)">program counter</a> (<code>PC</code>) 값을 저장한다는 것이다.
+<ul>
+<li>이것이 바로 return address 가 된다; 즉, 함수가 종료되었을 때 돌아와야할 주소는, 함수 호출 직전의 <code>PC</code> 값이기 떄문.</li>
+</ul>
+</li>
+<li>참고로 모든 register 값을 저장하지는 않는다. 일단은 필요한 값들 (특히 <code>PC</code>) 만 저장한다고 생각하자.</li>
+<li>그리고 여기까지 한 다음에 함수 코드로 점프하게 된다.</li>
+<li>이 register 를 저장하고 점프하는 것은 많은 architecture 에서 shortcut instruction 으로 제공한다.
+<ul>
+<li>그건 아래 tip 에서 확인한다.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>이것도 무조건 stack 에 저장할까? </p></div>
+                  
+                </div>
+<ul>
+<li>아니다. Architecture 별로 다르다.</li>
+<li><a href="../../../gardens/arch/drafts/Reduced-Instruction-Set-Computer,-RISC-(Arch)" class="internal" data-slug="gardens/arch/drafts/Reduced-Instruction-Set-Computer,-RISC-(Arch)">RISC</a> 계열에서는 보통 register 에 저장한다.
+<ul>
+<li>MIPS 에서는 <code>JAL</code> (Jump and Link) instruction 이고, <code>$ra</code> register 에 저장한다.</li>
+<li>ARM 에서는 <code>BL</code> (Branch with Link) instruction 이고, <code>r14</code> register 에 저장한다.</li>
+</ul>
+</li>
+<li>X86 에서는 stack 에 저장한다. (Instruction 이름은 <code>CALL</code> 이다.)</li>
+</ul>
+</blockquote>
+<h4 id="3-local-variable-저장">3. Local variable 저장<a aria-hidden="true" tabindex="-1" href="#3-local-variable-저장" class="internal"> §</a></h4>
+<ul>
+<li>이제</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#activation--instance--function-on-running" data-for="activation--instance--function-on-running">Activation = Instance = Function on running</a></li><li class="depth-0"><a href="#activation-lifecycle" data-for="activation-lifecycle">Activation Lifecycle</a></li><li class="depth-1"><a href="#creation" data-for="creation">Creation</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li>No backlinks found</li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../postscript.js" type="module"></script></html>

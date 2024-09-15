@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html><head><title>MVCC 를 구현하며 겪은 사건사고들</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="MVCC 를 구현하며 겪은 사건사고들"/><meta property="og:description" content="개요 § 모종의 이유로 인해, MVCC 를 직접 구현해야 할 일이 생겼다. 이 “모종의 이유” 는 간단하게 말하면 LSM 와 같은 상황에서 metadata concurrency control 이 필요했기 때문이었다. 따라서 1개의 writer thread 와 N 개의 reader thread 를 생성하고, 이렇게 구성한 이유는 writer 간의 concurrency 는 관심 대상이 아니었기 때문이다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="개요 § 모종의 이유로 인해, MVCC 를 직접 구현해야 할 일이 생겼다. 이 “모종의 이유” 는 간단하게 말하면 LSM 와 같은 상황에서 metadata concurrency control 이 필요했기 때문이었다. 따라서 1개의 writer thread 와 N 개의 reader thread 를 생성하고, 이렇게 구성한 이유는 writer 간의 concurrency 는 관심 대상이 아니었기 때문이다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/concurrency/drafts/MVCC-를-구현하며-겪은-사건사고들"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">MVCC 를 구현하며 겪은 사건사고들</h1><p class="content-meta ">Sep 09, 2024, 7 min read</p><ul class="tags "><li><a href="../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../tags/db-concurrency" class="internal tag-link">#db-concurrency</a></li><li><a href="../../../../tags/story" class="internal tag-link">#story</a></li></ul></div></div><article class="popover-hint"><h2 id="개요">개요<a aria-hidden="true" tabindex="-1" href="#개요" class="internal"> §</a></h2>
+<ul>
+<li>모종의 이유로 인해, <a href="../../../../gardens/database/concurrency/drafts/Multiversion-Concurrency-Control,-MVCC-(Database)" class="internal" data-slug="gardens/database/concurrency/drafts/Multiversion-Concurrency-Control,-MVCC-(Database)">MVCC</a> 를 직접 구현해야 할 일이 생겼다.
+<ul>
+<li>이 “모종의 이유” 는 간단하게 말하면 <a href="../../../../gardens/database/rocksdb/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/rocksdb/LSM-Tree-(RocksDB)">LSM</a> 와 같은 상황에서 metadata concurrency control 이 필요했기 때문이었다.</li>
+</ul>
+</li>
+<li>따라서 1개의 writer thread 와 N 개의 reader thread 를 생성하고,
+<ul>
+<li>이렇게 구성한 이유는 writer 간의 concurrency 는 관심 대상이 아니었기 때문이다.</li>
+<li>Writer 와 reader 간의 concurrency 해결 방법이 궁금했었기에, writer 를 여러개 배치하는 것은 추가적인 concurrency 를 고려해야 해서 writer 는 하나만 배치한 것.</li>
+<li>근데 reader 는 여러개 생성해도 이들간의 concurrency 는 없기 때문에 reader 만 N 개로 늘린 것이다.</li>
+</ul>
+</li>
+<li>Writer 는 공유 공간에 임의의 십진수와 그것의 16진수 숫자 문자열을 저장하고 reader 는 그것을 읽어들여 십진수와 16진수가 동일한 수인지 판단하는 식으로 concurrency 문제의 발생 여부를 감지하고자 하였다.
+<ul>
+<li>즉, 만약 concurrency 가 발생했다면, 16진수 숫자를 십진수로 변환했을 때 저장되어 있던 십진수와 다를 것이기 때문.</li>
+</ul>
+</li>
+</ul>
+<h2 id="그의-고분분투">그의 고분분투<a aria-hidden="true" tabindex="-1" href="#그의-고분분투" class="internal"> §</a></h2>
+<h3 id="1-설계-문제로-인한-concurrency-재현-실패">1) 설계 문제로 인한 Concurrency 재현 실패<a aria-hidden="true" tabindex="-1" href="#1-설계-문제로-인한-concurrency-재현-실패" class="internal"> §</a></h3>
+<ul>
+<li>처음에는 write thread 하나가 파일에 append-only 로 쭉 써내려가고, 16개의 read thread 가 이 파일을 처음부터 full scan 을 해나가는 상황에서도 concurrency 가 발생할 것으로 생각했다.
+<ul>
+<li>단순하게 같은 파일을 1 writer 와 N reader 가 접근하니까 concurrency 가 발생할 것이라 생각한 것.</li>
+<li>그리고 이것이 실제 usecase 와 유사했다. 저 write thread 가 수행하는 append-only 는 <a href="../../../../gardens/database/rocksdb/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/rocksdb/LSM-Tree-(RocksDB)">LSM</a> 을 모사하기 위함이고, read thread 의 full scan 은 이 <a href="../../../../gardens/database/rocksdb/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/rocksdb/LSM-Tree-(RocksDB)">LSM</a> 을 full scan 하는 thread 로 비견될 수 있기 때문.</li>
+</ul>
+</li>
+<li>하지만 concurrency 는 발생하지 않았다.
+<ul>
+<li>일단 원인은 write thread 가 생성되고 read thread 가 생성되기 때문에 항상 read thread 가 write thread 에 비해 조금 뒤쳐져 있어 동일한 공간을 write thread 와 read thread 가 바라보지 않았기 떄문이었다.</li>
+<li>근데 write thread 가 먼저 시작했어도 실행 순서가 꼬이면 read thread 가 write thread 를 앞지를 수 있는 것 아닌가? 싶은 생각에 몇가지를 더 시도해 보았다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="시도-1-batch-write-with-fsync-batch-read">시도 1: Batch write with <code>fsync</code>, batch read<a aria-hidden="true" tabindex="-1" href="#시도-1-batch-write-with-fsync-batch-read" class="internal"> §</a></h4>
+<ul>
+<li>일단 C file library 를 걷어내고 open, read syscall 로 batch write, read 를 시도해 보았다.</li>
+<li>즉, 기존에는 <code>stdio.h</code> 의 <code>fopen</code>, <code>fwrite</code> 함수를 사용했다면</li>
+<li>이번에는 <code>fcntl.h</code> 의 <code>open</code> 와 <code>unistd.h</code> 의 <code>write</code> 함수를 사용하는 것으로 바꾸었고,</li>
+<li>16Mi 크기를 동적할당해 여기에 데이터를 적은 후 <code>write</code> 하고 <code>fsync</code> 로 파일로 내려주었다.</li>
+<li>Reader thread 는, 기존에는 <code>char</code> 하나씩 읽어 십진수의 경우에는 <code>atoi</code> 로, 16진수의 경우에는 <code>strtol</code> 로 <code>int</code> 로 바꾸어 비교했었는데</li>
+<li>이것도 16Mi 크기를 동적할당해 통째로 데이터를 읽어들여 처리하는 것으로 바꾸었다.</li>
+<li>근데 이래도 concurrency 는 발생하지 않았다.</li>
+</ul>
+<h4 id="시도-2-disable-page-cache-o_direct">시도 2: Disable page cache (<code>O_DIRECT</code>)<a aria-hidden="true" tabindex="-1" href="#시도-2-disable-page-cache-o_direct" class="internal"> §</a></h4>
+<ul>
+<li>Concurrency 가 발생하지 않는 것이 page cache 때문일 수도 있겠다는 생각이 들어서, <code>O_DIRECT</code> 모드로 파일을 읽어서 page cache 를 bypass 하는 방식을 사용해 보았다.</li>
+<li>물론 안되기는 매한가지였다.</li>
+</ul>
+<h3 id="2-단계적으로-구현하기-위해-설계-변경">2) 단계적으로 구현하기 위해 설계 변경<a aria-hidden="true" tabindex="-1" href="#2-단계적으로-구현하기-위해-설계-변경" class="internal"> §</a></h3>
+<ul>
+<li>좀 생각해 보니 append-only 와 full scan 에서 concurrency 를 재현하는 것은 불필요하다는 생각을 하게 되었다.
+<ul>
+<li>Metadata 에 대한 concurrency control 이 필요했기 때문.</li>
+</ul>
+</li>
+<li>그리고 일단은 MVCC 에 집중하기 위해, 파일IO 는 빼고 메모리 상에서 concurrency 를 유발하고, lock 을 잡는 식으로 우선 해결해 보며, 그 다음에 MVCC 를 구현하기로 생각을 바꿨다.</li>
+<li>그래서 다음와 같은 구조체에</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">struct</span><span style="color:var(--shiki-color-text);"> Data {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> dec;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">char</span><span style="color:var(--shiki-color-text);"> hex[</span><span style="color:var(--shiki-token-constant);">64</span><span style="color:var(--shiki-color-text);">];</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">};</span></span></code></pre></div>
+<ul>
+<li>이놈을 위한 메모리 공간을 동적할당 해놓고 write thread 는 이곳에 데이터를 write 하고, read thread 는 데이터를 가져다가 <code>dec</code> 와 <code>hex</code> 를 비교하도록 해놓았다.</li>
+<li>즉, writer 에서는 다음과 같은 짓을 하고</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">data</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">dec </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> i;</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">sprintf</span><span style="color:var(--shiki-color-text);">(data</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">hex</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;</span><span style="color:var(--shiki-token-constant);">%X</span><span style="color:var(--shiki-token-string-expression);">&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> i);</span></span></code></pre></div>
+<ul>
+<li>Reader 에서는 다음과 같은 짓을 한다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (data</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">dec </span><span style="color:var(--shiki-token-keyword);">!=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">strtol</span><span style="color:var(--shiki-color-text);">(data</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">hex</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">16</span><span style="color:var(--shiki-color-text);">)) {</span><span style="color:var(--shiki-token-comment);"> /* ... */</span><span style="color:var(--shiki-color-text);"> }</span></span></code></pre></div>
+<ul>
+<li>이렇게 하면 당연히 concurrency 문제가 발생한다.
+<ul>
+<li>가령 writer 가 <code>dec</code> 까지만 업데이트한 상태에서 reader 가 <code>dec</code> 와 <code>hex</code> 를 읽으면 이 둘은 같지 않기 때문.</li>
+</ul>
+</li>
+<li>다음처럼 lock 을 걸면 해결되긴 한다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><div data-rehype-pretty-code-title data-language="c" data-theme="default">writer.c</div><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">pthread_mutex_lock</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">lock);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">data</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">dec </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> i;</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">sprintf</span><span style="color:var(--shiki-color-text);">(data</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">hex</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;</span><span style="color:var(--shiki-token-constant);">%X</span><span style="color:var(--shiki-token-string-expression);">&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> i);</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">pthread_mutex_unlock</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">lock);</span></span></code></pre></div>
+<div data-rehype-pretty-code-fragment><div data-rehype-pretty-code-title data-language="c" data-theme="default">reader.c</div><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">pthread_mutex_lock</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">lock);</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> dec_num </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> data</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">dec;</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> hex_num </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">strtol</span><span style="color:var(--shiki-color-text);">(data</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">hex</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">16</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">pthread_mutex_unlock</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">lock);</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (dec_num </span><span style="color:var(--shiki-token-keyword);">!=</span><span style="color:var(--shiki-color-text);"> hex_num) {</span><span style="color:var(--shiki-token-comment);"> /* ... */</span><span style="color:var(--shiki-color-text);"> }</span></span></code></pre></div>
+<ul>
+<li>물론 위와 같이 하면 안되긴 한다.
+<ul>
+<li>왜냐면 이건 writer-reader 간의 lock 뿐 아니라 불필요한 reader-reader 간의 lock 도 잡히기 때문.</li>
+<li>하지만 이건 굳이 해결 안한다. 어차피 lock 은 다 걷어내고 MVCC 로 갈거니까.</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-two-version-mvcc-가-될까">3) Two-version MVCC 가 될까?<a aria-hidden="true" tabindex="-1" href="#3-two-version-mvcc-가-될까" class="internal"> §</a></h3>
+<h3 id="4-mvcc-로-가자">4) MVCC 로 가자..<a aria-hidden="true" tabindex="-1" href="#4-mvcc-로-가자" class="internal"> §</a></h3>
+<h2 id="비고-c-정리">비고: C 정리<a aria-hidden="true" tabindex="-1" href="#비고-c-정리" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../gardens/c-cpp/c/drafts/C---O_DIRECT-파일-입출력" class="internal" data-slug="gardens/c-cpp/c/drafts/C---O_DIRECT-파일-입출력">C - O_DIRECT 파일 입출력</a></li>
+<li><a href="../../../../gardens/c-cpp/c/drafts/C---POSIX-thread-mutex-사용법" class="internal" data-slug="gardens/c-cpp/c/drafts/C---POSIX-thread-mutex-사용법">C - POSIX thread mutex 사용법</a></li>
+<li><a href="../../../../gardens/c-cpp/c/drafts/C---구조체-(struct)-정리" class="internal" data-slug="gardens/c-cpp/c/drafts/C---구조체-(struct)-정리">C - 구조체 (struct) 정리</a></li>
+<li><a href="../../../../gardens/c-cpp/c/drafts/C---기본-파일-입출력-(fopen,-fwrite,-fread,-fclose)" class="internal" data-slug="gardens/c-cpp/c/drafts/C---기본-파일-입출력-(fopen,-fwrite,-fread,-fclose)">C - 기본 파일 입출력 (fopen, fwrite, fread, fclose)</a></li>
+<li><a href="../../../../gardens/c-cpp/c/drafts/C---동적-할당-(malloc,-calloc,-free)" class="internal" data-slug="gardens/c-cpp/c/drafts/C---동적-할당-(malloc,-calloc,-free)">C - 동적 할당 (malloc, calloc, free)</a></li>
+<li><a href="../../../../gardens/c-cpp/c/drafts/C---메모리에-데이터-저장하기-(memset,-memcpy)" class="internal" data-slug="gardens/c-cpp/c/drafts/C---메모리에-데이터-저장하기-(memset,-memcpy)">C - 메모리에 데이터 저장하기 (memset, memcpy)</a></li>
+<li><a href="../../../../gardens/c-cpp/c/drafts/C---숫자-문자열-변환-(atoi,-strtol)" class="internal" data-slug="gardens/c-cpp/c/drafts/C---숫자-문자열-변환-(atoi,-strtol)">C - 숫자 문자열 변환 (atoi, strtol)</a></li>
+<li><a href="../../../../gardens/c-cpp/c/drafts/C---파일-입출력-Syscall-(open,-write,-read,-fsync,-close)" class="internal" data-slug="gardens/c-cpp/c/drafts/C---파일-입출력-Syscall-(open,-write,-read,-fsync,-close)">C - 파일 입출력 Syscall (open, write, read, fsync, close)</a></li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#개요" data-for="개요">개요</a></li><li class="depth-0"><a href="#그의-고분분투" data-for="그의-고분분투">그의 고분분투</a></li><li class="depth-1"><a href="#1-설계-문제로-인한-concurrency-재현-실패" data-for="1-설계-문제로-인한-concurrency-재현-실패">1) 설계 문제로 인한 Concurrency 재현 실패</a></li><li class="depth-1"><a href="#2-단계적으로-구현하기-위해-설계-변경" data-for="2-단계적으로-구현하기-위해-설계-변경">2) 단계적으로 구현하기 위해 설계 변경</a></li><li class="depth-1"><a href="#3-two-version-mvcc-가-될까" data-for="3-two-version-mvcc-가-될까">3) Two-version MVCC 가 될까?</a></li><li class="depth-1"><a href="#4-mvcc-로-가자" data-for="4-mvcc-로-가자">4) MVCC 로 가자..</a></li><li class="depth-0"><a href="#비고-c-정리" data-for="비고-c-정리">비고: C 정리</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li>No backlinks found</li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

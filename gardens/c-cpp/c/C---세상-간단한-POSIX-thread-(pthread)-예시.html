@@ -28,30 +28,37 @@
 <span data-line> </span>
 <span data-line><span style="color:var(--shiki-token-keyword);">void*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">thread_func</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">void*</span><span style="color:var(--shiki-color-text);"> arg) {</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">int*</span><span style="color:var(--shiki-color-text);"> id </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int*</span><span style="color:var(--shiki-color-text);">)arg;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">pthread_t</span><span style="color:var(--shiki-color-text);"> tid </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">pthread_self()</span><span style="color:var(--shiki-color-text);">;</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">; i </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">2</span><span style="color:var(--shiki-color-text);">; i</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
-<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-function);">printf(</span><span style="color:var(--shiki-token-string-expression);">&quot;Thread(</span><span style="color:var(--shiki-token-constant);">%d</span><span style="color:var(--shiki-token-string-expression);">)\n&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-token-function);">id)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-function);">printf(</span><span style="color:var(--shiki-token-string-expression);">&quot;Thread(</span><span style="color:var(--shiki-token-constant);">%d</span><span style="color:var(--shiki-token-string-expression);">) id=</span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">\n&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-token-function);">id</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> tid)</span><span style="color:var(--shiki-color-text);">;</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">pthread_exit(arg)</span><span style="color:var(--shiki-color-text);">;</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
 <ul>
 <li>결과 예시</li>
 </ul>
-<p><img src="../../../images/Pasted-image-20240908215910.png" width="auto" height="auto"/></p>
+<p><img src="../../../images/Pasted-image-20240909081349.png" width="auto" height="auto"/></p>
 <ul>
-<li>간단한 주의사항 설명:
+<li>간단한 설명:
 <ul>
 <li>일단 기본적으로 <code>pthread.h</code> 를 추가해 줘야 한다.</li>
-<li>Thread 에 인자를 넣어줄 때는 <code>pthread_create</code> 의 4번째 인자를 활용하면 된다.
+<li>Thread 에 인자를 넣어줄 때는 <code>pthread_create()</code> 의 4번째 인자를 활용하면 된다.
 <ul>
 <li>하나밖에 못넣으니까 여러개를 넣고자 한다면 <a href="../../../gardens/c-cpp/c/drafts/C---구조체-(struct)-정리" class="internal" data-slug="gardens/c-cpp/c/drafts/C---구조체-(struct)-정리">구조체</a> 를 활용하자.</li>
 <li>안넣고 싶으면 <code>NULL</code> 을 박으면 된다.</li>
 </ul>
 </li>
-<li>Thread 에서 결과를 받을 때는 <code>pthread_join</code> 의 두번째 인자를 활용하면 된다.
+<li>Thread 에서 결과를 받을 때는 <code>pthread_join()</code> 의 두번째 인자를 활용하면 된다.
 <ul>
 <li>다만 주의할 것은 double pointer 라는 것.</li>
-<li>Thread 내에서 보내주는 값은 <code>pthread_exit</code> 에 넣어주면 된다.</li>
-<li>안받고 싶으면 <code>pthread_join</code> 이나 <code>pthread_exit</code> 둘 다 <code>NULL</code> 을 박으면 된다.</li>
+<li>Thread 내에서 보내주는 값은 <code>pthread_exit()</code> 에 넣어주면 된다.</li>
+<li>안받고 싶으면 <code>pthread_join()</code> 이나 <code>pthread_exit()</code> 둘 다 <code>NULL</code> 을 박으면 된다.</li>
+</ul>
+</li>
+<li>Thread 내에서 본인의 ID 를 알고 싶으면 <code>pthread_self()</code> 를 이용하면 된다.
+<ul>
+<li>반환 자료형은 <code>pthread_t</code> 이고</li>
+<li>Formatting 할 때는 <code>%lu</code> (<code>unsigned long</code>) 으로 해주면 된다.</li>
 </ul>
 </li>
 </ul>

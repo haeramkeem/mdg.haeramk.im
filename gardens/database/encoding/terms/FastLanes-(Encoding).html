@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html><head><title>FastLanes (Encoding)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="FastLanes (Encoding)"/><meta property="og:description" content="참고한 것들 풀 논문 정리본 원본 논문 이 글은 The FastLanes Compression Layout - Decoding &amp;gt;100 Billion Integers per Second with Scalar Code 에서 핵심 아이디어만 요약한 글입니다. 별도의 명시가 없으면, 본 논문에서 그림을 가져오거나 주인장이 직접 그렸습니다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="참고한 것들 풀 논문 정리본 원본 논문 이 글은 The FastLanes Compression Layout - Decoding &amp;gt;100 Billion Integers per Second with Scalar Code 에서 핵심 아이디어만 요약한 글입니다. 별도의 명시가 없으면, 본 논문에서 그림을 가져오거나 주인장이 직접 그렸습니다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/encoding/terms/FastLanes-(Encoding)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">FastLanes (Encoding)</h1><p class="content-meta ">Sep 15, 2024, 12 min read</p><ul class="tags "><li><a href="../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../tags/db-encoding" class="internal tag-link">#db-encoding</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/(논문)-The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/(논문)-The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code">풀 논문 정리본</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>원본 논문 </p></div>
+                  
+                </div>
+<ul>
+<li>이 글은 <a href="https://dl.acm.org/doi/10.14778/3598581.3598587" class="external">The FastLanes Compression Layout - Decoding >100 Billion Integers per Second with Scalar Code</a> 에서 핵심 아이디어만 요약한 글입니다.</li>
+<li>별도의 명시가 없으면, 본 논문에서 그림을 가져오거나 주인장이 직접 그렸습니다.</li>
+</ul>
+</blockquote>
+<h2 id="요약정리">요약정리<a aria-hidden="true" tabindex="-1" href="#요약정리" class="internal"> §</a></h2>
+<ul>
+<li>FastLanes 는 architecture 에 의존적이지 않고, 빠르게 정수 데이터를 decoding 하는 layout 이다.</li>
+<li>풀 논문 정리본은 <a href="../../../../gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/(논문)-The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code" class="internal" data-slug="gardens/database/encoding/papers/The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code/(논문)-The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code">여기</a> 에 돼있고, 여기에는 로직만 실압근으로다가 정리해놓을거다.
+<ul>
+<li>Motivation, evaluation 등은 저기서 확인하자.</li>
+</ul>
+</li>
+</ul>
+<h2 id="virtual-instruction-set">Virtual Instruction Set<a aria-hidden="true" tabindex="-1" href="#virtual-instruction-set" class="internal"> §</a></h2>
+<ul>
+<li>기존의 연구들이 다소 <a href="../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> <a href="../../../../gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)" class="internal" data-slug="gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)">ISA</a> 에 의존적이라는 문제점 아래, FastLanes 에서는 가상의 SIMD register 와 그에 맞는 instruction set 을 정의하고 구현한 다음 해당 instruction set 으로 integer decoding 을 구현해 냈다.</li>
+</ul>
+<p><img src="../../../../images/fl_varch_bin_autovec.png" width="auto" height="auto"/></p>
+<ul>
+<li>전체적으로 보면 위와 같다.</li>
+<li>일단 virtual register &amp; instruction set 에 관해서는,
+<ul>
+<li>Virtual register <code>FLMM1024</code>: SIMD 가 128, 256, 512bit 로 register size 가 두배씩 커지고 있기 때문에, FastLanes 에서는 추후에 개발될 1024bit 사이즈의 register 를 가정했다.</li>
+<li>Virtual instruction set: 모든 SIMD architecture 에서 공통적으로 제공하고, 간단한 9개의 instruction 들을 추렸다.</li>
+</ul>
+</li>
+<li>그에 대한 구현에 관해서는 다음의 4가지의 버전으로 구현했다:
+<ul>
+<li><code>Scalar</code>: C++ Scalar code 로 구현하고 compiler 에서 SIMD optimization 을 비활성화한 버전</li>
+<li><code>Auto_vectorized</code>: <code>Scalar</code> 에서 compiler 의 SIMD optimization 을 사용한 버전</li>
+<li><code>Scalar_T64</code>: C++ Scalar integer type <code>uint64</code> 를 SIMD 처럼 사용한 버전
+<ul>
+<li>즉, SIMD 자료형이 아닌 Scalar 자료형 <code>uint64</code> 를 사용하는데, 이것을 마치 64bit SIMD register 처럼 사용하는 것이다.</li>
+<li>예를 들면 <code>uint8</code> 연산 8개를 <code>uint64</code> 연산 하나로 처리하겠다는 것.</li>
+</ul>
+</li>
+<li><code>SIMD</code>: SIMD <a href="../../../../gardens/arch/terms/Intrinsic-Function-(Arch)" class="internal" data-slug="gardens/arch/terms/Intrinsic-Function-(Arch)">intrinsic</a> 을 사용한 버전</li>
+</ul>
+</li>
+<li>이런 접근 방식에 따라,
+<ul>
+<li>SIMD 를 지원하지 않는 CPU architecture 에 대해서는 <code>Scalar</code> 혹은 <code>Scalar_T64</code> 를 사용할 수 있기 때문에 과거의 architecture 를 커버할 수 있고</li>
+<li>SIMD 를 지원하는 현대의 많은 CPU architecture 에 대해서는 <code>SIMD</code> 혹은 <code>Auto_vectorized</code> 를 사용할 수 있기 때문에 현대의 architecture 가 커버되며
+<ul>
+<li>이 점에 관해서는 <code>Auto_vectorized</code> 가 C++ Scalar code 로 구현되어 있기 때문에 다른 architecture 에 대해 새로 구현하지 않아도 된다는 portability 장점을 가져가게 된다.</li>
+</ul>
+</li>
+<li>미래에 1024bit SIMD register 가 개발된다면, 이 architecture 에서 제공하는 instruction 중 virtual instruction set 과 동일한 기능의 instruction 을 사용하면 되기 때문에 미래의 architecture 에 대해서도 대응이 된다고 할 수 있다.</li>
+<li>즉, 정리하면 이 virtual instruction set 의 접근방식으로 과거, 현재, 미래의 architecture 모두를 잡고 있는 셈.</li>
+</ul>
+</li>
+</ul>
+<h2 id="interleaved-bit-packing">Interleaved Bit-packing<a aria-hidden="true" tabindex="-1" href="#interleaved-bit-packing" class="internal"> §</a></h2>
+<ul>
+<li>위의 virtual instruction set 으로 기존의 <a href="../../../../gardens/database/encoding/terms/Interleaved-Bit-Packing-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Interleaved-Bit-Packing-(Encoding)">Interleaved Bit-Packing</a> 를 구현하여 기존의 방식에 있었던 architecture dependency 를 해결헀다.
+<ul>
+<li>즉, 기존에는 새로운 architecture 가 등장하면 그것을 이용해 insterleaved BP 를 구현하는 형식이었다면,</li>
+<li>FastLanes 에서는 모든 architecture 로 구현할 수 있는 virtual instruction 을 정의한 다음, 그것으로 interleaved BP 를 구현한 것.</li>
+</ul>
+</li>
+<li>위의 virtual instruction set 으로 unpack 하는 것을 알아보자.</li>
+</ul>
+<h3 id="lane-에-bit-들이-모두-있는-경우">Lane 에 Bit 들이 모두 있는 경우<a aria-hidden="true" tabindex="-1" href="#lane-에-bit-들이-모두-있는-경우" class="internal"> §</a></h3>
+<ul>
+<li>Lane 에 bit 들이 전부 들어와 있는 경우에는 <code>MASK</code> 와 <code>AND</code> 를 한 후, <code>SHIFT</code> 하여 값을 가져온다.</li>
+</ul>
+<p><img src="../../../../images/fl_ibp_unpack_1.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그림은 Lane 에 bit 들이 딱 붙어 있는 경우</li>
+</ul>
+<p><img src="../../../../images/fl_ibp_unpack_2.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그림은 Lane 에서 좀 떨어져 있는 경우</li>
+</ul>
+<h3 id="bit-들이-여러-word-에-뿌려져-있는-경우">Bit 들이 여러 word 에 뿌려져 있는 경우<a aria-hidden="true" tabindex="-1" href="#bit-들이-여러-word-에-뿌려져-있는-경우" class="internal"> §</a></h3>
+<ul>
+<li>Bit 들이 여러 word 에 나뉘어져 있는 경우에는, 각각에 대해 <code>MASK</code> 와 <code>AND</code> 한 후, <code>SHIFT</code> 한 것을 <code>OR</code> 로 합친다.</li>
+</ul>
+<p><img src="../../../../images/fl_ibp_unpack_3.png" width="auto" height="auto"/></p>
+<ul>
+<li>즉, 위 그림처럼 다음 word 에서 bit 들을 가져오고</li>
+</ul>
+<p><img src="../../../../images/fl_ibp_unpack_4.png" width="auto" height="auto"/></p>
+<ul>
+<li>이전 word 에서 값을 가져온 다음 두 word 에서 가져온 것을 <code>OR</code> 하여 합친다.</li>
+</ul>
+<h2 id="unified-transposed-layout-for-delta-encoding">Unified Transposed Layout for DELTA Encoding<a aria-hidden="true" tabindex="-1" href="#unified-transposed-layout-for-delta-encoding" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 같은 경우에는 이전의 값에 DELTA 를 더해 이후의 값을 구하기 때문에, 연속된 데이터 간의 dependency 가 있다.</li>
+<li>이것은 연속된 데이터가 인접한 SIMD lane 에 들어가게 되면 연산이 불가능해진다는 결과로 이어진다.
+<ul>
+<li>당연한 일이다. 여러 lane 의 데이터들이 한번의 instruction 으로 병렬적으로 연산되는데, 인접한 lane 의 값을 알아야 다음 lane 을 연산할 수 있다는 것은 병렬처리가 아니기 때문.</li>
+</ul>
+</li>
+<li>따라서 이 sequential data dependency 를 해결하기 위한 방법이 Transposing 이고, 그것을 모든 lane size 경우의 수를 고려하여 더욱 개선한 것이 Unified Transposed Layout 이다.</li>
+</ul>
+<h3 id="transposing">Transposing<a aria-hidden="true" tabindex="-1" href="#transposing" class="internal"> §</a></h3>
+<p><img src="../../../../images/fl_utl_trans_layout.png" width="auto" height="auto"/></p>
+<ul>
+<li>우선 위 그림처럼 Lane size 만큼의 간격을 두고 값을 복사해 온다.</li>
+</ul>
+<p><img src="../../../../images/fl_utl_trans_enc.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 DELTA 를 구할 때는, 위 그림처럼 Lane size 개수의 vector 단위로 구한다.</li>
+</ul>
+<p><img src="../../../../images/fl_utl_trans_dec.png" width="auto" height="auto"/></p>
+<ul>
+<li>그럼 Decoding 할 때는 반대로 하면 되겠지?
+<ul>
+<li>위 그림처럼 Lane size 개수의 vector 단위로 DELTA vector 와 이전 vector 를 더해 현재 vector 를 구한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="unified-transposed-layout">Unified Transposed Layout<a aria-hidden="true" tabindex="-1" href="#unified-transposed-layout" class="internal"> §</a></h3>
+<ul>
+<li>위의 예시는 Lane size 가 4인 경우였는데, 이것을 그대로 Lane size 를 8로 늘려서 처리하면 문제가 생긴다.
+<ul>
+<li>Lane size 만큼의 vector 간의 data dependency 가 있었기 때문에, vector 단위로 처리할 수 있었던 것인데</li>
+<li>동일한 layout 에서 Lane size 를 늘리면 한 vector 내에 dependency 가 생기기 때문.</li>
+</ul>
+</li>
+<li>우선 그럼 Lane size 가 4인 경우와 8인 경우를 모두 커버하는 layout 을 설계해 보자.</li>
+<li>다음처럼 1번 vector 와 2번 vector 의 순서를 뒤집으면 된다.</li>
+</ul>
+<p><img src="../../../../images/fl_utl_rationale_1.png" width="auto" height="auto"/></p>
+<ul>
+<li>여기서 저 점선이 dependency 를 나타내는 것임</li>
+<li>그럼 이때 Lane size 가 4일 때 정상적으로 연산되나 보자.</li>
+</ul>
+<p><img src="../../../../images/fl_utl_lane_4.png" width="auto" height="auto"/></p>
+<ul>
+<li>솔직히 이건 말로 설명하는 것보다 직접 눈으로 보는게 더 이해가 잘된다.</li>
+<li>어쨋든 그래서 위 그림을 살펴보면 Lane size 가 4일 때 data dependency 가 없다는 것을 볼 수 있고,</li>
+</ul>
+<p><img src="../../../../images/fl_utl_lane_8.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그림을 보면 8일때도 문제가 없다는 것을 알 수 있다.</li>
+<li>이 원리에 따라, Lane size 가 16, 32, 64, 128 일 때를 모두 고려한 배치 순서는 “04261537” 이다.</li>
+</ul>
+<p><img src="../../../../images/fl_utl_04261537.png" width="auto" height="auto"/></p>
+<ul>
+<li>저 파란색 정사각형을 16개의 값이 들어있는 block 이라고 생각하고, Dependency line 을 쭉 따라가 보자.</li>
+<li>그럼 문제가 없을 것이란 것을 알 수 있을 것이다.</li>
+</ul>
+<h2 id="fastlanes-rle">FastLanes-RLE<a aria-hidden="true" tabindex="-1" href="#fastlanes-rle" class="internal"> §</a></h2>
+<ul>
+<li>마지막으로는 <a href="../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a> 를 개선하는 방법이다.</li>
+<li>RLE 는 문제가 두가지 있는데,
+<ul>
+<li>RLE 자체의 고질병이라고 할 수 있는 branch misprediction 이다.
+<ul>
+<li>RLE 에서는 run value 를 run length 만큼 copy 해야 하기 때문에, 임의 횟수만큼의 loop 을 돌아야 하고,</li>
+<li>이것은 당연히 branch misprediction 으로 이어진다.</li>
+</ul>
+</li>
+<li>둘째는 SIMD lane overwrite 이다.
+<ul>
+<li>SIMD lane 은 고정된 크기이고, 이것을 이용해 가변 개수 (run length) 의 run value 를 copy 해야 하기 때문에,</li>
+<li>Run length 보다 더 큰 lane size 의 배수 만큼 run value 를 병렬적으로 copy 한 다음</li>
+<li>다음 run 을 처리할 때는 복사한 값을 overwrite 하여 임의의 run length 를 맞춘다.</li>
+<li>근데 이건 당연히 lane 을 최대로 사용하고 있는 것이 아니기 때문에 비효율적이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그래서 제시한 방법은 다음과 같다. 일단 아래 그림은 일반적인 RLE encoding 이다.</li>
+</ul>
+<p><img src="../../../../images/fl_rle_retionale_1.png" width="auto" height="auto"/></p>
+<ul>
+<li>FastLanes-RLE 에서는 Run length 대신, Run value vector 의 인덱스로 value 를 전부 치환한다.
+<ul>
+<li>즉, run value vector 를 <a href="../../../../gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)">dictionary</a> 처럼 사용하는 것.</li>
+<li>이것을 index vector 라고 부르자.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../images/fl_rle_retionale_2.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 이것을 <a href="../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA encoding</a> 한다.
+<ul>
+<li>이것이 효과적인 이유는 index vector 의 값들이 index 이기 때문에 run 이 시작될 때 마다 1씩 증가하는 형상을 가지게 되고,</li>
+<li>따라서 이것에 DELTA 를 하게 되면 run 이 시작될 때만 1이고 run 이 진행중일 때는 0인 형태가 된다.</li>
+<li>결과적으로 값이 0과 1밖에 없기 때문에 <a href="../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 를 하면 1비트만 사용할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../images/fl_rle_retionale_3.png" width="auto" height="auto"/></p>
+<ul>
+<li>마지막으로 여기다가 위에서 말한 <a href="#unified-transposed-layout-for-delta-encoding" class="internal">UTL</a> 을 씌우면 병렬처리까지 완벽하게 되는 것.</li>
+</ul>
+<p><img src="../../../../images/fl_rle_retionale_4.png" width="auto" height="auto"/></p>
+<ul>
+<li>이렇게 하면 일단 loop 의 횟수가 고정이기 때문에 branch misprediction 이 줄어들고</li>
+<li>Lane 도 최대로 쓸 수 있게 된다.
+<ul>
+<li>이 Overwrite 문제에 대해서는 만약에 decoding 시에 index vector 를 원본 value vector 로 치환한다면 마찬가지로 발생하긴 한다.</li>
+<li>근데 index vector 상태로 둬도 query processing 에는 아무런 문제가 없다. 그냥 query processing 할 때 대상이 되는 놈만 index 값을 value 로 바꿔서 사용하면 되기 때문.</li>
+<li>이렇게 원본으로 바꾸지 않는 것은 <a href="https://duckdb.org/" class="external">DuckDB</a> 같은 DBMS 에서 사용하는 방법이며, 반대의 개념을 Full (혹은 eager) decompression 이라고 한다.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#요약정리" data-for="요약정리">요약정리</a></li><li class="depth-0"><a href="#virtual-instruction-set" data-for="virtual-instruction-set">Virtual Instruction Set</a></li><li class="depth-0"><a href="#interleaved-bit-packing" data-for="interleaved-bit-packing">Interleaved Bit-packing</a></li><li class="depth-1"><a href="#lane-에-bit-들이-모두-있는-경우" data-for="lane-에-bit-들이-모두-있는-경우">Lane 에 Bit 들이 모두 있는 경우</a></li><li class="depth-1"><a href="#bit-들이-여러-word-에-뿌려져-있는-경우" data-for="bit-들이-여러-word-에-뿌려져-있는-경우">Bit 들이 여러 word 에 뿌려져 있는 경우</a></li><li class="depth-0"><a href="#unified-transposed-layout-for-delta-encoding" data-for="unified-transposed-layout-for-delta-encoding">Unified Transposed Layout for DELTA Encoding</a></li><li class="depth-1"><a href="#transposing" data-for="transposing">Transposing</a></li><li class="depth-1"><a href="#unified-transposed-layout" data-for="unified-transposed-layout">Unified Transposed Layout</a></li><li class="depth-0"><a href="#fastlanes-rle" data-for="fastlanes-rle">FastLanes-RLE</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/database/(Garden)-Database" class="internal">(Garden) Database</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>
