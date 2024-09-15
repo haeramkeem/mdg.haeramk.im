@@ -3,7 +3,7 @@ date: 2024-06-14
 ---
 > [!info] 프로젝트 링크
 > - [깃허브](https://github.com/aos24s-cse-snu-ac-kr)
-> - [최종 발표 자료]([fdp_nvmevirt.pdf](https://1drv.ms/b/s!AnQMW732rqISg-lx8ilheP7CS42Ibg?e=HcJEc1))
+> - [최종 발표 자료](https://1drv.ms/b/s!AnQMW732rqISg-lx8ilheP7CS42Ibg?e=HcJEc1)
 
 ## 개요
 
