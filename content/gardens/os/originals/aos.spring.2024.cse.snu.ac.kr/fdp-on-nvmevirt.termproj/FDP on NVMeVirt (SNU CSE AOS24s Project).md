@@ -1,10 +1,13 @@
 ---
 date: 2024-06-14
 ---
+> [!info] 프로젝트 링크
+> - [깃허브](https://github.com/aos24s-cse-snu-ac-kr)
+> - [최종 발표 자료]([fdp_nvmevirt.pdf](https://1drv.ms/b/s!AnQMW732rqISg-lx8ilheP7CS42Ibg?e=HcJEc1))
+
 ## 개요
 
 - [[(서울대) 고급 운영체제 강의록|서울대 석사과정 고급운영체제 강의]] 수강 중 수행한 프로젝트 진행 중 메모한 글입니다.
-- [깃허브](https://github.com/aos24s-cse-snu-ac-kr)
 
 ## 목차
 
