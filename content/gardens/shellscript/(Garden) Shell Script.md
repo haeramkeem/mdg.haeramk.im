@@ -97,6 +97,12 @@ date: 2024-04-23
 - `ipvsadm`
 	- [[ipvsadm - 설정 모두 지우기|설정 모두 지우기]]
 	- [[ipvsadm - 설정 확인하기|설정 확인하기]]
+- `journalctl`
+	- [[journactl - 기본적인 사용법|기본적인 사용법]]
+	- [[journalctl - Kernel log 보기|Kernel log 보기]]
+	- [[journalctl - Log level 필터링하기|Log level 필터링하기]]
+	- [[journalctl - Log 비활성화하기|Log 비활성화하기]]
+	- [[journalctl - 시점으로 필터링하기|시점으로 필터링하기]]
 - `less`
 	- [[less - Color code 보여주기|Color code 보여주기]]
 - `ln`
