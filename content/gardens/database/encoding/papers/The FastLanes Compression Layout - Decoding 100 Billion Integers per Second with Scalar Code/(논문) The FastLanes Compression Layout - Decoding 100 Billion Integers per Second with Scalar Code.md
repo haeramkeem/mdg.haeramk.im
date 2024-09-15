@@ -7,7 +7,7 @@ date: 2024-08-21
 > [!info] FastLanes 링크
 > - [논문](https://dl.acm.org/doi/10.14778/3598581.3598587)
 > - [GitHub 코드](https://github.com/cwida/FastLanes)
-> - [주인장 논문 발표 자료 (Haeram Kim, 2024-09-14, SNU)]([FastLanes.haeramkim.2024-09-14.pdf](https://1drv.ms/b/s!AnQMW732rqISg-lz0idcPfIPVeRrnw?e=0ypNrU))
+> - [주인장 논문 발표 자료 (Haeram Kim, 2024-09-14, SNU)](https://1drv.ms/b/s!AnQMW732rqISg-lz0idcPfIPVeRrnw?e=0ypNrU)
 
 ## 개요
 
