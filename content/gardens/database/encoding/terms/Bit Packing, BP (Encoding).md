@@ -5,6 +5,7 @@ tags:
 date: 2024-08-05
 aliases:
   - BP
+  - Bit-Packing
 ---
 > [!info]- 참고한 것들
 > - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.5. FOR & Bit-packing|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
@@ -46,3 +47,4 @@ aliases:
 
 - 요즘은 [[Single Instruction Multiple Data, SIMD (Arch)|SIMD]] 를 이용해 한번에 여러개를 쭉쭉 처리해 나가는 최적화도 한다.
 - 이것과 관련해서는 [[Frame Of Reference, FOR (Encoding)|FOR]] + BP 를 SIMD 로 최적화한 [C++ 라이브러리](https://github.com/lemire/FastPFor) 를 참고하자.
+- 이 SIMD 로 병렬적으로 처리하기 쉽게 하게 하기 위해 packing 된 bit 를 저장하는 새로운 layout 이 제안되었는데, 그것이 [[Interleaved Bit-Packing (Encoding)|Interleaved Bit-Packing]] 이다.
