@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html><head><title>Flash Memory, SSD (Storage)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Flash Memory, SSD (Storage)"/><meta property="og:description" content="참고한 것들 블로그 글 어떤 회사 블로그 글 어떤 글 카카오 테크 블로그 이게 무언가? § 반도체 소자를 이용해 전기적으로 읽고 (read) 쓸 (write, program) 수 있는 저장장치를 말한다. 하나의 비트는 Floating-gate 트랜지스터로 구성된 셀에 저장되며 여기에 전압을 가해 bit 를 읽거나 쓰게 된다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../static/icon.png"/><meta name="description" content="참고한 것들 블로그 글 어떤 회사 블로그 글 어떤 글 카카오 테크 블로그 이게 무언가? § 반도체 소자를 이용해 전기적으로 읽고 (read) 쓸 (write, program) 수 있는 저장장치를 말한다. 하나의 비트는 Floating-gate 트랜지스터로 구성된 셀에 저장되며 여기에 전압을 가해 bit 를 읽거나 쓰게 된다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/storage/ssd/Flash-Memory,-SSD-(Storage)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Flash Memory, SSD (Storage)</h1><p class="content-meta ">Apr 06, 2024, 8 min read</p><ul class="tags "><li><a href="../../../tags/storage" class="internal tag-link">#storage</a></li><li><a href="../../../tags/terms" class="internal tag-link">#terms</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://metar.tistory.com/entry/NAND-flash%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80" class="external">블로그 글</a></li>
+<li><a href="https://www.tuxera.com/blog/what-is-write-amplification-why-is-it-bad-what-causes-it/" class="external">어떤 회사 블로그 글</a></li>
+<li><a href="https://codecapsule.com/2014/02/12/coding-for-ssds-part-2-architecture-of-an-ssd-and-benchmarking/" class="external">어떤 글</a></li>
+<li><a href="https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2" class="external">카카오 테크 블로그</a></li>
+</ul>
+</blockquote>
+<h2 id="이게-무언가">이게 무언가?<a aria-hidden="true" tabindex="-1" href="#이게-무언가" class="internal"> §</a></h2>
+<ul>
+<li>반도체 소자를 이용해 전기적으로 읽고 (read) 쓸 (write, program) 수 있는 저장장치를 말한다.</li>
+<li>하나의 비트는 Floating-gate 트랜지스터로 구성된 셀에 저장되며 여기에 전압을 가해 bit 를 읽거나 쓰게 된다.</li>
+</ul>
+<h2 id="구조">구조<a aria-hidden="true" tabindex="-1" href="#구조" class="internal"> §</a></h2>
+<p><img src="../../../images/Pasted-image-20240313213520-1.png" width="auto" height="auto"/></p>
+<blockquote>
+<p><a href="https://tech.kakao.com/2016/07/14/coding-for-ssd-part-2" class="external">출처</a></p>
+</blockquote>
+<h3 id="host-interface">Host Interface<a aria-hidden="true" tabindex="-1" href="#host-interface" class="internal"> §</a></h3>
+<ul>
+<li><em>Host Interface</em> 로 부터 호스트 (가령 OS) 의 요청이 들어오게 된다. 조립컴 살때 종종 보이는 SATA 나 PCIe 가 여기에 속한다.
+<ul>
+<li>SATA 3.0 는 대략 550Mb/s, PCIe 3.0 는 1 lane 당 1Gb/s 의 속도를 낸다. (보통은 4, 8 lane 으로 구성된다)</li>
+<li>대부분의 SSD 는 처리 속도가 550Mb/s 보다는 크기에, SATA 3.0 을 사용하는 것은 Host Interface 에의 병목이 생기게 된다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="flash-memory-package">Flash memory package<a aria-hidden="true" tabindex="-1" href="#flash-memory-package" class="internal"> §</a></h3>
+<ul>
+<li><em>Flash memory package</em> 가 실제 정보 저장을 위한 반도체 소자이다.</li>
+<li>요놈의 구조를 하나씩 살펴보자.</li>
+</ul>
+<p><img src="../../../images/Pasted-image-20240315004625.png" width="auto" height="auto"/></p>
+<ul>
+<li>Bit 를 저장하는 최소단위인 <em>cell</em> 이 있고</li>
+<li>Cell 이 모여 <em>page</em> 가 되고
+<ul>
+<li><em>Page</em> 는 Read/Write operation 의 데이터 크기 단위이다. (<a href="#readwrite-by-page" class="internal">Read/Write by Page</a>)</li>
+</ul>
+</li>
+<li>Page 가 모여 <em>block</em> 이 되고
+<ul>
+<li><em>Block</em> 은 Erase operation 의 데이터 크기 단위이다. (<a href="#erase-by-block" class="internal">Erase by Block</a>)</li>
+</ul>
+</li>
+<li>Block 이 모이면 <em>plane</em> 이 되고
+<ul>
+<li><em>Plane</em> 은 Read/Write operation 의 단위이다.</li>
+<li>Plane 별로 register 가 존재하고, read 한 데이터는 이 register 에 채워진 후 SSD controller 에 보내지며 write data 또한 이 register 에 채워진 후 page 에 저장된다.</li>
+</ul>
+</li>
+<li>Plane 이 모이면 <em>die</em> 가 되고</li>
+<li>이 <em>die</em> 들이 하나의 <em>chip</em> 을 구성하게 된다</li>
+</ul>
+<h3 id="ssd-controller-ram-channel">SSD Controller, RAM, Channel<a aria-hidden="true" tabindex="-1" href="#ssd-controller-ram-channel" class="internal"> §</a></h3>
+<ul>
+<li>SSD 의 컨트롤러에도 나름의 <em>Processor</em> 와 <em>RAM</em> 이 있다.
+<ul>
+<li><em>Processor</em> 는 명령어를 받아서 <em>Flash Controller</em> 로 보내고</li>
+<li><em>RAM</em> 은 매핑 정보를 저장하거나 캐시로 쓰인다.</li>
+</ul>
+</li>
+<li><em>Flash Controller</em> 는 실제 반도체 소자인 <em>Flash Memory Package</em> 와 <em>Channel</em> 로 연결되어 제어하게 된다.</li>
+</ul>
+<h2 id="operation-상의-특징들">Operation 상의 특징들<a aria-hidden="true" tabindex="-1" href="#operation-상의-특징들" class="internal"> §</a></h2>
+<h3 id="readwrite-by-page">Read/Write by Page<a aria-hidden="true" tabindex="-1" href="#readwrite-by-page" class="internal"> §</a></h3>
+<ul>
+<li>Read, Write (혹은 <em>program</em> 이라는 용어도 쓴다) 작업은 <em>page</em> 단위로 이루어 진다.</li>
+<li>사용자 입장에서 하나의 byte 만 읽고 쓰는건 가능하다. 하지만 이 요청이 SSD 레벨로 가게 되면 동일하게 page 전체를 r/w 하고 나머지는 버리게 된다.
+<ul>
+<li>Page 에 부분적으로 write 할 수는 없다. 즉, write 하려는 데이터가 page 사이즈보다 작을 경우 나머지 공간은 그냥 빈공간으로 남고 그 공간에 이어서 write 할 수는 없다. (이러한 경우도 <a href="../../../gardens/storage/ssd/terms/Write-Amplification,-WA-and-Write-Amplication-Factor,-WAF-(Storage)" class="internal" data-slug="gardens/storage/ssd/terms/Write-Amplification,-WA-and-Write-Amplication-Factor,-WAF-(Storage)">WA</a> 에 속한다.)</li>
+</ul>
+</li>
+</ul>
+<h3 id="erase-by-block">Erase by Block<a aria-hidden="true" tabindex="-1" href="#erase-by-block" class="internal"> §</a></h3>
+<ul>
+<li>Erase 작업은 page 들을 그룹한 단위인 block 단위로 이루어 진다.
+<ul>
+<li>이때 block 에 있던 기존에 write 된 page 들은 다른 곳으로 옮겨 가게 되는데, 이 작업을 <a href="../../../gardens/storage/ssd/terms/Garbage-Collection,-GC-(Storage)" class="internal" data-slug="gardens/storage/ssd/terms/Garbage-Collection,-GC-(Storage)">GC</a> 라 한다.</li>
+</ul>
+</li>
+<li>Erase 작업을 하게 되면 해당 block 의 모든 page 가 <em>free</em> 상태가 된다.</li>
+<li>Erase 를 page 단위가 아닌 더 큰 block 단위로 하는 이유는 비용때문에 설계를 그렇게 했기 때문이다.
+<ul>
+<li>간단히 말하자면, erase 를 위한 회로를 page 마다 넣는 것이 비용상 비효율적이기 때문.</li>
+<li>자세한 설명은 <a href="../../../gardens/storage/ssd/draft/Deep-Dive-SSD---Storing-and-Detecting-Electrons-(Storage)" class="internal" data-slug="gardens/storage/ssd/draft/Deep-Dive-SSD---Storing-and-Detecting-Electrons-(Storage)">여기</a> 에서 해준다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="free-page-write-non-overwritable">Free Page Write, Non-overwritable<a aria-hidden="true" tabindex="-1" href="#free-page-write-non-overwritable" class="internal"> §</a></h3>
+<ul>
+<li>Write 는 free page 에서만 가능하다.</li>
+<li>따라서, page overwrite (in-place update) 가 불가능하다: 이전에 write 된 적이 있는 page 는 free page 가 아니기 때문에 write 가 불가능한 것.</li>
+</ul>
+<h3 id="read-modify-write">Read-modify-write<a aria-hidden="true" tabindex="-1" href="#read-modify-write" class="internal"> §</a></h3>
+<p><img src="../../../images/Pasted-image-20240314124139.png" width="auto" height="auto"/></p>
+<blockquote>
+<p>Page 를 수정하고 이후 erase (gc) 하는 과정 정리 이미지 (<a href="https://codecapsule.com/2014/02/12/coding-for-ssds-part-3-pages-blocks-and-the-flash-translation-layer/" class="external">출처</a>)</p>
+</blockquote>
+<ul>
+<li>Page 는 in-place update 가 안되기에, 내용을 변경하고자 할 때에는 다음과 같은 방법을 사용한다.
+<ul>
+<li>기존의 페이지는 <em>stale</em> 혹은 <em>invalid</em> 상태로 바꾸고,</li>
+<li>해당 페이지를 레지스터 (아마 SSD Processor 안에 있는?) 로 옮겨서 수정을 한 뒤에,</li>
+<li>새로운 free page 에 write 하게 된다.</li>
+<li>이 과정은 <em>Read-Modify-Write</em> 라고 부르기도 한다.</li>
+</ul>
+</li>
+<li>이후 이 <em>stale</em> 페이지는 <a href="../../../gardens/storage/ssd/terms/Garbage-Collection,-GC-(Storage)" class="internal" data-slug="gardens/storage/ssd/terms/Garbage-Collection,-GC-(Storage)">GC</a> 과정에서 정리된다.</li>
+</ul>
+<h3 id="pe-cycle-limit-문서-분리-pe-cyclen-limit">P/E Cycle Limit (문서 분리: <a href="../../../gardens/storage/ssd/terms/PE-Cyclen-Limit,-Wearing-off-(Storage)" class="internal" data-slug="gardens/storage/ssd/terms/PE-Cyclen-Limit,-Wearing-off-(Storage)">PE Cyclen Limit</a>)<a aria-hidden="true" tabindex="-1" href="#pe-cycle-limit-문서-분리-pe-cyclen-limit" class="internal"> §</a></h3>
+<ul>
+<li>SSD 는 전기 소자의 특성때문에 r/w 횟수에 제한이 있다.</li>
+</ul>
+<h2 id="종류-문서-분리-multi-level-cell">종류 (문서 분리: <a href="../../../gardens/storage/ssd/terms/Multi-Level-Cell,-MLC-(Storage)" class="internal" data-slug="gardens/storage/ssd/terms/Multi-Level-Cell,-MLC-(Storage)">Multi Level Cell</a>)<a aria-hidden="true" tabindex="-1" href="#종류-문서-분리-multi-level-cell" class="internal"> §</a></h2>
+<ul>
+<li>SSD 는 Cell 하나가 몇개의 bit 를 표현할 수 있냐에 따라 SLC (Single), MLC (Multiple), TLC (Triple), QLC (Quadra) 등으로 나눌 수 있다.
+<ul>
+<li>SLC 로 갈수록 용량은 줄어들지만 성능과 수명은 좋아진다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="벤치마킹">벤치마킹<a aria-hidden="true" tabindex="-1" href="#벤치마킹" class="internal"> §</a></h2>
+<ul>
+<li>SSD 의 경우 최악의 성능을 테스트하기 위해 부하를 미리 걸어 놓는 <a href="../../../gardens/storage/ssd/terms/Pre-conditioning-(Storage)" class="internal" data-slug="gardens/storage/ssd/terms/Pre-conditioning-(Storage)">Pre-conditioning</a> 을 사용하기도 한다.
+<ul>
+<li>하지만 이것이 반드시 서비스 환경에서의 성능을 반영한다고 말할 수는 없다. 랜덤 읽기 쓰기 이기 때문에 실 서비스 환경과는 당연히 차이가 있기 때문.</li>
+<li>실 서비스의 데이터 특성을 고려한 자체개발 (in-house) 테스트 툴을 사용하는 것이 (물론 뭐 여유가 된다면) 좋다고 하더라.</li>
+</ul>
+</li>
+<li>벤치마킹을 수행할 때에는 여러 파라미터 (설정값 정도로 생각하자) 들을 주입하는데, 대표적으로는:
+<ul>
+<li>워크로드 타입
+<ul>
+<li>“주입되는 데이터의 특성” 정도로 생각하면 된다. 데이터가 application 에서 생성하는 특정 패턴 (뭐 json log 등의) 을 따르는지, 아니면 sequential, random r/w 인지 등</li>
+</ul>
+</li>
+<li>읽기/쓰기 비율
+<ul>
+<li>이건 뭐 말 그대로… 읽기와 쓰기를 어떤 비율로 해서 벤치마킹을 하는지</li>
+</ul>
+</li>
+<li>큐 길이
+<ul>
+<li>동시성과 관련된 것이다. 동시에 몇개의 프로세스 혹은 스레드가 부하를 거는지</li>
+</ul>
+</li>
+<li>데이터 청크 크기
+<ul>
+<li>Input 혹은 output 작업 1회 수행시 처리되는 양</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>또한 이런 벤치마킹 결과는 다음과 같은 메트릭 (뭐 단위 정도로 생각하자) 으로 정량적인 결과를 산출한다:
+<ul>
+<li><a href="../../../gardens/storage/common/terms/Throughput-(Storage)" class="internal" data-slug="gardens/storage/common/terms/Throughput-(Storage)">스루풋 (Throughput)</a></li>
+<li><a href="../../../gardens/storage/common/terms/Input-Output-per-second,-IOps-(storage)" class="internal" data-slug="gardens/storage/common/terms/Input-Output-per-second,-IOps-(storage)">IOps</a></li>
+<li><a href="../../../gardens/storage/common/terms/Latency-(Storage)" class="internal" data-slug="gardens/storage/common/terms/Latency-(Storage)">레이턴시 (Latency)</a></li>
+</ul>
+</li>
+<li>벤치마킹의 결과를 해석할 때는, (각 메트릭들은 SSD 의 성능을 각기 다른 시선에서 수치화하기 때문에) 이러한 메트릭을 정확하게 이해하고 분석하는게 좋다고 한다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#이게-무언가" data-for="이게-무언가">이게 무언가?</a></li><li class="depth-0"><a href="#구조" data-for="구조">구조</a></li><li class="depth-1"><a href="#host-interface" data-for="host-interface">Host Interface</a></li><li class="depth-1"><a href="#flash-memory-package" data-for="flash-memory-package">Flash memory package</a></li><li class="depth-1"><a href="#ssd-controller-ram-channel" data-for="ssd-controller-ram-channel">SSD Controller, RAM, Channel</a></li><li class="depth-0"><a href="#operation-상의-특징들" data-for="operation-상의-특징들">Operation 상의 특징들</a></li><li class="depth-1"><a href="#readwrite-by-page" data-for="readwrite-by-page">Read/Write by Page</a></li><li class="depth-1"><a href="#erase-by-block" data-for="erase-by-block">Erase by Block</a></li><li class="depth-1"><a href="#free-page-write-non-overwritable" data-for="free-page-write-non-overwritable">Free Page Write, Non-overwritable</a></li><li class="depth-1"><a href="#read-modify-write" data-for="read-modify-write">Read-modify-write</a></li><li class="depth-1"><a href="#pe-cycle-limit-문서-분리-pe-cyclen-limit-wearing-off-storagepe-cyclen-limit" data-for="pe-cycle-limit-문서-분리-pe-cyclen-limit-wearing-off-storagepe-cyclen-limit">P/E Cycle Limit (문서 분리: [[PE Cyclen Limit, Wearing-off (Storage)|PE Cyclen Limit]])</a></li><li class="depth-0"><a href="#종류-문서-분리-multi-level-cell-mlc-storagemulti-level-cell" data-for="종류-문서-분리-multi-level-cell-mlc-storagemulti-level-cell">종류 (문서 분리: [[Multi Level Cell, MLC (Storage)|Multi Level Cell]])</a></li><li class="depth-0"><a href="#벤치마킹" data-for="벤치마킹">벤치마킹</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../gardens/storage/(Garden)-Storage" class="internal">(Garden) Storage</a></li><li><a href="../../../gardens/storage/common/terms/Logical-Block-Addressing,-LBA-(Storage)" class="internal">Logical Block Addressing, LBA (Storage)</a></li><li><a href="../../../gardens/storage/hdd/terms/Shingled-Magnetic-Recording-HDD,-SMR-HDD-(Storage)" class="internal">Shingled Magnetic Recording HDD, SMR HDD (Storage)</a></li><li><a href="../../../gardens/storage/ssd/terms/Garbage-Collection,-GC-(Storage)" class="internal">Garbage Collection, GC (Storage)</a></li><li><a href="../../../gardens/storage/ssd/terms/Multi-Level-Cell,-MLC-(Storage)" class="internal">Multi Level Cell, MLC (Storage)</a></li><li><a href="../../../gardens/storage/ssd/terms/NAND-based-Flash-Memory-(Storage)" class="internal">NAND-based Flash Memory (Storage)</a></li><li><a href="../../../gardens/storage/ssd/terms/NOR-based-Flash-Memory-(Storage)" class="internal">NOR-based Flash Memory (Storage)</a></li><li><a href="../../../gardens/storage/ssd/terms/Open-Channel-SSD,-OCSSD-(Storage)" class="internal">Open Channel SSD, OCSSD (Storage)</a></li><li><a href="../../../gardens/storage/ssd/terms/Pre-conditioning-(Storage)" class="internal">Pre-conditioning (Storage)</a></li><li><a href="../../../gardens/storage/ssd/terms/Write-Amplification,-WA-and-Write-Amplication-Factor,-WAF-(Storage)" class="internal">Write Amplification, WA and Write Amplication Factor, WAF (Storage)</a></li><li><a href="../../../gardens/storage/zsm/Zoned-Storage-Model-(Storage)" class="internal">Zoned Storage Model (Storage)</a></li><li><a href="../../../gardens/storage/zsm/papers/drafts/(논문)-ZNS,-Avoiding-the-Block-Interface-Tax-for-Flash-based-SSDs" class="internal">(논문) ZNS, Avoiding the Block Interface Tax for Flash-based SSDs</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../postscript.js" type="module"></script></html>
