@@ -137,6 +137,10 @@ date: 2024-04-23
 - `ping`
 	- [[ping - 1개만 보내기|1개만 보내기]]
 	- [[ping - Timeout 설정하기|Timeout 설정하기]]
+- `psql`
+	- [[psql - Backslash Command 정리|Backslash Command 정리]]
+	- [[psql - 기본 접속 방법|기본 접속 방법]]
+	- [[psql - 설정 확인|설정 확인]]
 - `tar`
 	- [[tar - 다운로드 와 압축해제를 동시에|다운로드 와 압축해제를 동시에]]
 	- [[tar - 파일 압축 하기|파일 압축하기]]
