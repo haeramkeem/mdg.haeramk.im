@@ -26,7 +26,7 @@ title: 매디쏜 디지딸 갈든
 - [[(Garden) Proxmox Virtual Environment|Proxmox VE]]
 - [[(Garden) Python|파이썬]]
 - [[(Garden) Shell Script|쉘스크립트]]
-- [[(Garden) Storage, SSD|스토리지]]
+- [[(Garden) Storage|스토리지]]
 - [[(Garden) Software Engineering|소프트웨어 공학]]
 - [[(Garden) Web|웹개발]]
 - [[아까이브 갈든 - Archive Garden|아까이브 갈든]] : 여기에는 정리는 안돼있지만 버리기에는 "아까" 운 작물들 (그냥 창고) 이 있습니다.

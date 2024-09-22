@@ -11,6 +11,7 @@ date: 2024-07-29
 
 - [[(CMU 15-445) Intro. to Database Systems]]
 - [[(CMU 15-721) Advanced Database Systems]]
+- [[(SNU GSDS) Bigdata and Knowledge Management Systems]]
 
 ### Common
 

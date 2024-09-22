@@ -14,7 +14,7 @@ aliases:
 
 - Storage 를 고정크기인 *Block* 들의 1차원 배열로 나타내는 논리적인 주소 공간.
 	- Virtual memory 공간의 storage 버전인 셈.
-	- 반대 개념으로는 [[Physical Block Address, PBA (Storage)|PBA]] 가 있다.
+	- Physical Block 에 대한 주소는 *PBA* (*Physical Block Address*) 라고 한다.
 - 이 공간은 논리적인 공간인 만큼, block 들에는 아무런 제약도 걸려있지 않다고 보면 된다:
 	- LBA 주소를 통해 Random access 가능
 	- Read, write, overwrite 가능
