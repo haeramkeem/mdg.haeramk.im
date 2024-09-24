@@ -7,6 +7,11 @@ aliases:
   - FD
   - File Descriptor
 ---
+> [!info]- 참고한 것들
+> - [Velog 블로그](https://velog.io/@hyeseong-dev/File-Descriptor)
+> - [Medium 블로그](https://medium.com/@boutnaru/the-linux-kernel-data-structure-journey-struct-file-8b1fffaaa416)
+> - [위키](https://en.wikipedia.org/wiki/File_descriptor)
+
 ## File Descriptor (순한맛)
 
 - 블로그를 몇군데 돌아다니다 보니까, 대강 내용들이 다 비슷비슷하다.
