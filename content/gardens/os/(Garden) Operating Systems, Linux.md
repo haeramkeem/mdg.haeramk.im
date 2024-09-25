@@ -25,8 +25,12 @@ date: 2024-07-29
 
 ### File system
 
+- [[File System (OS)|File System]]
 - 용어들
+	- [[Directory (File System)|Directory]]
 	- [[File Descriptor, FD (File System)|File Descriptor, FD]]
+	- [[Inode (File System)|Inode]]
+	- [[Link (File System)|Link]]
 	- [[Slack Space Recycling, SSR (File System)|Slack Space Recycling, SSR]]
 - 논문들
 	- [[(논문) A Fast File System for UNIX|(Draft) Marshall K. McKusick - A Fast File System for UNIX (ACM ToCS '84)]]
