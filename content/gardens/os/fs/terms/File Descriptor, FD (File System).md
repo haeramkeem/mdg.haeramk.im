@@ -10,7 +10,7 @@ aliases:
 > [!info]- 참고한 것들
 > - [Velog 블로그](https://velog.io/@hyeseong-dev/File-Descriptor)
 > - [Medium 블로그](https://medium.com/@boutnaru/the-linux-kernel-data-structure-journey-struct-file-8b1fffaaa416)
-> - [위키](https://en.wikipedia.org/wiki/File_descriptor
+> - [위키](https://en.wikipedia.org/wiki/File_descriptor)
 
 ## File Descriptor (순한맛)
 
