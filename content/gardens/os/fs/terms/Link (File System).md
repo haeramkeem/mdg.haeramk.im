@@ -54,6 +54,55 @@ aliases:
 	- `C` 의 entry 로 `..` 가 들어있을 것이며 (+1)
 	- `D` 의 entry 로 `..` 가 들어있을 것이다. (+1) -> 총합 4개!
 
+### Exercise
+
+- 실제로 한번 파일을 link 하고 unlink 해보자.
+- 일단 두 directory 와 file 하나를 생성한다.
+
+```bash
+mkdir dir1 dir2
+touch dir1/file1
+```
+
+- 이때 directory 구조는 다음과 같고:
+
+![[Pasted image 20240927101349.png]]
+
+- 파일은 `dir1` 에 있는 것처럼 보인다.
+
+![[Pasted image 20240927101441.png]]
+
+- 이때 `file1` 을 `dir2` 에 hard link 를 걸어보자.
+
+```bash
+ln dir1/file1 dir2/file1
+```
+
+- 그럼 directory 구조는 다음처럼 된다.
+
+![[Pasted image 20240927101557.png]]
+
+- 이때 두 directory 의 내용을 확인하면 다음과 같다.
+
+![[Pasted image 20240927101649.png]]
+
+- 동일한 파일이 `dir1` 와 `dir2` 모두에서 보이는 것을 확인할 수 있다.
+	- 여기서 주목해야 할 것은 `-i` 옵션으로 [[Inode (File System)|inode]] 도 출력해보면 두 파일의 inode ID 가 동일하다는 것이다.
+	- 즉, 두 directory 에 있는 파일은 두개의 파일이 아니라 하나의 파일이고, 두 directory 에 동시에 연결되어 있는 셈인 것.
+- 이때 `dir1` 을 지워보자.
+
+```bash
+rm -r dir1
+```
+
+- 그럼 directory 구조는 다음과 같다.
+
+![[Pasted image 20240927101929.png]]
+
+- `file1` 은 `dir2` 에 계속 참조되고 있기 때문에 지워지지 않은 것을 볼 수 있다.
+
+![[Pasted image 20240927101949.png]]
+
 ## Soft Link (Symlink)
 
 - Hard link 가 directory 에만 적혀있는 유령회사같은 놈이었다면
