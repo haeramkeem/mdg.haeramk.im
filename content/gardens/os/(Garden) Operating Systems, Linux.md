@@ -25,7 +25,12 @@ date: 2024-07-29
 
 ### File system
 
+- [[File System (OS)|File System]]
 - 용어들
+	- [[Directory (File System)|Directory]]
+	- [[File Descriptor, FD (File System)|File Descriptor, FD]]
+	- [[Inode (File System)|Inode]]
+	- [[Link (File System)|Link]]
 	- [[Slack Space Recycling, SSR (File System)|Slack Space Recycling, SSR]]
 - 논문들
 	- [[(논문) A Fast File System for UNIX|(Draft) Marshall K. McKusick - A Fast File System for UNIX (ACM ToCS '84)]]
@@ -56,7 +61,7 @@ date: 2024-07-29
 ### Replacement Policy
 
 - 용어들
-	- [[Least Frequently Used, LFU (replacement policy)|Least Frequently Used, LFU]]
-	- [[Least Recently Used, LRU (replacement policy)|Least Recently Used, LRU]]
+	- [[Least Frequently Used, LFU (Replacement)|Least Frequently Used, LFU]]
+	- [[Least Recently Used, LRU (Replacement)|Least Recently Used, LRU]]
 - 논문들
 	- [[(논문) ARC - A Self-Tuning, Low Overhead Replacement Cache|(Draft) ARC - A Self-Tuning, Low Overhead Replacement Cache (FAST '03)]]

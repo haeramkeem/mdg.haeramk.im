@@ -30,7 +30,7 @@ date: 2024-05-22
 	- Demand paging 은 "page 가 요청되는 시점에, 이미 올라와있지 않은 놈만 상위계층으로 올리는 것" 이다.
 	- 그리고 보통 하나의 page 만 올리는 것이 아닌 "빠른 시일 내로 요청될 것 같은 여러 page" 들을 같이 올리게 된다 (이것이 prefetching 이다.)
 	- 따라서 저장장치의 여유공간이 빠르게 없어지게 되는데, 공간이 부족한 경우에 새로운 page 를 올리기 위해서는 어떤 page 는 하위계층으로 쫒겨나야 한다.
-	- 이때 어떤 page 를 내릴 것인지 결정하는 것이 [[Replacement Policy (replacement policy)|cache replacement policy]] 이다.
+	- 이때 어떤 page 를 내릴 것인지 결정하는 것이 [[Replacement Policy (OS)|cache replacement policy]] 이다.
 
 #### Metrics for cache replacement policy
 
@@ -43,7 +43,7 @@ date: 2024-05-22
 - Overhead:
 	- 여기에서 overhead 라는 것은 이 cache replacement policy algorithm 에 대한 시공간 복잡도를 의미한다.
 	- 즉, 이 cache replacement policy 를 사용하는데에만 너무 많은 연산이 필요하거나 너무 많은 메모리를 잡아먹게 된다면 무의미하다는 것.
-	- 대표적으로는 [[Least Recently Used, LRU (replacement policy)|LRU]] 와 [[Least Frequently Used, LFU (replacement policy)|LFU]] 간의 차이가 있다.
+	- 대표적으로는 [[Least Recently Used, LRU (Replacement)|LRU]] 와 [[Least Frequently Used, LFU (Replacement)|LFU]] 간의 차이가 있다.
 		- LRU 의 경우에는 단순히 Linked-list 로 구현할 수 있어 $O(1)$ 의 시간복잡도를 가지지만,
 		- LFU 의 경우에는 정렬을 해야 하기에 Heap 이 필요해 $O(logn)$ 의 시간복잡도를 가지기에 overhead 가 큰 셈.
 - 따라서 "좋은 cache replacement policy" 라는 것은 hit rate 가 높고, overhead 가 적은 것일 것이다.
@@ -67,7 +67,7 @@ date: 2024-05-22
 	- $L_1$: "최근에", "단 한번만" 접근된 page
 	- $L_2$: "최근에", "두번 이상" 접근된 page
 	- 느낌이 $L_1$ 에 있다가 한번 더 참조되면 $L_2$ 로 옮겨지는 식으로 구현될 것 같죠?
-	- $L_1$ 은 따라서 *recency*, 즉 [[Temporal Locality (replacement policy)|시간 지역성]] 의 공간이고 $L_2$ 는 *frequency*, 즉 [[Spacial Locality (replacement policy)|공간 지역성]] 의 공간이다.
+	- $L_1$ 은 따라서 *recency*, 즉 [[Temporal Locality (Replacement)|시간 지역성]] 의 공간이고 $L_2$ 는 *frequency*, 즉 [[Spacial Locality (Replacement)|공간 지역성]] 의 공간이다.
 - 그리고 각각의 용량은 cache size 인 $c$ 이다.
 	- "용량" 이다; 이것은 C++ vector 에서의 capacity 와 유사하다고 생각하면 되고 [^lru-capacity],
 	- 뒤에서 나올 "사이즈" 는 C++ vector 에서의 size 라고 생각하면 된다.
