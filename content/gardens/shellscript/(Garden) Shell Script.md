@@ -141,6 +141,8 @@ date: 2024-04-23
 	- [[psql - Backslash Command 정리|Backslash Command 정리]]
 	- [[psql - 기본 접속 방법|기본 접속 방법]]
 	- [[psql - 설정 확인|설정 확인]]
+- Slurm
+	- [[Slurm - 기본적인 사용법|기본적인 사용법]]
 - `tar`
 	- [[tar - 다운로드 와 압축해제를 동시에|다운로드 와 압축해제를 동시에]]
 	- [[tar - 파일 압축 하기|파일 압축하기]]
