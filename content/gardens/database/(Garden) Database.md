@@ -68,7 +68,7 @@ date: 2024-07-29
 	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
 	- [[(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code|The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code (VLDB'23)]]
 
-### Modern DBMS
+### Modern
 
 - 용어집
 	- [[Data Cube (Database)|Data Cube]]
@@ -90,7 +90,49 @@ date: 2024-07-29
 	- [[STEAL, NO_STEAL (Database)|STEAL, NO_STEAL]]
 	- [[Undo Log (Database)|Undo Log]]
 
-### RocksDB
+### DBMS
+
+> [!info] 범위
+> - 여기에는 DBMS-specific 한 내용을 담을거임
+
+#### Elasticsearch
+
+- 스토리
+	- [[TL;DR ElasticSearch - 엘라스틱서치 간단하게 시작하기|엘라스틱서치 간단하게 시작하기]]
+	- [[ElasticSearch Architecture - 엘라스틱서치 아키텍처|엘라스틱서치 아키텍처]]
+	- [[Read & Write Operation in ElasticSearch - 엘라스틱서치 RW 과정 정리|엘라스틱서치 RW 과정 정리]]
+- 용어집
+	- [[_doc (ElasticSearch)|_doc]]
+	- [[_id (ElasticSearch)|_id]]
+	- [[Apache Lucene|Lucene]]
+	- [[Cluster (ElasticSearch)|Cluster]]
+	- [[Coordinating Node (ElasticSearch)|Coordinating Node]]
+	- [[Data Node (ElaticSearch)|Data Node]]
+	- [[Document (ElasticSearch)|Document]]
+	- [[Flush (ElasticSearch)|Flush]]
+	- [[Index (ElasticSearch)|Index]]
+	- [[Indexing (ElasticSearch)|Indexing]]
+	- [[Master Node (ElasticSearch)|Master Node]]
+	- [[Node (ElasticSearch)|Node]]
+	- [[Primary Shard (ElasticSearch)|Primary Shard]]
+	- [[Refresh (ElasticSearch)|Refresh]]
+	- [[Replication Shard (ElasticSearch)|Replication Shard]]
+	- [[Shard (ElasticSearch)|Shard]]
+	- [[Type (ElasticSearch)|Type]]
+- Lucene
+	- [[Segment (Lucene)]]
+	- [[Read API (Lucene)]]
+	- [[Merge (Lucene)]]
+	- [[Index (Lucene)]]
+	- [[Flush API (Lucene)]]
+	- [[Commit API (Lucene)]]
+
+#### PostgreSQL
+
+- 용어집
+	- [[Shared Buffer (PostgreSQL)|Shared Buffer]]
+
+#### RocksDB
 
 - 용어집
 	- [[Leveled Compaction (RocksDB)|Leveled Compaction]]

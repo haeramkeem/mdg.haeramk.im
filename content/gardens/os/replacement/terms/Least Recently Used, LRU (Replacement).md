@@ -4,6 +4,8 @@ tags:
   - terms
   - os-replacement
 date: 2024-05-22
+aliases:
+  - LRU
 ---
 > [!info]- 참고한 것들
 > - [[09. Segmentation#Replacement Policy|충남대 류재철 교수님 운영체제 강의 (Spring 2021)]]
@@ -12,10 +14,10 @@ date: 2024-05-22
 ## 덜 최신에 사용된
 
 - 즉, 가장 오래전에 사용된
-- ...놈을 cache 나 memory 에서 내쫒는 [[Replacement Policy (replacement policy)|Cache replacement policy]] 이다.
-- 최근에 참조된 놈은 조만간 다시 참조될 것이라는 [[Temporal Locality (replacement policy)|시간 지역성]] 에 기반한 것이다.
-	- 유사하지만 비슷한 놈으로는 [[Least Frequently Used, LFU (replacement policy)|LFU]] 가 있다.
-- [[First In First Out, FIFO (replacement policy)|FIFO]] 와 비슷하다고 생각할 수 있지만 좀 다르다.
+- ...놈을 cache 나 memory 에서 내쫒는 [[Replacement Policy (OS)|Cache replacement policy]] 이다.
+- 최근에 참조된 놈은 조만간 다시 참조될 것이라는 [[Temporal Locality (Replacement)|시간 지역성]] 에 기반한 것이다.
+	- 유사하지만 비슷한 놈으로는 [[Least Frequently Used, LFU (Replacement)|LFU]] 가 있다.
+- [[First In First Out, FIFO (Replacement)|FIFO]] 와 비슷하다고 생각할 수 있지만 좀 다르다.
 	- FIFO 는 가장 오래전에 "cache 에 올라온" 놈을 지우는거고
 	- LRU 는 가장 오래전에 "참조된" 놈을 지우는거다.
 - Linked List 형태로 구현한다
