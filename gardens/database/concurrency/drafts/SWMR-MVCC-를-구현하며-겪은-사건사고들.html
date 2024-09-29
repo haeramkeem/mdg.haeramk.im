@@ -4,7 +4,7 @@
 <li>일단, <em>SWMR <a href="../../../../gardens/database/concurrency/drafts/Multiversion-Concurrency-Control,-MVCC-(Database)" class="internal" data-slug="gardens/database/concurrency/drafts/Multiversion-Concurrency-Control,-MVCC-(Database)">MVCC</a></em> 는 <em>Single Writer, Multiple Reader Multi-version Concurrency Control</em> 의 약자 (라고 주인장 스스로 정했다.)</li>
 <li>모종의 이유로 인해, 이놈을 직접 구현해야 할 일이 생겼다.
 <ul>
-<li>이 “모종의 이유” 는 간단하게 말하면 <a href="../../../../gardens/database/rocksdb/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/rocksdb/LSM-Tree-(RocksDB)">LSM</a> 와 같은 상황에서 metadata concurrency control 이 필요했기 때문이었다.</li>
+<li>이 “모종의 이유” 는 간단하게 말하면 <a href="../../../../gardens/database/dbms/rocksdb/terms/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/dbms/rocksdb/terms/LSM-Tree-(RocksDB)">LSM</a> 와 같은 상황에서 metadata concurrency control 이 필요했기 때문이었다.</li>
 </ul>
 </li>
 <li>따라서 1개의 writer thread 와 N 개의 reader thread 를 생성하고,
@@ -26,7 +26,7 @@
 <li>처음에는 write thread 하나가 파일에 append-only 로 쭉 써내려가고, 16개의 read thread 가 이 파일을 처음부터 full scan 을 해나가는 상황에서도 concurrency 가 발생할 것으로 생각했다.
 <ul>
 <li>단순하게 같은 파일을 1 writer 와 N reader 가 접근하니까 concurrency 가 발생할 것이라 생각한 것.</li>
-<li>그리고 이것이 실제 usecase 와 유사했다. 저 write thread 가 수행하는 append-only 는 <a href="../../../../gardens/database/rocksdb/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/rocksdb/LSM-Tree-(RocksDB)">LSM</a> 을 모사하기 위함이고, read thread 의 full scan 은 이 <a href="../../../../gardens/database/rocksdb/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/rocksdb/LSM-Tree-(RocksDB)">LSM</a> 을 full scan 하는 thread 로 비견될 수 있기 때문.</li>
+<li>그리고 이것이 실제 usecase 와 유사했다. 저 write thread 가 수행하는 append-only 는 <a href="../../../../gardens/database/dbms/rocksdb/terms/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/dbms/rocksdb/terms/LSM-Tree-(RocksDB)">LSM</a> 을 모사하기 위함이고, read thread 의 full scan 은 이 <a href="../../../../gardens/database/dbms/rocksdb/terms/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/dbms/rocksdb/terms/LSM-Tree-(RocksDB)">LSM</a> 을 full scan 하는 thread 로 비견될 수 있기 때문.</li>
 </ul>
 </li>
 <li>하지만 concurrency 는 발생하지 않았다.
