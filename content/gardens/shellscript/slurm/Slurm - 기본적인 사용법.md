@@ -1,7 +1,7 @@
 ---
 tags:
   - shellscript
-  - sh-slurm
+  - bash-slurm
 date: 2024-09-30
 ---
 ## Slurm 클러스터를 사용하기 위한 기본적인 명령어 몇개
