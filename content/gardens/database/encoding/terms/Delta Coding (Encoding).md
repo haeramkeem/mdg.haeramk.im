@@ -52,7 +52,7 @@ delta:    [1,2,5,5,5,7,0,-1,4]
 - 즉, 어찌 보면 그냥 원래 음수를 표현하던 방식인 [[Integer (C++ Number)#Negative|2의 보수]] 를 활용하는 것.
 - 따라서 signed int 를 unsigned int 로 해석하면 된다. 다음의 C++ 예시를 참고하시라.
 
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 
@@ -106,7 +106,7 @@ int main() {
 	- Decoding: `((y >>> 1) ^ ((y << 31) >> 31)` (여기서 `>>>` 는 unsigned right shift 이다.)
 - 그리고, 이것을 코드로 나타내면 다음과 같다.
 
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 
@@ -155,7 +155,7 @@ int main() {
 	- 물론 음수와 양수를 XOR 를 하면 음수가 나오긴 하는데, 이때는 위의 [[#Modulo (Unsigned)|Modulo]] 와 같이 처리해야 할듯.
 - 다음의 예시를 보자.
 
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 
