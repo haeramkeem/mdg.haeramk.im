@@ -26,7 +26,7 @@ aliases:
 	- One Value: 모든 값이 동일한 RLE
 	- [[Dictionary Encoding (Encoding)|Dictionary]]
 	- [[Huffman Coding (Encoding)|Frequency]]
-	- [[Patching (Encoding)|Patched]] [[Frame Of Reference, FOR (Encoding)|FOR]] + [[Bit Packing, BP (Encoding)|BP]]
+	- [[Patching, Mostly Encoding (Encoding)|Patched]] [[Frame Of Reference, FOR (Encoding)|FOR]] + [[Bit Packing, BP (Encoding)|BP]]
 	- [[Fast Static Symbol Table, FSST (Encoding)|FSST]]
 	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
 	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|PDE]]

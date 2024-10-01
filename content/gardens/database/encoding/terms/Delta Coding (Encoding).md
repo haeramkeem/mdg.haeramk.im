@@ -189,7 +189,7 @@ int main() {
 ### 하지만 BP 가 안되는데요?
 
 - 보면 [[#Zig-zag encoding|Zig-zag]] 의 경우는 그렇다 쳐도, [[#Modulo (Unsigned)|Modulo]] 랑 [[#XOR|XOR]] 의 경우에는 중간에 `255` 나 `254` 같은 야리꾸리한 값들이 있다는 것을 알 수 있다.
-- 따라서 이런 요사스러운 애들에 대해서는 [[Patching (Encoding)|Patching]] 을 이용하여 BP 를 하게 된다.
+- 따라서 이런 요사스러운 애들에 대해서는 [[Patching, Mostly Encoding (Encoding)|Patching]] 을 이용하여 BP 를 하게 된다.
 
 ## 언제 쓰면 좋을까?
 

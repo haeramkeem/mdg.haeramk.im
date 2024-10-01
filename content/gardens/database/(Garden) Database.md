@@ -59,7 +59,7 @@ date: 2024-07-29
 	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Interleaved Bit-Packing (Encoding)|Interleaved Bit-Packing]]
-	- [[Patching (Encoding)|Patching]]
+	- [[Patching, Mostly Encoding (Encoding)|Patching, Mostly Encoding]]
 	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]]
 	- [[Prefix Code (Encoding)|Prefix Code]]
 	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
