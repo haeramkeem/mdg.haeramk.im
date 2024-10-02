@@ -121,7 +121,7 @@ if (dec_num != hex_num) { /* ... */ }
 
 - [[C - O_DIRECT 파일 입출력]]
 - [[C - POSIX thread mutex 사용법]]
-- [[C - 구조체 (struct) 정리]]
+- [[C - Struct]]
 - [[C - 기본 파일 입출력 (fopen, fwrite, fread, fclose)]]
 - [[C - 동적 할당 (malloc, calloc, free)]]
 - [[C - 메모리에 데이터 저장하기 (memset, memcpy)]]
