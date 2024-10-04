@@ -60,13 +60,18 @@ date: 2024-07-29
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Interleaved Bit-Packing (Encoding)|Interleaved Bit-Packing]]
 	- [[Patching, Mostly Encoding (Encoding)|Patching, Mostly Encoding]]
-	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]]
+	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]] (part of [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks]])
 	- [[Prefix Code (Encoding)|Prefix Code]]
 	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
 - 논문들
 	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
 	- [[(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code|The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code (VLDB'23)]]
+
+### Index
+
+- 논문들
+	- [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|Building a Bw-Tree Takes More Than Just Buzz Words (SIGMOD'18)]]
 
 ### Modern
 
