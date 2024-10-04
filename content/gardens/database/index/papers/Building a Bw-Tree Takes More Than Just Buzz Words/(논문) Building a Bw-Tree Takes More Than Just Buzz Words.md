@@ -3,6 +3,8 @@ tags:
   - database
   - db-index
 date: 2024-10-04
+aliases:
+  - OpenBwTree
 ---
 > [!info] OpenBwTree 링크
 > - [논문](https://dl.acm.org/doi/10.1145/3183713.3196895)
