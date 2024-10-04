@@ -60,7 +60,7 @@ date: 2024-07-29
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Interleaved Bit-Packing (Encoding)|Interleaved Bit-Packing]]
 	- [[Patching, Mostly Encoding (Encoding)|Patching, Mostly Encoding]]
-	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]] (part of [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks]])
+	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]] (redirect [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks]])
 	- [[Prefix Code (Encoding)|Prefix Code]]
 	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
@@ -70,6 +70,9 @@ date: 2024-07-29
 
 ### Index
 
+- 용어들
+	- [[2. Bw-Tree Essentials (OpenBwTree, SIGMOD 18)|Buzz Word Tree, Bw-Tree]] (redirect [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|OpenBwTree]])
+	- [[4. Component Optimization (OpenBwTree, SIGMOD 18)|Epoch-based GC]] (redirect [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|OpenBwTree]])
 - 논문들
 	- [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|Building a Bw-Tree Takes More Than Just Buzz Words (SIGMOD'18)]]
 
