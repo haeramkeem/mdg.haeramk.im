@@ -8,7 +8,7 @@ date: 2024-09-09
 ## 개요
 
 - 일단, *SWMR [[Multiversion Concurrency Control, MVCC (Database)|MVCC]]* 는 *Single Writer, Multiple Reader Multi-version Concurrency Control* 의 약자 (라고 주인장 스스로 정했다.)
-- 모종의 이유로 인해, 이놈을 직접 구현해야 할 일이 생겼다.
+- 모종의 이유로 인해 이놈을 직접 구현해야 할 일이 생겼다.
 	- 이 "모종의 이유" 는 간단하게 말하면 [[LSM Tree (RocksDB)|LSM]] 와 같은 상황에서 metadata concurrency control 이 필요했기 때문이었다.
 - 따라서 1개의 writer thread 와 N 개의 reader thread 를 생성하고,
 	- 이렇게 구성한 이유는 writer 간의 concurrency 는 관심 대상이 아니었기 때문이다.

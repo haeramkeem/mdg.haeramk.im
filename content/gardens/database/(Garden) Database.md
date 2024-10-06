@@ -21,6 +21,11 @@ date: 2024-07-29
 	- [[Database Management System, DBMS (Database)|Database Management System]]
 	- [[Transaction, ACID (Database)|Transaction, ACID]]
 
+### Concurrency
+
+- 논문들
+	- [[(논문) Diva - Making MVCC Systems HTAP-Friendly|Diva - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
+
 ### Benchmark
 
 - TPC
