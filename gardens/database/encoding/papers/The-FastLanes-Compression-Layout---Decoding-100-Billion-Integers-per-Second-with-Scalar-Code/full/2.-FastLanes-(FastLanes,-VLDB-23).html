@@ -89,7 +89,7 @@
 </li>
 <li>근데 chunk size 가 커진다는 것은 그만큼 value range 가 커질 가능성이 있기 때문에 <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 시에 compression ratio 가 더 안좋아질 수 있다.
 <ul>
-<li>물론 <a href="../../../../../../gardens/database/encoding/terms/Patching-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Patching-(Encoding)">exception mechanism</a> 으로 이러한 문제를 완화할 수는 있지만.</li>
+<li>물론 <a href="../../../../../../gardens/database/encoding/terms/Patching,-Mostly-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Patching,-Mostly-Encoding-(Encoding)">exception mechanism</a> 으로 이러한 문제를 완화할 수는 있지만.</li>
 </ul>
 </li>
 </ul>
@@ -556,7 +556,7 @@
 <li>만약 이것보다 더 큰 경우라면 0-bit <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 라는 것을 이용한다고 한다.</li>
 <li>간단하게 말하면 run 이 매우 길다면 <em>Delta Encoded Vector</em> 가 대부분 0 이고 가끔씩 1 이 되기 때문에</li>
 <li>별도의 <em>Delta Encoded Vector</em> 를 저장하지 않고 decoding 할 때만 0으로 <code>memset</code> 한 다음</li>
-<li>이 1들을 <a href="../../../../../../gardens/database/encoding/terms/Patching-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Patching-(Encoding)">exception handling</a> 으로 처리하는 방법이다.</li>
+<li>이 1들을 <a href="../../../../../../gardens/database/encoding/terms/Patching,-Mostly-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Patching,-Mostly-Encoding-(Encoding)">exception handling</a> 으로 처리하는 방법이다.</li>
 <li>이건 근데 본 논문에서는 다루고 있지 않고, 추후에 별도의 논문으로 공개된다고 한다.</li>
 </ul>
 </li>
