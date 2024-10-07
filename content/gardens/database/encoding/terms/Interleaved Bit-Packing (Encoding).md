@@ -13,7 +13,7 @@ aliases:
 
 ## 란?
 
-- [[Bit Packing, BP (Encoding)|BP]] 를 할 때, 기존에는 [[Patching (Encoding)|Horizontal Bit-packing]] 방식으로 저장하던 것을 [[Single Instruction Multiple Data, SIMD (Arch)|SIMD]] 를 적용하기 쉽도록 layout 을 바꾼 것이다.
+- [[Bit Packing, BP (Encoding)|BP]] 를 할 때, 기존에는 [[Patching, Mostly Encoding (Encoding)|Horizontal Bit-packing]] 방식으로 저장하던 것을 [[Single Instruction Multiple Data, SIMD (Arch)|SIMD]] 를 적용하기 쉽도록 layout 을 바꾼 것이다.
 
 ## Layout
 

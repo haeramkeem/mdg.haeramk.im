@@ -1,9 +1,10 @@
 ---
 tags:
-  - c
+  - database
+  - db-index
+  - terms
 aliases:
-  - struct
-  - 구조체
+  - Index
 ---
 > [!fail]- 본 글은 #draft 상태입니다.
-> - [ ] 내용 추가
+> - [ ] 내용 정리

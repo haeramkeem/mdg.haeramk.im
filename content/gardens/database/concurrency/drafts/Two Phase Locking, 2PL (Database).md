@@ -3,5 +3,5 @@ tags:
   - database
   - db-concurrency
 aliases:
-  - MVCC
+  - 2PL
 ---

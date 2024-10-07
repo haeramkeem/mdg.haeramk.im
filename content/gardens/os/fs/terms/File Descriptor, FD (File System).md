@@ -36,7 +36,7 @@ aliases:
 > [!tip] Linux 6.11 기준입니다.
 
 - 그럼 이걸 코드로 확인해 보자.
-- File descriptor 의 [[C - 구조체 (struct) 정리|구조체]] 이름은 `struct file` 이다. ([Code ref](https://github.com/torvalds/linux/blob/v6.11/include/linux/fs.h#L990-L1037))
+- File descriptor 의 [[C - Struct|구조체]] 이름은 `struct file` 이다. ([Code ref](https://github.com/torvalds/linux/blob/v6.11/include/linux/fs.h#L990-L1037))
 	- 여기를 보면 file 의 inode 를 가리키고 있는 것을 볼 수 있다.
 	- 즉, process 입장에서는 file descriptor index -> file descriptor -> inode 순서로 찾아가게 되는 것.
 

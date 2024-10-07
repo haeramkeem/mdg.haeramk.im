@@ -6,6 +6,9 @@ aliases:
   - Shared Buffer
 date: 2024-09-29
 ---
+> [!info]- 참고한 것들
+> - [[Lab 03. Shared Buffer|서울대 정형수 교수님 BKMS 강의 (Fall 2024)]]
+
 ## Shared Buffer
 
 - PostgreSQL 에서는 buffer pool 을 *Shared Buffer* 라고 부른다.

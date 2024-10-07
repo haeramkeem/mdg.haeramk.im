@@ -2,6 +2,8 @@
 tags:
   - database
 date: 2024-08-21
+aliases:
+  - HTAP
 ---
 > [!info]- 참고한 것들
 > - [위키](https://en.wikipedia.org/wiki/Hybrid_transactional/analytical_processing)

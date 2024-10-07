@@ -13,9 +13,15 @@ date: 2024-07-29
 - [[(충남대) 프로그래밍 언어 개론 강의록]]
 - [[(충남대) 컴파일러 개론 강의록]]
 
+### Function
+
+- 용어집
+	- [[First, Second Class Citizen (PL)|First, Second Class Citizen]]
+
 ### Optimization
 
-- [[Code Motion (PL)|Code Motion]]
-- [[Instruction Scheduling (PL)|Instruction Scheduling]]
-- [[Loop Invariant (PL)|Loop Invariant]]
-- [[Loop Unroll (PL)|Loop Unroll]]
+- 용어집
+	- [[Code Motion (PL)|Code Motion]]
+	- [[Instruction Scheduling (PL)|Instruction Scheduling]]
+	- [[Loop Invariant (PL)|Loop Invariant]]
+	- [[Loop Unroll (PL)|Loop Unroll]]

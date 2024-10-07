@@ -54,7 +54,7 @@ void* thread_func(void* arg) {
 - 간단한 설명:
 	- 일단 기본적으로 `pthread.h` 를 추가해 줘야 한다.
 	- Thread 에 인자를 넣어줄 때는 `pthread_create()` 의 4번째 인자를 활용하면 된다.
-		- 하나밖에 못넣으니까 여러개를 넣고자 한다면 [[C - 구조체 (struct) 정리|구조체]] 를 활용하자.
+		- 하나밖에 못넣으니까 여러개를 넣고자 한다면 [[C - Struct|구조체]] 를 활용하자.
 		- 안넣고 싶으면 `NULL` 을 박으면 된다.
 	- Thread 에서 결과를 받을 때는 `pthread_join()` 의 두번째 인자를 활용하면 된다.
 		- 다만 주의할 것은 double void pointer (`void**`) 라는 것.

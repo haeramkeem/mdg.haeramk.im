@@ -11,7 +11,7 @@ date: 2024-07-29
 
 - [[(CMU 15-445) Intro. to Database Systems]]
 - [[(CMU 15-721) Advanced Database Systems]]
-- [[(SNU GSDS) Bigdata and Knowledge Management Systems]]
+- [[(SNU GSDS) Bigdata and Knowledge Management Systems 01]]
 
 ### Common
 
@@ -20,6 +20,11 @@ date: 2024-07-29
 - 용어집
 	- [[Database Management System, DBMS (Database)|Database Management System]]
 	- [[Transaction, ACID (Database)|Transaction, ACID]]
+
+### Concurrency
+
+- 논문들
+	- [[(논문) Diva - Making MVCC Systems HTAP-Friendly|Diva - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
 
 ### Benchmark
 
@@ -59,14 +64,22 @@ date: 2024-07-29
 	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Interleaved Bit-Packing (Encoding)|Interleaved Bit-Packing]]
-	- [[Patching (Encoding)|Patching]]
-	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]]
+	- [[Patching, Mostly Encoding (Encoding)|Patching, Mostly Encoding]]
+	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]] (redirect [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks]])
 	- [[Prefix Code (Encoding)|Prefix Code]]
 	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
 - 논문들
 	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
 	- [[(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code|The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code (VLDB'23)]]
+
+### Index
+
+- 용어들
+	- [[2. Bw-Tree Essentials (OpenBwTree, SIGMOD 18)|Buzz Word Tree, Bw-Tree]] (redirect [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|OpenBwTree]])
+	- [[4. Component Optimization (OpenBwTree, SIGMOD 18)|Epoch-based GC]] (redirect [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|OpenBwTree]])
+- 논문들
+	- [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|Building a Bw-Tree Takes More Than Just Buzz Words (SIGMOD'18)]]
 
 ### Modern
 
@@ -130,6 +143,7 @@ date: 2024-07-29
 #### PostgreSQL
 
 - 용어집
+	- [[Background Writer (PostgreSQL)|Background Writer]]
 	- [[Shared Buffer (PostgreSQL)|Shared Buffer]]
 
 #### RocksDB

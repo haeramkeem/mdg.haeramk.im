@@ -18,7 +18,6 @@ title: 매디쏜 디지딸 갈든
 - [[(Garden) C, Cpp|C, C++]]
 - [[(Garden) Cybersecurity|사이버보안]]
 - [[(Garden) Database|데이터베이스]]
-- [[(Garden) Elasticsearch|엘라스틱서치]]
 - [[(Garden) Kubernetes|쿠버네티스]]
 - [[(Garden) Network, Protocol|네트워크]]
 - [[(Garden) Operating Systems, Linux|운영체제]]

@@ -6,6 +6,7 @@ date: 2024-08-23
 ---
 > [!info]- 참고한 것들
 > - [스댕](https://superuser.com/a/22462)
+> - [어떤 블로그](https://linuxize.com/post/how-get-size-of-file-directory-linux/)
 
 ## TL;DR
 
