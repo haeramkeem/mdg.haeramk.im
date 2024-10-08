@@ -2,6 +2,8 @@
 tags:
   - database
 date: 2024-07-18
+aliases:
+  - ETL
 ---
 > [!info]- 참고한 것들
 > - [[01. Modern OLAP Databases|CMU-15721, Advanced Database Systems]]
