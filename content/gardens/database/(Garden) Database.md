@@ -24,7 +24,7 @@ date: 2024-07-29
 ### Concurrency
 
 - 논문들
-	- [[(논문) Diva - Making MVCC Systems HTAP-Friendly|Diva - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
+	- [[(논문) DIVA - Making MVCC Systems HTAP-Friendly|DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
 
 ### Benchmark
 
