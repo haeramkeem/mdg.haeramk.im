@@ -4,6 +4,8 @@ tags:
   - data-model
   - relational-model
 date: 2024-07-17
+aliases:
+  - PK
 ---
 > [!info]- 참고한 것들
 > - [[01. Relational Model and Algebra|CMU-15445, Intro. to Database Systems]]

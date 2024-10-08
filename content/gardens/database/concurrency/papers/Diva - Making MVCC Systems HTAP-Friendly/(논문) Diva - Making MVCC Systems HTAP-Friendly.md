@@ -33,3 +33,5 @@ date: 2024-10-06
 ## 목차
 
 > [!fail] #draft Partial-ready 상태입니다.
+
+- [[1. Introduction (DIVA, SIGMOD 22)|1. Introduction]]
