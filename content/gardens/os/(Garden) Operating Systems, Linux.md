@@ -16,8 +16,7 @@ date: 2024-07-29
 ### Common
 
 - 용어들
-	- [[External Fragment (OS)|External Fragment]]
-	- [[Internal Fragment (OS)|Internal Fragment]]
+	- [[Fragmentation (OS)|Fragmentation]]
 	- [[Shared-nothing Architecture (OS)|Shared-nothing Architecture]]
 - 논문들
 	- [[(논문) Hints for Computer System Design|(Draft) Butler W. Lampson - Hints for Computer System Design (ACM SIGOPS)]]

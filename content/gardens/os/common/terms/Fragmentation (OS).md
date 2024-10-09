@@ -3,8 +3,23 @@ tags:
   - terms
   - os
 date: 2024-04-11
+aliases:
+  - Internal fragmentation
+  - External fragmentation
 ---
-## 외부 단편화, External Fragment
+## 란?
+
+- *Fragmentation* (*단편화*) 라는 것은 공간 자체는 충분히 많이 남아있지만, 구조상 문제 때문에 그 공간을 사용할 수 없게 되는 문제이다.
+- 따라서 [[Virtual Memory (Memory)|Virtual memory]] 나 [[Logical Block Addressing, LBA (Storage)|Storage]] 등 어떤 "공간" 을 다루는 분야에서 자주 등장하게 된다.
+- 이건 *Internal fragmentation* (*내부 단편화*) 와 *External fragmentation* (*외부 단편화*) 로 나뉜다.
+
+## 내부단편화, Internal Fragmentation
+
+- 이것은 어떤 "고정된 크기의 공간" 을 전부 사용하지 못해 해당 공간 내에 "사용하지 않고 비는 공간" 을 의미한다.
+	- 가령 [[Virtual Memory (Memory)|Virtual memory]] 의 page 나
+	- [[Logical Block Addressing, LBA (Storage)|LBA]] 에서의 block 에서 발생하는 문제.
+
+## 외부 단편화, External Fragmentation
 
 - 이것은 어떤 공간이 free 상태가 됐다가 해당 자리에 더 작은 데이터가 들어와서 남는 공간을 말한다.
 - 이렇게 말하니까 원래 알던 사람 아니면 뭔소린지 모를 것 같긴 하다.
