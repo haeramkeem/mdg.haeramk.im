@@ -35,3 +35,4 @@ date: 2024-10-06
 > [!fail] #draft Partial-ready 상태입니다.
 
 - [[1. Introduction (DIVA, SIGMOD 22)|1. Introduction]]
+- [[3. Design Overview of DIVA (DIVA, SIGMOD 22)|3. Design Overview of DIVA]]
