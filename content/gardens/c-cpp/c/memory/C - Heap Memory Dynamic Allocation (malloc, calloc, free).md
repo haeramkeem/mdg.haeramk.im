@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-memory
 aliases:
   - malloc
   - calloc

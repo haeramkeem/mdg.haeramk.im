@@ -19,10 +19,11 @@ date: 2024-07-29
 
 - [[C - 함수 진입, 탈출 메세지 출력하기|함수 진입, 탈출 메세지 출력하기]]
 - Kernel
-	- [[C - printk format 정리|printk format 정리]]
+	- [[C - Printk formatting|printk formatting]]
 	- [[C - 세상 간단한 Kernel module 예시|세상 간단한 Kernel module 예시]]
 - Memory
-	- [[C - Heap Memory Dynamic Allocation (malloc, calloc, free)|Heap Memory Dynamic Allocation]]
+	- [[C - Heap memory dynamic allocation (malloc, calloc, free)|Heap Memory Dynamic Allocation]]
+	- [[C - Memory utils (memcpy, memset)|Memory utils]]
 - POSIX Thread
 	- [[C - 세상 간단한 POSIX thread (pthread) 예시|세상 간단한 POSIX thread (pthread) 예시]]
 - 자료형
