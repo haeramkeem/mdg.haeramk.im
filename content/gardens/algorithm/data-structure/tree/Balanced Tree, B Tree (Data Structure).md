@@ -19,7 +19,7 @@ date: 2024-04-06
 ## B-Tree (B minus tree)
 
 > [!tip] B+ Tree
-> - ... 는 DB 의 [[Index (Database)|Index]] 에서 많이 사용되기 때문에 [[B+ Tree (DB Index)|여기]] 에서 설명하겠읍니다.
+> - ... 는 DB 의 [[Index (Database)|Index]] 에서 많이 사용되기 때문에 [[B+ Tree (Database Index)|여기]] 에서 설명하겠읍니다.
 
 - B-Tree 는 Balanced Tree 의 일종인데
 - B-Tree 의 경우에는 자식이 2개 이상일 수 있고 노드의 Key 는 1개 이상일 수 있다

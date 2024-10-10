@@ -27,7 +27,7 @@ date: 2024-04-14
 
 - 스토리지에 저장될 용도로 설계된 default SST type 이다.
 - 따라서 당연히 스토리지의 특성을 최대한 반영하고 있다:
-	- SST 의 크기는 [[Internal Fragment (OS)|internal fragment]] 를 최대한 줄이기 위해 기본적인 block size 인 4KB 의 배수로 구성된다.
+	- SST 의 크기는 [[Fragmentation (OS)|internal fragment]] 를 최대한 줄이기 위해 기본적인 block size 인 4KB 의 배수로 구성된다.
 	- 따라서 memory 에 올릴 때에도 block 단위로 올리고, block 단위로 캐싱도 한다.
 - 이 SST 는 효율적으로 데이터를 저장하기 위해 압축이나 encoding 을 사용하기도 한다. (옵션인듯)
 
