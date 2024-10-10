@@ -19,7 +19,7 @@ date: 2024-10-06
 
 ## Abstract
 
-- [[Multiversion Concurrency Control, MVCC (Database)|MVCC]] 는 [[On-Line Transactional Processing, OLTP (Database)|OLTP]] 의 관점에서는 많은 발전이 있었지만, 이것을 [[Hybrid Transactional and Analytical Processing, HTAP (Database)|HTAP]] 시스템에서 [[On-Line Analytical Processing, OLAP (Database)|OLAP]] query 에 대응하기 위해 사용하는 것은 어려움이 있다고 한다. 왜냐면:
+- [[Multiversion Concurrency Control, MVCC (Database Concurrency)|MVCC]] 는 [[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 의 관점에서는 많은 발전이 있었지만, 이것을 [[Hybrid Transactional and Analytical Processing, HTAP (Modern Database)|HTAP]] 시스템에서 [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] query 에 대응하기 위해 사용하는 것은 어려움이 있다고 한다. 왜냐면:
 	1. 빠른 version searching 와 적은 IO 을 보장하는 것이 힘들고
 	2. Storage 에 부담을 덜 주기 위한 즉각적인 version GC 도 힘들기 때문
 - 이런 문제점들은 OLTP 를 위한 MVCC 에서는 보통 version index 와 version data 를 통합한 Unified data storage 를 사용하고 있기 때문이었다.

@@ -15,8 +15,8 @@ date: 2024-08-23
 ![[Pasted image 20240823100809.png]]
 
 - TPC-H 는 TPC 시리즈 중에서 "의사 결정 지원 시스템" 을 벤치마크할 용도로 설계된 것이다.
-	- 즉, [[On-Line Analytical Processing, OLAP (Database)|OLAP]] 벤치마크 용도인 것.
-- 위의 ER Diagram 을 보면 알 수 있듯이, [[TPC-C (DB Benchmark)|TPC-C]] 처럼 온라인 커머스 비즈니스를 모사하고 있다.
+	- 즉, [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 벤치마크 용도인 것.
+- 위의 ER Diagram 을 보면 알 수 있듯이, [[TPC-C (Database Benchmark)|TPC-C]] 처럼 온라인 커머스 비즈니스를 모사하고 있다.
 
 ## Dataset 생성해보기
 

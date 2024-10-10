@@ -10,7 +10,7 @@ aliases:
 
 ## OLTP + OLAP
 
-- 이름 그대로 [[On-Line Transactional Processing, OLTP (Database)|OLTP]] 와 [[On-Line Analytical Processing, OLAP (Database)|OLAP]] 를 하이브리드로 하나의 [[Database Management System, DBMS (Database)|DBMS]] 에서 제공하는 것을 일컫는다.
+- 이름 그대로 [[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 와 [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 를 하이브리드로 하나의 [[Database Management System, DBMS (Database)|DBMS]] 에서 제공하는 것을 일컫는다.
 
 ### 장점
 
@@ -18,7 +18,7 @@ aliases:
 - 우선 저장공간을 덜 필요로 한다.
 	- 이건 기존에는 ETL 에 의해 OLTP 의 row data 를 OLAP 에 column data 로 옮겼다면
 	- HTAP 에서는 이런 데이터 "복사" 가 필요 없기 때문.
-- 또한 [[Extract-Transform-Load, ETL (Database)|ETL]] 이 빨라진다.
+- 또한 [[Extract-Transform-Load, ETL (Modern Database)|ETL]] 이 빨라진다.
 	- 위와 유사한 이유로, OLTP 와 OLAP 를 별도로 운용하면서 생기는 (데이터 이동과 같은) 지연이 적어지기 떄문에 HTAP 을 사용하면 up-to-date analytics 가 가능해지는 것.
 
 ### 단점; 기술적인 어려움

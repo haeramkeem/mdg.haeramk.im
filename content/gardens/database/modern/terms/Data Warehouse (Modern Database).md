@@ -8,19 +8,19 @@ date: 2024-07-17
 
 ## 데이터 창고
 
-- 한마디로 말하면, [[Relational Data Model (Database)|Relational data]] 를 위한 [[On-Line Analytical Processing, OLAP (Database)|OLAP]] 시스템이라고 할 수 있다.
+- 한마디로 말하면, [[Relational Data Model (Database)|Relational data]] 를 위한 [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 시스템이라고 할 수 있다.
 	- 그래서 이름이 "창고" 인 것: 데이터들이 정리정돈 되어 있기 때문에.
 
 ![[Pasted image 20240708162624.png]]
 
 - 이놈에게는 몇가지 특징이 있다.
 	1) 우선 위에서 말한 대로 데이터는 [[Relational Data Model (Database)|relational data model]] 을 따른다.
-	2) 데이터 소스는 [[On-Line Transactional Processing, OLTP (Database)|OLTP]] 이다.
+	2) 데이터 소스는 [[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 이다.
 		- 즉, 어떤 데이터를 *Data Warehouse* 에서 사용하기 위해서는 반드시 OLTP 를 거쳐야 한다.
 	3) *Proprietary data format* 을 가진다.
 		- Data Warehouse 에 저장된 데이터는 해당 *Data Warehouse* 솔루션에서만 사용할 수 있는 data format 이다.
 		- 즉, 해당 데이터는 vendor lock-in 이 걸린다는 것.
-	4) [[Extract-Transform-Load, ETL (Database)|ETL]] 이 필요하다.
+	4) [[Extract-Transform-Load, ETL (Modern Database)|ETL]] 이 필요하다.
 		- 즉, OLTP 의 데이터를 Data Warehouse 에서 사용하기 위해서 중간에 낀 ETL 이:
 			- Row-store 를 column-store 로 변환해 주고,
 			- 해당 OLTP 솔루션이 사용하고 있는 data format 을 Data Warehouse 에서 이해할 수 있는 data format (3번에서의 *proprietary data format*) 으로 변환한다.

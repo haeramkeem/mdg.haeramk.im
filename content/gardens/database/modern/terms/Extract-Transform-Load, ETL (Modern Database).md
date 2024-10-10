@@ -13,9 +13,9 @@ aliases:
 ![[Pasted image 20240708162624.png]]
 
 - 사실 제곧내이다.
-	- ([[On-Line Transactional Processing, OLTP (Database)|OLTP]] 의 데이터를) 꺼내서,
-	- ([[On-Line Analytical Processing, OLAP (Database)|OLAP]] 에 사용하기 편한 형태로) 바꾸고,
-	- ([[On-Line Analytical Processing, OLAP (Database)|OLAP]] 에) 넣어주는 놈을 일컫는다.
+	- ([[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 의 데이터를) 꺼내서,
+	- ([[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 에 사용하기 편한 형태로) 바꾸고,
+	- ([[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 에) 넣어주는 놈을 일컫는다.
 
 ## Modern OLAP DBMS
 
