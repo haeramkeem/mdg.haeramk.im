@@ -26,6 +26,8 @@ date: 2024-07-29
 	- [[C - Memory utils (memcpy, memset)|Memory utils]]
 - POSIX Thread
 	- [[C - 세상 간단한 POSIX thread (pthread) 예시|세상 간단한 POSIX thread (pthread) 예시]]
+- String
+	- [[C - Decoding number string (atoi, strtol)|Decoding number string]]
 - 자료형
 	- [[C - Function Pointer|Function Pointer]]
 	- [[C - Struct|Struct]]
