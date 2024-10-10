@@ -15,3 +15,4 @@ aliases:
 - 여기서는
 	- [[Logical Logging (Database Recovery)|Logical Logging]] 처럼 어떤 작업을 했는지 로깅하고
 	- [[Physical Logging (Database Recovery)|Physical Logging]] 처럼 before, after image 를 로깅하되 block 이나 page 전체가 아닌 그것의 내부에서 실제로 변경된 부분만을 로깅한다.
+- 아마 어떤 작업인지와 before, after 에 대한 partial image 를 로깅하지 않을까.

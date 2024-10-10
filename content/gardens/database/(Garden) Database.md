@@ -96,12 +96,11 @@ date: 2024-07-29
 
 - 용어집
 	- [[FORCE, NO_FORCE Policy (Database Recovery)|FORCE, NO_FORCE Policy]]
+	- [[Log (Database Recovery)|Log]]
 	- [[Logical Logging (Database Recovery)|Logical Logging]]
 	- [[Physical Logging (Database Recovery)|Physical Logging]]
 	- [[Physiological Logging (Database Recovery)|Physiological Logging]]
-	- [[Redo Log (Database Recovery)|Redo Log]]
 	- [[STEAL, NO_STEAL Policy (Database Recovery)|STEAL, NO_STEAL Policy]]
-	- [[Undo Log (Database Recovery)|Undo Log]]
 
 ### DBMS
 

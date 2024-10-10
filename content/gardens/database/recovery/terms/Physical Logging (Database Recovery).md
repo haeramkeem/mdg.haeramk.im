@@ -15,7 +15,7 @@ aliases:
 ## Block 단위의 로깅
 
 - Transaction 을 로깅할 때, storage level 의 block (아마 [[Logical Block Addressing, LBA (Storage)|LBA]]) 혹은 page 단위로 로깅하는 것.
-	- [[Undo Log (Database Recovery)|UNDO]] 를 위한 before image 와 [[Redo Log (Database Recovery)|REDO]] 를 위한 after image 를 모두 간직한다.
+	- [[Log (Database Recovery)|UNDO]] 를 위한 before image 와 [[Log (Database Recovery)|Redo log]] 를 위한 after image 를 모두 간직한다.
 - 여기서의 핵심은 block (page) 단위인 것이다.
 	- Block (page) 의 일부가 변경이 되어도 전부를 logging 하고,
 	- 하나의 transaction 에는 여러 block (page) 이 관여될 수 있기 때문에 생성되는 로그가 많은 것이 특징이다.
