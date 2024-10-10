@@ -6,6 +6,7 @@ date: 2024-07-18
 aliases:
   - Transaction
   - ACID
+  - Tx
 ---
 > [!info]- 참고한 것들
 > - [어떤 미디엄 블로그](https://chrisjune-13837.medium.com/db-transaction-%EA%B3%BC-acid%EB%9E%80-45a785403f9e)

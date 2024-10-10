@@ -21,12 +21,7 @@ aliases:
 ### 장단점
 
 - 즉, *FORCE* 정책을 사용하게 되면 data durability 는 보장되지만 매 commit 에 IO 가 수반되므로 느려질 수 있다.
-	- *NO_FORCE* 는 반대라고 생각하면 된다; durability 는 보장되지 않지만 commit overhead 가 줄어든다.
+	- *NO_FORCE* 는 반대라고 생각하면 된다; durability 는 보장되지 않지만 IO 에 의한 commit overhead 가 줄어든다.
 - Recovery 의 관점에서 보자면 *FORCE* 정책의 경우에는 어차피 commit 시에 disk 에 저장되므로 별다른 [[Log (Database Recovery)|Redo log]] 가 필요 없다는 장점이 있다.
 	- 물론 *NO_FORCE* 의 경우에는 반대이다.
-- 따라서 다음과 같이 정리할 수 있다.
-
-|          | FORCE                               | NO_FORCE                        |
-| -------- | ----------------------------------- | ------------------------------- |
-| **PROS** | High durability<br>No REDO required | Fast commit process             |
-| **CONS** | Slow commit process                 | Low durability<br>REDO required |
+- 보통은 *NO_FORCE* 를 많이 사용한다; *FORCE* 에 의한 IO overhead 가 너무 크기 때문.
