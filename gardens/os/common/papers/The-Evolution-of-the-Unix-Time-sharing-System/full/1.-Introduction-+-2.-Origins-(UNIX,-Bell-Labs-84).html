@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html><head><title>(논문) The Evolution of the Unix Time-sharing System (1. Introduction &amp; 2. Origins)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) The Evolution of the Unix Time-sharing System (1. Introduction &amp; 2. Origins)"/><meta property="og:description" content="원본 논문 이 글은 Dennis M. Ritchie - The Evolution of the Unix Time-sharing System 논문을 읽고 정리한 글입니다. 별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다. 1. Introduction § AT&amp;amp;T 의 Bell Labs 에서 만든 UNIX 운영체제에 대한 간략한 역사와 발전 과정을 서술했다고 한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="원본 논문 이 글은 Dennis M. Ritchie - The Evolution of the Unix Time-sharing System 논문을 읽고 정리한 글입니다. 별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다. 1. Introduction § AT&amp;amp;T 의 Bell Labs 에서 만든 UNIX 운영체제에 대한 간략한 역사와 발전 과정을 서술했다고 한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/common/papers/The-Evolution-of-the-Unix-Time-sharing-System/full/1.-Introduction-+-2.-Origins-(UNIX,-Bell-Labs-84)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) The Evolution of the Unix Time-sharing System (1. Introduction &amp; 2. Origins)</h1><p class="content-meta ">Mar 18, 2024, 6 min read</p><ul class="tags "><li><a href="../../../../../../tags/os" class="internal tag-link">#os</a></li><li><a href="../../../../../../tags/snu-aos24s" class="internal tag-link">#snu-aos24s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>원본 논문 </p></div>
+                  
+                </div>
+<ul>
+<li>이 글은 <a href="https://www.bell-labs.com/usr/dmr/www/hist.html" class="external">Dennis M. Ritchie - The Evolution of the Unix Time-sharing System</a> 논문을 읽고 정리한 글입니다.</li>
+<li>별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다.</li>
+</ul>
+</blockquote>
+<h2 id="1-introduction">1. Introduction<a aria-hidden="true" tabindex="-1" href="#1-introduction" class="internal"> §</a></h2>
+<ul>
+<li>AT&amp;T 의 Bell Labs 에서 만든 UNIX 운영체제에 대한 간략한 역사와 발전 과정을 서술했다고 한다.</li>
+<li>UNIX 는 1969 년에 제작되었고, 1974 년에 처음으로 <a href="https://dl.acm.org/doi/10.1145/361011.361061" class="external">논문</a> 으로 발표됐으며 본 논문은 1979 년에 발표되었다고 한다. UNIX 시스템에 대한 그간의 발전 과정은 많은 교훈을 주기에 본 논문을 저술했다고 하더라.</li>
+</ul>
+<h2 id="2-origins---unix-가-발명되기까지-1969년-의-bell-labs-의-상황">2. Origins - UNIX 가 발명되기까지 (~1969년) 의 Bell Labs 의 상황<a aria-hidden="true" tabindex="-1" href="#2-origins---unix-가-발명되기까지-1969년-의-bell-labs-의-상황" class="internal"> §</a></h2>
+<ul>
+<li>1968-1969 까지의 AT&amp;T 의 Bell Labs 의 상황은 다소 어수선했다고 한다.
+<ul>
+<li>기존에 진행하던 <a href="https://en.wikipedia.org/wiki/Multics" class="external">Multics</a> 운영체제 프로젝트가 점점 망해가고 있었고</li>
+<li>Bell Labs 의 컴퓨터 센터 (Murray Hil Computer Center) 는 <a href="https://en.wikipedia.org/wiki/Multics" class="external">GE645</a> 를 운용중이었는데, <a href="https://en.wikipedia.org/wiki/GE-600_series" class="external">GE635</a> 에서 Multics 를 지원하기 위한 이 컴퓨터는 부족한 점이 많았으며</li>
+<li>연구소가 “Computing Service” 와 “Computing Research” 두 분야로 조직개편을 했다고 한다.</li>
+</ul>
+</li>
+<li>저자 및 그의 동료들 (<a href="https://en.wikipedia.org/wiki/Ken_Thompson" class="external">Thompson</a>, <a href="https://en.wikipedia.org/wiki/Dennis_Ritchie" class="external">Ritchie</a>, <a href="https://en.wikipedia.org/wiki/Joe_Ossanna" class="external">Ossanna</a> 등) 은 Multics 에 대해 마지막까지 희망의 끈을 놓지 않고 있었다.
+<ul>
+<li>하지만 Multics 가 제공하기로 한 편리한 사용 환경은 나중에 보니 아주 제한된 사용자들에게만 (아마 저자 및 그의 동료들에게만?) 편리한 기능이었고</li>
+<li>이외 여러 문제가 있어서 Multics 프로젝트가 엎어진듯..</li>
+</ul>
+</li>
+<li>결국에는 Multics 를 대체하기 위한 다른 것을 찾아야 했다고 한다. 이를 위해 여러 컴퓨팅 장비들을 물색해야만 했고 그것들을 구매하기 위해 노력을 많이 했으나 결국에는 기각되었다.
+<ul>
+<li>이것은 그들이 회상해 봤을 때 너무나 많은 돈을 너무나 소규모의 조직에 쏟아 붓기를 제안했기 때문이었다.</li>
+<li>또한 연구소 입장에서는 운영체제 개발은 더이상 흥미가 느껴지지 않는 분야였고 연구소 내부에 computing center 를 더이상 운용하고 싶어했지 않았다.</li>
+<li>따라서 이런 장비를 구입하는 것은 연구소가 보기에 Multics 와 같은 또 다른 실패작을 만들어 낼 것이라고 생각했고 성공적인 무언가를 만들어낸다 하더라도 computing center 를 계속 운용해야 했기에 부담이 있었을 것이라고 했다.</li>
+</ul>
+</li>
+<li>그럼에도 불구하고 1969년에는 여러 기술적인 진보가 있었는데..
+<ul>
+<li>UNIX 파일시스템의 기본적인 설계를 스케치 했었고</li>
+<li>스케치한 파일시스템의 성능을 시뮬레이션하기도 했으며</li>
+<li>GE645 를 위한 새로운 운영체제를 기초적인 부분까지 완성했었다고 한다.
+<ul>
+<li>웰컴메세지를 출력하는 기능까지 개발이 되었으나, GE645 의 수명이 몇달 안남았다고 결론이 났기에 여기까지만 하고 중단되었다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>또한 1969년에 사용자가 우주선을 태양계의 이곳 저곳으로 움직이며 플레이하는 Space Travel 이란 게임을 만들었다.
+<ul>
+<li>처음에는 Fortran 언어를 사용해 <a href="https://en.wikipedia.org/wiki/General_Comprehensive_Operating_System" class="external">GECOS</a> (GE635 에서 사용하는 운영체제) 에서 작동하도록 개발되었으나</li>
+<li>조작이 불편했고 GE635 를 사용할 경우 시간당 $75 의 금액이 부과되었기에 <a href="https://en.wikipedia.org/wiki/PDP-7" class="external">PDP-7</a> 머신으로 갈아타게 되었다.</li>
+<li>PDP-7 용의 버전은 기존의 GECOS 용 버전에서 플로팅 포인트 사칙연산 패키지나 디버깅 시스템 등 많은 부분을 개선했다고 한다.</li>
+<li>개발은 GECOS 에서 PDP-7 용으로 cross-assembly 하는 방식으로 진행됐다고 한다.</li>
+</ul>
+</li>
+<li>Space Travel 은 단순한 게임일 뿐이었지만, PDP-7 용 운영체제를 위한 많은 개념들을 제시해 주었다고 한다.
+<ul>
+<li>이전에 스케치한 파일시스템을 실제로 구현했고</li>
+<li>파일시스템이 실제로 실행될 수 있도록 프로세스의 개념을 추가했으며</li>
+<li>복사 붙여넣기, 쉘 등의 사용자를 위한 유틸리티들이 추가되었다.</li>
+</ul>
+</li>
+<li>여기까지 온 뒤에는 더이상 GECOS 에서 cross-assembly 하기 보다는 PDP-7 에서 직접 assembly 하는 것이 가능해졌고, 이후에 <a href="https://en.wikipedia.org/wiki/Brian_Kernighan" class="external">Brian Kernighan</a> 이 “UNIX” 란 이름을 붙이며 우리에게 널리 알려진 UNIX 운영체제가 탄생하게 되었다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#1-introduction" data-for="1-introduction">1. Introduction</a></li><li class="depth-0"><a href="#2-origins---unix-가-발명되기까지-1969년-의-bell-labs-의-상황" data-for="2-origins---unix-가-발명되기까지-1969년-의-bell-labs-의-상황">2. Origins - UNIX 가 발명되기까지 (~1969년) 의 Bell Labs 의 상황</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/os/common/papers/The-Evolution-of-the-Unix-Time-sharing-System/(논문)-The-Evolution-of-the-Unix-Time-sharing-System" class="internal">(논문) The Evolution of the Unix Time-sharing System</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>

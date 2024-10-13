@@ -66,7 +66,7 @@
 <li>하지만 이 방법 또한 문제가 있었는데…
 <ul>
 <li>아무래도 page 사이즈가 일정하지 않다 보니</li>
-<li>작은 사이즈의 page 가 빠지고 나면 여기에는 이 것보다 더 큰 사이즈의 page 가 들어올 수 없으니 <a href="../../../../gardens/os/common/terms/External-Fragment-(OS)" class="internal" data-slug="gardens/os/common/terms/External-Fragment-(OS)">외부 단편화</a> 문제가 생기게 되고</li>
+<li>작은 사이즈의 page 가 빠지고 나면 여기에는 이 것보다 더 큰 사이즈의 page 가 들어올 수 없으니 <a href="../../../../gardens/os/common/terms/Fragmentation-(OS)" class="internal" data-slug="gardens/os/common/terms/Fragmentation-(OS)">외부 단편화</a> 문제가 생기게 되고</li>
 <li>결과적으로 큰 사이즈의 page 가 할당될 수 있는 기회를 놓치게 된다.
 <ul>
 <li>만약 그 빈공간이 합쳐져 있었으면 superpage 를 할당할 수 있었을 텐데 이놈들이 전부 찢겨져 있기 때문에 superpage 가 할당될 수 없는 흔한 단편화 문제가 발생한다는 것.</li>
@@ -136,7 +136,7 @@
 </li>
 <li>따라서 그냥 단순하게 이 page 의 사이즈를 늘려버리면 TLB coverage 가 늘어나 이러한 문제점들이 해결될 것이라 생각할 수 있다.
 <ul>
-<li>하지만 이것은 그만큼이나 메모리를 필요로 하지 않는 application 의 경우에는 무히려 <a href="../../../../gardens/os/common/terms/Internal-Fragment-(OS)" class="internal" data-slug="gardens/os/common/terms/Internal-Fragment-(OS)">내부단편화</a> 를 늘리는 효과를 가져와 메모리를 비효율적으로 사용하게 만든다.</li>
+<li>하지만 이것은 그만큼이나 메모리를 필요로 하지 않는 application 의 경우에는 무히려 <a href="../../../../gardens/os/common/terms/Fragmentation-(OS)" class="internal" data-slug="gardens/os/common/terms/Fragmentation-(OS)">내부단편화</a> 를 늘리는 효과를 가져와 메모리를 비효율적으로 사용하게 만든다.</li>
 <li>결과적으로 이것은 메모리 pressure 을 늘려 page replacement 를 더 빈번하게 일어나게 만들어 성능이 안좋아지는 효과를 가져온다.</li>
 </ul>
 </li>
