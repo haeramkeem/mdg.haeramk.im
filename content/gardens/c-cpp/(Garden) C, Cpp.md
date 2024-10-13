@@ -17,14 +17,20 @@ date: 2024-07-29
 
 ### C
 
-- [[C - 세상 간단한 POSIX thread (pthread) 예시|세상 간단한 POSIX thread (pthread) 예시]]
 - [[C - 함수 진입, 탈출 메세지 출력하기|함수 진입, 탈출 메세지 출력하기]]
+- Kernel
+	- [[C - Printk formatting|printk formatting]]
+	- [[C - 세상 간단한 Kernel module 예시|세상 간단한 Kernel module 예시]]
+- Memory
+	- [[C - Heap memory dynamic allocation (malloc, calloc, free)|Heap Memory Dynamic Allocation]]
+	- [[C - Memory utils (memcpy, memset)|Memory utils]]
+- POSIX Thread
+	- [[C - 세상 간단한 POSIX thread (pthread) 예시|세상 간단한 POSIX thread (pthread) 예시]]
+- String
+	- [[C - Decoding number string (atoi, strtol)|Decoding number string]]
 - 자료형
 	- [[C - Function Pointer|Function Pointer]]
 	- [[C - Struct|Struct]]
-- Kernel
-	- [[C - printk format 정리|printk format 정리]]
-	- [[C - 세상 간단한 Kernel module 예시|세상 간단한 Kernel module 예시]]
 
 ### C++
 

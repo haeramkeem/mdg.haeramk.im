@@ -24,13 +24,13 @@ date: 2024-07-29
 ### Concurrency
 
 - 논문들
-	- [[(논문) Diva - Making MVCC Systems HTAP-Friendly|Diva - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
+	- [[(논문) DIVA - Making MVCC Systems HTAP-Friendly|DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
 
 ### Benchmark
 
 - TPC
-	- [[TPC-C (DB Benchmark)|TPC-C]]
-	- [[TPC-H (DB Benchmark)|TPC-H]]
+	- [[TPC-C (Database Benchmark)|TPC-C]]
+	- [[TPC-H (Database Benchmark)|TPC-H]]
 
 ### Data Model
 
@@ -84,24 +84,23 @@ date: 2024-07-29
 ### Modern
 
 - 용어집
-	- [[Data Cube (Database)|Data Cube]]
-	- [[Data Lake, Data Lakehouse (Database)|Data Lake, Data Lakehouse]]
-	- [[Data Warehouse (Database)|Data Warehouse]]
-	- [[Extract-Transform-Load, ETL (Database)|Extract-Transform-Load, ETL]]
-	- [[Hybrid Transactional and Analytical Processing, HTAP (Database)|Hybrid Transactional and Analytical Processing, HTAP]]
-	- [[On-Line Analytical Processing, OLAP (Database)|On-Line Analytical Processing, OLAP]]
-	- [[On-Line Transactional Processing, OLTP (Database)|On-Line Transactional Processing, OLTP]]
+	- [[Data Cube (Modern Database)|Data Cube]]
+	- [[Data Lake, Data Lakehouse (Modern Database)|Data Lake, Data Lakehouse]]
+	- [[Data Warehouse (Modern Database)|Data Warehouse]]
+	- [[Extract-Transform-Load, ETL (Modern Database)|Extract-Transform-Load, ETL]]
+	- [[Hybrid Transactional and Analytical Processing, HTAP (Modern Database)|Hybrid Transactional and Analytical Processing, HTAP]]
+	- [[On-Line Analytical Processing, OLAP (Modern Database)|On-Line Analytical Processing, OLAP]]
+	- [[On-Line Transactional Processing, OLTP (Modern Database)|On-Line Transactional Processing, OLTP]]
 
 ### Recovery
 
 - 용어집
-	- [[FORCE, NO_FORCE (Database)|FORCE, NO_FORCE]]
-	- [[Logical Logging (Database)|Logical Logging]]
-	- [[Physical Logging (Database)|Physical Logging]]
-	- [[Physiological Logging (Database)|Physiological Logging]]
-	- [[Redo Log (Database)|Redo Log]]
-	- [[STEAL, NO_STEAL (Database)|STEAL, NO_STEAL]]
-	- [[Undo Log (Database)|Undo Log]]
+	- [[Algorithms for Recovery and Isolation Exploiting Semantics, ARIES (Database Recovery)|Algorithms for Recovery and Isolation Exploiting Semantics, ARIES]]
+	- [[FORCE, NO_FORCE Policy (Database Recovery)|FORCE, NO_FORCE Policy]]
+	- [[Log (Database Recovery)|Log]]
+	- [[Physiological Logging (Database Recovery)|Physiological Logging]]
+	- [[STEAL, NO_STEAL Policy (Database Recovery)|STEAL, NO_STEAL Policy]]
+	- [[Write Ahead Log, WAL (Database Recovery)|Write Ahead Log, WAL]]
 
 ### DBMS
 

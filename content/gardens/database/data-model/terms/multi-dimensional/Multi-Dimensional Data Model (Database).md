@@ -49,4 +49,4 @@ date: 2024-08-22
 		- "여름철에는 어떤 시술이 인기일까" 와 같은 분석을 하기 위해서는 이 데이터를 "날짜" 와 "시술 종류" 의 관점으로 분석하면 될 것이다.
 		- 또는, "20대가 자주 하는 시술은 무엇일까" 와 같은 분석은, "고객 나이" 와 "시술 정보" 의 관점으로 바라보면 될 것이다.
 	- 즉, 원하는 차원을 골라다가 분석을 하기 위해서 다양한 차원을 가지는 데이터들을 한 곳에 모으게 되는 것이고, 이때 이 데이터들을 기술하는 model 로서 *Multi-dimensional data model* 을 사용하는 것이다.
-- 위에서 "분석" 이라는 말을 했다. 즉, 이 data model 은 [[On-Line Analytical Processing, OLAP (Database)|OLAP]] 에서 자주 사용된다.
+- 위에서 "분석" 이라는 말을 했다. 즉, 이 data model 은 [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 에서 자주 사용된다.
