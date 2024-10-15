@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-type
 date: 2024-10-02
 aliases:
   - Function pointer

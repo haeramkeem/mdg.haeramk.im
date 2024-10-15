@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-pthread
 date: 2024-09-08
 aliases:
   - pthread

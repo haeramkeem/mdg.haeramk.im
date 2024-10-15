@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-io
 aliases:
   - O_DIRECT
   - posix_memalign
@@ -106,6 +107,7 @@ int main() {
 
 > [!tip] 기타 함수 참고
 > - [[C - Memory utils (memcpy, memset)|memcpy, memset]]
+> - [[C - File IO syscall (open, write, read, fsync, close)|open, write, read, close]]
 
 ### O_DIRECT
 
