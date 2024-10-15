@@ -18,6 +18,8 @@ date: 2024-07-29
 ### C
 
 - [[C - 함수 진입, 탈출 메세지 출력하기|함수 진입, 탈출 메세지 출력하기]]
+- IO
+	- [[C - Direct IO (O_DIRECT)|Direct IO (O_DIRECT)]]
 - Kernel
 	- [[C - Printk formatting|printk formatting]]
 	- [[C - 세상 간단한 Kernel module 예시|세상 간단한 Kernel module 예시]]

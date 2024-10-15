@@ -3,6 +3,8 @@ tags:
   - os
   - os-io
 date: 2024-08-27
+aliases:
+  - MMAP
 ---
 > [!info]- 참고한 것들
 > - [[19. Memory Mapping, Shared Memory, Swap|서울대 김진수 교수님 고급운영체제 강의 (Spring 2024)]]
