@@ -48,6 +48,7 @@ date: 2024-07-29
 	- [[Memory Management Unit, MMU (OS)|Memory Management Unit, MMU]]
 	- [[Page Table Base Register, CR3 (Memory)|Page Table Base Register, CR3]]
 	- [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer, TLB]]
+	- [[Virtual Address Space, VAS (Memory)|Virtual Address Space, VAS]]
 - 논문
 	- [[(논문) Practical, Transparent Operating System Support for Superpages|(Draft) Juan Navarro et al. Practical, Transparent Operating System Support for Superpages (OSDI '02)]]
 
