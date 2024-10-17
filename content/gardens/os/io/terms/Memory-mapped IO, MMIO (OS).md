@@ -65,7 +65,7 @@ sudo lspci -v
 > [출처: kernel.org](https://www.kernel.org/doc/Documentation/DMA-API-HOWTO.txt)
 
 - 어떤 device driver 가 virtual memory address 로 MMIO 에 접근하려 한다고 해보자.
-- 그럼 일단 이 주소는 [[Memory Management Unit, MMU (OS)|MMU]] 에 의해 physical memory address 로 바뀔 것이다.
+- 그럼 일단 이 주소는 [[Memory Management Unit, MMU (Memory)|MMU]] 에 의해 physical memory address 로 바뀔 것이다.
 - 그리고 이 주소는 PCI controller 에 의해 *bus address* 로 바뀐다.
 	- 저 *bus virtual address* 는 *IO address* 혹은 *device virtual address* 라고도 불리고, device 내부적인 주소 체계라고 이해하면 된다.
 	- 바꾸는 과정을 좀 더 구체적으로 설명하면,

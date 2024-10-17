@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-pthread
 aliases:
   - pthread_mutex
 ---

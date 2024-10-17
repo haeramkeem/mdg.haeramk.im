@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-type
 date: 2024-10-02
 aliases:
   - Function pointer
@@ -12,7 +13,7 @@ aliases:
 
 ## 누구냐 넌
 
-- C 언어는 함수를 [[First, Second Class Citizen (PL)|Second-class citizen]] 으로 취급한다.
+- C 언어는 함수를 [[First, Second Class Citizen (PL Function)|Second-class citizen]] 으로 취급한다.
 	- 즉, 함수를 "값" 으로 취급하지 않는다는 것.
 - 만약 함수가 "값" 으로 취급된다면 그 값의 주소가 포인터가 될 것인데, C 언어는 그렇게 하지 않는다면 도대체 이 function pointer 는 어떤 놈일까?
 - 이놈의 정체는 virtual memory 의 code 부분에 있는 함수의 주소를 가리키고 있는 변수이다.
@@ -65,7 +66,7 @@ int main() {
 
 ### First-class citizen 처럼 사용하기
 
-- Function pointer 는 엄연한 "변수" 이기 때문에, [[First, Second Class Citizen (PL)|First-class citizen]] 처럼 사용할 수 있다.
+- Function pointer 는 엄연한 "변수" 이기 때문에, [[First, Second Class Citizen (PL Function)|First-class citizen]] 처럼 사용할 수 있다.
 - 즉, 다음과 같이 function pointer 를 인자로 주거나
 
 ```c {7-9}

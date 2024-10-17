@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-string
 aliases:
   - atoi
   - strtol

@@ -14,11 +14,11 @@ date: 2024-10-09
 
 ## Heap memory allocation
 
-- `malloc`, `calloc` 는 C 언어에서 [[Virtual Memory (Memory)|Heap memory]] 를 동적으로 할당하는 대표적인 함수이고, `free` 는 이걸 다시 반환하는 함수이다.
+- `malloc`, `calloc` 는 C 언어에서 [[Virtual Address Space, VAS (Memory)|Heap memory]] 를 동적으로 할당하는 대표적인 함수이고, `free` 는 이걸 다시 반환하는 함수이다.
 	- 참고로 말하자면, 얘네들은 syscall 은 아니다. Heap memory 공간은 사전에 어느정도 늘어나 있고, 이 공간 중 일부를 할당받아 사용하는 것.
 - 동적 할당을 하는 이유에 대해서는, 어떤 놈의 lifecycle 을 내 맘대로 가져가고 싶기 때문이다.
 	- 즉, static allocation 을 위해 할당된 메모리 공간은 lifecycle 에 제약사항이 있기 때문이다.
-		- 가령 함수 내의 local variable 같은 경우에는 [[Virtual Memory (Memory)|Stack memory]] 에 저장되기 때문에 함수가 종료되면 function record 가 날라가면서 같이 반환되고,
+		- 가령 함수 내의 local variable 같은 경우에는 [[Virtual Address Space, VAS (Memory)|Stack memory]] 에 저장되기 때문에 함수가 종료되면 function record 가 날라가면서 같이 반환되고,
 		- Global variable 같은 경우에는 process 가 살아있는 동안 계속 살아있기 때문.
 	- 근데 dynamic allocation 을 하면 언제 생성하고 언제 사라질지를 programmer 가 직접 제어할 수 있다.
 - 그럼 하나하나 알아보자.
