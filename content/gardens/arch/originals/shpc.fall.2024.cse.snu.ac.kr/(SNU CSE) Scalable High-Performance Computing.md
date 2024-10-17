@@ -12,5 +12,6 @@
 
 > [!fail] #draft 학기 종료 후 업데이트될 예정입니다.
 
-- [[01.  Trends]]
-- [[02.  Binary Representation]]
+- [[01. Trends]]
+- [[02. Binary Representation]]
+- [[03. FP Representation]]
