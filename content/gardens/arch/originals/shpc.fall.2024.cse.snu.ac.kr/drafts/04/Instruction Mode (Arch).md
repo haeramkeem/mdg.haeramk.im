@@ -1,11 +1,15 @@
 ---
 tags:
-  - os
-  - os-process
-  - terms
+  - arch
 aliases:
-  - Process Control Block
-  - PCB
+  - Instruction mode
+  - Kernel mode
+  - Supervisor mode
+  - User mode
+  - Protected mode
+  - System mode
+  - Monitor mode
+  - Privileged mode
 ---
 > [!info]- 참고한 것들
 > - [[04. Processes and Threads|서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024)]]

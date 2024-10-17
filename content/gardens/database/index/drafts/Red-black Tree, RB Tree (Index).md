@@ -1,10 +1,10 @@
 ---
 tags:
-  - os
-  - os-process
-  - terms
+  - database
+  - db-index
 aliases:
-  - Time sharing system
+  - Red-black Tree
+  - RB Tree
 ---
 > [!info]- 참고한 것들
 > - [[04. Processes and Threads|서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024)]]

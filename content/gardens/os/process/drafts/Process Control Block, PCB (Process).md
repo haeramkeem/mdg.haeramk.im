@@ -1,11 +1,12 @@
 ---
 tags:
-  - arch
-  - arch-inst
+  - os
+  - os-process
+  - terms
 aliases:
-  - Instruction
-  - Assembly language
-  - Low-level code
+  - Process Control Block
+  - PCB
+  - PID
 ---
 > [!info]- 참고한 것들
 > - [[04. Processes and Threads|서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024)]]
