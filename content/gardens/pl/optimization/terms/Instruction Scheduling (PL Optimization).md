@@ -19,7 +19,7 @@ aliases:
 
 - Instruction 은 pipeline 으로 실행되기 때문에, 동시에 여러개의 instruction 이 각기 다른 stage 로 실행된다.
 - 하지만 바로 이전 instruction 의 실행 결과를 사용해야 하는 경우라면 해당 instruction 이 끝날때 까지는 이후 instruction 이 실행될 수 없을 것이다.
-- 따라서 [[Code Motion (PL)|코드의 실행 순서를 바꿔서]] 이러한 의존성이 있는 instruction 을 연달아 실행하는 것이 아닌 간격을 좀 두어서 (즉, 이전 instruction 을 처리하는 동안은 의존성이 없는 다른 instruction 을 처리하는 것으로 순서를 바꿔서) pipeline 될 수 있게 하는 방법이 *Instruction Scheduling* 이다.
+- 따라서 [[Code Motion (PL Optimization)|코드의 실행 순서를 바꿔서]] 이러한 의존성이 있는 instruction 을 연달아 실행하는 것이 아닌 간격을 좀 두어서 (즉, 이전 instruction 을 처리하는 동안은 의존성이 없는 다른 instruction 을 처리하는 것으로 순서를 바꿔서) pipeline 될 수 있게 하는 방법이 *Instruction Scheduling* 이다.
 	- 이놈은 여러가지 용어로 불린다: *Code Scheduling*, *Code Hoisting*, *Code Sinking*
 - 다음의 예시를 보자.
 

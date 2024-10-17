@@ -7,10 +7,13 @@ aliases:
   - Activation
   - Instance
   - Activation Record
-  - Function
+  - Stack Frame
 ---
 > [!info]- 참고한 것들
 > - [스탠포드 SEE](https://see.stanford.edu/materials/icsppcs107/15-Function-Call-And-Return.pdf)
+
+> [!fail]- 본 글은 #draft 상태입니다.
+> - [ ] 내용 추가
 
 ## Activation = Instance = Function on running
 

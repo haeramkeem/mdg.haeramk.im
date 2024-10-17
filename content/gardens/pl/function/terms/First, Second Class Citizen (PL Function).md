@@ -1,6 +1,7 @@
 ---
 tags:
   - pl
+  - pl-func
 aliases:
   - First-class citizen
   - Second-class citizen
