@@ -19,3 +19,4 @@
 - [[03. FP Representation]]
 - [[04. Processes and Threads]]
 - [[05. Dependences and Pipelining]]
+- [[06. Loop-carried Dependences and Parallelism]]
