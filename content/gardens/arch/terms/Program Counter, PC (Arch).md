@@ -12,8 +12,11 @@ date: 2024-09-10
 ---
 > [!info]- 참고한 것들
 > [위키 - Instruction cycle](https://en.wikipedia.org/wiki/Instruction_cycle)
+> [[05. Dependences and Pipelining|서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024)]]
 
 ## 다음에 실행할 instruction 주소
+
+![[Pasted image 20241017210006.png]]
 
 - 이게 전부다. 진짜다.
 - *Program Counter* (*PC*) 는 다음에 실행할 [[Instruction (Arch)|Instruction]] 의 주소를 담고 있는 register 로,
