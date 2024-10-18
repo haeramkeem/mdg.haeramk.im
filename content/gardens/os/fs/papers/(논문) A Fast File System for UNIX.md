@@ -153,7 +153,7 @@ tags:
 ### Optimizing Storage Utilization
 
 - 자 이렇게 4096 byte 짜리 block 들을 인접한 cylinder 에 때려박아 아주 빠른 데이터 접근 속도를 구현해 냈다.
-- 근데 이 경우에는 당연히 [[08-2. Physical Memory Allocation#Fixed Partition (고정 분할 방식)|Internal Fragmentation]] 이 문제가 된다.
+- 근데 이 경우에는 당연히 [[08. Physical Memory Allocation#Fixed Partition (고정 분할 방식)|Internal Fragmentation]] 이 문제가 된다.
 - 저자의 실험에 따르면, block 사이즈를 늘림에 따라 낭비되는 공간의 크기가 점점 늘어나는 것으로 나타났다:
 	- 심지어 block size 를 4096 byte 로 했을 때에는 45.6% 나 되는 양이 낭비되었다고 한다.
 
