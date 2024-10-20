@@ -14,9 +14,14 @@
 
 > [!fail] #draft 학기 종료 후 모두 업데이트될 예정입니다.
 
+> [!info] `08` 강
+> - 은 ML 기초 내용이라 스킵했습니다.
+
 - [[01. Trends]]
 - [[02. Binary Representation]]
 - [[03. FP Representation]]
 - [[04. Processes and Threads]]
 - [[05. Dependences and Pipelining]]
 - [[06. Loop-carried Dependences and Parallelism]]
+- [[07. Synchronization]]
+- [[09. GPU Architectures]]
