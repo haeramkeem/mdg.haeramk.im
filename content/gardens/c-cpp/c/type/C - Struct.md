@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-type
 aliases:
   - struct
   - 구조체

@@ -1,6 +1,7 @@
 ---
 tags:
   - c
+  - c-io
 aliases:
   - fopen
   - fwrite

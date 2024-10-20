@@ -4,6 +4,7 @@ tags:
 date: 2024-07-23
 aliases:
   - SIMD
+  - Vectorization
 ---
 > [!info]- 참고한 것들
 > - [SIMD 위키](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data), [MMX 위키](https://en.wikipedia.org/wiki/MMX_(instruction_set)), [AVX 위키](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions), [SSE 위키](https://en.wikipedia.org/wiki/Streaming_SIMD_Extensions), 

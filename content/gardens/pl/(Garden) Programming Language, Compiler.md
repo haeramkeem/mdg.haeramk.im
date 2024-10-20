@@ -16,12 +16,12 @@ date: 2024-07-29
 ### Function
 
 - 용어집
-	- [[First, Second Class Citizen (PL)|First, Second Class Citizen]]
+	- [[First, Second Class Citizen (PL Function)|First, Second Class Citizen]]
 
 ### Optimization
 
 - 용어집
-	- [[Code Motion (PL)|Code Motion]]
-	- [[Instruction Scheduling (PL)|Instruction Scheduling]]
-	- [[Loop Invariant (PL)|Loop Invariant]]
-	- [[Loop Unroll (PL)|Loop Unroll]]
+	- [[Code Motion (PL Optimization)|Code Motion]]
+	- [[Instruction Scheduling (PL Optimization)|Instruction Scheduling]]
+	- [[Loop Invariant (PL Optimization)|Loop Invariant]]
+	- [[Loop Unroll (PL Optimization)|Loop Unroll]]

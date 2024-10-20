@@ -57,7 +57,7 @@ int main() {
 
 ### Negative
 
-- 음의 정수의 경우에는 양의 정수를 2의 보수로 만들면 된다.
+- 음의 정수의 경우에는 양의 정수를 [[Integer Representation (Arch)|2의 보수]] 로 만들면 된다.
 
 ```cpp
 int main() {

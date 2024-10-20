@@ -1,0 +1,6 @@
+---
+tags:
+  - pl
+aliases:
+  - Variable
+---
