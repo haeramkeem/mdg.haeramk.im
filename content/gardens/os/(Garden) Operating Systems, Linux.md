@@ -39,6 +39,7 @@ date: 2024-07-29
 ### IO
 
 - 용어들
+	- [[Direct Memory Access, DMA (OS)|Direct Memory Access, DMA]]
 	- [[Memory-mapped File IO, MMAP (OS)|Memory-mapped File IO, MMAP]]
 	- [[Memory-mapped IO, MMIO (OS)|Memory-mapped IO, MMIO]]
 
