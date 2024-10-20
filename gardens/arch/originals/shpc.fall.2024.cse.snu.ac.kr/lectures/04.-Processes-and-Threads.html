@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html><head><title>04. Processes and Threads</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="04. Processes and Threads"/><meta property="og:description" content="서울대학교 컴퓨터공학과 이재진 교수님의 &amp;quot;확장형 고성능 컴퓨팅&amp;quot; 강의를 필기한 내용입니다. 목차 Programming Language Basics § 맨날 얘기하는거지만 CS 에서는 abstraction 이 중허고 이것으로 내부 작동 과정을 알지 못해도 해당 기능을 사용할 수 있게 해준다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 이재진 교수님의 &amp;quot;확장형 고성능 컴퓨팅&amp;quot; 강의를 필기한 내용입니다. 목차 Programming Language Basics § 맨날 얘기하는거지만 CS 에서는 abstraction 이 중허고 이것으로 내부 작동 과정을 알지 못해도 해당 기능을 사용할 수 있게 해준다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/lectures/04.-Processes-and-Threads"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">04. Processes and Threads</h1><p class="content-meta ">Sep 11, 2024, 21 min read</p><ul class="tags "><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-shpc24f" class="internal tag-link">#snu-shpc24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학과 이재진 교수님의 &quot;확장형 고성능 컴퓨팅&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/(SNU-CSE)-Scalable-High-Performance-Computing" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/(SNU-CSE)-Scalable-High-Performance-Computing">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="programming-language-basics">Programming Language Basics<a aria-hidden="true" tabindex="-1" href="#programming-language-basics" class="internal"> §</a></h2>
+<ul>
+<li>맨날 얘기하는거지만 CS 에서는 abstraction 이 중허고 이것으로 내부 작동 과정을 알지 못해도 해당 기능을 사용할 수 있게 해준다.</li>
+<li>이때 PL 은 프로그램 작성을 위한 high-level abstraction 을 제공한다.
+<ul>
+<li>“Programming” 은 machine 에 어떤 작업을 하도록 명령을 내리는 것으로 정의할 수 있다.</li>
+<li>뻔한 얘기지만 PL 은 자연어에 가까워서 programming 을 더 빠르게 할 수 있도록 해준다고 한다.</li>
+</ul>
+</li>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)">Low-level (assembly)</a>: <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)">Instruction</a> 에 naming 을 해놓은 것 (1:1 관계)
+<ul>
+<li>옛날에는 어떤 언어를 만들 때, 처음에는 compiler 를 asm 으로 개발하고 그 이후에는 compiler 도 그 언어로 개발되는 순서로 했었다고 한다.</li>
+</ul>
+</li>
+<li>Syntax 와 sementics 의 차이는
+<ul>
+<li>Syntax: 문법</li>
+<li>Semantics: 의미</li>
+</ul>
+</li>
+<li><a href="../../../../../gardens/pl/drafts/Interpreter-(PL)" class="internal" data-slug="gardens/pl/drafts/Interpreter-(PL)">Interpreter</a>
+<ul>
+<li>Compile 과 execution 을 동시에 하는 것인데</li>
+<li>조금 더 구체적으로 말하면 program 을 input 으로 받아 해당 program 의 output 을 output 으로 내뱉는 놈을 의미한다.</li>
+<li>모든 연산이 함수로 구현되어 있어서 code parsing 후 해당 함수를 call 하는 것으로 실행된다.</li>
+<li>따라서 매번 func call procedure 를 타기 때문에 compiler 보다 느린 것.</li>
+</ul>
+</li>
+<li><a href="../../../../../gardens/pl/function/drafts/Function-(PL-Function)" class="internal" data-slug="gardens/pl/function/drafts/Function-(PL-Function)">Function</a>
+<ul>
+<li>수학적 함수와는 다르게 PL 에서의 함수는 machine state (가령 memory 에 저장된 값) 을 바꾸기 때문에 매 실행시마다 결과가 다를 수 있다.</li>
+<li>따라서 수학 함수는 값으로서 생각할 수 있지만 C 에서는 안된다.
+<ul>
+<li>C 언어의 함수는 <a href="../../../../../gardens/pl/function/terms/First,-Second-Class-Citizen-(PL-Function)" class="internal" data-slug="gardens/pl/function/terms/First,-Second-Class-Citizen-(PL-Function)">Second-class citizen</a> 이기 때문.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="c-compilation-step">C Compilation Step<a aria-hidden="true" tabindex="-1" href="#c-compilation-step" class="internal"> §</a></h3>
+<ul>
+<li>C compile 과정:</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241017133617.png" width="auto" height="auto"/></p>
+<ul>
+<li>C compile 과정: Source code (<code>.c</code>) -> <a href="../../../../../gardens/c-cpp/gcc-llvm/drafts/Compilation-Steps-(GCC,-LLVM)" class="internal" data-slug="gardens/c-cpp/gcc-llvm/drafts/Compilation-Steps-(GCC,-LLVM)">Preprocessing</a> -> Compilation -> <a href="../../../../../gardens/c-cpp/gcc-llvm/drafts/Compilation-Steps-(GCC,-LLVM)" class="internal" data-slug="gardens/c-cpp/gcc-llvm/drafts/Compilation-Steps-(GCC,-LLVM)">Object file</a> (<code>.o</code>) -> <a href="../../../../../gardens/c-cpp/gcc-llvm/drafts/Compilation-Steps-(GCC,-LLVM)" class="internal" data-slug="gardens/c-cpp/gcc-llvm/drafts/Compilation-Steps-(GCC,-LLVM)">Linking</a> (w/ lib) -> Executable binary</li>
+<li>Preprocessing
+<ul>
+<li><code>#include</code> 는 header file 을 가져오기 때문에 선언만 가져온다.</li>
+<li>그래서 link 를 통해 implementation 을 연결해주는 작업이 필요한 것.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241017133921.png" width="auto" height="auto"/></p>
+<ul>
+<li>Linker
+<ul>
+<li>만약 link 하지 않고 그냥 implentation 이 preprocess 에서 다 포함이 된다면 매번 얘네들을 compile 해줘야 한다.</li>
+<li>근데 linker 을 사용하면 부분적으로 compile 하고 (<code>.o</code>) 변경되지 않은 부분들에 대해서는 compile 하지 않게 해주는 덕분에 전부 compile 하는것보다 훨씬 빠르게 수행될 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="process-execution">Process Execution<a aria-hidden="true" tabindex="-1" href="#process-execution" class="internal"> §</a></h2>
+<ul>
+<li>Process 의 <a href="../../../../../gardens/os/process/drafts/Process-State-Model-(Process)" class="internal" data-slug="gardens/os/process/drafts/Process-State-Model-(Process)">execution lifecycle</a> 을 큰그림으로 그려보자.
+<ul>
+<li>Program 을 실행하면 이걸 메모리에 올려두고, ready queue 에 넣어놓은 뒤에</li>
+<li>Context switch 되면 kernel 에서 정해진 사전 작업을 처리하고</li>
+<li>이 메모리에 올려둔 코드로 jump 해서 제어권 변경 및 실행되기 시작하는 것.</li>
+<li>그리고 종료되면 kernel 이 다시 제어권을 받아 후처리하게 된다.</li>
+</ul>
+</li>
+<li>그리고 각 instruction 을 실행하는 것은
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Program-Counter,-PC-(Arch)" class="internal" data-slug="gardens/arch/terms/Program-Counter,-PC-(Arch)">Controller Unit</a> 은 <a href="../../../../../gardens/arch/terms/Program-Counter,-PC-(Arch)" class="internal" data-slug="gardens/arch/terms/Program-Counter,-PC-(Arch)">PC</a> 를 보고 해당 instrunction 를 메모리에서 가져오고 (fetch),
+<ul>
+<li>PC 를 바꾸는것도 이 Controller unit 이 담당한다.</li>
+</ul>
+</li>
+<li>Decoder 가 이놈이 뭔지 파악 (decode) 해서 해당 inst 에 대한 ALU (Arithmetic Logic Unit) 으로 보내 처리 (execute) 하며,</li>
+<li>이런 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Cycle-(Arch-Instruction)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Cycle-(Arch-Instruction)">instruction cycle</a> 을 반복하게 된다.</li>
+</ul>
+</li>
+<li>Kernel 로 제어권이 넘어간다는 것은 kernel code 로 PC 를 바꾸는 것을 의미한다.
+<ul>
+<li>이렇게 제어권을 넘기는 것을 control transfer 라고 한다.</li>
+</ul>
+</li>
+<li><code>BRANCH</code>, function call (<code>JUMP</code>) 모두 마찬가지로 Control unit 이 PC 를 바꾸는 것</li>
+<li><code>STORE</code>(+ <code>LOAD</code>), Arithmetic operation, <code>BRANCH</code> 만 있으면 이론적으로는 어떤 프로그램이든 구현할 수 있다.
+<ul>
+<li>저 상태에서 필요에 의해 optimization 이 들어간게 현대의 CPU 임.</li>
+</ul>
+</li>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Register-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Register-(Arch)">Register</a>: processor 가 직접 접근해서 값을 가져올 수 있는 아주 빠른 저장소
+<ul>
+<li>Architecture 가 32, 64 bit 라는 것은 register 의 사이즈가 해당 크기라는 것이다.
+<ul>
+<li>그래서 메모리에서 한번에 가져오는 bit 의 크기도 그 정도이고,</li>
+<li>Instruction 의 최대 크기도 여기에 맞게 되어 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="../../../../../gardens/pl/drafts/Variable-(PL)" class="internal" data-slug="gardens/pl/drafts/Variable-(PL)">Variable</a>: named memory location
+<ul>
+<li>이 주소는 compile time 에 다 정해진다.
+<ul>
+<li>당연히 <a href="../../../../../gardens/os/memory/draft/Virtual-Memory-(Memory)" class="internal" data-slug="gardens/os/memory/draft/Virtual-Memory-(Memory)">Virtual address</a> 이기 떄문에 이것이 가능한 것</li>
+<li>실행시에 virtual address 로 접근하면 page fault 가 나며 physical address 를 받아 page table 등록되고 처리되는 형태</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="cisc-risc">CISC, RISC<a aria-hidden="true" tabindex="-1" href="#cisc-risc" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Complex-Instruction-Set-Computer,-CISC-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Complex-Instruction-Set-Computer,-CISC-(Arch)">CISC</a>: Complex Instruction Set Computer
+<ul>
+<li>Backward-compatibility 를 위해서 이전의 <a href="../../../../../gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)" class="internal" data-slug="gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)">ISA</a> 도 다 들고 있음</li>
+<li>따라서 매우 뚱뚱맨</li>
+<li>참고로 CISC 라는 용어는 RISC 가 나오기 전까지는 없었다고 한다; CISC 는 RISC 가 아닌 모든 architecture 를 다 커버함.</li>
+</ul>
+</li>
+<li><a href="../../../../../gardens/arch/drafts/Reduced-Instruction-Set-Computer,-RISC-(Arch)" class="internal" data-slug="gardens/arch/drafts/Reduced-Instruction-Set-Computer,-RISC-(Arch)">RISC</a>: Reduced Instruction Set Computer
+<ul>
+<li>CISC 에서는 메모리 주소 표현법이 아주 많고 따라서 compiler 입장에서는 선택지가 많기 때문에 optimize 하기 힘들다.</li>
+<li>그래서 RISC 는 표현법이 적고 <code>LOAD</code>, <code>STORE</code> 를 무조건 사용해야 하는 등의 차이점이 있다.
+<ul>
+<li>CISC 에서는 <code>LOAD</code>, <code>STORE</code> 뿐 아니라 메모리 주소가 instruction 에 바로 들어갈 수도 있는데 RISC 는 무조건 LOAD 로 register 로 올려야지 사용할 수 있다.</li>
+</ul>
+</li>
+<li>RISC 가 문법이 간단하기 떄문에 compiler 입장에서 어떻게 해야 code optimize 를 할 수 있을지 예측이 가능하다.
+<ul>
+<li>가령 RISC 의 경우에는 모든 instruction 의 크기가 동일하다. CISC 에서는 들쭉날쭉함</li>
+<li>그리고 RISC 에서는 모든 instruction 이 (<a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)">pipeline</a> 의 도움을 받아) 1 cycle 에 끝난다.</li>
+<li>다만 RISC 에서는 이런 간단한 문법때문에 오히려 code size 가 커지기도 한다.</li>
+</ul>
+</li>
+<li>요즘은 겉으로는 CISC 지만 내부적으로는 RISC 로 되어 있다고 한다.
+<ul>
+<li>외부에 노출되는 API 만 CISC 형태를 띄고 실제 구현된 것은 RISC 와 비슷하게 구현되어 있다고 한다.</li>
+<li>사실 이건 뭔말인지 잘 모르겠음</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="process">Process<a aria-hidden="true" tabindex="-1" href="#process" class="internal"> §</a></h2>
+<ul>
+<li>이놈 구성 요소
+<ul>
+<li>(1) register 도 들어간다.
+<ul>
+<li>당연히 <a href="../../../../../gardens/os/process/drafts/Time-Sharing-System-(Process)" class="internal" data-slug="gardens/os/process/drafts/Time-Sharing-System-(Process)">time sharing</a> 할 떄 사용하고 있던 register 들을 <a href="../../../../../gardens/os/process/drafts/Process-Control-Block,-PCB-(Process)" class="internal" data-slug="gardens/os/process/drafts/Process-Control-Block,-PCB-(Process)">PCB</a> 에 넣어놔야지 다시 복구가 가능하니까</li>
+</ul>
+</li>
+<li>(2) memory (3) IO status (fd 등) (4) signal mgmt</li>
+</ul>
+</li>
+<li>Run mode
+<ul>
+<li>Instruction 도 mode 가 나눠져 있다</li>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Mode-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Mode-(Arch)">Kernel mode</a> 와 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Mode-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Mode-(Arch)">user mode</a></li>
+<li>당연히 kernel mode inst 는 kernel 만 실행할 수 있고,</li>
+<li>User mode 의 code 가 kernel instruction 을 실행하기 위해서는 이걸 해달라고 kernel 에 부탁하는 방식을 사용한다 (즉, 이게 syscall) <a href="../../../../../gardens/os/process/drafts/System-Call-(Process)" class="internal" data-slug="gardens/os/process/drafts/System-Call-(Process)">syscall</a>.
+<ul>
+<li>Syscall 을 걸면 trap 이 걸리며 kernel mode 로 바뀌게 된다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Process 를 실행시키는 것은
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Uni,-Multi-programming-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Uni,-Multi-programming-(Arch)">Uniprogramming</a>: 하나의 core 에서 process 를 한번에 하나만 실행하고, 끝날 때 까지 계속 잡고 있는 것.</li>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Uni,-Multi-programming-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Uni,-Multi-programming-(Arch)">Uni, Multi-programming (Arch)</a>: 반대로 core 를 time-sharing 하며 switching 해 여러개의 process 를 와리가리하면서 실행시키는 것</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>여기부터는 <code>2024-09-18</code> 강의</p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="virtual-memory">Virtual Memory<a aria-hidden="true" tabindex="-1" href="#virtual-memory" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>참고) Virtual Memory 의 기원 </p></div>
+                  
+                </div>
+<ul>
+<li>처음 논문은 MIT 의 multics OS 개발팀이 작성</li>
+<li>근데 발명은 atlas system 에 처음 도입되었다고 한다
+<ul>
+<li>이놈은 영국의 manchester computer 라는 회사에서 만들었다고 한다.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li><a href="../../../../../gardens/os/memory/draft/Virtual-Memory-(Memory)" class="internal" data-slug="gardens/os/memory/draft/Virtual-Memory-(Memory)">Virtual Memory</a> 간단 복습</li>
+<li>“정의” 는
+<ul>
+<li>Physical memory 에 대한 abstraction 으로써 이 physical memory 를 여러 process 가 공유할 때</li>
+<li>(1) 실제 공간보다 더 크게 보이고 (2) process 혼자 쓰고 있는 듯한 환상</li>
+<li>을 제공해 준다.</li>
+</ul>
+</li>
+<li>이를 제공하기 위해
+<ul>
+<li>Virtual memory 의 address 와 physical memory 의 address 를 mapping 하고 (<a href="../../../../../gardens/os/memory/draft/Page-Table-(Memory)" class="internal" data-slug="gardens/os/memory/draft/Page-Table-(Memory)">Page table</a>)
+<ul>
+<li>이 page table 에 mapping 을 <a href="../../../../../gardens/os/process/drafts/Process-Control-Block,-PCB-(Process)" class="internal" data-slug="gardens/os/process/drafts/Process-Control-Block,-PCB-(Process)">PID</a> 별로 구분해 놓아서 같은 virtual address 로 접근해도 pid 가 다르면 다른 데이터가 보이게 한다.</li>
+<li>즉, 이런 protection 을 해주는 셈 (그래서 virtual address space 를 private address space 라고도 한다).</li>
+</ul>
+</li>
+<li>Disk 에 데이터를 저장하되 필요할 때 (접근했을 때) memory 로 올리고 빼자 (<a href="../../../../../gardens/os/memory/draft/Demand-Paging-(Memory)" class="internal" data-slug="gardens/os/memory/draft/Demand-Paging-(Memory)">Demand paging</a>)</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241017151054.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)">Virtual memory space 구조</a>: 사실 다 아는거니까 간단하게만 복습하면
+<ul>
+<li>Lowest -> highest 순서로 code, data, stack, heap</li>
+<li>Global var 는 data 에, local 은 stack 에</li>
+<li>Stack 은 low -> high 로 자라고 heap 은 high -> low 로 자란다 (역방향).</li>
+<li>Stack 에 저장되는 함수 데이터는 <a href="../../../../../gardens/arch/drafts/Activation-(Arch)" class="internal" data-slug="gardens/arch/drafts/Activation-(Arch)">Stack Frame</a> 혹은 <a href="../../../../../gardens/arch/drafts/Activation-(Arch)" class="internal" data-slug="gardens/arch/drafts/Activation-(Arch)">Activation Record</a> 라고 불린다.</li>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Stack-Pointer,-SP-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Stack-Pointer,-SP-(Arch)">Stack pointer</a> (SP) 라는 register 가 stack 의 top 을 가리킨다.</li>
+<li>PC 는 code 공간을 가리키고 있게 된다. (해당 process 실행중에)</li>
+<li>함수가 실행되면 stack frame 이 생기고 SP 가 옮겨가고 종료되면 stack frame 가 날라가고 SP 가 다시 그 전으로 옮겨가는 방식이다.</li>
+<li>Function call 을 관리하기 위해 stack 을 사용하는 이유는 recursion 을 위해서이다.
+<ul>
+<li>Recursion 이 없으면 그냥 함수별로 고정된 공간 박아놓고 해도 된다.</li>
+</ul>
+</li>
+<li>Shared lib 공간은 shared library 를 code 공간에 넣으면 낭비니까 이 공간에 address mapping 만 해주는 것</li>
+<li>Data 공간은 초기화 여부에 따라 initialized, uninitialized 두개로 나뉘어 저장된다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="process-communication">Process Communication<a aria-hidden="true" tabindex="-1" href="#process-communication" class="internal"> §</a></h2>
+<ul>
+<li>Process 간의 communication 은 <a href="../../../../../gardens/os/process/drafts/Inter-process-Communication,-IPC-(Process)" class="internal" data-slug="gardens/os/process/drafts/Inter-process-Communication,-IPC-(Process)">IPC</a> 를 사용하거나, 아니면 아래 그림처럼 <a href="../../../../../gardens/os/memory/draft/Shared-Memory-(Memory)" class="internal" data-slug="gardens/os/memory/draft/Shared-Memory-(Memory)">shared memory</a> 를 잡아서 할 수 있다.
+<ul>
+<li>Shared memory 는 page table 을 가지고 장난치는 것으로, Process 간의 VAS 에 일정 부분을 shared memory space 로 잡아두고, 각 process 의 page table 에서 이 공간을 같은 physical memory space 에 mapping 하는 것이다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241017152632.png" width="auto" height="auto"/></p>
+<h2 id="concurrency">Concurrency<a aria-hidden="true" tabindex="-1" href="#concurrency" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/os/process/drafts/Time-Sharing-System-(Process)" class="internal" data-slug="gardens/os/process/drafts/Time-Sharing-System-(Process)">Concurrency</a> 는 정의로는 한 process 의 instruction 이 실행되는 와중에 다른 process 의 instruction 들이 끼어드는 (<em>Interleaved</em>) 것을 말한다.</li>
+<li>이것은 <a href="../../../../../gardens/os/process/drafts/Time-Sharing-System-(Process)" class="internal" data-slug="gardens/os/process/drafts/Time-Sharing-System-(Process)">Context switch</a> 로 구현한다.
+<ul>
+<li>요즘의 대부분 시스템들은 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Uni,-Multi-programming-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Uni,-Multi-programming-(Arch)">Multiprogramming</a> 으로 작동하고, 이에 따라 각 process 는 일정 간격의 시간 interval 을 할당받아 자신의 instruction 을 실행한다.</li>
+<li>이때 process 가 어떤 interval 동안 실행하고, CPU 를 반납할 때 그냥 반납해버리면 다음번의 interval 에서 내가 이전에 뭘 하고있었는지 (context) 를 알 수가 없다.</li>
+<li>그래서 할당, 반납할 때 이 context 를 load 하고 store 하는 과정이 진행되는데 이게 context switch 이다.</li>
+</ul>
+</li>
+<li><em>Control</em>: 한 process 의 주소공간의 instruction 이 실행되는 것
+<ul>
+<li>Control 이 넘어간다는 것은 control unit 에 의해 다른 process 의 주소공간으로 PC 가 변경되는 것</li>
+</ul>
+</li>
+</ul>
+<h2 id="state-transition">State Transition<a aria-hidden="true" tabindex="-1" href="#state-transition" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241017160416.png" width="auto" height="auto"/></p>
+<ul>
+<li>수업에서는 <a href="../../../../../gardens/os/process/drafts/Process-State-Model-(Process)" class="internal" data-slug="gardens/os/process/drafts/Process-State-Model-(Process)">3-state model</a> 로 설명을 하는데</li>
+<li>Running: CPU 를 잡고 실행중인 상태</li>
+<li>Ready: 실행중이진 않지만, 언제든 실행될 수 있는 상태</li>
+<li>Blocked: (IO 등의) event 로 인해 실행될 수 없는 상태
+<ul>
+<li>가령 file IO 를 요청한 경우 이건 syscall 이니까 OS 가 알게 되고, 따라서 해당 process 를 blocked 상태로 바꾼다.</li>
+<li>그리고 이 작업이 끝난 경우 interrupt 가 올 테니까 이 또한 OS 가 알게 되고, 따라서 해당 process 를 다시 ready 상태로 바꾼다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="preemptive-cooperative">Preemptive, Cooperative<a aria-hidden="true" tabindex="-1" href="#preemptive-cooperative" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/os/process/drafts/Time-Sharing-System-(Process)" class="internal" data-slug="gardens/os/process/drafts/Time-Sharing-System-(Process)">Preemptive</a> 는 말 그대로 빼았는 것, <a href="../../../../../gardens/os/process/drafts/Time-Sharing-System-(Process)" class="internal" data-slug="gardens/os/process/drafts/Time-Sharing-System-(Process)">Cooperative</a> 는 process 들 간에 협력하면서 CPU 를 나눠 갖는 것
+<ul>
+<li>Preemptive 의 대표주자로는 time-shared 가 있고</li>
+<li>Cooperative 는 <code>yield</code> 를 활용하는 것이다.
+<ul>
+<li>즉, kernel 이 process 로부터 뺏는게 아니라 스스로 <code>yield</code> 로 CPU 를 내려놓아 다른 애가 사용하는 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="thread">Thread<a aria-hidden="true" tabindex="-1" href="#thread" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/os/process/drafts/Thread-(Process)" class="internal" data-slug="gardens/os/process/drafts/Thread-(Process)">Thread</a> 는 아는것처럼 가장 작은 스케줄링 (실행) 의 단위이다.
+<ul>
+<li>이거를 좀 다르게 말하면 독립적인 fetch, decode, execute loop 단위라고 생각할 수 있다.</li>
+</ul>
+</li>
+<li>어쨋든 이놈 하나가 실행의 단위이기 때문에, 얘만의 context 가 필요하다.
+<ul>
+<li>그래서 process 에서 context 와는 무관한 (가령 code 같은 애들) 놈은 thread 끼리 공유하되,</li>
+<li>Register, stack, local data 는 thread 마다 갖고 있다.</li>
+<li>이 말은 thread 간에 process 의 VAS 중 일부를 공유한다는 것이고, 이 공유 공간 (흔히 data 공간) 을 이용해 thread 간에 communication 을 하게 된다.</li>
+</ul>
+</li>
+<li>User-level thread 와 kernel-level thread 가 있다.. 는 것도 이미 알테고</li>
+<li>이 thread 를 생성하는 것은 OS-independent 한 API 인 POSIX 에 정의되어 있어서 여기에의 thread API (<a href="../../../../../gardens/c-cpp/c/pthread/C---세상-간단한-POSIX-thread-(pthread)-예시" class="internal" data-slug="gardens/c-cpp/c/pthread/C---세상-간단한-POSIX-thread-(pthread)-예시">Pthread</a>) 를 불러서 thread 기능을 사용해주면 된다.</li>
+</ul>
+<h2 id="scheduling">Scheduling<a aria-hidden="true" tabindex="-1" href="#scheduling" class="internal"> §</a></h2>
+<ul>
+<li>Linux 에서는 process 와 thread 를 구분하지 않는다 (<code>task_struct</code>).</li>
+<li>현재 Linux 에서 사용하는 scheduling policy 는 <a href="../../../../../gardens/os/process/drafts/Completely-Fair-Scheduling,-CFS-(Process)" class="internal" data-slug="gardens/os/process/drafts/Completely-Fair-Scheduling,-CFS-(Process)">Completely Fair Scheduler (CFS)</a> 이다.
+<ul>
+<li>이전까지는 scheduling overhead 를 최대한 줄인 O(1) Scheduler 를 사용하고 있다가 fairness 를 위해 CFS 로 바꿨다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="cfs">CFS<a aria-hidden="true" tabindex="-1" href="#cfs" class="internal"> §</a></h3>
+<ul>
+<li>깊게 안들어가고 간단하게만 알아보면</li>
+<li>각 processor 에는 ready process 들이 담긴 run queue 가 있고 여기에서 하나씩 빼서 CPU 에 할당하는데</li>
+<li>이때는 <a href="../../../../../gardens/os/process/drafts/Completely-Fair-Scheduling,-CFS-(Process)" class="internal" data-slug="gardens/os/process/drafts/Completely-Fair-Scheduling,-CFS-(Process)">Nice</a> 라는 priority system 을 사용한다: Nice 가 작을수록 우선순위가 높음</li>
+<li>CFS 에서는 두가지 시간 단위가 있다:
+<ul>
+<li>Time slice: 이놈은 process 가 할당받아 빼앗기지 않고 사용할 수 있는 시간이다.
+<ul>
+<li>그리고 이 값은 static 한 것이 아닌, 우선순위 (Nice) 에 의해 결정된다.</li>
+</ul>
+</li>
+<li>Virtual runtime: 이놈은 지금까지 process 가 사용한 시간인데,
+<ul>
+<li>이것 또한 우선순위 (Nice) 에 의해 “조정” 된다.</li>
+<li>우선순위가 높으면 실제로는 10ms 동안 실행됐어도 2ms 실행된 것으로 조정되고 낮으면 반대</li>
+<li>즉, 실제 runtime 이 아니라 일종의 “Normalized” 된 가상의 (virtual) runtime 인 것.</li>
+<li>이놈의 수식 간단하게 보고 가자.
+<ul>
+<li>아래 수식에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 은 Nice 0 의 weight 이고, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 는 process <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 의 weight 이다.</li>
+<li>즉, process 의 weight 가 커지면 runtime 이 줄어들도록 조정된다는 것.</li>
+<li>참고로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span></span> 는 현재 시간을 의미한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">Vi</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">t</span><span class="mord mathnormal">u</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.00773em;">lR</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2964em;vertical-align:-0.9361em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.1389em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9361em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">h</span><span class="mord mathnormal">ys</span><span class="mord mathnormal">i</span><span class="mord mathnormal">c</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.00773em;">lR</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span></div>
+<ul>
+<li>정리하면, 어떤 process 를 선택할 지는 Virtual runtime 으로 고르고, 해당 process 에게 한번 실행할 때 얼마 만큼의 시간을 할당할지는 Time slice 로 고르는 것</li>
+<li>Run queue 는 <a href="../../../../../gardens/database/index/drafts/Red-black-Tree,-RB-Tree-(Index)" class="internal" data-slug="gardens/database/index/drafts/Red-black-Tree,-RB-Tree-(Index)">RBTree</a> 로 관리된다.
+<ul>
+<li>이놈에 대해 깊게는 안들어가고 간단하게만 설명하면,
+<ul>
+<li>Shortest path 와 longest tree 간의 height 차이가 2배를 넘지 않도록 하는 self-balanced tree 이다.</li>
+<li>따라서 이놈의 operation 은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">))</span></span></span></span></span> 의 시간복잡도를 가진다.</li>
+</ul>
+</li>
+<li>이놈을 virtual runtime 으로 정렬하는데 사용한다. 즉, process 들이 virtual runtime 으로 정렬되어 이 tree 에 들어가 있고, scheduling 할 때는 가장 왼쪽 (즉, virtual runtime 이 가장 작은 놈) 을 선택하며, context switch 가 발생해 CPU 를 반납한 process 에 대해서는 해당 시점에 대해 virtual runtime 을 새로 계산해서 이 tree 에 넣음</li>
+<li>이 RBTree 를 각 core 별로 관리한다.
+<ul>
+<li>즉, run queue 는 core 별로 있는 셈</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>간단한 CFS 작동 과정
+<ul>
+<li>일단 tick 이라는 시간 단위가 있고 time slice 는 여러개의 tick 으로 할당받는다.</li>
+<li>그리고 매 tick 마다 CFS 가 돌면서 지금 실행중인 process 의 time slice 를 1 tick 감소시킨다.</li>
+<li>만약에 더이상의 time slice 가 남아있지 않다면, 해당 process 에 flag 를 세우고 그 시점을 기준으로 virtual runtime 을 계산한다.</li>
+<li>(아마 다음 tick 에서?) flag 가 걸려있는 애를 evict 하고 RBTree 에서 새로 하나를 뽑아 scheduling 하며 evict 한 애는 위에서 구한 virtual runtime 값으로 BRTree 에 넣는다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="smp">SMP<a aria-hidden="true" tabindex="-1" href="#smp" class="internal"> §</a></h3>
+<ul>
+<li>Core 1개에 대해서는 CFS 로 scheduling 을 하고, 여러 core 간에는 <a href="../../../../../gardens/os/process/drafts/Symmetric-Multiprocessing,-SMP-(Process)" class="internal" data-slug="gardens/os/process/drafts/Symmetric-Multiprocessing,-SMP-(Process)">Symmetric Multiprocessing (SMP)</a> 로 scheduling 을 한다.</li>
+<li>얘는 각 core 의 run queue 간에 load balancing 을 해주는 역할을 한다.
+<ul>
+<li>Run queue length 를 count 해서 많은 쪽에서 적은 쪽으로 옮겨준다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241017180950.png" width="auto" height="auto"/></p>
+<ul>
+<li>많은 architecture 들이 위처럼 <em>Scheduling domain</em> 을 제공한다.
+<ul>
+<li>얘는 가장 말단의 Logical core 부터 grouping 을 해서 계층화를 해 이 group 단위로 scheduling 할 수 있게 해준다.</li>
+</ul>
+</li>
+<li>그래서 load balancing worker 가 주기적으로 깨어나서 가장 말단부터 확인한 후 각 queue length 를 균일하게 맞춰준다.
+<ul>
+<li>그 주기를 <em>Rebalancing tick</em> 이라고 하고</li>
+<li>Migration 할 때는 <em>Push migration</em> 을 한다. 즉, kernel 이 강제로 process 를 옮긴다는 소리.</li>
+<li>반대로 <em>Pull migration</em> 도 있는데, 이건 queue 가 자발적으로 다른 queue 로부터 가져오는 방법이다.</li>
+<li>Linux 에서는 기본적으로는 200ms 주기의 rebalancing tick 마다 Push migration 을 하고, 만약에 queue 가 비었을 때는 Pull migration 을 한다.</li>
+</ul>
+</li>
+<li>Process migration 은 core 의 load balance 를 해준다는 점에서 장점이 있지만, cache 가 깨지는 문제점이 있다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#programming-language-basics" data-for="programming-language-basics">Programming Language Basics</a></li><li class="depth-1"><a href="#c-compilation-step" data-for="c-compilation-step">C Compilation Step</a></li><li class="depth-0"><a href="#process-execution" data-for="process-execution">Process Execution</a></li><li class="depth-0"><a href="#cisc-risc" data-for="cisc-risc">CISC, RISC</a></li><li class="depth-0"><a href="#process" data-for="process">Process</a></li><li class="depth-0"><a href="#virtual-memory" data-for="virtual-memory">Virtual Memory</a></li><li class="depth-0"><a href="#process-communication" data-for="process-communication">Process Communication</a></li><li class="depth-0"><a href="#concurrency" data-for="concurrency">Concurrency</a></li><li class="depth-0"><a href="#state-transition" data-for="state-transition">State Transition</a></li><li class="depth-0"><a href="#preemptive-cooperative" data-for="preemptive-cooperative">Preemptive, Cooperative</a></li><li class="depth-0"><a href="#thread" data-for="thread">Thread</a></li><li class="depth-0"><a href="#scheduling" data-for="scheduling">Scheduling</a></li><li class="depth-1"><a href="#cfs" data-for="cfs">CFS</a></li><li class="depth-1"><a href="#smp" data-for="smp">SMP</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/(SNU-CSE)-Scalable-High-Performance-Computing" class="internal">(SNU CSE) Scalable High-Performance Computing</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Complex-Instruction-Set-Computer,-CISC-(Arch)" class="internal">Complex Instruction Set Computer, CISC (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)" class="internal">Instruction (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Cycle-(Arch-Instruction)" class="internal">Instruction Cycle (Arch Instruction)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Mode-(Arch)" class="internal">Instruction Mode (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)" class="internal">Instruction Pipeline (Arch Instruction)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Register-(Arch)" class="internal">Register (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Stack-Pointer,-SP-(Arch)" class="internal">Stack Pointer, SP (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Uni,-Multi-programming-(Arch)" class="internal">Uni, Multi-programming (Arch)</a></li><li><a href="../../../../../gardens/c-cpp/gcc-llvm/drafts/Compilation-Steps-(GCC,-LLVM)" class="internal">Compilation Steps (GCC, LLVM)</a></li><li><a href="../../../../../gardens/database/index/drafts/Red-black-Tree,-RB-Tree-(Index)" class="internal">Red-black Tree, RB Tree (Index)</a></li><li><a href="../../../../../gardens/os/memory/draft/Shared-Memory-(Memory)" class="internal">Shared Memory (Memory)</a></li><li><a href="../../../../../gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)" class="internal">Virtual Address Space, VAS (Memory)</a></li><li><a href="../../../../../gardens/os/process/drafts/Completely-Fair-Scheduling,-CFS-(Process)" class="internal">Completely Fair Scheduling, CFS (Process)</a></li><li><a href="../../../../../gardens/os/process/drafts/Inter-process-Communication,-IPC-(Process)" class="internal">Inter-process Communication, IPC (Process)</a></li><li><a href="../../../../../gardens/os/process/drafts/Process-Control-Block,-PCB-(Process)" class="internal">Process Control Block, PCB (Process)</a></li><li><a href="../../../../../gardens/os/process/drafts/Process-State-Model-(Process)" class="internal">Process State Model (Process)</a></li><li><a href="../../../../../gardens/os/process/drafts/Symmetric-Multiprocessing,-SMP-(Process)" class="internal">Symmetric Multiprocessing, SMP (Process)</a></li><li><a href="../../../../../gardens/os/process/drafts/System-Call-(Process)" class="internal">System Call (Process)</a></li><li><a href="../../../../../gardens/os/process/drafts/Thread-(Process)" class="internal">Thread (Process)</a></li><li><a href="../../../../../gardens/os/process/drafts/Time-Sharing-System-(Process)" class="internal">Time Sharing System (Process)</a></li><li><a href="../../../../../gardens/pl/drafts/Interpreter-(PL)" class="internal">Interpreter (PL)</a></li><li><a href="../../../../../gardens/pl/function/drafts/Function-(PL-Function)" class="internal">Function (PL Function)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

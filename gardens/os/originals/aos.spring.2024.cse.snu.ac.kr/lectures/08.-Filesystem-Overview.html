@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html><head><title>08. Filesystem Overview</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="08. Filesystem Overview"/><meta property="og:description" content="서울대학교 컴퓨터공학과 김진수 교수님의 &amp;quot;고급 운영체제&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Filesystem 구성요소 § File (*) § 누가 길가다가 물어보면 (1) Persistent storage 에 저장된 (2) 이름을 가지고 있는 (3) 연관된 byte 들의 모음 라고 말해라."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 김진수 교수님의 &amp;quot;고급 운영체제&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Filesystem 구성요소 § File (*) § 누가 길가다가 물어보면 (1) Persistent storage 에 저장된 (2) 이름을 가지고 있는 (3) 연관된 byte 들의 모음 라고 말해라."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/originals/aos.spring.2024.cse.snu.ac.kr/lectures/08.-Filesystem-Overview"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">08. Filesystem Overview</h1><p class="content-meta ">Apr 02, 2024, 13 min read</p><ul class="tags "><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-aos24s" class="internal tag-link">#snu-aos24s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학과 김진수 교수님의 &quot;고급 운영체제&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="filesystem-구성요소">Filesystem 구성요소<a aria-hidden="true" tabindex="-1" href="#filesystem-구성요소" class="internal"> §</a></h2>
+<h3 id="file-">File (<a href="../../../../../gardens/os/fs/File-System-(OS)" class="internal" data-slug="gardens/os/fs/File-System-(OS)">*</a>)<a aria-hidden="true" tabindex="-1" href="#file-" class="internal"> §</a></h3>
+<ul>
+<li>누가 길가다가 물어보면</li>
+<li><span class="text-highlight">(1) Persistent storage 에 저장된 (2) 이름을 가지고 있는 (3) 연관된 byte 들의 모음</span> 라고 말해라.</li>
+</ul>
+<h3 id="inode-">inode (<a href="../../../../../gardens/os/fs/terms/Inode-(File-System)" class="internal" data-slug="gardens/os/fs/terms/Inode-(File-System)">*</a>)<a aria-hidden="true" tabindex="-1" href="#inode-" class="internal"> §</a></h3>
+<ul>
+<li>파일의 metadata 를 <em>inode</em> 에 저장</li>
+<li>이런애들이 저장된다고 한다</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>NAME</th><th>DESCRIPTION</th></tr></thead><tbody><tr><td>파일 사이즈</td><td></td></tr><tr><td>Block 들의 위치</td><td>아마 LBA 주소일 듯하다.</td></tr><tr><td>소유자</td><td><code>user</code>, <code>group</code></td></tr><tr><td>권한</td><td><code>rwx</code></td></tr><tr><td>Timestamp</td><td>갖가지 시간 정보들</td></tr></tbody></table>
+<h3 id="directory-">Directory (<a href="../../../../../gardens/os/fs/terms/Directory-(File-System)" class="internal" data-slug="gardens/os/fs/terms/Directory-(File-System)">*</a>)<a aria-hidden="true" tabindex="-1" href="#directory-" class="internal"> §</a></h3>
+<ul>
+<li><em>Directory</em> 는 <code>[file_name, inode_id]</code> 의 list 를 담은 파일</li>
+<li>파일 이름은 directory 를 이용해 inode number 로 변환된다.
+<ul>
+<li>몰랐던 사실이죠? inode 가 아니라 dir 에 저장된다.</li>
+<li>여기서 path 는 directory 를 재귀적으로 참조하여 file 의 위치를 알아냄</li>
+</ul>
+</li>
+<li>이 inode number 로 inode 를 알아내는 것은 쉬움 - fs 의 inode 영역에서 index 로 접근</li>
+<li>여기서 metadata 를 읽어서 권한 등을 판단하는 두둥실을 한다고 한다.</li>
+</ul>
+<h3 id="filesystem-">Filesystem (<a href="../../../../../gardens/os/fs/File-System-(OS)" class="internal" data-slug="gardens/os/fs/File-System-(OS)">*</a>)<a aria-hidden="true" tabindex="-1" href="#filesystem-" class="internal"> §</a></h3>
+<ul>
+<li>Filesystem 는 <span class="text-highlight">사용자가 생성한 file 에 대한 metadata 를 관리하는 시스템</span> 이라고 정의할 수 있다.
+<ul>
+<li>즉, 각 file 자체에 대해서는 별로 신경쓰지 않는다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="layer">Layer<a aria-hidden="true" tabindex="-1" href="#layer" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20240609220959.png" width="auto" height="auto"/></p>
+<ul>
+<li>일반 프로그램은 lib 을 통해 (뒤에서 설명할) POSIX API 를 이용해 Filesystem 에 접근하게 된다.</li>
+<li><em>Virtual fs</em>: 모든 종류의 fs 들이 공통적으로 수행하는 기능을 정의한 fs 들의 superset
+<ul>
+<li><a href="../../../../../gardens/os/procfs/Process-Filesystem-(procfs)" class="internal" data-slug="gardens/os/procfs/Process-Filesystem-(procfs)">proc</a>: 파일시스템 인터페이스를 이용해 kernel 의 설정값에 접근할 수 있게 해주는 가상의 fs</li>
+</ul>
+</li>
+<li><em>Generic block layer</em>: 몇번 block 을 r/w 해라 등의 명령어 제공
+<ul>
+<li>즉, device driver 와 filesystem 간의 interface 임</li>
+</ul>
+</li>
+<li>이 아래에 <em>device specific driver</em> 들이 실제로 device 이랑 소통하며 명령어 처리</li>
+</ul>
+<h2 id="posix-api">POSIX API<a aria-hidden="true" tabindex="-1" href="#posix-api" class="internal"> §</a></h2>
+<h3 id="posix-operations">POSIX operations<a aria-hidden="true" tabindex="-1" href="#posix-operations" class="internal"> §</a></h3>
+<ul>
+<li>어떻게 정리해야 할 지 모르겠네; 일단 아래 그림 애피타이저로 먹고있어라:</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20240609223508.png" width="auto" height="auto"/></p>
+<h3 id="posix-inode">POSIX inode<a aria-hidden="true" tabindex="-1" href="#posix-inode" class="internal"> §</a></h3>
+<ul>
+<li><em>inode number</em>: inode 는 파일마다 하나씩 있고, 각각의 ID 가 있다.</li>
+<li><em>File type</em>: 뭐 그냥 파일인지, directory 인지 등등 명시
+<ul>
+<li><em>symlink</em> (<em>Soft link</em>): 파일인데, 내용에 다른 파일의 path 가 적혀있는 것 (<a href="../../../../../gardens/os/fs/terms/Link-(File-System)" class="internal" data-slug="gardens/os/fs/terms/Link-(File-System)">*</a>)
+<ul>
+<li>원본 파일과는 무관해서 원본파일이 지워져도 link 는 남아 있음 (당연히 접근은 안됨)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>Device ID</em>: 이 파일이 저장되어 있는 디스크 ID</li>
+<li><em>Access permission</em>: 누가? (user, group, others - <code>ugo</code>), 뭐를? (read, write, exec - <code>rwx</code>)</li>
+<li><em>Number of hard links</em>: (<a href="../../../../../gardens/os/fs/terms/Link-(File-System)" class="internal" data-slug="gardens/os/fs/terms/Link-(File-System)">*</a>)
+<ul>
+<li><em>Hard link</em> (<em>Link</em>): 얘는 symlink 와는 다르게 파일은 아님; 디렉토리 entry 상에만 있는 가짜 file 로 하나의 inode 에 여러개의 filename 이 link 되어 있는 것</li>
+<li>POSIX API 에는 delete operation 이 없다; 대신 <code>unlink</code> 라는 것이 있다.
+<ul>
+<li>이 Hard link 때문; 파일을 지워버리면 다른 hard link 들에서 접근할 수가 없기 때문이다.</li>
+<li>따라서 지우는 것 대신 unlink 를 하는 것이고 아무에게도 link 되지 않으면 그때 지워진다.</li>
+<li>이를 위해 inode 안의 이 <em>Number of hard link</em> count 가 있어서 몇개의 link 가 있는지 추적하는 것.</li>
+</ul>
+</li>
+<li>생각해보자: directory 의 경우에는 이 link count 가 어떻게 될까?
+<ul>
+<li>디렉토리는 link 가 최소 2개 생성된다.
+<ul>
+<li>상위 디렉토리에서 바라보는 파일로서 하나</li>
+<li>현재 디렉토리 내에서 <code>.</code> 로 하나</li>
+</ul>
+</li>
+<li>그럼 하위에 2개의 sub-directory 가 있으면 4개의 link 가 됨 (<code>..</code>)
+<ul>
+<li><code>A/B/C,D</code> 의 구조에서 directory <code>B</code> 를 예로 들어보자.</li>
+<li>일단 <code>A</code> 에 entry 로 <code>B</code> 가 들어있을 것이다 (+1)</li>
+<li>그리고 <code>B</code> 의 entry 로 <code>.</code> 가 들어있을 것이고 (+1)</li>
+<li><code>C</code> 의 entry 로 <code>..</code> 가 들어있을 것이며 (+1)</li>
+<li><code>D</code> 의 entry 로 <code>..</code> 가 들어있을 것이다. (+1) -> 총합 4개!</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>Timestamp</em> 들
+<ul>
+<li><em>atime</em>: access time</li>
+<li><em>mtime</em>: 파일 데이터 변경 시간 (modified time)</li>
+<li><em>ctime</em>: inode (metadata) 변경 시간</li>
+<li>주의할 것은 POSIX 에서는 file creation time 를 관리하지는 않는다!</li>
+</ul>
+</li>
+</ul>
+<h2 id="filesystem-구현상의-어려움">Filesystem 구현상의 어려움…<a aria-hidden="true" tabindex="-1" href="#filesystem-구현상의-어려움" class="internal"> §</a></h2>
+<ul>
+<li>Block allocation 에 대해 고려해야 한다: File 을 구성하는 block 들을 어떻게 배정할 것인가?</li>
+<li>Block indexing 에 대해서도 고려해야 한다: File 을 구성하는 block 들을 어떻게 빠르게 찾아갈 것인가?</li>
+<li>Path name 를 빠르게 inode 변환할 수 있게도 해야 하고
+<ul>
+<li>File path 를 찾아가는 것은 기본적으로 directory 를 반복적으로 참조해야 하기 때문에 이것을 최적화 해야 한다.</li>
+</ul>
+</li>
+<li>Crash 에 대한 대비 (journaling) 도 해야 한다.</li>
+<li>즉, 목표는
+<ul>
+<li>Performance (빠르게 작동)</li>
+<li>Reliability (문제상황시에 복구)</li>
+<li>Consistency (metadata 들 간의 sync)</li>
+</ul>
+</li>
+</ul>
+<h2 id="persistence">Persistence<a aria-hidden="true" tabindex="-1" href="#persistence" class="internal"> §</a></h2>
+<ul>
+<li>Filesystem 은 메모리도 버퍼로 사용하고 (메모리의 <em>page cache</em> 공간) 그 아래에서는 SSD 의 DRAM 도 버퍼가 되기 때문에 write 시에 persistence 를 보장하는 것이 쉬운 문제는 아니다.</li>
+<li>일단 Linux 의 경우에는 fs 의 mem (page cache) 상에 최대 30초정도 보관한다.
+<ul>
+<li>여기에 있는 것을 storage 로 내려보내는 것은 데몬이 수행한다.</li>
+</ul>
+</li>
+<li>추가적으로, 다음의 syscall 을 이용해서 명시적으로 디스크로 내려보내기도 한다.
+<ul>
+<li><code>sync()</code>: 모든 파일의 안내려간 부분을 전부 내림</li>
+<li><code>fsync()</code>: 특정 파일의 안내려간 부분을 전부 내림</li>
+<li><code>fdatasync()</code>: 특정 파일의 data 중 안내려간 부분을 전부 내리고, metadata 는 선택적으로
+<ul>
+<li>Metadata 가 깨져도 큰 문제가 되지 않는 상황에 사용한다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Reliability 를 위해서 로그를 적고 sync 를 해 로그 내용을 디스크까지 저장하고 crash 가 나면 이 로그의 내용을 디스크에서 불러와 복구작업을 진행하고</li>
+<li>Consistency fs 의 syscall 은 atomic 해야 한다 - 즉, 완벽하게 수행되거나, 전부 취소되거나 - 하다 만 중간상태로 남는 것은 없다</li>
+</ul>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>여기부터는 <code>2024-04-02</code> 강의</p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="journaling-write-ahead-log-wal">Journaling (Write-ahead log, WAL)<a aria-hidden="true" tabindex="-1" href="#journaling-write-ahead-log-wal" class="internal"> §</a></h2>
+<ul>
+<li>하나의 file 관련 syscall 을 처리하기 위해서는 여러번의 disk write 가 필요하기도 하고, 이들이 모두 정상적으로 끝나야지만 정상 종료로 판단하는 원자성을 fs 에서 제공해 줘야 한다.. 이를 위해 journaling 이 필요하다.
+<ul>
+<li>물론 Disk 의 1 sector 에대한 작업의 원자성은 디스크차원에서 보존해준다고 한다.</li>
+</ul>
+</li>
+<li>Filesystem 에는 journaling 공간 (혹은 log 공간) 이 있어서 그곳에다가 적어놓고 작업을 시작하게 된다.
+<ul>
+<li>기존 데이터 <code>A</code> 를 <code>A'</code> 로 바꾸고자 할 때</li>
+<li><em>Undo logging</em>: journaling 에 이전 버전인 <code>A</code> 을 적어 놓고 작업을 하다가 문제가 생기면 적어놓은 이전 버전으로 되돌리는 것</li>
+<li><em>Redo logging</em>: <code>A’</code> 를 journal 에 적어놓고 문제가 생기면 이후 버전으로 복구하는 것</li>
+</ul>
+</li>
+<li>fs 에서는 metadata 는 중요하기 때문에 이놈들에 대해 redo logging 을 한다고 한다.
+<ul>
+<li>물론, data 도 할 수는 있지만 너무 오버헤드가 크기에 안한다네</li>
+</ul>
+</li>
+<li>아마 journaling 은 한번의 disk write 만 필요하기에 journaling 을 journaling 하지는 않을듯?</li>
+<li>그리고 복구시에는 full disk scan 이 아니라 이 journal area 만 scan 하면 되기 때문에 복구가 더 빠르다는 장점도 있다.</li>
+</ul>
+<h2 id="semantics">Semantics<a aria-hidden="true" tabindex="-1" href="#semantics" class="internal"> §</a></h2>
+<ul>
+<li>다음의 상황을 고려해 보자:
+<ul>
+<li>한 파일에 두 프로세스가 write: 어차피 메모리에 버퍼해놓기 때문에 마지막으로 write 한 놈의 버전이 적용됨</li>
+<li>한 파일에 한 프로세스는 write, 한 프로세스 read: 하나의 copy 만을 open file page cache 에 두고 각자의 virtual memory address space 에 매핑하여 접근하기 때문에 한쪽의 변경사항이 다른 한쪽에서도 보인다.
+<ul>
+<li>프로세스에서 파일에 접근할 때는 메모리에 올려진 inode 를 보고 원하는 offset 에 대한 LBA 를 page cache 에서 찾아서 접근한다</li>
+<li>즉, 누가 올렸는지는 고려 안하고, 하나의 copy 만을 사용한다는 것.</li>
+</ul>
+</li>
+<li>파일 사용중에 누군가가 지웠음: 한놈이 파일을 directory 에서 <code>unlink</code> 하면 사용하던 놈은 이 파일을 open 하고 있어 계속 사용할 수 있다.
+<ul>
+<li>하지만 이때 directory 에서는 unlink 되어 있기 때문에 새로운 프로세스가 이 파일을 open 하는 것은 불가능하다.</li>
+<li>또한 사용하던 프로세스가 종료되어 이 파일이 어디에서도 open 되어 있지 않게 되면 그때 실제로 삭제된다.</li>
+</ul>
+</li>
+<li>파일 사용중에 다른 프로세스가 권한 바꿈: 현재의 프로세스가 open 할 때에만 permission check 를 하기 때문에 예를 들어 ro 로 바꾼다 하더라도 나는 계속 write 할 수 있다.</li>
+<li>파일 사이즈를 벗어난 공간에 write 를 하려고 함: 가능하다. 이 공간까지 합쳐져서 파일 사이즈가 커짐.
+<ul>
+<li><code>lseek</code> syscall 로 r/w pointer 를 옮길 수 있는데, 이것으로 기존의 파일 사이즈 4Ki 를 벗어난 위치 5Ki 에 2Ki data 를 write 를 하려고 한다고 해보자.</li>
+<li>그럼 파일 사이즈가 4Ki 에서 7Ki 로 바뀌고, 그 사이 공간 1Ki (주소로는 4Ki ~ 5Ki) 은 <em>Hole</em> 이 된다.</li>
+<li>그리고 만약 이 <em>Hole</em> 에 접근하게 되면, <code>0</code> 으로 초기화된 공간을 보게 됨.</li>
+</ul>
+</li>
+<li>파일 이름 변경 중에 머신의 전력이 차단되어 꺼짐: Filesystem 은 consistency 를 제공하기 위해서는, 기존의 이름 혹은 바뀐 이름 둘 중에 하나로만 보여야 한다.
+<ul>
+<li>즉, 둘 다 보이거나 둘 다 안보이면 안된다는 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>물론 위와 같은 정책들은 정하기 나름이다; 일반적으로는 위와 같이 하더라.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#filesystem-구성요소" data-for="filesystem-구성요소">Filesystem 구성요소</a></li><li class="depth-1"><a href="#file-file-system-os" data-for="file-file-system-os">File ([[File System (OS)|*]])</a></li><li class="depth-1"><a href="#inode-inode-file-system" data-for="inode-inode-file-system">inode ([[Inode (File System)|*]])</a></li><li class="depth-1"><a href="#directory-directory-file-system" data-for="directory-directory-file-system">Directory ([[Directory (File System)|*]])</a></li><li class="depth-1"><a href="#filesystem-file-system-os" data-for="filesystem-file-system-os">Filesystem ([[File System (OS)|*]])</a></li><li class="depth-0"><a href="#layer" data-for="layer">Layer</a></li><li class="depth-0"><a href="#posix-api" data-for="posix-api">POSIX API</a></li><li class="depth-1"><a href="#posix-operations" data-for="posix-operations">POSIX operations</a></li><li class="depth-1"><a href="#posix-inode" data-for="posix-inode">POSIX inode</a></li><li class="depth-0"><a href="#filesystem-구현상의-어려움" data-for="filesystem-구현상의-어려움">Filesystem 구현상의 어려움...</a></li><li class="depth-0"><a href="#persistence" data-for="persistence">Persistence</a></li><li class="depth-0"><a href="#journaling-write-ahead-log-wal" data-for="journaling-write-ahead-log-wal">Journaling (Write-ahead log, WAL)</a></li><li class="depth-0"><a href="#semantics" data-for="semantics">Semantics</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/os/fs/File-System-(OS)" class="internal">File System (OS)</a></li><li><a href="../../../../../gardens/os/fs/terms/Directory-(File-System)" class="internal">Directory (File System)</a></li><li><a href="../../../../../gardens/os/fs/terms/Inode-(File-System)" class="internal">Inode (File System)</a></li><li><a href="../../../../../gardens/os/fs/terms/Link-(File-System)" class="internal">Link (File System)</a></li><li><a href="../../../../../gardens/os/originals/aos.spring.2024.cse.snu.ac.kr/(서울대)-고급-운영체제-강의록" class="internal">(서울대) 고급 운영체제 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

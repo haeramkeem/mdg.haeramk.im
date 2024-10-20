@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html><head><title>05. Dependences and Pipelining</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="05. Dependences and Pipelining"/><meta property="og:description" content="서울대학교 컴퓨터공학과 이재진 교수님의 &amp;quot;확장형 고성능 컴퓨팅&amp;quot; 강의를 필기한 내용입니다. 목차 수업 시작 전 check-in 잡담 CPU clock 은 time sharing 말고도 HW 간 동기화를 위해서도 존재한다. Dependence § Dependence, Dependency: 연산간의 순서 관계 (ordering relationships) Dependency: 라고 시험에는 쓰지 말랜다 Dependence: 이게 재진스님 convention 임 Dependence 가 보존되는 한, 어떻게 실행 순서를 바꿔도 결과는 동일하다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 이재진 교수님의 &amp;quot;확장형 고성능 컴퓨팅&amp;quot; 강의를 필기한 내용입니다. 목차 수업 시작 전 check-in 잡담 CPU clock 은 time sharing 말고도 HW 간 동기화를 위해서도 존재한다. Dependence § Dependence, Dependency: 연산간의 순서 관계 (ordering relationships) Dependency: 라고 시험에는 쓰지 말랜다 Dependence: 이게 재진스님 convention 임 Dependence 가 보존되는 한, 어떻게 실행 순서를 바꿔도 결과는 동일하다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/lectures/05.-Dependences-and-Pipelining"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">05. Dependences and Pipelining</h1><p class="content-meta ">Sep 23, 2024, 16 min read</p><ul class="tags "><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-shpc24f" class="internal tag-link">#snu-shpc24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학과 이재진 교수님의 &quot;확장형 고성능 컴퓨팅&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/(SNU-CSE)-Scalable-High-Performance-Computing" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/(SNU-CSE)-Scalable-High-Performance-Computing">목차</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="tip" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>수업 시작 전 check-in 잡담 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li>CPU clock 은 time sharing 말고도 HW 간 동기화를 위해서도 존재한다.</li>
+</ul>
+</blockquote>
+<h2 id="dependence">Dependence<a aria-hidden="true" tabindex="-1" href="#dependence" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Dependence-(Arch)" class="internal" data-slug="gardens/arch/terms/Dependence-(Arch)">Dependence</a>, Dependency: 연산간의 순서 관계 (ordering relationships)
+<ul>
+<li>Dependency: 라고 시험에는 쓰지 말랜다</li>
+<li>Dependence: 이게 재진스님 convention 임</li>
+</ul>
+</li>
+<li>Dependence 가 보존되는 한, 어떻게 실행 순서를 바꿔도 결과는 동일하다.
+<ul>
+<li>다만 나중에 배우겠지만, data race 상황에서는 그렇지 않을 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="data-dependence">Data dependence<a aria-hidden="true" tabindex="-1" href="#data-dependence" class="internal"> §</a></h2>
+<h3 id="flow-dependence">Flow dependence<a aria-hidden="true" tabindex="-1" href="#flow-dependence" class="internal"> §</a></h3>
+<pre><code>P: A = ...
+...
+Q: ... = A
+</code></pre>
+<pre><code class="mermaid">flowchart LR
+	P -- dt --> Q
+</code></pre>
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Data-Dependence-(Arch)" class="internal" data-slug="gardens/arch/terms/Data-Dependence-(Arch)">Flow dependence</a> (true dependence, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span></span></span>) 란</li>
+<li>동일한 메모리 공간에 연산결과를 (1) 저장하고 (2) 읽어가는 두 연산을 말한다.</li>
+<li>즉, Read-after-write (RAW) 관계인 것.</li>
+</ul>
+<h3 id="anti-dependence">Anti dependence<a aria-hidden="true" tabindex="-1" href="#anti-dependence" class="internal"> §</a></h3>
+<pre><code>P: ... = A
+...
+Q: A = ...
+</code></pre>
+<pre><code class="mermaid">flowchart LR
+	P -- da --> Q
+</code></pre>
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Data-Dependence-(Arch)" class="internal" data-slug="gardens/arch/terms/Data-Dependence-(Arch)">Anti dependence</a> (false dependence, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span></span></span></span></span></span>) 란</li>
+<li>동일한 메모리 공간에 연산결과를 (1) 읽어가고 (2) 저장하는 두 연산을 말한다.</li>
+<li>즉, Write-after-read (WAR) 인 것.</li>
+</ul>
+<h3 id="output-dependence">Output dependence<a aria-hidden="true" tabindex="-1" href="#output-dependence" class="internal"> §</a></h3>
+<pre><code>P: A = ...
+...
+Q: A = ...
+</code></pre>
+<pre><code class="mermaid">flowchart LR
+	P -- da --> Q
+</code></pre>
+<ul>
+<li>Output dependence (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span></span></span></span></span></span></span></span></span></span></span></span></span>)
+<ul>
+<li>얘도 false dependence 이다.</li>
+</ul>
+</li>
+<li>동일한 공간에 두 연산이 모두 저장하는 경우</li>
+<li>당연히 두 연산의 순서를 바꾸면 문제가 생길 수 있다</li>
+</ul>
+<h3 id="input-dependence">Input dependence<a aria-hidden="true" tabindex="-1" href="#input-dependence" class="internal"> §</a></h3>
+<pre><code>P: ... = A
+...
+Q: ... = A
+</code></pre>
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Data-Dependence-(Arch)" class="internal" data-slug="gardens/arch/terms/Data-Dependence-(Arch)">Input dependence</a> 는 동일한 공간을 두 연산이 모두 읽어가는 경우이다.
+<ul>
+<li>이 경우에는 순서를 바꿔도 문제가 생기지 않기 때문에 엄밀하게는 dependence 는 아니지만</li>
+<li>cache 때문에 이런 개념을 정의했다고 한다.
+<ul>
+<li>뒤이은 연산은 cache 에 있는 놈을 가져가기 때문에 이러한 관계를 분석하기 위해 만든 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="control-dependence">Control dependence<a aria-hidden="true" tabindex="-1" href="#control-dependence" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Control-Dependence-(Arch)" class="internal" data-slug="gardens/arch/terms/Control-Dependence-(Arch)">Control dependence</a> 는 <code>BRANCH</code> 에 따라 바뀌는 flow 에 대한 dependence 를 말한다.</li>
+<li>이것을 분석할 때는 Basic block 과 CFG 를 그려서 생각한다.</li>
+</ul>
+<h3 id="basic-block">Basic Block<a aria-hidden="true" tabindex="-1" href="#basic-block" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241017200655.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Control-Dependence-(Arch)" class="internal" data-slug="gardens/arch/terms/Control-Dependence-(Arch)">Basic block</a> 은 첫 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)">Instruction</a> 으로 flow 가 들어와서 마지막 instruction 으로 flow 가 나가는 단위를 말한다.
+<ul>
+<li>즉, 중간에 <code>BRANCH</code> 로 빠져나가거나 다른곳에서부터 <code>JUMP</code> 로 들어오는 경우가 없는 코드 단위인 것.</li>
+</ul>
+</li>
+<li>구하는 알고리즘은:
+<ul>
+<li>첫 instruction 는 “leader” 이다.</li>
+<li><code>JUMP</code> 의 종착지도 “leader” 이다.</li>
+<li><code>JUMP</code> 의 다음 instrunction 도 “leader” 이다.
+<ul>
+<li><code>BRANCH</code> 로 점프하지 않는 경우에는 다음 instruction 이 실행되니까.</li>
+</ul>
+</li>
+<li>이렇게 “leader” 를 구하고 “leader” 부터 다음 “leader” 의 이전까지가 basic block 이다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="cfg-control-flow-graph">CFG (Control-Flow Graph)<a aria-hidden="true" tabindex="-1" href="#cfg-control-flow-graph" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241017200738.png" width="auto" height="auto"/></p>
+<ul>
+<li>각 basic block 들을 flow 에 따라 directed graph 로 표현한 것</li>
+<li>위 그림이 <a href="#basic-block" class="internal">예시</a> 에서의 code 에 대한 <a href="../../../../../gardens/arch/terms/Control-Dependence-(Arch)" class="internal" data-slug="gardens/arch/terms/Control-Dependence-(Arch)">CFG</a> 이다.</li>
+</ul>
+<h3 id="분석하기">분석하기<a aria-hidden="true" tabindex="-1" href="#분석하기" class="internal"> §</a></h3>
+<ul>
+<li>Control dependence 를 분석할 때는 basic block 간의 dependence 를 따진다.</li>
+<li>가령 basic block A “바로 앞선” basic block B 의 실행 결과에 따라 실행될지 아닐지 결정되는 경우에 A 는 B 에 control dependence 가 있다고 한다.
+<ul>
+<li>즉, A 와 B 의 순서가 바뀌면 안되기 때문</li>
+</ul>
+</li>
+<li>연속되지 않은 basic block 의 경우에는 다음과 같은 경우에만 control dependence 가 있다고 한다:
+<ul>
+<li>Basic block A 이후에 B 를 거치는 path 가 존재하고 거치지 않는 path 도 존재할 때</li>
+</ul>
+</li>
+</ul>
+<h2 id="instruction-pipeline">Instruction pipeline<a aria-hidden="true" tabindex="-1" href="#instruction-pipeline" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241017202844.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)">Instruction pipeline</a> 은 instruction throughput (CPU clock 당 실행되는 instruction 의 개수) 를 늘려주는 HW 적인 기술인데,
+<ul>
+<li>이것으로 인해 1 cycle 에 1 instruction 이 실행되는 것처럼 보이게 해준다.</li>
+</ul>
+</li>
+<li>간단히 살펴보면:
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Cycle-(Arch-Instruction)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Cycle-(Arch-Instruction)">Instruction cycle</a> 은 다음의 세 step 으로 이루어진다: <em>IF</em> (<em>instruction Fetch</em>), <em>ID</em> (<em>Instruction Decode</em>), <em>EX</em> (<em>Execute</em>)</li>
+<li>이때 각 step 은 실행에 1 cycle 이 걸리고, 독립적으로 실행될 수 있다.
+<ul>
+<li>독립적으로 실행될 수 있는 이유는 각각의 기능에 대해 CPU 내에 별도의 HW unit 이 있어서 dependence 가 없기 때문.</li>
+</ul>
+</li>
+<li>따라서 이들을 overlapping 해서 실행하는 것이 pipeline 이다.
+<ul>
+<li>그래서 1 cycle 에 1 inst 가 실행되는 것처럼 보인다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241017202922.png" width="auto" height="auto"/></p>
+<ul>
+<li>보통은 (<a href="../../../../../gardens/arch/drafts/Reduced-Instruction-Set-Computer,-RISC-(Arch)" class="internal" data-slug="gardens/arch/drafts/Reduced-Instruction-Set-Computer,-RISC-(Arch)">RISC</a>) 추가로 2개 step (<em>MEM</em> - <em>Memory Access</em>, <em>WB</em> - <em>Register Write Back</em>) 까지 해서 5단계로 나눈다.
+<ul>
+<li>Register write 는 있는데 register read 는 없는 이유는 이것은 ID 단계에서 수행되기 때문.</li>
+<li>이렇게 step 을 늘리면 CPU clock frequency 를 더 늘릴 수 있긴 하다.</li>
+<li>다만 이건 RISC 기준이고, CISC 같은 경우엔 12 개 정도로 훨씬 많다</li>
+</ul>
+</li>
+</ul>
+<h2 id="pipeline-hazard">Pipeline hazard<a aria-hidden="true" tabindex="-1" href="#pipeline-hazard" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Pipeline-Hazard-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Pipeline-Hazard-(Arch)">Pipeline hazard</a> 는 현재 EX step 에 있는 instruction 의 다음 instruction 이 다음 clock cycle 에서 EX 단계에 진입하지 못하는 경우를 말한다.</li>
+</ul>
+<h3 id="data-hazard">Data hazard<a aria-hidden="true" tabindex="-1" href="#data-hazard" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241017204156.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Data-Hazard-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Data-Hazard-(Arch)">Data hazard</a> WB 단계에서 register 에 저장된 값을 다음 instruction 의 ID 에서 가져올 수가 없기 때문에 발생하는 문제</li>
+</ul>
+<h4 id="hw-적인-해결-방법">HW 적인 해결 방법<a aria-hidden="true" tabindex="-1" href="#hw-적인-해결-방법" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20241017204406.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Pipeline-Hazard-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Pipeline-Hazard-(Arch)">Pipeline stalling</a>:  Bubble 을 추가해서 pipeline 을 잠깐 멈추는 (stall) 방법 (위의 그림)</li>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Data-Hazard-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Data-Hazard-(Arch)">Data forward</a>: 아니면 WB 까지 가지 않고 EX 다음에 바로 값을 ID 로 던져줄 수 있도록 회로를 설계
+<ul>
+<li>이 방법을 예시로 보면</li>
+<li>위 예시에서 3 번째 cycle 에서 1 번째 instruction 이 EX 를 한 다음 이 값을 바로 ID unit 으로 던져서 2 번째 instruction 의 ID 단계에서 사용할 수 있게 하는 방법이다.</li>
+<li>즉, 이 방법은 같은 cycle 에 있는 EX 와 ID 간의 충돌을 해결하는 방법이다.</li>
+</ul>
+</li>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Data-Hazard-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Data-Hazard-(Arch)">Transparent register file</a>: WB 단계를 cycle 의 절반만 사용하게 해서 한 cycle 에서 1/2 cycle 동안 WB 이 write 를 하고, 나머지 1/2 cycle 동안 ID 가 read 를 하게 하는 것
+<ul>
+<li>위 예시에서는 5 번째 cycle 에서 1 번 instruction 의 WB 가 값을 쓰고, 같은 cycle 에서 4 번째 instruction 의 ID 가 값을 바로 읽어가게 하는 것.</li>
+<li>즉, 이 방법은 같은 cycle 에 있는 WB 와 ID 간의 충돌을 해결하는 방법이다.</li>
+<li>참고로 여기서 <em>Register file</em> 은 array of registers 를 말한다. 즉,</li>
+</ul>
+</li>
+</ul>
+<h4 id="sw-적인-해결-방법">SW 적인 해결 방법<a aria-hidden="true" tabindex="-1" href="#sw-적인-해결-방법" class="internal"> §</a></h4>
+<ul>
+<li>순서를 바꿔 dependence 가 없는 instruction 을 bubble 하는 대신 실행하거나 (<a href="../../../../../gardens/pl/optimization/terms/Instruction-Scheduling-(PL-Optimization)" class="internal" data-slug="gardens/pl/optimization/terms/Instruction-Scheduling-(PL-Optimization)">Code Hoisting</a>)</li>
+<li><code>no-op</code> 이라는 bubble 과 동일한 역할을 하는 instruction 을 실행하는 방법이 있다.</li>
+</ul>
+<h3 id="structure-hazard">Structure hazard<a aria-hidden="true" tabindex="-1" href="#structure-hazard" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241017205818.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Structure-Hazard-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Structure-Hazard-(Arch)">Structure hazard</a> 은 HW 를 여러 instruction 이 동시에 사용하고 싶어서 인데</li>
+<li>쉽게 생각하면 이건 동일한 memory 공간에 두 instruction 이 동시에 접근하려고 하는 경우이다.
+<ul>
+<li>즉, MEM 에서 저장한 것을 IF 에서 접근하는 경우.</li>
+<li>물론 근데 MEM 에 한정된 것은 아니다; Network port 을 사용하고자 하는 경우에도 동일한 문제가 발생할 수 있다고 한다.</li>
+</ul>
+</li>
+<li>이 경우에는 마땅한 방법이 없다; bubble 을 넣거나 resource 를 늘리는 것으로도 해결 가능하다고 한다.</li>
+</ul>
+<h2 id="program-counter">Program Counter<a aria-hidden="true" tabindex="-1" href="#program-counter" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241017210006.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Program-Counter,-PC-(Arch)" class="internal" data-slug="gardens/arch/terms/Program-Counter,-PC-(Arch)">PC</a> 는 앞에서도 여러번 언급했지만</li>
+<li>다음에 실행할 instruction 의 memory 주소를 저장하는 놈이다.
+<ul>
+<li>CPU 는 <a href="../../../../../gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)">VAS</a> 를 바라보기 때문에, 당연히 이 주소도 <a href="../../../../../gardens/os/memory/draft/Virtual-Memory-(Memory)" class="internal" data-slug="gardens/os/memory/draft/Virtual-Memory-(Memory)">virtual address</a> 이다.</li>
+</ul>
+</li>
+<li>이놈은 IF 직후에 증가하며, <code>BRANCH</code> 에 의해서도 변경될 수 있다.</li>
+</ul>
+<h3 id="control-hazard">Control hazard<a aria-hidden="true" tabindex="-1" href="#control-hazard" class="internal"> §</a></h3>
+<ul>
+<li>기본적으로 PC 는 그냥 sequential 하게 증가하지만, <code>BRANCH</code> 시에는 아무리 빨라도 EX 가 지나고 MEM 이 되어서야 PC 를 확정지을 수 있다.</li>
+<li>따라서 만약에 딴 basic block 으로 <code>JUMP</code> 를 뛰어버리면, 이미 pipeline 에 올라왔던 instruction 들을 다 날려버려야 하는 문제를 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Control-Hazard-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Control-Hazard-(Arch)">Control hazard</a> 라고 한다.</li>
+</ul>
+<h4 id="hw-적-해결방법은">HW 적 해결방법은<a aria-hidden="true" tabindex="-1" href="#hw-적-해결방법은" class="internal"> §</a></h4>
+<ul>
+<li>그냥 bubble 을 넣거나</li>
+<li>Branch predictor 를 사용하는 방법이 있다.</li>
+</ul>
+<h4 id="sw-적-해결방법은">SW 적 해결방법은<a aria-hidden="true" tabindex="-1" href="#sw-적-해결방법은" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20241017211451.png" width="auto" height="auto"/></p>
+<ul>
+<li>Branch delay slot: <code>BRANCH</code> 했을 때 날라갈 수 있는 곳 (= Branch delay slot) 에 <code>BRANCH</code> 전의 instruction 들을 넣어 (어차피 실행해야 했던 애들이니까) jump 시에도 이 instruction 들을 flush 되지 않아도 되게 하는 방법이다.</li>
+<li>아니면 그냥 branch 를 최대한 안쓰게 program 을 작성하는 방법도 있다.</li>
+</ul>
+<h2 id="execution-ordering">Execution ordering<a aria-hidden="true" tabindex="-1" href="#execution-ordering" class="internal"> §</a></h2>
+<ul>
+<li>일단 들어가기 앞서, EX 는 1 clock cycle 안에 끝나지 않을 수 있다는 것을 생각하자.</li>
+<li>ID 이후에 EX 를 위해 해당 연산에 맞는 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Arithmetic-Logic-Unit,-ALU-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Arithmetic-Logic-Unit,-ALU-(Arch)">Functional Unit</a> 에 instruction 을 던져주는 것을 Dispatch 라고 하는데,</li>
+<li>이때 어떤 작업을 하냐에 따라 EX 단계에서 소모하는 cycle 이 다를 수 있다.
+<ul>
+<li>당연히 FP 연산이 integer 연산보다는 느리다.</li>
+</ul>
+</li>
+<li>그럼 이때 instruction 들을 어떻게 실행할 것이냐.</li>
+</ul>
+<h3 id="in-order-execution">In-order execution<a aria-hidden="true" tabindex="-1" href="#in-order-execution" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241018095804.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/In-order-Execution-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/In-order-Execution-(Arch)">In-order execution</a> 은 EX 가 실행되고 종료되는 것의 sync 를 맞추는 것이다.</li>
+<li>위 그림을 이해해 보자.
+<ul>
+<li>위 그림에서 각 직사각형은 1cycle 을 의미한다. 즉, integer addition 은 1cycle 만에 끝나고 FP multiply 는 3cycle, load-store 는 5cycle 이 걸린다.</li>
+<li>이때, 먼저 load-store instruction 이 실행되고, 그 다음 integer addition instruction 의 순서로 실행된다고 해보자.</li>
+<li>그럼 load-store 의 EX 가 2번째 cycle 에 진입했을 때, integer addition 이 막 ID 에서 빠져나와서 EX 되기 시작할 것이다 (즉, dispatch 된 것).</li>
+<li>다음 cycle 이 되면, load-store 의 EX 는 3번째 cycle 에 진입할 테지만 integer addition 은 이미 종료된 상태일 것이다.</li>
+<li>그럼에도 불구하고, 이 integer addition instruction 은 load-store 가 끝날 때 까지 계속 integer addition ALU 를 붙잡고 있는다.</li>
+<li>즉, 만약에 이 뒤에 또 다른 integer addition instruction 이 들어온다고 해도, 실행되지 않고 기다린다 (즉, dispatch 되지 못한다).</li>
+<li>이렇게 하는 이유는 load-store instruction 이 순서가 먼저이기 때문에 그 다음의 instruction 은 이것보다 먼저 끝날 수는 없기 때문.</li>
+</ul>
+</li>
+<li>즉, 앞선 instruction 의 EX 가 끝나기 전까지는 다음 EX 를 끝내지 않고, 만약 같은 연산의 경우에는 실행되지도 않는 방법이다.</li>
+</ul>
+<h3 id="out-of-order-ooo-execution">Out-of-Order (OoO) execution<a aria-hidden="true" tabindex="-1" href="#out-of-order-ooo-execution" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241017193947.png" width="auto" height="auto"/></p>
+<ul>
+<li>당연히 In-order execution 은 순서를 지키기 위해 EX 들이 실행되지 못하고 기다리기에 느릴 것이다.</li>
+<li>이 문제를 해결하는 방법이 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Out-of-Order-Execution,-OoO-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Out-of-Order-Execution,-OoO-(Arch)">Out-of-Order (OoO) execution</a> 이다.</li>
+<li>여기서는
+<ul>
+<li>일단 IF 와 ID 는 원래의 instruction 순서를 따라간다.</li>
+<li>그리고 instruction 의 실행이 종료되는 WB 도 instruction 의 순서를 따라간다.</li>
+<li>이외의 이 중간과정은 순서가 바뀔 수 있다.</li>
+</ul>
+</li>
+<li>이렇게 진행된다.
+<ul>
+<li>ID 이후에 Functional Unit 마다 존재하는 Reservation Station 이라는 일종의 run queue 같은 곳에다가 instruction 을 바로바로 던진다.
+<ul>
+<li>이렇게 ID 를 지나 reservation station 에 던지는 것을 Issue 라고 한다.</li>
+</ul>
+</li>
+<li>그리고, 해당 Functional Unit 은 순서를 맞추기 위해 기다리는 것 없이 이 reservation station 에서 instruction 을 바로바로 꺼내서 실행한다.</li>
+<li>그럼 순서가 뒤죽박죽이 될 텐데, 이때 Reorder buffer 가 다시 순서를 맞춰서 WB 로 넘긴다.</li>
+</ul>
+</li>
+<li>이것을 Tomasulo’s algorithm (IBM360/91) 이라고 한다.
+<ul>
+<li>여기서는 in-order issue, commit 을 하고 ooo dispatch, execution 을 한다고 한다.</li>
+<li>사실 in-order 와 OoO 의 하이브리드라고 하는데, 잘 모르겠음: 이게 위의 OoO 와 똑같은거 아닌가</li>
+</ul>
+</li>
+<li>여기서 사용되는 용어중에 Retirement (Graduation) 라는 것이 있는데,
+<ul>
+<li>Instruction 이 commit 되거나</li>
+<li>예외상황이 생겨 instruction 이 취소되는 경우 해당 instruction 의 reorder buffer slot 이 비워지고 이때를 retirement (graduation) 라고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="superscalar-processor">Superscalar Processor<a aria-hidden="true" tabindex="-1" href="#superscalar-processor" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241018120624.png" width="auto" height="auto"/></p>
+<ul>
+<li>용어정리를 해보자
+<ul>
+<li><a href="../../../../../gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)" class="internal" data-slug="gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)">Scalar</a> 는 한번에 하나의 data 에 대해, 하나의 instruction 을 실행하는 것이다 (Single instruction, single data).</li>
+<li>Vector 는 한번에 여러 data 에 대해, 하나의 instruction 을 실행하는 것이다 (<a href="../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">Single instruction, multiple data</a>)</li>
+<li><a href="../../../../../gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)" class="internal" data-slug="gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)">Superscalar</a> 는 말 그대로 scalar 가 여러개 있는 것이다. 즉, 한번에 여러 data 에 대해 여러 instruction 을 실행하는 것 (Multiple instruction, multiple data).</li>
+</ul>
+</li>
+<li>Superscalar Processor 는 이런 superscalar 를 지원하는 processor 로, 한번에 여러 instruction 에 대해 IF-ID 를 수행한다.
+<ul>
+<li>즉, 여러 instruction 이 issue 된다.</li>
+</ul>
+</li>
+<li>이런 superscalar 를 활용하여 병렬연산하는 것을 <a href="../../../../../gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)" class="internal" data-slug="gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)">Instruction Level Parallelism (ILP)</a> 라고 한다.</li>
+<li>이와 비슷하게, 여러 instruction 을 하나로 묶은 큰 instruction 하나를 issue 해 superscalar 와 같은 느낌을 내게 하는 방법도 있다.
+<ul>
+<li>이것을 VLIW (Very Long Instruction Word) 라고 하는데.</li>
+<li>옛날에는 intel 과 HP 에서 개발해서 팔아먹었는데 요즘은 안쓴다.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#dependence" data-for="dependence">Dependence</a></li><li class="depth-0"><a href="#data-dependence" data-for="data-dependence">Data dependence</a></li><li class="depth-1"><a href="#flow-dependence" data-for="flow-dependence">Flow dependence</a></li><li class="depth-1"><a href="#anti-dependence" data-for="anti-dependence">Anti dependence</a></li><li class="depth-1"><a href="#output-dependence" data-for="output-dependence">Output dependence</a></li><li class="depth-1"><a href="#input-dependence" data-for="input-dependence">Input dependence</a></li><li class="depth-0"><a href="#control-dependence" data-for="control-dependence">Control dependence</a></li><li class="depth-1"><a href="#basic-block" data-for="basic-block">Basic Block</a></li><li class="depth-1"><a href="#cfg-control-flow-graph" data-for="cfg-control-flow-graph">CFG (Control-Flow Graph)</a></li><li class="depth-1"><a href="#분석하기" data-for="분석하기">분석하기</a></li><li class="depth-0"><a href="#instruction-pipeline" data-for="instruction-pipeline">Instruction pipeline</a></li><li class="depth-0"><a href="#pipeline-hazard" data-for="pipeline-hazard">Pipeline hazard</a></li><li class="depth-1"><a href="#data-hazard" data-for="data-hazard">Data hazard</a></li><li class="depth-1"><a href="#structure-hazard" data-for="structure-hazard">Structure hazard</a></li><li class="depth-0"><a href="#program-counter" data-for="program-counter">Program Counter</a></li><li class="depth-1"><a href="#control-hazard" data-for="control-hazard">Control hazard</a></li><li class="depth-0"><a href="#execution-ordering" data-for="execution-ordering">Execution ordering</a></li><li class="depth-1"><a href="#in-order-execution" data-for="in-order-execution">In-order execution</a></li><li class="depth-1"><a href="#out-of-order-ooo-execution" data-for="out-of-order-ooo-execution">Out-of-Order (OoO) execution</a></li><li class="depth-0"><a href="#superscalar-processor" data-for="superscalar-processor">Superscalar Processor</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/(SNU-CSE)-Scalable-High-Performance-Computing" class="internal">(SNU CSE) Scalable High-Performance Computing</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Arithmetic-Logic-Unit,-ALU-(Arch)" class="internal">Arithmetic Logic Unit, ALU (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Control-Hazard-(Arch)" class="internal">Control Hazard (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Data-Hazard-(Arch)" class="internal">Data Hazard (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/In-order-Execution-(Arch)" class="internal">In-order Execution (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Out-of-Order-Execution,-OoO-(Arch)" class="internal">Out-of-Order Execution, OoO (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Pipeline-Hazard-(Arch)" class="internal">Pipeline Hazard (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/05/Structure-Hazard-(Arch)" class="internal">Structure Hazard (Arch)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/lectures/06.-Loop-carried-Dependences-and-Parallelism" class="internal">06. Loop-carried Dependences and Parallelism</a></li><li><a href="../../../../../gardens/arch/terms/Control-Dependence-(Arch)" class="internal">Control Dependence (Arch)</a></li><li><a href="../../../../../gardens/arch/terms/Data-Dependence-(Arch)" class="internal">Data Dependence (Arch)</a></li><li><a href="../../../../../gardens/arch/terms/Dependence-(Arch)" class="internal">Dependence (Arch)</a></li><li><a href="../../../../../gardens/arch/terms/Program-Counter,-PC-(Arch)" class="internal">Program Counter, PC (Arch)</a></li><li><a href="../../../../../gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)" class="internal">Scalar, Superscalar Processing (Arch)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

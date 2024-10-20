@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html><head><title>(논문) Building a Bw-Tree Takes More Than Just Buzz Words (2. Bw-Tree Essentials)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) Building a Bw-Tree Takes More Than Just Buzz Words (2. Bw-Tree Essentials)"/><meta property="og:description" content="원본 논문 이 글은 Building a Bw-Tree Takes More Than Just Buzz Words, SIGMOD’18 논문을 읽고 정리한 글입니다. 별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다. 2.0. Prologue § Arbitrary section 그냥 2."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="원본 논문 이 글은 Building a Bw-Tree Takes More Than Just Buzz Words, SIGMOD’18 논문을 읽고 정리한 글입니다. 별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다. 2.0. Prologue § Arbitrary section 그냥 2."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/index/papers/openbwtree.2018.sigmod.org/full/2.-Bw-Tree-Essentials-(OpenBwTree,-SIGMOD-18)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) Building a Bw-Tree Takes More Than Just Buzz Words (2. Bw-Tree Essentials)</h1><p class="content-meta ">Oct 20, 2024, 12 min read</p><ul class="tags "><li><a href="../../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../../tags/terms" class="internal tag-link">#terms</a></li><li><a href="../../../../../../tags/db-index" class="internal tag-link">#db-index</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>원본 논문 </p></div>
+                  
+                </div>
+<ul>
+<li>이 글은 <a href="https://dl.acm.org/doi/10.1145/3183713.3196895" class="external">Building a Bw-Tree Takes More Than Just Buzz Words, SIGMOD’18</a> 논문을 읽고 정리한 글입니다.</li>
+<li>별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다.</li>
+</ul>
+</blockquote>
+<h2 id="20-prologue">2.0. Prologue<a aria-hidden="true" tabindex="-1" href="#20-prologue" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>Arbitrary section </p></div>
+                  
+                </div>
+<ul>
+<li>그냥 <a href="#21-base-nodes-and-delta-chains" class="internal">2.1.</a> 직전의 내용이고, 논문에는 별도 section 으로 numbering 되어 있지는 않습니당</li>
+</ul>
+</blockquote>
+<ul>
+<li>Bw-Tree 는 DBMS 의 <a href="../../../../../../gardens/database/index/drafts/Index-(Database)" class="internal" data-slug="gardens/database/index/drafts/Index-(Database)">Index</a> 로서 thread pool 과 같이 생성되고, 따라서 여러개의 thread 들이 동시에 접근하게 된다.</li>
+<li>또한 (original Bw-Tree 는) GC 를 위한 별도의 background thread 가 돌아간다.</li>
+<li><a href="../../../../../../gardens/database/index/drafts/B+-Tree-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/B+-Tree-(Database-Index)">B+ Tree</a> 와의 주된 차이점은 node 를 직접적으로 변경하는 것이 금지되어 있다는 것이다.
+<ul>
+<li>이것은 (1) cache line invalidation 을 막기 위함 과 (2) lock 을 사용하지 않기 위함 이다.</li>
+</ul>
+</li>
+<li>이것을 달성하는 주된 아이디어 두개는 다음과 같다:
+<ul>
+<li><em>Delta chain</em>: Node 를 변경하는 것은 직접적으로 변경하는 것이 아닌 per-node delta node chain 을 이용한다.</li>
+<li><em>Indirection layer</em>:
+<ul>
+<li>Parent node 에서 가리키는 child node 의 주소가 delta node 가 생성됨에 따라 변경될 수 있다 (이해가 안된다면 일단 넘어가자).</li>
+<li>이 parent node 에 적힌 child node 의 주소를 변경하는 것 또한 node 자체를 변경하는 것이기에, logical ID 를 이용한 indirection 으로 이 문제를 해결한다.</li>
+<li>즉, child 의 physical addr 가 바뀌어도 이놈에 대한 logical ID 매핑만 변경해 주면 parent node 에서는 동일한 logical ID 로 해당 node 를 (논리적으로) 가리키게 할 수 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20241004091255.png" width="auto" height="auto"/></p>
+<ul>
+<li>위의 그림이 전체적인 architecture 를 그린 것인데,</li>
+<li>(Physical 하게) “Node” 는 총 세가지 종류가 있다.
+<ul>
+<li><em>Leaf node</em>: 실제 data 가 담기는 node (B+ Tree 와 동일)</li>
+<li><em>Inner node</em>: Guidepost node (B+ Tree 와 동일, intermediate node 임)</li>
+<li><em>Delta node</em>: Leaf, Inner node 에 대한 변경사항 (delta) 를 담는 node</li>
+<li>Bw-Tree 를 초기화할 때는, <em>Leaf node</em> 하나와 <em>Inner node</em> 하나가 생성된다고 한다.</li>
+</ul>
+</li>
+<li>그리고 logical 하게 묶어보면, 이 “node” 들은 다음과 같이 분류할 수 있다.
+<ul>
+<li><em>Base node</em>: <em>Leaf node</em> 와 <em>Inner node</em>
+<ul>
+<li>둘 다 “원본” 이라는 공통점으로 묶었다고 생각하면 된다.</li>
+</ul>
+</li>
+<li><em>Logical node</em> (<em>Virtual node</em>): <em>Base node</em> 와 <em>Delta node</em>
+<ul>
+<li><em>Delta node</em> 들은 이 <em>Base node</em> 에 대한 변경사항이므로</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이때 모든 physical node 는 logical ID 를 갖고 있고, 이것과 physical addr 와의 매핑은 <em>Mapping Table</em> 에서 관리한다.</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20241004220256.png" width="auto" height="auto"/></p>
+<ul>
+<li>Parent node 는 key 에 대한 route 를 physical addr 가 아닌 logical ID 로 저장한다.
+<ul>
+<li>따라서 parent-child 간에는 logical link 가 형성되고, node-maptable 간에는 physical link 가 형성된다.</li>
+<li>다른 관점에서는 위처럼 됨: Virtual node 끼리는 logical link 로, virtual node 내에서는 physical link 로 연결된다.</li>
+</ul>
+</li>
+<li>이 mapping table entry 를 변경하는 것은 <em>Compare and Swap</em> (<em>CaS</em>) instruction 으로 수행한다.
+<ul>
+<li>이것은 atomic instruction 으로, logical-physical mapping 이 atomic 하게 변경되므로 node-node link 도 atomic 하게 변경된다.</li>
+<li>또한 이 instruction 를 사용하면 mapping table entry 를 변경하는 것도 atomic 하게 처리할 수 있게 해준다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="21-base-nodes-and-delta-chains">2.1. Base Nodes and Delta Chains<a aria-hidden="true" tabindex="-1" href="#21-base-nodes-and-delta-chains" class="internal"> §</a></h2>
+<p><img src="../../../../../../images/Pasted-image-20241004091316.png" width="auto" height="auto"/></p>
+<ul>
+<li>변경사항은 delta node 에 담겨서 delta chain 의 head 에 들어간다.
+<ul>
+<li>즉, 최신의 delta 가 head 에 들어가고 오래된 delta 는 tail 쪽에 위치하는 “시간순” 배치를 가진다. (Chronological)</li>
+</ul>
+</li>
+<li>이 delta chain 의 head 를 (parent) base node 가 logical link 로 가리키고 있고, tail 은 다음 (child) base node 를 physical link 로 가리키고 있으며, 중간의 delta node 는 그 이전의 delta node 를 physical link 로 가리키고 있다.</li>
+<li>Base node 와 delta node 에는 모두 metadata (attribute) 가 저장되는데, 이놈은 해당 시점에의 <em>Virtual node</em> 의 “상태” 를 기록하는 역할을 한다.
+<ul>
+<li>여기에는 다음의 여섯가지 값이 담긴다:</li>
+</ul>
+<ol>
+<li><em>Low-key</em>: 해당 <em>Virtual node</em> 에의 가장 작은 key
+<ul>
+<li>이놈은 기본적으로는 predecessor (이전의 delta 혹은 base node) 의 것을 그대로 상속받는다.</li>
+<li>하지만 split 이 발생하면, split 되어 쪼개진 양쪽 node 중 오른쪽의 <em>Low-key</em> 는 split key 로 설정된다.</li>
+</ul>
+</li>
+<li><em>High-key</em>: 해당 <em>Virtual node</em> 의 right sibling 에 대한 <em>Low-key</em>
+<ul>
+<li>즉, ”<em>Virtual node</em> 에의 가장 큰 key” 의 다음 key 이다.</li>
+<li>Split 이 발생하면 split 되어 쪼개진 양쪽 node 중 왼쪽의 <em>High-key</em> 가 split key 로 설정된다.</li>
+<li>Merge 시에는 오른쪽의 <em>High-key</em> 가 merge 이후의 <em>High-key</em> 가 된다.</li>
+</ul>
+</li>
+<li><em>Right-sibling</em>: 말 그대로 해당 Virtual node 의 right sibling virtual node 의 logical ID 가 담긴다.</li>
+<li><em>Size</em>: <em>Virtual node</em> 에 담긴 key 의 갯수</li>
+<li><em>Depth</em>: 해당 node 부터 base node 까지의 거리. 따라서 base node 는 이 값이 0이고, delta node 는 1씩 증가하는 값을 가진다.</li>
+<li><em>Offset</em>: 변경된 값의 위치
+<ul>
+<li>라고 말하면 뭔소린가 하는데, 몇번째 key 가 변경되었는지에 대한 값이다.</li>
+<li>즉, 위의 예시에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 에 대한 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">Δ</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span></span></span></span></span> record 에 대해서는, 첫번째 key 이므로 <em>offset</em> 은 0이 되는 것.</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>이 값은 thread 가 record 를 추가할 때 계산되어 저장되고, tree 를 traverse 할 때 사용된다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="22-mapping-table">2.2. Mapping Table<a aria-hidden="true" tabindex="-1" href="#22-mapping-table" class="internal"> §</a></h2>
+<ul>
+<li>Bw-Tree 는 <a href="../../../../../../gardens/database/index/drafts/B+-Tree-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/B+-Tree-(Database-Index)">B-link Tree</a> 처럼 sibling 끼리 link 되어 있고, 따라서 하나의 (base) node 는 두개의 inbound pointer 가 연결된다: 하나는 parent 로 부터 연결된 것, 그리고 나머지 하나는 왼쪽 sibling 으로부터 연결된 것.</li>
+<li>기존의 B-link Tree 에서는 이들을 atomic 하게 변경하려면 HW 의 도움을 받거나 복잡한 SW 구현이 필요했는데, Bw-Tree 에서는 mapping table 을 구성해 이들을 indirection 하는 방식으로 간단하게 atomic 하게 처리할 수 있다.</li>
+<li>이 atomic instruction 이 <em>Compare-and-Swap</em> (<em>CaS</em>) 이고, 이놈은 거의 모든 architecture 에서 지원한다.</li>
+<li>다만 CaS 는 실패할 수가 있는데 이때 thread 는 작업을 전부 취소하고 다시 시작한다.
+<ul>
+<li>즉, root 부터 시작해서 다시 traverse 하는 것.</li>
+</ul>
+</li>
+<li>이것은 어찌 보면 overhead 이고, root 가 아닌 다른 곳에서부터 시작하도록 optimize 가 가능하지만 굳이 그럴 필요는 없다고 한다.
+<ul>
+<li>어차피 tree node 들이 L1 cache 에 다 올라와 있을 것이기 때문.</li>
+</ul>
+</li>
+<li>이 아이디어는 <a href="../../../../../../gardens/os/fs/papers/(논문)-F2FS---A-New-File-System-for-Flash-Storage" class="internal" data-slug="gardens/os/fs/papers/(논문)-F2FS---A-New-File-System-for-Flash-Storage">F2FS</a> 에서와 비슷한 접근이다.
+<ul>
+<li>F2FS 에서도 <a href="../../../../../../gardens/os/fs/File-System-(OS)" class="internal" data-slug="gardens/os/fs/File-System-(OS)">File</a> 을 update 하는 것이 insert 로 바뀌기 때문에 <a href="../../../../../../gardens/storage/common/terms/Logical-Block-Addressing,-LBA-(Storage)" class="internal" data-slug="gardens/storage/common/terms/Logical-Block-Addressing,-LBA-(Storage)">LBA</a> 가 변경되는 것이 <a href="../../../../../../gardens/os/fs/terms/Inode-(File-System)" class="internal" data-slug="gardens/os/fs/terms/Inode-(File-System)">Inode</a>, <a href="../../../../../../gardens/os/fs/terms/Directory-(File-System)" class="internal" data-slug="gardens/os/fs/terms/Directory-(File-System)">Directory</a> 에도 전파되는 문제를 indirection layer 로 해결하는데,</li>
+<li>여기에서도 마찬가지로 이 delta chain append 가 parent node 의 변경으로 propagation 되는 것을 이 mapping table 이 막아주고 있는 것.</li>
+</ul>
+</li>
+</ul>
+<h2 id="23-consolidation-and-garbage-collection">2.3. Consolidation and Garbage Collection<a aria-hidden="true" tabindex="-1" href="#23-consolidation-and-garbage-collection" class="internal"> §</a></h2>
+<ul>
+<li>Delta chain 은 점점 늘어나고, 이것은 당연히 문제가 된다.
+<ul>
+<li>메모리 사용량도 커지거니와</li>
+<li>방문하는 node 의 수가 커지기 때문에 traverse time 도 늘어난다.</li>
+</ul>
+</li>
+<li>따라서 이 delta chain 을 다시 base 로 합치는 <em>Consolidation</em> 작업을 worker thread 가 해주게 된다.
+<ul>
+<li>이 작업을 하는 조건은 오리지널 Hekaton 버전 Bw-Tree 에서는 delta chain length 가 8이 될때 해주는 것이 가장 좋다고 적어놓았는데,</li>
+<li>OpenBwTree 에서는 이것을 inner node 와 leaf node 에 따라 다르게 가져가는 것이 좋다고 한다.</li>
+</ul>
+</li>
+<li><em>Consolidation</em> 을 하는 것은 간단하다.
+<ul>
+<li>그냥 base node 를 복사해다가 delta node 를 쭉 적용한 뒤에, 이 메모리 공간을 mapping table 에 업데이트만 해주면 된다.</li>
+<li>그리고 이렇게 해서 쓸모없어진 node 들은 GC (reclaim) 되는데, 당연히 이것은 이 node 에 아무도 접근하지 않을 때 수행해야 한다.</li>
+<li>이 GC 시점을 잡는 것은 <a href="../../../../../../gardens/database/index/papers/openbwtree.2018.sigmod.org/full/4.-Component-Optimization-(OpenBwTree,-SIGMOD-18)" class="internal" data-slug="gardens/database/index/papers/openbwtree.2018.sigmod.org/full/4.-Component-Optimization-(OpenBwTree,-SIGMOD-18)">Section 4.2.</a> 에 설명하는 epoch-based GC 방식을 사용한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="24-structural-modification">2.4. Structural Modification<a aria-hidden="true" tabindex="-1" href="#24-structural-modification" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../../gardens/database/index/drafts/B+-Tree-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/B+-Tree-(Database-Index)">B+ Tree</a> 에서와 마찬가지로, 이놈도 overflow 되어 split 되거나 underflow 되어 merge 하는 작업이 수행된다.</li>
+<li>이런 구조 변경 작업을 <em>Structural Modification Operation</em> (<em>SMO</em>) 라고 하는데, Bw-Tree 에서의 SMO 를 간단히 설명해 보면 다음과 같다.</li>
+<li>SMO 작업은 (1) 다른 thread 에게 SMO 를 진행한다는 것을 알리기 위한 delta 를 추가하는 <em>Logical phase</em> 와 (2) 실제로 SMO 를 적용하는 <em>Physical phase</em> 두 단계로 나뉜다.
+<ul>
+<li><em>Logical phase</em> 에서는:
+<ul>
+<li>일단 high-key 나 right-sibling 등의 node attribute 를 변경하여 “논리적” 으로 두 node 를 합치거나 쪼갠다.</li>
+<li>다만 이 node attribute 를 변경하는 것도 delta node 를 추가하는 것으로 수행되는데, 이때의 delta node 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">Δ</span><span class="mord mathnormal">s</span><span class="mord mathnormal" style="margin-right:0.01968em;">pl</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span></span></span></span></span> 이나 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord">Δ</span><span class="mord mathnormal">m</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">e</span></span></span></span></span> type 이다 <sup><a href="#user-content-fn-smo-delta-type" id="user-content-fnref-smo-delta-type" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup>.</li>
+<li>이렇게 node attribute 를 먼저 변경함으로써 SMO 가 진행되는 와중에도 일관된 virtual node 의 상태를 바라볼 수 있게 해준다.
+<ul>
+<li>즉, SMO 의 결과 상태로 node attribute 를 선-변경하는 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>Physical phase</em> 에서는:
+<ul>
+<li>뭐 실제로 작업을 한 다음에 mapping table 을 바꿔준다.</li>
+<li>이것은 <em>logical phase</em> 를 수행한 thread 가 해도 되고 딴놈이 해도 된다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이 작업은 delta chain 과 indirection layer 를 활용하기에 마찬가지로 lock-free 하지만, CaS fail 에서 자유로울 수는 없다.
+<ul>
+<li>만약 CaS fail 상황에서 여러 thread 가 협력하여 SMO 를 진행하는 <em>Help-along protocol</em> 도 있다고 한다.</li>
+</ul>
+</li>
+</ul>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-smo-delta-type">
+<p>논문에서는 INSERT 나 REMOVE type 도 말하는데, 이건 어떻게 사용되는건지는 잘 모르겠음 <a href="#user-content-fnref-smo-delta-type" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#20-prologue" data-for="20-prologue">2.0. Prologue</a></li><li class="depth-0"><a href="#21-base-nodes-and-delta-chains" data-for="21-base-nodes-and-delta-chains">2.1. Base Nodes and Delta Chains</a></li><li class="depth-0"><a href="#22-mapping-table" data-for="22-mapping-table">2.2. Mapping Table</a></li><li class="depth-0"><a href="#23-consolidation-and-garbage-collection" data-for="23-consolidation-and-garbage-collection">2.3. Consolidation and Garbage Collection</a></li><li class="depth-0"><a href="#24-structural-modification" data-for="24-structural-modification">2.4. Structural Modification</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/database/(Garden)-Database" class="internal">(Garden) Database</a></li><li><a href="../../../../../../gardens/database/index/papers/openbwtree.2018.sigmod.org/(논문)-Building-a-Bw-Tree-Takes-More-Than-Just-Buzz-Words" class="internal">(논문) Building a Bw-Tree Takes More Than Just Buzz Words</a></li><li><a href="../../../../../../gardens/database/index/papers/openbwtree.2018.sigmod.org/full/4.-Component-Optimization-(OpenBwTree,-SIGMOD-18)" class="internal">(논문) Building a Bw-Tree Takes More Than Just Buzz Words (4. Component Optimization)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>

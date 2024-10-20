@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html><head><title>21. Virtual Memory for Linux</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="21. Virtual Memory for Linux"/><meta property="og:description" content="서울대학교 컴퓨터공학과 김진수 교수님의 &amp;quot;고급 운영체제&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Address system § 우선 “주소체계” 라는 것은 memory 의 bit stream 을 byte 단위로 주소를 매겨 놓은 것이다 i386: 32bit 주소 체계 따라서 232 개의 주소가 존재: VAS 전체 사이즈는 232byte=4GiB 근데 이 VAS 의 크기가 process 가 사용할 수 있는 공간의 크기인데, 4Gi 는 진짜 말도 안되게 작기 때문에 64bit 시스템이 나온 것."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 김진수 교수님의 &amp;quot;고급 운영체제&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. Address system § 우선 “주소체계” 라는 것은 memory 의 bit stream 을 byte 단위로 주소를 매겨 놓은 것이다 i386: 32bit 주소 체계 따라서 232 개의 주소가 존재: VAS 전체 사이즈는 232byte=4GiB 근데 이 VAS 의 크기가 process 가 사용할 수 있는 공간의 크기인데, 4Gi 는 진짜 말도 안되게 작기 때문에 64bit 시스템이 나온 것."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/originals/aos.spring.2024.cse.snu.ac.kr/lectures/21.-Virtual-Memory-for-Linux"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">21. Virtual Memory for Linux</h1><p class="content-meta ">May 30, 2024, 23 min read</p><ul class="tags "><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-aos24s" class="internal tag-link">#snu-aos24s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학과 김진수 교수님의 &quot;고급 운영체제&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="address-system">Address system<a aria-hidden="true" tabindex="-1" href="#address-system" class="internal"> §</a></h2>
+<ul>
+<li>우선 “주소체계” 라는 것은 memory 의 bit stream 을 byte 단위로 주소를 매겨 놓은 것이다</li>
+<li>i386: 32bit 주소 체계
+<ul>
+<li>따라서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">32</span></span></span></span></span></span></span></span></span></span></span></span></span> 개의 주소가 존재: VAS 전체 사이즈는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0085em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">32</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">4</span><span class="mord mathnormal">G</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span></li>
+</ul>
+</li>
+<li>근데 이 VAS 의 크기가 process 가 사용할 수 있는 공간의 크기인데, 4Gi 는 진짜 말도 안되게 작기 때문에 64bit 시스템이 나온 것.</li>
+<li>근데 이 64bit 를 모두 사용하지는 않는다; 처음 64bit 시스템이 나왔을때에는 48bit 주소쳬계를 사용했었고, 이루 Intel IceLake 부터는 9bit 를 추가해 57bit 주소체계를 사용함
+<ul>
+<li>따라서 48bit 주소체계에서는 VAS 사이즈가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0085em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">48</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">256</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 가 되고</li>
+<li>57bit 주소체계에서는 VAS 사이즈가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0085em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">57</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">128</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 가 된다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="linux-virtual-address-map">Linux virtual address map<a aria-hidden="true" tabindex="-1" href="#linux-virtual-address-map" class="internal"> §</a></h2>
+<ul>
+<li>VAS 내에는 user memory space 와 kernel memory space 가 둘 다 있다. (물론 지금은 아님; 뒤에서 설명하마)</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20240613010900.png" width="auto" height="auto"/></p>
+<ul>
+<li>그래서 이 VAS 공간을 user 와 kernel 이 나눠먹게 되는데
+<ul>
+<li>i386 시절에는 하위 3Gi 를 user 가 사용하고, 상위 1Gi 는 kernel 이 사용하도록 함</li>
+<li>amd64 에 와서는 VAS 전체 공간을 절반으로 뚝 잘라 하위 공간은 user 가 사용하고 상위 공간은 kernel 이 사용한다.
+<ul>
+<li>즉, 위의 그림처럼</li>
+<li>48bit 체계에서는 하위 128Ti 를 user 가, 상위 128Ti 를 kernel 이 사용하고</li>
+<li>57bit 체계에서는 하위 64Pi 를 user 가, 상위 64Pi 를 kernel 이 사용한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그래서 user mode 일때는 user VAS 에만 접근할 수 있고, kernel mode 일 때는 모든 VAS 에 접근할 수 있게 했다.</li>
+<li>그럼 이 각각에 대해 어떻게 사용되었나 살펴보자.</li>
+</ul>
+<h3 id="i386">i386<a aria-hidden="true" tabindex="-1" href="#i386" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20240613011858.png" width="auto" height="auto"/></p>
+<ul>
+<li>Linux 는 관리의 편의를 위해 kernel space 에는 physical memory 전체가 1:1 로 linear 하게 매핑되어 있었다.
+<ul>
+<li>Physical memory 의 상태가 그대로 kernel space 에 노출되는 것.</li>
+<li>즉, page table 없이 kernel virtual memory addr 에 단순한 bitwise operation 을 때리면 그냥 physical memory addr 가 나왔음
+<ul>
+<li>다만 page table 이 진짜 없어도 되나 더블체크 필요 - 머릿속으로는 없어도 될 것 같은데 수업시간 중에 가장 큰 superpage 를 사용한다는 얘기를 했단말이지</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>i386 시스템에서 kernel VAS 크기가 1Gi 인 것은 당시 메모리의 사이즈가 1Gi 를 넘지 않았기 때문이다.
+<ul>
+<li>즉, 1Gi 크기인 kernel VAS 에 1Gi 보다 작은 physical memory 를 linear mapping 하면 kernel VAS 를 통해 모든 physical memory 에 접근할 수 있기 때문.</li>
+</ul>
+</li>
+<li>그래서 위 그림에서 보이는 것처럼 상위 1Gi 는 physical memory 에 linear mapping 되어 있고 여기에서 일부는 kernel 관련, 나머지는 frame 으로 user memory space 에 page table 로 mapping 되게 되는 것이다.</li>
+</ul>
+<h3 id="i386-highlow-memory">i386 High/Low memory<a aria-hidden="true" tabindex="-1" href="#i386-highlow-memory" class="internal"> §</a></h3>
+<ul>
+<li>근데 문제가 생겼다: physical memory 크기가 1Gi 보다 커지기 시작한 것.</li>
+<li>따라서 kernel VAS 에서 physical memory 전체가 보이지 않게 되기에 이것을 해결해야 했다.</li>
+<li>처음에 등장한 단순한 생각은 그냥 kernel VAS 사이즈를 늘리는 것이다.
+<ul>
+<li>User 와 kernel space 크기를 동일하게 2Gi 로</li>
+</ul>
+</li>
+<li>하지만 user space 가 줄어들기에 다음과 같은 방법이 고안된다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20240613012532.png" width="auto" height="auto"/></p>
+<ul>
+<li>Kernel VAS 를 1Gi 로 그대로 두고,</li>
+<li>여기에서 890Mi 정도는 physical memory 에 linear mapping 을 하고
+<ul>
+<li>이 공간을 <em>Low Memory</em> 공간이라고 한다</li>
+</ul>
+</li>
+<li>Kernel VAS 에서 나머지 134Mi 에 대해서는 physical memory 의 남은 공간에 user VAS 에서 처럼 page table 로 mapping 을 해놓았다.
+<ul>
+<li>이 공간을 <em>High Memory</em> 공간이라 한다.</li>
+<li>따라서 user VAS 공간을 더 넉넉하게 가져갈 수는 있었지만</li>
+<li>여기에 접근할 때는 page table 을 고치면서 접근해야 하는 등의 번거로운게 있었다고 한다.</li>
+</ul>
+</li>
+<li>좀 딴얘기긴 한데
+<ul>
+<li>kernel VAS 공간을 동적 할당하는 <code>kmalloc</code> 의 경우에는 vaddr 와 paddr 이 모두 contiguous 한 공간을 할당해 주고, 따라서 이것은 <em>Low Memory</em> 공간에 할당된다.</li>
+<li>근데 <code>vmalloc</code> 의 경우에는 버퍼와 같은 용도로 사용할 사이즈는 더 크지만 contiguous 공간을 제공해주게 되고 따라서 contiguous 제약사항이 없기 때문에 <em>High Memory</em> 공간에 할당된다.</li>
+</ul>
+</li>
+<li>하지만 이런 scheme 은 더이상 사용하지 못하게 되었다; physical memory 사이즈 자체가 4Gi 보다 커지게 되어 더이상 VAS 전체를 다 사용해도 physical memory 공간을 담지 못하게 되었기 때문.</li>
+</ul>
+<h3 id="amd64">amd64<a aria-hidden="true" tabindex="-1" href="#amd64" class="internal"> §</a></h3>
+<ul>
+<li>위와 같은 문제로, 64bit 로 시스템이 바뀌었고, 다음처럼 사용된다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20240613013739.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그림은 48bit 체계에 대한 그림인 것을 알 수 있는데</li>
+<li>중간에 64TB 의 공간에 physical memory 가 넉넉하게 linear mapping 된다</li>
+</ul>
+<h2 id="kernel-page-table-isolation-kpti">Kernel Page Table Isolation (KPTI)<a aria-hidden="true" tabindex="-1" href="#kernel-page-table-isolation-kpti" class="internal"> §</a></h2>
+<ul>
+<li>위와 같은 구조는 Meltdown attack 이 발견되면서 완전히 바뀌게 된다.
+<ul>
+<li>Meltdown attack 은 뭐 이상한 짓을 하면 user mode 에서 kernel VAS 를 조금 엿보는게 가능하다는 것을 밝혀낸 것이다.</li>
+</ul>
+</li>
+<li>따라서 meltdown attack 때문에 이렇게 바꾼다.
+<ul>
+<li>VAS 내부에는 kernel VAS 를 진짜 최소한 만 두고
+<ul>
+<li>이 공간은 trap, syscall, interrupt hander 가 실행되기 위한 사전 작업용도의 작은 kernel 공간이다.</li>
+<li>따라서 kernel space 로 진입하기 전에 잠깐 거쳐가는 공간이라고 해서 <em>Trampoline space</em> 라고도 불린다.</li>
+</ul>
+</li>
+<li>나머지 공간에 대해서는 어쩔 수 없이 linear mapping 으로 접근하지 못하고 kernel 용 page table 을 통해 접근하도록 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20240613015035.png" width="auto" height="auto"/></p>
+<ul>
+<li>따라서 user page table 에 추가적으로 분리된 kernel page table 이 생기게 되었고 이것을 <em>Kernel Page Table Isolation</em> (<em>KPTI</em>) 라고 한다</li>
+</ul>
+<h3 id="kernel-page-table">Kernel page table<a aria-hidden="true" tabindex="-1" href="#kernel-page-table" class="internal"> §</a></h3>
+<ul>
+<li>따라서 이제는 page table 이 이렇게 구현된다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20240613015502.png" width="auto" height="auto"/></p>
+<ul>
+<li>전체 page table 의 크기는 8KB</li>
+<li>여기서 첫 4KB 는 kernel page table, 이후의 4KB 는 user page table</li>
+<li>이 전체 구조에 대한 시작주소는 linux 에서 task structure 의 <code>t->mm->pgd</code> 에 저장되어있다.
+<ul>
+<li>참고로 <code>t->mm</code> 은 task 의 VAS 정보를 저장하는 구조체다.</li>
+<li>따라서 kernel page table 시작주소는 그냥 <code>t->mm->pgd</code> 이고</li>
+<li>User page table 시작주소는 여기에서 4Ki 만큼 움직인 <code>mm->pgd | (1&lt;&lt;12)</code> 가 된다.</li>
+<li>그래서 user mode 일때는 CR3 를 <code>mm->pgd | (1&lt;&lt;12)</code> 로 설정하고 kernel mode 가 되면 CR3 를 <code>mm->pgd</code> 로 변경한다.</li>
+</ul>
+</li>
+<li>위에서 말한 trampoline space 에 대한 PTE 는 kernel page table 에 NX bit 로 마킹된 상태로 저장된다.</li>
+<li>User VAS 에 대한 PTE 는 이전 강의에서 말한것 처럼 page fault 시에 demand paging 하며 동적으로 적재되기에 어느 paddr 로 갈지 모르지만</li>
+<li>Kernel VAS 에 대한 paddr 은 거의 안바뀌기 때문에 얘네들에 대한 PTE 는 원본 (<code>swapper_pg_dir</code>) 이 있고 이것을 각 <code>task_struct</code> 에 복사해 준다
+<ul>
+<li>혹시라도 kernel 이 메모리를 많이 사용하게 되어 이 process 당 kernel page table 이 변경되면 원본인 <code>swapper_pg_dir</code> 도 바꿔주는데</li>
+<li>이때 모든 process 에 대해서 이것을 다 바꾸진 않고 lazy 하게 작동한다고 한다: 일단 원본을 바꾸지 않고 버티다가 나중에 kernel page fault 가 나면 바꿔주는
+<ul>
+<li>물론 kernel page fault 는 panic 이지만 이 경우에 한에서만 특별하게</li>
+<li>뒤에서 한번 더 나올거다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이전에는 user &lt;-> kernel 간에 page table 이 안바뀌기 때문에 mode 가 전환될 때 CR3 가 안바뀌어 TLB flush 도 수행되지 않았지만
+<ul>
+<li>이제는 mode 전환시 page table 이 바뀌어 CR3 가 바뀌기 때문에 TLB flush 가 발생한다.</li>
+<li>따라서 ASID 가 중요해진다더라.</li>
+</ul>
+</li>
+</ul>
+<h2 id="vma">VMA<a aria-hidden="true" tabindex="-1" href="#vma" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20240613021640.png" width="auto" height="auto"/></p>
+<ul>
+<li>Virtual Memory Area (VMA) 는 VAS 의 부분집합으로 쉽게 생각하면 code/data/heap/stack 등을 일컫는다고 생각하면 된다.</li>
+<li>현재 사용중인 virtual address 가 어디고 어디가 남았으며 하는 정보를 관리해야 하는데 linux 에서는 이것을 VMA 를 이용해 추적한다.
+<ul>
+<li>각 VMA 는 <code>vm_area_struct</code> 라는 구조체로 표현되며 이 구조체가 대변하는 VAS 내의 공간은 할당된 공간인 것이고,</li>
+<li>만약 어떤 vaddr 에 대해 이 구조체를 찾지 못하면 할당되지 않은 공간인 것이다.</li>
+<li>이것을 빠르게 찾기 위해 각 <code>vm_area_struct</code> 들은 reb-black tree 자료구조로 연결되어 있다고 한다.</li>
+</ul>
+</li>
+<li>procfs 에서 확인하려면 <code>/proc/${pid}/maps</code> 를 보면 된다.</li>
+</ul>
+<h2 id="lazy-tlb-flush">Lazy TLB flush<a aria-hidden="true" tabindex="-1" href="#lazy-tlb-flush" class="internal"> §</a></h2>
+<ul>
+<li>TLB flush 는 아주 값비싼 작업이고, 따라서 이것을 최대한 피할 수 있으면 좋은데</li>
+<li>위에서 설명한 KPTI 구조에서는 다음과 같이 최적화할 수 있다.
+<ul>
+<li>만약에 context switch 가 발생하는데, 옮겨가는 task 가 user VAS 가 없는놈 (가령 kernel thread 랄지) 인 상황에 대해 생각해 보자.</li>
+<li>그럼 새로운 task 의 kernel page table 이나 기존 task 의 kernel page table 이나 똑같을 거다.
+<ul>
+<li>당연히 <code>swagger_pg_dir</code> 을 두 task 모두 복사받았을 테니</li>
+</ul>
+</li>
+<li>따라서 이 경우에는 굳이 CR3 를 새로 설정해서 TLB flush 가 발생되게 할 이유가 없다.</li>
+</ul>
+</li>
+<li>이것을 조금 더 구체적으로 보면
+<ul>
+<li>Context switch 가 일어나게 하기 위해서는, kernel mode 로 드가야 하기 때문에 CR3 를 <code>t->active_mm->pgd</code> 값으로 바꾼다.
+<ul>
+<li>참고로, 일반 user process 의 경우에는 <code>t->active_mm</code> 은 <code>t->mm</code> 과 같다.</li>
+</ul>
+</li>
+<li>그런데 user VAS 가 없는 kernel thread 같은 애들의 경우에는 <code>t->mm</code> 값이 <code>NULL</code> 이다.
+<ul>
+<li>왜인지는 잘 모르겠다; kernel 에서는 VAS 를 쓸 필요가 없기 때문에 <code>t->mm</code> 를 <code>NULL</code> 로 해놓는 것인가</li>
+</ul>
+</li>
+<li>따라서 <code>t->mm</code> 이 <code>NULL</code> 인 경우에는 CR3 를 이전 task 의 <code>t->active_mm->pgd</code> 로 계속 유지해 TLB flush 가 일어나지 않게 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="page-cache">Page cache<a aria-hidden="true" tabindex="-1" href="#page-cache" class="internal"> §</a></h2>
+<ul>
+<li>메모리에는 <em>Page cache</em> 가 있어서 file IO 의 중간 버퍼 역할을 한다.
+<ul>
+<li>File write 할 때에도 그냥 이 page cache 에 던져 놓으면 replace 되며 디스크로 flush 되고</li>
+<li>File read 할 때에도 file 이 이 page cache 공간에 적재된다.</li>
+<li>메모리의 대부분은 이 page cache 가 먹고 있다</li>
+</ul>
+</li>
+<li>File 의 일부 block 이 mem 의 page cache 로 올라가는 것이기 때문에 filesystem 은 file 의 어느 block 이 page cache 의 어느 주소에 올라와 있는지 추적해야 한다.</li>
+<li>이것은 radix tree 로 구현되고, inode 하나 당 tree 하나 생성
+<ul>
+<li>radix tree 이기 때문에 cache 에 없으면 leaf 까지 안내려가도 되니까 다행, cache 에 있으면 leaf 까지 내려가니까 lookup 에 쫌 더 오래걸림</li>
+</ul>
+</li>
+<li>요즘은 radix tree 를 xarray 라는 것으로 바꿨다고 한다.</li>
+</ul>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>여기부터는 <code>2024-06-04</code> 강의</p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="page-fault-handler">Page fault handler<a aria-hidden="true" tabindex="-1" href="#page-fault-handler" class="internal"> §</a></h2>
+<ul>
+<li><em>Page fault</em>: page table 로 addr translation 이 안되는 경우</li>
+</ul>
+<h3 id="발생할-수-있는-page-fault-들">발생할 수 있는 page fault 들<a aria-hidden="true" tabindex="-1" href="#발생할-수-있는-page-fault-들" class="internal"> §</a></h3>
+<ul>
+<li>다음과 같은 경우의 수가 있다:</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20240613091126.png" width="auto" height="auto"/></p>
+<ul>
+<li>User address, user mode 에서의 page fault:
+<ul>
+<li>Invalid user address: null ptr, 할당되지 않은 곳 (heap/stack 사이에 비어있는 이상한 곳 등) - <code>SIGSEGV</code> 발생</li>
+<li>Valid user address: demand paging, swap 등에 의해 발생 - 정상적인, 일반적인 경우</li>
+</ul>
+</li>
+<li>Kernel address, user mode 에서의 page fault:
+<ul>
+<li>권한이 없기 때문에 무조건 잘못된 접근 - <code>SIGSEGV</code></li>
+</ul>
+</li>
+<li>User address, kernel mode 에서의 page fault:
+<ul>
+<li>kernel mode 에서는 기본적으로 page fault 가 발생하지 않는 것이 정상이다 - 발생하면 뭔가 이상한 상황 (<code>OOPS</code> - 커널 버그)</li>
+<li>근데 허용되는 케이스가 있다
+<ul>
+<li>User space 에 있는 buffer 를 kernel space 로 copy 해서 사용하려고 할 때 이놈이 swap out 되어있는 경우
+<ul>
+<li>이것은 buffer 를 먼저 memory 에 올린 다음에 kernel mode 로 바꾸는 방법으로 page fault 가 안나게 할 수는 있지만</li>
+<li>이것은 너무 번거롭다 - 일반적으로는 memory 에 올라와 있는 것이 흔하므로</li>
+<li>그래서 일단 copy 해놓고 <em>Fixup address</em> 라는 kernel 의 list 에 넣어놓음</li>
+<li>그리고 이 list 에 있는 공간에 대해서는 page fault 가 발생할 수 있고 처리 루틴에 따라 처리된다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kernel address, kernel mode:
+<ul>
+<li>이것도 위의 경우와 마찬가지로 기본적으로는 <code>OOPS</code> 인데</li>
+<li>허용되는 케이스는
+<ul>
+<li>바로 위에 나온 <em>Fixup address</em> 예외가 여기에서도 동일하게 발생할 수 있고</li>
+<li>추가적으로, 이전에 말한 lazy <code>swapper_pg_dir</code> update 상황도 발생할 수 있다.
+<ul>
+<li>즉, 모든 process 가 동일한 copy 갖고 있는 이 page table 이 어떤 process 실행 중에 바뀔 경우 다른 process 에도 반영하는 것은 lazy 하게 처리한다.</li>
+<li>일단 다른 process 에 대해서는 반영 안하고 해당 반영 안한 부분에 대해서만 추적하고 있다가 다른 process 가 그 부분에서 page fault 가 나면 처리 루틴이 도는 것</li>
+<li>이것을 <em>Inconsistent PGD</em> 라고 한다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="page-fault-handler-1">Page fault handler<a aria-hidden="true" tabindex="-1" href="#page-fault-handler-1" class="internal"> §</a></h3>
+<ul>
+<li>코드에서는 <code>__do_page_fault</code> 함수를 찾아보면 된다고 한다</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20240613092753.png" width="auto" height="auto"/></p>
+<ul>
+<li><code>address >= TASK_SIZE_MAX</code>: 주소가 <code>TASK_SIZE_MAX</code> 보다 크면 kernel space, 아니면 user space
+<ul>
+<li><code>do_user_addr_fault()</code>: User space 에서의 page fault 처리
+<ul>
+<li><code>in_interrupt() || !mm?</code> 은 이해안되니까 일단 넘어가자</li>
+<li>VMA 를 찾아서 valid 한지 검사:
+<ul>
+<li>Valid 하면 demand page (+swap) 상황이다 (아마?) - Access 검사 후 해결
+<ul>
+<li>“Access OK?” 가 뭔지는 몰겠음</li>
+</ul>
+</li>
+<li>그렇지 않다면
+<ul>
+<li>“Expand stack” 은 stack 공간이 아직 자라나지 않은 상태에서 접근한 경우이다
+<ul>
+<li>즉, timing 문제인 것</li>
+<li>맞다면 access 검사 후 해결</li>
+</ul>
+</li>
+<li>위 경우가 아니라면 user mode 일 때는 무조건 비정상 접근 (<code>SIGSEGV</code>) 이다.</li>
+<li>만약 kernel mode 라면 <em>Fixup address</em> 상황인지 보고 맞다면 해결, 아니라면 <code>OOPS</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>do_kern_addr_fault()</code>: Kernel space 에서의 page fault 처리
+<ul>
+<li>“vmalloc fault” 가 Inconsistent PDG 상황인 것 같다 - 이때는 <code>swagger_pg_dir</code> sync 를 맞추는 것으로 해결</li>
+<li>Kernel mode 가 아니면 무조건 <code>OOPS</code></li>
+<li>Kernel mode 인데 “vmalloc fault” 가 아니면 해결 가능한 상황은 Fixup address 밖에 없다 - 맞다면 해결, 아니라면 <code>OOPS</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="handle_mm_fault-normal-page-fault-handling"><code>handle_mm_fault()</code>: Normal page fault handling<a aria-hidden="true" tabindex="-1" href="#handle_mm_fault-normal-page-fault-handling" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20240613100351.png" width="auto" height="auto"/></p>
+<ul>
+<li><code>do_anonymous_page()</code>: PTE 가 없고, anonymous VMA 인 경우
+<ul>
+<li>Heap 생성 후 처음 접근하는 등의 상황에서 발생할 수 있다</li>
+<li>Read operation 이면 zero page 를 PTE 에 mapping</li>
+<li>Write operation 이면 한 frame 을 0 으로 clear 해서 PTE 에 mapping</li>
+</ul>
+</li>
+<li><code>do_fault()</code>: PTE 가 없고, file based VMA 인 경우
+<ul>
+<li>아마 code 영역 page fault 거나 file 이 open 된 이후 처음으로 접근되는 상황일거다</li>
+<li>우선 Page cache 에 이미 올라와 있는지 확인
+<ul>
+<li>맞다면 해당 page cache 을 PTE 에 mapping</li>
+<li>Page cache 에도 없다면 disk IO 한 뒤에 PTE mapping
+<ul>
+<li><em>Synchronous reader head</em> (요청된 page + 몇개 더 가져오는 방식)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그 다음 해당 private mapping 인지 확인하는데, 이것은 write operation 일 경우 COW 하기 위함</li>
+</ul>
+</li>
+<li><code>do_swap_page()</code>: PTE 는 있지만 memory 에는 없는 경우
+<ul>
+<li>swap out 된 경우이다.</li>
+<li>우선 swap cache 를 뒤져 보고
+<ul>
+<li>있으면 사용</li>
+<li>없으면 swap in IO
+<ul>
+<li>이때도 <em>Synchronous reader head</em> (요청된 page + 몇개 더 가져오는 방식)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>do_wp_page()</code>: PTE 도 있고 memory 에도 있는 경우
+<ul>
+<li>read-only 로 설정된 경우이다 - 이때는 page fault 라기 보다는 protection fault 인 것</li>
+<li>따라서 나만 사용하는 경우에는 그냥 r/w 로 바꿔서 write 하고</li>
+<li>나말고 딴사람도 사용하는 경우에는 COW 수행</li>
+</ul>
+</li>
+</ul>
+<h2 id="swapping">Swapping<a aria-hidden="true" tabindex="-1" href="#swapping" class="internal"> §</a></h2>
+<ul>
+<li>이전 19강에서 말한 내용이랑 동일하다.</li>
+<li>free page 수를 kernel 이 모니터링하고 있음</li>
+<li>free page 수가 low_watermark_pages 보다 작아지면 kswapd 가 깨어나 swap 수행</li>
+<li>그러다가 high_watermark_pages 보다 커지면 kswapd 가 잠듬</li>
+<li>만약에 min_watermark_page 에 도달하면 그때는 sync 모드로 작동
+<ul>
+<li>이때는 하나를 swap in 하려면 하나를 무조건 swap out 해야 한다</li>
+<li>min_watermark_page 보다 작아질 수는 있는데, 이것은 kernel page 의 경우에만 가능</li>
+</ul>
+</li>
+</ul>
+<h2 id="page-replacement-algorithm">Page replacement algorithm<a aria-hidden="true" tabindex="-1" href="#page-replacement-algorithm" class="internal"> §</a></h2>
+<h3 id="사용하는-lru-list-들">사용하는 LRU list 들<a aria-hidden="true" tabindex="-1" href="#사용하는-lru-list-들" class="internal"> §</a></h3>
+<ul>
+<li><code>LRU_UNEVICTABLE</code>: 절대로 못빼는 애들 (ramfs, page table, locked page 등?)</li>
+<li>Anonymous page 와 file-backed 에 대해 Active LRU 와 Inactive LRU 를 한 쌍씩 가지고 있다.</li>
+<li>즉, 다음의 4개가 있음:
+<ul>
+<li><code>LRU_ACTIVE_ANON</code></li>
+<li><code>LRU_ACTIVE_FILE</code></li>
+<li><code>LRU_INACTIVE_ANON</code></li>
+<li><code>LRU_INACTIVE_FILE</code></li>
+<li>이것을 분리하는 것은 android 같이 inactive 의 경우 swap 하지 않고 죽여버리는 등의
+<ul>
+<li>Active 와 inactive 의 처리 방법이 anon 과 file 에 따라 다르기 때문이라고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Anonymous 의 경우에는
+<ul>
+<li><code>LRU_ACTIVE_ANON</code> 의 LRU 방향에서부터 scan 해서 inactive 로 내쫒고, inactive 의 경우에도 scan 해서 disk 로 내쫒는 방식</li>
+<li>Anonymous 는 temporal locality (recency) 가 높다고 판단하는 것이다 - 접근되면 <code>LRU_ACTIVE_ANON</code> 의 MRU 에 넣는다</li>
+</ul>
+</li>
+<li>File-backed 의 경우에는
+<ul>
+<li>얘는 spacial locality (frequency) 가 높다고 판단한다 - 접근되면 <code>LRU_INACTIVE_FILE</code> 에 넣고 또 접근되면 <code>LRU_ACTIVE_FILE</code> 에 넣음
+<ul>
+<li>즉, ARC 와 비슷하다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="refault-distance">Refault distance<a aria-hidden="true" tabindex="-1" href="#refault-distance" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 여기는 일단은 패스하자. (ppt 19p ~) </p></div>
+                  
+                </div>
+</blockquote>
+<ul>
+<li>ghost cache 를 유지하지 않게 하기 위한 방법</li>
+<li>inactive_age: inactive_file 에서 빠져나간 page 개수
+<ul>
+<li>LRU 에서 swap 되어 나가서나</li>
+<li>중간에 있다가 또 접근되어 active_file 로 옮겨지는 경우</li>
+</ul>
+</li>
+<li>내가 나가있던 동안의 inactive_age 의 변화는 내가 없는 동안의 reference 된 page 의 수에 근사</li>
+<li>active list 의 크기보다 내가 나가있던동안 추가된 page 의 수 (r-e) 가 작으면 나는 cache 되었어햐 하는 page 이기에 cache 로 올라간다?</li>
+<li>active list 의 크기만큼의 ghost cache 가 있다고 가정하고 이 안에 있을 때 hit 되는 경우를 (r-e) 값으로 근사하고자 하는 것</li>
+<li>linux kernel 의 <code>workingset.c</code> 를 참조해라?</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#address-system" data-for="address-system">Address system</a></li><li class="depth-0"><a href="#linux-virtual-address-map" data-for="linux-virtual-address-map">Linux virtual address map</a></li><li class="depth-1"><a href="#i386" data-for="i386">i386</a></li><li class="depth-1"><a href="#i386-highlow-memory" data-for="i386-highlow-memory">i386 High/Low memory</a></li><li class="depth-1"><a href="#amd64" data-for="amd64">amd64</a></li><li class="depth-0"><a href="#kernel-page-table-isolation-kpti" data-for="kernel-page-table-isolation-kpti">Kernel Page Table Isolation (KPTI)</a></li><li class="depth-1"><a href="#kernel-page-table" data-for="kernel-page-table">Kernel page table</a></li><li class="depth-0"><a href="#vma" data-for="vma">VMA</a></li><li class="depth-0"><a href="#lazy-tlb-flush" data-for="lazy-tlb-flush">Lazy TLB flush</a></li><li class="depth-0"><a href="#page-cache" data-for="page-cache">Page cache</a></li><li class="depth-0"><a href="#page-fault-handler" data-for="page-fault-handler">Page fault handler</a></li><li class="depth-1"><a href="#발생할-수-있는-page-fault-들" data-for="발생할-수-있는-page-fault-들">발생할 수 있는 page fault 들</a></li><li class="depth-1"><a href="#page-fault-handler-1" data-for="page-fault-handler-1">Page fault handler</a></li><li class="depth-0"><a href="#swapping" data-for="swapping">Swapping</a></li><li class="depth-0"><a href="#page-replacement-algorithm" data-for="page-replacement-algorithm">Page replacement algorithm</a></li><li class="depth-1"><a href="#사용하는-lru-list-들" data-for="사용하는-lru-list-들">사용하는 LRU list 들</a></li><li class="depth-1"><a href="#refault-distance" data-for="refault-distance">Refault distance</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/os/originals/aos.spring.2024.cse.snu.ac.kr/(서울대)-고급-운영체제-강의록" class="internal">(서울대) 고급 운영체제 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>
