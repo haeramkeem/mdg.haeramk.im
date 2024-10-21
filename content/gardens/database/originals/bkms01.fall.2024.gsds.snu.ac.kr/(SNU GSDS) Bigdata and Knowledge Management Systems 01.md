@@ -18,6 +18,8 @@
 - [[03. Storage (part 1)]]
 - [[04. Storage (part 2)]]
 - [[05. Storage (part 3)]]
+- [[06. Buffer Pool Design]]
+- [[07. Hash Tables (part 1)]]
 
 ### 실습
 
