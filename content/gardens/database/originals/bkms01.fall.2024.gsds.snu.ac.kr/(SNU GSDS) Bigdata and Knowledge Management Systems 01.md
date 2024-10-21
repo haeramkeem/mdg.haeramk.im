@@ -15,11 +15,12 @@
 
 ### 이론
 
-- [[03. Storage (part 1)]]
-- [[04. Storage (part 2)]]
-- [[05. Storage (part 3)]]
+- [[03. Storage (Part 1 - Page, Slot)]]
+- [[04. Storage (Part 2 - File Organization)]]
+- [[05. Storage (Part 3 - File Format)]]
 - [[06. Buffer Pool Design]]
-- [[07. Hash Tables (part 1)]]
+- [[07. Hash Tables (Part 1 - Static Hash)]]
+- [[08. Hash Tables (Part 2 - Dynamic Hash)]]
 
 ### 실습
 
