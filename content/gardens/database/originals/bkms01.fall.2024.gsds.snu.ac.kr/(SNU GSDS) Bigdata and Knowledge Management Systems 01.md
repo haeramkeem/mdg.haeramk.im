@@ -13,7 +13,11 @@
 
 > [!fail] #draft 학기 종료 후 업데이트될 예정입니다.
 
-### 수업
+### 이론
+
+- [[03. Storage (part 1)]]
+- [[04. Storage (part 2)]]
+- [[05. Storage (part 3)]]
 
 ### 실습
 
