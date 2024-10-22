@@ -23,6 +23,7 @@ date: 2024-09-01
 - [[09. Tree Indexes (Part 1 - ISAM, B+Tree)]]
 - [[10. Tree Indexes (Part 2 - B+Tree Optimization, Other Data Structures)]]
 - [[11. Index Concurrency]]
+- [[12. External Sorting and Hashing]]
 
 ### 실습
 
