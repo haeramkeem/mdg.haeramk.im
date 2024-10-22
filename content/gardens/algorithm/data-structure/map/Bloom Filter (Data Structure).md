@@ -3,6 +3,8 @@ tags:
   - terms
   - data-structure
 date: 2024-04-14
+aliases:
+  - Bloom filter
 ---
 > [!info] 참고한 것들
 > - [티스토리 블로그](https://gngsn.tistory.com/201)
@@ -23,6 +25,10 @@ date: 2024-04-14
 
 ## 원리
 
+> [!warning] 그림이 좀 안맞죠?
+> - [위키피디아](https://en.wikipedia.org/wiki/Hash_collision) 에서 가져온 그림을 수정해서 사용했는데 가운데 "hashes" 부분이 좀 헷갈릴 수 있을것 같아 첨언하자면,
+> - 저 "hashes" 는 bit array 가 아니라 hash 의 결과고, bit array 는 표현 안돼있습니다.
+
 ![[bloom-filter.png]]
 
 - 블룸 필터를 hash 함수의 collision 을 아주 똑똑하게 사용한다.
@@ -37,7 +43,6 @@ date: 2024-04-14
 	- Hash 의 결과가 4bit 라면, 0~15 까지 16개의 값을 가질 수 있으므로 16bit 저장소를 사용하게 되는 것.
 	- 따라서 "John Smith" 을 hash 한 결과가 2 이라면, 2번째 index 의 bit 에 1을 저장해 원소가 추가되었음을 표시한다.
 	- 이렇게 하면 bit comparison 으로 결과를 알 수 있어 빠르기 때문.
-
-> [!warning] 그림이 좀 안맞죠?
-> - [위키피디아](https://en.wikipedia.org/wiki/Hash_collision) 에서 가져온 그림을 수정해서 사용했는데 가운데 "hashes" 부분이 좀 헷갈릴 수 있을것 같아 첨언하자면,
-> - 저 "hashes" 는 bit array 가 아니라 hash 의 결과고, bit array 는 표현 안돼있습니다.
+- False positive 확률을 낮추기 위해 hash function 을 여러개 사용하기도 한다.
+	- 어떤 값을 여러개의 hash function 에 돌려 나온 결과들에 대한 bit 를 전부 키고
+	- 확인할 때도 이 hash function 들을 다 돌려 모든 bit 가 켜져있는지 여부로 판단하는 것.
