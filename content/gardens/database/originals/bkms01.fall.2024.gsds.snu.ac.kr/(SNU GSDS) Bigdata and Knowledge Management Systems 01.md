@@ -22,6 +22,7 @@
 - [[07. Hash Tables (Part 1 - Static Hash)]]
 - [[08. Hash Tables (Part 2 - Dynamic Hash)]]
 - [[09. Tree Indexes (Part 1 - ISAM, B+Tree)]]
+- [[10. Tree Indexes (Part 2 - B+Tree Optimization, Other Data Structures)]]
 
 ### 실습
 
