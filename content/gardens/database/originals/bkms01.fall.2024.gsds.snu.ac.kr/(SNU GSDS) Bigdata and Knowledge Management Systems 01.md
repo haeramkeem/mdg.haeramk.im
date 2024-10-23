@@ -24,7 +24,3 @@ date: 2024-09-01
 - [[10. Tree Indexes (Part 2 - B+Tree Optimization, Other Data Structures)]]
 - [[11. Index Concurrency]]
 - [[12. External Sorting and Hashing]]
-
-### 실습
-
-- [[Lab 03. Shared Buffer]]

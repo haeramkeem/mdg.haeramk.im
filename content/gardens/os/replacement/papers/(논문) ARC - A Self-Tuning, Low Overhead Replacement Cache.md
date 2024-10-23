@@ -67,7 +67,7 @@ date: 2024-05-22
 	- $L_1$: "최근에", "단 한번만" 접근된 page
 	- $L_2$: "최근에", "두번 이상" 접근된 page
 	- 느낌이 $L_1$ 에 있다가 한번 더 참조되면 $L_2$ 로 옮겨지는 식으로 구현될 것 같죠?
-	- $L_1$ 은 따라서 *recency*, 즉 [[Temporal Locality (Replacement)|시간 지역성]] 의 공간이고 $L_2$ 는 *frequency*, 즉 [[Spacial Locality (Replacement)|공간 지역성]] 의 공간이다.
+	- $L_1$ 은 따라서 *recency*, 즉 [[Locality (Replacement)|시간 지역성]] 의 공간이고 $L_2$ 는 *frequency*, 즉 [[Locality (Replacement)|Spatial locality]] 의 공간이다.
 - 그리고 각각의 용량은 cache size 인 $c$ 이다.
 	- "용량" 이다; 이것은 C++ vector 에서의 capacity 와 유사하다고 생각하면 되고 [^lru-capacity],
 	- 뒤에서 나올 "사이즈" 는 C++ vector 에서의 size 라고 생각하면 된다.
