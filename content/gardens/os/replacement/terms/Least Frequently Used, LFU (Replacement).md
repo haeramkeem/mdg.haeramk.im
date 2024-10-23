@@ -14,7 +14,7 @@ aliases:
 ## 덜 빈번하게 사용된
 
 - 가장 사용 빈도가 낮은 놈을 방출시키는 [[Replacement Policy (OS)|cache replacement policy]] 이다.
-- 자주 사용된 놈은 또 사용될 것이라는 [[Spacial Locality (Replacement)|공간 지역성]] 에 기반한 방법인 셈.
+- 자주 사용된 놈은 또 사용될 것이라는 [[Locality (Replacement)|Temporal locality]] 에 기반한 방법인 셈.
 - Heap 을 이용하여 구현한다
     - 참조 시점이 아니라 빈도가 중요하므로 다른 놈들과의 비교를 해야되는데
     - 비교할때는 Linked List 를 이용해 일렬로 비교하며 따라가는 것 보다는 Heap 을 이용해 Leaf 까지 따라가며 비교횟수를 줄이는 것이 좋기 때문

@@ -15,7 +15,7 @@ aliases:
 
 - 즉, 가장 오래전에 사용된
 - ...놈을 cache 나 memory 에서 내쫒는 [[Replacement Policy (OS)|Cache replacement policy]] 이다.
-- 최근에 참조된 놈은 조만간 다시 참조될 것이라는 [[Temporal Locality (Replacement)|시간 지역성]] 에 기반한 것이다.
+- 최근에 참조된 놈은 조만간 다시 참조될 것이라는 [[Locality (Replacement)|시간 지역성]] 에 기반한 것이다.
 	- 유사하지만 비슷한 놈으로는 [[Least Frequently Used, LFU (Replacement)|LFU]] 가 있다.
 - [[First In First Out, FIFO (Replacement)|FIFO]] 와 비슷하다고 생각할 수 있지만 좀 다르다.
 	- FIFO 는 가장 오래전에 "cache 에 올라온" 놈을 지우는거고
