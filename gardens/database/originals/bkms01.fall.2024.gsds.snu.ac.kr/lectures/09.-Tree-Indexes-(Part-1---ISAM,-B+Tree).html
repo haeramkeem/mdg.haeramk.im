@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html><head><title>09. Tree Indexes (Part 1 - ISAM, B+Tree)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="09. Tree Indexes (Part 1 - ISAM, B+Tree)"/><meta property="og:description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Index data structure § Index: table 의 subset of attr 를 이용해 빠르게 RID 를 얻어낼 수 있도록 해주는 자료구조 table data 가 바뀌면 (즉, RID 가 추가되거나 변경되면) index 도 변경된다 를 위한 자료구조를 결정해야 하는데 storage overhead: 차지하는 용량이 적어야 하고 maintenance overhead: table data 가 변경되었을 때 수행되는 작업에 대한 overhead 들어가기 앞서, 이전 강의 에서 설명한 Heap file 의 access API 를 간단히 복기해 보면, Fetch (point lookup): tuple 하나를 고르는 것 Scan: 여러 데이터를 읽는 것(table scan, range scan) Search tree overview § Search tree 를 index 로 사용하기 위해서는 다음의 조건에 맞아야 한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Index data structure § Index: table 의 subset of attr 를 이용해 빠르게 RID 를 얻어낼 수 있도록 해주는 자료구조 table data 가 바뀌면 (즉, RID 가 추가되거나 변경되면) index 도 변경된다 를 위한 자료구조를 결정해야 하는데 storage overhead: 차지하는 용량이 적어야 하고 maintenance overhead: table data 가 변경되었을 때 수행되는 작업에 대한 overhead 들어가기 앞서, 이전 강의 에서 설명한 Heap file 의 access API 를 간단히 복기해 보면, Fetch (point lookup): tuple 하나를 고르는 것 Scan: 여러 데이터를 읽는 것(table scan, range scan) Search tree overview § Search tree 를 index 로 사용하기 위해서는 다음의 조건에 맞아야 한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/lectures/09.-Tree-Indexes-(Part-1---ISAM,-B+Tree)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">09. Tree Indexes (Part 1 - ISAM, B+Tree)</h1><p class="content-meta ">Oct 02, 2024, 18 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-bkms24f" class="internal tag-link">#snu-bkms24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 데이터사이언스대학원 정형수 교수님의 &quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal" data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="index-data-structure">Index data structure<a aria-hidden="true" tabindex="-1" href="#index-data-structure" class="internal"> §</a></h2>
+<ul>
+<li>Index: table 의 subset of attr 를 이용해 빠르게 RID 를 얻어낼 수 있도록 해주는 자료구조
+<ul>
+<li>table data 가 바뀌면 (즉, RID 가 추가되거나 변경되면) index 도 변경된다</li>
+</ul>
+</li>
+<li>를 위한 자료구조를 결정해야 하는데
+<ul>
+<li>storage overhead: 차지하는 용량이 적어야 하고</li>
+<li>maintenance overhead: table data 가 변경되었을 때 수행되는 작업에 대한 overhead</li>
+</ul>
+</li>
+<li>들어가기 앞서, <a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/lectures/03.-Storage-(Part-1---Page,-Slot)" class="internal" data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/lectures/03.-Storage-(Part-1---Page,-Slot)">이전 강의</a> 에서 설명한 Heap file 의 access API 를 간단히 복기해 보면,
+<ul>
+<li>Fetch (point lookup): tuple 하나를 고르는 것</li>
+<li>Scan: 여러 데이터를 읽는 것(table scan, range scan)</li>
+</ul>
+</li>
+</ul>
+<h2 id="search-tree-overview">Search tree overview<a aria-hidden="true" tabindex="-1" href="#search-tree-overview" class="internal"> §</a></h2>
+<ul>
+<li>Search tree 를 index 로 사용하기 위해서는 다음의 조건에 맞아야 한다.
+<ul>
+<li>Search (key: subset of attribute) 가 가능해야 하고</li>
+<li>여러 종류의 lookup 을 지원 (equality=point lookup, 1-d range, 2-d region 등) 해야 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="n-ary-tree-b-tree">N-ary tree, B tree<a aria-hidden="true" tabindex="-1" href="#n-ary-tree-b-tree" class="internal"> §</a></h3>
+<ul>
+<li>N-ary tree: key 가 N-1 개면 child (fanout) 가 N 개가 되고, 이것을 N-ary tree 라고 한다.</li>
+<li>B tree
+<ul>
+<li>Leaf-root distance (= height) 를 일정하게 유지되어있는 것을 balance 라고 한다.</li>
+<li>그리고 balancing 이 되지 않은 (치우친) 놈을 skewed 라고 한다.</li>
+<li>당연히 tree 의 search cost 가 log 가 되기 위해서는 balancing 되어 있어야 한다.</li>
+<li>그리고 알아서 balancing 이 되는 tree scheme 을 balanced tree, b tree 라고 한다.</li>
+</ul>
+</li>
+<li>Balancing 을 할 때는 크게 두 종류가 있다.
+<ul>
+<li>Child 들의 height 를 비교해 너무 차이가 크면 (즉, threshold 를 넘으면) child node 들을 옮기며 height 를 조절하는 방식
+<ul>
+<li>이렇게 child node 를 옮기며 height 를 조절하는 것을 rotation 이라고 한다.</li>
+<li>여기에는 AVL tree, Red-black tree 가 있다.</li>
+</ul>
+</li>
+<li>아니면 fanout 을 가변으로 가져가 이것으로 height 을 맞추는 방식
+<ul>
+<li>여기에는 B+ tree 가 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="avl-red-black-tree">AVL, Red-black tree<a aria-hidden="true" tabindex="-1" href="#avl-red-black-tree" class="internal"> §</a></h3>
+<ul>
+<li>AVL tree 에서는 이 차이가 2가 되면 rotation 함
+<ul>
+<li>근데 이 경우에는 height 가 매우 클 경우 이 threshold 가 상대적으로 작은데 이 작은 difference 에 의해 너무 자주 rotation 되는 문제가 있음</li>
+<li>즉, 너무 민감하게 반응한다</li>
+</ul>
+</li>
+<li>따라서 이 문제를 해결하기 위해 나온 것이 difference 가 아닌 multiply 로 접근하는 red-black tree 이다
+<ul>
+<li>이때는 양쪽 간의 차이가 2배 이상 나지 않게 함
+<ul>
+<li>red node 사이사이에 black node 를 넣는 방법</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="b-tree">B+ tree<a aria-hidden="true" tabindex="-1" href="#b-tree" class="internal"> §</a></h3>
+<ul>
+<li>B+ tree 는 height 가 큰쪽을 rotation 하는 것이 아니고 fanout 을 바꿔서 조절하는 방식이다.</li>
+<li>여기서는 max fanout 을 아주 크게 해놓고 각 node 마다 다른 fanout 을 가진다.</li>
+<li>일단은 insert 가 되면 fanout 을 늘리며 child 를 차곡차곡 쌓다가
+<ul>
+<li>즉, 이때는 height 가 일정하게 유지된다.</li>
+</ul>
+</li>
+<li>나중에 fanout 이 너무 커지면 split 을 하고 parent 를 새로 만든다.
+<ul>
+<li>따라서 이때는 height 가 일괄적으로 1씩 증가한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="indexed-sequential-access-method-isam">Indexed Sequential Access Method (ISAM)<a aria-hidden="true" tabindex="-1" href="#indexed-sequential-access-method-isam" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241022100348.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 Heap file 이 하나 주어질 때</li>
+<li>여러 page 에 임의 개수의 tuple 이 임의 순서로 저장되어 있을 때는 이 page 들을 모두 scan 해야 key 에 대한 value 를 알 수 있을 것이다.</li>
+<li>그래서 page 에 고정 개수의 tuple (+ 그리고 여분의 공간 조금 = padding) 을 담고, 이들이 non-overlapped sorted run 되게 정리한다.
+<ul>
+<li>이때 이 page 들은 하나의 file 에 sequential 하게 저장된다: 따라서 next page 와 같은 pointer 는 필요 없다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022100416.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 이 page 들에 대한 첫번째 key 들을 다 모아 parent page 로 만든다.
+<ul>
+<li>어차피 sorted run 인데 index 따로 안만들고 그냥 binary search 하면 되는거 아닌가? 에 대한 답변은:</li>
+<li>일단 binary search 의 경우에는 binary tree 를 탐색하는 것과 동일한데, 이때 fanout 이 2이기 때문에 IO 의 횟수가 너무 많아질 수 있다.</li>
+<li>그리고 binary search 를 수행할 때 난 page 의 제일 첫 key 만을 보고싶은데, page 전체를 읽어야 하는 amplication 도 문제가 된다.</li>
+<li>그래서 key 들만 모아 놓은 parent page 를 만들면, fanout 이 이 key 의 개수가 되기 때문에 depth 도 줄어들고 이놈만 읽으면 원하는 page 를 바로 찾을 수 있기 때문에 IO 횟수도 줄일 수 있다.</li>
+<li>이 parent page 내에서는 그냥 binary search 로 key 를 찾는다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022101358.png" width="auto" height="auto"/></p>
+<ul>
+<li>만약에 parent page 의 크기도 너무 커지면 동일하게 고정개수의 sorted run pages 들로 나눈 다음 다시 grandparent 생성한다.</li>
+<li>이런 것을 반복하면 결국은 이게 tree 구조가 되죠잉?</li>
+<li>이 방법이 indexed sequential access method (ISAM) 이라고 한다.
+<ul>
+<li>이때 절대 깨지 않는 정책 (Key invariant) 은 page 의 인접한 두 pair - 왼쪽 key (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>) 와 그것에 대한 포인터 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>) 와 오른쪽 key (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>) 와 그것에 대한 포인터 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>) - 에 대해, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 인 tuple 들은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 을 통해 접근할 수 있다는 것이다.</li>
+<li>참고로 (지금은 innodb 로 바뀌었다지만) 이놈이 MySQL 의 MyISAM 이다.</li>
+</ul>
+</li>
+<li>Lookup 을 할 때는 처음에 target key 를 이 parent page 에서 뒤져서 찾아본 뒤, 어느 child page 에 있는지 알아내서 찾아가는 식으로 하면 될 것이다.</li>
+<li>Insert 를 할 때는 위치를 찾아 가서 padding 이 남아있으면 여기에 넣거나, 아니면 padding 을 다 사용하면 overflow 공간에 새로운 page 를 넣게 된다.
+<ul>
+<li>이 점이 ISAM 의 단점이 된다. 뒤에서 알아보자.</li>
+</ul>
+</li>
+<li>이 방법이 제일 ideal 한 B+tree 형태라고 한다.</li>
+</ul>
+<h3 id="단점">단점<a aria-hidden="true" tabindex="-1" href="#단점" class="internal"> §</a></h3>
+<ul>
+<li>근데 ISAM 은 약점이 있다.</li>
+<li>일단 clustered index 는 연속된 key 들에 대한 데이터가 physical 하게도 인접하게 배치되어있는 것이고</li>
+<li>반대로 non-clustered 는 흩뿌려져있는 형태를 말한다.</li>
+<li>당연히 clustered 가 sequential IO 가 되니까 훨씬 좋고, DBMS 에서는 non-clustered 상태가 되면 그것을 알아차리게 된다.
+<ul>
+<li>Monitoring 기능이 있어 search 시 IO amp 를 계산해서 이것이 너무 커지면 random IO 가 늘어났다는 것이고 이것이 너무 커지면 wall message 를 띄워 rebuild 하도록 한다.</li>
+</ul>
+</li>
+<li>하지만 ISAM 의 경우에는 page 들이 non-overlapped sorted run 된 상태로 physically sequential 하게 저장돼있기 때문에 page 의 padding 을 다 사용하면 insert 하는 것이 어려워 진다.
+<ul>
+<li>만약 B+ tree 처럼 split 을 한다 해도 그 뒤의 page 들을 전부 밀어야 하기 때문에 overhead 가 크다.</li>
+</ul>
+</li>
+<li>따라서 이때는 overflow 공간이라는 곳에 별도의 page 를 만들어서 여기에 채우게 된다.</li>
+<li>근데 그럼 non-clustered 상태가 되기 때문에 성능이 저하되고, 결국에는 나중에 rebuild 를 해야 한다.
+<ul>
+<li>즉, physically sequential 특성때문에 B+ tree 에서 처럼 부분적으로 상태를 바꾸는 것 대신 그냥 leaf 전체를 rebuild 하게 되는 것.</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-tree-1">B+ tree<a aria-hidden="true" tabindex="-1" href="#b-tree-1" class="internal"> §</a></h2>
+<ul>
+<li>흔히 말하는 B+tree 는 B-linked tree 로, sibling 들이 모두 연결된 형태다.</li>
+<li>이놈은 height 가 무조건 같고, 대신 fanout 이 node 마다 상이하다.
+<ul>
+<li>따라서 time complexity 는 worst case 에도 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span> (단, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 은 최대 fanout) 이다.</li>
+<li>즉, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span>-way search tree 라고 할 수 있는 것.</li>
+</ul>
+</li>
+</ul>
+<h3 id="structure">Structure<a aria-hidden="true" tabindex="-1" href="#structure" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241022111810.png" width="auto" height="auto"/></p>
+<ul>
+<li>위처럼 생겼는데</li>
+<li>Inner node (intermediate node) 에는 key 가 sorting 되어 들어가 있고 각 key 에 대한 child pointer 가 담긴다.
+<ul>
+<li>따라서 value (tuple) 은 들어있지 않고, 길잡이 역할만 해준다고 해서 guidepost 혹은 route node 라고 불린다.</li>
+</ul>
+</li>
+<li>Leaf node 에 value 가 들어가 있고 leaf node 끼리는 prev, next page ID field 가 있어서 sibling 을 가리키게 되어 있다.
+<ul>
+<li>참고로 B- tree 에는 leaf 뿐 아니라 inner node 에도 value 가 다 들어간다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="insert-delete-structure-modification-operation-smo">Insert, Delete, Structure Modification Operation (SMO)<a aria-hidden="true" tabindex="-1" href="#insert-delete-structure-modification-operation-smo" class="internal"> §</a></h3>
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 을 다 채우진 않고, threshold 에 따라 split 하거나 merge 한다.</li>
+<li>Insert 를 했을 때, 자리가 충분하면 그냥 sorting 해서 넣고 끝내지만, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 이 거의 다 차면 node 를 반으로 자르는 split 을 진행한다.
+<ul>
+<li>Split 이 되면 새로 생긴 node 의 첫 key 와, page ID 를 parent 에게 알려 parent 가 이 새로 생긴 node 를 가리킬 수 있도록 한다.
+<ul>
+<li>이때는 양쪽에 비슷한 개수의 key 가 배치될 수 있게 하고 (redistribute entries evenly),</li>
+<li>(split 전 상태에서의) 가운데 key 를 parent 로 올린다.</li>
+</ul>
+</li>
+<li>이것을 promotion 이라고도 한다.</li>
+<li>근데 이것이 parent 의 fanout 도 추가하는 격이므로 만약에 parent 에게 fanout 이 작으면 그냥 parent 에게만 추가하면 끝이지만</li>
+<li>Parent 도 자리가 없으면 parent 도 split 되는 propagation 이 일어난다 (split propagation).</li>
+<li>만약에 이 propagation 이 root 까지 올라갔는데 root 도 자리가 없으면 root 도 split 하고 new root 를 생성한다.
+<ul>
+<li>즉, height 가 전체적으로 1 추가됨</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>만약에 delete 가 여러번 일어나 node 의 fanout 이 다시 절반보다 줄어들면 merge 한다.
+<ul>
+<li>이때 대상은 sibling (같은 parent 를 둔, 인접한 node) 이고</li>
+<li>우선 sibling 으로부터 key 몇개를 가져오는 작업 (re-distribution) 을 한다.</li>
+<li>근데 이것이 실패하면 merge 를 시작한다.
+<ul>
+<li>어떤 경우에 실패하는지는 안나옴.</li>
+</ul>
+</li>
+<li>이때는 sibling 또한 절반 아래로 줄어들었는지 확인하고 맞다면 두개를 합치는 merge 를 한다.</li>
+<li>물론 근데 split 은 당장 자리가 없는 상황이니까 eager-split 하지만</li>
+<li>merge 는 그럴 필요가 없다 - 어차피 height 조금 줄이는거니까</li>
+<li>그래서 merge overhead 를 피하기 위해 보통은 empty 가 될때까지 merge 를 미룬다</li>
+<li>참고로 parent 는 child 의 첫 key 를 가지게 되지만 해당 key 가 삭제될 경우 parent 에서 그것을 반영하여 다음 key 를 가지게 하지는 않는다 - 어차피 routing 용도로 가지고 있는 key 이고 그것을 바로 반영하지 않아도 routing 에는 문제가 없기 때문.</li>
+</ul>
+</li>
+</ul>
+<h3 id="leaf-node-construction">Leaf node construction<a aria-hidden="true" tabindex="-1" href="#leaf-node-construction" class="internal"> §</a></h3>
+<ul>
+<li>Leaf node 에는 알다시피 MySQL, SQLite, SQL Server, Oracle 은 tuple 자체가 담기고
+<ul>
+<li>즉, index-organized storage 인 것.</li>
+<li>그래서 이때는 table file 에 index 가 같이 저장된다.</li>
+</ul>
+</li>
+<li>PostgreSQL, DB2, (SQL Server, Oracle - 얘네는 optional?) 은 RID 만 담기고 별도의 heap file 로 분리한다.</li>
+<li>이 차이는 tradeoff 가 있다.
+<ul>
+<li>Heap file 을 사용한 경우에는 full scan 에 heap 만 읽으면 되니까 더 빠르지만
+<ul>
+<li>즉, index-organized 의 경우에는 사용하지 않을 index 까지 읽어야 하기 때문.</li>
+</ul>
+</li>
+<li>index 를 읽은 다음에 추가적으로 heap 을 읽는 추가적인 IO 가 있으니까 point access 가 좀 느리다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="selection-conditions">Selection conditions<a aria-hidden="true" tabindex="-1" href="#selection-conditions" class="internal"> §</a></h3>
+<ul>
+<li>Hash 는 무조건 exact match 를 요구하니까 predicate execution 이 불가능하다.</li>
+<li>하지만 tree 에서는 좀 구조가 복잡해지긴 해도 가능하다.
+<ul>
+<li>Predicate 에 필요한 attr 를 search key 로 해서</li>
+<li>Inner node 가 sort 되어 있으니까 여기에서 key 로 range search 를 하여 접근해야 할 child pointer 를 다 긁어모으고</li>
+<li>Child 로 내려가서 여기서도 range search 를 하며 key 들을 확인하는 것.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022124656.png" width="auto" height="auto"/></p>
+<ul>
+<li>
+<p>예를 들면 위와 같이 된다.</p>
+<ul>
+<li><code>A,C</code> 이전의 포인터는 range 상으로 <code>A,A</code> ~ <code>A,B</code> 까지가 커버되니까 <code>*,A</code> 로 매칭되는놈 (<code>A,A</code>) 가 있기에 내려가는 거고</li>
+<li><code>A,C</code> 포인터는 range 상으로 <code>A,C</code> ~ <code>B,A</code> 까지 커버되니까 <code>*,A</code> 로 매칭되는놈 (<code>B,A</code>) 가 있기에 내려가는 거고</li>
+<li><code>B,B</code> 포인터로는 왜 내려가는지 모르겠음</li>
+</ul>
+</li>
+<li>
+<p>참고) 위 그림에서 보이는 것처럼 any match (<code>*</code>) 는 predicate 의 뒤쪽에 위치시키는게 낫다.</p>
+<ul>
+<li>Attribute 의 앞부터 sorting 이 되어 있기 때문에 fixed value 를 predicate 의 앞에 두고 any 는 뒤에 두는 게 낫다.</li>
+<li>그래야 방문하는 child 를 줄일 수 있으니까.</li>
+</ul>
+</li>
+<li>
+<p>B+ 가 무조건 좋은건 아니다</p>
+<ul>
+<li>node 의 maxfan 을 크게 잡아놓기 때문에 node 를 읽을 때 의 데이터 크기가 크다</li>
+<li>그래서 이 단점때문에 linux kernel 에서 virtual memory 에서는 avl tree 를 사용한다 - memory 는 크게 읽는게 drawback 이기 떄무네</li>
+<li>하지만 DB 의 index 는 storage 에 저장되어 있고 이놈은 크게 읽는게 유리하기 때문에 DB 에서는 B+ 를 쓰는것</li>
+</ul>
+</li>
+</ul>
+<h3 id="duplicate-key">Duplicate key<a aria-hidden="true" tabindex="-1" href="#duplicate-key" class="internal"> §</a></h3>
+<ul>
+<li>Duplicated key 를 처리하는 방법은 두 가지 정도가 있다:</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022131802.png" width="auto" height="auto"/></p>
+<ul>
+<li>첫번째는 record id 를 그냥 append 하는 방법이다.
+<ul>
+<li>위 그림이 이에 대한 예시로, 원래는 두번째 leaf node 에 <code>[6,7,8]</code> 이 있었는데 6 이 추가되어 split 이 일어난 상황이다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022132045.png" width="auto" height="auto"/></p>
+<ul>
+<li>두번째는 위처럼 별도의 overflow 공간에 저장하는 방법이 있다.
+<ul>
+<li>이 방법을 보통 선호하는데 그 이유는 append 는 split 을 유발할 가능성이 있기 때문이다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="clustered-non-clustered-index">Clustered, Non-clustered Index<a aria-hidden="true" tabindex="-1" href="#clustered-non-clustered-index" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241022132329.png" width="auto" height="auto"/></p>
+<ul>
+<li>Clustered index 는 leaf node 의 key sequence 와 physical continuity 가 일치하는 경우를 말하고</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022132316.png" width="auto" height="auto"/></p>
+<ul>
+<li>Non-clustered 는 반대로 이 둘이 일치하지 않는 경우를 말한다.</li>
+<li>보통 clustered 가 더 좋은데, 그 이유는 이것이 sequential IO 로 scan 을 할 수 있기 때문.
+<ul>
+<li>즉 clustered 의 경우 leaf node 의 방향대로 쭉 읽기만 해도 sequential access 이기 때문에 빠르지만</li>
+<li>Non-clustered 의 경우 leaf node 방향으로 읽으면 random IO 가 되기 때문에 아주 오래걸린다고 한다.</li>
+</ul>
+</li>
+<li>기본적으로 PK 를 기준으로 하는 index (Primary index) 는 clustered index 이고, 다른 attribute 를 사용하는 index (Secondary index) 는 (PK 와 순서가 당연히 다르기 때문에) non-clustered index 가 된다.
+<ul>
+<li>따라서 secondary index 로 scan 을 하면 오래 걸리고, query plan 에 따라 그냥 file 전체를 읽게 하기도 한다더라.</li>
+</ul>
+</li>
+<li>이 단점을 보완한 방법은 먼저 leaf node 를 쭉 긁어와 어떤 놈을 scan 해야 하는지 추린 다음, sort 하여 최대한 sequential IO 로 바꾸는 작업을 하는 것이다.
+<ul>
+<li>보통 oracle 과 같은 비싼 DB 에서 이런걸 해주고</li>
+<li>이런 작업을 bitmap-beep scan 이라고 부르며</li>
+<li>oss 중에서는 postgresql 에서 지원하고</li>
+<li>여기서 bitmap 이라는 것은 읽어야 하는 page 에 대한 bitmap 이다</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#index-data-structure" data-for="index-data-structure">Index data structure</a></li><li class="depth-0"><a href="#search-tree-overview" data-for="search-tree-overview">Search tree overview</a></li><li class="depth-1"><a href="#n-ary-tree-b-tree" data-for="n-ary-tree-b-tree">N-ary tree, B tree</a></li><li class="depth-1"><a href="#avl-red-black-tree" data-for="avl-red-black-tree">AVL, Red-black tree</a></li><li class="depth-1"><a href="#b-tree" data-for="b-tree">B+ tree</a></li><li class="depth-0"><a href="#indexed-sequential-access-method-isam" data-for="indexed-sequential-access-method-isam">Indexed Sequential Access Method (ISAM)</a></li><li class="depth-1"><a href="#단점" data-for="단점">단점</a></li><li class="depth-0"><a href="#b-tree-1" data-for="b-tree-1">B+ tree</a></li><li class="depth-1"><a href="#structure" data-for="structure">Structure</a></li><li class="depth-1"><a href="#insert-delete-structure-modification-operation-smo" data-for="insert-delete-structure-modification-operation-smo">Insert, Delete, Structure Modification Operation (SMO)</a></li><li class="depth-1"><a href="#leaf-node-construction" data-for="leaf-node-construction">Leaf node construction</a></li><li class="depth-1"><a href="#selection-conditions" data-for="selection-conditions">Selection conditions</a></li><li class="depth-1"><a href="#duplicate-key" data-for="duplicate-key">Duplicate key</a></li><li class="depth-0"><a href="#clustered-non-clustered-index" data-for="clustered-non-clustered-index">Clustered, Non-clustered Index</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal">(SNU GSDS) Bigdata and Knowledge Management Systems 01</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

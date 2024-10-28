@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html><head><title>11. Index Concurrency</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="11. Index Concurrency"/><meta property="og:description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Index concurrency control § Index concurrency control 은 index data structure 에서 concurrent 접근시에 올바른 작동을 하게 하기 위해 control 하는 것이다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Index concurrency control § Index concurrency control 은 index data structure 에서 concurrent 접근시에 올바른 작동을 하게 하기 위해 control 하는 것이다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/lectures/11.-Index-Concurrency"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">11. Index Concurrency</h1><p class="content-meta ">Oct 14, 2024, 12 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-bkms24f" class="internal tag-link">#snu-bkms24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 데이터사이언스대학원 정형수 교수님의 &quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal" data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="index-concurrency-control">Index concurrency control<a aria-hidden="true" tabindex="-1" href="#index-concurrency-control" class="internal"> §</a></h2>
+<ul>
+<li>Index concurrency control 은
+<ul>
+<li>index data structure 에서</li>
+<li>concurrent 접근시에 올바른 작동을 하게 하기 위해</li>
+<li>control 하는 것이다.</li>
+</ul>
+</li>
+<li>Thread 가 여럿일 때 공유 데이터에 접근하는 것을 data race 라고 하는데
+<ul>
+<li>Read 만 할 때는 문제가 없음, write 가 뜨면 그때부터 문제가 생긴다.</li>
+<li>누군가 write 해서 문제가 생기면 그것을 conflict 라고 한다.</li>
+</ul>
+</li>
+<li>이 문제를 control 으로 해결하기 위해 latch 를 사용한다.
+<ul>
+<li>Latch 는 lock 이랑 동일; 다만 lock 은 table lock 등의 의미로 사용되므로 latch 라고 용어를 구분 (뒤에 나온다).</li>
+</ul>
+</li>
+<li>Concurrency control 은 성능에 큰 영향을 미치고 이건 design 에 따라 달라지기 때문에 design 을 잘 하는 것이 좋다고 한다.</li>
+</ul>
+<h3 id="correctness">Correctness<a aria-hidden="true" tabindex="-1" href="#correctness" class="internal"> §</a></h3>
+<ul>
+<li>DBMS 에서 correctness 에는 두 종류가 있다.</li>
+<li>Logical: record 자체에 대한 correctness</li>
+<li>Physical: internal representation (index 와 같은 관련된 자료구조를 생각하면 된다) 에 대한 correctness
+<ul>
+<li>KV 쌍들의 모음은 set 이고, hash 니 tree 니 모두 이 set 을 표현하기 위한 (즉, internal representaion) 자료구조이다. 이놈에 대한 correctness 가 physical correctness</li>
+<li>가령 SMO 가 representation 을 바꾸는 연산이기 때문에 이때 physical correctness 가 지켜져야 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="latch">Latch<a aria-hidden="true" tabindex="-1" href="#latch" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241022173549.png" width="auto" height="auto"/></p>
+<ul>
+<li>DBMS 에서는:</li>
+<li>Lock 은 logical content (즉, tuple, table) 에 대한 txn 들 간에 race 를 없애기 위한 것이다.
+<ul>
+<li>이놈은 그것을 사용하는 내내 잠겨있게 되고</li>
+<li><a href="../../../../../gardens/database/common/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/common/terms/Transaction,-ACID-(Database)">ACID</a> 를 위해 rollback 이 가능해야 한다.</li>
+</ul>
+</li>
+<li>Latch 는 data structure 에 대한 race 를 해결하기 위한 것이다.
+<ul>
+<li>이놈은 보통 아주 짧게 잠겨있다.</li>
+<li>Rollback 의 필요성이 없다.</li>
+</ul>
+</li>
+<li>Latch 와 관련해서는 다음의 세 구현이 있다.
+<ul>
+<li>Approach 1) OS Mutex (Sleeplock)
+<ul>
+<li>이놈은 lock, unlock API 두개만 지원하고</li>
+<li>1 개의 thread 만 진입할 수 있다 (mutual exclusion).</li>
+<li>즉, mode 를 지원하지 않는다.</li>
+</ul>
+</li>
+<li>Approach 2) TAS spin latch (Spinlock)
+<ul>
+<li>TAS: <code>test_and_set</code> 하는 atomic instruction</li>
+<li>Loop 를 돌며 test 를 하고, 가능하면 set 하고 loop 안으로 진입하여 lock 을 잡는다.</li>
+</ul>
+</li>
+<li>Approach 3) RWLatch
+<ul>
+<li>Read mode, write mode 를 구분지어 latch 를 잡게해주는 놈을 RW-latch 라고 한다.
+<ul>
+<li>왜냐면 read 끼리는 concurrency control 이 필요 없기 때문.</li>
+<li>Read mode 는 shared, write mode 는 exclusive 라고도 부른다.</li>
+</ul>
+</li>
+<li>mode 에 맞는 lock 을 하면 각 mode 로 진입한 thread 가 몇개가 있는지를 bookeeping 한 다음 이 정보로 누구를 기다리게 하고 누구를 들여보낼지를 결정</li>
+<li>read 도중에 write 가 들어오면 그놈은 기다리고, 이후에 또 read 가 들어오면 앞선 read 와 write 가 모두 끝날때까지 기다린다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Latch 를 잡는 단위 granularity 라고 표현한다.</li>
+</ul>
+<h2 id="hash-table-latching-slot-latch">Hash table latching: Slot latch<a aria-hidden="true" tabindex="-1" href="#hash-table-latching-slot-latch" class="internal"> §</a></h2>
+<ul>
+<li>Hash table 는 tree 와 다르게 SMO 를 별로 고려하지 않아도 된다. structure 변경이 별로 없기 때문.
+<ul>
+<li>가령 linear 의 경우 그냥 주렁주렁 매달아놓는 정도가 다이다.</li>
+<li>따라서 physical correctness 를 크게 신경쓰지 않아도 된다.</li>
+<li>이러한 점 때문에 parallelism 에 친화적이라고들 한다.</li>
+</ul>
+</li>
+<li>또한 thread 가 실제로 접근하는 것은 그 table 의 한 entry 뿐이기 떄문에 이 전체를 latch 잡는 것은 이상하다</li>
+<li>즉, hash table 에서는 latch 를 작은 단위로 잡는 것이 정론이다.
+<ul>
+<li>물론 근데 관리해야 할 latch 가 많아진다는 단점은 있다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022174537.png" width="auto" height="auto"/></p>
+<ul>
+<li>Page latch: page 단위로 latch 를 잡는 것
+<ul>
+<li>근데 page 의 다른 slot 에 접근하는 것도 막히는 문제가 있다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022174452.png" width="auto" height="auto"/></p>
+<ul>
+<li>Slot latch: slot 단위 latch</li>
+<li>위 방법에서 slot latch 를 사용하는 것이 표준이다. 이건 해결된 문제란다.
+<ul>
+<li>참고로 구조가 단순하기 때문에 RW-latch 말고 그냥 single-mode latch 를 사용하기도 한다.</li>
+</ul>
+</li>
+<li>다만 table resize 등의 상황으로 인해 table global lock 이 존재하긴 한다.</li>
+<li>또한 latch 를 slot 별로 하나만 사용하기 때문에 deadlock 이 없다</li>
+</ul>
+<h2 id="tree-latching">Tree latching<a aria-hidden="true" tabindex="-1" href="#tree-latching" class="internal"> §</a></h2>
+<ul>
+<li>당연히 B+tree 는 split, merge 가 있기 때문에 hash 와는 다르게 logical, physical correctness 가 모두 관여된다.</li>
+</ul>
+<h3 id="smo-race-on-b-tree">SMO race on B+ tree<a aria-hidden="true" tabindex="-1" href="#smo-race-on-b-tree" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241022175019.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 상황은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 이 H 의 44 를 지우고 41 를 I 로 옮겨서 rebalance 하려고 한다고 해보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022175045.png" width="auto" height="auto"/></p>
+<ul>
+<li>근데 이때 context switch 가 되어 버리고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 가 들어와서 41을 찾으러 간다고 해보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022175153.png" width="auto" height="auto"/></p>
+<ul>
+<li>근데 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 가 D 까지 와서 H 로 가려는 찰나에 다시 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 으로 context switch 되어 하던 rebalncing 을 수행해버리면</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022175318.png" width="auto" height="auto"/></p>
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 는 H 로 가도 41 을 찾을 수 없게 된다.</li>
+<li>이때의 문제는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 이 H 로 가면 될것이라고 믿고 있었지만 중간에 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 이 껴들어서 이 믿음을 바꿔버렸다는 것이다.</li>
+<li>그래서 이 믿음 (invariant) 을 중간에 방해하지 못하게 하기 위해 이 구간동안 atomic 하게 처리해야 한다.
+<ul>
+<li>즉, 읽는 것 (read) 와 read 를 기반으로 action 을 취하는 것 (read-follow) 간에 누군가 끼어들어서는 안된다는 것.</li>
+<li>이럴 때 사용할 수 있는 것이 <code>load_and_store_conditional</code>: 조건에 따라 read 하고 store 하는 것을 atomic 하게 해주는 instruction</li>
+</ul>
+</li>
+<li>이때 내가 들어가려고 하는 H 와 이제 나오려고 하는 D 모두에 latch 를 걸면 해결된다: tree 의 경우에는 latch 하나로는 안된다.</li>
+</ul>
+<h3 id="latch-crabbing-coupling">Latch crabbing (coupling)<a aria-hidden="true" tabindex="-1" href="#latch-crabbing-coupling" class="internal"> §</a></h3>
+<ul>
+<li>이건 B+ tree 뿐 아니라 SMO 작업이 일어날 수 있는 자료구조에서 latch 를 잡는 프로토콜이다.</li>
+<li>핵심 아이디어는 child 가 SMO 되면 parent 의 상태 또한 변하게 되기 때문에,
+<ul>
+<li>Parent 와 child 의 latch 를 잡은 이후에 child 가 SMO 될 것 같다면 parent 의 latch 를 풀지 않고</li>
+<li>Child 가 SMO 되지 않는 확신이 있으면 지금까지 잡은 모든 parent 의 latch 를 푸는 것이다.</li>
+</ul>
+</li>
+<li>이때 저 “확신” 은 어떻게 하는가:
+<ul>
+<li>자신이 read 작업이라면 자신이 SMO 를 유발할 가능성은 없다. 이때는 안심하고 parent 의 latch 를 풀어도 된다.</li>
+<li>자신이 insert 작업이라면 split 이 발생할 가능성이 있다. 이때는 child 에게 남은 공간이 있는 경우에만 parent (와 그의 선조들) latch 를 푼다.</li>
+<li>자신이 delete 작업이라면 merge 가 발생할 가능성이 있다. 이때는 child 가 절반 보다 많이 차있는 경우에만 parent (와 그의 선조들) latch 를 푼다.</li>
+</ul>
+</li>
+<li>여기서 잡는 latch 는
+<ul>
+<li>Read 인 경우에는 read latch 를 잡고,
+<ul>
+<li>따라서 이때 잡는 latch 는 “내가 읽고 있으니까 데이터 변경이나 SMO 를 하지 말아다오” 의 의미라 할 수 있다.</li>
+</ul>
+</li>
+<li>Insert, update 인 경우에는 write latch 를 잡는다.
+<ul>
+<li>따라서 이때 잡는 latch 는 “이 node 는 SMO 가 발생할 수 있으니까 아직 들어오지 말아다오” 의 의미라고 할 수 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#smo-race-on-b-tree" class="internal">위의 예시</a> 에서 이 crabbing 을 사용하면 어떻게 이 문제가 해결되는지 알아보자.
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 은 A, B 가 모두 절반밖에 안남았기 때문에 이놈의 latch 를 잡고 있다가 D 가 가득 차있는 것을 보도 A, B 에 대해서는 푼다.</li>
+<li>그리고 I 로 왔을 때 이놈도 절반밖에 안남았기 때문에 D 는 풀어주지 않는다. 이 상황에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 로 넘어간다.</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 로 왔을 때는 여기에 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 이 잡아놓은 write latch 가 있기 때문에, 들어가지 못한다.</li>
+<li>다시 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 로 와서 SMO 를 하고, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 로 왔을 때는 이미 SMO 가 끝난 상태를 보기 때문에 정상적으로 41 에 접근한다.</li>
+</ul>
+</li>
+<li>근데 그러면 잘못하다가는 root 부터 쭉 write latch 가 잡히는 상황이 생길 수도 있다. 그러면 index 전체를 latch 걸어버린 셈이기에 아무도 접근할 수 없을 수 있다는 문제가 있다.</li>
+<li>MySQL 에서는 이 작업은 어려워서 index concurrency 를 제공해 주지 않았다가 oracle 에 인수된 다음에야 구현되었다고 한다.</li>
+</ul>
+<h3 id="optimistic-concurrency-control">Optimistic concurrency control<a aria-hidden="true" tabindex="-1" href="#optimistic-concurrency-control" class="internal"> §</a></h3>
+<ul>
+<li>Optimistic concurrency control 은 conflict 가 안날 것이라고 낙관적으로 생각하고 처리하다가,
+<ul>
+<li>만약에 conflict 가 일어났을 때 (조금 더 큰 비용을 지불하는) conflict handling 을 해주는 방법이다.</li>
+</ul>
+</li>
+<li>B+ tree 에서는 split 안될 것이라고 생각하고 read latch 만 잡으면서 그냥 들어가다가,</li>
+<li>Split 이 안되면 땡큐인데 (prediction hit),</li>
+<li>Split 이 일어나면 (prediction miss) SMO 하지 않고 다시 위로 올라가서 write latch 를 잡으면서 다시 내려오는 방식을 취할 수 있다.
+<ul>
+<li>이렇게 하면 root 에 대한 write latch 를 잡는 시간이 줄어드니까 좋다: root 는 매우 빈번하게 접근되는 곳인데 이런곳에 write latch 가 잡혀버리면 나머지 애들은 전부 놀게 되는 것.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#index-concurrency-control" data-for="index-concurrency-control">Index concurrency control</a></li><li class="depth-1"><a href="#correctness" data-for="correctness">Correctness</a></li><li class="depth-1"><a href="#latch" data-for="latch">Latch</a></li><li class="depth-0"><a href="#hash-table-latching-slot-latch" data-for="hash-table-latching-slot-latch">Hash table latching: Slot latch</a></li><li class="depth-0"><a href="#tree-latching" data-for="tree-latching">Tree latching</a></li><li class="depth-1"><a href="#smo-race-on-b-tree" data-for="smo-race-on-b-tree">SMO race on B+ tree</a></li><li class="depth-1"><a href="#latch-crabbing-coupling" data-for="latch-crabbing-coupling">Latch crabbing (coupling)</a></li><li class="depth-1"><a href="#optimistic-concurrency-control" data-for="optimistic-concurrency-control">Optimistic concurrency control</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal">(SNU GSDS) Bigdata and Knowledge Management Systems 01</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

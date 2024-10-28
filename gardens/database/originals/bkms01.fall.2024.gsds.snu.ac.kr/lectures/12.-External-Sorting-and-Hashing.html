@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html><head><title>12. External Sorting and Hashing</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="12. External Sorting and Hashing"/><meta property="og:description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Query plan § Query plan 은 operation 할 계획을 수립하는 것을 말하는데 이렇게 tree 모양으로 생겼다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Query plan § Query plan 은 operation 할 계획을 수립하는 것을 말하는데 이렇게 tree 모양으로 생겼다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/lectures/12.-External-Sorting-and-Hashing"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">12. External Sorting and Hashing</h1><p class="content-meta ">Oct 14, 2024, 13 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-bkms24f" class="internal tag-link">#snu-bkms24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 데이터사이언스대학원 정형수 교수님의 &quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal" data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="query-plan">Query plan<a aria-hidden="true" tabindex="-1" href="#query-plan" class="internal"> §</a></h2>
+<ul>
+<li>Query plan 은 operation 할 계획을 수립하는 것을 말하는데</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022212942.png" width="auto" height="auto"/></p>
+<ul>
+<li>이렇게 tree 모양으로 생겼다.</li>
+<li>각 operation 들이 node 이고, edge 는 data 흐름이다.
+<ul>
+<li>즉, query plan tree 에서 bottom-top 으로 처리되고 root node 의 결과가 query 의 결과이다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="operation-consideration-for-disk-oriented-dbms">Operation consideration for disk-oriented DBMS<a aria-hidden="true" tabindex="-1" href="#operation-consideration-for-disk-oriented-dbms" class="internal"> §</a></h2>
+<ul>
+<li>Query 의 input (table), intermediate processing, output 까지의 데이터 크기가 memory 상에 다 들어갈 수 있으면 좋겠지만, 당연히 그렇지 않다.</li>
+<li>따라서 여기에서는 기존에 알고 있던 sorting 과 hashing 을 확장시켜, data 가 memory 에 다 들어오지 않더라도 중간중간 disk 로 내리며 이 연산들을 수행해내는 방법을 배울 것이다.
+<ul>
+<li>이렇게 disk 와 협력하며 sort, hash 를 하는 것을 external 을 붙여 external sorting, external hashing 이라고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="external-sorting">External sorting<a aria-hidden="true" tabindex="-1" href="#external-sorting" class="internal"> §</a></h2>
+<ul>
+<li>일단 DBMS 에서 sorting 이 필요한 이유는
+<ul>
+<li>말 그대로 <code>ORDER BY</code> clause 에 대응하기 위해 (sorting aggregation)</li>
+<li>아니면 <code>GROUP BY</code> 나 <code>DISTINCT</code> 와 같은 dedup 에도 sorting 을 활용할 수 있다.</li>
+<li>참고로 <code>JOIN</code> 에도 사용할 수 있다고 한다 (range predicate JOIN).</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241022223100.png" width="auto" height="auto"/></p>
+<ul>
+<li>External sorting 에서는 merge sort 를 확장한 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> way merge sort 를 한다.
+<ul>
+<li>위 그림 깔끔하게 잘그렸네</li>
+<li>merge sort 복습: divide (가장 작은 단위까지 나누고) and conquer (합치면서 sorting)</li>
+</ul>
+</li>
+<li>일단 연산에 사용되는 단위부터 알아보자.</li>
+</ul>
+<h3 id="sorted-run">Sorted run<a aria-hidden="true" tabindex="-1" href="#sorted-run" class="internal"> §</a></h3>
+<ul>
+<li>Key-value 에서
+<ul>
+<li>Key 는 sort 의 기준을 말하고</li>
+<li>Value 는 tuple 을 가리키는데 tuple data 를 모두 넣을 수도 있고 (early materialization), RID 를 넣을 수도 있다 (late materialization).
+<ul>
+<li>Late materialization 은 memory consumption 이 적다는 장점이 있지만 tuple data 를 같이 봐야하는 query 의 경우에는 tuple 을 찾으러 IO 를 해야 하기 때문에 이런경우에는 early 가 좋다</li>
+<li>어떤 방식으로 할지는 optimizer 가 결정한다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Run: List of key-value pair</li>
+<li>Sorted run: Key 를 기준으로 정렬된 list of key-value pair
+<ul>
+<li>이놈을 만드는 방법을 간단하게 스포하면:</li>
+<li>List 를 memory 에 fit 되는 사이즈로 나눠 memory 로 올린 다음에 각 단위를 in-memory sort 한 다음 파일로 저장하면 sorted run 이 된다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-way-external-merge-sort">2-way external merge sort<a aria-hidden="true" tabindex="-1" href="#2-way-external-merge-sort" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241022222011.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 K-way merge sort 라는 것은 한번에 K 개를 merge 하여 sorting 하는 것을 의미한다.
+<ul>
+<li>즉, 보통 알고 있는 것은 2-way merge sort 인 셈.</li>
+</ul>
+</li>
+<li>이놈에 대해 설명하기 전에, 일단 2-way merge sort 를 external 하게 수행하는 것은 어떻게 하는지 알아보자.</li>
+<li>일단 pass 0 와 pass 1~n 으로 구분된다.</li>
+</ul>
+<h4 id="pass-0">Pass 0<a aria-hidden="true" tabindex="-1" href="#pass-0" class="internal"> §</a></h4>
+<ul>
+<li>이 pass 는 sorted run 들을 생성하는 단계이다.</li>
+<li>Table 에는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 개의 page 가 있고 이것을 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 buffer 로 정렬한다고 했을 때</li>
+<li>한번에 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 page 를 읽어 정렬한 다음, 하나의 sorted run (file) 로 저장한다.</li>
+<li>이 작업을 table 전체에 대해 수행하면, 결국에는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mopen">⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉</span></span></span></span></span> 개의 sorted run 들이 생성된다.</li>
+</ul>
+<h4 id="pass-1n">Pass 1~n<a aria-hidden="true" tabindex="-1" href="#pass-1n" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20241022224117.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 이 pass 에서는 sorted run 들을 2-way merge 한다.</li>
+<li>여기서는 다음과 같은 방식으로 진행한다.
+<ul>
+<li>일단 buffer 2개에 2개의 sorted run 으로 부터 가져온 page 두개를 올린다.</li>
+<li>그리고 output buffer 를 하나 구비하고, 저 두 page 를 merge 하여 이 output buffer 에 채운다.</li>
+<li>Output buffer 는 다 찰때마다 output sorted run (file) 에 flush 한다.</li>
+<li>이렇게 page 두개를 merge 했으면 또 다시 두 sorted run 으로부터 각각 하나씩 page 를 읽어들여 merge 를 한다.</li>
+</ul>
+</li>
+<li>따라서 이때 필요한 buffer 는 3개면 된다.</li>
+<li>이와 같은 과정으로 모든 sorted run 들을 merge 하여 사이즈가 2배가 된 새로운 output sorted run 들로 만드는 것이 하나의 pass 이다.</li>
+<li>따라서 pass 의 수는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉)</span></span></span></span></span> 이 된다.</li>
+</ul>
+<h4 id="io-count">IO count<a aria-hidden="true" tabindex="-1" href="#io-count" class="internal"> §</a></h4>
+<ul>
+<li>그럼 이때 발생하는 IO 의 횟수를 알아보자.</li>
+<li>각 pass 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 번의 IO 가 발생한다.
+<ul>
+<li>왜냐면 일단 pass 0 에서는 모든 page 들을 읽어들여 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>-read) 정렬해서 sorted run 으로 바꾼 것이기 때문에 사실상 배치만 바뀐 것이지 write 하는 양은 동일하다 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>-write).</li>
+<li>그리고 pass 1~n 의 경우에도 모든 page 들을 읽어들여 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>-read) merge 해서 2배 사이즈의 sorted run 으로 바꾼 것이기에 사실상 write 하는 양은 여전히 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 개의 page 이다 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>-write).</li>
+</ul>
+</li>
+<li>따라서 pass0 와 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉)</span></span></span></span></span> 개의 pass 들 각각에 대해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 의 IO 가 있는 것이어서</li>
+<li>총 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉)</span></span></span></span></span> 번의 IO 가 발생한다.</li>
+</ul>
+<h3 id="k-way-external-merge-sort">K-way external merge sort<a aria-hidden="true" tabindex="-1" href="#k-way-external-merge-sort" class="internal"> §</a></h3>
+<ul>
+<li>그럼 이것을 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 로 generalize 시켜보자.</li>
+<li>일단 pass 0 에서는 동일하다. <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mopen">⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉</span></span></span></span></span> 개의 sorted run 을 만든다.</li>
+<li>Pass 1~n 에서는 B-1 way merge 를 한다.
+<ul>
+<li>왜 B-1 이냐: 위의 2-wat external merge sort 에서 필요한 buffer 가 3 개인 것을 생각하면, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 buffer 로 수행할 수 있는 way 의 수는 당연히 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 이 되는 것.</li>
+</ul>
+</li>
+<li>B-1 way merge 도 위에랑 별 다를 바가 없다:
+<ul>
+<li>일단 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개의 buffer 에는 각 run 들에서 가져온 page 들을 담고 (input buffer),</li>
+<li>나머지 1개의 buffer 는 output buffer 로 사용한다.</li>
+<li>그래서 이 input buffer 들을 merge 해서 output buffer 에 담고</li>
+<li>이것을 쭉 해서 output buffer 가 다 차면 flush</li>
+<li>이 방식을 사용하면 이 sorted run 들을 page 단위로 sequential access (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span>) 하면 끝난다.</li>
+</ul>
+</li>
+<li>따라서 동일한 이치로 pass 1~n 의 pass 개수는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mopen">(⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉)</span></span></span></span></span> 가 된다.</li>
+<li>2-way merge 에서 작은놈 고르는 것은 그냥 compare 로 가능한데 k-way 면 어떡하냐:
+<ul>
+<li>heap 을 사용한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="buffer-limit">Buffer limit<a aria-hidden="true" tabindex="-1" href="#buffer-limit" class="internal"> §</a></h3>
+<ul>
+<li>당연히 이때 buffer 를 사용하기 때문에 이런 internal operation 을 위한 buffer 의 개수를 제한해놓는다.
+<ul>
+<li>대부분의 DBMS 들 (가령 Postgres) 에서는 이 값들을 config 로 노출해놓는다.</li>
+<li>이걸 제한하지 않으면 서로 요구하는 buffer 가 많아져 메모리가 부족해지고, e2e 성능이 줄어들 수 있다.
+<ul>
+<li>이것을 overcommit 이라고 한댄다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>또한 page 사이즈를 줄이면 page 개수가 많아지므로 path 가 줄어 성능이 빨라질 수 있다.
+<ul>
+<li>당연히 근데 IO 단위가 줄어드니까 IO 측면에서는 부담이긴 하다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="double-buffering-optimization">Double buffering optimization<a aria-hidden="true" tabindex="-1" href="#double-buffering-optimization" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241022222220.png" width="auto" height="auto"/></p>
+<ul>
+<li>이건 buffer 을 두개씩 사용하는 것인데,</li>
+<li>한 buffer 를 처리하는 동안 background worker 가 다음 run 을 미리 prefetch 하는 latency hiding 방법이다.</li>
+</ul>
+<h2 id="index-sort">Index sort<a aria-hidden="true" tabindex="-1" href="#index-sort" class="internal"> §</a></h2>
+<ul>
+<li>이런 생각을 할 수도 있다: index 는 이미 sorting 되어 있으니까 그냥 이거 쭉 읽으면 안되나?</li>
+<li>당연히 된다. 다만, 이 index 가 clustered 되어 있어야 한다.
+<ul>
+<li>이때에는 그냥 index 로 scan 을 해버리면 정렬이고 뭐고 할거 없이 그냥 sequential access 로 끝난다.</li>
+</ul>
+</li>
+<li>근데 unclusted 상태라면, index 순으로 읽으면 거의 tuple 당 page IO 가 발생하고 (WAF), random access 이기 떄문에 대부분의 경우 성능이 구리다.</li>
+</ul>
+<h2 id="external-hash">External hash<a aria-hidden="true" tabindex="-1" href="#external-hash" class="internal"> §</a></h2>
+<ul>
+<li>이전에 배운 static, dynamic hash table 은 <code>JOIN</code> 을 위한 것이고,</li>
+<li>여기서의 hash table 은 <code>GROUP BY</code> 나 <code>DISTINCT</code> 에 대응하기 위한 “임시 (ephemeral)” hash table 이다.
+<ul>
+<li>즉, table scan 을 하는 와중에 같이 생성할 수 있는 hash table 이고</li>
+<li>Sorting 이 필요 없는 dedup 만이 목적이라면 sorting 보다 hashing 이 일반적으로 더 좋다고 한다.</li>
+</ul>
+</li>
+<li>Sorting 에서 merge 는 그냥 sequential 하게 읽으면 됐지만 hash 는 uniform func 이기 때문에 random access 가 되어 처음에 저장할때부터 hash-friendly 하게 저장한다.
+<ul>
+<li>여기서 저장이라는 것은 앞서 배운 heap file 와 같은 storage layout 보다는</li>
+<li>임시로 disk 에 flush 할 때 그렇게 한다라는 의미로 받아들이면 된다.</li>
+</ul>
+</li>
+<li>그래서 이것은 2개의 phase 로 진행된다:</li>
+</ul>
+<h3 id="phase-1">Phase 1<a aria-hidden="true" tabindex="-1" href="#phase-1" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241022230221.png" width="auto" height="auto"/></p>
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 개의 page 로 된 table 에 대해, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 buffer 를 사용한다라고 하면</li>
+<li>일단 1개의 buffer 는 input buffer 로 사용한다. 즉, table 의 page 를 하나씩 여기다 올림</li>
+<li>그리고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개의 buffer 가 output buffer 이다.
+<ul>
+<li>이놈을 bucket 라고 생각하면 되는데,</li>
+<li>Hash func 를 돌려 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ha</span><span class="mord mathnormal">s</span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.03588em;">ey</span><span class="mclose">)</span><span class="mspace allowbreak"></span><span class="mspace" style="margin-right:0.6667em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">mod</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 을 해서 나온 값 (digest) 에 맞는 buffer 에 저장한다.</li>
+<li>즉, 하나의 buffer 에는 같은 hash func result 를 가지는 애들만이 저장된다.</li>
+<li>그리고 이 buffer 가 다 차면 flush 를 해준다.</li>
+</ul>
+</li>
+<li>그래서 이 같은 digest 를 갖는 애들을 partition 이라고 부른다.
+<ul>
+<li>즉, dynamic hash 에서 chain hash 로 생각하면, bucket chain 이 하나의 partition 인 것.</li>
+<li>여기서 partition-wide 로는 duplicated key 가 없다고 한다: hash 시 같은 결과가 나오는 애들끼리 같은 parition 으로 묶어놨으니까</li>
+</ul>
+</li>
+<li>그리고 이 partition 들은 전부 memory 에 올릴 수 있는 사이즈여야 한다.
+<ul>
+<li>왜냐면 이것을 가지고 phase 2 에서 in-memory hash table 를 빌드할 수 있기 때문.</li>
+<li>Partition 하나의 page 개수는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2757em;vertical-align:-0.4033em;"></span><span class="mopen">⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4033em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉</span></span></span></span></span> 이 되고 이것이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 내에 들어와야 하기 때문에,</li>
+<li>즉, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2757em;vertical-align:-0.4033em;"></span><span class="mopen">⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4033em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 를 만족하는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.1133em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9267em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span><span style="top:-2.8867em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1133em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 여아 한다.</li>
+<li>만약 이게 불가능하다면 level 을 여러개 사용하는 수도 있다고 한다.</li>
+<li>이때의 buffer 사이즈는 join buffer config 로 조정한다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="phase-2">Phase 2<a aria-hidden="true" tabindex="-1" href="#phase-2" class="internal"> §</a></h3>
+<ul>
+<li>그 partition 내에서 다른 hash func 를 가지고 in-memory hash table (rehash) 를 해서 lookup 에 사용하는 것.</li>
+</ul>
+<h3 id="hashing-summarization">Hashing summarization<a aria-hidden="true" tabindex="-1" href="#hashing-summarization" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241022232159.png" width="auto" height="auto"/></p>
+<ul>
+<li>이것으로 <code>GROUP BY</code> + aggregation 을 처리하는 방법을 알아보자.</li>
+<li>어떤 search key (즉, <code>GROUP BY</code> 의 값) 으로 모든 partition 을 돌며 이 key 와 같은 값을 전부다 모아서 <code>key, {values}</code> 를 entry 로 하는 hash table 을 빌드한다.</li>
+<li>그리고 각 entry 의 <code>{values}</code> 에 aggregate 를 하면 결과가 나오게 되는 것.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#query-plan" data-for="query-plan">Query plan</a></li><li class="depth-0"><a href="#operation-consideration-for-disk-oriented-dbms" data-for="operation-consideration-for-disk-oriented-dbms">Operation consideration for disk-oriented DBMS</a></li><li class="depth-0"><a href="#external-sorting" data-for="external-sorting">External sorting</a></li><li class="depth-1"><a href="#sorted-run" data-for="sorted-run">Sorted run</a></li><li class="depth-1"><a href="#2-way-external-merge-sort" data-for="2-way-external-merge-sort">2-way external merge sort</a></li><li class="depth-1"><a href="#k-way-external-merge-sort" data-for="k-way-external-merge-sort">K-way external merge sort</a></li><li class="depth-1"><a href="#buffer-limit" data-for="buffer-limit">Buffer limit</a></li><li class="depth-1"><a href="#double-buffering-optimization" data-for="double-buffering-optimization">Double buffering optimization</a></li><li class="depth-0"><a href="#index-sort" data-for="index-sort">Index sort</a></li><li class="depth-0"><a href="#external-hash" data-for="external-hash">External hash</a></li><li class="depth-1"><a href="#phase-1" data-for="phase-1">Phase 1</a></li><li class="depth-1"><a href="#phase-2" data-for="phase-2">Phase 2</a></li><li class="depth-1"><a href="#hashing-summarization" data-for="hashing-summarization">Hashing summarization</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal">(SNU GSDS) Bigdata and Knowledge Management Systems 01</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

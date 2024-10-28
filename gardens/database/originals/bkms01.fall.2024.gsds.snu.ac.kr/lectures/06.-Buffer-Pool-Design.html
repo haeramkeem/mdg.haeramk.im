@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html><head><title>06. Buffer Pool Design</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="06. Buffer Pool Design"/><meta property="og:description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Architecture Revisit § Disk manager 는 efficiency 보다는 correctness 에 초점이 맞춰져 있다 그 위의 buffer pool 은 caching 을 이용한 IO efficiency, index 는 tree/hash 를 이용한 search efficiency 를 고려한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Architecture Revisit § Disk manager 는 efficiency 보다는 correctness 에 초점이 맞춰져 있다 그 위의 buffer pool 은 caching 을 이용한 IO efficiency, index 는 tree/hash 를 이용한 search efficiency 를 고려한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/lectures/06.-Buffer-Pool-Design"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">06. Buffer Pool Design</h1><p class="content-meta ">Sep 23, 2024, 14 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-bkms24f" class="internal tag-link">#snu-bkms24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 데이터사이언스대학원 정형수 교수님의 &quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal" data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="architecture-revisit">Architecture Revisit<a aria-hidden="true" tabindex="-1" href="#architecture-revisit" class="internal"> §</a></h2>
+<ul>
+<li>Disk manager 는 efficiency 보다는 correctness 에 초점이 맞춰져 있다</li>
+<li>그 위의 buffer pool 은 caching 을 이용한 IO efficiency, index 는 tree/hash 를 이용한 search efficiency 를 고려한다.</li>
+<li>Storage 에서는 다음의 두 관점을 생각해야 한다:
+<ul>
+<li>어디에 어떻게 저장할까: spatial control
+<ul>
+<li>연관된 데이터를 인접하게 위치시켜서 필요한 데이터를 한번에 많이 가져오자 (batch load)</li>
+<li>sequential 이 random 보다 좋으니까 log-structure 를 사용하자 등</li>
+</ul>
+</li>
+<li>언제 데이터를 읽어오고 언제 방출할까: temporal control
+<ul>
+<li>Disk 에서 가져오는 횟수를 최대한 줄이는게 목표</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="buffer-pool-manager">Buffer Pool Manager<a aria-hidden="true" tabindex="-1" href="#buffer-pool-manager" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241021193903.png" width="auto" height="auto"/></p>
+<ul>
+<li>알다시피
+<ul>
+<li>위쪽에서는 buffer pool 에 page 를 요청하면</li>
+<li>Buffer Pool 에서는 있으면 주고 없으면 Disk manager 에게 물어봐서 가져와서 준다</li>
+</ul>
+</li>
+<li>근데 공간이 부족하기 때문에 누군가는 나가야 한다. 이것 (replacement) 이 buffer pool 의 핵심 topic 임</li>
+<li>page 를 담는 buffer pool 공간을 frame 이라고 한다.
+<ul>
+<li>memory 에서와 동일하다고 생각하면 된다</li>
+<li>당연히 이 공간은 array 이다</li>
+</ul>
+</li>
+<li>어느 frame 에 어떤 page 가 들어가있는지를 나타내는 table 을 page table 이라고 한다.</li>
+</ul>
+<h3 id="concurrency-consideration">Concurrency consideration<a aria-hidden="true" tabindex="-1" href="#concurrency-consideration" class="internal"> §</a></h3>
+<ul>
+<li>lock vs latch
+<ul>
+<li>lock 과 latch 는 사실상 똑같은 것이긴 한데</li>
+<li>lock 은 transaction 의 ACID 를 위한 용어이기 때문에</li>
+<li>buffer pool 에서의 lock 은 <em>latch</em> 라고 부른다</li>
+<li>즉, DBMS 에서의 자료구조에 대한 concurrency 를 위해 사용하는 lock 은 lock 이라고 부르지 않고 latch 라고 부른다.</li>
+</ul>
+</li>
+<li>각 page 에 RW latch 를 구비해서 page 가 가리키는 메모리 공간에 접근하는 것에 대한 concurrency 를 조절한다.</li>
+<li>참고로) mutex 를 너무 많이 사용하면 특정 시점에 당연히 성능이 떨어질 수 있고 이걸 performance collapse 라고 한다.</li>
+</ul>
+<h3 id="page-table">Page table<a aria-hidden="true" tabindex="-1" href="#page-table" class="internal"> §</a></h3>
+<ul>
+<li>뭐 page table 은 위에서 말한 것처럼 page id 와 frame id 를 매핑해서 현재 buffer 의 상태를 나타내는데 사용된다.
+<ul>
+<li>여기에는 page 를 관리하기 위한 metadata 도 저장한다: dirty bit (flush 여부 확인용), pin count (evict 가능한지 알기 위해)</li>
+</ul>
+</li>
+<li>Page directory: 이놈은 page ID 와 file 에서의 page 위치를 mapping 해놓은 것
+<ul>
+<li>당연히 restart 시에 읽어들여야 하기 때문에 disk 에 저장된다.</li>
+</ul>
+</li>
+<li>Page table: 이놈은 page ID 와 buffer 에서의 frame index 를 mapping 해놓은 것.
+<ul>
+<li>당연히 restart 시에는 buffer 에 남아있는게 없기 때문에 disk 에 저장하지 않는다 (in-memory).</li>
+</ul>
+</li>
+</ul>
+<h3 id="allocation-policy">Allocation policy<a aria-hidden="true" tabindex="-1" href="#allocation-policy" class="internal"> §</a></h3>
+<ul>
+<li>Global policy: txn 범용적
+<ul>
+<li>즉, 살아있는 모든 txn 에 적용되는 정책</li>
+</ul>
+</li>
+<li>Local policy: 특정 txn 에 국한된 것
+<ul>
+<li>가령 특정 txn 은 특정 frame 만 사용해야 한다는 등</li>
+</ul>
+</li>
+</ul>
+<h2 id="buffer-pool-optimization">Buffer pool optimization<a aria-hidden="true" tabindex="-1" href="#buffer-pool-optimization" class="internal"> §</a></h2>
+<h3 id="multiple-buffer-pool">Multiple buffer pool<a aria-hidden="true" tabindex="-1" href="#multiple-buffer-pool" class="internal"> §</a></h3>
+<ul>
+<li>보통은 buffer pool 의 개수를 config 가능하게 하고, 하나만 사용할 수 있게는 안한다.
+<ul>
+<li>이런 것을 resource partitioning 이라고 부르고, 이건 independency 를 늘려 parallelism 을 늘리고 결론적으로 load balancing 되게 하는 목적이다.</li>
+</ul>
+</li>
+<li>즉, buffer pool 의 개수를 늘려서 buffer management 의 load 를 줄이겠다는 것</li>
+<li>그럼 어떤 page 를 어떤 buffer pool 에 저장할까?
+<ul>
+<li>방법1) 어느 buffer pool 에 담기는지 (이걸 object ID 라고 하더라) 를 page table 에 같이 저장하는 방법도 있을 수 있고</li>
+<li>방법2) hashing 하기: hash collision 가 나는 애들을 하나의 buffer pool 로 관리하는 방법
+<ul>
+<li>다만 hash algorithm 이 잘못되면 hot page 들이 하나의 buffer pool 에 몰릴 수 있기 때문에 조심해야 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="prefetch-buffer-pool-bypass">Prefetch, Buffer pool bypass<a aria-hidden="true" tabindex="-1" href="#prefetch-buffer-pool-bypass" class="internal"> §</a></h3>
+<ul>
+<li>Prefetch 는 알다시피 spacial locality 가 있는 애들을 미리 갖고오는 것이다.
+<ul>
+<li>가령 index 에서 leaf 에 닿으면 그 이후의 page 여러개를 한꺼번에 갖고오는 등</li>
+</ul>
+</li>
+<li>Buffer pool bypass 은 scan 시에 다른 txn 에 영향을 덜 주기 위해 buffer pool 을 사용하지 않는 방법이다.
+<ul>
+<li>Scan 을 하는 경우 buffer pool 을 많이 차지하는데, 이때 다른 txn 에 피해주는 것을 줄이기 위해 buffer pool 을 사용하지 않고 그냥 txn worker thread 의 local memory 공간에 읽어들이는 방법이다.</li>
+<li>뭐 피해주는 것도 있겠지만 LRU (CLOCK) 에서의 sequential flooding 문제도 있다.</li>
+<li><em>Light scan</em> 이라고도 부른댄다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="scan-sharing">Scan sharing<a aria-hidden="true" tabindex="-1" href="#scan-sharing" class="internal"> §</a></h3>
+<ul>
+<li>Full scan 을 하려는 txn 여러개를 생각해 보자.</li>
+<li>한놈이 scan 하면서 buffer 에 다 넣다가 공간이 부족해 지면 LRU 에 의해 가장 초반에 읽은 놈이 빠지는데</li>
+<li>다른놈이 와서 읽을라고 하면 그 이미 빠진 “초반에 읽은 놈”이 필요해지기 때문에 다시 넣는 문제가 생김
+<ul>
+<li>이렇게 sequential read 하는 tx 들이 서로 자기꺼를 넣으려고 딴애들꺼를 빼는 것을 sequential flooding (홍수) 이라고 한다.</li>
+</ul>
+</li>
+<li>이때 이 새로운 tx 는 처음부터 읽게 하지 말고 지금까지 읽고 있던 그 흐름에 태워서 같이 읽게 하는 방법이 scan sharing 이다.
+<ul>
+<li>즉, piggybacking 이라고 할 수 있다.</li>
+<li>cursor sharing 이라고도 한다.</li>
+</ul>
+</li>
+<li>그리고 이 흐름에 올라탄 놈은 일단 따라가다가 업혀준 애가 끝나면 다시 처음으로 돌아가서 안읽은 부분을 읽게 된다.</li>
+<li>근데 이게 항상 좋은 것은 아니다
+<ul>
+<li>왜냐면 tx 들 간의 연산 속도가 다르기 때문
+<ul>
+<li>어떤애는 무거운 연산을 하고 어떤애는 단순한 연산을 하고</li>
+</ul>
+</li>
+<li>근데 이들의 속도가 sync 되어 있기 때문에 오히려 성능이 낮아질 수 있다</li>
+<li>또한 이 sync 하는 것 자체에 대한 overhead 가 있을 수 있다
+<ul>
+<li>consensus overhead 라고 생각하면 된다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그래서 이 두 trade off 를 해결하기 위해
+<ul>
+<li>Cloud DB 에서는 그냥 tx 별 private buffer pool 을 줘버리고
+<ul>
+<li>당연히 그래서 동일한 page 를 여러번 읽게 되는 단점이 있다</li>
+</ul>
+</li>
+<li>Psql 에서는 sequential read 도중 threshold 를 넘으면 더이상의 buffer pool 을 사용하지 못하고 지금까지 사용한 만큼의 pool 만 반복적으로 사용할 수 있도록 제동을 걸어버린다
+<ul>
+<li>즉, 이렇게 하면 private buffer pool 과 비슷한 효과가 난다.</li>
+<li>이 방법이 위에서 말한 allocate policy 중에 private 이라고 할 수 있을 듯.</li>
+<li>이것을 ring buffer 라고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="disabling-page-cache">Disabling page cache<a aria-hidden="true" tabindex="-1" href="#disabling-page-cache" class="internal"> §</a></h3>
+<ul>
+<li>OS page cache 는 보통 사용 안하고, direct IO (<code>O_DIRECT</code>) 로 데이터를 읽어들인다고 한다.
+<ul>
+<li>는데 MySQL 이랑 PostgreSQL 모두 이게 꺼져있던데?</li>
+</ul>
+</li>
+</ul>
+<h2 id="replacement-policy">Replacement Policy<a aria-hidden="true" tabindex="-1" href="#replacement-policy" class="internal"> §</a></h2>
+<ul>
+<li>3C: 세 가지의 cache miss type
+<ul>
+<li>Cold miss: cache 에 아무것도 없을 때</li>
+<li>Capacity: 일반적으로 생각하는 replacement 에 의한 miss</li>
+<li>Conflict: CPU cache 에서는 set associativity 때문에 자리가 많이 있어도 특정 위치로 caching 되어야 하는 상황이 있다. 이런 경우를 conflict 라고 하더라</li>
+</ul>
+</li>
+</ul>
+<h2 id="lru-clock">LRU, CLOCK<a aria-hidden="true" tabindex="-1" href="#lru-clock" class="internal"> §</a></h2>
+<ul>
+<li>Buffer Pool 에서의 LRU 는 bustub 에서 구현했던거 생각하면 되는데
+<ul>
+<li>Pininng 되어 있으면 못뺌</li>
+<li>Unpin 하면 뺄 수 있고 이때의 timestamp 를 저장</li>
+<li>뺄때는 timestamp 가 가장 먼놈을 뺌
+<ul>
+<li>참고로 LRU 에서는 가장 먼놈을 빼고, LRU-K 에서는 뒤에서 K 번째로 먼놈을 뺀다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>실제로는 LRU 말고 CLOCK 을 많이 사용한다고 한다.
+<ul>
+<li>Buffer pool 이 커지면 min timestamp 찾는데 디지게 오래걸리기 때문</li>
+</ul>
+</li>
+<li>사용되면 ref bit 를 키고, clock counter 는 돌면서 이 ref bit 를 꺼주면서 만약 ref bit 가 이미 꺼져있으면 그놈을 죽이는것.
+<ul>
+<li>기억하자: Replace 되어 들어온놈도 ref bit 가 켜지고, pinning 도 된다.</li>
+</ul>
+</li>
+<li>즉, 한 주기동안만 사용됐는지 확인해서 그 주기에 사용안되면 빼는 방식이다.
+<ul>
+<li>즉, LRU 의 access time 을 approximate 하는 알고리즘이다.</li>
+<li>여기서 ref bit 을 늘리는 variation 도 가능하다고 한다.</li>
+</ul>
+</li>
+<li>Page table 에 접근할때마다 (buffer pool 에 요청이 올 때마다) clock handle 을 움직임
+<ul>
+<li>이렇게 스스로 clock 을 움직이는 것을 self clocking 이라고 한댄다.</li>
+</ul>
+</li>
+<li>아래는 PostgreSQL 의 CLOCK 구현이다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241021203403.png" width="auto" height="auto"/></p>
+<ul>
+<li>사실 뭐 읽어보면 그리 어려울 것은 없다.</li>
+</ul>
+<h3 id="sequential-flooding">Sequential flooding<a aria-hidden="true" tabindex="-1" href="#sequential-flooding" class="internal"> §</a></h3>
+<ul>
+<li>위에서도 말했지만 sequential flooding 은 LRU 를 사용하는데에 있어서 full scan 시에 방금 뺀 놈이 다시 들어오게 되는 상황이 반복되어 miss rate 가 100% 가 되는 것이다.
+<ul>
+<li>Scan sharing 에서처럼 여러 txn 이 부딧치는 경우도 가능하고</li>
+<li>(여러번 들었겠지만) buffer 크기보다 조금 큰 working set 을 반복해서 scan 하는 상황도 sequential flooding 이라고 한다.</li>
+</ul>
+</li>
+<li>이때는 LRU 보다는 MRU 가 더 좋다.
+<ul>
+<li>이건 해보면 알 수 있다.</li>
+</ul>
+</li>
+<li>따라서 sequential scan 의 경우에는 이놈이 LRU cache 를 pollution 하지 못하게 별도의 private buffer 를 주는 방법도 있다.</li>
+</ul>
+<h3 id="lru-k">LRU-K<a aria-hidden="true" tabindex="-1" href="#lru-k" class="internal"> §</a></h3>
+<ul>
+<li>이 문제를 해결하기 위해 마지막 K 번째의 access 를 이용해 evict 를 하는 LRU-K 가 소개되었다고 한다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241021210057.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 MySQL 에서는 이 LRU-K 를 approximate 한 알고리즘을 사용하는데 원리는 ARC 와 비슷하다:</li>
+<li>하나의 LRU list 를 사용하는데 entrypoint 를 두개를 가진다.
+<ul>
+<li>하나는 처음 hit 시에 넣는 old list head 와</li>
+<li>두번 이상 hit 되었을 때 들어가는 young list head 가 있음.</li>
+</ul>
+</li>
+<li>따라서 young list 는 temporal locality 가 지켜지는 공간이고, old list 는 spatial locality 가 지켜지는 공간이라고 할 수 있다.
+<ul>
+<li>만약에 scan 을 하는 경우 새로은 page 가 계속 들어올 테니까 이때는 old list 에서만 놀게 되고, temporal locality 공간을 침범하지 않아 cache pollution 을 하지 않는다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="etc">Etc<a aria-hidden="true" tabindex="-1" href="#etc" class="internal"> §</a></h3>
+<ul>
+<li>뭐 PostgreSQL 에서 private buffer 느낌을 내주는 ring buffer 라던지</li>
+<li>자주 사용되는 것을 알고 있는 page 우선순위를 높여서 빼지 못하게 하는거라던지 등의 방법들이 있다고 한다.</li>
+</ul>
+<h2 id="dirty-page">Dirty page<a aria-hidden="true" tabindex="-1" href="#dirty-page" class="internal"> §</a></h2>
+<ul>
+<li>변경사항을 persistent 하게 하기 위해 변경이 되면 dirty bit 가 켜지고 그럼 이놈이 evict 될 때 write 된다</li>
+<li>가끔씩 background worker 가 있어서 주기적으로 dirty page 들을 내리면서 dirty bit 를 꺼주는 것도 수행한다고 한다.
+<ul>
+<li>이때는 그럼 evict 시에 flush 를 안해도 되기 때문에 replace 가 빨라 query 성능이 좋아진다고 한다.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#architecture-revisit" data-for="architecture-revisit">Architecture Revisit</a></li><li class="depth-0"><a href="#buffer-pool-manager" data-for="buffer-pool-manager">Buffer Pool Manager</a></li><li class="depth-1"><a href="#concurrency-consideration" data-for="concurrency-consideration">Concurrency consideration</a></li><li class="depth-1"><a href="#page-table" data-for="page-table">Page table</a></li><li class="depth-1"><a href="#allocation-policy" data-for="allocation-policy">Allocation policy</a></li><li class="depth-0"><a href="#buffer-pool-optimization" data-for="buffer-pool-optimization">Buffer pool optimization</a></li><li class="depth-1"><a href="#multiple-buffer-pool" data-for="multiple-buffer-pool">Multiple buffer pool</a></li><li class="depth-1"><a href="#prefetch-buffer-pool-bypass" data-for="prefetch-buffer-pool-bypass">Prefetch, Buffer pool bypass</a></li><li class="depth-1"><a href="#scan-sharing" data-for="scan-sharing">Scan sharing</a></li><li class="depth-1"><a href="#disabling-page-cache" data-for="disabling-page-cache">Disabling page cache</a></li><li class="depth-0"><a href="#replacement-policy" data-for="replacement-policy">Replacement Policy</a></li><li class="depth-0"><a href="#lru-clock" data-for="lru-clock">LRU, CLOCK</a></li><li class="depth-1"><a href="#sequential-flooding" data-for="sequential-flooding">Sequential flooding</a></li><li class="depth-1"><a href="#lru-k" data-for="lru-k">LRU-K</a></li><li class="depth-1"><a href="#etc" data-for="etc">Etc</a></li><li class="depth-0"><a href="#dirty-page" data-for="dirty-page">Dirty page</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal">(SNU GSDS) Bigdata and Knowledge Management Systems 01</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>
