@@ -1,9 +1,10 @@
-## 개요
-
-### 강의 정보
-
-![[bkms_image.png]]
-> 전설의 돛단배책
+---
+tags:
+  - originals
+  - snu-bkms24f
+date: 2024-09-01
+---
+## 강의 정보
 
 | 제공                                                   | 교수      | 강의 시기       |
 | ---------------------------------------------------- | ------- | ----------- |
@@ -11,10 +12,15 @@
 
 ## 목차
 
-> [!fail] #draft 학기 종료 후 업데이트될 예정입니다.
+### 이론
 
-### 수업
-
-### 실습
-
-- [[Lab 03. Shared Buffer]]
+- [[03. Storage (Part 1 - Page, Slot)]]
+- [[04. Storage (Part 2 - File Organization)]]
+- [[05. Storage (Part 3 - File Format)]]
+- [[06. Buffer Pool Design]]
+- [[07. Hash Tables (Part 1 - Static Hash)]]
+- [[08. Hash Tables (Part 2 - Dynamic Hash)]]
+- [[09. Tree Indexes (Part 1 - ISAM, B+Tree)]]
+- [[10. Tree Indexes (Part 2 - B+Tree Optimization, Other Data Structures)]]
+- [[11. Index Concurrency]]
+- [[12. External Sorting and Hashing]]
