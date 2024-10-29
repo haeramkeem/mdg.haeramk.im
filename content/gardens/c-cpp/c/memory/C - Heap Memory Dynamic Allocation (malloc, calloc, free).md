@@ -26,6 +26,9 @@ date: 2024-10-09
 ## `malloc`: Memory allocation
 
 > [!tip]- Header file: `stdlib.h`
+> ```c
+> #include <stdlib.h>
+> ```
 
 - `malloc` 은 *Memory allocation* 의 약자로 인자로 준 크기 만큼만 할당해 주는 제일 단순한 형태의 함수이다.
 - 함수 선언은 다음과 같다:
@@ -60,7 +63,9 @@ int main() {
 ## `calloc`: Contiguous allocation
 
 > [!tip]- Header file: `stdlib.h`
-
+> ```c
+> #include <stdlib.h>
+> ```
 - `calloc` 은 *Contiguous allocation* 의 약자로 [[#`malloc` Memory allocation|malloc]] 이랑 유사하지만 배열을 위한 공간을 할당하기 위한 좀 더 편리한 기능을 제공한다.
 	- 일단 `malloc` 에서는 값들을 초기화해주지 않는다. 즉, 쓰레기 값이 들어있을 수도 있는 것. 근데 `calloc` 은 `0` 으로 초기화해준다.
 	- 그리고 인자도 좀 다르다. "배열" 을 위한 공간을 할당해주는 만큼, "인자의 갯수" 와 "인자의 크기" 를 인자로 받는다.
