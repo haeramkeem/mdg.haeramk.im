@@ -84,3 +84,8 @@ date: 2024-07-29
 - [[lldb - Breakpoint 관련|Breakpoint 관련]]
 - [[lldb - CMake 세팅하기|CMake 세팅하기]]
 - [[lldb - Variable 관련|Variable 관련]]
+
+### Plugins
+
+- `ctags`
+	- [[ctags - Basic usage|기본 사용법]]

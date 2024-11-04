@@ -1,3 +1,9 @@
+---
+tags:
+  - originals
+  - snu-shpc24f
+date: 2024-09-01
+---
 ## 개요
 
 ### 강의 정보

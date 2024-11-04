@@ -18,6 +18,9 @@ date: 2024-10-10
 ## `memcpy`: Memory copy
 
 > [!tip]- Header file: `string.h`
+> ```c
+> #include <string.h>
+> ```
 
 - 이름 그대로 memory 공간을 그대로 복사하는 것이다.
 - 선언은 이렇게 돼있다:
@@ -60,6 +63,9 @@ int main() {
 ## `memset`: Memory set
 
 > [!tip]- Header file: `string.h`
+> ```c
+> #include <string.h>
+> ```
 
 - 이것도 이름 그대로 memory 공간을 같은 값으로 채우는 것이다.
 	- 물론 이걸 `for` loop 으로 할 수 있는데, `memset` 은 당연히 [[Single Instruction Multiple Data, SIMD (Arch)|SIMD]] optimization 이 되어 있어 일반적으로는 `memset` 을 사용하는 것이 더 빠르다 ([고 한다](https://stackoverflow.com/a/7367716)).
