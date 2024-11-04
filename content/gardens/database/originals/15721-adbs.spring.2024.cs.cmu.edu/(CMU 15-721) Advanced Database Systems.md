@@ -1,3 +1,10 @@
+---
+tags:
+  - originals
+  - database
+  - cmu-15721
+date: 2024-06-24
+---
 ## 개요
 
 ### 강의 정보
