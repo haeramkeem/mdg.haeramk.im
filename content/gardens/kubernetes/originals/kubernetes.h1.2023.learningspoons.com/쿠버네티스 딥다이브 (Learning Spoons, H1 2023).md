@@ -1,3 +1,10 @@
+---
+tags:
+  - originals
+  - kubernetes
+  - kube-deepdive
+date: 2023-04-22
+---
 > [!info] 강의 정보
 > - 러닝스푼스에서 2023년 4월 ~ 6월 간 강의한 [쿠버네티스 딥다이브 2기](https://learningspoons.com/course/detail/kubernetes/) 를 듣고 정리한 내용입니다.
 
