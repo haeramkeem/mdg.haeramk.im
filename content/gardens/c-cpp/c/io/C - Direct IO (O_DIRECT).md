@@ -124,7 +124,7 @@ int main() {
 	- File offset 도 512byte 의 배수여야 한다.
 	- Memory 의 buffer 는 512byte 에 align 되어 있어야 한다.
 - 이를 위해서 저 `posix_memalign()` 를 사용하는 것.
-	- 이놈은 [[C - Heap Memory Dynamic Allocation (malloc, calloc, free)|malloc]] 처럼 동적할당을 해주되, 해당 memory 공간이 align 되어 있도록 할당해준다.
+	- 이놈은 [[C - Memory Dynamic Allocation (malloc, calloc, free)|malloc]] 처럼 동적할당을 해주되, 해당 memory 공간이 align 되어 있도록 할당해준다.
 - 이놈의 함수 선언은 요래 돼있다.
 
 ```c

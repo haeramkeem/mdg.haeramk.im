@@ -17,7 +17,7 @@ aliases:
 	- 즉, 함수를 "값" 으로 취급하지 않는다는 것.
 - 만약 함수가 "값" 으로 취급된다면 그 값의 주소가 포인터가 될 것인데, C 언어는 그렇게 하지 않는다면 도대체 이 function pointer 는 어떤 놈일까?
 - 이놈의 정체는 virtual memory 의 code 부분에 있는 함수의 주소를 가리키고 있는 변수이다.
-	- 즉, 이것은 해당 포인터에는 메모리 공간을 [[C - Heap memory dynamic allocation (malloc, calloc, free)|동적 할당]] 할 수 없다는 것.
+	- 즉, 이것은 해당 포인터에는 메모리 공간을 [[C - Memory Dynamic Allocation (malloc, calloc, free)|동적 할당]] 할 수 없다는 것.
 - 예시를 보면서 살펴보자.
 
 ### 예시

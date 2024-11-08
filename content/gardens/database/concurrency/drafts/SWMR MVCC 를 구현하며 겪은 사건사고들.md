@@ -123,7 +123,7 @@ if (dec_num != hex_num) { /* ... */ }
 - [[C - POSIX thread mutex]]
 - [[C - Struct]]
 - [[C - Basic file IO (fopen, fwrite, fread, fclose)]]
-- [[C - Heap memory dynamic allocation (malloc, calloc, free)]]
+- [[C - Memory Dynamic Allocation (malloc, calloc, free)]]
 - [[C - 메모리에 데이터 저장하기 (memset, memcpy)]]
 - [[C - Decoding number string (atoi, strtol)]]
 - [[C - File IO syscall (open, write, read, fsync, close)]]
