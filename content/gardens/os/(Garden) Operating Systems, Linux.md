@@ -17,10 +17,16 @@ date: 2024-07-29
 
 - 용어들
 	- [[Fragmentation (OS)|Fragmentation]]
-	- [[Shared-nothing Architecture (OS)|Shared-nothing Architecture]]
 - 논문들
 	- [[(논문) Hints for Computer System Design|(Draft) Butler W. Lampson - Hints for Computer System Design (ACM SIGOPS)]]
 	- [[(논문) The Evolution of the Unix Time-sharing System|Dennis M. Ritchie - The Evolution of the Unix Time-sharing System]]
+
+### Distributed
+
+- 용어들
+	- [[Shared-nothing Architecture (OS)|Shared-nothing Architecture]]
+- 논문들
+	- 
 
 ### File system
 
