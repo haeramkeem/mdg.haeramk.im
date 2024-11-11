@@ -25,7 +25,7 @@ date: 2024-07-17
 			- Row-store 를 column-store 로 변환해 주고,
 			- 해당 OLTP 솔루션이 사용하고 있는 data format 을 Data Warehouse 에서 이해할 수 있는 data format (3번에서의 *proprietary data format*) 으로 변환한다.
 		- 효과적인 ETL 을 위해, 그리고 Data Warehouse 시스템이 모든 데이터들에 대해 주도권을 갖고 있게 하기 위해 OLTP 에 데이터가 주입되기 전에 Schema 가 다 저장되어야 한다고 한다.
-	5) [[Shared-nothing Architecture (OS)|Shared-nothing 아키텍쳐]] 를 가진다.
+	5) [[Shared-nothing Architecture (Distributed Computing)|Shared-nothing 아키텍쳐]] 를 가진다.
 		- 즉, 여러 대의 compute node 들이 공유 디스크를 사용하는 것이 아니라 각자의 local disk 에서 전체 데이터의 일부분을 저장하고 처리한다.
 		- 이 점은 scalability 가 낮다는 점에서 단점으로 꼽히기도 한다.
 - 상당수의 *Data Warehouse* 솔루션들이 기존의 Monolithic DBMS 를 analytic-friendly 하게 커스텀하여 사용한다.

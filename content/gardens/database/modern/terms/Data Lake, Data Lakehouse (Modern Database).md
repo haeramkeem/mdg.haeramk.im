@@ -18,7 +18,7 @@ date: 2024-07-18
 		- JSON, XML 와 같은 semi-structured,
 		- 이미지, 동영상 같은 unstructured 데이터 모두를 핸들링할 수 있다.
 	2) Storage 가 [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 내부에서 외부의 object storage 로 분리되었다.
-		- 이것은 *Data Lakehouse* 는 더 이상 [[Shared-nothing Architecture (OS)|shared-nothing]] 이 아니라는 것을 시사한다.
+		- 이것은 *Data Lakehouse* 는 더 이상 [[Shared-nothing Architecture (Distributed Computing)|shared-nothing]] 이 아니라는 것을 시사한다.
 	3) (2) 의 결과로, *Data Lakehouse* 에서는 더 이상 데이터를 [[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 를 통해서만 주입하지 않아도 된다.
 		- 즉, [[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 가 아닌 client 도 object storage 에 S3 프로토콜 등으로 직접 데이터를 주입하고,
 		- 어느 위치에 데이터가 있는지를 [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 의 *Catalog* 란 component 에게 알려주면 그만이다.

@@ -24,9 +24,10 @@ date: 2024-07-29
 ### Distributed
 
 - 용어들
-	- [[Shared-nothing Architecture (OS)|Shared-nothing Architecture]]
+	- [[Quorum (Distributed Computing)|Quorum]]
+	- [[Shared-nothing Architecture (Distributed Computing)|Shared-nothing Architecture]]
 - 논문들
-	- 
+	- [[(논문) Exploiting Nil-Externality for Fast Replicated Storage|Exploiting Nil-Externality for Fast Replicated Storage (SOSP '21)]]
 
 ### File system
 
