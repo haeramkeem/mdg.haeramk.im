@@ -7,11 +7,11 @@ aliases:
   - VR
 ---
 > [!info]- 참고한 것들
-> - [VR Revisited 논문](https://pmg.csail.mit.edu/papers/vr-revisited.pdf)
+> - [Viewstamped Replication Revisited, MIT CSAIL Tech Report](https://pmg.csail.mit.edu/papers/vr-revisited.pdf)
 > - [FreeCodeCamp](https://www.freecodecamp.org/news/viewstamped-replication-revisited-a-summary-144ac94bd16f/)
 
 > [!info] 원본 논문
-> - 이 글은 [Viewstamped Replication Revisited](https://pmg.csail.mit.edu/papers/vr-revisited.pdf) 에서 핵심 아이디어만 요약한 글입니다.
+> - 이 글은 [Viewstamped Replication Revisited, MIT CSAIL Tech Report](https://pmg.csail.mit.edu/papers/vr-revisited.pdf) 에서 핵심 아이디어만 요약한 글입니다.
 > - 별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다.
 
 ## VR
