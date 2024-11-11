@@ -72,6 +72,7 @@ aliases:
 - 또한 client (VR Proxy) 도 일련의 정보를 저장해둔다.
 	- 일단 위 정보들 중에서는 *Configuration* 이랑 *View number* 를 가지고 있고
 	- 추가적으로 *Client ID* 와 1씩 증가하는 *Client request number* 가 있다.
+- 이렇게 state 를 bookkeeping 하는 것을 *State Machine* 이라고 부르기도 한다.
 
 ## Operation
 

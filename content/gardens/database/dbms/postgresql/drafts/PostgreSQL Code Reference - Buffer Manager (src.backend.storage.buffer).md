@@ -3,7 +3,7 @@ tags:
   - database
   - db-postgresql
 date: 2024-11-05
-title: PostgreSQL - Buffer Manager (/src/backend/storage/buffer)
+title: PostgreSQL Code Reference - Buffer Manager (/src/backend/storage/buffer)
 aliases:
   - bufmgr
 ---

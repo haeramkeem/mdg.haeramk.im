@@ -24,6 +24,7 @@ date: 2024-07-29
 ### Distributed
 
 - 용어들
+	- [[Consistent Unordered Replication Protocol, CURP (Distributed Computing)|Consistent Unordered Replication Protocol, CURP]]
 	- [[Quorum (Distributed Computing)|Quorum]]
 	- [[Shared-nothing Architecture (Distributed Computing)|Shared-nothing Architecture]]
 	- [[Viewstamped Replication Protocol, VR (Distributed Computing)|Viewstamped Replication Protocol, VR]]
