@@ -26,6 +26,7 @@ date: 2024-07-29
 - 용어들
 	- [[Quorum (Distributed Computing)|Quorum]]
 	- [[Shared-nothing Architecture (Distributed Computing)|Shared-nothing Architecture]]
+	- [[Viewstamped Replication Protocol, VR (Distributed Computing)|Viewstamped Replication Protocol, VR]]
 - 논문들
 	- [[(논문) Exploiting Nil-Externality for Fast Replicated Storage|Exploiting Nil-Externality for Fast Replicated Storage (SOSP '21)]]
 
