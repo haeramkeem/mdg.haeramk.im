@@ -9,6 +9,9 @@ date: 2024-09-29
 > [!info]- 참고한 것들
 > - [[Lab 03. Shared Buffer|서울대 정형수 교수님 BKMS 강의 (Fall 2024)]]
 
+> [!tip] Code ref
+> - 여기에는 개념적인 내용이 있고 code 관련 내용은 [[PostgreSQL - Buffer Manager (src.backend.storage.buffer)|여기]] 에 있습니다.
+
 ## Shared Buffer
 
 - PostgreSQL 에서는 buffer pool 을 *Shared Buffer* 라고 부른다.
