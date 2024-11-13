@@ -141,8 +141,6 @@ date: 2024-07-29
 
 #### PostgreSQL
 
-- 스토리
-	- 
 - 용어집
 	- [[Background Writer (PostgreSQL)|Background Writer]]
 	- [[Shared Buffer (PostgreSQL)|Shared Buffer]]
