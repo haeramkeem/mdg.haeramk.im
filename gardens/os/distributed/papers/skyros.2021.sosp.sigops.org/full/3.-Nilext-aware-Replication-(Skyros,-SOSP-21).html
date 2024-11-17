@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html><head><title>(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (3. Nilext-aware Replication)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (3. Nilext-aware Replication)"/><meta property="og:description" content="본 글은 논문 Exploiting Nil-Externality for Fast Replicated Storage (SOSP &amp;#039;21) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction 2."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 Exploiting Nil-Externality for Fast Replicated Storage (SOSP &amp;#039;21) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction 2."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/3.-Nilext-aware-Replication-(Skyros,-SOSP-21)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (3. Nilext-aware Replication)</h1><p class="content-meta ">Nov 12, 2024, 16 min read</p><ul class="tags "><li><a href="../../../../../../tags/os" class="internal tag-link">#os</a></li><li><a href="../../../../../../tags/os-distributed" class="internal tag-link">#os-distributed</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="https://dl.acm.org/doi/10.1145/3477132.3483543" class="external">Exploiting Nil-Externality for Fast Replicated Storage (SOSP '21)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>목차 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/1.-Introduction-(Skyros,-SOSP-21)" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/1.-Introduction-(Skyros,-SOSP-21)">1. Introduction</a></li>
+<li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/2.-Nil-Externalizing-Interfaces-(Skyros,-SOSP-21)" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/2.-Nil-Externalizing-Interfaces-(Skyros,-SOSP-21)">2. Nil-Externalizing Interfaces</a></li>
+<li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/3.-Nilext-aware-Replication-(Skyros,-SOSP-21)" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/3.-Nilext-aware-Replication-(Skyros,-SOSP-21)">3. Nilext-aware Replication (현재 글)</a></li>
+<li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/4.-Skyros-Design-and-Implementation-(Skyros,-SOSP-21)" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/4.-Skyros-Design-and-Implementation-(Skyros,-SOSP-21)">4. Skyros Design and Implementation</a></li>
+<li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/5.-Evaluation-(Skyros,-SOSP-21)" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/5.-Evaluation-(Skyros,-SOSP-21)">5. Evaluation</a></li>
+<li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/6-8.-Discussion,-Related-Work,-Conclusion-(Skyros,-SOSP-21)" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/6-8.-Discussion,-Related-Work,-Conclusion-(Skyros,-SOSP-21)">6-8. Discussion, Related Work, Conclusion</a></li>
+</ul>
+</blockquote>
+<h2 id="31-consensus-based-replication-background">3.1. Consensus-based Replication Background<a aria-hidden="true" tabindex="-1" href="#31-consensus-based-replication-background" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../../gardens/os/distributed/drafts/Paxos-(Distributed-Computing)" class="internal" data-slug="gardens/os/distributed/drafts/Paxos-(Distributed-Computing)">Paxos</a> 나 <a href="../../../../../../gardens/os/distributed/terms/Viewstamped-Replication-Protocol,-VR-(Distributed-Computing)" class="internal" data-slug="gardens/os/distributed/terms/Viewstamped-Replication-Protocol,-VR-(Distributed-Computing)">VR</a> 은 <a href="../../../../../../gardens/os/distributed/drafts/Consensus-Protocol-(Distributed-Computing)" class="internal" data-slug="gardens/os/distributed/drafts/Consensus-Protocol-(Distributed-Computing)">Consensus</a> 를 통해 replica 들이 동일한 “순서” 로 작업을 처리할 수 있게 해준다.
+<ul>
+<li>즉, client 는 leader 에게 request 를 요청한 뒤, leader 와 replica 들은 서로 소통하며 이 “순서” 에 대해 합의를 하고, 각자 이 “순서” 대로 작업을 하는 식으로 동일한 “순서” 로 작업이 수행되게끔 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20241113233205.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그림은 failure 가 없다는 가정 하에 어떻게 write 와 read 가 수행되는지를 나타내는 그림이다.</li>
+<li>일단 write 부터 보면
+<ul>
+<li>Client -> leader: Leader 가 client 로부터 request 를 받는다.</li>
+<li>Leader 는 그 다음에 해당 request 에 log index 번호를 할당하고 (VR 에서는 이것을 <em>Op number</em> 라고 부른다), log 에 추가한다.</li>
+<li>Leader -> follower: Leader 는 follower 들에게 <code>PREPARE</code> 메세지를 통해 request 내용 및 leader 가 정한 순서 (즉, log index 번호) 를 보낸다.</li>
+<li>Follower -> leader: Follower 는 이 순서가 자신이 알고 있는 순서와 동일하다면, 즉 자신이 알고 있는 마지막 request 의 다음 request 라면, <code>PREPARE OK</code> 메세지를 보낸다.</li>
+<li>Leader 는 충분한 (즉, quorum - leader 포함 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span>) <code>PREPARE OK</code> 를 받으면 해당 request 를 상위 layer 인 server application (즉, storage process) 에게 보내 이것을 처리한다.</li>
+<li>Leader -> client: Leader 는 처리 완료 후에 client 에게 그의 결과를 응답한다.</li>
+</ul>
+</li>
+<li>그리고 read 는 그냥 leader 혼자 처리한다.
+<ul>
+<li>즉, leader 는 완벽한 request 순서로 요청을 처리했음이 보장되기 때문에, 올바른 응답을 해줄 수 있다.</li>
+</ul>
+</li>
+<li>이런 replication protocol 에서 latency 는 Round Trip Time (RTT) 에 전적으로 의존한다.</li>
+<li>또한, throughput 은 단위시간당 “Leader” 가 처리한 request 의 개수로 측정된다.</li>
+<li>많은 replication protocol 에서는 request 를 <em>Batch</em> 로 처리하는 기능을 제공한다.
+<ul>
+<li>즉, 한번에 많은 request 를 받아 처리하는 것.</li>
+<li>이렇게 하면 당연히 throughput 은 높아지지만, latency 가 증가하게 된다는 단점이 있다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-exploiting-nil-externality-for-fast-replication">3.2. Exploiting Nil-externality for Fast Replication<a aria-hidden="true" tabindex="-1" href="#32-exploiting-nil-externality-for-fast-replication" class="internal"> §</a></h2>
+<ul>
+<li>이런 consensus protocol 을 naive 하게 적용하는 것은, storage interface 의 <em>Nilext</em> 특성을 제대로 살리지 못한다.
+<ul>
+<li>즉, 기존의 consensus protocol 에서는 <em>Nilext</em> operation 에 대해서는 이런 ordering 이랑 execution 을 defer 할 수 있는데도 불구하고 전부 synchronous 하게 처리한 후 응답하기 떄문.</li>
+</ul>
+</li>
+<li>따라서 본 논문에서의 가설은 <em>Nilext</em> operation 에 대해서는 ordering 과 execution 을 defer 해 성능을 더욱 높일 수 있을 것이라는 것이다.</li>
+<li>이에 따라 이 가설을 검증할 수 있는 <em>Nilext</em>-aware replication protocol 을 설계했는데, 자세한 것은 <a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/4.-Skyros-Design-and-Implementation-(Skyros,-SOSP-21)" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/4.-Skyros-Design-and-Implementation-(Skyros,-SOSP-21)">Section 4.</a> 에서 하도록 하고, 여기서는 간단한 overview 부터 살펴보자.</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20241113234907.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 위 그림이 <em>Nilext</em>-aware replication protocol 의 과정을 한눈에 보여주는 것이다.</li>
+<li>우선 <em>Nilext</em> write 가 어떻게 완수되는지 알아보자.
+<ul>
+<li>전에 말한 대로, durability (logging) 은 defer 가 불가능하다.</li>
+<li>따라서 client 는 모든 replica 에게 request 를 보내고, quorum 이상의 응답이 오면 durability 가 보장되었으므로 (즉, quorum 이상의 replica 에서 request 가 log 에 추가되었으므로) 해당 request 가 완료되었다고 취급한다.</li>
+<li>따라서 이것은 1-RTT 에 수행될 수 있고, client 는 이 request 가 ordering 및 execution 되기를 기다릴 필요가 없다.</li>
+<li>여기까지의 상태를 <em>Completed</em> 라고 앞으로 부르도록 하자.</li>
+</ul>
+</li>
+<li>그리고 이것은 VR 과 마찬가지의 방법으로 ordering 되고 execution 되는데, 대신 이것이 background 로 처리된다.
+<ul>
+<li>이렇게 ordering, execution 까지 완료된 상태를 <em>Finalized</em> 라고 부르기로 하자.</li>
+</ul>
+</li>
+<li>이렇게 바뀐 storage 의 상태는 나중에 <em>non-Nilext</em> operation 이 요청되면 그때 externalize 된다.
+<ul>
+<li>따라서 이 시점 전까지는 관련 data 들이 <em>Finalize</em> 되어야 한다.</li>
+</ul>
+</li>
+<li>이에 따라 만약 read operation 이 leader 에게 요청되면, leader 는 이 요청이 필요로 하는 data 들이 <em>Finalize</em> 되었는지를 체크할 것이다.
+<ul>
+<li>만약에 다 <em>Finalize</em> 되었다면, 그냥 operation 을 처리한 뒤에 응답한다 (1-RTT).</li>
+<li>하지만 만약에 그렇지 않다면, 이번에는 background 가 아닌 foreground (synchronously) 로 VR 과 동일한 과정을 통해 ordering 을 하고 execution 하여 전부 <em>Finalize</em> 한 뒤에서야 operation 을 처리하고 응답한다 (2-RTT).</li>
+<li>근데 이런 2-RTT read operation 은 자주 일어나지 않는다; 앞으로도 계속 강조할 것이지만, <em>Finalize</em> 작업이 background 로 계속 돌고 있기 때문에 대부분은 <em>Finalize</em> 된 상태일 것이고, 그렇지 않는다 할 지라도 한번 2-RTT read 가 발생하면 뒤이은 read 에 대해서는 (만약 동일한 데이터를 read 할 때는) 1-RTT 에 처리되기 때문이다.</li>
+</ul>
+</li>
+<li>만약 <em>non-Nilext</em> write operation 가 오면, 이때는 어쩔 수 없다. 그냥 VR 와 동일하게 2-RTT 로 처리된다.</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20241114001327.png" width="auto" height="auto"/></p>
+<ul>
+<li>따라서 위처럼 정리할 수 있다.</li>
+<li>결과적으로 <em>Nilext</em> 의 효과를 보기 위해서는 대부분의 write 가 <em>Nilext</em> 하고, read 는 최근에 write 하지 않은 데이터를 참조하면 더욱 좋을 것이다.</li>
+</ul>
+<h2 id="33-fast-case-is-the-common-case">3.3. Fast Case is the Common Case<a aria-hidden="true" tabindex="-1" href="#33-fast-case-is-the-common-case" class="internal"> §</a></h2>
+<ul>
+<li>여기서는 실제 production trace 를 보면서 application-level tendency 를 확인해 보자.</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>NXSECTION </p></div>
+                  
+                </div>
+<ul>
+<li>여기 <code>3.3.x.</code> section 은 논문에는 없는 section 임다.</li>
+</ul>
+</blockquote>
+<h3 id="331-nilext-write-portion">3.3.1. <em>Nilext</em> write portion<a aria-hidden="true" tabindex="-1" href="#331-nilext-write-portion" class="internal"> §</a></h3>
+<ul>
+<li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/2.-Nil-Externalizing-Interfaces-(Skyros,-SOSP-21)#221-rocksdb-leveldb-memcached-example" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/2.-Nil-Externalizing-Interfaces-(Skyros,-SOSP-21)">Section 2.2.1.</a> 에서 말한 것처럼, <a href="../../../../../../gardens/database/dbms/rocksdb/terms/LSM-Tree-(RocksDB)" class="internal" data-slug="gardens/database/dbms/rocksdb/terms/LSM-Tree-(RocksDB)">LSM tree</a> 에 기반한 애들은 모든 write 가 <em>Nilext</em> 했었고, Memcached 는 그렇지 않았다.</li>
+<li>근데 이때 write 에서 <em>Nilext</em> 가 차지하는 비중은 얼마일까?
+<ul>
+<li>다시 말해, 만약 요청되는 write operation 중 대부분이 <em>non-Nilext</em> 하다면, <em>Nilext</em> write 가 1-RTT 인들 별 소용이 없는게 아닌가?</li>
+</ul>
+</li>
+<li>이를 확인하기 위해 Memcached 의 Twitter 의 fork 버전인 <a href="https://github.com/twitter/twemcache" class="external">Twemcached</a> 에 대한 <a href="https://github.com/twitter/cache-trace" class="external">production trace</a> 를 분석해 29 개의 cluster 에 대한 통계를 냈다.
+<ul>
+<li>또한 <a href="https://www.ibm.com/products/cloud-object-storage" class="external">IBM COS (Cloud Object Storage)</a> 에 대해서도, 35 개의 cluster 를 분석해 통계를 냈다.</li>
+<li>참고로 이때는 사용한 데이터셋에서 10% 이상의 operation 이 write 인 cluster 만을 고려했다고 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20241114002210.png" width="auto" height="auto"/></p>
+<ul>
+<li>먼저 Twemcached 를 보면:
+<ul>
+<li>이 그래프는 이렇게 해석하면 된다:
+<ul>
+<li>가장 오른쪽에 집중하면, 거의 80% 에 달하는 cluster 들 (세로축) 에서 발생하는 write operation 중, 90-100% (가로축) 가 <em>Nilext</em> operation 인 <code>SET</code> 이었다는 소리이다.</li>
+</ul>
+</li>
+<li>또한 위 그래프에서 보이지는 않지만, <em>non-Nilext</em> write 중 <code>ADD</code>, <code>CAS</code>, <code>DELETE</code>, <code>INCR</code>, <code>PREPEND</code> 만이 사용되었고,</li>
+<li><code>INCR</code> 를 제외하면 나머지는 전부 “error” 의 형태로 storage 의 상태를 노출시키는 중이었다.
+<ul>
+<li>따라서 이 말은 만약에 interface 를 변형해 “error” 도 출력되지 않게 한다면, 더욱 더 많은 write operation 을 <em>Nilext</em> 로 간주할 수 있다는 소리가 된다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>또한 IBM COS 를 보면
+<ul>
+<li>65% 에 달하는 cluster 들 (세로축) 에서 발생하는 write operation 중 90-100% (가로축) 가 <em>Nilext</em> operation 이었다는 것이었다.</li>
+<li>마찬가지로 IBM COS 의 <em>non-Nilext</em> operation 인 <code>DELETE</code> 도 “error” 만을 노출하고 있고, 이놈을 변형해서 더욱 높은 수치를 얻어낼 수도 있다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="332-read-latest-portion">3.3.2. Read latest portion<a aria-hidden="true" tabindex="-1" href="#332-read-latest-portion" class="internal"> §</a></h3>
+<ul>
+<li>다음으로는 2-RTT read 를 유발하는 상황인 un-<em>Finalized</em> read 가 production trace 에서는 얼마나 발생하는지 보자.</li>
+<li>일단 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 를 <em>Finalize</em> 에 걸리는 시간이라고 하자.</li>
+<li>그럼 같은 데이터에 대해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">a</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">im</span><span class="mord mathnormal">es</span><span class="mord mathnormal">t</span><span class="mord mathnormal">am</span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">im</span><span class="mord mathnormal">es</span><span class="mord mathnormal">t</span><span class="mord mathnormal">am</span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 인 상황의 비중을 보면 이를 알 수 있을 것이다.</li>
+<li>이에 따라 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mord mathnormal">s</span></span></span></span></span> 일 때와 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">50</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></span> 일 때에 대해 IBM COS 데이터셋으로 분석해본 결과, 다음과 같은 결과가 나왔다:
+<ul>
+<li>참고로 Twemcached 데이터셋은 밀리초 단위의 trace 가 없어서 분석하지 못했다고 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20241114003742.png" width="auto" height="auto"/></p>
+<ul>
+<li>이놈은 이렇게 해석하면 된다:
+<ul>
+<li>66% 의 cluster 들에 대해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mord mathnormal">s</span></span></span></span></span> 이내에 read-after-write 한 경우는 0-5% 밖에 안됐고,</li>
+<li>85% 의 cluster 들에 대해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">50</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></span> 이내에 read-after-write 한 경우도 0-5% 밖에 안됐다.</li>
+</ul>
+</li>
+<li>심지어 이 수치는 1-RTT 가 2ms 밖에 안되는 환경에서 측정한 것이기에, 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">1</span><span class="mord mathnormal">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">50</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></span> 라는 수치도 경장히 보수적으로 잡은거라고 할 수 있다.</li>
+<li>또한 위에서도 말했다 시피 한번 read-after-write 가 일어나 synchronous 가 발생한 뒤에는, 앞으로는 그러지 않을 것이기에 실제 2-RTT read 가 발생하는 비중은 위 분석에서보다 훨씬 적을 것이다.</li>
+</ul>
+<h2 id="34-comparison-to-other-approaches">3.4. Comparison to Other Approaches<a aria-hidden="true" tabindex="-1" href="#34-comparison-to-other-approaches" class="internal"> §</a></h2>
+<ul>
+<li>물론 <a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/6-8.-Discussion,-Related-Work,-Conclusion-(Skyros,-SOSP-21)#7-related-work" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/6-8.-Discussion,-Related-Work,-Conclusion-(Skyros,-SOSP-21)">Section 7.</a> 에서 related work 에 대한 설명이 있지만, 여기서도 간단하게 기존에는 어떤 시도들이 있었고 <em>Nilext</em>-aware replication protocol 이 이것들에 비해 가지는 강점들에 대해서 알아보자.</li>
+</ul>
+<h3 id="341-efficient-ordering-in-consensus">3.4.1 Efficient Ordering in Consensus.<a aria-hidden="true" tabindex="-1" href="#341-efficient-ordering-in-consensus" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>NXSECTION </p></div>
+                  
+                </div>
+<ul>
+<li>여기 <code>3.4.1.x.</code> section 은 논문에는 없는 section 임다.</li>
+</ul>
+</blockquote>
+<h4 id="3411-network-ordering">3.4.1.1. Network Ordering.<a aria-hidden="true" tabindex="-1" href="#3411-network-ordering" class="internal"> §</a></h4>
+<ul>
+<li>어떤 network 는 이런 ordering 을 수행해주는 기능을 갖고 있기도 하고, 따라서 1-RTT 에 ordering 까지 할 수 있다.</li>
+<li>그런데 당연히 이런 network 는 비싸다. 이에 반해 <em>Nilext</em>-aware protocol 은 이런 장비 없이도 가능하고, geo-replication (multi-region replication) 환경에서도 가능하다.</li>
+</ul>
+<h4 id="3412-speculative-execution">3.4.1.2. Speculative Execution.<a aria-hidden="true" tabindex="-1" href="#3412-speculative-execution" class="internal"> §</a></h4>
+<ul>
+<li>이건 order 가 다 맞을것이라는 optimistic approach 이다.
+<ul>
+<li>즉, client 는 모든 replica 에게 request 를 뿌리고, 각 replica 는 즉시 execution 을 한다.</li>
+<li>그리고 client 는 이 replica 들 에게서 받은 result 를 가지고 inconsistency 가 있는지 확인한 후에</li>
+<li>만약 그렇다면, rollback 을 한다.</li>
+</ul>
+</li>
+<li>근데 이 방식에서는
+<ul>
+<li>Client 가 rollback 해주기 전까진 storage 가 inconsistent 상태에 놓인다는 점과</li>
+<li>Rollback 이 필요하다는 단점이 있다.</li>
+</ul>
+</li>
+<li>하지만 <em>Nilext</em>-aware replication 에서는 위와 같은 문제가 없다.</li>
+<li>참고로 얼핏 생각하면 <em>Nilext</em>-aware replication 과 speculative replication 이 비슷해 보일 수 있는데,
+<ul>
+<li>Speculative replication 은 바로 execute 를 하고 ACK 를 날리지만</li>
+<li><em>Nilext</em>-aware replication 은 ACK 를 하고 execute 를 한다는 차이점이 있다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="3413-exploiting-commutativity">3.4.1.3. Exploiting Commutativity.<a aria-hidden="true" tabindex="-1" href="#3413-exploiting-commutativity" class="internal"> §</a></h4>
+<ul>
+<li><a href="../../../../../../gardens/os/distributed/terms/Consistent-Unordered-Replication-Protocol,-CURP-(Distributed-Computing)" class="internal" data-slug="gardens/os/distributed/terms/Consistent-Unordered-Replication-Protocol,-CURP-(Distributed-Computing)">CURP</a> 와 같은 protocol 에서는 다른 데이터를 참조하는 operation 들에 대해서는 ordering 이 애초에 필요가 없다 (교환법칙 - Commutativity) 는 점을 이용한다.</li>
+<li>하지만 <a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/5.-Evaluation-(Skyros,-SOSP-21)#57-comparison-to-commutative-protocols" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/5.-Evaluation-(Skyros,-SOSP-21)">Section 5.7.</a> 에서 말하겠지만, 이 protocol 의 문제점은 같은 데이터를 참조하는 경우 (즉, <em>Conflict</em> 상황) 에서는 최대 3-RTT 까지 overhead 가 커질 수 있다는 점이다.</li>
+<li>만약 이 operation 이 <em>Nilext</em> 라면, conflict 상황에서도 1-RTT 로 write 를 끝낼 수 있기 때문에 <em>Nilext</em>-aware replication 이 우위를 가진다고 할 수 있다.</li>
+<li>심지어, 이 <em>Nilext</em>-aware replication 과 Commutative replication 은 둘 모두를 hybrid 로 사용할 수 있다.
+<ul>
+<li>이것에 관해서는 <a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/5.-Evaluation-(Skyros,-SOSP-21)#57-comparison-to-commutative-protocols" class="internal" data-slug="gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/5.-Evaluation-(Skyros,-SOSP-21)">Section 5.7.</a> 에서 더 알아보자.</li>
+</ul>
+</li>
+</ul>
+<h3 id="342-other-approaches-to-replicated-storage">3.4.2 Other Approaches to Replicated Storage.<a aria-hidden="true" tabindex="-1" href="#342-other-approaches-to-replicated-storage" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>이해 부족 </p></div>
+                  
+                </div>
+<ul>
+<li>여기에서는 related work 에 대한 이해가 부족해 간단하게만 정리하겠슴다.</li>
+</ul>
+</blockquote>
+<ul>
+<li>다른 replication 들에 대해 살펴보고 가자면,
+<ul>
+<li><em>Shared register</em>: API 를 read 와 write 두개만 지원하면 <em>Register</em> 라는 것을 이용해 해결할 수 있다고 한다.
+<ul>
+<li>하지만 RMW 를 지원하지 않기 때문에 기각.
+<ul>
+<li><a href="https://www.usenix.org/system/files/nsdi20-paper-burke.pdf" class="external">Gryff (NSDI’20)</a> 논문 에서는 consensus 를 결합해 RMW 도 가능하게 했지만, <code>UPDATE</code> 가 2-RTT 라는 문제가 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>Primary-backup</em> 여기서도 write operation 은 2-RTT 이라고 한다.</li>
+<li><em>Chain replication</em> 이놈은 message delay 가 너무 길다고 한다.</li>
+</ul>
+</li>
+<li>물론 이들과 <em>Nilext</em>-aware replication 을 섞을 수 있지만, 그건 future work 로 남긴다고 한다.</li>
+</ul>
+<h4 id="3421-summary">3.4.2.1. Summary<a aria-hidden="true" tabindex="-1" href="#3421-summary" class="internal"> §</a></h4>
+<ul>
+<li>정리하자면, <em>Nilext</em>-aware replication 은 다른 protocol 들과 다르게 interface 의 특성인 <em>Nilext</em> 를 최대한 살리는 강점이 있다.</li>
+<li>또한, <em>Nilext</em>-aware replication 에서 문제가 되는 <em>non-Nilext</em> write 와 read un-<em>Finalized</em> 는 발생빈도가 아주 적기에 문제가 되지 않는다.</li>
+<li><em>Nilext</em>-aware replication 은 특정한 network 기능에 의존하지도, rollback 도 하지 않는다는 장점이 있다.</li>
+<li>또한 <em>Commutativity</em> 와 결합하여 더 좋은 성능을 낼 수도 있다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#31-consensus-based-replication-background" data-for="31-consensus-based-replication-background">3.1. Consensus-based Replication Background</a></li><li class="depth-0"><a href="#32-exploiting-nil-externality-for-fast-replication" data-for="32-exploiting-nil-externality-for-fast-replication">3.2. Exploiting Nil-externality for Fast Replication</a></li><li class="depth-0"><a href="#33-fast-case-is-the-common-case" data-for="33-fast-case-is-the-common-case">3.3. Fast Case is the Common Case</a></li><li class="depth-1"><a href="#331-nilext-write-portion" data-for="331-nilext-write-portion">3.3.1. Nilext write portion</a></li><li class="depth-1"><a href="#332-read-latest-portion" data-for="332-read-latest-portion">3.3.2. Read latest portion</a></li><li class="depth-0"><a href="#34-comparison-to-other-approaches" data-for="34-comparison-to-other-approaches">3.4. Comparison to Other Approaches</a></li><li class="depth-1"><a href="#341-efficient-ordering-in-consensus" data-for="341-efficient-ordering-in-consensus">3.4.1 Efficient Ordering in Consensus.</a></li><li class="depth-1"><a href="#342-other-approaches-to-replicated-storage" data-for="342-other-approaches-to-replicated-storage">3.4.2 Other Approaches to Replicated Storage.</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/(논문)-Exploiting-Nil-Externality-for-Fast-Replicated-Storage" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage</a></li><li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/1.-Introduction-(Skyros,-SOSP-21)" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (1. Introduction)</a></li><li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/2.-Nil-Externalizing-Interfaces-(Skyros,-SOSP-21)" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (2. Nil-Externalizing Interfaces)</a></li><li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/3.-Nilext-aware-Replication-(Skyros,-SOSP-21)" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (3. Nilext-aware Replication)</a></li><li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/4.-Skyros-Design-and-Implementation-(Skyros,-SOSP-21)" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (4. Skyros Design and Implementation)</a></li><li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/5.-Evaluation-(Skyros,-SOSP-21)" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (4. Skyros Design and Implementation)</a></li><li><a href="../../../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/6-8.-Discussion,-Related-Work,-Conclusion-(Skyros,-SOSP-21)" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (6-8. Discussion, Related Work, Conclusion)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>

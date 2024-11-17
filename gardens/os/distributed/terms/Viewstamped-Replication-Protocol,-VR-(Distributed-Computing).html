@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html><head><title>Viewstamped Replication Protocol, VR (Distributed Computing)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Viewstamped Replication Protocol, VR (Distributed Computing)"/><meta property="og:description" content="참고한 것들 Viewstamped Replication Revisited, MIT CSAIL Tech Report FreeCodeCamp 원본 논문 이 글은 Viewstamped Replication Revisited, MIT CSAIL Tech Report 에서 핵심 아이디어만 요약한 글입니다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="참고한 것들 Viewstamped Replication Revisited, MIT CSAIL Tech Report FreeCodeCamp 원본 논문 이 글은 Viewstamped Replication Revisited, MIT CSAIL Tech Report 에서 핵심 아이디어만 요약한 글입니다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/distributed/terms/Viewstamped-Replication-Protocol,-VR-(Distributed-Computing)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Viewstamped Replication Protocol, VR (Distributed Computing)</h1><p class="content-meta ">Nov 11, 2024, 19 min read</p><ul class="tags "><li><a href="../../../../tags/os" class="internal tag-link">#os</a></li><li><a href="../../../../tags/os-distributed" class="internal tag-link">#os-distributed</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://pmg.csail.mit.edu/papers/vr-revisited.pdf" class="external">Viewstamped Replication Revisited, MIT CSAIL Tech Report</a></li>
+<li><a href="https://www.freecodecamp.org/news/viewstamped-replication-revisited-a-summary-144ac94bd16f/" class="external">FreeCodeCamp</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>원본 논문 </p></div>
+                  
+                </div>
+<ul>
+<li>이 글은 <a href="https://pmg.csail.mit.edu/papers/vr-revisited.pdf" class="external">Viewstamped Replication Revisited, MIT CSAIL Tech Report</a> 에서 핵심 아이디어만 요약한 글입니다.</li>
+<li>별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다.</li>
+</ul>
+</blockquote>
+<h2 id="vr">VR<a aria-hidden="true" tabindex="-1" href="#vr" class="internal"> §</a></h2>
+<ul>
+<li><em>Viewstamped Replication Protocol</em> (<em>VR</em>) 은 여러 node 들이 동일한 operation 을 처리하여 고가용 서비스를 제공하게 할 때 사용되는 프로토콜이다.</li>
+<li>기본적인 특징은:
+<ul>
+<li>Replication protocol 인데, consensus 도 제공한다.</li>
+<li>Disk IO 를 필요로 하지 않는다; Disk IO 없이도 충분히 작동하고, disk IO 는 그냥 “persistency” 를 위해서만 사용된다.</li>
+<li>Crash failure 에 대해서만 대응한다.</li>
+<li>Internet 과 같은 asynchronous network 에서 작동하도록 고안되어 있다; 즉, 메세지가 전달되지 않거나, 순서가 바뀌거나, 중복해서 전달되는 상황에서도 대비가 되어 있다.</li>
+</ul>
+</li>
+<li>그럼 이제 VR 에서 어떻게 operation 을 처리하는지, replica failure 시에는 어떻게 처리되는지, 그 fail 된 replica 는 어떻게 다시 복구되는지 살펴보자.</li>
+</ul>
+<h2 id="basic-terminology">Basic terminology<a aria-hidden="true" tabindex="-1" href="#basic-terminology" class="internal"> §</a></h2>
+<h3 id="architecture">Architecture<a aria-hidden="true" tabindex="-1" href="#architecture" class="internal"> §</a></h3>
+<ul>
+<li>일단 VR 에서는 흔한 <a href="../../../../gardens/os/distributed/terms/Quorum-(Distributed-Computing)" class="internal" data-slug="gardens/os/distributed/terms/Quorum-(Distributed-Computing)">Quorum</a> requirement 를 사용한다.
+<ul>
+<li>즉, 총 replica count 가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 일때, quorum 은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 이 되고, 이때 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span> 만큼의 fault-tolerance 를 가진다.</li>
+</ul>
+</li>
+<li>그리고 보통 아래와 같은 구조로 운영된다.</li>
+</ul>
+<p><img src="../../../../images/Pasted-image-20241111155308.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 VR 은 user code (client application) 와 service code (server application) 사이에 위치하여 둘 간에 중재를 하게 되는데</li>
+<li><em>VR Proxy</em> 는 user code 으로부터 요청을 받아 replica 에게 쏴주고, 응답을 받아 다시 user code 에게 전달하는 매개체 역할을 한다.</li>
+<li><em>VR Code</em> 는 <em>VR Proxy</em> 가 보낸 request 를 받아 다른 replica 의 <em>VR Code</em> 에게 뿌려 해당 request 가 replication 될 수 있게 한다.
+<ul>
+<li>그리고 <em>VR Code</em> 는 request 를 같은 node 의 service code 에게 보내 처리되게 한 후, 그 결과를 <em>VR Proxy</em> 에게 보낸다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="primary-secondary-view">Primary, Secondary, View<a aria-hidden="true" tabindex="-1" href="#primary-secondary-view" class="internal"> §</a></h3>
+<ul>
+<li>일단 여기서 지켜져야 할 가장 핵심은 “모든 replica 에서 처리되는 request 의 순서는 동일해야 한다” 는 것이다.
+<ul>
+<li>어찌보면 당연한 것이다. 하나의 service 가 받는 request 순서는 고정되어있기 때문에, 이것을 replication 하고자 할 때도 각 구성요소인 replica 는 동일한 순서로 해당 request 를 처리해야 한다.</li>
+</ul>
+</li>
+<li>여기에서 <em>Primary</em> 와 <em>Secondary</em> 가 나뉜다. 이들은 둘 다 replica 가 수행할 “role” 의 이름인데,
+<ul>
+<li><em>Primary</em> 는 이 “순서를 정하는” 역할을 한다.</li>
+<li>그리고 <em>Secondary</em> 는 <em>Primary</em> 가 정한 순서를 그대로 따라 실행하는 역할을 한다.</li>
+</ul>
+</li>
+<li>근데 당연히 <em>Primary</em> 역할의 replica 도 fail 할 수 있다. 이때 하나의 replica 가 <em>Primary</em> 의 역할을 하는 기간을 <em>View</em> 라고 한다.
+<ul>
+<li>따라서 system 전체는 시간순으로는 연속적인 view 들을 거치며 실행된다고 할 수 있고,</li>
+<li><em>Primary</em> 가 죽어서 새로운 replica 가 <em>Primary</em> 를 맡게 되는 일련의 과정을 <em>View-change Procedure</em> 라고 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="state">State<a aria-hidden="true" tabindex="-1" href="#state" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>주의 </p></div>
+                  
+                </div>
+<ul>
+<li>여기서 request 에 붙는 숫자가 두 종류가 있는데, 이 둘은 같지 않을 수 있다.</li>
+<li><em>Op number</em> 는 replica 가 수신한 request 에 붙는 숫자이고,</li>
+<li><em>Client request number</em> 는 client 가 송신한 request 에 붙이는 숫자이다.</li>
+</ul>
+</blockquote>
+<ul>
+<li>각 replica (VR Code) 들은 일련의 “상태 (<em>state</em>)” 를 bookkeeping 해둔다.
+<ul>
+<li><em>Configuration</em>: 이것은 모든 replica 의 IP 주소를 정렬한 배열이다.</li>
+<li><em>Replica number</em>: 이것은 해당 replica 를 고유하게 식별해주는 숫자로, 본인에 대한 <em>Configuration</em> 에서의 index 값이다.</li>
+<li><em>View number</em>: 이것은 0 부터 시작해 view change 마다 꾸준하게 1씩 증가하는 값이다.</li>
+<li><em>Status</em>: 이것은 현재 replica 의 상태로, <em>Normal</em>, <em>View-change</em>, <em>Recovering</em> 세 상태 중 하나의 값을 가진다.</li>
+<li><em>Op number</em>: 이것은 0 부터 시작해 request 를 받을 때마다 1씩 증가하는 값으로, 현재 replica 가 받은 가장 최신의 request 를 나타낸다.</li>
+<li><em>Log</em>: 이것은 replica 가 받은 request 들이 저장되는 배열로, <em>Op number</em> 순서대로 저장된다.</li>
+<li><em>Commit number</em>: 이것은 가장 최근에 본 replica 가 commit 한 (즉, 실행을 완료한) request 의 <em>Op number</em> 를 나타낸다.</li>
+<li><em>Client table</em>: 이것은 replica 가 들고 있는 client 들에 대한 정보로, 각 client 당 가장 최근의 request 의 <em>Client request number</em> (뒤에 나옴) 와 만약에 그 request 가 commit 되었다면, 이에 대한 respond 도 저장한다.</li>
+</ul>
+</li>
+<li>여기서 확인할 점은 <em>Primary</em> 가 누구인지는 저장하지 않는다는 것이다. 이것은 단순하게 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">Vi</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.10903em;">wN</span><span class="mord mathnormal">u</span><span class="mord mathnormal">mb</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mspace allowbreak"></span><span class="mspace" style="margin-right:0.6667em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">mod</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">i</span><span class="mord mathnormal">gu</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord">∣</span></span></span></span></span> 으로 계산된다.
+<ul>
+<li>이 점이 흥미로운 것은 <a href="../../../../gardens/os/distributed/drafts/Raft-Algorithm-(Distributed-Computing)" class="internal" data-slug="gardens/os/distributed/drafts/Raft-Algorithm-(Distributed-Computing)">Raft</a> 처럼 별도의 leader election 작업을 하지는 않는다는 것이다.</li>
+<li>Leader 는 그냥 round-robin 으로 선출된다.</li>
+</ul>
+</li>
+<li>또한 client (VR Proxy) 도 일련의 정보를 저장해둔다.
+<ul>
+<li>일단 위 정보들 중에서는 <em>Configuration</em> 이랑 <em>View number</em> 를 가지고 있고</li>
+<li>추가적으로 <em>Client ID</em> 와 1씩 증가하는 <em>Client request number</em> 가 있다.</li>
+</ul>
+</li>
+<li>이렇게 state 를 bookkeeping 하는 것을 <em>State Machine</em> 이라고 부르기도 한다.</li>
+</ul>
+<h2 id="operation">Operation<a aria-hidden="true" tabindex="-1" href="#operation" class="internal"> §</a></h2>
+<h3 id="normal-operation">Normal operation<a aria-hidden="true" tabindex="-1" href="#normal-operation" class="internal"> §</a></h3>
+<ul>
+<li>우선 정상적인 상황에서 어떻게 작동하는지 보자.</li>
+</ul>
+<p><img src="../../../../images/Pasted-image-20241111162856.png" width="auto" height="auto"/></p>
+<ol>
+<li>우선 client 는 무조건 <em>Primary</em> 에게 요청을 보낸다.
+<ul>
+<li>이게 가능한 이유는 client 가 <em>Configuration</em> 과 <em>View number</em> 를 알고 있기 때문.</li>
+<li>이때는 <em>Client ID</em> 와 <em>Client request number</em> 를 같이 보낸다.</li>
+</ul>
+</li>
+<li>그럼 <em>Primary</em> 는 <em>Client table</em> 을 보고 이 request 를 검증한다.
+<ul>
+<li>만약 <em>Client table</em> 을 봤을 때 <em>Client request number</em> 가 <em>Client table</em> 에 적힌 그것 보다 작다면, 이것을 기각한다.</li>
+<li>만약에 <em>Client table</em> 에의 <em>Client request number</em> 와 같고 그것이 commit 되어서 respond 까지 <em>Client table</em> 에 저장되어 있다면, 그 respond 를 보낸다.</li>
+</ul>
+</li>
+<li>검증이 끝나면, 이것을 다른 replica 에게 뿌려주는 작업을 한다.
+<ol>
+<li>일단 <em>Op number</em> 를 증가시키고, <em>Log</em> 에 추가한다.</li>
+<li>그리고 <em>Client table</em> 에 저장한 <em>Client request number</em> 도 업데이트 해준다.</li>
+<li>마지막으로 <code>PREPARE</code> 메세지를 다른 replica 에게 뿌리는데, 여기에는 Client 의 request 내용 이외에도 <em>Primary</em> 가 알고 있는 (1) <em>View-number</em> (2) <em>Op number</em> (3) <em>Commit number</em> 를 넣는다.</li>
+</ol>
+</li>
+<li>Replica 는 <code>PREPARE</code> 를 받은 뒤에 저 <em>Primary</em> 가 한 작업과 “유사” 한 짓을 한다.
+<ol>
+<li>일단 <em>Primary</em> 의 <em>Op number</em> 가 기준이 된다. 즉, 이 받은 <em>Op number</em> 가 본인이 알고 있는 <em>Op number</em> 과 1 이 차이나지 않는다면 (<em>Primary</em> 가 <em>Op number</em> 를 증가시켰기 때문에 <em>Secondary</em> 는 이것보다 1 적은 값을 들고있어야 정상) <em>Primary</em> 로부터 state 를 받아오는 (state transfer) 등의 작업을 하여 이 새로운 operation 의 이전 operation 들이 모두 자신의 <em>Log</em> 에도 들어오게 한다.</li>
+<li>그리고 <em>Primary</em> 가 보낸 <em>Op number</em> 로 자신의 <em>Op number</em> 를 설정하고, request 를 <em>Log</em> 에 넣으며, 본인의 <em>Client table</em> 에도 다 반영을 한 뒤에 <code>PREPARE OK</code> 메세지를 <em>Primary</em> 에게 쏜다.</li>
+</ol>
+<ul>
+<li>즉, <code>PREPARE OK</code> 라는 말은 해당 <em>Op number</em> 의 request 뿐 아니라 그 전까지의 애들도 전부 “적어도” <em>Log</em> 에는 다 들어갔다는 소리이다.</li>
+</ul>
+</li>
+<li><em>Primary</em> 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span> 개의 <code>PREPARE OK</code> 를 기다린다. 이건 당연히 <em>Primary</em> 를 포함해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개의 quorum 을 맞추려면 <em>Secondary</em> 로부터 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span> 개의 <code>PREPARE OK</code> 를 받아야 하기 때문이다.</li>
+<li>그리고 <em>Primary</em> 는 <em>Commit number</em> 를 증가시키고, <em>Service Code</em> 에 upcall 을 날려 이것 (그리고 혹시나 이전의 request 들 중에 exec 되지 않은 것들 까지) 을 execute 하게 한 뒤, client 에게 <code>REPLY</code> 를 보낸다.
+<ul>
+<li><code>REPLY</code> 에는 upcall 의 결과 뿐 아니라, <em>Primary</em> 가 알고 있는 <em>View number</em>, <em>Client request number</em> 도 보낸다.</li>
+</ul>
+</li>
+<li><em>Secondary</em> 도 <em>Primary</em> 와 “유사”한 짓을 한다.
+<ol>
+<li>만약 operation 이 <em>Log</em> 에도 잘 저장되어 있고 이전의 operation 들이 모두 exec 된 상태라면, 이 operation 에 대해서도 <em>Service Code</em> 에 upcall 을 날려 execute 하게 한다.</li>
+<li>또한 <em>Commit number</em> 하고 <em>Client table</em> 까지 다 업데이트해준다.</li>
+</ol>
+<ul>
+<li>하지만 당연히 <code>REPLY</code> 는 보내지 않는다. <em>Primary</em> 가 이미 보냈기 때문.</li>
+</ul>
+</li>
+</ol>
+<h3 id="view-change">View change<a aria-hidden="true" tabindex="-1" href="#view-change" class="internal"> §</a></h3>
+<ul>
+<li>일단 view change 가 필요하다는 것은 heartbeat message 를 통해 알아낸다.
+<ul>
+<li><em>Primary</em> 는 request 를 처리하며 <code>PREPARE</code> 를 보낼 것이기에 이 메세지가 heartbeat 가 되며,</li>
+<li>만약에 request 가 없을 경우에는 <em>Primary</em> 는 <code>COMMIT</code> 을 보내 heartbeat 처럼 사용한다.</li>
+<li>따라서 만일 이 두 메세지가 모두 일정 기간동안 오지 않는다면, <em>Secondary</em> 는 view change 를 시작하게 된다.</li>
+</ul>
+</li>
+<li>그래서 view change 는 다음과 같은 순서로 진행된다.</li>
+</ul>
+<ol>
+<li>만약 어떤 놈이 timeout 이 나면, 그놈은 <em>view number</em> 를 증가시키고, 상태를 <em>view change</em> 로 바꾸며, <code>START VIEW CHANGE</code> 메세지를 뿌린다.</li>
+<li>이것을 받은 애들은 자신의 timer 를 체크해 진짜 timeout 이 났는지 확인하고, 만약에 진짜로 view change 를 해야한다면 동일하게 <em>view number</em> 를 증가시키고, 상태를 <em>view change</em> 로 바꾸며, <code>START VIEW CHANGE</code> 메세지를 뿌린다.
+<ul>
+<li>Timer 를 보거나 아니면 자신보다 <em>view number</em> 가 더 높은 <code>START VIEW CHANGE</code> 혹은 <code>DO VIEW CHANGE</code> (뒤에 나옴) 메세지를 받으면 이와 같은 작업을 할 수도 있다고 한다.</li>
+</ul>
+</li>
+<li>그럼 <code>START VIEW CHANGE</code> 가 계속 reproduce 되며 퍼질텐데, 어떤 한 노드가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span> 개의 <code>START VIEW CHANGE</code> 를 받게 되면, 그놈은 다음 view 의 <em>Primary</em> 에게 <code>DO VIEW CHANGE</code> 를 쏘게 된다.
+<ul>
+<li>위에서도 말했다시피 VR 에서는 별다른 leader election 작업 없이 그냥 round robin 으로 leader 를 선정하기에, 특별한 작업 없이도 view change 시에 다음 leader 는 누가 될지 알 수 있게 해준다.</li>
+<li>그리고 이 <code>DO VIEW CHANGE</code> 에는 본인의 state 를 같이 실어 보낸다: <em>Log</em>, <em>Op number</em>, <em>Commit number</em>, 그리고 <em>View number</em> 등등.</li>
+</ul>
+</li>
+<li>다음 <em>Primary</em> 는 본인 제외 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span> 개의 <code>DO VIEW CHANGE</code> 를 받게 되면 이 받은 정보를 가지고 이전의 <em>Primary</em> 의 state 를 복구한다.
+<ul>
+<li>여기에서는 “가장 최신의 정보” 하나만 있으면 된다.</li>
+<li>즉, 여러 <em>Secondary</em> 들이 보낸 <code>DO VIEW CHANGE</code> 의 state 를 조합해 복구하는 것이 아닌, 가장 최신의 것이라고 판단되는 놈 하나의 state 로만 복구를 하게 된다.</li>
+<li>“하나” 만 있으면 되기 때문에 <code>DO VIEW CHANGE</code> 가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개만 있어도 (“본인 제외” <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span> 개 이기 때문에) 충분한 것이다.
+<ul>
+<li><code>PREPARE OK</code> 를 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개를 받았기 때문에, 저 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개의 <code>DO VIEW CHANGE</code> 속에는 무조건 가장 최신의 정보가 들어있게 되기 때문.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>복구한 뒤에는 <em>Primary</em> 는 본인의 <em>view number</em> 를 (<code>DO VIEW CHANGE</code> 에 들어있던) 다음 view 로 바꾸게 되고, <code>STARTVIEW</code> 메세지를 쏴서 새로운 view 가 시작될 수 있게 한다.
+<ul>
+<li>여기에는 새로운 <em>Log</em>, <em>Commit number</em>, <em>Op number</em> 등이 담긴다.</li>
+<li><em>Primary</em> 는 아직 execute 하지 않은 애들을 전부 처리하고 순차적으로 client 에게 <code>REPLY</code> 를 보낸다.</li>
+<li>그리고 이 시점부터 <em>Primary</em> 는 client 의 request 를 받을 수 있는 상태 (<em>normal</em>) 이 된다.</li>
+</ul>
+</li>
+<li><em>Secondary</em> 는 <code>STARTVIEW</code> 를 받으면 다음의 작업을 하며 <em>normal</em> 상태로 돌아간다.
+<ul>
+<li>해당 메세지에 들어있는 state 로 자신의 state 를 설정하고,</li>
+<li><em>Log</em> 를 보고 모든 uncommitted operation 들에 대해 <code>PREPARE OK</code> 를 보내 <em>Primary</em> 에서 이놈들에 대해 execute 할 수 있게 한다.</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>추가적으로, 여기에는 더욱 optimization 을 할 수 있는 구석이 있다고 한다.
+<ul>
+<li>가령 여기에 사용되는 메세지들의 숫자는 적지만, 각각의 데이터 사이즈는 크다.
+<ul>
+<li>뭐 <em>Log</em> 를 주고받고 하니까네</li>
+</ul>
+</li>
+<li>따라서 어차피 대부분의 <em>Log</em> 는 새로운 <em>Primary</em> 도 갖고 있을 것이기에, 최신의 <em>Log</em> 몇개만을 주고받고 혹시 부족하면 더 달라고 하는 등의 최적화도 가능하다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="recovery">Recovery<a aria-hidden="true" tabindex="-1" href="#recovery" class="internal"> §</a></h3>
+<ul>
+<li>Replica 는 fail 시에 적어도 해당 fail 시점까지는 복구해야 client request 를 처리하거나 view change 에 가담할 수 있다.
+<ul>
+<li>왜인지는 사실 잘 모르겠다.</li>
+</ul>
+</li>
+<li>이것을 복구하는 가장 간단한 방법은 storage 에다가 저장해 놓는 것이고 물론 이러한 방식을 사용하기는 하지만 너무 자주 IO 를 하는 것은 당연히 normal operation 을 느리게 할 것이다.</li>
+<li>약간 극단적으로 생각해서 아무것도 storage 에 저장하지 않는 상황에서도 VR 은 복구가 가능하다; 왜냐면 “다른 replica” 들이 정보들을 갖고 있기 때문.</li>
+<li>따라서 recovery protocol 은 다음과 같이 진행된다.</li>
+</ul>
+<ol>
+<li>우선 되살아난 replica 는 본인의 상태를 <em>Recovering</em> 로 설정하고, 다른 replica 들에게 <code>RECOVERY</code> 메세지를 보낸다.
+<ul>
+<li>이 <code>RECOVERY</code> 메세지에는 논스 (<em>Nonce</em>) 를 함께 보낸다. 이것은 간단하게 말하면 각 recovery 를 식별하게 해주는 장치로, 이전에 진행된 recovery protocol 과 구분지어 이전 recovery protocol 에서의 데이터로 복구되지 않게 하기 위함이다.</li>
+</ul>
+</li>
+<li>상태가 <em>Normal</em> 인 replica 들만이 이 메세지에 대해 <code>RECOVERY RESPONSE</code> 메세지로 응답한다.
+<ul>
+<li>여기에는 기본적으로 현재 view 의 <em>view number</em> 와 수신한 논스값이 들어있고,</li>
+<li><em>Primary</em> 는 추가적으로 <em>Log</em>, <em>Op number</em>, <em>Commit number</em> 를 같이 보낸다.</li>
+</ul>
+</li>
+<li>Recovery 가 진행중인 replica 는 <em>Primary</em> 의 것을 포함해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개의 <code>RECOVERY RESPONSE</code> 를 받기를 기다린 후, 여기서의 정보들로 본인의 state 를 복구해 <em>Normal</em> 로 돌아온다.</li>
+</ol>
+<h3 id="reconfiguration">Reconfiguration<a aria-hidden="true" tabindex="-1" href="#reconfiguration" class="internal"> §</a></h3>
+<ul>
+<li>일단 <em>Reconfiguration</em> 이라는 것은 새로운 node 가 추가되거나 삭제되어서 fault tolerant (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span>) 가 바뀔 때의 protocol 을 의미한다.</li>
+<li>이때 각 기간을 <em>epoch</em> 이라고 부른다; 즉, <em>Reconfiguration</em> 이 진행되면 <em>epoch</em> 가 바뀌는 것.
+<ul>
+<li>그리고 <em>epoch</em> 간 전환되는 기간을 <em>transition</em> 이라고 부른다.</li>
+</ul>
+</li>
+<li>일단 client 가 <code>RECONFIGURATION</code> request 를 보내고, 이것이 commit 되는 것으로서 작업이 시작된다.
+<ul>
+<li>이 일련의 과정을 통해 client 의 request 를 처리할 책임이 old group 으로부터 new group 으로 이전되게 된다.</li>
+</ul>
+</li>
+<li>그리고 이 transition 기간동안에는 client request 를 받지 못하는 상태가 되고, 이번에도 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개의 replica 의 state 가 최신화되면 그때부터 new group 으로서 client request 를 받을 수 있는 상태가 된다.</li>
+<li>근데 이 down time 은 꽤 치명적일 수 있다: 그래서 <em>Warming-up</em> 방식을 사용하기도 한다고 한다.
+<ul>
+<li>이것은 old group 이 계속해서 client request 를 처리하는 동안 새로 추가된 node 들에 대해 state 최신화를 수행해 제대로 transition 이 시작되었을 때 금방 끝날 수 있게 하는 방법이다.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#vr" data-for="vr">VR</a></li><li class="depth-0"><a href="#basic-terminology" data-for="basic-terminology">Basic terminology</a></li><li class="depth-1"><a href="#architecture" data-for="architecture">Architecture</a></li><li class="depth-1"><a href="#primary-secondary-view" data-for="primary-secondary-view">Primary, Secondary, View</a></li><li class="depth-1"><a href="#state" data-for="state">State</a></li><li class="depth-0"><a href="#operation" data-for="operation">Operation</a></li><li class="depth-1"><a href="#normal-operation" data-for="normal-operation">Normal operation</a></li><li class="depth-1"><a href="#view-change" data-for="view-change">View change</a></li><li class="depth-1"><a href="#recovery" data-for="recovery">Recovery</a></li><li class="depth-1"><a href="#reconfiguration" data-for="reconfiguration">Reconfiguration</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/os/(Garden)-Operating-Systems,-Linux" class="internal">(Garden) Operating Systems, Linux</a></li><li><a href="../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/1.-Introduction-(Skyros,-SOSP-21)" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (1. Introduction)</a></li><li><a href="../../../../gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/full/3.-Nilext-aware-Replication-(Skyros,-SOSP-21)" class="internal">(논문) Exploiting Nil-Externality for Fast Replicated Storage, SOSP 2021 (3. Nilext-aware Replication)</a></li><li><a href="../../../../gardens/os/distributed/terms/Consistent-Unordered-Replication-Protocol,-CURP-(Distributed-Computing)" class="internal">Consistent Unordered Replication Protocol, CURP (Distributed Computing)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>
