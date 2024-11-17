@@ -73,11 +73,12 @@ date: 2024-07-29
 		- [[Smart pointer 생성하기 (C++ Pointer)|생성하기 생성하기 (make_, use_count)]]
 		- [[Smart pointer 일반 포인터로 바꾸기 (C++ Pointer)|일반 포인터로 바꾸기 (get)]]
 - STL
-	- [[Map 루프 (C++ STL)|Map 루프]]
-	- [[Map 원소 삭제하기 (C++ STL)|Map 원소 삭제하기]]
-	- [[Map 원소 존재여부 검사하기 (C++ STL)|Map 원소 존재여부 검사하기]]
-	- [[Map 원소 추가하기 (C++ STL)|Map 원소 추가하기]]
 	- [[size() 의 사칙연산 주의할 것 (C++ STL)|size() 와 사칙연산]]
+	- `std::map`
+		- [[Map 루프 (C++ STL)|Map 루프]]
+		- [[Map 원소 삭제하기 (C++ STL)|Map 원소 삭제하기]]
+		- [[Map 원소 존재여부 검사하기 (C++ STL)|Map 원소 존재여부 검사하기]]
+		- [[Map 원소 추가하기 (C++ STL)|Map 원소 추가하기]]
 
 ### GDB, LLDB
 

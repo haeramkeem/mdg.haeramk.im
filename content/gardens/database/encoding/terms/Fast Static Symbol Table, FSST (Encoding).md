@@ -7,6 +7,7 @@ aliases:
   - FSST
 ---
 > [!info]- 참고한 것들
+> - [FSST: Fast Random Access String Compression, VLDB'20](https://dl.acm.org/doi/pdf/10.14778/3407790.3407851)
 > - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.6 FSST|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
 
 > [!info] 원본 논문
