@@ -90,3 +90,5 @@ date: 2024-07-29
 
 - `ctags`
 	- [[ctags - Basic usage|기본 사용법]]
+- `make`, `cmake`
+	- [[make, cmake - Macro 주입하기|Macro 주입하기]]
