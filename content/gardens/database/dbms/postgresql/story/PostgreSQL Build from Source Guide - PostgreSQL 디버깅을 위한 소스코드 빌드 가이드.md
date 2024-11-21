@@ -44,7 +44,7 @@ make install
 	- 매번 하는게 귀찮아도 여기서는 debugging 이 목적이니까 일단 해주자.
 
 ```bash
-export LD_LIBRARY_PATH=/home/toor/postgres-REL_16_4/env/lib
+export LD_LIBRARY_PATH=`pwd`/env/lib
 ```
 
 - 그리고 이렇게 하면 server 가 시작된다.

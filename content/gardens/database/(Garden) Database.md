@@ -55,7 +55,6 @@ date: 2024-07-29
 - 용어집
 	- [[Bit Packing, BP (Encoding)|Bit Packing, BP]]
 	- [[Bitmap (Encoding)|Bitmap]]
-	- [[BtrBlocks (Encoding)|BtrBlocks]]
 	- [[Delta Coding (Encoding)|Delta Coding]]
 	- [[Dictionary Encoding (Encoding)|Dictionary Encoding]]
 	- [[Elias Gamma Coding (Encoding)|Elias Gamma Coding]]
@@ -70,8 +69,14 @@ date: 2024-07-29
 	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
 - 논문들
-	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
 	- [[(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code|The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code (VLDB'23)]]
+
+### Format
+
+- 용어집
+	- [[BtrBlocks (Format)|BtrBlocks]]
+- 논문들
+	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
 
 ### Index
 
