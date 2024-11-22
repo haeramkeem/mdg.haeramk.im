@@ -2,9 +2,8 @@
 tags:
   - database
   - db-postgresql
-date: 2024-11-05
 aliases:
-  - GetVictimBuffer
+  - ExtendBufferedRelShared
 ---
 > [!fail]- 본 글은 #draft 상태입니다.
 > - [ ] 내용 정리
@@ -14,7 +13,5 @@ aliases:
 > ```
 > src/backend/storage/buffer/bufmgr.c
 > ```
-> - Line: `1585`
-> - Link: [GetVictimBuffer()](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/storage/buffer/bufmgr.c#L1584-L1736)
-
-## `GetVictimBuffer()`
+> - Line: `1826`
+> - Link: [ExtendBufferedRelShared()](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/storage/buffer/bufmgr.c#L1821-L2099)

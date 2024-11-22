@@ -14,10 +14,13 @@ aliases:
 > - Line: `196`
 > - Link: [StrategyGetBuffer()](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/storage/buffer/freelist.c#L183-L357)
 
-## `StrategyGetBuffer()`
+## Overview
 
 - 여기가 실질적으로 CLOCK 을 돌리는 함수이다.
 	- 여기서는 크게 (1) freelist 를 뒤져서 free buffer 가 있으면 주거나 (2) free buffer 가 없으면 CLOCK 을 돌리는 순서로 작동한다.
+
+## Line ref
+
 - [L205-L250](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/storage/buffer/freelist.c#L205-L250): 여기서는 [[Ring Buffer (PostgreSQL)|ring buffer]] 나 [[Background Writer (PostgreSQL)|bgwriter]] 를 위한 작업을 수행한다. 일단은 패스...
 - [L252-L312](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/storage/buffer/freelist.c#L252-L312): 여기서 freelist 를 뒤진다.
 	- 일단 [[type BufferStrategyControl (Postgres Coderef)|BufferStrategyControl]] 의 `firstFreeBuffer` 를 보고 0 보다 크면 free buffer 가 있다는 것이므로 해당 free buffer 를 가져온다.
@@ -35,4 +38,8 @@ aliases:
 				- 여기서 중요한 것은 이 경우에 `trycounter` 를 다시 buffer 개수로 초기화시켜버린다는 것이다.
 				- 이말은 reference count 가 0이고, usage count 가 0이 아닌 시점부터 CLOCK 을 한바퀴 돌리는 것으로 생각할 수 있다.
 			- Usage count 가 0이라면, 이놈이 방을 빼야할 놈으로 결정된다.
-- 참고로 이놈은 [[#`GetVictimBuffer()`|GetVictimBuffer()]] 에서밖에 호출되지 않는다.
+
+## Caller
+
+- 이놈은 다음의 함수에서 호출된다:
+	- [[func GetVictimBuffer (Postgres Coderef)|GetVictimBuffer]]

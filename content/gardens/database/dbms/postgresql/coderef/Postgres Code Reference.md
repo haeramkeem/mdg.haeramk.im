@@ -15,4 +15,6 @@ date: 2024-11-21
 	- [[type BufferStrategyControl (Postgres Coderef)|BufferStrategyControl]]
 - Funcs
 	- [[func ClockSweepTick (Postgres Coderef)|ClockSweepTick]]
+	- [[func GetVictimBuffer (Postgres Coderef)|GetVictimBuffer]]
+	- [[func InvalidateVictimBuffer (Postgres Coderef)|InvalidateVictimBuffer]]
 	- [[func StrategyGetBuffer (Postgres Coderef)|StrategyGetBuffer]]
