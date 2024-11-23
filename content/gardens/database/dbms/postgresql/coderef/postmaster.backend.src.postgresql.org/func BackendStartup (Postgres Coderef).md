@@ -20,13 +20,13 @@ date: 2024-11-23
 
 ## Line ref
 
-- [L4121-L4132](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4121-4132): [[type Backend (Postgres Coderef)|Backend]] 구조체를 생성한다.
+- [L4121-L4132](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4121-L4132): [[type Backend (Postgres Coderef)|Backend]] 구조체를 생성한다.
 - [L4134-L4163](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4134-L4163): Random cancel key 를 생성하는 등의 [[type Backend (Postgres Coderef)|Backend]] 구조체를 초기화한다.
 - [L4165-L4168](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4165-L4168): `fork()` 로 backend process 를 fork 한다.
 	- `4166`: 여기의 `backend_forkexec()` 은 Windows 운영체제에는 `fork()` syscall 이 없기 때문에 해당 기능을 수행해 주는 함수라고 생각하면 된다.
 - [L4169-L4193](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4169-L4193): `fork()` 된 child process (즉, `pid` 가 `0`) 에서의 logic 이다.
 	- `4168-4177`: Backend 는 postmaster 와 별개의 process 이기 때문에 postmaster 가 사용하던 자원들을 정리해 준다
-	- `4179-4192`: Backend initiation 작업을 해주고 [[func BackendRun (Postgres Coderef)|BackendRun]] 으로 backend 를 시작한다.
+	- `4179-4192`: Backend initiation 작업을 해주고 [[func PostgresMain (Postgres Coderef)|BackendRun]] 으로 backend 를 시작한다.
 - [L4196-L4209](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4196-L4209): `fork()` 한 parent process 에서의 logic 인데, `fork()` 를 실패했을 때의 logic 이다 (즉, `pid` 가 음수).
 	- 여기서는 뭐 error message 를 출력하고 `STATUS_ERROR` 를 return 하는 것으로 끝난다.
 - [L4211-L4229](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4211-L4229): 여기는 parent process 에서 `fork()` 에 성공했을 때의 logic 이다 (즉, `pid` 가 양수).
