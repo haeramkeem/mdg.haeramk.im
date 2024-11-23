@@ -18,3 +18,8 @@ date: 2024-11-21
 	- [[func GetVictimBuffer (Postgres Coderef)|GetVictimBuffer]]
 	- [[func InvalidateVictimBuffer (Postgres Coderef)|InvalidateVictimBuffer]]
 	- [[func StrategyGetBuffer (Postgres Coderef)|StrategyGetBuffer]]
+
+## `src/backend/postmaster`
+
+- Funcs
+	- [[func BackendStartup (Postgres Coderef)|BackendStartup]]

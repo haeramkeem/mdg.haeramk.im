@@ -37,7 +37,7 @@ aliases:
 	- `1658-1681`: WAL 은 말 그대로 Write-ahead 이기 때문에, buffer 가 flush 되기 전에 WAL 이 먼저 flush 되어야 한다. 따라서 이 부분에서 아직 WAL 이 flush 되지 않았다면 해당 buffer 는 기각하고 다시 처음 (`1602` 줄) 로 돌아간다.
 		- 다만 Write-ahead 가 반드시 지켜지는 것은 아닌 것 같다.
 		- Default strategy 가 아닐때 이것을 체크하는 것으로 봐서, default strategy 일 때는 WAL 보다 data 가 먼저 flush 될 수 있는듯.
-	- `1683-1688`: [[func FlushBuffer (Postgres Coderef)|FlushBuffer]] 함수로 실질적으로 flush 를 수행하는 곳이다.
+	- `1683-1688`: [[func PostgresMain (Postgres Coderef)|FlushBuffer]] 함수로 실질적으로 flush 를 수행하는 곳이다.
 - [L1692-L1712](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/storage/buffer/bufmgr.c#L1692-L1712): Statistics 작업해주는거같은데 뭔지는 잘 모르겠음
 - [L1714-L1723](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/storage/buffer/bufmgr.c#L1714-L1723): [[func InvalidateVictimBuffer (Postgres Coderef)|InvalidateVictimBuffer]] 로 buffer 를 buffer table 에서 삭제하는 등의 buffer 를 clean 한 상태로 바꿔준다.
 	- 만약 근데 찰나의 순간에 다른 누군가가 pinning 했거나 write 했을 수 있기 때문에, 만약 이 함수가 실패하면 다시 처음 (`1602` 줄) 으로 돌아간다.

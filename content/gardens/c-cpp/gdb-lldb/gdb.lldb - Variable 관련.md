@@ -2,6 +2,7 @@
 tags:
   - lldb
 date: 2024-07-02
+title: gdb/lldb - Variable 관련
 ---
 ## TL;DR
 
