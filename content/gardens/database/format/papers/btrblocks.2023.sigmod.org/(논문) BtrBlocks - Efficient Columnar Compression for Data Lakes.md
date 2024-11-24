@@ -15,7 +15,7 @@ date: 2024-08-09
 ![[Pasted image 20240809101447.png]]
 
 - SIGMOD (Proc. Mgmt. of Data) 2023 년도에 소개된 BtrBlock 논문을 읽고 정리해 보자.
-- 핵심 로직만 짚은 버전은 [[BtrBlocks (Format)|여기]] 에 있다.
+- 핵심 로직만 짚은 버전은 [[BtrBlocks (Database Format)|여기]] 에 있다.
 
 ## 목차
 

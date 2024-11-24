@@ -4,11 +4,12 @@ tags:
   - db-concurrency
 aliases:
   - MVCC
+  - Multiversion Concurrency Control
 date: 2024-10-06
 ---
 ## 란?
 
-- Concurrency control 을 하기 위한 전통적인 방법은 [[Two Phase Locking, 2PL (Database)|lock]] 이었다.
+- Concurrency control 을 하기 위한 전통적인 방법은 [[Two Phase Locking, 2PL (Database Transaction)|lock]] 이었다.
 - 근데 이건 당연히 느리다.
 	- Lock 이 해제될때까지 "기다려야" 하기 때문.
 - 기존 방식은 어찌 보면 in-place update 를 하기 위해 그것에 대해 lock 을 잡고 작업하는 것이었다면,

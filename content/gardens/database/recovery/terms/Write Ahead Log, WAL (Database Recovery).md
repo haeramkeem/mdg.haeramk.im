@@ -13,6 +13,6 @@ date: 2024-10-10
 ## Write "Ahead" Log
 
 - 제곧내이다: Write 하기 "전에 (Ahead)" [[Log (Database Recovery)|Logging]] 을 하는 것.
-- 즉, logging 을 먼저 하고 [[Page (Database Storage)|Page]] write 를 하라는 것.
+- 즉, logging 을 먼저 하고 [[Slotted Page (Database Format)|Page]] write 를 하라는 것.
 - 이러면 page write 도중에 crash 가 나더라도 관련 log 가 disk 에 있기 때문에, recovery 를 하던 rollback 을 하던 할 수 있다.
 - 또한, 유사한 맥락으로 이 log 가 disk 로 내려간 다음에서야 관련 [[Transaction, ACID (Database)|Transaction]] 들이 commit 되었다고 인정받는다.

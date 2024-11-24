@@ -9,7 +9,7 @@ date: 2024-11-21
 
 ## 개요
 
-- Postgres 에서는 [[Parquet (Format)|Parquet]] 를 native 하게 지원하지는 않고, 관련 extension 들도 좀 부실한 상황이다.
+- Postgres 에서는 [[Parquet (Database Format)|Parquet]] 를 native 하게 지원하지는 않고, 관련 extension 들도 좀 부실한 상황이다.
 - 관련하여 서치를 해보자면, 보통 FDW (Foreign Data Wrapper) extension 을 사용한다.
 	- [Crunchy data 블로그](https://www.crunchydata.com/blog/parquet-and-postgres-in-the-data-lake): 여기서는 [Parquet FDW](https://github.com/adjust/parquet_fdw) 를 사용하여 Postgres 에서 Parquet file 을 로드해 query 를 날려보는 짓을 해본다.
 	- [Medium 블로그](https://medium.com/@ahuarte/loading-parquet-in-postgresql-via-duckdb-testing-queries-and-exploring-the-core-1d667ae67dc2): 여기서는 DuckDB 에 Parquet file 을 로드하고 DuckDB FDW 를 이용해 Postgres 에서 DuckDB 에 query 를 날리는 짓을 한다.
@@ -162,7 +162,7 @@ CREATE FOREIGN TABLE phl_parking_pq (
 ## Evaluation
 
 - 이제 몇가지 query 를 해보자.
-- 일단 Parquet 는 [[Partition Attribute Across, PAX (Format)|PAX]] 이기 때문에 full column scan 에 강점을 가질 것이다.
+- 일단 Parquet 는 [[Partition Attribute Across, PAX (Database Format)|PAX]] 이기 때문에 full column scan 에 강점을 가질 것이다.
 
 ```sql
 SELECT issuing_agency FROM phl_parking;
