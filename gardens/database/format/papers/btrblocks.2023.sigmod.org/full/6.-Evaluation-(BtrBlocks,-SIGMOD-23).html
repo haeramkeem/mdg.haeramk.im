@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html><head><title>(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (6. Evaluation)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (6. Evaluation)"/><meta property="og:description" content="본 글은 논문 BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD &amp;#039;23) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Abstract, Intro 2."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD &amp;#039;23) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Abstract, Intro 2."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (6. Evaluation)</h1><p class="content-meta ">Jul 17, 2024, 52 min read</p><ul class="tags "><li><a href="../../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../../tags/논문" class="internal tag-link">#논문</a></li><li><a href="../../../../../../tags/draft" class="internal tag-link">#draft</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="https://dl.acm.org/doi/10.1145/3589263" class="external">BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>목차 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/1.-Abstract,-Intro-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/1.-Abstract,-Intro-(BtrBlocks,-SIGMOD-23)">1. Abstract, Intro</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)">2. Background</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)">3. Scheme selection and compression</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)">4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)">5. Fast decompression</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)">6. Evaluation (현재 글)</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/7.-Related-work-and-conclusion-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/7.-Related-work-and-conclusion-(BtrBlocks,-SIGMOD-23)">7. Related work and conclusion</a></li>
+</ul>
+</blockquote>
+<h2 id="6-evaluation">6. Evaluation<a aria-hidden="true" tabindex="-1" href="#6-evaluation" class="internal"> §</a></h2>
+<h3 id="60-setup">6.0. <em>Setup</em><a aria-hidden="true" tabindex="-1" href="#60-setup" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Tip <a href="#60-setup" class="internal">Section 6.0.</a> Setup</p></div>
+                  
+                </div>
+<ul>
+<li>마찬가지로 논문에는 없는 section 이고, 형식상 주인장이 끼워 넣은 것이다.</li>
+</ul>
+</blockquote>
+<h4 id="601-test-setup">6.0.1. Test setup<a aria-hidden="true" tabindex="-1" href="#601-test-setup" class="internal"> §</a></h4>
+<ul>
+<li>100Gpbs 네트워크를 제공하는 이점이 있는 AWS EC2 <code>c5n</code> 인스턴스 (<code>c5n.18xlarge</code>) 를 사용했다.</li>
+<li>하드웨어 정보는:</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>CLASS</th><th>INFO</th></tr></thead><tbody><tr><td>CPU</td><td>Intel Xen Pantium 8000 series (Skylake-SP)</td></tr><tr><td>Core/clock</td><td>36C 72T (3.5GHz)</td></tr><tr><td>SIMD support</td><td>AVX2, AVX512</td></tr><tr><td>Memory</td><td>192GiB</td></tr></tbody></table>
+<ul>
+<li>그리고 SW dependency 정보는:</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>CLASS</th><th>INFO</th></tr></thead><tbody><tr><td>Compiler</td><td>GCC 10.3.1</td></tr><tr><td>OS</td><td>Amazon Linux 2 (kernel 5.10)</td></tr></tbody></table>
+<ul>
+<li>추가적으로…
+<ul>
+<li>TBB library 를 이용해 병렬처리</li>
+<li>Hyperthreading 은 비활성화</li>
+<li>Evaluation 전에 모든 메모리 공간에 접근해 실험 도중 page fault 가 나지 않도록 했다.</li>
+<li>여러번 실험 후 평균내어 caching 과 CPU frequency ramp-up 이라는 것도 방지했다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="602-parquet-test-setup">6.0.2. Parquet test setup<a aria-hidden="true" tabindex="-1" href="#602-parquet-test-setup" class="internal"> §</a></h4>
+<ul>
+<li>일단 실험을 위해 Parquet file 을 생성하는 것은 <a href="https://github.com/apache/arrow" class="external">Apache Arrow</a> (<code>pyarrow 9.0.0</code>) 와 <a href="https://github.com/apache/spark" class="external">Apache Spark</a> (<code>pyspark 3.3.0</code>) 모두를 사용했다고 한다.
+<ul>
+<li>위의 것들을 사용하면서 변경한 설정은 Arrow 에서 Parquet file 의 rowgroup 사이즈를 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">17</span></span></span></span></span></span></span></span></span></span></span></span></span> 로 변경한 것 외에는 없다고 한다.</li>
+<li>이유는 그냥 이게 더 빨라서.</li>
+</ul>
+</li>
+<li>그리고 이렇게 생성한 Parquet file 과 Arrow C++ library 를 이용해 구현한 BtrBlock 에 대한 실험을 진행했다고 한다.
+<ul>
+<li>Arrow C++ library 는 Arrow 의 여러 클래스 (구조체) 를 제공하는 high-level API 와 Parquet file 을 직접 건드릴 수 있게 해주는 low-level API 두 가지를 제공하는데,</li>
+<li>High-level API 의 경우에는 너무 느려서 low-level API 만을 사용했다고 한다.</li>
+</ul>
+</li>
+<li>그리고 rowgroup 과 column 에 대해 decompression 하는 과정을 병렬로 처리되도록 했다고 한다 <sup><a href="#user-content-fn-rowgroup-column-decompression" id="user-content-fnref-rowgroup-column-decompression" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup>.</li>
+</ul>
+<h3 id="61-real-world-datasets">6.1. Real-World Datasets<a aria-hidden="true" tabindex="-1" href="#61-real-world-datasets" class="internal"> §</a></h3>
+<h4 id="611-synthetic-data">6.1.1. Synthetic data.<a aria-hidden="true" tabindex="-1" href="#611-synthetic-data" class="internal"> §</a></h4>
+<ul>
+<li>TPC-H 나 TPC-DS 와 같은 데이터셋은 전통적인 DBMS 혹은 cloud DBMS 들에 대해 query engine 성능 측정에 아주 효과적이라고 알려져 있다.</li>
+<li>하지만 얘네들이 생성해주는 데이터셋은 현실에서 볼 수 있는 데이터와는 조금 거리가 있다는 것 또한 알려져 있는 사실이다.
+<ul>
+<li>이 데이터들은 완벽하게 정규화되어 있고,</li>
+<li>균일하고 독립적인 데이터 분포를 이루고</li>
+<li>정수 데이터들이 대부분이기 때문에</li>
+<li>(특히 Data Lake 에서는) 현실의 데이터와는 거리가 있다는 것.</li>
+</ul>
+</li>
+<li>따라서 BtrBlock 에서는 이런 인공적인 (<em>Synthetic</em>) 데이터보다는 현실적인 데이터를 사용했다고 한다.</li>
+</ul>
+<h4 id="612-the-public-bi-benchmark">6.1.2. The Public BI Benchmark.<a aria-hidden="true" tabindex="-1" href="#612-the-public-bi-benchmark" class="internal"> §</a></h4>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>PBI 링크 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cwida/public_bi_benchmark" class="external">깃허브</a></li>
+</ul>
+</blockquote>
+<ul>
+<li>그래서 BtrBlock 에서 사용하는 데이터셋은 <em>Public BI Benchmark</em> 이다.</li>
+<li>여기에는, <a href="https://www.tableau.com/" class="external">Tableau 사</a> 에서 공개한 46 개의 Tableau Workbook 에 의해 추출된 데이터들이 포함되어 있다고 한다.</li>
+<li>따라서 이 데이터들은 완벽하지 않다는 점에서 훨씬 더 현실과 유사하다고 할 수 있다:
+<ul>
+<li>왜곡된 데이터들</li>
+<li>정규화되지 않은 테이블들</li>
+<li>잘못 사용된 데이터 타입들
+<ul>
+<li>가령 실수값을 문자열로 저장하는 등</li>
+</ul>
+</li>
+<li>잘못된 <code>NULL</code> 표현
+<ul>
+<li>가령 <code>NULL</code> 을 문자열로 저장하는 등</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>또한, Tableau 만의 특징도 있었는데, 그것은 Tablaeu 에서는 decimal 을 floating-point number 로 저장한다는 것이었다.
+<ul>
+<li>Floating number 는 위에서도 말했다시피, 다소 효율적이지 못한 방식으로 저장되고 있는 반면에</li>
+<li>AI, ML 분야에서는 빈번하게 사용되고 있는 자료형이다.</li>
+</ul>
+</li>
+<li>그래서 일단 이 데이터셋이 어떤 특징을 가지고 있는지부터 살펴보자.</li>
+</ul>
+<h4 id="613-public-bi-vs-tpc-h">6.1.3. Public BI vs. TPC-H.<a aria-hidden="true" tabindex="-1" href="#613-public-bi-vs-tpc-h" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240724113849.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 표는 Public BI 와 TPC-H 의 여러 자료형의 데이터에 대해 여러가지 compression 방법을 적용했을 때를 나타낸다.</li>
+<li>일단 가로축부터:
+<ul>
+<li>뭐 <em>datatype</em> 이나 <em>dataset</em> 은 별로 설명할 필요가 없을 것 같고</li>
+<li><em>metric</em> 의 경우에는 <code>sh</code> 와 <code>cr</code> 로 나뉜다.
+<ul>
+<li><code>sh</code> 는 전체 데이터 사이즈에서 해당 데이터가 차지하는 비율 (%) 을 뜻한다.
+<ul>
+<li>가령 표의 왼쪽 위에 있는 71.5% 는 전체 PBI 데이터셋 중에서 String data 가 71.5% 라는 것을 의미한다.</li>
+<li>뭐 TPC-H 에서는 여러 사이즈의 데이터셋을 생성할 수 있기 때문에, 절대적인 수치가 아닌 상태 비율로 표현했다고 하네</li>
+</ul>
+</li>
+<li><code>cr</code> 은 <em>compression ratio</em> 이다.
+<ul>
+<li>어떤 compression 방법을 적용했을 때와 적용하지 않았을 때 (<em>Binary</em>) 의 데이터 사이즈를 비교해서 계산된 값이다 <sup><a href="#user-content-fn-compression-ratio" id="user-content-fnref-compression-ratio" data-footnote-ref aria-describedby="footnote-label" class="internal">2</a></sup>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그리고 세로축은:
+<ul>
+<li><em>Binary</em> 는 압축되지 않은 날것의 상태이고,
+<ul>
+<li>즉, 메모리에 적재된 binary column data</li>
+<li>이것을 가지고 Parquet file 을 만들고 BtrBlock 을 적용하고 지지고 볶고 하는 것.</li>
+</ul>
+</li>
+<li><em>Parquet</em> 는 <em>Binary</em> 를 Parquet file 로 인코딩한 것,</li>
+<li>그 아래의 <em>LZ4</em>, <em>Snappy</em>, <em>Zstd</em> 는 Parquet file 을 해당 compression tool 로 압축한 것을 의미한다.</li>
+<li>그리고 마지막에 <em>BtrBlock</em> 을 적용했을 때의 결과인 것.</li>
+</ul>
+</li>
+<li>자 그럼 이 값들에 대해 더 깊게 살펴보자.</li>
+</ul>
+<h4 id="614-public-bi-vs-tpc-h-strings">6.1.4. Public BI vs. TPC-H: Strings.<a aria-hidden="true" tabindex="-1" href="#614-public-bi-vs-tpc-h-strings" class="internal"> §</a></h4>
+<ul>
+<li>위의 표에서 확인할 수 있는 문자열 관점에서의 PBI 와 TPC-H 의 차이점은 크게 두가지이다.</li>
+</ul>
+<ol>
+<li>일단 PBI 에서가 TPC-H 보다 전체 데이터 중 문자열이 차지하는 비중이 더 컸다.</li>
+<li>평균 compression ratio 가 PBI 보다 TPC-H 가 더 크다 (즉, 더 많이 압축된다).
+<ul>
+<li>이것은 왜냐면 PBI 에서는 대부분의 문자열이 구조적인 경향이 있기 때문이다.
+<ul>
+<li>“구조적인” 이라는 말이 좀 어색할 수 있는데, 가령 웹페이지 URL 나, 아니면 제품 코드처럼 비슷한 형태를 띄고 있다는 것이다.</li>
+<li>얘네들은 동일한 prefix 를 사용하는 (가령 <code>https://</code> 처럼) 경우가 종종 있기 때문에, 더 압축이 많이 되는 것.</li>
+</ul>
+</li>
+<li>반면에 TPC-H 에서는 test data pool 에서 무작위 선택을 하기 때문에, 이러한 경향성을 보이지 않아 압축이 덜되는 것이다.</li>
+<li>결과적으로 PBI 의 경우에는 10.2 정도의 압축률을 보이는 반면, TPC-H 의 경우에는 3.3 정도의 압축률밖게 안나오게 된다.</li>
+</ul>
+</li>
+</ol>
+<h4 id="615-public-bi-vs-tpc-h-doubles">6.1.5. Public BI vs. TPC-H: Doubles.<a aria-hidden="true" tabindex="-1" href="#615-public-bi-vs-tpc-h-doubles" class="internal"> §</a></h4>
+<ul>
+<li>Double 의 경우에는 <a href="#614-public-bi-vs-tpc-h-strings" class="internal">문자열</a> 과는 반대의 양상을 보였다.</li>
+</ul>
+<ol>
+<li>우선 TPC-H 에서 double 이 차지하는 비중이 더 컸고, (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7804em;vertical-align:-0.136em;"></span><span class="mord">14.4</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">19.5</span></span></span></span></span>)</li>
+<li>압축률도 TPC-H 에서 더 컸다. (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7804em;vertical-align:-0.136em;"></span><span class="mord">1.99</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2.78</span></span></span></span></span>)
+<ul>
+<li>이것은 TPC-H 에서 double 값들의 범위가 한정되어 있기 때문이다.
+<ul>
+<li>TPC-H 에서는 대부분의 double 이 금액 (<em>price data</em>) 를 나타내는 데 사용되었기 때문에, 이 값들의 범위가 한정되어 있다 <sup><a href="#user-content-fn-numeric-range" id="user-content-fnref-numeric-range" data-footnote-ref aria-describedby="footnote-label" class="internal">3</a></sup>.</li>
+<li>따라서 compression 을 적용하기에 더 용이 (특히 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)">Pseudodecimal Encoding</a> 는 더욱 더) 하기에 이런 결과가 나오는 것이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="616-public-bi-vs-tpc-h-integers">6.1.6. Public BI vs. TPC-H: Integers.<a aria-hidden="true" tabindex="-1" href="#616-public-bi-vs-tpc-h-integers" class="internal"> §</a></h4>
+<ul>
+<li>정수의 경우에는:</li>
+</ul>
+<ol>
+<li>비중은 TPC-H 가 더 컸다. (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7804em;vertical-align:-0.136em;"></span><span class="mord">14.1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">18.7</span></span></span></span></span>)</li>
+<li>하지만 compression ratio 는 PBI 가 훨씬 더 크게 나왔다. (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7804em;vertical-align:-0.136em;"></span><span class="mord">5.42</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.60</span></span></span></span></span>)
+<ul>
+<li>이건 TPC-H 의 데이터들이 비현실적으로 완벽하게 정규화되어 있는 데에서 비롯된다.
+<ul>
+<li>TPC-H 의 데이터에서 정수값은 대부분 Primary (Unique), Foreign Key 이기에 <code>SEQUENCE</code> 인 경우가 잦았다.</li>
+<li>따라서 중복되는 값이 거의 없기에, <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)#222-rle--one-value" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)">RLE</a> 와 같은 애들을 사용하기에 용이하지 않은 것.</li>
+<li>이러한 것들은 그들의 깃허브 (<a href="https://github.com/cwida/public_bi_benchmark/blob/master/benchmark/CommonGovernment/samples/CommonGovernment_1.sample.csv" class="external">1</a>, <a href="https://github.com/cwida/public_bi_benchmark/blob/master/benchmark/Generico/samples/Generico_1.sample.csv" class="external">2</a>) 에 공개한 데이터셋에서 확인할 수 있다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="617-adapting-for-evaluation">6.1.7. Adapting for evaluation.<a aria-hidden="true" tabindex="-1" href="#617-adapting-for-evaluation" class="internal"> §</a></h4>
+<ul>
+<li>BtrBlock 에서는 이러한 PBI 데이터셋을 그대로 이용한 것이 아니고, 이것들 중 일부만을 사용했다.</li>
+<li>선택 혹은 배제된 데이터들은 다음과 같다:
+<ol>
+<li>일단 데이터셋의 여러 테이블 중 가장 크기가 큰 테이블 하나만을 사용했다.
+<ul>
+<li>이것은 같은 데이터셋에 속한 여러 테이블들은 유사성을 보이기 때문이다.</li>
+<li>가령 한 테이블 데이터로부터 다른 테이블 데이터가 산출되기도 하고, 이런 점이 이 테이블들을 유사하게 만든다.</li>
+</ul>
+</li>
+<li>또한 사이즈가 너무 작은 데이터셋 (<code>IUBLibrary</code>, <code>IGlocations</code>, <code>Hatred1</code>) 과 <code>date</code>, <code>timestamp</code> 와 같은 column 들도 제외했다고 한다.</li>
+</ol>
+</li>
+<li>이렇게 골라낸 결과는 메모리에 적재된 양 기준 총 119.5GB 크기였다고 한다.
+<ul>
+<li>여기에는 43개의 table 이 포함되고, 각 테이블은 6 ~ 519 (평균 57) column 들을 가지고 있으며 총 2451 column 으로 이루어진다고 한다.</li>
+</ul>
+</li>
+<li>그리고, 다른 논문들과의 비교를 위해, TPC-H 를 이용해서도 evaluation 을 진행했다고 한다.</li>
+</ul>
+<h3 id="62-the-compression-scheme-pool">6.2. The Compression Scheme Pool<a aria-hidden="true" tabindex="-1" href="#62-the-compression-scheme-pool" class="internal"> §</a></h3>
+<h4 id="621-measuring-the-impact-of-individual-techniques">6.2.1. Measuring the impact of individual techniques.<a aria-hidden="true" tabindex="-1" href="#621-measuring-the-impact-of-individual-techniques" class="internal"> §</a></h4>
+<ul>
+<li>각 Cascading 단계에서 각 compression scheme 이 미치는 영향을 실험해 보았을 때, 전반적으로 compression ratio 와 decompression speed 사이에는 trade-off 가 있는 것으로 나타났다.</li>
+<li>이 영향도를 실험하기 위해서, 어떤 compression scheme 을 scheme pool 에 하나씩 추가하며 compression ratio 와 decompression speed 가 어떻게 달라지는지 확인했다고 한다.
+<ul>
+<li>즉, 이후에 나올 그래프에 나온 scheme 순서가 추가한 순서인 것.</li>
+</ul>
+</li>
+<li>그리고 decompression 의 경우에는 concurrency control 에 의해 발생하는 지연 (가령 lock 을 잡고 놓는 등의) 을 막기 위해 스레드를 하나만 사용했다고 한다.</li>
+</ul>
+<h4 id="622-impact-on-compression-ratio">6.2.2. Impact on compression ratio.<a aria-hidden="true" tabindex="-1" href="#622-impact-on-compression-ratio" class="internal"> §</a></h4>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>그래프 읽기 </p></div>
+                  
+                </div>
+<ul>
+<li>여기서의 compression scheme 순서는 scheme pool 에 추가된 순서이고, 이렇게 추가됨에 따라 compression ratio 가 어떻게 변화하냐를 나타낸 것이다.</li>
+<li>주의할 것은 이 순서대로 cascading 되었다는 것이 아니라는 점이다.</li>
+</ul>
+</blockquote>
+<p><img src="../../../../../../images/Pasted-image-20240724141458.png" width="auto" height="auto"/></p>
+<ul>
+<li>Double 먼저 보자.
+<ul>
+<li>여기에서 가장 크게 향상을 이뤄낸 scheme 은 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)#223-dictionary" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)">Dictionary</a> 와 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)">Pseudodecimal</a> 이다. (각각 95%, 20%)</li>
+<li>하지만 보다시피, double 은 본질적으로 compression 이 힘들기 때문에, 다른 자료형에 비해 compression ratio 가 낮은 것을 확인할 수 있다.</li>
+</ul>
+</li>
+<li>Integer 는 별 설명이 없다… 특별할게 없기 때문인듯.</li>
+<li>String 의 경우에는,
+<ul>
+<li>일단 세 자료형 중에 가장 compression ratio 가 좋은 것을 볼 수 있다.</li>
+<li>Dictionary 가 추가됐을 때 7배 가까이 compression ratio 가 뛰는 것을 볼 수 있고,</li>
+<li>Dictionary 가 FSST 를 같이 사용하도록 하면 Dictionary 에 비해 51% 더 증진되는 것을 볼 수 있다.</li>
+<li>그리고 FSST 가 추가되는 경우 (<em>Raw FSST</em>) 에 compression ratio 가 좀 더 증진되었다.</li>
+</ul>
+</li>
+<li>OneValue 는 위 그래프에서는 별로 두각을 드러내지 못했다.
+<ul>
+<li>아마 block 전체가 하나의 값을 가지는 경우가 드물어서 그러리라.</li>
+<li>하지만 뒤에서 설명하겠지만, 만약 이것이 적용된다면 (64,000개가 하나의 값으로 쪼그라들기 때문에) 엄청난 compression ratio 를 달성하게 된다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="623-impact-on-decompression-speed">6.2.3. Impact on decompression speed.<a aria-hidden="true" tabindex="-1" href="#623-impact-on-decompression-speed" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240724141520.png" width="auto" height="auto"/></p>
+<ul>
+<li>OneValue 가 double 과 integer 의 경우에 가장 decompression speed 가 빨랐다.
+<ul>
+<li>이것은 OneValue 의 경우에 아마 SIMD 같은걸로 쭉쭉 써내려갈 수 있기 때문이리라.</li>
+</ul>
+</li>
+<li>그리고 string 의 경우에는 Dictionary 가 가장 빨랐는데,
+<ul>
+<li>이것은 위에서 설명한 것처럼 Dictionary 에서 문자열을 복사하는 방식이 아닌 pointer 를 복사하는 방식이기에 가능한 것이었다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="63-sampling-algorithm">6.3. Sampling Algorithm<a aria-hidden="true" tabindex="-1" href="#63-sampling-algorithm" class="internal"> §</a></h3>
+<h4 id="631-sampling-research-questions">6.3.1. Sampling research questions.<a aria-hidden="true" tabindex="-1" href="#631-sampling-research-questions" class="internal"> §</a></h4>
+<ul>
+<li>BtrBlock 에서는 sample 을 바탕으로 scheme selection 을 하기 때문에, “어떻게 sample 을 추출하냐 (<em>Sampling Strategy</em>)“에 따라 “scheme selection 의 정확도”가 올라간다.</li>
+<li>여기서 “어떻게 sample 을 추출하냐” 는 다음과 같은 research question 으로 정리될 수 있다.
+<ol>
+<li>Sample 사이즈를 고정시켰을 때, 어떻게 sample 을 추출하는 것이 좋을까? 작게 여러개? 아니면 크게 하나?</li>
+<li>Sample 사이즈가 변화함에 따라, scheme selection 의 정확도는 어떻게 변화할까?</li>
+</ol>
+</li>
+<li>그리고 이 research question 에 대한 답을 하기위한 척도, 즉 “scheme selection 의 정확도” 는 다음과 같이 계산할 수 있다.
+<ol>
+<li>일단 모든 column 의 첫번째 block 들에 대해 scheme pool 의 모든 scheme 을 적용시킨다.
+<ul>
+<li>BtrBlock 에는 8개의 scheme 이 있으므로, column 당 8개의 결과가 나올 것이다.</li>
+</ul>
+</li>
+<li>그리고, cascading 을 위해, 이 결과들에 대해 적용하지 않은 scheme 을 하나씩 적용시켜본다.
+<ul>
+<li>즉, 8개의 scheme 중 하나가 적용되어 있고 나머지 7개가 남아 이것을 적용시키는 것이기 때문에, column 당 총 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">56</span></span></span></span></span> 개의 결과가 나올 것이다.</li>
+</ul>
+</li>
+<li>이 64개 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">64</span></span></span></span></span>) 의 결과들 중에, compression ratio 가 작은 놈을 고른다. 이것을 <em>Optimal Scheme</em> 이라고 부르자.</li>
+<li>그리고 한 <em>Sampling Strategy</em> 을 선택해 위의 과정을 반복하되, block 전체가 아닌, 이 <em>Sampling Strategy</em> 를 통해 선택된 sample 을 이용해 수행한다. 이 결과로 선택된 scheme 을 <em>Sampling Scheme</em> 이라고 부르자.</li>
+<li>만약 <em>Sampling Scheme</em> 이 <em>Optimal Scheme</em> 과 같거나 혹은 2% 내의 성능 하락만이 있는 경우에 대해 올바르게 scheme 을 선택했다고 간주할 때, 이 <em>Sampling Strategy</em> 가 올바르게 scheme 을 선택한 비율을 계산한다. 이것이 “scheme selection 의 정확도” 이다.
+<ul>
+<li>“2% 내의 성능 하락” 이라는 허용범위를 둔 것은, 가령 (Dict -> RLE) 와 (RLE -> Dict) 와 같이 사실상 동일한 경우 또한 올바름으로 인정하기 위해서이다.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>이제 이렇게 정의한 “정확도” 에 따라 첫번째 research question 에 대한 답을 해보자.</li>
+</ul>
+<h4 id="632-best-strategy-for-a-fixed-sample-size">6.3.2. Best strategy for a fixed sample size.<a aria-hidden="true" tabindex="-1" href="#632-best-strategy-for-a-fixed-sample-size" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240724154045.png" width="auto" height="auto"/></p>
+<ul>
+<li>이게 그 결과다. 일단 legend 부터 확인해 보자.
+<ul>
+<li>기본적인 것은 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)#311-choosing-samples" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)">Section 3.1.1.</a> 에서 설명한 것과 동일하다.
+<ul>
+<li>즉, 전체 block 을 <em>Partition</em> 으로 나누고, 그 안에서 랜덤한 위치에서 시작해 일정 개수의 연속된 <em>Entry</em> 들을 고르는 것.</li>
+</ul>
+</li>
+<li><code>NxM</code> 에서 <code>N</code> 은 <em>Partition</em> 의 갯수이고, <code>M</code> 은 <em>Partition</em> 당 <em>Entry</em> 의 갯수이다.
+<ul>
+<li>즉, <code>640x1</code> 은 한 block 을 640 개의 <em>Partition</em> 으로 나누고, 그 <em>Partition</em> 에서 1개의 <em>Entry</em> 를 선택한다는 것이다.</li>
+</ul>
+</li>
+<li>따라서 <code>640x1</code> 은 그냥 개별 랜덤 선택 (<em>Random individual tuples</em> - 청록색) 과 같고, <code>1x640</code> 은 그냥 하나의 덩어리를 선택 (<em>Single tuple range</em> - 보라색) 와 같다.</li>
+</ul>
+</li>
+<li>결과는:
+<ul>
+<li>예상대로 <em>Random individual tuples</em> 가 가장 구렸다. 아마 locality 를 고려하지 못하기 때문이리라.</li>
+<li>그리고 <em>Single tuple range</em> 는 생각보다는 선방했지만 그래도 구렸다. 이건 아마 distribution 을 고려하지 못하기 때문이리라.
+<ul>
+<li><em>Single tuple range</em> 가 데이터의 특성을 제대로 반영하지 못한다는 것의 예시가 궁금하면, <a href="#665-per-column-performance" class="internal">Section 6.6.5.</a> 의 <code>Value Example</code> column 을 보자.</li>
+</ul>
+</li>
+<li>위의 결과가 시사하는 바는 (<code>320x2</code> 를 제외하면) 여러 <em>Partition</em> 에서 적당한 개수의 <em>Entry</em> 를 선택하는 것이 locality 와 distribution 의 토끼를 모두 잡게 해준다는 것이다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="633-impact-of-sample-size">6.3.3. Impact of sample size.<a aria-hidden="true" tabindex="-1" href="#633-impact-of-sample-size" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240724154100.png" width="auto" height="auto"/></p>
+<ul>
+<li>위의 그래프는 두번째 research question 인, sample size 와 “정확도” 간의 상관관계다.
+<ul>
+<li>다만 여기서는 저 <em>Data SIze</em> 가 “정확도” 의 척도가 된다.</li>
+<li>즉, 저 <em>Data Size</em> 는 compression result 의 사이즈를 일컫는 것으로,</li>
+<li><em>Optimal Scheme</em> 으로 compression 했을 때를 기준치 (<em>optimum</em>) 로 했을 때 sample 사이즈를 변경해 가며 <em>Sampling Scheme</em> 으로 compression 한 결과와의 차이를 나타내고 있는 것.</li>
+<li>따라서 <em>optimum</em> 에 가까울 수록 “정확한” 것이 된다.</li>
+</ul>
+</li>
+<li>세로축에 대한 이야기는 위의 설명으로 얼추 된 것 같고, 이제 가로축 얘기를 해보자.
+<ul>
+<li>보면 <em>optimum</em> 에 가까울 수록 “정확” 하긴 하지만, sample 의 사이즈는 점차 커지는 것을 볼 수 있다.</li>
+<li>Sample 의 크기가 커진다는 얘기는 당연히 compression 시에 CPU 를 많이 사용한다는 것이고, 따라서 이 가로축은 “CPU 사용률” 을 대변할 수 있게 된다.</li>
+</ul>
+</li>
+<li>즉, 정리하면 sample 을 작게 잡으면 정확도는 떨어지지만 (즉, compression ratio 는 작아지지만), CPU 사용량은 적게 먹게 되고, 반대로 크게 잡으면 정확도는 높아지지만 CPU 사용량이 커지는 trade-off 가 있는 것.</li>
+</ul>
+<h4 id="634-samping-in-btrblocks">6.3.4. Samping in BtrBlocks<a aria-hidden="true" tabindex="-1" href="#634-samping-in-btrblocks" class="internal"> §</a></h4>
+<ul>
+<li>위 실험 결과가 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)#311-choosing-samples" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)">Section 3.1.1</a> 에서 제시한 설정값들에 대한 근거가 된다.</li>
+<li>위같은 실험 결과에 의해, BtrBlock 은 10개의 <em>Partition</em> 과 64개의 <em>Entry per Partition</em> 을 사용해 sampling 을 하고, 그 결과 CPU 사용량을 전체 과정 대비 1.2% 만 소모하고도 scheme selection 이 가능해 졌다.</li>
+</ul>
+<h3 id="64-compression">6.4. Compression<a aria-hidden="true" tabindex="-1" href="#64-compression" class="internal"> §</a></h3>
+<h4 id="641-compression-ratio">6.4.1. Compression ratio.<a aria-hidden="true" tabindex="-1" href="#641-compression-ratio" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240724163659.png" width="auto" height="auto"/></p>
+<ul>
+<li>BtrBlock 의 compression ratio 는 위 그림 하나로 정리될 수 있다.
+<ul>
+<li>일단 BtrBlock 은 relational column store 을 전제로 한 compression scheme 이다. 따라서 대표적인 relation column store 4개와도 compression ratio 를 비교했으며, 위 그래프에서 System A~D 로 표현되어 있다 <sup><a href="#user-content-fn-system-a-d" id="user-content-fnref-system-a-d" data-footnote-ref aria-describedby="footnote-label" class="internal">4</a></sup>.
+<ul>
+<li>보다시피 전부 BtrBlock 에 비해 나약하다.</li>
+</ul>
+</li>
+<li>그리고 대표적인 column data format 인 Parquet 와, 그것에 여러 compression 을 적용한 애들 (Parquet + LZ4, Snappy, Zstd) 과의 비교 또한 수행하였다.
+<ul>
+<li>여기서는 Parquet + Zstd 를 제외하면 모두 이겨버리는 것을 볼 수 있다.</li>
+<li>Parquet + Zstd 를 이기지 못하긴 했지만, 이놈은 heavyweight 라는 치명적인 단점이 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="642-compression-speed">6.4.2. Compression speed.<a aria-hidden="true" tabindex="-1" href="#642-compression-speed" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240724180608.png" width="auto" height="auto"/></p>
+<ul>
+<li>앞서 말한 것처럼, compression 과정은 OLAP 에서 이루어지기 때문에 compression speed 에 대해서는 크게 신경쓰지 않는다.</li>
+<li>다만, compression speed 가 다른 것들과 비교해서 나쁘지 않다는 것을 피력하기 위한 것인 걸로 보인다.</li>
+<li>어쨋든, compression 과정은 (1) CSV 파일을 읽어 memory 로 올리고, (2) memory 에서 binary data 를 처리하는 두 단계로 나눌 수 있고, 각 단계를 시작점으로 해서 속도가 얼마나 나오는지 실험했다고 한다.</li>
+<li>그 결과는 위에서 볼 수 있듯이, (1) 에서 시작했을 때는 Parquet 를 사용했을 때와 유사한 수준이었고, (2) 에서 시작한 것은 훨씬 더 빠른 속도를 보여주었다.</li>
+</ul>
+<h3 id="65-pseudodecimal-encoding">6.5. Pseudodecimal Encoding<a aria-hidden="true" tabindex="-1" href="#65-pseudodecimal-encoding" class="internal"> §</a></h3>
+<h4 id="651-evaluation-outside-of-btrblocks">6.5.1. Evaluation outside of BtrBlocks.<a aria-hidden="true" tabindex="-1" href="#651-evaluation-outside-of-btrblocks" class="internal"> §</a></h4>
+<ul>
+<li>앞서 설명한 대로, <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)">PDE</a> 는 double 수치를 위해 BtrBlock 에서 새로 제안한 것이고 따라서 BtrBlock 과 별개의 evaluation 을 수행하면 더욱 객관적인 비교가 될 것이다.</li>
+<li>하지만 문제는 PDE 는 그 자체로는 compression 을 수행하지 않는다:
+<ul>
+<li>마치 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)#225-for--bit-packing" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)">FOR</a> 이후에 bit 수를 줄이기 위해 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)#225-for--bit-packing" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)">Bit-packing</a> 을 수행하는 것처럼,</li>
+<li>PDE 도 double 을 decimal 로 바꿔서 더욱 compression 하기 편한 형태로 만들 뿐 그 자체로는 데이터의 사이즈가 줄어들지는 않는다.</li>
+</ul>
+</li>
+<li>따라서 이것을 evaluation 하기 위해서 <em>Fixed two-level cascade</em> 을 가정한다:
+<ul>
+<li>즉, <em>무조건</em> PDE 다음에는 FastBP128 이 cascading 되어 실질적인 compression 은 이것을 통해 하는 것.</li>
+</ul>
+</li>
+</ul>
+<h4 id="652-comparing-to-existing-double-schemes">6.5.2. Comparing to existing double schemes.<a aria-hidden="true" tabindex="-1" href="#652-comparing-to-existing-double-schemes" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240724202136.png" width="auto" height="auto"/></p>
+<ul>
+<li>위의 표는 PDE 의 성능을 객관적으로 보기 위해, 이것과 다른 4개의 floating-point encoding scheme (<a href="https://ieeexplore.ieee.org/document/4148768" class="external">FPC</a>, <a href="https://dl.acm.org/doi/10.14778/2824032.2824078" class="external">Gorilla</a>, <a href="https://dl.acm.org/doi/abs/10.14778/3551793.3551852" class="external">Chimp-Chimp128</a>) 들에 대해 compression ratio 를 비교해 본 것이다.
+<ul>
+<li>여기서 대상이 된 column 들은 데이터들이 아주 많고, <em>non-trivial data</em> 들이 들어 있다고 한다.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Tip <em>Non-trivial data</em> 란?</p></div>
+                  
+                </div>
+<ul>
+<li>대략 “중복되는 값이 너무 많지 않은 데이터” 정도로 생각하면 될 것 같다.</li>
+</ul>
+</blockquote>
+<ul>
+<li>일단 보면 Chimp128 과 서로 우열을 다루고 있는 모습을 확인할 수 있다.
+<ul>
+<li>하지만, Chimp128 이 우세한 경우는 대부분 근소한 차이인 반면</li>
+<li><code>CommonGov.-26, 31, 40</code> 같은 column 을 보면 무친듯이 ratio 가 좋다는 점에서 <sup><a href="#user-content-fn-pde-commongov" id="user-content-fnref-pde-commongov" data-footnote-ref aria-describedby="footnote-label" class="internal">5</a></sup> PDE 가 다른 encoding 에 비해 좋다고 말할 수 있을 것이다.</li>
+</ul>
+</li>
+<li>다만, <code>NYC-29</code> 의 경우에는 compression ratio 가 꼴찌로 선정되는 수모를 겪었는데, 이건 PDE 가 high-precision value 에 대해서는 불리하기 때문이다.
+<ul>
+<li>즉, high-precision 의 경우에는 exponent 가 너무 커져 많은 경우 patch 로 빠지고, 따라서 거의 compression 이 되지 않는 안타까움이 발생하기 때문이다.
+<ul>
+<li>이것이 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)#422-when-to-choose-pseudodecimal-encoding" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)">Section 4.2.2.</a> 에서 설명한 첫번째 heuristic 의 근거가 된다.</li>
+</ul>
+</li>
+<li><code>NYC-29</code> 에는 위도, 경도값이 들어 있기에 이런 안좋은 결과가 나온 것.</li>
+</ul>
+</li>
+</ul>
+<h4 id="653-effectiveness-inside-btrblocks">6.5.3. Effectiveness inside BtrBlocks.<a aria-hidden="true" tabindex="-1" href="#653-effectiveness-inside-btrblocks" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240724204115.png" width="auto" height="auto"/></p>
+<ul>
+<li>추가적으로 수행된 실험은, BtrBlock 의 다른 scheme 들과 경쟁해, PDE 를 BtrBlock 의 double 전문 scheme 으로 포함시킬만 한지 검증하는 것이었다.
+<ul>
+<li>만일 다른 자료형과 무관한 scheme 들로도 충분히 double 을 compression 할 수 있다면, 굳이 이것이 BtrBlock 에 포함할 이유가 없기 때문이다.</li>
+</ul>
+</li>
+<li>결과는 위의 표와 같다:
+<ul>
+<li>보면, 일부 <code>column</code> 들에 대해서는 PDE 가 밀리는 것을 볼 수 있는데,
+<ul>
+<li>왼쪽의 일부 <code>column</code> 들이 PDE 보다 RLE 가 더 좋은 경우에 대해서는, run 이 너무 많아서 RLE 가 더 효율적이기 때문이고,</li>
+<li>오른쪽의 일부 <code>column</code> 들이 PDE 보다 Dictionary 가 더 좋은 경우에 대해서는, unique value 가 너무 적어 Dictionary 가 더 효율이기 때문이다.</li>
+<li>위 상황들이 모두 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)#422-when-to-choose-pseudodecimal-encoding" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)">Section 4.2.2.</a> 에서 설명한 두번째 heuristic 의 근거가 된다.</li>
+</ul>
+</li>
+<li>위 상황을 제외하면 PDE 가 우세한 것을 확인할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="66-decompression">6.6. Decompression<a aria-hidden="true" tabindex="-1" href="#66-decompression" class="internal"> §</a></h3>
+<h4 id="661-open-source-formats">6.6.1. Open source formats.<a aria-hidden="true" tabindex="-1" href="#661-open-source-formats" class="internal"> §</a></h4>
+<ul>
+<li><a href="#641-compression-ratio" class="internal">Section 6.4.1.</a> 에서는 proprietary system 들에 BtrBlock 을 적용해서 실험을 할 수 있었으나, decompression 에 대해서는 해당 service provider 에서 허가해주지 않아 실험을 진행할 수 없었다고 한다.</li>
+<li>따라서 <a href="#602-parquet-test-setup" class="internal">Section 6.0.2.</a> 에서 설명한 Parquet 에 추가적으로, ORC 에 BtrBlock 을 진행하여 실험을 수행했다고 한다.</li>
+</ul>
+<h4 id="662-orc-test-setup">6.6.2. ORC test setup.<a aria-hidden="true" tabindex="-1" href="#662-orc-test-setup" class="internal"> §</a></h4>
+<ul>
+<li>ORC file 을 생성하는 것은 Apache Arrow (<code>pyarrow 9.0.0</code>) 를 사용했다.
+<ul>
+<li>Apache Spark 는 사용하지 않았다고 한다.</li>
+</ul>
+</li>
+<li>그냥 기본 설정을 사용하려고 했으나, 기본 설정을 사용하면 ORC file 이 너무 커져 병렬처리가 불가능해지는 문제가 있었다. 그래서 다음과 같은 설정을 바꿨다고 한다:
+<ul>
+<li><code>dictionary_key_size_threshold</code> 값을 기본값 (<code>0</code>) 에서 <a href="https://github.com/apache/hive" class="external">Apache Hive</a> 의 기본값 (<code>0.8</code>) 으로 변경했다.</li>
+<li>또한 LZ4 의 compression strategy configuration 도 기본값 (<code>DEFAULT</code>) 에서 <code>COMPRESSION</code> 으로 변경했다.</li>
+</ul>
+</li>
+<li><a href="#602-parquet-test-setup" class="internal">Section 6.0.2</a> 에서는 Parquet 의 rowgroup size 를 변경했으나, ORC 의 저것과 동일한 설정인 stripe size 는 변경하지 않았다.
+<ul>
+<li>이유는 빨라지지 않아서.</li>
+</ul>
+</li>
+<li>이렇게 만든 ORC file 로 benchmark 하는 것은 ORC C++ Library 를 사용했으나, 파일을 메모리로부터 읽어오는 기능 <sup><a href="#user-content-fn-orc-mem-readfile" id="user-content-fnref-orc-mem-readfile" data-footnote-ref aria-describedby="footnote-label" class="internal">6</a></sup> 을 지원하지 않아 이 부분 (코드상으로는 <code>orc::InputStream</code>) 만 커스텀했다고 한다.</li>
+<li>Parquet 에서와 마찬가지로 ORC 에서도 stripe 와 column 에 대해 병렬로 decompression 을 하여 실험했다 <sup><a href="#user-content-fn-rowgroup-column-decompression" id="user-content-fnref-rowgroup-column-decompression-2" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup>.</li>
+</ul>
+<h4 id="663-in-memory-public-bi-decompression-throughput">6.6.3. In-memory Public BI decompression throughput.<a aria-hidden="true" tabindex="-1" href="#663-in-memory-public-bi-decompression-throughput" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240725140448.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그래프는 PBI 를 이용해 decompression 을 실험한 결과를 보여준다.
+<ul>
+<li>이미 여러번 언급한 것처럼 decompression throughput 와 compression ratio 간에는 trade-off 가 존재하고, 따라서 이 둘을 각각 Y 축과 X 축에 놓아 다른 방법들과 2차원적인 비교를 해보았다.
+<ul>
+<li>Decompression throughput 과 compression ratio 모두 좋은 것이 좋기 때문에 당연히 오른쪽 위일수록 좋은 방법이라 할 수 있다.</li>
+</ul>
+</li>
+<li>참고로 decompression throughput 은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">Deco</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">resse</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span><span class="mord">/</span><span class="mord mathnormal">Deco</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">ress</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span></span></span></span></span>  로 산출했다고 한다.</li>
+</ul>
+</li>
+<li>그 결과는 BtrBlock 은 다른 어떤 방법들보다 decompression throughput 이 월등히 좋았다.
+<ul>
+<li>Parquet 에 비하면 2.6배, Parquet + Snappy 에 비하면 3.6배, Parquet + Zstd 에 비하면 3.8배 더 좋았다고 한다.</li>
+<li>이것은 Parquet, ORC file 을 Zstd 로 compression 했을 때 ratio 가 BtrBlock 보다 좋은 점을 커버해 준다.
+<ul>
+<li>즉, compression ratio 가 Zstd 보다 뒤지긴 하지만, 그만큼 decompression throughput 이 월등하기 때문에 경쟁력이 있다는 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="664-decompression-of-parquet-vs-orc">6.6.4. Decompression of Parquet vs. ORC.<a aria-hidden="true" tabindex="-1" href="#664-decompression-of-parquet-vs-orc" class="internal"> §</a></h4>
+<ul>
+<li>BtrBlock 과는 무관하지만, PBI 를 사용한 것이 이 논문의 contribution 중 하나이기 때문에, PBI 를 사용했을 때 Parquet 와 ORC 의 성능도 한번 비교해 보자.</li>
+<li>결론적으로, 전반적으로 Parquet 가 더 좋았다.
+<ul>
+<li>Decompression throughput:
+<ul>
+<li>Vanilla, +Snappy, +Zstd 에 대해 Parquet 가 ORC 보다 각각 4.1배, 4.2배, 2.4배 더 throughput 이 잘나왔다.</li>
+</ul>
+</li>
+<li>Compression ratio:
+<ul>
+<li>보면 Snappy 나 Zstd 를 추가하면 ORC 가 Parquet 보다 좀 더 compression ratio 가 좋아기긴 한다.</li>
+<li>근데 이것은 애초에 Vanilla 상태에서 비교했을 때 ORC 가 Parquet 에 비해 file size 가 28% 더 크기 때문이라고 한다.</li>
+<li>File size 는 28% 가 차이나는데, compression ratio 는 기껏해야 8% 정도밖에 차이나지 않기 때문에 Parquet 가 더 우세하다는 논리인듯.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="665-per-column-performance">6.6.5. Per-column performance.<a aria-hidden="true" tabindex="-1" href="#665-per-column-performance" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240725142830.png" width="auto" height="auto"/></p>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>표 읽기 </p></div>
+                  
+                </div>
+<ul>
+<li>각 ID 가 어떤 column 인지 아래에 나와 있다 (join 표시). Column 까지 같이 적으면 너무 가독성이 떨어져서 table 을 분리한듯.</li>
+</ul>
+</blockquote>
+<ul>
+<li>위 표는 PBI 에서 랜덤으로 선택한 column 들에 대해 BtrBlocks 와 Parquet + Zstd 를 비교해놓은 것이다.
+<ul>
+<li>Decompression speed: 보면 진짜 BtrBlock 이 월등하게 빠르긴 하다.</li>
+<li>Compression ratio: 이건 전반적으로 Zstd 가 더 좋긴 하다. 근데 그 차이가 decompression speed 에서의 차이만큼이나 극적이진 않다는 것을 볼 수 있다.</li>
+<li>Scheme: 이건 BtrBlock 에서 첫 cascading 시에 선택된 scheme 을 보여준다.
+<ul>
+<li>보면 OneValue 와 PDE 를 사용했을 때 Zstd 보다 compression ratio 가 더 잘 나온다는 점에서 이 둘은 충분히 BtrBlocks 의 scheme pool 에 추가될 가치가 있다는 것을 알 수 있다.</li>
+</ul>
+</li>
+<li>Value Example: 이건 block 의 첫 20개의 entry 를 예시로서 보여준 것이다.
+<ul>
+<li>여기서 <a href="#632-best-strategy-for-a-fixed-sample-size" class="internal">Section 6.3.2</a> 에서 언급한 <em>Single tuple range</em> 의 문제점을 다시금 확인할 수 있다.</li>
+<li>첫 20개의 entry 만 보면 OneValue 가 적합해 보이는 것이 여럿 있지만, 실제로는 OneValue 가 선택되지 않았다는 점에서 이 연속된 entry 로만 판단하는 것이 꽤나 부정확하다는 것을 확인할 수 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="666-in-memory-tpc-h-decompression-throughput">6.6.6. In-memory TPC-H decompression throughput.<a aria-hidden="true" tabindex="-1" href="#666-in-memory-tpc-h-decompression-throughput" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240725141559.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="#663-in-memory-public-bi-decompression-throughput" class="internal">Section 6.6.3</a> 에서는 PBI 를 이용해 실험을 했고, 다른 논문과의 비교를 위해 TPC-H 에 대한 실험 결과도 같이 수행했다고 한다.</li>
+<li>결과는:
+<ul>
+<li>일단 <a href="#663-in-memory-public-bi-decompression-throughput" class="internal">Section 6.6.3</a> 에 비해 양상이 크게 바뀌지는 않았다. 여전히 BtrBlock 이 더 throughput 이 잘나왔고, 심지어는 compression ratio 는 Parquet + Zstd 를 앞서기까지 한다.
+<ul>
+<li>수치적으로는, throughput 이 Parquet, +Snappy, +Zstd 에 대해 각각 2.6배, 3.9배, 4.2배 더 좋아졌다고 한다.</li>
+</ul>
+</li>
+<li>그리고 전반적으로 throughput 이 감소했다. 이것은 <a href="#611-synthetic-data" class="internal">Section 6.1.1</a> 에서 설명한 것처럼, TPC-H 가 PBI 에 비해 데이터들이 훨씬 비현실적이기 때문이다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="67-end-to-end-cloud-cost-evaluation">6.7. End-to-End Cloud Cost Evaluation<a aria-hidden="true" tabindex="-1" href="#67-end-to-end-cloud-cost-evaluation" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Tip <a href="#67-end-to-end-cloud-cost-evaluation" class="internal">Section 6.7.</a> 의 구조</p></div>
+                  
+                </div>
+<ul>
+<li>본 섹션은 크게 네 덩어리로 나눌 수 있다.</li>
+</ul>
+<ol>
+<li><a href="#671-is-parquet-decompression-fast-enough" class="internal">6.7.1</a> 과 <a href="#672-decompression-throughput-and-network-bandwidth" class="internal">6.7.2</a> 는 cloud 가 제공하는 네트워크의 대역폭 관점에서 BtrBlock 의 정당성을 검포하기 위한 새로운 metric 인 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 를 제시한다.</li>
+<li><a href="#673-measuring-end-to-end-cost" class="internal">6.7.3</a> 과 <a href="#674-end-to-end-cost-test-setup" class="internal">6.7.4</a> 는 evaluation 을 위한 환경 설정에 대한 것이다.</li>
+<li><a href="#675-loading-individual-columns" class="internal">6.7.5</a> 와 <a href="#676-cost-comparability" class="internal">6.7.6</a> 은 일종의 시행착오에 대한 것이고,</li>
+<li><a href="#677-loading-entire-datasets" class="internal">6.7.7</a> 과 <a href="#678-cost-of-loading-full-datasets" class="internal">6.7.8</a> 에 결론이 나온다.</li>
+</ol>
+</blockquote>
+<h4 id="671-is-parquet-decompression-fast-enough">6.7.1. Is Parquet decompression fast enough?<a aria-hidden="true" tabindex="-1" href="#671-is-parquet-decompression-fast-enough" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/pg47.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="#663-in-memory-public-bi-decompression-throughput" class="internal">Section 6.6.3.</a> 의 그래프를 보다 보면 Parquet 를 사용했을 때 전부 throughput 이 50GB/s 를 넘는다는 것을 볼 수 있다.</li>
+<li>이것은 <a href="#601-test-setup" class="internal">Section 6.0.1.</a> 에서 소개한 <code>c5n.18xlarge</code> instance 의 100Gbps (즉, 12.5GB/s) 네트워크를 고려하면, 무히려 네트워크가 병목이 되기 때문에 decompression throughput 이 아무리 좋아도 별 쓸데가 없다고 생각할 수 있다.
+<ul>
+<li>생각해보면 맞는말인것 같긴 하다: 어차피 한 뭉탱이를 죽이는 속도로 decompression 한다고 해도, Data Lake 에서 가져오는 것이 느리기 때문에 가져오는 시간동안 기다리고 있어야 할테니까 결론적으로는 전체적인 throughput 은 네트워크 병목에 걸려버리는 것 아닐까?</li>
+</ul>
+</li>
+<li>근데 이것은 틀렸습니다.</li>
+<li>왜? 인지 본 section 에서 알아보자.</li>
+</ul>
+<h4 id="672-decompression-throughput-and-network-bandwidth">6.7.2 Decompression throughput and network bandwidth.<a aria-hidden="true" tabindex="-1" href="#672-decompression-throughput-and-network-bandwidth" class="internal"> §</a></h4>
+<ul>
+<li>위 오해는 어떤 값의 단위만 보고, 그 값이 어떤 것을 대상으로 하는지 고려하지 않았기에 생긴 것이다.</li>
+<li>Decompression throughput 는 decompressed data 를 대상으로 한다.
+<ul>
+<li>이것은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">Deco</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">resse</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span><span class="mord">/</span><span class="mord mathnormal">Deco</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">ress</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span></span></span></span></span> 으로 계산되기 때문.</li>
+</ul>
+</li>
+<li>하지만 network bandwidth 는 compressed data 를 대상으로 한다.
+<ul>
+<li>네트워크를 통해 전송되는 것은 compressed data 이기 때문.</li>
+</ul>
+</li>
+<li>따라서 decompressed throughput 의 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Deco</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">resse</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></span> 는 네트워크와는 아무 상관이 없고, 진짜로 네트워크가 병목인지를 확인하기 위해서는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">resse</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></span> 를 고려해야 한다.</li>
+<li>따라서 새로운 metric <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 를 하나 다음과 같이 정의해 보자.</li>
+</ul>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">resse</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span><span class="mord">/</span><span class="mord mathnormal">Deco</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">ress</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span></span></span></span></span></div>
+<ul>
+<li>이놈이 갖는 의미를 한 문장으로 요약해 보면 대략: “1초간 decompression 하기 위해 필요한 compressed data 의 양” 정도로 생각해 볼 수 있다.</li>
+<li>이 값을 decompression throughput (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>) 로 나타내 보면, decompression throughput 을 compression ratio 로 나눈 값이 된다.</li>
+</ul>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">resse</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span><span class="mord">/</span><span class="mord mathnormal">Deco</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">resse</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">ress</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span></span></span></span></span></div>
+<ul>
+<li>그럼 이 값이 갖는 상관관계를 생각해 보자.
+<ul>
+<li>만약 이 값이 크다면:
+<ul>
+<li>네트워크를 통해 전송해야 되는 양 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">resse</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></span>) 이 많거나 (= <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">ress</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span></span></span></span></span> 가 크거나)</li>
+<li>Decompression 에 소요되는 시간 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Deco</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">ress</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span></span></span></span></span>) 이 적음 (= decompression 이 빠름 = <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 가 큼) 을 의미하는 것이다.</li>
+</ul>
+</li>
+<li>이 값이 작다면 위와 반대의 경우겠지.</li>
+</ul>
+</li>
+<li>이 값을 network bandwidth 와 비교했을 때, 크거나 작은 경우에 대해 다음처럼 해석할 수 있다.
+<ul>
+<li>만약 이 값이 network bandwidth 보다 크다면, 그것은 네트워크의 병목을 의미하는게 맞고, 따라서 이 BtrBlocks 가 제공하는 빠른 decompression 이 의미가 없다는 것은 설득력이 있다.</li>
+<li>하지만 이 값이 network bandwidth 보다 작다면, 그것은 네트워크가 아닌 CPU 에 병목이 있다는 것을 의미하고, 따라서 빠른 decompression 으로 CPU 에 부담을 줄여주는 BtrBlocks 은 정당성이 있다.</li>
+</ul>
+</li>
+<li><a href="#678-cost-of-loading-full-datasets" class="internal">뒤</a> 에서도 말할 결론을 미리 말하자면, 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 값은 network bandwidth 보다 작았다. 즉, 기존 Parquet 를 사용했을 때의 문제는 network bottleneck 이 아니라 CPU bound 에 기인한 것이 맞았다는 소리이다.</li>
+</ul>
+<h4 id="673-measuring-end-to-end-cost">6.7.3. Measuring end-to-end cost.<a aria-hidden="true" tabindex="-1" href="#673-measuring-end-to-end-cost" class="internal"> §</a></h4>
+<ul>
+<li>S3 scan 과 관련된 지출은 크게 두가지로 나눌 수 있다.
+<ol>
+<li>당연히 scan 을 수행할 EC2 인스턴스가 필요하다. 실험에 사용된 <code>c5n.18xlarge</code> 인스턴스 기준, 시간당 $3.89 가 필요하다.</li>
+<li>S3 에 대해서는, 1000개의 <code>GET</code> 요청 당 $0.0004 가 지출된다.
+<ul>
+<li>이때, 응답으로 오는 데이터의 크기는 상관없다. 이는 아마 한번의 응답에 전송되는 데이터의 크기가 제한되어 있기 때문이리라.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>따라서 scan 에 소모되는 지출은 (1) decompression time 과 (2) request count 를 통해 구할 수 있다.</li>
+<li>이 실험에서 S3 <code>GET</code> response 의 데이터 사이즈는 16MB 이다.
+<ul>
+<li>이건 S3 에서 최대의 대역폭을 얻기 위해서는 한번에 8MB 혹은 16MB 크기의 <em>chunk</em> 를 받는 것이 좋다는 권고사항에 따른 것이다.</li>
+<li>따라서 BtrBlock 의 경우에는, 총 사이즈가 16MB 에 근접하도록 여러 block 을 묶은 chunk 를 받는다.</li>
+<li>BtrBlock 과 비교하기 위한 Parquet 의 경우에는:
+<ul>
+<li>당연히 이놈도 여러 파일로 나눠서 저장하는데, 각 파일의 사이즈를 조정하는 것이 불가능했다.</li>
+<li>각 파일의 크기는 5.5 ~ 24MB 정도 되고 마찬가지로 이것을 16MB 에 근접하게 맞춘 chunk 를 받는다 <sup><a href="#user-content-fn-parquet-file-size" id="user-content-fnref-parquet-file-size" data-footnote-ref aria-describedby="footnote-label" class="internal">7</a></sup>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>또한 어떤 데이터셋의 경우에는 크기가 너무 작아 의미있는 throughput 측정이 불가능했다고 한다.
+<ul>
+<li>그래서 CSV 파일의 크기가 6GB 이하인 table 의 경우에는 실험에서 제외했다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="674-end-to-end-cost-test-setup">6.7.4. End-to-end cost test setup.<a aria-hidden="true" tabindex="-1" href="#674-end-to-end-cost-test-setup" class="internal"> §</a></h4>
+<ul>
+<li>전체적으로는 S3 C++ SDK 를 통해 S3 로부터 chunk 를 받은 뒤, 메모리 상에서 decompression 을 하는 것으로 구성된다.</li>
+<li>S3 C++ SDK 는 stream 이라는 것을 사용하는데, 이것이 별로 효율적이지도 않고 메모리에 있는 데이터를 decompression 하는 것을 분리하여 측정하기 위해, 별도의 memory pool 을 직접 구현했다고 한다 <sup><a href="#user-content-fn-memory-pool" id="user-content-fnref-memory-pool" data-footnote-ref aria-describedby="footnote-label" class="internal">8</a></sup>.
+<ul>
+<li>여기서는 나름의 삽질을 한 결과, S3 로부터 받은 chunk 하나 당 하나의 thread 를 생성해 처리하는 것이 효율적인 것을 알아내 그렇게 구현되어 있고,</li>
+<li>S3 에 요청을 보내는 것은 비동기적으로 이루어져 보낸 뒤에 global queue 에 넣는 식으로 구현해 최대 대역폭을 낼 수 있도록 했다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="675-loading-individual-columns">6.7.5. Loading individual columns.<a aria-hidden="true" tabindex="-1" href="#675-loading-individual-columns" class="internal"> §</a></h4>
+<ul>
+<li>OLAP query 에서는 전체 table 을 전부 읽는 경우는 거의 없고, 여러 테이블에서 여러 column 들을 골라 읽게 된다.</li>
+<li>따라서 각 column 을 S3 에서 가져와 decompression 하는 실험을 진행하였다.
+<ul>
+<li>실험은 PBI 에서 사이즈가 가장 큰 5개의 데이터셋을 대상으로 random query 를 해 해당 query 에서 필요로 하는 column 만을 S3 에서 불러들여 decompression 하는 식으로 진행됐다.</li>
+</ul>
+</li>
+<li>결과적으로 BtrBlock 은 다음의 비용을 절감하는 것으로 보였다고 한다.
+<ul>
+<li>PBI 데이터셋 기준: Parquet + Compression 한것에 비해 9배, Vanilla Parquet 에 비해서는 20배 더 저렴하고</li>
+<li>TPC-H 기준: Parquet + Snappy 기준 3.6배, Parquet + Zstd 기준 2.8배, Parquet 기준 5.5배 더 저렴한것으로 보였다고 한다.</li>
+</ul>
+</li>
+<li>다만 여기서 “보인다” 라는 워딩에 집중하자. <a href="#676-cost-comparability" class="internal">다음 section</a> 에서 설명하겠지만, 이 실험 결과는 BtrBlock 의 디자인에 기인한 것이 아닌, 다른 곳에 원인이 있다.</li>
+</ul>
+<h4 id="676-cost-comparability">6.7.6. Cost comparability.<a aria-hidden="true" tabindex="-1" href="#676-cost-comparability" class="internal"> §</a></h4>
+<ul>
+<li>위에서도 살짝 언급한 것처럼, 위의 실험 결과는 BtrBlock 의 디자인 때문이 아닌 metadata handling 때문에 성능 차이가 나는 것이다.</li>
+<li>우선 Parquet 의 metadata handling 을 보자.
+<ul>
+<li>Parquet 에서는 여러 column 을 하나의 Parquet file 로 만들고, column offset (column 들을 구분하는 delimiter 라고 생각하자.) 를 file 맨 뒤에 metadata footer 로 달아놓는다.</li>
+<li>따라서 이러한 구조의 Parquet file 에서 하나의 column 을 가져오는 것은 다음과 같은 세번의 요청으로 수행할 수 있다.
+<ol>
+<li>Metadata footer 의 길이를 읽어오고,</li>
+<li>그 길이만큼의 데이터를 읽어 metadata footer 자체를 읽어오고,</li>
+<li>그 metadata footer 를 통해 원하는 column 이 어디부터 어디까진지 알아내어 column data 를 읽어온다.</li>
+</ol>
+</li>
+<li>이렇게 하거나, 아니면 그냥 Parquet file 전체를 읽어온 다음에 column 을 분리해내는 방법을 사용할 수 있고, 이 방식이 때로는 위의 방식보다 더 빨랐다고 한다.</li>
+</ul>
+</li>
+<li>하지만 BtrBlock 은 다른식으로 metadata 를 handling 한다.
+<ul>
+<li>BtrBlock 은 Parquet 와 다르게, 하나의 column 으로 file 을 만든다.</li>
+<li>그리고 metadata 는 별도의 file 로, table 당 하나를 생성한다.</li>
+</ul>
+</li>
+<li>이렇듯 metadata handling 이 두 format 간에 차이가 있고, 이 차이점이 유발하는 <a href="#675-loading-individual-columns" class="internal">위</a> 와 같은 실험 결과는 논리적이지 못한 것.</li>
+<li>다만, <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)#213-metadata--statistics" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)">Section 2.1.3.</a> 에서도 언급한 것처럼, 이러한 metadata handling 은 본 논문에서 다루고자 하는 논지가 아니다.</li>
+<li>따라서 실제 OLAP query 의 처리 과정과는 다르더라도, 객관적인 비용 비교를 위해 다른 방식으로 실험을 진했다고 한다.</li>
+</ul>
+<h4 id="677-loading-entire-datasets">6.7.7. Loading entire datasets.<a aria-hidden="true" tabindex="-1" href="#677-loading-entire-datasets" class="internal"> §</a></h4>
+<ul>
+<li>따라서 <a href="#675-loading-individual-columns" class="internal">위</a> 에서처럼 각 column 을 load 하는 방식이 아닌, 데이터셋 전체를 load 하여 computing time 과 request cost 를 측정했다.
+<ul>
+<li>이렇게 함으로써 metadata handling 을 생략할 수 있고, decompression speed 에만 집중할 수 있었다.</li>
+</ul>
+</li>
+<li>방식은 <a href="#675-loading-individual-columns" class="internal">위</a> 에서의 5개의 데이터셋을 각각 10,000 번씩 load + decompression 하여 그때의 cost 를 측정하는 것으로 이루어졌다.</li>
+</ul>
+<h4 id="678-cost-of-loading-full-datasets">6.7.8. Cost of loading full datasets.<a aria-hidden="true" tabindex="-1" href="#678-cost-of-loading-full-datasets" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240726104929.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 표가 최종 실험 결과이다.
+<ul>
+<li>Cost 에 대해서는, Parquet 에 비해서는 대략 2.6배, Parquet + Compression 에 비해서는 대략 1.8 배 정도 저렴한 것을 알 수 있다.</li>
+<li>그리고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 에 대해서는, BtrBlock 이 제일 높게 나온 것과, 전부 다 <code>c5n.18xlarge</code> 의 network bandwidth limit 인 100Gbps 보다 작은 것을 확인할 수 있다.
+<ul>
+<li>다만, 이 “100Gbps” 라는 수치는 spec 에 따른 것이고, 실제로는 그것보다 더 작을 수도 있다.</li>
+<li>따라서 EC2 &lt;-> S3 간 대역폭을 측정해 보았고, 결과는 91Gbps 정도로 여전히 위 표에 제시된 것들보다는 큼을 알 수 있다.</li>
+</ul>
+</li>
+<li>이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 의 결과를 통해 <a href="#672-decompression-throughput-and-network-bandwidth" class="internal">6.7.2</a> 에 나온 의혹을 잠재울 수 있다.
+<ul>
+<li>즉, Parquet 에 문제가 있는 것이 아닌 network bandwidth 가 작기 때문이 아니냐는 의혹은,</li>
+<li>실제로는 위의 결과가 시사하는 바에 따라 network bandwidth 를 최대로 사용하고 있지 않음을 확인할수 있다.</li>
+<li>따라서 결론적으로 network bandwidth 가 아닌 Parquet 가 유발하는 CPU bound 가 문제인 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이것을 그래프로 표현한 것이 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/1.-Abstract,-Intro-(BtrBlocks,-SIGMOD-23)#14-btrblocks" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/1.-Abstract,-Intro-(BtrBlocks,-SIGMOD-23)">Section 1.4.</a> 에 등장한 아래의 그래프이다.</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240717164138.png" width="auto" height="auto"/></p>
+<ul>
+<li>가로축은 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 값을 나타내고 (S3 scan limit 이 91Gbps 에 그어져 있는 것을 확인할 수 있다.)</li>
+<li>세로축은 Scan cost 을 역수로 바꿔 $1 당 수행할 수 있는 scan 을 나타낸 것이다.</li>
+<li>마지막으로, 위의 실험에는 단순히 load + decompression 만 포함되어 있고, query processing 은 포함되어 있지 않기 때문에, BtrBlock 으로 실제로 절감되는 비용은 이것보다 더 클 것이라고 한다.</li>
+</ul>
+<h3 id="68-result-discussion">6.8. Result Discussion<a aria-hidden="true" tabindex="-1" href="#68-result-discussion" class="internal"> §</a></h3>
+<h4 id="681-is-btrblocks-only-fast-because-of-simd">6.8.1. Is BtrBlocks only fast because of SIMD?<a aria-hidden="true" tabindex="-1" href="#681-is-btrblocks-only-fast-because-of-simd" class="internal"> §</a></h4>
+<ul>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)">Section 5.</a> 에는 SIMD 를 활용한 low-level optimization 이 많이 들어가 있는 것을 확인할 수 있다.</li>
+<li>그러면 자연스레 “BtrBlock 이 아닌 SIMD 에 의해 이런 성능 향상이 있었던 것이 아니냐” 라는 의문이 들 수 있다.
+<ul>
+<li>즉, SIMD 만으로 이뤄낸 성능 향상이라면 BtrBlock 을 사용할 필요 없이 그냥 Parquet 에 SIMD 를 적용하면 되기 때문.</li>
+</ul>
+</li>
+<li>따라서 SIMD 를 사용하지 않는 버전도 만들어서, <a href="#66-decompression" class="internal">Section 6.6.</a> 의 실험을 반복해 봤다고 한다.</li>
+<li>결과는 SIMD 를 사용했을 때에 비해 17% 정도 성능 하락이 있었지만, 그럼에도 불구하고 Parquet variant 에 비해 2.3배 더 빨랐다고 한다.</li>
+</ul>
+<h4 id="682-update-the-standard-or-create-a-new-format">6.8.2. Update the standard or create a new format?<a aria-hidden="true" tabindex="-1" href="#682-update-the-standard-or-create-a-new-format" class="internal"> §</a></h4>
+<ul>
+<li>당연히, Parquet 와 같은 널리 사용되는 format 에 BtrBlock 이 녹아들어가는 것이 좋다.
+<ul>
+<li>그럼 사용자 입장에서는 이 BtrBlock 에서의 이점을 누리기 위해 data migration 을 하거나,</li>
+<li>관련된 코드를 고칠 일이 없을 것이기 때문.</li>
+</ul>
+</li>
+<li>하지만 <a href="#681-is-btrblocks-only-fast-because-of-simd" class="internal">Section 6.8.1</a> 이 보여주고 있는 것과 같이, SIMD 와 같은 low-level optimization 만으로는 불충분하고, high-level design 이 바뀌어야 하기에 Parquet 에 흡수된다 한들 version compatibility 문제가 생길 것이다.</li>
+<li>따라서 이런 알려진 format 에 통합하기 보다는, 지금으로서는 BtrBlock 을 open source 로 공개해 추후에 통합하는 방법을 찾아 보는 것으로 마무리 지었다고 한다.</li>
+</ul>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-rowgroup-column-decompression">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> Parquet 의 구조가 아직 파악이 안돼서 그런 것 같은데, 저 둘을 병렬적으로 decompression 한다는게 어떤건지 감이 안온다. <a href="#user-content-fnref-rowgroup-column-decompression" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a> <a href="#user-content-fnref-rowgroup-column-decompression-2" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩<sup>2</sup></a></p>
+</li>
+<li id="user-content-fn-compression-ratio">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 단위가 뭔지 모르겠다. 이것도 코드 보고 확인해야 할 듯. <a href="#user-content-fnref-compression-ratio" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-numeric-range">
+<p>원문에는 <em>Numeric range</em>, <em>One size range</em> 라는 말로서 표현되는데, 이것이 정확히 어떤 의미인지는 파악이 안된다. <a href="#user-content-fnref-numeric-range" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-system-a-d">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 원문상에도 System A~D 로만 표현되어 있고, 어떤 솔루션인지는 정확하게 나와있지 않다. 아마 proprietary system (cloud data warehouse solution) 인듯. 코드 뒤지다 보면 찾을 수 있을지도 모르겠다. <a href="#user-content-fnref-system-a-d" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-pde-commongov">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 얘네들은 도대체 뭐가 좋아서 무친듯이 뛰는건지 확인해 볼 필요가 있다. <a href="#user-content-fnref-pde-commongov" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-orc-mem-readfile">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 메모리로부터 파일을 직접 읽어오는 것이 어떤 의미인지 모르겠다. 대강 memory buffer 에 우선 파일을 올려놓은 뒤에 벤치를 돌리고 싶은데 그러지 못한다는 얘기인것 같은데, 코드 보면서 확인해야 할 듯. <a href="#user-content-fnref-orc-mem-readfile" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-parquet-file-size">
+<p>본문에는 BtrBlock 처럼 16MB 로 맞춰서 받는 이야기는 없다. 주인장의 예상임. <a href="#user-content-fnref-parquet-file-size" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-memory-pool">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 이쪽 전반이 감이 잘 안온다. 코드 보면서 파악해야 될 것. <a href="#user-content-fnref-memory-pool" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#6-evaluation" data-for="6-evaluation">6. Evaluation</a></li><li class="depth-1"><a href="#60-setup" data-for="60-setup">6.0. Setup</a></li><li class="depth-1"><a href="#61-real-world-datasets" data-for="61-real-world-datasets">6.1. Real-World Datasets</a></li><li class="depth-1"><a href="#62-the-compression-scheme-pool" data-for="62-the-compression-scheme-pool">6.2. The Compression Scheme Pool</a></li><li class="depth-1"><a href="#63-sampling-algorithm" data-for="63-sampling-algorithm">6.3. Sampling Algorithm</a></li><li class="depth-1"><a href="#64-compression" data-for="64-compression">6.4. Compression</a></li><li class="depth-1"><a href="#65-pseudodecimal-encoding" data-for="65-pseudodecimal-encoding">6.5. Pseudodecimal Encoding</a></li><li class="depth-1"><a href="#66-decompression" data-for="66-decompression">6.6. Decompression</a></li><li class="depth-1"><a href="#67-end-to-end-cloud-cost-evaluation" data-for="67-end-to-end-cloud-cost-evaluation">6.7. End-to-End Cloud Cost Evaluation</a></li><li class="depth-1"><a href="#68-result-discussion" data-for="68-result-discussion">6.8. Result Discussion</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/(논문)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/1.-Abstract,-Intro-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (1. Abstract, Intro)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (2. Background)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (3. Scheme selection and compression)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (4. Pseudodecimal encoding)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (5. Fast decompression)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (6. Evaluation)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/7.-Related-work-and-conclusion-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (7. Related work and conclusion)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>

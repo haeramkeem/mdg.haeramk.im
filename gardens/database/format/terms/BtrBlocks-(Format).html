@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html><head><title>BtrBlocks (Format)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="BtrBlocks (Format)"/><meta property="og:description" content="참고한 것들 풀 논문 정리본 원본 논문 이 글은 BtrBlocks: Efficient Columnar Compression for Data Lakes 에서 핵심 아이디어만 요약한 글입니다. 별도의 명시가 없으면, 본 논문에서 그림을 가져오거나 주인장이 직접 그렸습니다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="참고한 것들 풀 논문 정리본 원본 논문 이 글은 BtrBlocks: Efficient Columnar Compression for Data Lakes 에서 핵심 아이디어만 요약한 글입니다. 별도의 명시가 없으면, 본 논문에서 그림을 가져오거나 주인장이 직접 그렸습니다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/format/terms/BtrBlocks-(Format)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">BtrBlocks (Format)</h1><p class="content-meta ">Aug 12, 2024, 8 min read</p><ul class="tags "><li><a href="../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../tags/db-format" class="internal tag-link">#db-format</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/(논문)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/(논문)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes">풀 논문 정리본</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>원본 논문 </p></div>
+                  
+                </div>
+<ul>
+<li>이 글은 <a href="https://dl.acm.org/doi/10.1145/3589263" class="external">BtrBlocks: Efficient Columnar Compression for Data Lakes</a> 에서 핵심 아이디어만 요약한 글입니다.</li>
+<li>별도의 명시가 없으면, 본 논문에서 그림을 가져오거나 주인장이 직접 그렸습니다.</li>
+</ul>
+</blockquote>
+<h2 id="요약정리">요약정리<a aria-hidden="true" tabindex="-1" href="#요약정리" class="internal"> §</a></h2>
+<ul>
+<li>BtrBlock 은 효율적인 compression 을 지원하는 (fast decompression + high compression ratio) columnar data format 이다.</li>
+<li>풀 논문 정리본은 <a href="../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/(논문)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/(논문)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes">여기</a> 에 돼있고, 여기에는 로직만 실압근으로다가 정리해놓을거다.
+<ul>
+<li>Motivation, evaluation 등은 저기서 확인하자.</li>
+</ul>
+</li>
+</ul>
+<h3 id="scheme-pool">Scheme Pool<a aria-hidden="true" tabindex="-1" href="#scheme-pool" class="internal"> §</a></h3>
+<ul>
+<li>Decompression 이 빠른 8개 (기존것 7개 + 새로운 것 1개) 의 scheme 으로 scheme pool 을 구성한다.
+<ul>
+<li><a href="../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a></li>
+<li>One Value: 모든 값이 동일한 RLE</li>
+<li><a href="../../../../gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)">Dictionary</a></li>
+<li><a href="../../../../gardens/database/encoding/terms/Huffman-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Huffman-Coding-(Encoding)">Frequency</a></li>
+<li><a href="../../../../gardens/database/encoding/terms/Patching,-Mostly-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Patching,-Mostly-Encoding-(Encoding)">Patched</a> <a href="../../../../gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)">FOR</a> + <a href="../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a></li>
+<li><a href="../../../../gardens/database/encoding/terms/Fast-Static-Symbol-Table,-FSST-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Fast-Static-Symbol-Table,-FSST-(Encoding)">FSST</a></li>
+<li><a href="../../../../gardens/database/encoding/terms/Roaring-Bitmap-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Roaring-Bitmap-(Encoding)">Roaring Bitmap</a></li>
+<li><a href="../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)">PDE</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="cascading-compression">Cascading Compression<a aria-hidden="true" tabindex="-1" href="#cascading-compression" class="internal"> §</a></h3>
+<p><img src="../../../../images/btrblocks_pg33.png" width="auto" height="auto"/></p>
+<ul>
+<li>전체 구조는 다음과 같음: column 하나를 64,000 entry 씩 block 으로 묶은 단위로 compression 을 진행</li>
+<li>그리고 column 하나는 하나의 BtrFile 이 된다</li>
+<li>이때 저 가운데 부분이 어떻게 되는지 보자</li>
+</ul>
+<h4 id="entrypoint-pick-and-compress">Entrypoint: Pick and Compress<a aria-hidden="true" tabindex="-1" href="#entrypoint-pick-and-compress" class="internal"> §</a></h4>
+<p><img src="../../../../images/btrblocks_pg34-1.png" width="auto" height="auto"/></p>
+<ul>
+<li>처음에 block 은 <em>Pick and compress</em> 과정으로 들어간다.
+<ul>
+<li>코드상으로는 <a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/compression/SchemePicker.hpp" class="external">CSchemePicker::compress</a> 에 해당한다.</li>
+</ul>
+</li>
+<li>여기서 하는 역할은 크게 (1) Scheme selection 과 (2) Compress 로 나눌 수 있다.</li>
+<li>그럼 입력된 block 으로 scheme selection 을 어떻게 하는지 보자.</li>
+</ul>
+<h4 id="scheme-selection">Scheme Selection<a aria-hidden="true" tabindex="-1" href="#scheme-selection" class="internal"> §</a></h4>
+<p><img src="../../../../images/btrblocks_pg35-1.png" width="auto" height="auto"/></p>
+<ul>
+<li>처음에는 block 의 자료형에 따라 적용할 수 없는 scheme 들은 걸러낸다.</li>
+<li>그리고 block 으로부터 통계를 구하고, 이것으로 heuristic 을 돌려 추가적으로 몇가지의 scheme 을 더 걸러낸다.
+<ul>
+<li>구하는 통계에는 min, max, unique value count, avg. run length 등이 포함된다. (<a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/stats/NumberStats.hpp" class="external">코드 예시 - Number 자료형</a>)</li>
+<li>그리고 heuristic 으로 추가적인 필터링을 하는 것은 (3) 번째 단계에서 실제로 compression 을 해보며 compression ratio 가 가장 높은 놈을 고를건데, 이때 compression 을 돌려볼 scheme candidate 를 최대한 줄이기 위해서이다.
+<ul>
+<li>너무 candidate 가 많으면 이 (3) 번 과정이 너무 오래걸리니까.</li>
+<li>이건 코드상으로는 모든 scheme 들이 상속받는 <code>Scheme::isUsable()</code> 함수에서 구체적인 heuristic 을 확인할 수 있다.
+<ul>
+<li>대부분의 scheme 들은 그냥 <code>true</code> 를 반환한다. 즉, heuritic filtering 없이 그냥 pass 되는 셈.</li>
+<li><a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/double/Pseudodecimal.cpp#L476-L483" class="external">PDE::isUsable()</a>: Unique &lt; 10%</li>
+<li><a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/string/Fsst.cpp#L119-L129" class="external">FSST::isUsable()</a>
+<ul>
+<li>Unique &lt; 50% (of not NULL)</li>
+<li>Total length > FSST_CONFIG_THRESHOLD</li>
+</ul>
+</li>
+<li><a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/string/DynamicDictionary.cpp#L586-L605" class="external">StringDynDict::isUsable()</a>
+<ul>
+<li>When FSST is not available</li>
+<li>Unique &lt; 50% (of not NULL)</li>
+</ul>
+</li>
+<li>근데 일부 scheme 에서는 이 함수 말고 다음 단계에서 heuristic 이 적용되기도 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>마지막으로는 sample 을 채취해 그것에다 직접 compression 해보고, compression ratio 가 가장 높은 놈을 선택하게 된다.
+<ul>
+<li>이건 모든 scheme 들이 상속받는 <code>Scheme::expectedCompressionRatio()</code> 함수를 호출하는 것으로 수행된다.</li>
+<li>공통적으로는 하나의 candidate scheme 에 대해 compression 를 하고, 그 결과를 cascading 하는 방식으로 수행된다.
+<ul>
+<li>여기서부터 머리속이 복잡해진다: scheme selection 을 위해서는 compression 이 들어가고, compression 을 위해서 scheme selection 을 하는 loop 이 생기기 때문.</li>
+<li>이건 <a href="#scheme-selection-loop" class="internal">뒤에서</a> 더 알아보자.</li>
+</ul>
+</li>
+<li>다만 어떤 scheme 의 경우에는 sample 을 compression 하는 것으로 compression ratio 를 예측하기 힘든 경우도 있다.
+<ul>
+<li>가령 FSST 는 sample 로는 실제 compression ratio 를 파악하기 힘들다. 따라서 이놈에 대해서는 expected compression ratio 를 무조건 <code>1</code>로 반환한다.</li>
+<li><a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/string/Fsst.cpp#L10-L15" class="external">FSST::expectedCompressionRatio()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="scheme-selection-loop">Scheme Selection Loop<a aria-hidden="true" tabindex="-1" href="#scheme-selection-loop" class="internal"> §</a></h4>
+<ul>
+<li>우선 각 scheme 을 적용하는 것은 <code>Scheme::compress()</code> 함수로 수행된다.</li>
+<li>즉, sample 은 일단 candidate scheme 중 하나로 compress 된다.</li>
+</ul>
+<p><img src="../../../../images/btrblocks_pg36-1.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 그 결과는 다시 <a href="#entrypoint-pick-and-compress" class="internal">pick and compress</a> 로 들어간다.</li>
+<li>즉, 하나의 scheme 을 적용한 결과에 대해서 동일한 과정을 거쳐 그 결과를 또 다시 compress 하게 되는 것.</li>
+</ul>
+<p><img src="../../../../images/btrblocks_pg37-1.png" width="auto" height="auto"/></p>
+<ul>
+<li>그렇다고 무한정 이 cascading 을 반복하지는 않는다. 최대 3번까지만 반복함.</li>
+<li>이렇게 함으로써 어떤 한 scheme 에서 시작하는 (이걸 root scheme 이라고 부르자.) 모든 가능한 cascading 을 거치게 되고,</li>
+<li>이때 가장 compression ratio 가 높았던 root scheme 하나를 최종적으로 선택하게 된다.</li>
+<li>가령 candidate scheme 으로 <code>A</code>, <code>B</code> 가 있었다고 해보자. (즉, root scheme 은 <code>A</code> 와 <code>B</code> 이다.)</li>
+<li>그리고 각자의 결과는 <code>A</code> 의 경우에는 <code>A1</code>, <code>A2</code> 로 cascading 될 수 있고, <code>B</code> 의 경우에는 <code>B1</code>, <code>B2</code> 가 가능하다고 해보자.</li>
+<li>마찬가지로 <code>A1</code> 의 결과는 <code>A11</code>, <code>A12</code> 로 cascading 되는 식으로 진행된다고 해보자. 그럼 다음과 같은 tree 가 만들어 진다.</li>
+</ul>
+<pre><code class="mermaid">stateDiagram
+	[*] --> A
+		A --> A1
+			A1 --> A11
+			A1 --> A12
+		A --> A2
+			A2 --> A21
+			A2 --> A22
+	[*] --> B
+		B --> B1
+			B1 --> B11
+			B1 --> B12
+		B --> B2
+			B2 --> B21
+			B2 --> B22
+</code></pre>
+<ul>
+<li>이때 <code>A --> A1 --> A11</code> 부터 <code>B --> B2 --> B22</code> 까지의 모든 경우의 수에 대한 compression ratio 를 계산하여, 가장 compression ratio 가 좋았던 root scheme (즉, <code>A</code> 혹은 <code>B</code> 일 것이다.) 을 최종적인 scheme 으로 고르게 된다.</li>
+</ul>
+<h4 id="compression-loop">Compression Loop<a aria-hidden="true" tabindex="-1" href="#compression-loop" class="internal"> §</a></h4>
+<ul>
+<li>위 과정을 거치게 되면, scheme 하나가 결정될 것이다.</li>
+<li>그리고 이 과정을 block 에 대해서도 동일하게 반복한다 (…)</li>
+<li>즉, 다음과 같이 scheme 이 결정됐다고 할 때</li>
+</ul>
+<p><img src="../../../../images/btrblocks_pg39-1.png" width="auto" height="auto"/></p>
+<ul>
+<li>이것은 그 결정된 scheme 으로 compression 되고</li>
+</ul>
+<p><img src="../../../../images/btrblocks_pg41-1.png" width="auto" height="auto"/></p>
+<ul>
+<li>다시 <a href="#entrypoint-pick-and-compress" class="internal">pick and compress</a> 로 돌아가 반복한다.</li>
+</ul>
+<p><img src="../../../../images/btrblocks_pg42-1.png" width="auto" height="auto"/></p>
+<h2 id="sampling">Sampling<a aria-hidden="true" tabindex="-1" href="#sampling" class="internal"> §</a></h2>
+<ul>
+<li>위에서 sampling 하는 것은 그냥 지나쳤는데, 구체적으로는 다음과 같이 수행된다.</li>
+</ul>
+<p><img src="../../../../images/Pasted-image-20240719175037.png" width="auto" height="auto"/></p>
+<ul>
+<li>Block 의 전체 64,000 개의 entry 를 6,400 개씩 묶어 partition 을 하고,</li>
+<li>그 partition 내에서 랜덤한 offset 으로부터 64 개의 entry 를 꺼내어 합친다.</li>
+<li>그럼 partition 10 개에서 64개씩 꺼내게 되므로 총 640 개의 entry 가 나오므로, 전체 block 의 1% 를 sampling 하는 셈이다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#요약정리" data-for="요약정리">요약정리</a></li><li class="depth-1"><a href="#scheme-pool" data-for="scheme-pool">Scheme Pool</a></li><li class="depth-1"><a href="#cascading-compression" data-for="cascading-compression">Cascading Compression</a></li><li class="depth-0"><a href="#sampling" data-for="sampling">Sampling</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/database/(Garden)-Database" class="internal">(Garden) Database</a></li><li><a href="../../../../gardens/database/encoding/papers/fastlanes.2023.pvldb.vldb.org/full/5.-Conclusion-and-Future-Work-(FastLanes,-VLDB-23)" class="internal">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (5. Conclusion and Future Work)</a></li><li><a href="../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/(논문)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

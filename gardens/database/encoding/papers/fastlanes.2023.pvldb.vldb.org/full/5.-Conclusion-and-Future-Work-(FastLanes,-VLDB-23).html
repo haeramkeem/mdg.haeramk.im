@@ -76,7 +76,7 @@
 <ul>
 <li>위에서도 말한 것처럼, <em>FastLanes</em> 에서는 BP 된 데이터를 원본의 데이터 크기로 복원하는 것 (<em>fully, eager decompression</em>) 이 아니라 lane 크기에 맞을 정도로만 데이터를 복원하는 방식 (<em>compressed vector</em>) 을 사용하여 데이터의 크기를 줄여 cache 에서 바로 데이터를 가져다가 query execution 을 할 수 있게 했다.</li>
 <li>여기서 한가지 연구해볼만한 것은, CPU 가 아닌 GPU 나 TPU 에서도 이런 것이 가능할지 이다.</li>
-<li><em>FastLanes</em> 에서는 decompression speed 뿐만 아니라 compression ratio 도 향상시켰는데, 이들을 (<a href="../../../../../../gardens/database/encoding/terms/BtrBlocks-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/BtrBlocks-(Encoding)">BtrBlocks</a> 마냥) cascading 해서 결과적으로 Snappy 나 Zstd, LZ 와 같은 general-purpose compression scheme 으로 만드는 것 또한 추가적으로 해볼 연구라고 한다.</li>
+<li><em>FastLanes</em> 에서는 decompression speed 뿐만 아니라 compression ratio 도 향상시켰는데, 이들을 (<a href="../../../../../../gardens/database/format/terms/BtrBlocks-(Format)" class="internal" data-slug="gardens/database/format/terms/BtrBlocks-(Format)">BtrBlocks</a> 마냥) cascading 해서 결과적으로 Snappy 나 Zstd, LZ 와 같은 general-purpose compression scheme 으로 만드는 것 또한 추가적으로 해볼 연구라고 한다.</li>
 <li>마지막으로, <em>FastLanes</em> 를 Parquet 와 같은 open-source data format 과 통합하여 end-to-end evaluation 을 하는 것도 future work 로 남겨놨다고 한다.
 <ul>
 <li>시도해 보긴 했으나, cascading 을 한다는 것은 chunk 를 recursive-compression 될 수 있게 배치하고 이에 대한 metadata 를 관리해야 하기에 추후의 연구로 남긴듯</li>

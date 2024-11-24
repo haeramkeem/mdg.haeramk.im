@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html><head><title>Postgres with Parquet - Postgres 에서 Parquet 사용해보기</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Postgres with Parquet - Postgres 에서 Parquet 사용해보기"/><meta property="og:description" content="참고한 것들 Crunchy data 블로그 개요 § Postgres 에서는 Parquet 를 native 하게 지원하지는 않고, 관련 extension 들도 좀 부실한 상황이다. 관련하여 서치를 해보자면, 보통 FDW (Foreign Data Wrapper) extension 을 사용한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="참고한 것들 Crunchy data 블로그 개요 § Postgres 에서는 Parquet 를 native 하게 지원하지는 않고, 관련 extension 들도 좀 부실한 상황이다. 관련하여 서치를 해보자면, 보통 FDW (Foreign Data Wrapper) extension 을 사용한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/dbms/postgresql/story/Postgres-with-Parquet---Postgres-에서-Parquet-사용해보기"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Postgres with Parquet - Postgres 에서 Parquet 사용해보기</h1><p class="content-meta ">Nov 21, 2024, 5 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/db-postgresql" class="internal tag-link">#db-postgresql</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="https://www.crunchydata.com/blog/parquet-and-postgres-in-the-data-lake" class="external">Crunchy data 블로그</a></li>
+</ul>
+</blockquote>
+<h2 id="개요">개요<a aria-hidden="true" tabindex="-1" href="#개요" class="internal"> §</a></h2>
+<ul>
+<li>Postgres 에서는 <a href="../../../../../gardens/database/format/drafts/Parquet-(Format)" class="internal" data-slug="gardens/database/format/drafts/Parquet-(Format)">Parquet</a> 를 native 하게 지원하지는 않고, 관련 extension 들도 좀 부실한 상황이다.</li>
+<li>관련하여 서치를 해보자면, 보통 FDW (Foreign Data Wrapper) extension 을 사용한다.
+<ul>
+<li><a href="https://www.crunchydata.com/blog/parquet-and-postgres-in-the-data-lake" class="external">Crunchy data 블로그</a>: 여기서는 <a href="https://github.com/adjust/parquet_fdw" class="external">Parquet FDW</a> 를 사용하여 Postgres 에서 Parquet file 을 로드해 query 를 날려보는 짓을 해본다.</li>
+<li><a href="https://medium.com/@ahuarte/loading-parquet-in-postgresql-via-duckdb-testing-queries-and-exploring-the-core-1d667ae67dc2" class="external">Medium 블로그</a>: 여기서는 DuckDB 에 Parquet file 을 로드하고 DuckDB FDW 를 이용해 Postgres 에서 DuckDB 에 query 를 날리는 짓을 한다.</li>
+<li><a href="https://www.crunchydata.com/blog/pg_parquet-an-extension-to-connect-postgres-and-parquet" class="external">pg_parquet</a>: 이놈은 Parquet 를 바로 사용하기보다는, Postgres 에 Parquet 를 import, export 하는 API 를 제공한다.</li>
+<li><a href="https://www.postgresql.org/about/news/parquet-s3-fdw-100-released-2571/" class="external">parquet_s3_pg</a>: 이놈은 JDBC 를 Postgres 에 FDW 로 노출시켜주는 놈인데, 여기에 Parquet 또한 지원하는 모양이다.</li>
+</ul>
+</li>
+<li>그래서 일단 저 <a href="https://www.crunchydata.com/blog/parquet-and-postgres-in-the-data-lake" class="external">Crunchy data 블로그</a> 에서 한 작업을 재현해보기로 하자.</li>
+</ul>
+<h2 id="gtd">GTD<a aria-hidden="true" tabindex="-1" href="#gtd" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Postgres 설정 </p></div>
+                  
+                </div>
+<ul>
+<li>여기서는 <a href="../../../../../gardens/database/dbms/postgresql/story/PostgreSQL-Build-from-Source-Guide---PostgreSQL-디버깅을-위한-소스코드-빌드-가이드" class="internal" data-slug="gardens/database/dbms/postgresql/story/PostgreSQL-Build-from-Source-Guide---PostgreSQL-디버깅을-위한-소스코드-빌드-가이드">이 가이드</a> 에서 설정한 Postgres 를 기준으로 합니당</li>
+</ul>
+</blockquote>
+<h3 id="dataset-csv">Dataset (CSV)<a aria-hidden="true" tabindex="-1" href="#dataset-csv" class="internal"> §</a></h3>
+<ul>
+<li>데이터셋은 위 저자의 <a href="https://www.crunchydata.com/blog/performance-and-spatial-joins" class="external">또 다른 블로그 글</a> 에서 사용한 Philadelphia 의 주차 위반 데이터를 사용한다.</li>
+<li>이건 이렇게 다운받으면 된다:
+<ul>
+<li>근데 좀 오래걸린다. 크기가 커서라기보다는 뭔가 네트워크가 느린듯</li>
+</ul>
+</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">curl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;https://phl.carto.com/api/v2/sql?filename=parking_violations&amp;format=csv&amp;skipfields=cartodb_id,the_geom,the_geom_webmercator&amp;q=SELECT%20*%20FROM%20parking_violations%20WHERE%20issue_datetime%20%3E=%20%272012-01-01%27%20AND%20issue_datetime%20%3C%20%272017-12-31%27&quot;</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-o</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">phl_parking.csv</span></span></code></pre></div>
+<ul>
+<li>그리고 <code>psql</code> 로 session 에 접속한 뒤에 table 을 만들고,</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="sql" data-theme="default"><code data-language="sql" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">CREATE</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">TABLE</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">phl_parking</span><span style="color:var(--shiki-color-text);"> (</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	anon_ticket_number </span><span style="color:var(--shiki-token-keyword);">integer</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	issue_datetime </span><span style="color:var(--shiki-token-keyword);">timestamptz</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">state</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	anon_plate_id </span><span style="color:var(--shiki-token-keyword);">integer</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	division </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">location</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	violation_desc </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	fine float8,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	issuing_agency </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	lat float8,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	lon float8,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	gps </span><span style="color:var(--shiki-token-keyword);">boolean</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	zip_code </span><span style="color:var(--shiki-token-keyword);">text</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<ul>
+<li>다음과 같이 CSV 를 import 해주면 된다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="sql" data-theme="default"><code data-language="sql" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">\</span><span style="color:var(--shiki-token-keyword);">copy</span><span style="color:var(--shiki-color-text);"> phl_parking </span><span style="color:var(--shiki-token-keyword);">FROM</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">'phl_parking.csv'</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">WITH</span><span style="color:var(--shiki-color-text);"> (FORMAT csv, HEADER true);</span></span></code></pre></div>
+<ul>
+<li>그리고 확인해 보면 잘 들어온다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="sql" data-theme="default"><code data-language="sql" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">SELECT</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">COUNT</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);">) </span><span style="color:var(--shiki-token-keyword);">FROM</span><span style="color:var(--shiki-color-text);"> phl_parking;</span></span></code></pre></div>
+<p><img src="../../../../../images/Pasted-image-20241121121310.png" width="auto" height="auto"/></p>
+<h3 id="converting-csv-to-parquet">Converting: CSV to Parquet<a aria-hidden="true" tabindex="-1" href="#converting-csv-to-parquet" class="internal"> §</a></h3>
+<ul>
+<li>위 블로그에서는 <a href="https://gdal.org/en/latest/" class="external">GDAL</a> 에서 제공하는 <code>ogr2ogr</code> 이란 툴을 사용하는데, 해보니 Parquet 드라이버를 찾을 수 없다며 안된다.</li>
+<li>그래서 그냥 <code>pyarrow</code> 와 <code>pandas</code> 로 변환 진행</li>
+<li>일단 <code>pyarrow</code> 하고 <code>pandas</code> 설치</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Python venv </p></div>
+                  
+                </div>
+<ul>
+<li>그냥 <code>pip</code> 로 install 하면 global environment 라고 하며 안된다고 징징댄다.</li>
+<li>그래서 virtual environment <code>venv</code> 를 설정해주고 거기에서 설치하자.</li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">/path/to/venv/bin/pip3</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">install</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">pyarrow</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">pandas</span></span></code></pre></div>
+<ul>
+<li>그리고 이런 python script 를 짜주고</li>
+</ul>
+<div data-rehype-pretty-code-fragment><div data-rehype-pretty-code-title data-language="python" data-theme="default">conv.py</div><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="python" data-theme="default"><code data-language="python" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">import</span><span style="color:var(--shiki-color-text);"> pandas </span><span style="color:var(--shiki-token-keyword);">as</span><span style="color:var(--shiki-color-text);"> pd</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">csv_file </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;/path/to/phl_parking.csv&quot;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">df </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> pd</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">read_csv</span><span style="color:var(--shiki-token-punctuation);">(csv_file)</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">parquet_file </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">&quot;phl_parking.parquet&quot;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">df</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">to_parquet</span><span style="color:var(--shiki-token-punctuation);">(parquet_file, engine</span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-token-string-expression);">'pyarrow'</span><span style="color:var(--shiki-token-punctuation);">, index</span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-token-constant);">False</span><span style="color:var(--shiki-token-punctuation);">, compression</span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-token-constant);">None</span><span style="color:var(--shiki-token-punctuation);">)</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">print</span><span style="color:var(--shiki-token-punctuation);">(</span><span style="color:var(--shiki-token-keyword);">f</span><span style="color:var(--shiki-token-string-expression);">&quot;CSV file converted to Parquet: </span><span style="color:var(--shiki-token-constant);">{</span><span style="color:var(--shiki-token-punctuation);">parquet_file</span><span style="color:var(--shiki-token-constant);">}</span><span style="color:var(--shiki-token-string-expression);">&quot;</span><span style="color:var(--shiki-token-punctuation);">)</span></span></code></pre></div>
+<ul>
+<li>이렇게 실행하면 됨</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">/path/to/venv/bin/python3</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">conv.py</span></span></code></pre></div>
+<ul>
+<li>그러면 정상적으로 변환이 된다.</li>
+</ul>
+<h3 id="parquet_fdw-설치"><code>parquet_fdw</code> 설치<a aria-hidden="true" tabindex="-1" href="#parquet_fdw-설치" class="internal"> §</a></h3>
+<ul>
+<li>우선 source code 를 clone 한다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">git</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">clone</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">https://github.com/adjust/parquet_fdw.git</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-punctuation);">&amp;&amp;</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">cd</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">parquet_fdw</span></span></code></pre></div>
+<ul>
+<li>Parquet 를 사용하기 위해서는 <a href="https://arrow.apache.org/" class="external">Apache Arrow</a> 의 <code>libarrow</code> 를 설치해야 한다.</li>
+<li>뭐 저기 document 가면 설치 방법이 있긴 하지만, Ubuntu 기준의 설치 스크립트가 <code>parquet_fdw</code> 에 준비되어 있어 이걸 사용하자.
+<ul>
+<li>여기 script 에는 <code>sudo</code> 가 빠져있어서 그냥 실행하면 권한없다고 뜬다.</li>
+</ul>
+</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">bash</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-c</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">'./install_arrow.sh'</span></span></code></pre></div>
+<ul>
+<li>그리고 다음 명령어로 compile 및 설치하면 된다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">make</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">install</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">PG_CONFIG=/path/to/pg_config</span></span></code></pre></div>
+<ul>
+<li>여기서 <code>PG_CONFIG</code> 는 <a href="../../../../../gardens/database/dbms/postgresql/story/PostgreSQL-Build-from-Source-Guide---PostgreSQL-디버깅을-위한-소스코드-빌드-가이드" class="internal" data-slug="gardens/database/dbms/postgresql/story/PostgreSQL-Build-from-Source-Guide---PostgreSQL-디버깅을-위한-소스코드-빌드-가이드">이전 가이드</a> 에서 Postgres 를 다른 위치에 설치했기 때문에 설정해주는 것이고, 기본 위치에 설치했으면 필요 없다.</li>
+<li>만약 다른 위치에 설치했다면, 해당 위치의 <code>/bin/pg_config</code> 에 있다.</li>
+<li>그리고 <code>psql</code> session 에서 다음과 같이 해주면 정상적으로 extension 을 가져올 수 있다.
+<ul>
+<li>여기서 server 는 FDW 로 데이터를 가져올 data source 정도로 생각하면 된다.</li>
+</ul>
+</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="sql" data-theme="default"><code data-language="sql" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">CREATE</span><span style="color:var(--shiki-color-text);"> EXTENSION parquet_fdw;</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">CREATE</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">SERVER</span><span style="color:var(--shiki-color-text);"> parquet_srv FOREIGN </span><span style="color:var(--shiki-token-keyword);">DATA</span><span style="color:var(--shiki-color-text);"> WRAPPER parquet_fdw;</span></span></code></pre></div>
+<h3 id="import-parquet">Import Parquet<a aria-hidden="true" tabindex="-1" href="#import-parquet" class="internal"> §</a></h3>
+<ul>
+<li>그리고 요래 foreign table 을 생성하는 식으로 Parquet file 을 import 하면 된다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="sql" data-theme="default"><code data-language="sql" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">CREATE</span><span style="color:var(--shiki-color-text);"> FOREIGN </span><span style="color:var(--shiki-token-keyword);">TABLE</span><span style="color:var(--shiki-color-text);"> phl_parking_pq (</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	anon_ticket_number </span><span style="color:var(--shiki-token-keyword);">integer</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	issue_datetime </span><span style="color:var(--shiki-token-keyword);">timestamptz</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">state</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	anon_plate_id </span><span style="color:var(--shiki-token-keyword);">integer</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	division </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">location</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	violation_desc </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	fine float8,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	issuing_agency </span><span style="color:var(--shiki-token-keyword);">text</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	lat float8,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	lon float8,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	gps </span><span style="color:var(--shiki-token-keyword);">boolean</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	zip_code </span><span style="color:var(--shiki-token-keyword);">text</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">) </span><span style="color:var(--shiki-token-keyword);">SERVER</span><span style="color:var(--shiki-color-text);"> parquet_srv OPTIONS (</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">filename</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">'/tmp/phl_parking.parquet'</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	sorted </span><span style="color:var(--shiki-token-string-expression);">'issue_datetime'</span><span style="color:var(--shiki-color-text);">,</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	use_threads </span><span style="color:var(--shiki-token-string-expression);">'true'</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<h2 id="evaluation">Evaluation<a aria-hidden="true" tabindex="-1" href="#evaluation" class="internal"> §</a></h2>
+<ul>
+<li>이제 몇가지 query 를 해보자.</li>
+<li>일단 Parquet 는 <a href="../../../../../gardens/database/format/drafts/Partition-Attribute-Across,-PAX-(Format)" class="internal" data-slug="gardens/database/format/drafts/Partition-Attribute-Across,-PAX-(Format)">PAX</a> 이기 때문에 full column scan 에 강점을 가질 것이다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="sql" data-theme="default"><code data-language="sql" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">SELECT</span><span style="color:var(--shiki-color-text);"> issuing_agency </span><span style="color:var(--shiki-token-keyword);">FROM</span><span style="color:var(--shiki-color-text);"> phl_parking;</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">SELECT</span><span style="color:var(--shiki-color-text);"> issuing_agency </span><span style="color:var(--shiki-token-keyword);">FROM</span><span style="color:var(--shiki-color-text);"> phl_parking_pq;</span></span></code></pre></div>
+<p><img src="../../../../../images/Pasted-image-20241121122346.png" width="auto" height="auto"/></p>
+<ul>
+<li>대신 여러 column 들을 조합해야 하는 경우에는 더 오래걸린다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="sql" data-theme="default"><code data-language="sql" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">SELECT</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">FROM</span><span style="color:var(--shiki-color-text);"> phl_parking;</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">SELECT</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">FROM</span><span style="color:var(--shiki-color-text);"> phl_parking_pq;</span></span></code></pre></div>
+<p><img src="../../../../../images/Pasted-image-20241121122419.png" width="auto" height="auto"/></p></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#개요" data-for="개요">개요</a></li><li class="depth-0"><a href="#gtd" data-for="gtd">GTD</a></li><li class="depth-1"><a href="#dataset-csv" data-for="dataset-csv">Dataset (CSV)</a></li><li class="depth-1"><a href="#converting-csv-to-parquet" data-for="converting-csv-to-parquet">Converting: CSV to Parquet</a></li><li class="depth-1"><a href="#parquet_fdw-설치" data-for="parquet_fdw-설치">parquet_fdw 설치</a></li><li class="depth-1"><a href="#import-parquet" data-for="import-parquet">Import Parquet</a></li><li class="depth-0"><a href="#evaluation" data-for="evaluation">Evaluation</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/(Garden)-Database" class="internal">(Garden) Database</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

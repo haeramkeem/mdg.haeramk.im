@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html><head><title>(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (2. Background)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (2. Background)"/><meta property="og:description" content="본 글은 논문 BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD &amp;#039;23) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Abstract, Intro 2."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD &amp;#039;23) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Abstract, Intro 2."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (2. Background)</h1><p class="content-meta ">Jul 17, 2024, 16 min read</p><ul class="tags "><li><a href="../../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../../tags/논문" class="internal tag-link">#논문</a></li><li><a href="../../../../../../tags/draft" class="internal tag-link">#draft</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="https://dl.acm.org/doi/10.1145/3589263" class="external">BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD '23)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>목차 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/1.-Abstract,-Intro-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/1.-Abstract,-Intro-(BtrBlocks,-SIGMOD-23)">1. Abstract, Intro</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)">2. Background (현재 글)</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)">3. Scheme selection and compression</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)">4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)">5. Fast decompression</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)">6. Evaluation</a></li>
+<li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/7.-Related-work-and-conclusion-(BtrBlocks,-SIGMOD-23)" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/7.-Related-work-and-conclusion-(BtrBlocks,-SIGMOD-23)">7. Related work and conclusion</a></li>
+</ul>
+</blockquote>
+<h2 id="2-background">2. Background<a aria-hidden="true" tabindex="-1" href="#2-background" class="internal"> §</a></h2>
+<h3 id="21-existing-open-file-formats">2.1. Existing Open File Formats<a aria-hidden="true" tabindex="-1" href="#21-existing-open-file-formats" class="internal"> §</a></h3>
+<h4 id="211-parquet--orc">2.1.1. Parquet &amp; ORC.<a aria-hidden="true" tabindex="-1" href="#211-parquet--orc" class="internal"> §</a></h4>
+<ul>
+<li>Apache 의 Parquet 와 ORC 는 모두 OLAP 에서 사용하기 위한 오픈소스 column data format 이다.</li>
+<li>이들 (그리고 대부분의 column data format 들이) block 단위 compression 을 진행한다고 한다.</li>
+<li>논문에서는, 이 둘 중 Parquet 가 더 많이 사용되고 유명하기 때문에 이놈에 집중했다고 한다.</li>
+</ul>
+<h4 id="212-column-encoding-in-parquet">2.1.2. Column encoding in Parquet.<a aria-hidden="true" tabindex="-1" href="#212-column-encoding-in-parquet" class="internal"> §</a></h4>
+<ul>
+<li>Parquet 에서는 이렇게 data compression (encoding) 을 한다고 한다:
+<ul>
+<li>RLE, Dictionary, Bit-packing, Delta Encoding 중 하나를 유저가 static 하게 선택하거나, 아니면 하드코딩된 규칙에 따라 선택된다고 한다.</li>
+</ul>
+</li>
+<li>여러 column 에 대한 chunk 들을 encoding 한 뒤에는 이것을 <em>Rowgroup</em> 라는 이름으로 묶고, 그리고 이 <em>Rowgroup</em> 들이 모으고 뒤에 footer 를 붙여 하나의 <em>Parquet File</em> 를 만든다.</li>
+</ul>
+<h4 id="213-metadata--statistics">2.1.3. Metadata &amp; Statistics<a aria-hidden="true" tabindex="-1" href="#213-metadata--statistics" class="internal"> §</a></h4>
+<ul>
+<li>위에서 말한 것 처럼, <em>Parquet File</em> 의 맨 뒤에는 footer 가 붙고, 여기에는 metadata, statistics, 그리고 lightweight index 가 들어간다.</li>
+<li>근데 이것은 좀 별로이다.
+<ul>
+<li>이러한 정보들이 footer 에 들어가 있기 때문에 만약에 statistics 와 index 를 이용해 데이터를 지우고자 한다면, 무조건 파일을 끝까지 읽어 footer 를 찾아야 한다.</li>
+<li>하지만 가령 low latency 환경에서는 파일을 끝까지 읽는 것이 굉장한 부담이기 때문에, 파일을 읽기 전에 이런 statistics 와 index 에 접근할 수 있다면 더 좋다는 것.</li>
+<li>따라서 BtrBlock 에서는 이것을 해결하기 위해 compressed block 과 나머지 metadata 등을 분리했다고 한다.
+<ul>
+<li>즉, 이 metadata 등의 정보들은 header, footer 어디든 붙일 수 있고 아니면 아예 별도로 관리할 수도 있게 했다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>근데 이런 metadata 는 BtrBlock 에서는 핵심적인 내용은 아니다. 다만 <a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)#676-cost-comparability" class="internal" data-slug="gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)">Evaluation</a> 에서 위와 같은 차이점이 영향을 미치는 경우가 있어 참고 정도로 알아두자.</li>
+</ul>
+<h4 id="214-additional-general-purpose-compression">2.1.4. Additional general-purpose compression.<a aria-hidden="true" tabindex="-1" href="#214-additional-general-purpose-compression" class="internal"> §</a></h4>
+<ul>
+<li>기존의 Parquet 가 사용하는 compression scheme 들은 너무 선택지가 적고, 이 선택지 중에 하나를 선택하는 방법 또한 너무나 단순하다.
+<ul>
+<li>가령, Dictionary compression 을 하는 경우에는 압축 중에 dictionary 가 너무 커지면 그냥 데이터를 압축되지 않은 상태로 냅둔다고 한다.</li>
+</ul>
+</li>
+<li>따라서 순정의 Parquet 의 경우에는 compression ratio 가 너무나 작고, 따라서 일반적으로 Parquet file 을 general purpose compression scheme 으로 한번 더 압축한다.
+<ul>
+<li>이 scheme 들에는 <a href="https://github.com/google/snappy" class="external">Snappy</a>, <a href="https://github.com/google/brotli" class="external">Brotli</a>, <a href="https://github.com/facebook/zstd" class="external">Zstd</a>, <a href="https://www.gnu.org/software/gzip/" class="external">Gzip</a>, <a href="https://github.com/lz4/lz4" class="external">LZ4</a>, <a href="https://www.oberhumer.com/opensource/lzo/" class="external">LZO</a>, <a href="https://sourceware.org/bzip2/" class="external">BZip2</a> 가 있다.</li>
+</ul>
+</li>
+<li>하지만 이들은 모두 decompression overhead 가 너무 크거나 compression ratio 가 너무 적다고 한다.
+<ul>
+<li>이것에 관해서는, overhead &lt;-> ratio 간의 trade-off 양 극단에 위치한 Zstd 와 Snappy 를 BtrBlock 와 비교했다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="215-a-better-way-to-compress">2.1.5. A better way to compress.<a aria-hidden="true" tabindex="-1" href="#215-a-better-way-to-compress" class="internal"> §</a></h4>
+<ul>
+<li>저자들은 <em>Parquet File</em> 생성시에 이미 한 가지 방법으로 encoding 하였기에, 이것을 또 다시 다른 compression scheme 으로 압축하는 것은 decompression overhead 측면에서 비효율적인 것을 확인했다고 한다.</li>
+<li>따라서, BtrBlock 에서는 이런 짓을 하지 않고, Parquet 에 선택할 수 있는 compression scheme 을 늘리고 (+ 심지어 하나는 더 개발해서 추가하고) 그들 중에 적절한 것을 선택할 수 있는 알고리즘과 compression scheme 을 연속해서 적용하는 방법에 대해 제시한다.</li>
+</ul>
+<h3 id="22-compression-schemes-used-in-btrblocks">2.2. Compression Schemes Used In BtrBlocks<a aria-hidden="true" tabindex="-1" href="#22-compression-schemes-used-in-btrblocks" class="internal"> §</a></h3>
+<h4 id="221-combining-fast-encodings">2.2.1. Combining fast encodings.<a aria-hidden="true" tabindex="-1" href="#221-combining-fast-encodings" class="internal"> §</a></h4>
+<ul>
+<li>BtrBlock 은 위에서 설명한 대로 일련의 encoding scheme 들을 조합해 compression 을 진행한다.</li>
+<li>이 encoding scheme 들은 모두 커버하는 자료형이 정해져 있다.
+<ul>
+<li>즉, 어떤 알고리즘은 정수만 처리하고, 어떤 알고리즘은 문자열만 처리하는 등.</li>
+<li>각 encoding 과 궁합이 잘 맞는 Data distribution 이 각 encoding 마다 상이하기 때문에, 각 encoding 들은 서로에게 영향을 주지 않고 따라서 여러 encoding 을 연달아 적용하는 것이 가능하다.</li>
+<li>이것은 결과적으로 decompression speed 의 손해를 보지 않고 compression ratio 는 늘릴 수 있게 해준다.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>Tip <em>Data Distribution</em> 이란?</p></div>
+                  
+                </div>
+<ul>
+<li>잘 감이 안온다면, 값들이 연속적인지, 중복된 값들이 많이 있는지 등의 데이터 특성이라고 생각하자.</li>
+</ul>
+</blockquote>
+<ul>
+<li>그리고 encoding 하는 단위는 column 을 고정된 크기로 나눈 block 이다.
+<ul>
+<li>여기서 block 은 storage 에서의 block 과는 다른 단위이다; 기본적으로 64,000 entry 를 하나의 block 으로 묶어 처리한다고 한다.</li>
+<li>이렇게 block 단위로 encoding 하는 것에는 다음과 같은 장점이 있다:
+<ol>
+<li>각 block 의 data distribution 에 따라 다른 encoding 을 선택할 수 있게 해준다.
+<ul>
+<li>즉, 하나의 큰 data 보다 그것을 잘게 쪼갠 단위에 대해서는 더 올바른 최적화가 가능하기 때문.</li>
+</ul>
+</li>
+<li>여러 block 을 한번에 처리할 수 있다 (parallel).</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20240718194834.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 표는 BtrBlock 에서 사용하는 8개의 encoding scheme 을 나타낸 것이다. 이제 이것들에 대해 (자체 개발한 pseudodecimal 을 제외하고) 하나하나 살펴보자.</li>
+</ul>
+<h4 id="222-rle--one-value">2.2.2. RLE &amp; One Value.<a aria-hidden="true" tabindex="-1" href="#222-rle--one-value" class="internal"> §</a></h4>
+<ul>
+<li><em>Run Length Encoding</em> (<em>RLE</em>) (<a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/RLE.hpp" class="external">코드</a>) 은 말 그대로 “연속된 개수” 로 encoding 하는 것이다.
+<ul>
+<li>가령 <code>{42, 42, 42}</code> 의 경우에는 <code>(42, 3)</code> 으로 줄이는 방식이다.</li>
+<li>따라서 이 방식은 자료형에 상관 없이 universal 하게 사용할 수 있다.</li>
+</ul>
+</li>
+<li>그리고 <em>One Value</em> (<a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/string/OneValue.cpp" class="external">코드</a>) 는 한 block 의 entry 들이 모두 동일한 값을 가지는 특수한 경우에만 사용할 수 있는 encoding <sup><a href="#user-content-fn-one-value" id="user-content-fnref-one-value" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup> 이다.</li>
+</ul>
+<h4 id="223-dictionary">2.2.3. Dictionary<a aria-hidden="true" tabindex="-1" href="#223-dictionary" class="internal"> §</a></h4>
+<ul>
+<li><em>Dictionary Encoding</em> 은 <code>[원본:대체]</code> 의 mapping 인 <em>Dictionary</em> (가령 C++ 문법으로 설명하자면, <code>std::map&lt;원본, 대체></code>) 을 가지고 해당 <code>원본</code> 값들을 <code>대체</code> 값으로 전부 대체하는 encoding 방법이다.
+<ul>
+<li>당연히 <code>대체</code> 의 데이터 크기는 <code>원본</code> 보다 작도록 하기 때문에, 더 많이 대체할 수록 더 많이 압축된다.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>논문에서의 표현 </p></div>
+                  
+                </div>
+<ul>
+<li>논문에서는 이 <code>[원본:대체]</code> 가 <code>[distinct:code]</code> 로 표현된다.</li>
+</ul>
+</blockquote>
+<ul>
+<li>이때 저 <code>대체</code> 를 어떤 것으로 할지, <em>Dictionary</em> 로 어떤 자료구조를 쓸 지는 encoding 대상에 따라 다르다.
+<ul>
+<li>만약 column data 가 고정 크기라면 (가령, <code>VARCHAR(255)</code> 등), 배열로서 Dictionary 를 구현한다.
+<ul>
+<li>이때는 당연히 저 <code>대체</code> 는 배열의 index 가 될 것이다.</li>
+</ul>
+</li>
+<li>만약 가변크기라면, offset 이 있는 문자열 풀 <sup><a href="#user-content-fn-string-pool" id="user-content-fnref-string-pool" data-footnote-ref aria-describedby="footnote-label" class="internal">2</a></sup> 을 이용한다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="224-frequency">2.2.4. Frequency<a aria-hidden="true" tabindex="-1" href="#224-frequency" class="internal"> §</a></h4>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>Frequency Encoding </p></div>
+                  
+                </div>
+<ul>
+<li>이놈의 정체가 뭔지 정확히는 모르겠다. 일단 <a href="../../../../../../gardens/database/encoding/terms/Huffman-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Huffman-Coding-(Encoding)">허프만 코딩</a> 과 유사한 놈으로 알고 지나가자.</li>
+<li>참고: <a href="https://www.redbooks.ibm.com/redbooks/pdfs/sg248212.pdf" class="external">IBM DB2 BLU 가이드</a>, <a href="https://github.com/maxi-k/btrblocks/blob/master/btrblocks/scheme/templated/Frequency.hpp#L50-L97" class="external">코드</a></li>
+</ul>
+</blockquote>
+<ul>
+<li><em>Frequency Encoding</em> 은 <em>Dictionary Encoding</em> 이랑 유사하지만, 어떤 값이 등장하는 빈도에 따라 추가적인 최적화가 들어간 것이다.</li>
+<li>여기서의 <code>대체</code> 는 고정 크기의 값이 아니고, 빈도가 많은 값에 대해서는 적은 크기의 <code>대체</code> 로 대체하고, 반대로 빈도가 적은 값에 대해서는 큰 크기의 <code>대체</code> 로 대체한다.</li>
+<li>가령 다음처럼 구현할 수 있다.
+<ul>
+<li>가령 가장 빈번하게 등장하는 두 값의 경우에는, <code>대체</code> 를 1bit 로 구성할 수 있고, 따라서 해당 값들은 1bit 로 대체할 수 있다.</li>
+<li>그 다음으로 빈도가 높은 8개 (3등 ~ 10등) 까지는, <code>대체</code> 를 3bit 로 구성해 대체하고,</li>
+<li>나머지의 빈도는 그냥 Dictionary 처럼 배열 index (offset) 으로 배체하는 방식</li>
+</ul>
+</li>
+<li>이 방법은 처음에 <a href="https://www.vldb.org/pvldb/vol6/p1080-barber.pdf" class="external">IBM DB2 BLU 논문</a> 에서 제시되었는데, BtrBlock 에서는 여기에 추가적으로 최적화를 했다고 한다:
+<ul>
+<li>현실의 데이터를 분석해본 결과, 값의 빈도가 대략 지수적 (exponentially) 감소한다는 관찰에 따라서,</li>
+<li>빈도가 높은 몇개의 값과 비트맵 등을 저장한다고 한다 <sup><a href="#user-content-fn-freq-end" id="user-content-fnref-freq-end" data-footnote-ref aria-describedby="footnote-label" class="internal">3</a></sup></li>
+</ul>
+</li>
+</ul>
+<h4 id="225-for--bit-packing">2.2.5. FOR &amp; Bit-packing<a aria-hidden="true" tabindex="-1" href="#225-for--bit-packing" class="internal"> §</a></h4>
+<ul>
+<li><em>Frame of Reference</em> (<em>FOR</em>) 는 기준값을 바꾸는 것이다.
+<ul>
+<li>이게 뭔이야기인고 하니, 일반 정수값은 따지고 보면 0과의 차이 이다.</li>
+<li>이때 이 기준값을 바꾼다면, 해당 값들을 더 작게 만들 수 있을 것이다.</li>
+</ul>
+</li>
+<li>그리고 값들이 더 작아지게 되면, <em>Bit-packing</em> 을 이용해 더 적은 bit 로 해당 값들을 표현할 수 있다.
+<ul>
+<li>가령 <code>[105, 101, 113]</code> 를 기준값을 100 으로 FOR 를 하면, <code>[5, 1, 13]</code> 으로 표현될 수 있다.</li>
+<li>이때 <em>Bit-packing</em> 을 하게 되면 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">24</span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span></span></span></span></span> 로 표현되던 것이 각각 4bit 씩 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">12</span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span></span></span></span></span> 로 표현될 수 있다.</li>
+</ul>
+</li>
+<li>하지만 위 방식에서는 돌발상황이 생길 수 있다.
+<ul>
+<li>만일 위 예시에서 118 이 튀어나온 다면, 18 은 4bit 으로는 표현하지 못하기 때문에 모든 값들을 5bit 으로 바꿔야 한다.</li>
+<li>이러한 문제를 막기 위해 저런 돌발상황에 대해서는 별도로 관리하여 bitbase 를 올리지 않아도 되게 할수 있다.
+<ul>
+<li>이것을 <em>Patched FOR</em> (<em>PFOR</em>) 라고 부르고, 이 아이디어를 SIMD 에 적용한 알고리즘인 <em>SIMD- FastPFOR</em> 와 <em>SIMD-FastBP128</em> <sup><a href="#user-content-fn-simd" id="user-content-fnref-simd" data-footnote-ref aria-describedby="footnote-label" class="internal">4</a></sup> 이 BtrBlock 에 적용됐다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>보다시피 이 encoding scheme 은 당연히 정수값에 대해서만 사용할 수 있다.</li>
+</ul>
+<h4 id="226-fsst">2.2.6. FSST<a aria-hidden="true" tabindex="-1" href="#226-fsst" class="internal"> §</a></h4>
+<p><img src="../../../../../../images/Pasted-image-20240730143409.png" width="auto" height="auto"/></p>
+<blockquote>
+<p>출처: <a href="https://dl.acm.org/doi/10.14778/3407790.3407851" class="external">FSST: fast random access string compression, PVLDB’20</a></p>
+</blockquote>
+<ul>
+<li><em>Fast Static Symbol Table</em> (<em>FSST</em>) 도 <em>Dictionary Encoding</em> 와 유사한 원리를 가진다:
+<ul>
+<li>String 의 8byte 길이의 (즉, 문자 8개) substring 을 1byte <code>대체</code> 로 바꾸는 것이다.</li>
+</ul>
+</li>
+<li>이때의 dictionary 는 <em>Symbol Table</em> 이라고 불리는데, 빈도가 높은 순서대로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">256</span></span></span></span></span> 개의 substring 을 entry 로 넣어 관리한다.
+<ul>
+<li>그리고 이 <em>Symbol Table</em> 은 block 당 하나를 생성한다고 한다.</li>
+</ul>
+</li>
+<li>당연히 저 <em>Symbol Table</em> 을 구성하기 위해 빈도 높은 순서대로 정렬하고 막 해야 할 것이기 때문에, compression 과정은 다소 오래걸린다.</li>
+<li>하지만, decompression 에 대해서는 그냥 치환만 하면 되기 때문에, 아주 빠르다.</li>
+</ul>
+<h4 id="227-null-storage-using-roaring-bitmaps">2.2.7. NULL Storage Using Roaring Bitmaps.<a aria-hidden="true" tabindex="-1" href="#227-null-storage-using-roaring-bitmaps" class="internal"> §</a></h4>
+<ul>
+<li><em>Roaring Bitmap</em> 은 bitmap 을 압축하기 위한 algorithm 이다.
+<ul>
+<li>이놈을 요약하면 전체 bitmap 을 일정 크기의 chunk 로 자르고, 해당 chunk 에 1이 얼마나 있냐를 가지고 동적으로 해당 chunk 를 저장할 자료구조를 선택하는 방식으로 작동한다고 한다.</li>
+<li>오픈소스 Roaring Bitmap 라이브러리는 HW-aware optimization 이 들어가 있고 (가령 bit 를 세는 것은 x86 이나 ARM 에서 하나의 instruction 으로 제공해 준다고 한다), BtrBlock 에서는 이것을 활용한다고 한다.</li>
+</ul>
+</li>
+<li>따라서 block 의 <code>NULL</code> entry 를 bitmap 으로 표현한 뒤, 이것을 압축하는 형태인 것으로 보인다 <sup><a href="#user-content-fn-roaring-bitmap" id="user-content-fnref-roaring-bitmap" data-footnote-ref aria-describedby="footnote-label" class="internal">5</a></sup>.
+<ul>
+<li><code>NULL</code> 말고도 다른 <a href="#224-frequency" class="internal">Frequency Encoding</a> 에서의 예외사항 들에 대해서도 이 방식으로 추적한다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="228-cascading-compression">2.2.8. Cascading Compression<a aria-hidden="true" tabindex="-1" href="#228-cascading-compression" class="internal"> §</a></h4>
+<ul>
+<li><em>Cascading Compression</em> 은 <a href="#225-for--bit-packing" class="internal">FOR &amp; Bit-packing</a> 에서 처럼 하나의 compression output 을 다른 compression 의 input 으로 넣는 것을 의미한다.</li>
+<li><a href="https://dl.acm.org/doi/abs/10.1145/3323991" class="external">이 논문</a> 에서는 여러 compression algorithm 들을 분류하고, 이들을 어떻게 cascading 할 수 있을지에 대해 제시했다.
+<ul>
+<li>여기서는 algorithm 들을 logical, physical 두가지 분류로 나누고,</li>
+<li>Gray-box cost model 이라는 것을 통해 정수값 compression 을 위한 algorithm 선택법을 제시했다.</li>
+</ul>
+</li>
+<li>하지만 위 논문에서 제시한 것은 정수값에 대한, 최대 2가지 algorithm 을 조합하는 방법이기에, 저자들은 n 가지 algorithm 을 조합하며 type 또한 정수에 한정되지 않는 방법을 개발했다고 한다.
+<ul>
+<li>또한 이 개발한 방법은 cost model 을 사용하지 않고, sampling-based 이기에 더 확장성이 좋다고 한다. 자세한 것은 더 읽어보자.</li>
+</ul>
+</li>
+</ul>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-one-value">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 이거 감 안온다. 코드 보고 확인하자. <a href="#user-content-fnref-one-value" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-string-pool">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 이것도 뭔지 감이 잘 안온다. 코드 보고 확인해야 할듯. <a href="#user-content-fnref-string-pool" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-freq-end">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 이것도 코드 보고 확인하자. <a href="#user-content-fnref-freq-end" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-simd">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 구체적인 이야기는 하지 않는다. <a href="https://onlinelibrary.wiley.com/doi/10.1002/spe.2203" class="external">논문</a> 참고해서 확인하자. <a href="#user-content-fnref-simd" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-roaring-bitmap">
+<p><a href="../../../../../.././../../../../../tags/draft" class="tag-link internal" data-slug="tags/draft">#draft</a> 주인장의 추측이다. 논문에서는 column 의 NULL 값을 bitmap 으로 어떻게 표현하는지에 대한 설명은 되어 있지 않다. <a href="#user-content-fnref-roaring-bitmap" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#2-background" data-for="2-background">2. Background</a></li><li class="depth-1"><a href="#21-existing-open-file-formats" data-for="21-existing-open-file-formats">2.1. Existing Open File Formats</a></li><li class="depth-1"><a href="#22-compression-schemes-used-in-btrblocks" data-for="22-compression-schemes-used-in-btrblocks">2.2. Compression Schemes Used In BtrBlocks</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/database/encoding/papers/fastlanes.2023.pvldb.vldb.org/full/4.-Related-Work-(FastLanes,-VLDB-23)" class="internal">(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code, VLDB 2023 (4. Related Work)</a></li><li><a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal">Bit Packing, BP (Encoding)</a></li><li><a href="../../../../../../gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)" class="internal">Dictionary Encoding (Encoding)</a></li><li><a href="../../../../../../gardens/database/encoding/terms/Fast-Static-Symbol-Table,-FSST-(Encoding)" class="internal">Fast Static Symbol Table, FSST (Encoding)</a></li><li><a href="../../../../../../gardens/database/encoding/terms/Frame-Of-Reference,-FOR-(Encoding)" class="internal">Frame Of Reference, FOR (Encoding)</a></li><li><a href="../../../../../../gardens/database/encoding/terms/Roaring-Bitmap-(Encoding)" class="internal">Roaring Bitmap (Encoding)</a></li><li><a href="../../../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal">Run Length Encoding, RLE (Encoding)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/(논문)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/1.-Abstract,-Intro-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (1. Abstract, Intro)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/2.-Background-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (2. Background)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/3.-Scheme-selection-and-compression-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (3. Scheme selection and compression)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/4.-Pseudodecimal-encoding-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (4. Pseudodecimal encoding)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/5.-Fast-decompression-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (5. Fast decompression)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/6.-Evaluation-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (6. Evaluation)</a></li><li><a href="../../../../../../gardens/database/format/papers/btrblocks.2023.sigmod.org/full/7.-Related-work-and-conclusion-(BtrBlocks,-SIGMOD-23)" class="internal">(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD 2023 (7. Related work and conclusion)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>
