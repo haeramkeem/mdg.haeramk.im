@@ -1,7 +1,7 @@
 ---
 tags:
   - database
-  - db-encoding
+  - db-format
 date: 2024-08-12
 aliases:
   - BtrBlocks

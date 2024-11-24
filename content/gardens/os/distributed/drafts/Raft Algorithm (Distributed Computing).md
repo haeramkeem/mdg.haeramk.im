@@ -7,6 +7,7 @@ aliases:
 ---
 > [!info]- 참고한 것들
 > - [In Search of an Understandable Consensus Algorithm, ATC'14](https://www.usenix.org/conference/atc14/technical-sessions/presentation/ongaro)
+> - [호롤리 블로그](https://gruuuuu.github.io/integration/paxos-raft/)
 
 > [!info] 원본 논문
 > - 이 글은 [In Search of an Understandable Consensus Algorithm, ATC'14](https://www.usenix.org/conference/atc14/technical-sessions/presentation/ongaro) 에서 핵심 아이디어만 요약한 글입니다.

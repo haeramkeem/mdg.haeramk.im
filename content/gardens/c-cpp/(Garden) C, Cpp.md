@@ -82,11 +82,14 @@ date: 2024-07-29
 
 ### GDB, LLDB
 
-- [[lldb - Breakpoint 관련|Breakpoint 관련]]
-- [[lldb - CMake 세팅하기|CMake 세팅하기]]
-- [[lldb - Variable 관련|Variable 관련]]
+- [[gdb.lldb - Breakpoint 관련|Breakpoint 관련]]
+- [[gdb.lldb - CMake 세팅하기|CMake 세팅하기]]
+- [[gdb.lldb - Variable 관련|Variable 관련]]
+- [[gdb.lldb - 시작하기|시작하기]]
 
 ### Plugins
 
 - `ctags`
 	- [[ctags - Basic usage|기본 사용법]]
+- `make`, `cmake`
+	- [[make, cmake - Macro 주입하기|Macro 주입하기]]
