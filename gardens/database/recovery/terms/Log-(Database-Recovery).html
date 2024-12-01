@@ -18,7 +18,7 @@
 </blockquote>
 <ul>
 <li>Log 는 위의 사진처럼 어떤 작업의 일지, 기록 등을 뜻하는 단어이다.</li>
-<li>이와 비슷하게, <a href="../../../../gardens/database/common/terms/Database-Management-System,-DBMS-(Database)" class="internal" data-slug="gardens/database/common/terms/Database-Management-System,-DBMS-(Database)">DBMS</a> 에서 <em>Log</em> 는 DBMS 가 작업한 것에 대한 기록이고, 따라서 <a href="../../../../gardens/database/common/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/common/terms/Transaction,-ACID-(Database)">Transaction</a> 이 수행한 operation 들이 sequential 하게 파일에 저장된다.</li>
+<li>이와 비슷하게, <a href="../../../../gardens/database/common/terms/Database-Management-System,-DBMS-(Database)" class="internal" data-slug="gardens/database/common/terms/Database-Management-System,-DBMS-(Database)">DBMS</a> 에서 <em>Log</em> 는 DBMS 가 작업한 것에 대한 기록이고, 따라서 <a href="../../../../gardens/database/transaction/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/transaction/terms/Transaction,-ACID-(Database)">Transaction</a> 이 수행한 operation 들이 sequential 하게 파일에 저장된다.</li>
 </ul>
 <h2 id="log-sequence-number-lsn">Log Sequence Number, LSN<a aria-hidden="true" tabindex="-1" href="#log-sequence-number-lsn" class="internal"> §</a></h2>
 <ul>
@@ -27,7 +27,7 @@
 <li>즉, LSN 이 더 큰 log entry 는 그렇지 않은 것에 비해 최신의 log 인 것.</li>
 </ul>
 </li>
-<li>각 <a href="../../../../gardens/database/storage/drafts/Page-(Database-Storage)" class="internal" data-slug="gardens/database/storage/drafts/Page-(Database-Storage)">Page</a> 에는 <em>LSN</em> 이 명시되어 있어 해당 page 를 변경한 마지막 log 를 식별할 수 있게 한다.
+<li>각 <a href="../../../../gardens/database/format/drafts/Slotted-Page-(Database-Format)" class="internal" data-slug="gardens/database/format/drafts/Slotted-Page-(Database-Format)">Page</a> 에는 <em>LSN</em> 이 명시되어 있어 해당 page 를 변경한 마지막 log 를 식별할 수 있게 한다.
 <ul>
 <li>따라서 이것으로 recovery 시에 해당 page 를 변경한 마지막 log 을 빨리 알아내어 복구할 수 있게 된다.</li>
 </ul>
@@ -49,10 +49,10 @@
 <ul>
 <li>DBMS 에서 recovery 가 필요한 상황은 다음과 같이 정리해 볼 수 있다.
 <ul>
-<li><em><a href="../../../../gardens/database/common/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/common/terms/Transaction,-ACID-(Database)">Transaction</a> failure</em>:
+<li><em><a href="../../../../gardens/database/transaction/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/transaction/terms/Transaction,-ACID-(Database)">Transaction</a> failure</em>:
 <ul>
 <li>Tx 를 commit 하는 것은 여러개의 page write 을 필요로 할 수 있는데,</li>
-<li>Tx 가 실패하면 <a href="../../../../gardens/database/common/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/common/terms/Transaction,-ACID-(Database)">Atomicity</a> 를 위해 이 page write 들을 원상복구시킬 필요가 있다.</li>
+<li>Tx 가 실패하면 <a href="../../../../gardens/database/transaction/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/transaction/terms/Transaction,-ACID-(Database)">Atomicity</a> 를 위해 이 page write 들을 원상복구시킬 필요가 있다.</li>
 <li>이를 위한 log 가 <a href="#undo-log-ctrl--z" class="internal">UNDO log</a> 이다.</li>
 </ul>
 </li>
@@ -73,7 +73,7 @@
 <li>위에서 말한것 처럼, 이놈은 committed transaction 을 복구할 때 사용된다.
 <ul>
 <li><a href="../../../../gardens/database/recovery/terms/FORCE,-NO_FORCE-Policy-(Database-Recovery)" class="internal" data-slug="gardens/database/recovery/terms/FORCE,-NO_FORCE-Policy-(Database-Recovery)">NO_FORCE</a> 정책에서는 commit 이 항상 disk 에 저장되지는 않기 때문에, crash 시에 committed transaction 을 이 redo log 를 보면서 transaction 이 정상적으로 끝난 상태로 되돌리게 된다.</li>
-<li>즉, <a href="../../../../gardens/database/common/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/common/terms/Transaction,-ACID-(Database)">Durability</a> 를 보장하기 위한 것.</li>
+<li>즉, <a href="../../../../gardens/database/transaction/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/transaction/terms/Transaction,-ACID-(Database)">Durability</a> 를 보장하기 위한 것.</li>
 </ul>
 </li>
 </ul>
@@ -85,7 +85,7 @@
 <ul>
 <li>Transaction rollback 을 하면 transaction 이전 상태로 되돌려야 하기 때문에, 이놈을 보면서 되돌리는 것.</li>
 <li><a href="../../../../gardens/database/recovery/terms/STEAL,-NO_STEAL-Policy-(Database-Recovery)" class="internal" data-slug="gardens/database/recovery/terms/STEAL,-NO_STEAL-Policy-(Database-Recovery)">STEAL</a> 정책에서는 commit 되지 않은 update 가 flush 될 수 있기 때문에, tx failure 시에 이런 flush 된 애들까지 되돌리기 위해 <em>Undo log</em> 가 필요하다.</li>
-<li>즉, <a href="../../../../gardens/database/common/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/common/terms/Transaction,-ACID-(Database)">Atomicity</a> 를 보장하기 위한 것이다.</li>
+<li>즉, <a href="../../../../gardens/database/transaction/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/transaction/terms/Transaction,-ACID-(Database)">Atomicity</a> 를 보장하기 위한 것이다.</li>
 </ul>
 </li>
 </ul>

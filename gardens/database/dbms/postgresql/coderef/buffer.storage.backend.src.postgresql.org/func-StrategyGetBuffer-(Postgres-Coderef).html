@@ -42,7 +42,7 @@
 <li>만약 reference count 가 0 보다 크다면, 그냥 <code>trycounter</code> 를 하나 줄이고다시 (a) 로 돌아가 CLOCK 한 tick 을 더 움직인다.
 <ul>
 <li>이때 만약 <code>trycounter</code> 가 0이라면, 이것은 모든 buffer 가 현재 사용중이라는 소리다. 이때는 더 이상 시도하지 않고 실패한 것으로 끝낸다.</li>
-<li>물론 여러번 시도할 수 있지만, infinite loop 을 방지하기 위해 실패처리하고 <a href="../../../../../../gardens/database/common/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/common/terms/Transaction,-ACID-(Database)">Transaction</a> 을 재시작한다고 한다.</li>
+<li>물론 여러번 시도할 수 있지만, infinite loop 을 방지하기 위해 실패처리하고 <a href="../../../../../../gardens/database/transaction/terms/Transaction,-ACID-(Database)" class="internal" data-slug="gardens/database/transaction/terms/Transaction,-ACID-(Database)">Transaction</a> 을 재시작한다고 한다.</li>
 </ul>
 </li>
 <li>만약 그렇지 않다면, 이놈은 현재 사용되고 있지 않다는 얘기다. 이때 usage count 를 확인한다.
