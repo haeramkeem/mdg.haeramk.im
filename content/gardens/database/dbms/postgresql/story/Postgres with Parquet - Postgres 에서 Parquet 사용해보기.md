@@ -17,14 +17,14 @@ date: 2024-11-21
 	- [parquet_s3_pg](https://www.postgresql.org/about/news/parquet-s3-fdw-100-released-2571/): 이놈은 JDBC 를 Postgres 에 FDW 로 노출시켜주는 놈인데, 여기에 Parquet 또한 지원하는 모양이다.
 - 그래서 일단 저 [Crunchy data 블로그](https://www.crunchydata.com/blog/parquet-and-postgres-in-the-data-lake) 에서 한 작업을 재현해보기로 하자.
 
-## GTD
+## GTD: Get Things Done
 
 > [!tip] Postgres 설정
 > - 여기서는 [[PostgreSQL Build from Source Guide - PostgreSQL 디버깅을 위한 소스코드 빌드 가이드|이 가이드]] 에서 설정한 Postgres 를 기준으로 합니당
 
 ### Dataset (CSV)
 
-- 데이터셋은 위 저자의 [또 다른 블로그 글](https://www.crunchydata.com/blog/performance-and-spatial-joins) 에서 사용한 Philadelphia 의 주차 위반 데이터를 사용한다.
+- 데이터셋은 위 저자의 [또 다른 블로그 글](https://www.crunchydata.com/blog/performance-and-spatial-joins) 에서 사용한 필라델피아의 주차 위반 데이터를 사용한다.
 - 이건 이렇게 다운받으면 된다:
 	- 근데 좀 오래걸린다. 크기가 커서라기보다는 뭔가 네트워크가 느린듯
 
