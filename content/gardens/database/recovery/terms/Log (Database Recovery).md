@@ -28,7 +28,7 @@ aliases:
 
 - 각 log entry 에는 *Log Sequence Number* (*LSN*) 라 불리는 증가하는 ID 가 붙는다.
 	- 즉, LSN 이 더 큰 log entry 는 그렇지 않은 것에 비해 최신의 log 인 것.
-- 각 [[Page (Database Storage)|Page]] 에는 *LSN* 이 명시되어 있어 해당 page 를 변경한 마지막 log 를 식별할 수 있게 한다.
+- 각 [[Slotted Page (Database Format)|Page]] 에는 *LSN* 이 명시되어 있어 해당 page 를 변경한 마지막 log 를 식별할 수 있게 한다.
 	- 따라서 이것으로 recovery 시에 해당 page 를 변경한 마지막 log 을 빨리 알아내어 복구할 수 있게 된다.
 - 각 log 의 내용은 (아마?) fixed size 인 것 같다: 그래서 이 LSN 만으로도 file 의 offset 을 알아낼 수 있다고 한다.
 

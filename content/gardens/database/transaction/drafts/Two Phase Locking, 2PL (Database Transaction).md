@@ -1,12 +1,9 @@
 ---
 tags:
   - database
-  - db-index
-  - terms
+  - db-concurrency
 aliases:
-  - Index
-  - Primary index
-  - Secondary index
+  - 2PL
 ---
 > [!fail]- 본 글은 #draft 상태입니다.
 > - [ ] 내용 정리

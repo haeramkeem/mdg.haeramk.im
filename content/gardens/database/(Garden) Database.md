@@ -19,12 +19,6 @@ date: 2024-07-29
 	- [[Database - 어떤 언어가 하탈까?]]
 - 용어집
 	- [[Database Management System, DBMS (Database)|Database Management System]]
-	- [[Transaction, ACID (Database)|Transaction, ACID]]
-
-### Concurrency
-
-- 논문들
-	- [[(논문) DIVA - Making MVCC Systems HTAP-Friendly|DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
 
 ### Benchmark
 
@@ -63,6 +57,7 @@ date: 2024-07-29
 	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Interleaved Bit-Packing (Encoding)|Interleaved Bit-Packing]]
+	- [[Little Endian Base 128, LEB128 (Encoding)|Little Endian Base 128, LEB128]]
 	- [[Patching, Mostly Encoding (Encoding)|Patching, Mostly Encoding]]
 	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]] (redirect [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks]])
 	- [[Prefix Code (Encoding)|Prefix Code]]
@@ -74,7 +69,7 @@ date: 2024-07-29
 ### Format
 
 - 용어집
-	- [[BtrBlocks (Format)|BtrBlocks]]
+	- [[BtrBlocks (Database Format)|BtrBlocks]]
 - 논문들
 	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
 
@@ -106,6 +101,14 @@ date: 2024-07-29
 	- [[Physiological Logging (Database Recovery)|Physiological Logging]]
 	- [[STEAL, NO_STEAL Policy (Database Recovery)|STEAL, NO_STEAL Policy]]
 	- [[Write Ahead Log, WAL (Database Recovery)|Write Ahead Log, WAL]]
+
+### Transaction
+
+- 용어집
+	- [[Transaction, ACID (Database)|Transaction, ACID]]
+	- [[Multiversion Concurrency Control, MVCC (Database Transaction)|Multiversion Concurrency Control, MVCC]]
+- 논문들
+	- [[(논문) DIVA - Making MVCC Systems HTAP-Friendly|DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
 
 ### DBMS
 
