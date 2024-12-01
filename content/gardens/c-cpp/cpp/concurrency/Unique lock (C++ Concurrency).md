@@ -12,7 +12,7 @@ date: 2024-07-17
 
 ## 란?
 
-- [[Lock guard (C++ Concurrency)|std::lock_guard]] 와 유사하게 scope 내에서만 lock 을 잡지만,
+- [[Lock Guard (C++ Concurrency)|std::lock_guard]] 와 유사하게 scope 내에서만 lock 을 잡지만,
 - 여기에다가 추가적인 기능까지 제공해주는 general purpose mutex 이다.
 
 ### Lock tag

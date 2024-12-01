@@ -71,9 +71,9 @@ date: 2024-04-24
 
 ## 함수 진입 / 탈출 문구 출력
 
-- 함수 진입/종료 logging 을 위해서 [[C - 함수 진입, 탈출 메세지 출력하기|Instrument Function]] 을 사용하였다.
-- 근데 user mode 에서는 [[C - 함수 진입, 탈출 메세지 출력하기|dlfnc.h]] 를 사용할 수 있지만 kernel mode 에서는 이것을 사용할 수 없기 때문에 고민고민하던중
-	- `printk()` 의 formatting 중에 function pointer 를 function name 으로 [[C - Printk formatting|바꿔주는 것]] (`%ps`) 이 있길래 사용해 보니 잘 돼서 이걸 사용.
+- 함수 진입/종료 logging 을 위해서 [[함수 진입, 탈출 메세지 출력하기 (C Debug)|Instrument Function]] 을 사용하였다.
+- 근데 user mode 에서는 [[함수 진입, 탈출 메세지 출력하기 (C Debug)|dlfnc.h]] 를 사용할 수 있지만 kernel mode 에서는 이것을 사용할 수 없기 때문에 고민고민하던중
+	- `printk()` 의 formatting 중에 function pointer 를 function name 으로 [[Printk Formatting (C Linux Kernel)|바꿔주는 것]] (`%ps`) 이 있길래 사용해 보니 잘 돼서 이걸 사용.
 - 추가적으로 보기 편하게 하려고 함수 진입/탈출 인덴트도 처리했다.
 	- ...근데 multi-thread 로 돌아가서 좀 이상하게 나오긴 함
 - `debug.c` 파일 생성

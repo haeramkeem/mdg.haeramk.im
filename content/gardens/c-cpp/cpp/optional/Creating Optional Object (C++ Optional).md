@@ -19,7 +19,7 @@ std::optional<std::string> opt = "goodday";
 auto opt = std::make_optional("goodday");
 ```
 
-- 세번째는 [[Copy constructor, 복사 생성자 (C++ Class)|copy constructor]] 를 이용하는 것이다.
+- 세번째는 [[Copy Constructor (C++ Class)|copy constructor]] 를 이용하는 것이다.
 
 ```cpp
 auto opt = std::optional<std::string>("goodday");
@@ -33,5 +33,5 @@ auto opt = std::optional<std::string>{"goodday"};
 
 ## 주의..
 
-- 위의 예시들은 모두 `std::optional` 로 감싸진 "원래" 객체가 [[Copy constructor, 복사 생성자 (C++ Class)|copy constructor]] 를 지원하는 경우에만 가능하다.
+- 위의 예시들은 모두 `std::optional` 로 감싸진 "원래" 객체가 [[Copy Constructor (C++ Class)|copy constructor]] 를 지원하는 경우에만 가능하다.
 	- 만약 copy 가 안된다면, `std::move` 와 함께 사용해야 한다는 것을 항상 잊지 말자

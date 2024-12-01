@@ -63,7 +63,7 @@ char big_endian[4] = {0x12, 0x34, 0x56, 0x78};
 ## 변환 코드
 
 - 어차피 big endian 은 little endian 에서 순서만 바꿔주면 되니까, byte stream 을 little endian primitive type 으로 바꾸는 코드만 살펴보자.
-	- 대부분 little endian 을 쓰면 되기 때문에 사실 그냥 [[C - Memory utils (memcpy, memset)|memcpy]] 만 해주면 된다.
+	- 대부분 little endian 을 쓰면 되기 때문에 사실 그냥 [[Memory Utils (C Memory)|memcpy]] 만 해주면 된다.
 	- 근데 혹시나 architecture-free 한 코드를 짜고자 한다면, 요래하면 되니라
 
 ```c

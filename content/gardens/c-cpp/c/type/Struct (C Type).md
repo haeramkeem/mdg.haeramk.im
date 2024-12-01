@@ -8,7 +8,7 @@ aliases:
 ---
 ## 란?
 
-- 구조체는 OPP 의 입장에서 보면 [[Constructor, 생성자 (C++ Class)|class]] 와 유사한 면이 있다.
+- 구조체는 OPP 의 입장에서 보면 [[Constructor (C++ Class)|class]] 와 유사한 면이 있다.
 	- 여러 자료형의 필드들을 갖고있다는 점이나, 각 필드를 `.` 연산자로 접근하기 때문.
 - 물론 C 는 OPP 언어가 아니기 때문에 class 는 아니다; 정확하게 말하면 구조체는 "Memory 공간을 해석하는 지침서" 정도가 된다.
 - 예를 들어보자.
@@ -101,7 +101,7 @@ int main() {
 
 ### (Kinda) Method
 
-- OPP 에서의 method 가 욕심난다면, 이렇게 [[C - Function Pointer|function pointer]] field 로 비슷하게 흉내낼 수 있긴 하다.
+- OPP 에서의 method 가 욕심난다면, 이렇게 [[Function Pointer (C Type)|function pointer]] field 로 비슷하게 흉내낼 수 있긴 하다.
 
 ```c {9,15,18}
 #include <stdio.h>

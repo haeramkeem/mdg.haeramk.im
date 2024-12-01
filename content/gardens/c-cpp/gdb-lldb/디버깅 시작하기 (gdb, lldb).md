@@ -2,7 +2,6 @@
 tags:
   - lldb
 date: 2024-11-22
-title: gdb/lldb - 시작하기
 aliases:
   - gdb
   - lldb

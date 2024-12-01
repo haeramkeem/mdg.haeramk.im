@@ -3,6 +3,8 @@ tags:
   - cpp
   - ctags
 date: 2024-11-02
+aliases:
+  - ctags
 ---
 > [!info]- 참고한 것들
 > - [스댕 - universal-ctags 설치](https://askubuntu.com/a/1179548)

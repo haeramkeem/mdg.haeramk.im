@@ -58,7 +58,7 @@ int main() {
 
 ![[Pasted image 20241010074909.png]]
 
-- 위 예시에서는 [[C - Struct|struct]] 를 복사했지만, 자료형에 관계없이 모두 가능하다.
+- 위 예시에서는 [[Struct (C Type)|struct]] 를 복사했지만, 자료형에 관계없이 모두 가능하다.
 
 ## `memset`: Memory set
 
