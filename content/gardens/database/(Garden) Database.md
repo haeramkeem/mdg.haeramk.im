@@ -57,6 +57,7 @@ date: 2024-07-29
 	- [[Frame Of Reference, FOR (Encoding)|Frame Of Reference, FOR]]
 	- [[Huffman Coding (Encoding)|Huffman Coding]]
 	- [[Interleaved Bit-Packing (Encoding)|Interleaved Bit-Packing]]
+	- [[Little Endian Base 128, LEB128 (Encoding)|Little Endian Base 128, LEB128]]
 	- [[Patching, Mostly Encoding (Encoding)|Patching, Mostly Encoding]]
 	- [[4. Pseudodecimal encoding (BtrBlocks, SIGMOD 23)|Pseudodecimal Encoding, PDE]] (redirect [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks]])
 	- [[Prefix Code (Encoding)|Prefix Code]]
