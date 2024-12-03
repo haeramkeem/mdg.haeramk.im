@@ -73,5 +73,6 @@ date: 2024-07-29
 - 용어들
 	- [[Least Frequently Used, LFU (Replacement)|Least Frequently Used, LFU]]
 	- [[Least Recently Used, LRU (Replacement)|Least Recently Used, LRU]]
+	- [[Locality (Replacement)|Locality]]
 - 논문들
 	- [[(논문) ARC - A Self-Tuning, Low Overhead Replacement Cache|(Draft) ARC - A Self-Tuning, Low Overhead Replacement Cache (FAST '03)]]
