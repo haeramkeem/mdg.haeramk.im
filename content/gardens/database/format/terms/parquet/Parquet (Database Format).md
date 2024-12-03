@@ -28,7 +28,7 @@ date: 2024-12-03
 
 ## Layout Overview
 
-![[Pasted image 20241203110305.png]]
+![[Pasted image 20241203125702.png]]
 
 - 왼쪽이 table 을 나타낸 것이고, 오른쪽은 이런 table 이 저장되는 Parquet file format 을 보여준다.
 - 여기서 몇개의 row 들을 묶어 [[struct RowGroup (Parquet Format)|struct RowGroup (Parquet Format)]] 이라는 logical unit 으로 묶는다.
@@ -38,3 +38,10 @@ date: 2024-12-03
 	- 이놈 단위로 파일에 sequential 하게 저장된다.
 	- 즉, 한 *Row Group* 에 대한 첫번째 column 의 *Column Chunk* 가 sequential 하게 저장되고, 두번째 column 의 *Column Chunk* 가 저장되는 형식인 것.
 - *Column Chunk* 들의 뒤에는 file 의 전체 metadata ([[struct FileMetaData (Parquet Format)|struct FileMetaData (Parquet Format)]]) 가 달리고, 그 뒤에 이 metada 의 크기가 담기며, 이 묶음 앞뒤로 Magic number (*MG*) 가 담기게 된다.
+	- Magic number 는 unencrypted data 의 경우에는 `"PAR1"` 이 들어가고, encrypted data 의 경우에는 `"PARE"` 가 들어간다.
+		- 이 둘은 file 의 첫, 그리고 마지막 4byte 에 담긴다.
+	- Metadata length 는 tail magic number 옆에 4byte [[Endian (Arch)|Little endian]] integer 로 저장된다.
+		- 즉, `[(file_size - 8):(file_size - 4)]` offset 에 저장되는 것.
+- 따라서 file 을 읽을 때는 metadata length 를 읽은 다음에 `[(file_size - meta_len - 8):(file_size - 8)]` 를 읽어주면 metadata 를 읽을 수 있게 된다.
+	- 이 부분에 대한 DuckDB 의 구현은 [LoadMetadata()](https://github.com/duckdb/duckdb/blob/v1.1.3/extension/parquet/parquet_reader.cpp#L59-L123) 에서 확인할 수 있고,
+	- Arrow 의 구현은 [DoIt()](https://github.com/apache/arrow/blob/apache-arrow-18.1.0/cpp/tools/parquet/parquet_dump_footer.cc#L41-L90) 에서 확인할 수 있다.
