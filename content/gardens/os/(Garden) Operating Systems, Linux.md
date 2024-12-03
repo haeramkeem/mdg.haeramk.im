@@ -55,6 +55,7 @@ date: 2024-07-29
 ### Memory
 
 - 용어들
+	- [[Memory Hierarchy (Memory)|Memory hierarchy]]
 	- [[Memory Management Unit, MMU (Memory)|Memory Management Unit, MMU]]
 	- [[Page Table Base Register, CR3 (Memory)|Page Table Base Register, CR3]]
 	- [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer, TLB]]
