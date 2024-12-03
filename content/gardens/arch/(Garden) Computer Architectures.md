@@ -26,3 +26,5 @@ date: 2024-07-29
 	- [[Direct-mapped Cache (CPU Cache)|Direct-mapped Cache]]
 	- [[Fully Associative Cache (CPU Cache)|Fully Associative Cache]]
 	- [[Set Associative Cache (CPU Cache)|Set Associative Cache]]
+- [[CUDA (NVIDIA CUDA)|CUDA]]
+	- [[CUDA Execution Model (NVIDIA CUDA)|CUDA Execution Model]]
