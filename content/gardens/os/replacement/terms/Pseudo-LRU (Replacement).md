@@ -5,7 +5,7 @@ tags:
   - os-replacement
 aliases:
   - Pseudo-LRU
-date: 2024-12-03
+date: 2024-10-09
 ---
 > [!info]- 참고한 것들
 > - [[10. Caches|서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024)]]

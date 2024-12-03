@@ -21,3 +21,8 @@ date: 2024-07-29
 - [[Program Counter, PC (Arch)|Program Counter, PC]]
 - [[Scalar, Superscalar Processing (Arch)|Scalar, Superscalar Processing]]
 - [[Single Instruction Multiple Data, SIMD (Arch)|Single Instruction Multiple Data, SIMD]]
+- [[CPU Cache (Arch)|CPU Cache]]
+	- [[Cache Write Policy (CPU Cache)|Cache Write Policy]]
+	- [[Direct-mapped Cache (CPU Cache)|Direct-mapped Cache]]
+	- [[Fully Associative Cache (CPU Cache)|Fully Associative Cache]]
+	- [[Set Associative Cache (CPU Cache)|Set Associative Cache]]
