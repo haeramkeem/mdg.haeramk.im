@@ -13,6 +13,7 @@ aliases:
 ---
 > [!info]- 참고한 것들
 > - [[14. CUDA|서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024)]]
+> - [어떤 Velog](https://velog.io/@aram_father/CUDA-Thread-Hierarchy)
 
 ## CUDA Execution Model
 
