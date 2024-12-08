@@ -6,8 +6,6 @@ aliases:
   - GPU
   - Single Instruction, Multiple Threads
   - SIMT
-  - Thread
-  - Warp
   - Predicated execution
   - Branch divergence
 ---

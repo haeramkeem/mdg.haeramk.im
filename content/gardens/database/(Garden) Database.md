@@ -70,6 +70,7 @@ date: 2024-07-29
 
 - 용어집
 	- [[BtrBlocks (Database Format)|BtrBlocks]]
+	- [[Parquet (Database Format)|Parquet]]
 - 논문들
 	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
 

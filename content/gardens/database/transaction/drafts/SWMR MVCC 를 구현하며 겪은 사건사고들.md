@@ -122,11 +122,11 @@ if (dec_num != hex_num) { /* ... */ }
 
 ## 비고: C 정리
 
-- [[C - Direct IO (O_DIRECT)]]
+- [[Direct IO, O_DIRECT (C File IO)]]
 - [[C - POSIX thread mutex]]
-- [[C - Struct]]
+- [[Struct (C Type)]]
 - [[C - Basic file IO (fopen, fwrite, fread, fclose)]]
-- [[C - Memory Dynamic Allocation (malloc, calloc, free)]]
+- [[Memory Dynamic Allocation (C Memory)]]
 - [[C - 메모리에 데이터 저장하기 (memset, memcpy)]]
-- [[C - Decoding number string (atoi, strtol)]]
+- [[Numeric String Utils (C String)]]
 - [[C - File IO syscall (open, write, read, fsync, close)]]

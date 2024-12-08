@@ -82,8 +82,8 @@ Stack trace (most recent call last) in thread 6112686080:
 
 ## C++ 관련 삽질
 
-- [[Atomic 자료형 (C++ Concurrency)]]
-- [[Lock guard (C++ Concurrency)]]
-- [[Lock 함수 (C++ Concurrency)]]
-- [[Unique lock (C++ Concurrency)]]
-- [[Shared mutex (C++ Concurrency)]]
+- [[Atomic Type (C++ Concurrency)]]
+- [[Lock Guard (C++ Concurrency)]]
+- [[Lock Function (C++ Concurrency)]]
+- [[Unique Lock (C++ Concurrency)]]
+- [[Shared Mutex (C++ Concurrency)]]

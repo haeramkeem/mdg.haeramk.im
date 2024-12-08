@@ -17,61 +17,62 @@ date: 2024-07-29
 
 ### C
 
-- [[C - 함수 진입, 탈출 메세지 출력하기|함수 진입, 탈출 메세지 출력하기]]
+- Debug
+	- [[함수 진입, 탈출 메세지 출력하기 (C Debug)|함수 진입, 탈출 메세지 출력하기]]
 - IO
-	- [[C - Direct IO (O_DIRECT)|Direct IO (O_DIRECT)]]
+	- [[Direct IO, O_DIRECT (C File IO)|Direct IO, O_DIRECT]]
 - Kernel
-	- [[C - Printk formatting|printk formatting]]
-	- [[C - 세상 간단한 Kernel module 예시|세상 간단한 Kernel module 예시]]
+	- [[Printk Formatting (C Linux Kernel)|Printk Formatting]]
+	- [[세상 간단한 Kernel module 예시 (C Linux Kernel)|세상 간단한 Kernel module 예시]]
 - Memory
-	- [[C - Memory Dynamic Allocation (malloc, calloc, free)|Memory Dynamic Allocation]]
-	- [[C - Memory utils (memcpy, memset)|Memory utils]]
+	- [[Memory Dynamic Allocation (C Memory)|Memory Dynamic Allocation]]
+	- [[Memory Utils (C Memory)|Memory Utils]]
 - POSIX Thread
-	- [[C - 세상 간단한 POSIX thread (pthread) 예시|세상 간단한 POSIX thread (pthread) 예시]]
+	- [[세상 간단한 POSIX thread (pthread) 예시 (C Thread)|세상 간단한 POSIX thread (pthread) 예시]]
 - String
-	- [[C - Decoding number string (atoi, strtol)|Decoding number string]]
+	- [[Numeric String Utils (C String)|Numeric String Utils]]
 - 자료형
-	- [[C - Function Pointer|Function Pointer]]
-	- [[C - Struct|Struct]]
+	- [[Function Pointer (C Type)|Function Pointer]]
+	- [[Struct (C Type)|Struct]]
 
 ### C++
 
-- [[Vexing Parse 문제 (C++)|Vexing Parse 문제]]
-- [[명령줄 인수 (Command-line arguments) 처리하기 (C++)|명령줄 인수 (Command-line arguments) 처리하기]]
-- [[소유권, move (C++)|소유권 (move)]]
-- [[형변환, dynamic_cast (C++)|형변환 (dynamic_cast)]]
+- [[Command-line Arguments (C++)|Command-line Arguments]]
+- [[Dynamic Type Casting (C++)|Dynamic Type Casting]]
+- [[Move Ownership (C++)|Move Ownership]]
+- [[Vexing Parse Problem (C++)|Vexing Parse Problem]]
 - Async
-	- [[Promise, future 사용법 (C++ Async)|Promise, future 사용법]]
+	- [[Promise, Future (C++ Async)|Promise, Future]]
 - Char, String
-	- [[Char to string 변환 (C++ String)|Char to string 변환]]
-	- [[Char 대소문자 변환 (C++ String)|Char 대소문자 변환]]
+	- [[Converting Char Case (C++ String)|Converting Char Case]]
+	- [[Converting Char to String (C++ String)|Converting Char to String]]
 	- [[String 변수를 auto 로 생성하지 말자 (C++ String)|String 변수를 auto 로 생성하지 말자]]
 - Class
-	- [[Const 메소드 (C++ Class)|Const 메소드]]
-	- [[Constructor, 생성자 (C++ Class)|Constructor, 생성자]]
-	- [[Copy assignment operator, 복사 대입 연산자 (C++ Class)|Copy assignment operator, 복사 대입 연산자]]
-	- [[Copy constructor, 복사 생성자 (C++ Class)|Copy constructor, 복사 생성자]]
-	- [[Destructor, 소멸자 (C++ Class)|Destructor, 소멸자]]
-	- [[Friend 클래스 (C++ Class)|Friend 키워드]]
-	- [[Move constructor, 이동 생성자 (C++ Class)|Move constructor, 이동 생성자]]
+	- [[Constant Method (C++ Class)|Constant Method]]
+	- [[Constructor (C++ Class)|Constructor]]
+	- [[Copy Assignment Operator (C++ Class)|Copy Assignment Operator]]
+	- [[Copy Constructor (C++ Class)|Copy Constructor]]
+	- [[Destructor (C++ Class)|Destructor]]
+	- [[Friend Class (C++ Class)|Friend Class]]
+	- [[Move Constructor (C++ Class)|Move Constructor]]
 - Concurrency control
-	- [[Atomic 자료형 (C++ Concurrency)|Atomic 자료형]]
-	- [[Lock guard (C++ Concurrency)|Lock guard]]
-	- [[Lock 함수 (C++ Concurrency)|Lock 함수]]
-	- [[Mutex 사용법 (C++ Concurrency)|Mutex 잡고 놓기]]
-	- [[Shared mutex (C++ Concurrency)|Shared mutex]]
-	- [[Unique lock (C++ Concurrency)|Unique lock]]
+	- [[Atomic Type (C++ Concurrency)|Atomic Type]]
+	- [[Lock Guard (C++ Concurrency)|Lock Guard]]
+	- [[Lock Function (C++ Concurrency)|Lock Function]]
+	- [[Mutex (C++ Concurrency)|Mutex]]
+	- [[Shared Mutex (C++ Concurrency)|Shared Mutex]]
+	- [[Unique Lock (C++ Concurrency)|Unique Lock]]
 - Number
 	- [[Float, Double Point, IEEE 754 (C++ Number)|Float, Double Point]]
 	- [[Integer (C++ Number)|Integer]]
-- [[Optional 소개 (C++ Optional)|optional]]
-	- [[Optional 객체 사용하기, bugprone-unchecked-optional-access 에러 (C++ Optional)|객체 사용하기 (bugprone-unchecked-optional-access 에러)]]
-	- [[Optional 객체 생성하기 (C++ Optional)|객체 생성하기]]
+- [[Optional Object (C++ Optional)|optional]]
+	- [["bugprone-unchecked-optional-access" Error (C++ Optional)|"bugprone-unchecked-optional-access" Error]]
+	- [[Creating Optional Object (C++ Optional)|Creating Optional Object]]
 - Pointer
-	- [[Reference 타입 (C++ Pointer)|Reference 타입]]
+	- [[Reference Type (C++ Pointer)|Reference Type]]
 	- Smart pointer
-		- [[Smart pointer 생성하기 (C++ Pointer)|생성하기 생성하기 (make_, use_count)]]
-		- [[Smart pointer 일반 포인터로 바꾸기 (C++ Pointer)|일반 포인터로 바꾸기 (get)]]
+		- [[Converting Smart Pointer to Pointer (C++ Pointer)|Converting Smart Pointer to Pointer]]
+		- [[Creating Smart Pointer (C++ Pointer)|Creating Smart Pointer]]
 - STL
 	- [[size() 의 사칙연산 주의할 것 (C++ STL)|size() 와 사칙연산]]
 	- `std::map`
@@ -82,15 +83,15 @@ date: 2024-07-29
 
 ### GDB, LLDB
 
-- [[gdb.lldb - Breakpoint 관련|Breakpoint 관련]]
-- [[gdb.lldb - CMake 세팅하기|CMake 세팅하기]]
-- [[gdb.lldb - Variable 관련|Variable 관련]]
-- [[gdb.lldb - 시작하기|시작하기]]
+- [[Breakpoint (gdb, lldb)|Breakpoint]]
+- [[CMake Setting (gdb, lldb)|CMake Setting]]
+- [[Print Variable (gdb, lldb)|Print Variable]]
+- [[디버깅 시작하기 (gdb, lldb)|디버깅 시작하기]]
 
 ### Plugins
 
 - `ctags`
-	- [[ctags - Basic usage|기본 사용법]]
+	- [[Basic Usage (ctags)|Basic Usage]]
 - `make`, `cmake`
-	- [[cmake - Library 설정하기|Library 설정하기]]
-	- [[make, cmake - Macro 주입하기|Macro 주입하기]]
+	- [[Library Configuration (cmake)|Library Configuration]]
+	- [[Macro Setup (make, cmake)|Macro Setup]]

@@ -31,3 +31,5 @@ date: 2024-09-01
 - [[06. Loop-carried Dependences and Parallelism]]
 - [[07. Synchronization]]
 - [[09. GPU Architectures]]
+- [[10. Caches]]
+- [[14. CUDA]]

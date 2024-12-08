@@ -195,4 +195,4 @@ date: 2024-07-12
 
 ## C++ 관련 삽질
 
-- [[Friend 클래스 (C++ Class)]]
+- [[Friend Class (C++ Class)]]

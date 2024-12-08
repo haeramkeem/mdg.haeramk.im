@@ -30,7 +30,7 @@ date: 2024-10-17
 		- 초기화되어있지 않은 값들은 *Uninitialized Data* (`.bss`) 에 담긴다.
 			- *BSS* 라는게 있는데, *Block Started Symbol* 이란 뜻이다. 일단은 *BSS* 란 용어를 보면 uninitialized data 공간 말하는구나... 라고 생각하자.
 - *Heap* 공간은 메모리 동적할당을 위한 공간인데,
-	- 많이 쓰는 [[C - Memory Dynamic Allocation (malloc, calloc, free)|malloc]] 은 library 함수이고 syscall 이 아니다.
+	- 많이 쓰는 [[Memory Dynamic Allocation (C Memory)|malloc]] 은 library 함수이고 syscall 이 아니다.
 	- `malloc` 은 heap 공간을 갖고 장난치다가 여기에 공간이 부족해 지면 `sbrk` 라는 syscall 을 부르고 이때 heap 이 늘어나는 것
 - *Stack* 공간은 당연히 function call stack 이다.
 	- Local memory 의 경우 여기에 들어간다.
