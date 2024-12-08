@@ -57,3 +57,25 @@ aliases:
 - 이 thread block 들은 thread block scheduler 에 의해 GPU 의 여러 SM 들에게 RR 로 분배된다.
 - SM 이 thread block 을 받게 되면, 이것은 warp 단위로 쪼개진다.
 - Warp 는 warp scheduler 에 의해 thread 단위로 SP 들에게 전달되고, SP 가 열심히 연산을 하게 되는 것이다.
+
+## CUDA API
+
+- 그럼 이 execution model 을 CUDA API 로는 어떻게 사용하는지 알아보자.
+- 우선 grid 는 몇개의 thread block 으로 이루어져 있는지, 그리고 각 thread block 은 몇개의 thread 로 이루어져 있는지는 configurable 한 값들이다.
+	- `dim gridDim(X, Y, Z);` 로 grid 내의 thread block 개수를 지정한다.
+		- 인자가 세개인 것은 3차원 (X축, Y축, Z축) 으로 지정할 수 있게 하기 위함이다.
+		- 즉, 이상황에서 총 thread block 의 개수는 `X * Y * Z` 인 것.
+	- `dim blockDim(X, Y, Z);` 로 thread block 내의 thread 개수를 지정한다.
+		- 이때도 마찬가지로 3차원으로 지정할 수 있게 한다.
+	- 이 두 configure 이 kernel call 의 `<<<>>>` 에 들어간다.
+		- `<<<gridDim, blockDim>>>` 으로 해주면 된다.
+- Kernel code 는 하나의 thread 에서 작동하게 된다. 그럼 내가 grid, thread block 구조 안에서 어디에 있는지는 알아야 할 것 아닌가.
+	- 이를 위해 다음의 두 변수가 추가적으로 제공된다.
+	- `blockIdx`: 이놈은 현재 thread 가 속한 grid 내에서의 thread block index 를 알려준다.
+		- 즉, grid 내에서 몇번째 thread block 인가? 를 담고 있는 것.
+		- `gridDim` 이 3차원으로 정의되는 것처럼, 이 index 도 3차원으로 값을 받아올 수 있다.
+		- X축, Y축, Z축 각각 `blockIdx.x`, `blockIdx.y`, `blockIdx.z` 로 index 를 받아올 수 있다.
+	- `threadIdx`: 이놈은 현재 thread 가 속한 thread block 내에서의 thread index 를 알려준다.
+		- 마찬가지로 이놈도 `threadIdx.x`, `threadIdx.y`, `threadIdx.z` 로 3차원적으로 접근할 수 있다.
+- OpenCL 에서와 다르게, global id 같은건 없다. 직접 계산해 줘야 한다.
+	- 이렇게 계산해 주면 된다: `blockIdx.{x,y,z} * blockDim.{x,y,z} + threadIdx.{x,y,z}`
