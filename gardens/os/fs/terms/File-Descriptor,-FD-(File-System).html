@@ -46,7 +46,7 @@
 </blockquote>
 <ul>
 <li>그럼 이걸 코드로 확인해 보자.</li>
-<li>File descriptor 의 <a href="../../../../gardens/c-cpp/c/type/C---Struct" class="internal" data-slug="gardens/c-cpp/c/type/C---Struct">구조체</a> 이름은 <code>struct file</code> 이다. (<a href="https://github.com/torvalds/linux/blob/v6.11/include/linux/fs.h#L990-L1037" class="external">Code ref</a>)
+<li>File descriptor 의 <a href="../../../../gardens/c-cpp/c/type/Struct-(C-Type)" class="internal" data-slug="gardens/c-cpp/c/type/Struct-(C-Type)">구조체</a> 이름은 <code>struct file</code> 이다. (<a href="https://github.com/torvalds/linux/blob/v6.11/include/linux/fs.h#L990-L1037" class="external">Code ref</a>)
 <ul>
 <li>여기를 보면 file 의 inode 를 가리키고 있는 것을 볼 수 있다.</li>
 <li>즉, process 입장에서는 file descriptor index -> file descriptor -> inode 순서로 찾아가게 되는 것.</li>

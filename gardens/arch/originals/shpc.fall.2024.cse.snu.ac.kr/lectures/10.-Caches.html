@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><title>10. Caches</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="10. Caches"/><meta property="og:description" content="서울대학교 컴퓨터공학과 이재진 교수님의 &amp;quot;확장형 고성능 컴퓨팅&amp;quot; 강의를 필기한 내용입니다. 목차 Locality § 일단 Locality 는 간단히 말하면 “조만간 사용될 것임” 을 뜻하는 것으로 생각하면 되고 Temporal locality 는 시간의 측면에서의 locality 를 말한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 이재진 교수님의 &amp;quot;확장형 고성능 컴퓨팅&amp;quot; 강의를 필기한 내용입니다. 목차 Locality § 일단 Locality 는 간단히 말하면 “조만간 사용될 것임” 을 뜻하는 것으로 생각하면 되고 Temporal locality 는 시간의 측면에서의 locality 를 말한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/lectures/10.-Caches"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">10. Caches</h1><p class="content-meta ">Oct 09, 2024, 6 min read</p><ul class="tags "><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-shpc24f" class="internal tag-link">#snu-shpc24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<html><head><title>10. Caches</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="10. Caches"/><meta property="og:description" content="서울대학교 컴퓨터공학과 이재진 교수님의 &amp;quot;확장형 고성능 컴퓨팅&amp;quot; 강의를 필기한 내용입니다. 목차 Locality § 일단 Locality 는 간단히 말하면 “조만간 사용될 것임” 을 뜻하는 것으로 생각하면 되고 Temporal locality 는 시간의 측면에서의 locality 를 말한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학과 이재진 교수님의 &amp;quot;확장형 고성능 컴퓨팅&amp;quot; 강의를 필기한 내용입니다. 목차 Locality § 일단 Locality 는 간단히 말하면 “조만간 사용될 것임” 을 뜻하는 것으로 생각하면 되고 Temporal locality 는 시간의 측면에서의 locality 를 말한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/lectures/10.-Caches"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">10. Caches</h1><p class="content-meta ">Oct 09, 2024, 21 min read</p><ul class="tags "><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-shpc24f" class="internal tag-link">#snu-shpc24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
 <div class="callout-title">
                   <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
                   <div class="callout-title-inner"><p>서울대학교 컴퓨터공학과 이재진 교수님의 &quot;확장형 고성능 컴퓨팅&quot; 강의를 필기한 내용입니다. </p></div>
@@ -12,13 +12,13 @@
 <h2 id="locality">Locality<a aria-hidden="true" tabindex="-1" href="#locality" class="internal"> §</a></h2>
 <ul>
 <li>일단 Locality 는 간단히 말하면 “조만간 사용될 것임” 을 뜻하는 것으로 생각하면 되고</li>
-<li><a href="../../../../../gardens/os/replacement/draft/Locality-(Replacement)" class="internal" data-slug="gardens/os/replacement/draft/Locality-(Replacement)">Temporal locality</a> 는 시간의 측면에서의 locality 를 말한다.
+<li><a href="../../../../../gardens/os/replacement/terms/Locality-(Replacement)" class="internal" data-slug="gardens/os/replacement/terms/Locality-(Replacement)">Temporal locality</a> 는 시간의 측면에서의 locality 를 말한다.
 <ul>
 <li>어떤 데이터를 참조했을 때의 “시점” 을 기준으로 가까운 시간 내에 다시 접근될 것이라는 것.</li>
 <li>즉, 최근에 사용되었던 애는 조만간 다시 사용될 것이라는 예측이다.</li>
 </ul>
 </li>
-<li><a href="../../../../../gardens/os/replacement/draft/Locality-(Replacement)" class="internal" data-slug="gardens/os/replacement/draft/Locality-(Replacement)">Spatial locality</a> 는 공간의 측면에서 locality 를 말한다.
+<li><a href="../../../../../gardens/os/replacement/terms/Locality-(Replacement)" class="internal" data-slug="gardens/os/replacement/terms/Locality-(Replacement)">Spatial locality</a> 는 공간의 측면에서 locality 를 말한다.
 <ul>
 <li>어떤 데이터를 참조했을 때 이놈의 “위치” 를 기준으로 가까운 위치의 데이터를 접근할 것이라는 것.</li>
 <li>즉, 사용되었던 애의 주변에 있는 애들도 조만간 사용될 것이라는 예측이다.</li>
@@ -46,7 +46,7 @@
 <h2 id="memory-hierarchy">Memory hierarchy<a aria-hidden="true" tabindex="-1" href="#memory-hierarchy" class="internal"> §</a></h2>
 <p><img src="../../../../../images/Pasted-image-20241021101314.png" width="auto" height="auto"/></p>
 <ul>
-<li>뭐 이렇게 hierarchy 가 있는거는 알테고</li>
+<li>뭐 이렇게 <a href="../../../../../gardens/os/memory/terms/Memory-Hierarchy-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Memory-Hierarchy-(Memory)">Memory hierarchy</a> 가 있는거는 알테고</li>
 <li>Memory 도 storage 에 비하면 cache 의 역할을 하지만 replacement 같은 것이 SW 로 구현되어있다는 점에서 SW cache 라고 부르고
 <ul>
 <li>CPU cache 는 replacement 도 HW 적으로 되어 있기 때문에 HW cache 라고 부른다.</li>
@@ -54,7 +54,7 @@
 </li>
 <li>참고) DRAM 에 비해 SRAM 은 더 빠르지만 transistor 도 더 많이 들어가 비싸다고 한다.</li>
 </ul>
-<h2 id="cache">Cache<a aria-hidden="true" tabindex="-1" href="#cache" class="internal"> §</a></h2>
+<h2 id="cache"><a href="../../../../../gardens/arch/cache/terms/CPU-Cache-(Arch)" class="internal" data-slug="gardens/arch/cache/terms/CPU-Cache-(Arch)">Cache</a><a aria-hidden="true" tabindex="-1" href="#cache" class="internal"> §</a></h2>
 <ul>
 <li>Cache 가 필요한 이유는 instruction 을 실행하는데 이놈이 memory 에 있기 때문.
 <ul>
@@ -73,7 +73,18 @@
 <li>어쨋든 cache access 관련하여 두 개의 주된 result 는
 <ul>
 <li><em>Hit</em>: 원하는 놈 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></span> 가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 번째 level 안의 cache line 에 있는 경우</li>
-<li><em>Miss</em>: 없는 경우. 이때는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 번째 level 에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 번째로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></span> 가 포함된 cache line 을 올려야 한다.</li>
+<li><em>Miss</em>: 없는 경우. 이때는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 번째 level 에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 번째로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></span> 가 포함된 cache line 을 올려야 한다.
+<ul>
+<li>여기에는 종류가 있다.</li>
+<li><em>Cold miss</em>: cache 가 비어있을 때</li>
+<li><em>Conflict miss</em>: cacheline 이 들어올 자리가 없을 때</li>
+<li><em>Capacity miss</em>: 단위시간동안 사용하는 데이터의 크기 (= <em>Working set</em>) 가 cache 의 크기보다 클때
+<ul>
+<li>근데 사실 이건 conflict miss 랑 구분하기가 힘들다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -102,26 +113,503 @@
 <p><img src="../../../../../images/Pasted-image-20241021105657.png" width="auto" height="auto"/></p>
 <ul>
 <li>Memory address 로 cache 에 접근하기 위해서 위처럼 구성되어 있다.</li>
-<li>일단 전체 구조는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 개의 set 으로 구성되어 있다.
+<li>일단 전체 구조는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 개의 set 이 있고, 각 set 에 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></span> 개의 cache line 이 있으며 이 cache line 은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 byte 로 구성된 형태다.
 <ul>
-<li>이것을 구분하는 것은 address 의 set index field 를 참고해서 어느 set 에 있는지 알아낸다.</li>
+<li>각 cache line 에 대해서는 cache line 들을 구분지어주기 위한 tag 와</li>
+<li>Cache line 이 유효한지를 나타내는 validity bit 이 있다.</li>
 </ul>
 </li>
-<li>그리고 그 안에는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></span> 개의 cache line 이 있다.
+<li>보통 cache size 라고 한다면 저 valid 나 tag 는 제외한 크기를 말한다.
 <ul>
-<li>이것을 구분하는 것은 address 의 tag field 를 참고한다.</li>
+<li>즉, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 인 것.</li>
+</ul>
+</li>
+<li>이때, 원하는 address 의 byte 에 접근하는 방법을 알아보자.</li>
+<li>Set 을 찾아가는 것은 address 의 set index field 를 참고해서 어느 set 에 있는지 알아낸다.</li>
+<li>Set 내에서 원하는 cacheline 을 찾는 것은 address 의 tag field 를 참고한다.
+<ul>
 <li>얘는 index 로 접근하는게 아니라 cache line 에 적힌 tag 를 비교해서 찾아낸다.</li>
 </ul>
 </li>
-<li>Cache line 안에서는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 byte 가 있다.</li>
+<li>Cache line 안에서 byte 를 찾는 것은, memory address 의 나머지 부분을 offset 으로 해서 찾아가게 된다.</li>
 </ul>
-<blockquote class="callout" data-callout="failure">
+<h2 id="cache-types">Cache Types<a aria-hidden="true" tabindex="-1" href="#cache-types" class="internal"> §</a></h2>
+<h3 id="direct-mapped-cache"><a href="../../../../../gardens/arch/cache/terms/Direct-mapped-Cache-(CPU-Cache)" class="internal" data-slug="gardens/arch/cache/terms/Direct-mapped-Cache-(CPU-Cache)">Direct-mapped cache</a><a aria-hidden="true" tabindex="-1" href="#direct-mapped-cache" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241203182925.png" width="auto" height="auto"/></p>
+<ul>
+<li>간단하다: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 일때를 <em>Direct-mapped Cache</em> 라고 부른다.</li>
+<li>접근하는 것은 아주 쉽다.
+<ul>
+<li>Set index 를 보고 해당 set 으로 간다.</li>
+<li>Tag 를 보고 원하는 cacheline 인지 확인한다.</li>
+<li>만약에 맞다면, 그냥 사용하면 되고, 아니라면 이놈을 빼버리고 원하는 cacheline 을 가져오면 된다.</li>
+</ul>
+</li>
+<li>따라서 replacement 도 간단하다: 뭐 victim 선정 이런거 없이 tag 안맞으면 빼버리면 되니까.</li>
+<li>이걸 회로로 나타내보면 이렇게 그릴 수 있다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241203190909.png" width="auto" height="auto"/></p>
+<ul>
+<li>위에서 말한대로,
+<ul>
+<li>Set index 로 set 을 정하고</li>
+<li>Tag 를 비교해서 hit 인지 아닌지 알려주고</li>
+<li>Offset 으로 해당 offset 의 word 를 찾아서 그것도 알려준다.
+<ul>
+<li>참고로 저기 등변사다리꼴은 Multiplexer (MUX) 로, index access 와 비슷하게 입력값 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 으로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 번째 입력값을 뱉는 역할을 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="access-example">Access Example<a aria-hidden="true" tabindex="-1" href="#access-example" class="internal"> §</a></h4>
+<ul>
+<li>Access 예시를 보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241203191312.png" width="auto" height="auto"/></p>
+<ul>
+<li>각 색깔은 word (4byte) 이고 이때 cacheline 은 word 두개 크기 (8byte) 이다.
+<ul>
+<li>따라서 offset 은 cacheline 이 8byte 이기 때문에 3bit 이다.</li>
+</ul>
+</li>
+<li>Set 이 4개이면 Set index 는 2bit 면 될 것이다.</li>
+<li>그리고 Tag 는 1bit 를 사용해 총 6bit address space 라고 해보자.</li>
+<li>이때 address 0 (주황색) 에 접근했을 때의 모습이 위 그림이다.
+<ul>
+<li>Set 0 의 validity 가 0이었기 때문에, cache miss 가 나고 해당 cacheline 이 올라오게 된 것.</li>
+<li>따라서 이때는 저 주황색이 cache miss 에 의해 올라온 것이고, 그 옆의 연두색은 cacheline 단위로 올라오느라 prefetch 된 것이다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241203191759.png" width="auto" height="auto"/></p>
+<ul>
+<li>그래서 다음 address 4 (연두색) 에 접근하면 hit 가 나게 된다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241203192036.png" width="auto" height="auto"/></p>
+<ul>
+<li>동일하게 address 20 에 접근하면 miss 가 나게 되고, set index 가 <code>10</code> 이기 때문에 set 2 에 올라온다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241203192145.png" width="auto" height="auto"/></p>
+<ul>
+<li>이때 address 48 에 접근하게 되면 conflict 가 나게 된다.
+<ul>
+<li>이놈도 동일하게 set index 가 <code>10</code> 이고 심지어 validity bit 도 켜져있는데 tag 가 다르기 때문 (address 20 은 <code>0</code>, 48 은 <code>1</code>).</li>
+</ul>
+</li>
+<li>따라서 아래처럼 address 48 의 cacheline 이 올라오게 된다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241203192428.png" width="auto" height="auto"/></p>
+<h3 id="fully-associative-cache"><a href="../../../../../gardens/arch/cache/terms/Set-Associative-Cache-(CPU-Cache)" class="internal" data-slug="gardens/arch/cache/terms/Set-Associative-Cache-(CPU-Cache)">Fully associative cache</a><a aria-hidden="true" tabindex="-1" href="#fully-associative-cache" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241203192713.png" width="auto" height="auto"/></p>
+<ul>
+<li>Direct-mapped cache 는 간단하긴 하지만 cache miss 가 너무 많이 난다.
+<ul>
+<li>Tag 가 다르면 그냥 숙청되기 때문.</li>
+</ul>
+</li>
+<li>그럼 반대로, set 을 1개만 사용하면 어떻게 될까. 이것이 <em>Fully-associative cache</em> 이다.</li>
+<li>이때는 cache miss 시에 그냥 set 의 빈자리에 cacheline 을 밀어넣는다.</li>
+<li>“빈자리” 에 넣는다는 것이 중요하다.
+<ul>
+<li>덕분에 cache evict 가 많이 줄어들게 된다. Direct-mapped cache 의 경우에는 cache 가 많이 비어있어도 정작 내가 들어가야 하는 set 이 차있으면 evict 시켜야 하기 때문.</li>
+<li>따라서 evict 가 발생하는 것은 진짜 cache 가 전부 차있을때 이므로 그만큼 utilization 이 좋다고 할 수 있다.</li>
+</ul>
+</li>
+<li>하지만 당연히 단점이 있는데, 그것은 복잡해진다는 것이다.
+<ul>
+<li>모든 cacheline 의 tag 를 비교해야 하고, 이것을 linear 하게 하는 것은 불가능하기 때문에 (SW 가 아닌 HW 이므로) 한번에 tag 를 비교하기 위해 위처럼 복잡한 회로가 추가된다.</li>
+<li>그리고 evict 시에 victim 을 선정할 필요도 생긴다. 이를 위해 replacement 를 위한 회로도 추가된다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="set-associative-cache">Set Associative Cache<a aria-hidden="true" tabindex="-1" href="#set-associative-cache" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241203193816.png" width="auto" height="auto"/></p>
+<ul>
+<li>CS 에서는 항상 trade-off 가 있으면 그 중간놈도 존재하는 법이다.</li>
+<li>Direct-mapped cache 는 간단하지만 miss 가 자주 일어나는 문제가 있었고, Fully-associative cache 는 그 반대였기 때문에, 그 중간지점인 적절한 개수의 set 과 적절한 개수의 line 을 사용하는 놈을 생각하게 되는 것.</li>
+<li>이것이 <em>Set Associative Cache</em> 이다.</li>
+<li>위 그림을 보면, 좀 복잡해 보이긴 하지만 cacheline 두개가 연달아 붙어있는 형태이다.
+<ul>
+<li>일단 set index 로 해당 set 으로 찾아가면, 여기에는 cacheline 이 두개가 있다.</li>
+<li>이 두 cacheline 에 대해, tag 를 한번에 비교하고 맞는놈에 대한 cacheline 에서 offset 으로 가져오게 되는 것.</li>
+</ul>
+</li>
+<li>여기서 set 하나에 몇개의 line 을 둘 것이냐에 따라 <em>N-way</em> 라고 부른다.
+<ul>
+<li>2개 있으면 2-way, 4개면 4-way 등등</li>
+</ul>
+</li>
+</ul>
+<h2 id="cache-replacement">Cache Replacement<a aria-hidden="true" tabindex="-1" href="#cache-replacement" class="internal"> §</a></h2>
+<ul>
+<li>Cache 하면 항상 나오는 주제가 replacement 이다. 빠르게 (모르던 것들은 자세히…) 알아보자.</li>
+</ul>
+<h3 id="lru"><a href="../../../../../gardens/os/replacement/terms/Least-Recently-Used,-LRU-(Replacement)" class="internal" data-slug="gardens/os/replacement/terms/Least-Recently-Used,-LRU-(Replacement)">LRU</a><a aria-hidden="true" tabindex="-1" href="#lru" class="internal"> §</a></h3>
+<ul>
+<li>안쓴다. 사실 그대로 쓰는데가 거의 없는거같다. 이유를 현실적으로 생각해 보자.</li>
+<li>간단하게 생각하면 된다. LRU 를 위해서는 “순서” 를 저장해야 하는데, 이 순서의 경우의 수는 factorial 이고, 이를 이용해 계산해 보면 필요한 bit 가 생각보다 많기 때문.
+<ul>
+<li>2-way 면 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">2</span><span class="mclose">!</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span> 이므로 1bit 면 되지만</li>
+<li>4-way 면 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">4</span><span class="mclose">!</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">24</span></span></span></span></span> 이므로 5bit 가 필요하고</li>
+<li>8-way 면 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">8</span><span class="mclose">!</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">40320</span></span></span></span></span> 이므로 16bit 가 필요하다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="fifo"><a href="../../../../../gardens/os/replacement/draft/First-In-First-Out,-FIFO-(Replacement)" class="internal" data-slug="gardens/os/replacement/draft/First-In-First-Out,-FIFO-(Replacement)">FIFO</a><a aria-hidden="true" tabindex="-1" href="#fifo" class="internal"> §</a></h3>
+<ul>
+<li>안쓴다. 이유는 locality 가 하나도 고려되지 않기 때문.</li>
+</ul>
+<h3 id="random">RANDOM<a aria-hidden="true" tabindex="-1" href="#random" class="internal"> §</a></h3>
+<ul>
+<li>신기하게도 이놈은 쓴다. ARM 에서는 이걸로 replacement 를 한다고 한다.</li>
+</ul>
+<h3 id="pseudo-lru"><a href="../../../../../gardens/os/replacement/terms/Pseudo-LRU-(Replacement)" class="internal" data-slug="gardens/os/replacement/terms/Pseudo-LRU-(Replacement)">Pseudo-LRU</a><a aria-hidden="true" tabindex="-1" href="#pseudo-lru" class="internal"> §</a></h3>
+<ul>
+<li>이것은 decision tree 를 이용한 LRU approximate algorithm 이다.</li>
+<li>핵심 아이디어는 binary tree 에서 node 의 값이 1이면 왼쪽 놈이 최근에 사용되었다는 의미이고, 0이면 오른쪽 놈이 최근에 사용되었다는 의미라고 정하고 access 될때 경로상에 있는 node 들의 bit 를 그에 맞게 바꿔 가장 이전에 사용되는 놈을 찻게 하는 것이다.</li>
+</ul>
+<h4 id="예시">예시<a aria-hidden="true" tabindex="-1" href="#예시" class="internal"> §</a></h4>
+<ul>
+<li>예시를 보자. 다음과 같은 decision tree 가 있을때
+</li>
+</ul>
+<pre><code class="mermaid">flowchart TD
+	ABCD[ABCD:]
+	AB[AB:]
+	CD[CD:]
+	A((A))
+	B((B))
+	C((C))
+	D((D))
+	ABCD -- 1 --> AB
+	ABCD -- 0 --> CD
+	AB -- 1 --> A
+	AB -- 0 --> B
+	CD -- 1 --> C
+	CD -- 0 --> D
+</code></pre>
+<ul>
+<li>만약 A 에 접근한다면, A 까지 가는 경로는 ABCD -> AB -> A 이다. 이때 가야하는 child 를 node 에 적어주면 다음과 같다.</li>
+</ul>
+<pre><code class="mermaid">flowchart TD
+	ABCD[ABCD: 1]
+	AB[AB: 1]
+	CD[CD:]
+	A((A))
+	B((B))
+	C((C))
+	D((D))
+	ABCD -- 1 --> AB
+	ABCD -- 0 --> CD
+	AB -- 1 --> A
+	AB -- 0 --> B
+	CD -- 1 --> C
+	CD -- 0 --> D
+</code></pre>
+<ul>
+<li>따라서 A 가 접근되면, node 들의 bit 는 다음처럼 될 것이다.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ACCESS</th><th>ABCD</th><th>AB</th><th>CD</th></tr></thead><tbody><tr><td>A</td><td>1</td><td>1</td><td>not changed</td></tr></tbody></table>
+<ul>
+<li>다음은 C 에 access 되었다고 해보자. 그럼 ABCD -> CD -> C 이므로 node 에는 다음처럼 표시해 주면 될 것이다.</li>
+</ul>
+<pre><code class="mermaid">flowchart TD
+	ABCD[ABCD: 0]
+	AB[AB: 1]
+	CD[CD:1]
+	A((A))
+	B((B))
+	C((C))
+	D((D))
+	ABCD -- 1 --> AB
+	ABCD -- 0 --> CD
+	AB -- 1 --> A
+	AB -- 0 --> B
+	CD -- 1 --> C
+	CD -- 0 --> D
+</code></pre>
+<ul>
+<li>그럼 C 가 접근되었을 때의 경우의 수도 위의 표에 추가를 해보자.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ACCESS</th><th>ABCD</th><th>AB</th><th>CD</th></tr></thead><tbody><tr><td>A</td><td>1</td><td>1</td><td>not changed</td></tr><tr><td>C</td><td>0</td><td>not changed</td><td>1</td></tr></tbody></table>
+<ul>
+<li>마친가지의 과정을 B 와 D 에 대해서도 생각해 보면, 다음과 같이 표가 만들어 진다.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ACCESS</th><th>ABCD</th><th>AB</th><th>CD</th></tr></thead><tbody><tr><td>A</td><td>1</td><td>1</td><td>not changed</td></tr><tr><td>B</td><td>1</td><td>0</td><td>not changed</td></tr><tr><td>C</td><td>0</td><td>not changed</td><td>1</td></tr><tr><td>D</td><td>0</td><td>not changed</td><td>0</td></tr></tbody></table>
+<ul>
+<li>이렇게 access table 을 완성했다. 그럼 victim 은 어떻게 고를까.</li>
+<li>아래의 상황에서 새로운 <code>E</code> 가 들어온다고 해보자.</li>
+</ul>
+<pre><code class="mermaid">flowchart TD
+	ABCD[ABCD: 0]
+	AB[AB: 1]
+	CD[CD:1]
+	A((A))
+	B((B))
+	C((C))
+	D((D))
+	ABCD -- 1 --> AB
+	ABCD -- 0 --> CD
+	AB -- 1 --> A
+	AB -- 0 --> B
+	CD -- 1 --> C
+	CD -- 0 --> D
+</code></pre>
+<ul>
+<li>일단 <code>ABCD</code> 가 <code>0</code> 이기 때문에 right child 보다 left child 의 애들이 더 예전에 접근되었을 것이다.</li>
+<li>또한, <code>AB</code> 는 <code>1</code> 이기 때문에 left child 보다 right child 의 애들이 더 예전에 접근되었을 것이다.</li>
+<li>따라서 victim 은 B 가 된다. 이것을 표로 나타내면</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ABCD</th><th>AB</th><th>CD</th><th>VICTIM</th></tr></thead><tbody><tr><td>0</td><td>1</td><td>doesn’t matter</td><td>B</td></tr></tbody></table>
+<ul>
+<li>이 원리를 확장해 저 표를 완성해보면</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ABCD</th><th>AB</th><th>CD</th><th>VICTIM</th></tr></thead><tbody><tr><td>0</td><td>0</td><td>doesn’t matter</td><td>A</td></tr><tr><td>0</td><td>1</td><td>doesn’t matter</td><td>B</td></tr><tr><td>1</td><td>doesn’t matter</td><td>0</td><td>C</td></tr><tr><td>1</td><td>doesn’t matter</td><td>1</td><td>D</td></tr></tbody></table>
+<ul>
+<li>이렇게 victim table 또한 완성할 수 있다. 이 access table 과 victim table 을 이용해 replace 하는 것이 <em>Pseudo-LRU</em> 이다.</li>
+</ul>
+<h4 id="performance">Performance<a aria-hidden="true" tabindex="-1" href="#performance" class="internal"> §</a></h4>
+<ul>
+<li>일단 성능으로 보자면, LRU 와 Pseudo-LRU 는 통계적으로 봤을때 miss rate 차이가 아주 적다고 한다.</li>
+<li>또한 필요로 하는 bit 의 개수를 보면,
+<ul>
+<li>LRU 의 경우에는 cache size 가 4라면 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">4</span><span class="mclose">!</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">24</span></span></span></span></span> 이므로 5bit 가 필요하다.</li>
+<li>하지만 Pseudo-LRU 의 경우에는 보다시피 3bit 만 있으면 된다.</li>
+<li>이것을 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 으로 확장시키면, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">o</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0359em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span><span class="mbin mtight">+</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 이라고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="cache-write-policies">Cache Write Policies<a aria-hidden="true" tabindex="-1" href="#cache-write-policies" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="info">
 <div class="callout-title">
-                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
-                  <div class="callout-title-inner"><p>#draft Timeout... 나중에 정리하겠슴다 </p></div>
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>여기부터는 <code>2024-10-14</code> 강의임</p></div>
                   
                 </div>
-</blockquote></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+</blockquote>
+<ul>
+<li>Read 는 access pattern 에 따라 좀 성능이 달라질 수 있다.
+<ul>
+<li>Sequential access 의 경우에는 cacheline 을 읽어와서 이후 한동안 hit 가 나 성능이 좋지만</li>
+<li>Random access 의 경우에는 miss 가 날 뿐 아니라 한번 읽는데에도 cacheline 단위로 올라오기 때문에 읽어야 할 양이 많아서 오히려 느려질 수 있다.
+<ul>
+<li>때문에 이때는 그냥 memory 를 바로 읽는게 나을 수도 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Write 는 read 에 비해 좀 다른 구석이 있다.
+<ul>
+<li>Read 는 tag 비교와 offset 으로 값을 가져오는 것을 동시에 할 수 있다.
+<ul>
+<li>즉, tag 를 비교한 다음에 일치하면 값을 읽어오는게 아니라 tag 과 값을 같이 가져와서 tag 가 안맞으면 버리는 방식을 취한다.</li>
+</ul>
+</li>
+<li>하지만 write 는 그렇게 못한다. Tag 가 다른데 write 를 해버리면 안되기 떄문.</li>
+</ul>
+</li>
+</ul>
+<h3 id="hit-policy">Hit policy<a aria-hidden="true" tabindex="-1" href="#hit-policy" class="internal"> §</a></h3>
+<ul>
+<li>Write 시에 cache hit 이 발생하면, 두가지 policy 가 가능하다.</li>
+<li><em>Write through</em>: Cache 와 mem 둘 다 write 하는 것
+<ul>
+<li>당연히 느리다.</li>
+<li>근데 구현이 쉽기도 하고, 항상 cache 와 mem 의 데이터가 일치하기 때문에 consistency 문제가 없다.</li>
+</ul>
+</li>
+<li><em>Write back</em>: Cache 에만 write 하는 것
+<ul>
+<li>당연히 빠르다 (read 와 write 의 속도가 같다).</li>
+<li>그럼 언제 mem 에 write 되냐: evict 시에 수행한다.
+<ul>
+<li>즉, dirty bit 를 유지해야 한다는 소리.</li>
+</ul>
+</li>
+<li>또한 cache 와 mem 간의 consistency 문제가 있다.</li>
+<li>하지만 빠르다. 그래서 보통은 이 정책을 사용한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="miss-policy">Miss policy<a aria-hidden="true" tabindex="-1" href="#miss-policy" class="internal"> §</a></h3>
+<ul>
+<li>Write 시에 miss 가 발생하면, 이때에도 두가지 policy 가 가능하다.</li>
+<li><em>Write allocate</em>: Cache 로 갖고와서 write 하기</li>
+<li><em>No write allocate</em>: Cache 로 갖고오지 않고 mem 에 바로 write 하기</li>
+</ul>
+<h3 id="mix">Mix<a aria-hidden="true" tabindex="-1" href="#mix" class="internal"> §</a></h3>
+<ul>
+<li>저 hit policy 와 miss policy 두개를 섞어보자.</li>
+<li><em>Write through</em> + <em>Write allocate</em>
+<ul>
+<li>모든 write 는 cache 와 mem 에 전부 적힌다.</li>
+</ul>
+</li>
+<li><em>Write through</em> + <em>No write allocate</em>
+<ul>
+<li>모든 write 는 mem 으로 가고, hit 일때는 cache 내용도 바뀐다.</li>
+</ul>
+</li>
+<li><em>Write back</em> + <em>Write allocate</em>
+<ul>
+<li>Sequential write 에 아주 좋다: Write allocate 로 miss 시에 가져온 뒤에는 한동안 hit 이 나고, cache 에만 적으므로 (Write back) 매우 빠르다.</li>
+</ul>
+</li>
+<li><em>Write back</em> + <em>No write allocate</em>
+<ul>
+<li>데이터가 있는곳에만 적는다. Cache 에 있으면 cache 에만 적고, mem 에 있으면 mem 에만 적는다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="non-blocking-lockup-free-cache">Non-blocking, Lockup-free Cache<a aria-hidden="true" tabindex="-1" href="#non-blocking-lockup-free-cache" class="internal"> §</a></h2>
+<ul>
+<li>Cache 는 miss 가 나면 그놈을 가져오는 동안에는 다른애들은 block 되는데 이건 당연히 성능상 좋지 않다.</li>
+<li>그래서 miss 가 처리되는 동안 다른 hit 들은 제공해 주거나, 추가적인 state 를 이용하는 방법이 있다.
+<ul>
+<li>이런 애들을 Non-blocking, Lockup-free cache 라고 부르는듯</li>
+<li>저 state 는 Miss Status, Information Holding Register (MSHR) 라고 부른다.</li>
+<li>더 깊게는 들어가지 말자.</li>
+</ul>
+</li>
+</ul>
+<h2 id="metrics">Metrics<a aria-hidden="true" tabindex="-1" href="#metrics" class="internal"> §</a></h2>
+<ul>
+<li>Cache 의 성능을 판단하는 metric 은
+<ul>
+<li><em>Miss rate</em>: 얼마나 miss 가 자주 일어나는지</li>
+<li><em>Hit time</em>: hit 시에 얼마나 빠르게 cache line 의 내용을 CPU 에게 전달하느냐</li>
+<li><em>Miss penality</em>: miss 시에 mem 에서 가져오는게 얼마나 걸릴 것이냐</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
 	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
 	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
 	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
@@ -131,7 +619,7 @@
 	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
 	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
 	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
-	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#locality" data-for="locality">Locality</a></li><li class="depth-0"><a href="#memory-hierarchy" data-for="memory-hierarchy">Memory hierarchy</a></li><li class="depth-0"><a href="#cache" data-for="cache">Cache</a></li><li class="depth-1"><a href="#cache-line" data-for="cache-line">Cache line</a></li><li class="depth-1"><a href="#structure" data-for="structure">Structure</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li>No backlinks found</li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#locality" data-for="locality">Locality</a></li><li class="depth-0"><a href="#memory-hierarchy" data-for="memory-hierarchy">Memory hierarchy</a></li><li class="depth-0"><a href="#cpu-cache-archcache" data-for="cpu-cache-archcache">[[CPU Cache (Arch)|Cache]]</a></li><li class="depth-1"><a href="#cache-line" data-for="cache-line">Cache line</a></li><li class="depth-1"><a href="#structure" data-for="structure">Structure</a></li><li class="depth-0"><a href="#cache-types" data-for="cache-types">Cache Types</a></li><li class="depth-1"><a href="#direct-mapped-cache-cpu-cachedirect-mapped-cache" data-for="direct-mapped-cache-cpu-cachedirect-mapped-cache">[[Direct-mapped Cache (CPU Cache)|Direct-mapped cache]]</a></li><li class="depth-1"><a href="#set-associative-cache-cpu-cachefully-associative-cache" data-for="set-associative-cache-cpu-cachefully-associative-cache">[[Set Associative Cache (CPU Cache)|Fully associative cache]]</a></li><li class="depth-1"><a href="#set-associative-cache" data-for="set-associative-cache">Set Associative Cache</a></li><li class="depth-0"><a href="#cache-replacement" data-for="cache-replacement">Cache Replacement</a></li><li class="depth-1"><a href="#least-recently-used-lru-replacementlru" data-for="least-recently-used-lru-replacementlru">[[Least Recently Used, LRU (Replacement)|LRU]]</a></li><li class="depth-1"><a href="#first-in-first-out-fifo-replacementfifo" data-for="first-in-first-out-fifo-replacementfifo">[[First In First Out, FIFO (Replacement)|FIFO]]</a></li><li class="depth-1"><a href="#random" data-for="random">RANDOM</a></li><li class="depth-1"><a href="#pseudo-lru-replacementpseudo-lru" data-for="pseudo-lru-replacementpseudo-lru">[[Pseudo-LRU (Replacement)|Pseudo-LRU]]</a></li><li class="depth-0"><a href="#cache-write-policies" data-for="cache-write-policies">Cache Write Policies</a></li><li class="depth-1"><a href="#hit-policy" data-for="hit-policy">Hit policy</a></li><li class="depth-1"><a href="#miss-policy" data-for="miss-policy">Miss policy</a></li><li class="depth-1"><a href="#mix" data-for="mix">Mix</a></li><li class="depth-0"><a href="#non-blocking-lockup-free-cache" data-for="non-blocking-lockup-free-cache">Non-blocking, Lockup-free Cache</a></li><li class="depth-0"><a href="#metrics" data-for="metrics">Metrics</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/arch/cache/terms/CPU-Cache-(Arch)" class="internal">CPU Cache (Arch)</a></li><li><a href="../../../../../gardens/arch/cache/terms/Cache-Write-Policy-(CPU-Cache)" class="internal">Cache Write Policy (CPU Cache)</a></li><li><a href="../../../../../gardens/arch/cache/terms/Direct-mapped-Cache-(CPU-Cache)" class="internal">Direct-mapped Cache (CPU Cache)</a></li><li><a href="../../../../../gardens/arch/cache/terms/Fully-Associative-Cache-(CPU-Cache)" class="internal">Fully Associative Cache (CPU Cache)</a></li><li><a href="../../../../../gardens/arch/cache/terms/Set-Associative-Cache-(CPU-Cache)" class="internal">Set Associative Cache (CPU Cache)</a></li><li><a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/(SNU-CSE)-Scalable-High-Performance-Computing" class="internal">(SNU CSE) Scalable High-Performance Computing</a></li><li><a href="../../../../../gardens/os/memory/terms/Memory-Hierarchy-(Memory)" class="internal">Memory Hierarchy (Memory)</a></li><li><a href="../../../../../gardens/os/replacement/terms/Locality-(Replacement)" class="internal">Locality (Replacement)</a></li><li><a href="../../../../../gardens/os/replacement/terms/Pseudo-LRU-(Replacement)" class="internal">Pseudo-LRU (Replacement)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
 function toggleCallout() {
   const outerBlock = this.parentElement;
   outerBlock.classList.toggle(`is-collapsed`);
