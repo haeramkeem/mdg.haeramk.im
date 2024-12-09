@@ -28,3 +28,4 @@ date: 2024-09-01
 - [[14. Query Execution (Part 1 - Execution)]]
 - [[15. Query Execution (Part 2 - Execution Optimization)]]
 - [[16. Query Optimization (Part 1 - Rule-based)]]
+- [[17. Query Optimization (Part 2 - Cost-based)]]

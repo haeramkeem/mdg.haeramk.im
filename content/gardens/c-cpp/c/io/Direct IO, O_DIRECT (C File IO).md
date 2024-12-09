@@ -5,6 +5,7 @@ tags:
 aliases:
   - O_DIRECT
   - posix_memalign
+  - Direct IO
 date: 2024-10-15
 ---
 > [!info]- 참고한 것들
