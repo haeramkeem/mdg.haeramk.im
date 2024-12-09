@@ -25,3 +25,4 @@ date: 2024-09-01
 - [[11. Index Concurrency]]
 - [[12. External Sorting and Hashing]]
 - [[13. Join Algorithms]]
+- [[14. Query Execution]]
