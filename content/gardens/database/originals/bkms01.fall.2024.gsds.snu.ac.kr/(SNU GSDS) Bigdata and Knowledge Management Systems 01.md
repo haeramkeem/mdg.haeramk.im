@@ -31,3 +31,4 @@ date: 2024-09-01
 - [[17. Query Optimization (Part 2 - Cost-based)]]
 - [[18. Transaction]]
 - [[19. Two-Phase Locking, 2PL]]
+- [[20. Timestamp Ordering Concurrency Control]]
