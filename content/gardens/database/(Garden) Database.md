@@ -97,6 +97,7 @@ date: 2024-07-29
 
 - 용어집
 	- [[Algorithms for Recovery and Isolation Exploiting Semantics, ARIES (Database Recovery)|Algorithms for Recovery and Isolation Exploiting Semantics, ARIES]]
+	- [[Compensation Log Record, CLR (Database Recovery)|Compensation Log Record, CLR]]
 	- [[FORCE, NO_FORCE Policy (Database Recovery)|FORCE, NO_FORCE Policy]]
 	- [[Log (Database Recovery)|Log]]
 	- [[Log Message Schemes (Database Recovery)|Physiological Logging]]

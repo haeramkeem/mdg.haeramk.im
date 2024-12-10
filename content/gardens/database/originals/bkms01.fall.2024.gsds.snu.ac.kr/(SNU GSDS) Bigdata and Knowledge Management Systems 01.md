@@ -34,3 +34,4 @@ date: 2024-09-01
 - [[20. Timestamp Ordering Concurrency Control]]
 - [[21. Multi-Version Concurrency Control]]
 - [[22. Database Logging]]
+- [[23. Database Recovery]]
