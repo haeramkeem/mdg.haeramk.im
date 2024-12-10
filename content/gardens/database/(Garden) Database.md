@@ -99,7 +99,7 @@ date: 2024-07-29
 	- [[Algorithms for Recovery and Isolation Exploiting Semantics, ARIES (Database Recovery)|Algorithms for Recovery and Isolation Exploiting Semantics, ARIES]]
 	- [[FORCE, NO_FORCE Policy (Database Recovery)|FORCE, NO_FORCE Policy]]
 	- [[Log (Database Recovery)|Log]]
-	- [[Physiological Logging (Database Recovery)|Physiological Logging]]
+	- [[Log Message Schemes (Database Recovery)|Physiological Logging]]
 	- [[STEAL, NO_STEAL Policy (Database Recovery)|STEAL, NO_STEAL Policy]]
 	- [[Write Ahead Log, WAL (Database Recovery)|Write Ahead Log, WAL]]
 

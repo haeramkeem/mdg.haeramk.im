@@ -7,6 +7,10 @@ aliases:
   - Transaction
   - ACID
   - Tx
+  - Atomicity
+  - Consistency
+  - Isolation
+  - Durability
 ---
 > [!info]- 참고한 것들
 > - [어떤 미디엄 블로그](https://chrisjune-13837.medium.com/db-transaction-%EA%B3%BC-acid%EB%9E%80-45a785403f9e)
@@ -22,7 +26,7 @@ aliases:
 
 - 하나의 *transaction* 이 만족해야 하는 특성 4가지가 있는데, 보통 이것의 앞글자를 따 *ACID* 라고 부른다.
 
-### Atomic
+### Atomicity
 
 - *Transaction* 의 가장 기본이 되는, "원자성" 에 대한 특성이다.
 - 즉, 하나의 transaction 은 완전히 실행되어 종료된 상태, 아니면 아예 실행되지 않은 상태 둘 중 하나의 결과만 존재해야 한다.

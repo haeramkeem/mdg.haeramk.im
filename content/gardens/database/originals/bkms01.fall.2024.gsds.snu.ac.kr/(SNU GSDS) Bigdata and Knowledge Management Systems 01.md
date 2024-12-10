@@ -33,3 +33,4 @@ date: 2024-09-01
 - [[19. Two-Phase Locking, 2PL]]
 - [[20. Timestamp Ordering Concurrency Control]]
 - [[21. Multi-Version Concurrency Control]]
+- [[22. Database Logging]]
