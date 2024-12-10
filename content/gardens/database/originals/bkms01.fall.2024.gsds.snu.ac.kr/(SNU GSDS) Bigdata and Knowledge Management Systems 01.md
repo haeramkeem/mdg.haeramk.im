@@ -30,3 +30,4 @@ date: 2024-09-01
 - [[16. Query Optimization (Part 1 - Rule-based)]]
 - [[17. Query Optimization (Part 2 - Cost-based)]]
 - [[18. Transaction]]
+- [[19. Two-Phase Locking, 2PL]]
