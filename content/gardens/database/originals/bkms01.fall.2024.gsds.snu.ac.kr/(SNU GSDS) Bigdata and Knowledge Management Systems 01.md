@@ -14,6 +14,8 @@ date: 2024-09-01
 
 ### 이론
 
+- [[01. Overview and Relational Model]]
+- [[02. SQL]]
 - [[03. Storage (Part 1 - Page, Slot)]]
 - [[04. Storage (Part 2 - File Organization)]]
 - [[05. Storage (Part 3 - File Format)]]
