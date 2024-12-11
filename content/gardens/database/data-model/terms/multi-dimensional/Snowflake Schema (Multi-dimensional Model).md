@@ -4,6 +4,8 @@ tags:
   - data-model
   - multidimensional-model
 date: 2024-08-22
+aliases:
+  - Snowflake schema
 ---
 > [!info]- 참고한 것들
 > - [긱](https://www.geeksforgeeks.org/multidimensional-data-model/)

@@ -14,6 +14,8 @@ date: 2024-09-01
 
 ### 이론
 
+- [[01. Overview and Relational Model]]
+- [[02. SQL]]
 - [[03. Storage (Part 1 - Page, Slot)]]
 - [[04. Storage (Part 2 - File Organization)]]
 - [[05. Storage (Part 3 - File Format)]]
@@ -24,3 +26,14 @@ date: 2024-09-01
 - [[10. Tree Indexes (Part 2 - B+Tree Optimization, Other Data Structures)]]
 - [[11. Index Concurrency]]
 - [[12. External Sorting and Hashing]]
+- [[13. Join Algorithms]]
+- [[14. Query Execution (Part 1 - Execution)]]
+- [[15. Query Execution (Part 2 - Execution Optimization)]]
+- [[16. Query Optimization (Part 1 - Rule-based)]]
+- [[17. Query Optimization (Part 2 - Cost-based)]]
+- [[18. Transaction]]
+- [[19. Two-Phase Locking, 2PL]]
+- [[20. Timestamp Ordering Concurrency Control]]
+- [[21. Multi-Version Concurrency Control]]
+- [[22. Database Logging]]
+- [[23. Database Recovery]]
