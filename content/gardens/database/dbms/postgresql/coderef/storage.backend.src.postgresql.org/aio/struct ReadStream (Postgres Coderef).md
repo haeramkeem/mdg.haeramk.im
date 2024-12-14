@@ -11,7 +11,7 @@ date: 2024-12-14
 > [!info]- 코드 위치 (v17.1)
 > - File path: `src/backend/storage/aio/read_stream.c`
 > - Line: `109`
-> - Link: #draft 
+> - Link: [struct ReadStream](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L106-L154)
 > - VIM
 > ```
 > vi src/backend/storage/aio/read_stream.c +109
@@ -69,6 +69,9 @@ date: 2024-12-14
 	- `next_buffer_index`: Circular queue tail 이다.
 	- `max_pinned_buffers`: Prefetch 가 완료되었거나, 아니면 진행중인 buffer 는 pinning 된다. 이때, 최대 몇개까지 pinning 할 수 있는지에 대한 정보이다.
 		- 즉, 최대로 prefetch 완료 혹은 진행중일 수 있는 buffer 의 개수이다.
+	- `queue_size`: `buffer` queue 의 크기이다.
+		- 이 값은 `max_pinned_buffers` 보다 1 더 크게 설정되는데,
+		- 이것은 이 queue 가 circular queue 이고 client 는 queue head 의 하나 이전 데이터로 작업을 하기 때문에 head 와 tail 간에 1 의 gap 이 필요하기 때문이다.
 	- `pinned_buffers`: 현재 pinning 된 buffer 의 개수이다.
 		- 즉, 현재 prefetch 완료 혹은 진행중일 수 있는 buffer 의 개수이자
 		- 현재의 `buffer` queue 의 size 이다.

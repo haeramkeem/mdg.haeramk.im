@@ -5,6 +5,7 @@ tags:
 aliases:
   - heap_fetch_next_buffer
   - heap_fetch_next_buffer()
+date: 2024-12-14
 ---
 > [!info]- 코드 위치 (v17.1)
 > - File path: `src/backend/access/heap/heapam.c`
