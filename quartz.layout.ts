@@ -14,6 +14,10 @@ export const sharedPageComponents: SharedLayout = {
   }),
 }
 
+function filterDrafts(f: QuartzPluginData) {
+    return ! (f.frontmatter.tags.includes('draft'));
+}
+
 // components for pages that display a single page (e.g. a single note)
 export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
@@ -26,7 +30,11 @@ export const defaultContentPageLayout: PageLayout = {
     Component.MobileOnly(Component.Spacer()),
     Component.Search(),
     Component.Darkmode(),
-    // Component.DesktopOnly(Component.Explorer()),
+    Component.DesktopOnly(Component.RecentNotes({
+        title: "Recent",
+        showTags: false,
+        filter: filterDrafts,
+    })),
   ],
   right: [
     Component.Graph(),
