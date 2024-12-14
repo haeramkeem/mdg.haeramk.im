@@ -21,6 +21,11 @@ date: 2024-11-21
 	- [[func InvalidateVictimBuffer (Postgres Coderef)|InvalidateVictimBuffer]]
 	- [[func StrategyGetBuffer (Postgres Coderef)|StrategyGetBuffer]]
 
+## `src/backend/access/heap`
+
+- Funcs
+	- [[func heap_fetch_next_buffer (Postgres Coderef)|heap_fetch_next_buffer]]
+
 ## `src/backend/postmaster`
 
 - Funcs
