@@ -59,6 +59,6 @@ export LD_LIBRARY_PATH=`pwd`/env/lib
 	- 그리고 기본적인 database name 도 `postgres` 이다. 아래에 `postgres` 가 이거임
 
 ```bash
-./bin/psql postgres
+./env/bin/psql postgres
 ```
 

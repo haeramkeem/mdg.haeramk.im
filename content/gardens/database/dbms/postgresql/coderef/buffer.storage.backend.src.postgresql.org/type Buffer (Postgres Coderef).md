@@ -6,7 +6,7 @@ date: 2024-11-05
 aliases:
   - Buffer
 ---
-> [!info] 코드 위치
+> [!info]- 코드 위치 (v16.4)
 > - File path
 > ```
 > src/include/storage/buf.h
