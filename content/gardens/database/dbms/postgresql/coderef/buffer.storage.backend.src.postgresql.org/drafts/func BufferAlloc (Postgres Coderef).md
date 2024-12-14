@@ -16,5 +16,3 @@ aliases:
 > ```
 > - Line: `1219`
 > - Link: [BufferAlloc()](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/storage/buffer/bufmgr.c#L1196-L1399)
-
-## `BufferAlloc()`
