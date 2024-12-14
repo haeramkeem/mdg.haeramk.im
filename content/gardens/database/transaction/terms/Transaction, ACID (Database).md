@@ -1,7 +1,7 @@
 ---
 tags:
   - database
-  - data-model
+  - db-transaction
 date: 2024-07-18
 aliases:
   - Transaction
@@ -20,7 +20,6 @@ aliases:
 - *Transaction* 이란, [[Database Management System, DBMS (Database)|DBMS]] 에서 "한번에 (atomic)" 실행되는 단위를 의미한다.
 	- 일반적으로 하나의 작업은 *transaction* 이고,
 	- 여러개의 작업을 (transaction) 으로 묶을 수도 있다.
-- 이놈의 처리를 전문적으로 해주는 cloud SaaS 서비스를 [[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 라고 한다.
 
 ## ACID
 

@@ -2,6 +2,7 @@
 tags:
   - arch
   - arch-inst
+  - draft
 aliases:
   - Instruction pipeline
   - Pipeline

@@ -1,6 +1,7 @@
 ---
 tags:
   - arch
+  - draft
 aliases:
   - Half adder
   - Full adder

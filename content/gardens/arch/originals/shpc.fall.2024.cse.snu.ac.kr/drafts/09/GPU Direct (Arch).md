@@ -1,6 +1,7 @@
 ---
 tags:
   - arch
+  - draft
 aliases:
   - GPU Direct
   - GPU Direct Storage

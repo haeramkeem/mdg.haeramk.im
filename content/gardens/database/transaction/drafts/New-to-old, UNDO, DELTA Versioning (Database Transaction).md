@@ -1,7 +1,7 @@
 ---
 tags:
   - database
-  - db-concurrency
+  - db-transaction
 aliases:
   - New-to-old
   - N2O

@@ -3,8 +3,12 @@ tags:
   - arch
   - arch-cuda
   - story
+  - draft
 date: 2024-12-06
 ---
+> [!fail]- 본 글은 #draft 상태입니다.
+> - [ ] 내용 추가
+
 > [!info]- 참고한 것들
 > - [어떤 대단한 사람의 블로그](https://siboehm.com/articles/22/CUDA-MMM)
 

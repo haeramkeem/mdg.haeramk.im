@@ -5,6 +5,7 @@ tags:
 aliases:
   - struct
   - 구조체
+date: 2024-10-06
 ---
 ## 란?
 

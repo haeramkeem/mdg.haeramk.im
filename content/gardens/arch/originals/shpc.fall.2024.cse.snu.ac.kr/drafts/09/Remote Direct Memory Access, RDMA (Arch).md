@@ -1,6 +1,7 @@
 ---
 tags:
   - arch
+  - draft
 aliases:
   - Remote Direct Memory Access
   - RDMA

@@ -1,6 +1,7 @@
 ---
 tags:
   - arch
+  - draft
 aliases:
   - Loop-independent Dependence
   - DOALL Parallelism

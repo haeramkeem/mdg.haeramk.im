@@ -2,6 +2,7 @@
 tags:
   - arch
   - story
+  - draft
 date: 2024-09-10
 aliases:
   - Activation

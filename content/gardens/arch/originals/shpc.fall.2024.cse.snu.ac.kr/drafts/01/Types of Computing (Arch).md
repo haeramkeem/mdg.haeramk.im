@@ -1,6 +1,7 @@
 ---
 tags:
   - arch
+  - draft
 aliases:
   - Cloud computing
   - Parallel processing

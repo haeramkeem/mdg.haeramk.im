@@ -1,8 +1,8 @@
 ---
 tags:
   - database
-  - db-concurrency
   - story
+  - db-transaction
 date: 2024-09-09
 ---
 > [!fail]- 본 글은 #draft 상태입니다.

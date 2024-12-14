@@ -2,6 +2,7 @@
 tags:
   - arch
   - arch-cuda
+  - draft
 aliases:
   - Global memory coalescing
   - GMEM

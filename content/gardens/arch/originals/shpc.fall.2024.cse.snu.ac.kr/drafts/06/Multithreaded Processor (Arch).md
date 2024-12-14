@@ -1,6 +1,7 @@
 ---
 tags:
   - arch
+  - draft
 aliases:
   - Multithreaded Processor
   - Thread-level parallelism

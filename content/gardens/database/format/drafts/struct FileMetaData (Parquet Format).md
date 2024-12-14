@@ -3,9 +3,9 @@ tags:
   - database
   - db-format
   - db-parquet
+  - draft
 aliases:
   - FileMetaData
-date: 2024-12-03
 ---
 > [!info] 코드 위치
 > - Line: `1106`
