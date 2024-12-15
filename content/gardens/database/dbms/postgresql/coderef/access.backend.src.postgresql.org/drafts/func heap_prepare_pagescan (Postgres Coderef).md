@@ -2,6 +2,7 @@
 tags:
   - database
   - db-postgresql
+  - draft
 aliases:
   - heap_prepare_pagescan
   - heap_prepare_pagescan()

@@ -28,6 +28,7 @@ date: 2024-12-14
 	- (C) 만약에 이전에 요청한 것들이 buffer 로 올라오는 중이고 fadvice 도 사용할 수 있다면, 이때도 2배 증가시키되 설정값 (`io_combine_limit`) 보다도 커질 수 있다.
 - 즉, 위와 같은 전략으로 읽어들이는 개수가 늘어날때는 크게, 줄어드는 것은 서서히 줄어들게 할 수 있다.
 	- 왜냐면 만약에 buffer 에 올라온 block 이 적을 때에는 많이 가져오도록 하고, 이미 많이 올라와 있다면 적게만 가져오게 해서 이 read stream 이 너무 많은 buffer 를 차지하지 않게 하기 위함이다.
+- 이 내용에 대한 구현인 [[func read_stream_next_buffer (Postgres Coderef)|read_stream_next_buffer()]] 를 같이 보면 좋다.
 
 ## `struct ReadStream` Fields
 
@@ -42,7 +43,7 @@ date: 2024-12-14
  *                          buffers buf/data       ios
  *
  *                          +----+  +-----+       +--------+
- *                          |    |  |     |  +----+ 42..44 | <- oldest_io_index
+ *    (where client use) -> |    |  |     |  +----+ 42..44 | <- oldest_io_index
  *                          +----+  +-----+  |    +--------+
  *   oldest_buffer_index -> | 10 |  |  ?  |  | +--+ 60..60 |
  *                          +----+  +-----+  | |  +--------+
@@ -69,6 +70,8 @@ date: 2024-12-14
 	- `next_buffer_index`: Circular queue tail 이다.
 	- `max_pinned_buffers`: Prefetch 가 완료되었거나, 아니면 진행중인 buffer 는 pinning 된다. 이때, 최대 몇개까지 pinning 할 수 있는지에 대한 정보이다.
 		- 즉, 최대로 prefetch 완료 혹은 진행중일 수 있는 buffer 의 개수이다.
+		- 여기서 생각할 점은 이 pin count 는 정확하게는 "read stream 이 담당하는 buffer 들을 몇개나 pinning 했냐" 이다.
+		- 따라서 이 pin count 가 감소한다고 해서 실제로 buffer 에서 pin 이 빠지는 것은 아니고 "더이상 담당하지 않음" 이라고 이해하는 것이 좋다.
 	- `queue_size`: `buffer` queue 의 크기이다.
 		- 이 값은 `max_pinned_buffers` 보다 1 더 크게 설정되는데,
 		- 이것은 이 queue 가 circular queue 이고 client 는 queue head 의 하나 이전 데이터로 작업을 하기 때문에 head 와 tail 간에 1 의 gap 이 필요하기 때문이다.
@@ -93,3 +96,4 @@ date: 2024-12-14
 - `per_buffer_data`: Queue head (`oldest_buffer_index`) 의 buffer data 를 가리키는 포인터
 - `fast_path`: 위에서 말한 (A) 시나리오인가에 대한 flag.
 	- 즉, 모든 buffer 가 prefetch 되었으면 이 flag 가 켜지게 된다.
+- `buffered_blocknum`: Client 가 사용하고 있는 block 번호이다.

@@ -4,8 +4,8 @@ tags:
   - db-postgresql
   - draft
 aliases:
-  - heap_scan_stream_read_next_serial
-  - heap_scan_stream_read_next_serial()
+  - read_stream_look_ahead
+  - read_stream_look_ahead()
 ---
 > [!fail]- 본 글은 #draft 상태입니다.
 > - [ ] 내용 정리

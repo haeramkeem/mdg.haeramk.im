@@ -2,6 +2,7 @@
 tags:
   - database
   - db-postgresql
+  - draft
 aliases:
   - heap_scan_stream_read_next_parallel
   - heap_scan_stream_read_next_parallel()

@@ -45,6 +45,8 @@ date: 2024-11-21
 	- [[struct ReadStream (Postgres Coderef)|ReadStream]]
 - Funcs
 	- [[func read_stream_begin_relation (Postgres Coderef)|read_stream_begin_relation]]
+	- [[func read_stream_get_block (Postgres Coderef)|read_stream_get_block]]
+	- [[func read_stream_next_buffer (Postgres Coderef)|read_stream_next_buffer]]
 
 #### `buffer`
 
