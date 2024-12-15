@@ -7,6 +7,7 @@ aliases:
   - HeapTupleData
   - struct HeapTupleData
   - HeapTuple
+  - Heap tuple
 ---
 > [!info]- 코드 위치 (v17.1)
 > - File path: `src/include/access/htup.h`

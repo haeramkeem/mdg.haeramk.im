@@ -14,6 +14,8 @@ date: 2024-11-21
 - Funcs
 	- [[func heap_beginscan (Postgres Coderef)|heap_beginscan]]
 	- [[func heap_fetch_next_buffer (Postgres Coderef)|heap_fetch_next_buffer]]
+	- [[func heap_getnextslot (Postgres Coderef)|heap_getnextslot]]
+	- [[func heapgettup_pagemode (Postgres Coderef)|heapgettup_pagemode]]
 	- [[func initscan (Postgres Coderef)|initscan]]
 	- [[func table_beginscan (Postgres Coderef)|table_beginscan]]
 	- [[func table_scan_getnextslot (Postgres Coderef)|table_scan_getnextslot]]
