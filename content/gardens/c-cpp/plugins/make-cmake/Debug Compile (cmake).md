@@ -1,7 +1,8 @@
 ---
 tags:
-  - lldb
   - cmake
+  - gdb
+  - lldb
 date: 2024-07-02
 ---
 ## TL;DR

@@ -4,9 +4,9 @@ tags:
   - db-postgresql
 date: 2024-11-21
 ---
-## Call Stack Tree
+## Story
 
-- [[Sequential Scan Callstack (Postgres Coderef)|Sequential Scan]]
+- [[Sequential Scan Callstack (Postgres Coderef)|Sequential Scan Callstack]]
 
 ## `src/backend`
 
