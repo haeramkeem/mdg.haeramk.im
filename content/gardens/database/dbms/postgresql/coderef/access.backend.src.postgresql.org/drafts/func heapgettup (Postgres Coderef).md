@@ -12,9 +12,9 @@ aliases:
 
 > [!info]- 코드 위치 (v17.1)
 > - File path: `src/backend/access/heap/heapam.c`
-> - Line: `871`
-> - Link: #draft 
+> - Line: `847`
+> - Link: [heapgettup()](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/access/heap/heapam.c#L826-L941)
 > - VIM
 > ```
-> vi src/backend/access/heap/heapam.c +871
+> vi src/backend/access/heap/heapam.c +847
 > ```
