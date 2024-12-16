@@ -2,6 +2,7 @@
 tags:
   - arch
   - terms
+  - draft
 aliases:
   - PERMUTE
   - SHUFFLE

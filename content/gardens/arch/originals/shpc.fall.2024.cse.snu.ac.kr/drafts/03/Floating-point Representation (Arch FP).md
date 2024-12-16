@@ -2,6 +2,7 @@
 tags:
   - arch
   - arch-fp
+  - draft
 aliases:
   - Floating-point representation
   - Precision

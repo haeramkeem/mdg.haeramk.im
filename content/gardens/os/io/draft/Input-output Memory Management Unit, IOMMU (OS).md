@@ -2,10 +2,12 @@
 tags:
   - os
   - os-io
-date: 2024-08-27
 aliases:
   - IOMMU
 ---
+> [!fail]- 본 글은 #draft 상태입니다.
+> - [ ] 내용 정리
+
 ## MMU for IO
 
 ![[Pasted image 20240827140717.png]]

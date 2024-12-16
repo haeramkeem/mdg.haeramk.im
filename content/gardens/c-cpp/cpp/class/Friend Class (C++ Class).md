@@ -2,7 +2,7 @@
 tags:
   - cpp
   - cpp-class
-date: 2204-07-15
+date: 2024-07-15
 ---
 > [!info]- 참고한 것들
 > - [위키독스](https://wikidocs.net/21185)

@@ -14,7 +14,7 @@ title: 매디쏜 디지딸 갈든
 대강 이런 작물들을 심고 있습니다.
 
 - [[(Garden) Algorithm, Data Structure|알고리즘, 자료구조]]
-- [[(Garden) Computer Architectures|컴퓨터 구조]]
+- [[(Garden) Computer Architectures, GPU|컴퓨터 구조, GPU]]
 - [[(Garden) C, Cpp|C, C++]]
 - [[(Garden) Cybersecurity|사이버보안]]
 - [[(Garden) Database|데이터베이스]]

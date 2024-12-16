@@ -2,7 +2,7 @@
 tags:
   - kubernetes
   - etcd
-date: 2024-12-21
+date: 2023-12-21
 ---
 > [!info] 참고한 [공식 문서](https://etcd.io/docs/v3.5/op-guide/security/)
 

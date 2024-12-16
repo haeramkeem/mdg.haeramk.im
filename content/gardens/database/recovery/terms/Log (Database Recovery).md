@@ -33,8 +33,8 @@ aliases:
 - 각 log 의 내용은 (아마?) fixed size 인 것 같다: 그래서 이 LSN 만으로도 file 의 offset 을 알아낼 수 있다고 한다.
 
 > [!tip] LSN 과 DB replication
-> - 이놈은 database replication 에도 사용된다고 한다.
-> - 간단하게 생각하면, secondary 에서 primary 의 데이터를 다 들고오는 대신 primary 의 log 들을 보면서 자신의 데이터를 sync 하면 되기 때문.
+> - 이놈은 database replication 에도 사용된다고 한다: [[Viewstamped Replication Protocol, VR (Distributed Computing)|VR]]
+> - 간단하게 생각하면, secondary 에서 primary 의 데이터를 다 들고오는 대신 primary 의 log 만 갖고 와서 replay 하면 primary 와 sync 가 맞기 때문.
 
 ## Log Types
 
@@ -69,3 +69,6 @@ aliases:
 
 - Log 에는 이런 작업 기록 말고도 주기적으로 현재 상태에 대해서도 적으면서 recovery 에 사용될 수 있게 한다.
 - 이런 애들을 *Checkpoint* 라고 한다.
+- 이게 필요한 이유는 recovery 시간을 단축시키기 위해서 이다.
+	- *Checkpoint* 의 가장 큰 역할은 "여기까지는 완벽함" 인데,
+	- 주기적으로 checkpointing 을 해서 중간중간 이 "여기까지는 완벽함" 지점을 만들어 줌으로써 recovery 해야 하는 양이 너무 많아지지 않게 한다.

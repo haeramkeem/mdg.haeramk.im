@@ -4,10 +4,51 @@ tags:
   - db-postgresql
 date: 2024-11-21
 ---
-> [!info] Postgres 버전
-> - 코드 분석에 사용된 버전은 [Release 16.4](https://github.com/postgres/postgres/tree/REL_16_4) 입니당
+## `src/backend`
 
-## `src/backend/storage/buffer`
+### `access`
+
+- Types
+	- [[struct HeapTupleData (Postgres Coderef)|HeapTupleData]]
+	- [[struct HeapTupleHeaderData (Postgres Coderef)|HeapTupleHeaderData]]
+- Funcs
+	- [[func heap_beginscan (Postgres Coderef)|heap_beginscan]]
+	- [[func heap_fetch_next_buffer (Postgres Coderef)|heap_fetch_next_buffer]]
+	- [[func heap_getnextslot (Postgres Coderef)|heap_getnextslot]]
+	- [[func heapgettup_pagemode (Postgres Coderef)|heapgettup_pagemode]]
+	- [[func initscan (Postgres Coderef)|initscan]]
+	- [[func table_beginscan (Postgres Coderef)|table_beginscan]]
+	- [[func table_scan_getnextslot (Postgres Coderef)|table_scan_getnextslot]]
+
+### `executor`
+
+- Types
+	- [[struct TupleTableSlot (PostgresCoderef)|TupleTableSlot]]
+- Funcs
+	- [[func ExecScan (Postgres Coderef)|ExecScan]]
+	- [[func ExecScanFetch (Postgres Coderef)|ExecScanFetch]]
+	- [[func ExecSeqScan (Postgres Coderef)|ExecSeqScan]]
+	- [[func ExecStoreBufferHeapTuple (Postgres Coderef)|ExecStoreBufferHeapTuple]]
+	- [[func SeqNext (Postgres Coderef)|SeqNext]]
+	- [[func tts_buffer_heap_store_tuple (Postgres Coderef)|tts_buffer_heap_store_tuple]]
+
+### `postmaster`
+
+- Funcs
+	- [[gardens/database/dbms/postgresql/coderef/postmaster.backend.src.postgresql.org/func BackendStartup (Postgres Coderef)|BackendStartup]]
+
+### `storage`
+
+#### `aio`
+
+- Types
+	- [[struct ReadStream (Postgres Coderef)|ReadStream]]
+- Funcs
+	- [[func read_stream_begin_relation (Postgres Coderef)|read_stream_begin_relation]]
+	- [[func read_stream_get_block (Postgres Coderef)|read_stream_get_block]]
+	- [[func read_stream_next_buffer (Postgres Coderef)|read_stream_next_buffer]]
+
+#### `buffer`
 
 - Types
 	- [[type Buffer (Postgres Coderef)|Buffer]]
@@ -18,8 +59,3 @@ date: 2024-11-21
 	- [[func GetVictimBuffer (Postgres Coderef)|GetVictimBuffer]]
 	- [[func InvalidateVictimBuffer (Postgres Coderef)|InvalidateVictimBuffer]]
 	- [[func StrategyGetBuffer (Postgres Coderef)|StrategyGetBuffer]]
-
-## `src/backend/postmaster`
-
-- Funcs
-	- [[func BackendStartup (Postgres Coderef)|BackendStartup]]

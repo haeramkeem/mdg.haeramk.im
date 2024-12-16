@@ -2,6 +2,7 @@
 tags:
   - arch
   - arch-bitop
+  - draft
 aliases:
   - Shift
   - Logical shift

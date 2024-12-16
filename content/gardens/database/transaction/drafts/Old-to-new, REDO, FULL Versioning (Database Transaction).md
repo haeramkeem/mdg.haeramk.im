@@ -1,7 +1,7 @@
 ---
 tags:
   - database
-  - db-concurrency
+  - db-transaction
 aliases:
   - Old-to-new
   - O2N

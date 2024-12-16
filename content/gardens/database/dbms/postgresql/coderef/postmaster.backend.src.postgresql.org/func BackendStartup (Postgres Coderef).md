@@ -6,10 +6,10 @@ aliases:
   - BackendStartup
 date: 2024-11-23
 ---
-> [!info] 코드 위치
+> [!info]- 코드 위치 (v16.4)
 > - File path
 > ```
-> ./src/backend/postmaster/postmaster.c
+> src/backend/postmaster/postmaster.c
 > ```
 > - Line: `4116`
 > - Link: [BackendStartup()](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4108-L4230)
