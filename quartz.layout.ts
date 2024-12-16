@@ -30,11 +30,11 @@ export const defaultContentPageLayout: PageLayout = {
     Component.MobileOnly(Component.Spacer()),
     Component.Search(),
     Component.Darkmode(),
-    Component.DesktopOnly(Component.RecentNotes({
-        title: "Recent",
-        showTags: false,
-        filter: filterDrafts,
-    })),
+    // Component.DesktopOnly(Component.RecentNotes({
+    //     title: "Recent",
+    //     showTags: false,
+    //     filter: filterDrafts,
+    // })),
   ],
   right: [
     Component.Graph(),
