@@ -84,14 +84,16 @@ date: 2024-07-29
 ### GDB, LLDB
 
 - [[Breakpoint (gdb, lldb)|Breakpoint]]
-- [[CMake Setting (gdb, lldb)|CMake Setting]]
 - [[Print Variable (gdb, lldb)|Print Variable]]
+- [[Running Process (gdb, lldb)|Running Process]]
+- [[Thread (gdb, lldb)|Thread]]
 - [[디버깅 시작하기 (gdb, lldb)|디버깅 시작하기]]
 
 ### Plugins
 
 - `ctags`
 	- [[Basic Usage (ctags)|Basic Usage]]
+	- [[Debug Compile (cmake)|Debug Compile]]
 - `make`, `cmake`
 	- [[Library Configuration (cmake)|Library Configuration]]
 	- [[Macro Setup (make, cmake)|Macro Setup]]
