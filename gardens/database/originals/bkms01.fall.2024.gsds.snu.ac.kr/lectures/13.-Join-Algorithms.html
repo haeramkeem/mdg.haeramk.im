@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html><head><title>13. Join Algorithms</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="13. Join Algorithms"/><meta property="og:description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 JOIN 이 필요한 이유 § Relational algebra 에서는 entity 와 relation 으로 table 을 분리하기 때문에 (normalize) 이것이 종합된 데이터를 조회하기 위해서는 다시 합침 Normalize 하는 이유는 data redundancy 를 줄이기 위해 Data redundancy 는 또한 update 를 지연시키는 원인이 된다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 JOIN 이 필요한 이유 § Relational algebra 에서는 entity 와 relation 으로 table 을 분리하기 때문에 (normalize) 이것이 종합된 데이터를 조회하기 위해서는 다시 합침 Normalize 하는 이유는 data redundancy 를 줄이기 위해 Data redundancy 는 또한 update 를 지연시키는 원인이 된다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/lectures/13.-Join-Algorithms"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div><div class="recent-notes desktop-only"><h3>Recent</h3><ul class="recent-ul"><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../.." class="internal">매디쏜 디지딸 갈든</a></h3></div><p class="meta">Dec 16, 2024</p><ul class="tags"></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/부록---시험대비)-요약정리" class="internal">부록 - 시험대비) 요약정리</a></h3></div><p class="meta">Dec 16, 2024</p><ul class="tags"></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/(충남대)-웹-프로그래밍-강의록" class="internal">(충남대) 웹 프로그래밍 강의록</a></h3></div><p class="meta">Dec 16, 2024</p><ul class="tags"></ul></div></li></ul></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">13. Join Algorithms</h1><p class="content-meta ">Oct 28, 2024, 22 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-bkms24f" class="internal tag-link">#snu-bkms24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 데이터사이언스대학원 정형수 교수님의 &quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal" data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="join-이-필요한-이유">JOIN 이 필요한 이유<a aria-hidden="true" tabindex="-1" href="#join-이-필요한-이유" class="internal"> §</a></h2>
+<ul>
+<li>Relational algebra 에서는 entity 와 relation 으로 table 을 분리하기 때문에 (normalize) 이것이 종합된 데이터를 조회하기 위해서는 다시 합침</li>
+<li>Normalize 하는 이유는 data redundancy 를 줄이기 위해
+<ul>
+<li>Data redundancy 는 또한 update 를 지연시키는 원인이 된다.</li>
+</ul>
+</li>
+<li><a href="../../../../../gardens/database/data-model/terms/multi-dimensional/Snowflake-Schema-(Multi-dimensional-Model)" class="internal" data-slug="gardens/database/data-model/terms/multi-dimensional/Snowflake-Schema-(Multi-dimensional-Model)">Snowflake Schema</a> 에서 fact, dimension table 이 각각 쪼개져있는 것을 생각하면 됨</li>
+<li>다만 redundancy 가 줄어드는 대신 JOIN 비용이 든다.</li>
+<li>본 강의에서는 binary (즉, table 2개만 join 하는), inner (즉, match tuple 만 반환하는), equijoin (즉, exact match 만 수행하는) 에 대해서만 다룬다.
+<ul>
+<li>이게 가장 기본적이고 다른 join 들로 확장할 수 있다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="join-operation">JOIN Operation<a aria-hidden="true" tabindex="-1" href="#join-operation" class="internal"> §</a></h2>
+<h3 id="terminology">Terminology<a aria-hidden="true" tabindex="-1" href="#terminology" class="internal"> §</a></h3>
+<ul>
+<li><em>Outer table</em> 은 JOIN 시 먼저 읽는 table 로, 오른쪽 피연산자라고 생각하면 된다.</li>
+<li>그리고 <em>Inner table</em> 은 JOIN 으로 연결되는 table 로, 왼쪽 피연산자라고 생각해도 된다.</li>
+<li>즉, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6883em;vertical-align:-0.005em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⋈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 일 때 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 이 <em>Outer table</em> 이 되고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 이 <em>Inner table</em> 이 되는 것.</li>
+</ul>
+<h3 id="output">Output<a aria-hidden="true" tabindex="-1" href="#output" class="internal"> §</a></h3>
+<ul>
+<li>일단 JOIN operation 의 output 은 기본적으로는 Join attribute 가 match 되는 두 table 의 두 tuple 에 대해, 두 tuple 의 concat 이 output 이 된다.</li>
+<li>좀 더 수학적으로 말하면,
+<ul>
+<li>두 table <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 와 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 에 대해, 각 table 에 속한 두 tuple <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 이 만약 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.09618em;">J</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">in</span><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight">tt</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.09618em;">J</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">in</span><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight">tt</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mclose">)</span></span></span></span></span> 이라면 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span></span> 이 그의 결과가 된다.</li>
+</ul>
+</li>
+<li>주의할 점은 tuple 이 결과값이 된다는 것이다:
+<ul>
+<li>뒤에서도 배우겠지만 Volcano model 에서는 한번의 operation 에서는 하나의 tuple 이 결과값이 되기 떄문.</li>
+</ul>
+</li>
+</ul>
+<h3 id="data">Data<a aria-hidden="true" tabindex="-1" href="#data" class="internal"> §</a></h3>
+<ul>
+<li>Tuple 이 결과값이 된다는 것은 알겠는데, 그럼 이 tuple 의 representation 은 어떻게 될까.</li>
+<li><em>Early materialization</em>: 두 tuple 의 전체를 들고다니는 방식
+<ul>
+<li>이때는 tuple 의 data 전체를 query plan 내내 들고다니므로 query 중간 결과물에 대해 데이터의 사이즈가 크다는 문제가 있다.</li>
+<li>다만 그래도 이미 필요한 attribute 의 값들을 query 를 실행하는 동안 다 알고 있기 때문에 다시 table 에서 값을 가져올 필요가 없다.
+<ul>
+<li>즉, JOIN operation 을 호출한 놈은 이미 tuple 전체를 들고 있기 때문에 이 record 의 다른 attribute 가 필요할 때 추가적으로 table 에서 갖고올 필요가 없다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>Late materialization</em>: 두 tuple 의 join attribute 와 RID 를 갖고다니는 방식
+<ul>
+<li>당연히 이때는 중간 데이터 사이즈는 작지만, 특정 attribute 가 필요할 때마다 table 에서 갖고와야 하는 문제가 있다.</li>
+<li>적은 수의 attribute 를 사용하는 <a href="../../../../../gardens/database/modern/terms/On-Line-Analytical-Processing,-OLAP-(Modern-Database)" class="internal" data-slug="gardens/database/modern/terms/On-Line-Analytical-Processing,-OLAP-(Modern-Database)">OLAP</a>, 그리고 그에 최적화된 columnar store 에 대해 강점을 가진다고 한다.</li>
+<li>또한 join selectivity 가 낮으면 이것을 사용하는 것이 좋다. 즉, JOIN operation 의 결과가 많다면 (selectivity - 선택성) early materialization 으로는 감당이 안될 수도 있기 때문.</li>
+</ul>
+</li>
+<li>따라서 이 둘간의 trade-off 가 있다고 할 수 있다. 이중에 어떤 것을 선택할지는 query plan 단계에서 이루어진다.
+<ul>
+<li>만약 중간 데이터의 크기가 클 것 같다면 <em>Late materialization</em> 을, 작을 것 같다면 <em>Early materialization</em> 을 사용한다.</li>
+<li>이때의 metric 이 <em>cardinality</em> 이다.
+<ul>
+<li>이때의 cardinality 는 단순히 중복의 정도가 아닌듯? <sup><a href="#user-content-fn-cardinality" id="user-content-fnref-cardinality" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup></li>
+</ul>
+</li>
+<li>이 cardinality 로 중간 데이터의 사이즈를 예측해서 이게 작다면 그냥 early 로 하고, 크다면 late materialization 으로 rid 만 들고다니는 것.</li>
+</ul>
+</li>
+</ul>
+<h3 id="cost-analysis-criteria">Cost Analysis Criteria<a aria-hidden="true" tabindex="-1" href="#cost-analysis-criteria" class="internal"> §</a></h3>
+<ul>
+<li>JOIN 성능을 결정하는 가장 주된 cost metric 은 IO count 이다.</li>
+<li>또한, cross-product 하는 것보다 join 을 하는 것이 무조건 좋다고 한다.
+<ul>
+<li>왜냐면 cross-product 에서는 predicate 가 적용되지 않기 때문.</li>
+<li>Predicate pushdown 의 관점에서 생각하면 된다: cross-product 한 뒤에 predicate 을 적용하면 predicate 적용 전까지의 데이터 사이즈는 경장히 크기 때문.</li>
+</ul>
+</li>
+</ul>
+<h2 id="nested-loop-join-nlj">Nested Loop Join, NLJ<a aria-hidden="true" tabindex="-1" href="#nested-loop-join-nlj" class="internal"> §</a></h2>
+<h3 id="stupid-way">Stupid Way<a aria-hidden="true" tabindex="-1" href="#stupid-way" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241209121441.png" width="auto" height="auto"/></p>
+<ul>
+<li>그냥 nested loop 으로 두 테이블을 sequential scan 해서 match 되는 것을 찾는 것</li>
+<li>이때의 IO count 를 계산해 보자.
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 개의 page 로 구성되고 table 전체는 (tuple per page 가 아님!) <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span></span> 개의 tuple 을 갖고 있고</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 개의 page 로 구성되고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 개의 tuple 를 갖고 있다고 할때</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 은 한번만 읽으면 되니까 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 번의 IO 가 발생하고,</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 의 tuple 마다 sequential scan 을 해야 하니까 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 번이 필요하다.</li>
+<li>따라서 IO count 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 이 되는 것.</li>
+</ul>
+</li>
+</ul>
+<h3 id="block-nested-loop">Block Nested Loop<a aria-hidden="true" tabindex="-1" href="#block-nested-loop" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241209122511.png" width="auto" height="auto"/></p>
+<ul>
+<li>이때는 tuple 단위로 비교하는게 아닌 block 단위로 비교하는 방식이다.
+<ul>
+<li>여기서 block 은 “1개 이상의 page” 라고 이해하면 된다.</li>
+<li>그래서
+<ol>
+<li>Outer table 의 block 을 buffer 에 올리고</li>
+<li>Inner table 의 block 을 buffer 에 올리고</li>
+<li>두 block 의 모든 tuple 을 전부 훑으며 matching tuple 이 있는지 찾고 (찾으면 emit)</li>
+<li>두 block 의 모든 tuple 을 전부 소진한 후에는 inner table 의 다음 block 을 buffer 에 올리는 방식이다.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>따라서 만약 두 block 의 사이즈가 각각 1 page 라면, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 은 1번의 full scan 이 발생하니까 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 번의 IO 가 발생하고, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 의 page 마다 full scan 이 발생하니까 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 번의 IO 가 발생한다.
+<ul>
+<li>결과적으로 IO 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 번</li>
+<li>정리하면 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 이기 때문에, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 보다 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 이 작아지는게 IO 를 줄이는데 유리하다.
+<ul>
+<li>즉, outer table 의 사이즈가 작은 것이 유리함.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209144603.png" width="auto" height="auto"/></p>
+<ul>
+<li>이때, buffer 사이즈가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 일때의 전략을 생각해 보자.</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 의 공식을 다시 한번 생각해 보자. 모든 값들을 변수로 놓아 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span></span></span></span> 라고 한다면,
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span> 는 outer table 을 full scan 하는데 필요한 IO 이다. 따라서 이것은 buffer size 와 관계 없이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 이다 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span>).</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span></span></span></span> 는 inner table 을 full scan 하는데 필요한 IO 이다. 이것도 buffer size 와 관계없이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 이다 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>).</li>
+<li>그럼 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span> 는 inner table scan 의 횟수이다. 만약 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 buffer 중 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></span> 개를 outer table scan 에 사용한다면, outer table 의 page <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></span> 개를 올린 다음 그것을 가지고 inner table 을 full scan 할 것이다.</li>
+<li>따라서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span> 가 될 것이기에, 전체 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>) 가 작아지기 위해서는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></span> 가 최대가 되어야 한다.</li>
+<li>이때의 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></span> 의 최대값은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span> 이다. 왜냐면 inner table 을 담을 buffer 최소 1개와 결과를 저장할 buffer 최소 1개가 필요하기 때문.</li>
+</ul>
+</li>
+<li>따라서 위와 같은 알고리즘이 나오게 되는 것이고, 이때의 IO count 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2757em;vertical-align:-0.4033em;"></span><span class="mopen">⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4033em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 가 된다.</li>
+<li>근데 만약 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 가 무진장 커서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span> 라면?</li>
+</ul>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mopen">(⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span></div>
+<ul>
+<li>따라서 이때의 IO count 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 이 되어 아주 작아진다.</li>
+<li>NLJ 는 언뜻 보기에 비효율적인 것 처럼 보이지만, 여전히 사용되는 이유가 여기에 있다: 만약 buffer size 가 아주 크다면, 이 방식으로 NLJ 를 돌리는 것이 더 빠를 때도 있기 때문.</li>
+<li>마찬가지의 이유로, outer table scan 에 최대한 많은 buffer 를 할당하는 것이 효율적이다.</li>
+</ul>
+<h3 id="index-nested-loop-join">Index nested loop join<a aria-hidden="true" tabindex="-1" href="#index-nested-loop-join" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241209152847.png" width="auto" height="auto"/></p>
+<ul>
+<li>NLJ 의 가장 큰 약점은 반복적으로 inner table 을 scan 해야 한다는 것이었다.</li>
+<li>하지만 그렇지 않아도 된다면? 우리는 이미 sequential scan 의 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span> 을 효율적으로 줄일 수 있는 자료구조를 알고 있다: 바로 index.</li>
+<li>따라서 index 를 활용하면 outer table 의 tuple 하나와 match 되는 inner table 의 tuple 을 찾는 것을 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span> 으로 줄일 수 있고, 이것이 바로 <em>Index Nested Loop Join</em> 이다.
+<ul>
+<li>Primary index 를 그대로 사용하면 좋긴 하지만, 만약 join attribute 가 PK 가 아니라면 새로 build 해야 하는 overhead 가 있다.</li>
+<li>따라서 이렇게 index build 에 필요한 IO 까지 감안했을 때 <em>Index NLJ</em> 이 더 좋다면, 이것을 사용하게 되는 것.</li>
+</ul>
+</li>
+<li>Index search overhead 가 constant <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></span> 라고 했을 때, <em>Index NLJ</em> 의 IO count 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></span> 가 된다.</li>
+</ul>
+<h2 id="sort-merge-join-smj">Sort-Merge Join, SMJ<a aria-hidden="true" tabindex="-1" href="#sort-merge-join-smj" class="internal"> §</a></h2>
+<ul>
+<li>이놈은 match tuple 을 고르는 과정에서 sorting 을 이용하는 방식이다.</li>
+<li>크게 (1) Sorting, (2) Merging 두 phase 로 나뉜다.</li>
+<li>근데 (1) Sorting 은 이전에 배운 External sorting 을 그대로 사용하면 되므로 여기서는 생략하고, (2) Merging 만 살펴보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209153510.png" width="auto" height="auto"/></p>
+<ul>
+<li>알고리즘은 two-pointer 를 사용한다.</li>
+<li>우선 outer, inner table 모두에 첫번째에다가 pointer 를 둔다.</li>
+<li>그리고 다음의 방식으로 pointer 를 움직인다.
+<ul>
+<li>만약 outer table pointer 가 더 크다면, inner table pointer 를 움직인다.</li>
+<li>만약 inner table pointer 가 더 크다면, outer table pointer 를 움직인다.</li>
+<li>만약 match 된다면, emit 하고 inner table pointer 를 움직인다.</li>
+</ul>
+</li>
+<li>다만 여기에는 함정이 하나 있다. 그건 아래 예시에서 알아보자.</li>
+</ul>
+<h3 id="example">Example<a aria-hidden="true" tabindex="-1" href="#example" class="internal"> §</a></h3>
+<ul>
+<li>예시를 보고 이해하자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209153832.png" width="auto" height="auto"/></p>
+<ul>
+<li>처음에는 첫번째 tuple 에 pointer 를 둔다.
+<ul>
+<li>그리고 이때에는 두 pointer 가 match 되기 때문에, emit 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209153913.png" width="auto" height="auto"/></p>
+<ul>
+<li>두 pointer 가 match 되기 때문에, inner table pointer 를 움직인다.
+<ul>
+<li>이때에도 두 pointer 가 match 되므로 emit 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209154028.png" width="auto" height="auto"/></p>
+<ul>
+<li>직전에도 match 가 되었기 때문에, inner table pointer 를 움직인다.
+<ul>
+<li>근데 이번에는 inner table pointer 가 더 크기 때문에, outer table pointer 를 움직이면 다음처럼 된다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209154148.png" width="auto" height="auto"/></p>
+<ul>
+<li>Outer table pointer 를 움직였더니 match 되었다. 따라서 emit 하고 inner table pointer 를 움직인다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209154457.png" width="auto" height="auto"/></p>
+<ul>
+<li>움직였더니 inner table pointer 가 더 커졌다. 따라서 이번에는 outer table pointer 를 움직인다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209154546.png" width="auto" height="auto"/></p>
+<ul>
+<li>여기가 위에서 말한 함정이다.
+<ul>
+<li>원래의 알고리즘 대로라면, 위 상황에서도 outer table pointer 가 하나 움직여 <code>{300,ODB}</code> 로 가야 한다.</li>
+<li>근데 그렇게 하면 <code>{200,GZA,200,8888}</code> 이 누락된다.
+<ul>
+<li>위의 예시에서는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 에 <code>{200,GZA}</code> 가 두개 있어서 헷갈릴 수는 있는데, 어쨋든 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> 의 3번째 record 와 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 의 3번째 record 가 match 되었어야 했는데 이 알고리즘은 그것을 그냥 지나치는 셈.</li>
+</ul>
+</li>
+<li>따라서 match 가 되어 (1) inner table pointer 를 움직였을 때 값이 달라지고, 뒤에어 (2) outer table pointer 를 움직였을 때 값이 동일하다면 다시 inner table pointer 를 위로 올린다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209155436.png" width="auto" height="auto"/></p>
+<ul>
+<li>즉, 이렇게 된다는 것.</li>
+<li>이후에는 다시 inner table pointer 를 움직이고, outer table pointer 도 움직이는 것을 반복한다.
+<ul>
+<li>그럼 머리로 생각해보면 inner table pointer 이동 -> outer table pointer 이동 -> outer table pointer 이동의 순서대로 움직여 다음처럼 된다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209155631.png" width="auto" height="auto"/></p>
+<ul>
+<li>이후의 상황은 말 안해도 알겠쥬?
+<ul>
+<li>Inner table pointer 이동 -> outer table pointer 이동 -> emit -> inner table pointer 이동</li>
+<li>까지 하면 아래처럼 된다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209155834.png" width="auto" height="auto"/></p>
+<ul>
+<li>이제 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> 는 끝났기 때문에 종료되는 것.</li>
+</ul>
+<h3 id="io-count">IO Count<a aria-hidden="true" tabindex="-1" href="#io-count" class="internal"> §</a></h3>
+<ul>
+<li>그럼 이때 IO count 는 얼마일까.</li>
+<li>일단 external sorting 의 IO count 가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mopen">(⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉)</span></span></span></span></span> 인 것을 기억한다면,
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></span> sort: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mopen">(⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉)</span></span></span></span></span></li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> sort: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mopen">(⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉)</span></span></span></span></span></li>
+<li>Merge: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> (각각 sequential scan 하기 때문)</li>
+</ul>
+</li>
+<li>가 되고 총 IO 는 저 셋을 전부 합한 값이 된다.</li>
+</ul>
+<h3 id="best-when-worst-when">Best when, Worst when<a aria-hidden="true" tabindex="-1" href="#best-when-worst-when" class="internal"> §</a></h3>
+<ul>
+<li>일단 SMJ 를 사용하기 가장 좋은 때는
+<ol>
+<li>JOIN attribute 가 PK 여서 이미 sorting (index 가 있기 때문에) 된 경우나</li>
+<li>Query 에 <code>ORDER BY</code> 가 들어가 있는 경우처럼 어차피 sorting 을 해야 하는 경우이다.</li>
+</ol>
+</li>
+<li>그리고 가장 안좋은 때는 양 table 의 JOIN attribute 의 값이 전부 동일한 경우이다.
+<ul>
+<li>이 경우에는 마치 NLJ 처럼 작동하는데, 추가적으로 sorting overhead 까지 추가되기 때문에 NLJ 보다도 안좋아진다.</li>
+<li>IO count 는: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">or</span><span class="mord mathnormal" style="margin-right:0.07153em;">tC</span><span class="mord mathnormal">os</span><span class="mord mathnormal">t</span></span></span></span></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="hash-join-hj">Hash Join, HJ<a aria-hidden="true" tabindex="-1" href="#hash-join-hj" class="internal"> §</a></h2>
+<ul>
+<li>Exact match 를 위해서는 hash table 이 일반적으로 좋잖아? 그래서 hash 를 이용한 join 알고리즘이 있는데 이것이 <em>Hash Join</em> 이다.</li>
+</ul>
+<h3 id="basic-hash-join">Basic Hash Join<a aria-hidden="true" tabindex="-1" href="#basic-hash-join" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20241209162755.png" width="auto" height="auto"/></p>
+<ul>
+<li>기본적인 hash join 은 두 단계로 나뉜다.</li>
+<li><em>Build</em>: outer table 을 이용해 JOIN attribute 를 hash func 에 통과시켜 하여 hash table 을 만든다.</li>
+<li><em>Probe</em>: innter table 의 각 tuple 에 대해, 동일한 hash func 를 통과시켜 해당 hash table entry 로 간 후 여기서 matching 되는 애를 찾는다.</li>
+<li>즉, hash func 를 이용해 problem size 를 hash collision count 만큼으로 줄여 matching overhead 를 줄이는 것이 가장 핵심이다.
+<ul>
+<li>Hash partition 내에서 찾을 때는 hash table implementation 에 달린 것 같다. 즉, collision 을 어떻게 처리하는지는 어떻게 구현하기에 달린듯.</li>
+</ul>
+</li>
+</ul>
+<h3 id="hash-table-content">Hash Table Content<a aria-hidden="true" tabindex="-1" href="#hash-table-content" class="internal"> §</a></h3>
+<ul>
+<li>이때 hash table 에 담기는 내용은:
+<ul>
+<li>일단 key 는 당연히 JOIN attribute 이다.</li>
+<li>Value 는 구현하기 나름이다.</li>
+</ul>
+</li>
+<li>Value 는 위에서 말한 materialization 에 따라 달라진다고 생각하면 된다.
+<ul>
+<li>Early materialization 처럼 table content 전체를 모두 가지고 있을 수도 있다.
+<ul>
+<li>당연히 이때는 early materialization 장단점을 고스란히 가져간다: 차지하는 용량은 크지만, 추가적인 IO 는 없다.</li>
+</ul>
+</li>
+<li>아니면 late materialization 처럼 tuple identifier 만 가지고 있을 수도 있다.
+<ul>
+<li>여기서 tuple identifier 는 RID 일 수도 있지만, query plan tree 에서 child operator 가 emit 한 tuple 을 고유하게 식별할 수 있는 것이라면 뭐든 가능하다.</li>
+<li>마찬가지고 late materialization 의 장단점을 그대로 가져간다: 용량은 적지만, 추가적인 IO 가 수반될 수 있다.</li>
+<li>따라서 columnar 에 적합하고 JOIN selectivity 가 낮을수록 좋다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="probe-phase-optimization-sideways-information-passing">Probe Phase Optimization: Sideways Information Passing<a aria-hidden="true" tabindex="-1" href="#probe-phase-optimization-sideways-information-passing" class="internal"> §</a></h3>
+<ul>
+<li>Hash table 을 통해 problem size 를 hash collision count 까지 줄였다고 하더라도, 그래도 hash partition 내에서 찾는 것의 overhead 가 있긴 하다.</li>
+<li>따라서 이것을 줄이고자 build phase 에서 hash table 에 더불어 <a href="../../../../../gardens/algorithm/data-structure/map/Bloom-Filter-(Data-Structure)" class="internal" data-slug="gardens/algorithm/data-structure/map/Bloom-Filter-(Data-Structure)">Bloom filter</a> 도 만드는 optimization 이 <em>Sideways Information Passing</em> (<em>SIP</em>) 이다.
+<ul>
+<li>이것이 좋은 이유는 Bloom filter 에는 보통 여러개의 hash func 를 사용해 그냥 hash table 보다는 collision 이 덜 발생하고,</li>
+<li>Bloom filter 의 사이즈는 보통 <a href="../../../../../gardens/arch/cache/terms/CPU-Cache-(Arch)" class="internal" data-slug="gardens/arch/cache/terms/CPU-Cache-(Arch)">Cache line</a> 에 들어갈 정도로 작기 때문에 공간도 많이 안먹고 속도도 빠르다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209164508.png" width="auto" height="auto"/></p>
+<ul>
+<li>이 그림이 좀 바보같긴 한데, 그래도 이걸로 설명해보면
+<ul>
+<li>일단 왼쪽의 hash table 은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></span> 로 만든 것이고, 오른쪽의 bloom filter 도 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></span> 로 만든 것이다.</li>
+<li>그리고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 를 probing 할 때는, 이 bloom filter 를 먼저 봐서 해당 key 가 hash table 에 있는지 찾고, 있다면 그제서야 hash table 을 찾으러 가는 것.</li>
+</ul>
+</li>
+</ul>
+<h3 id="cost-analysis-for-basic-hash-join">Cost Analysis for Basic Hash Join<a aria-hidden="true" tabindex="-1" href="#cost-analysis-for-basic-hash-join" class="internal"> §</a></h3>
+<ul>
+<li>일단 external hashing 을 생각해 보면, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 buffer 에 대해, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 개의 partition 이 생긴다 (input buffer 하나 제외).
+<ul>
+<li>그리고 각 partition 의 크기는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 보다 작아야 한다.
+<ul>
+<li>왜냐면 probing 시에 partition 하나를 다 훑어야 하기 때문에, partition 전체가 buffer 에 올라와 있어야 하기 때문.</li>
+<li>물론 뭐 swap in-out 을 할수는 있겠지만 그럼 너무 느려지잖아?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그래서 이 basic hashing 으로 커버할 수 있는 table 의 사이즈는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 이다.
+<ul>
+<li>반대로 생각하면, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> page 를 가지는 table 을 위해서는 buffer 가 대략 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.1133em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9267em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span><span style="top:-2.8867em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1133em;"><span></span></span></span></span></span></span></span></span></span> 개는 필요하다는 것.</li>
+</ul>
+</li>
+</ul>
+<h3 id="grace-hash-join">GRACE Hash Join<a aria-hidden="true" tabindex="-1" href="#grace-hash-join" class="internal"> §</a></h3>
+<ul>
+<li>GRACE hash join 은 hash table 두개를 사용하는 방법이다.
+<ul>
+<li>일본의 동경대에서 처음 개발한 방법이라고 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241209170030.png" width="auto" height="auto"/></p>
+<ul>
+<li>방법은 동일한 hash func 를 가지고 동일한 크기의 hash table 을 outer, inner table 모두에 대해 build 한 후</li>
+<li>동일 level 의 hash partition 끼리 NLJ 를 하는 것이다. <sup><a href="#user-content-fn-grace-hash-join" id="user-content-fnref-grace-hash-join" data-footnote-ref aria-describedby="footnote-label" class="internal">2</a></sup></li>
+</ul>
+<h4 id="recursive-partitioning">Recursive Partitioning<a aria-hidden="true" tabindex="-1" href="#recursive-partitioning" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20241209172250.png" width="auto" height="auto"/></p>
+<ul>
+<li>위에서 말한 table size 와 연관된 것인데, hash partition 의 사이즈가 너무 커져서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 개의 buffer 에 전부 들어가지 못한다라고 한다면 여기에 또 다른 hash func 를 적용해서 nested hash table 을 만든다.</li>
+<li>그리고 반대편의 hash partition 에도 (여기는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></span> 보다 작다고 할 지라도) 마찬가지의 hash func 을 하나 더 사용해서 nested hash table 을 만든다.</li>
+<li>그 다음 동일하게 같은 level 끼리 NLJ 를 하는 방법이 <em>Recursive Partitioning</em> 이다. <sup><a href="#user-content-fn-recursive-partitioning" id="user-content-fnref-recursive-partitioning" data-footnote-ref aria-describedby="footnote-label" class="internal">3</a></sup></li>
+</ul>
+<h4 id="io-count-1">IO Count<a aria-hidden="true" tabindex="-1" href="#io-count-1" class="internal"> §</a></h4>
+<ul>
+<li>GRACE Hash Join 에서는 총 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span> 번의 IO 가 필요하다. 왜냐면:
+<ul>
+<li>양쪽의 table 을 partition 낼때 읽고 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>) 쓰고 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>)</li>
+<li>Probing 할 때 또 읽고 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>)</li>
+</ul>
+</li>
+</ul>
+<h3 id="static-dynamic-hash">Static, Dynamic Hash<a aria-hidden="true" tabindex="-1" href="#static-dynamic-hash" class="internal"> §</a></h3>
+<ul>
+<li>만약에 outer table 의 크기를 이미 알고 있다면, static hash table 을 build 하는 것이 overhead 면에서 더 좋다.</li>
+<li>근데 그렇지 않을 수도 있기 때문에, 이때는 어쩔 수 없이 dynamic hash table 을 사용해야 한다.</li>
+</ul>
+<h2 id="join-comparison">Join Comparison<a aria-hidden="true" tabindex="-1" href="#join-comparison" class="internal"> §</a></h2>
+<ul>
+<li>다음의 IO count 를 기억하자.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ALG.</th><th>IO COST</th></tr></thead><tbody><tr><td>Simple NLJ</td><td><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span></td></tr><tr><td>Block NLJ</td><td><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span></td></tr><tr><td>Blobk NLJ (Big Buffer)</td><td><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span></td></tr><tr><td>Index NLJ</td><td><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></span></td></tr><tr><td>SMJ</td><td><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">or</span><span class="mord mathnormal" style="margin-right:0.07153em;">tC</span><span class="mord mathnormal">os</span><span class="mord mathnormal">t</span></span></span></span></span></td></tr><tr><td>HJ (GRACE)</td><td><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span></td></tr></tbody></table>
+<ul>
+<li>대표주자들을 생각해 보면,
+<ul>
+<li>일단 buffer 가 무쟈게 큰 경우 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span>) 에는 Block NLJ 가 좋다: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 이기 때문.</li>
+<li>만약 어차피 sorting 을 해야 된다거나, sorting 이 이미 되어 있다면 SMJ 가 좋다: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">or</span><span class="mord mathnormal" style="margin-right:0.07153em;">tC</span><span class="mord mathnormal">os</span><span class="mord mathnormal">t</span></span></span></span></span> 가 빠지기 때문.
+<ul>
+<li>Non-uniform data 의 경우에도 sorting 이 좋다고 한다. <sup><a href="#user-content-fn-non-uniform" id="user-content-fnref-non-uniform" data-footnote-ref aria-describedby="footnote-label" class="internal">4</a></sup></li>
+</ul>
+</li>
+<li>그도 아닌 일반적인 경우에는, GRACE HJ 가 좋다.</li>
+</ul>
+</li>
+</ul>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-cardinality">
+<p>그럼 뭔데 <a href="#user-content-fnref-cardinality" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-grace-hash-join">
+<p>GRACE Hash Join 이 Basic Hash Join 에 비해 어떤 강점이 있는지는 모르겠다. <a href="#user-content-fnref-grace-hash-join" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-recursive-partitioning">
+<p>Basic Hash Join 에서도 동일하게 사용할 수 있는 방법 아닌가? <a href="#user-content-fnref-recursive-partitioning" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-non-uniform">
+<p>왜인지는 모르겠음 <a href="#user-content-fnref-non-uniform" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#join-이-필요한-이유" data-for="join-이-필요한-이유">JOIN 이 필요한 이유</a></li><li class="depth-0"><a href="#join-operation" data-for="join-operation">JOIN Operation</a></li><li class="depth-1"><a href="#terminology" data-for="terminology">Terminology</a></li><li class="depth-1"><a href="#output" data-for="output">Output</a></li><li class="depth-1"><a href="#data" data-for="data">Data</a></li><li class="depth-1"><a href="#cost-analysis-criteria" data-for="cost-analysis-criteria">Cost Analysis Criteria</a></li><li class="depth-0"><a href="#nested-loop-join-nlj" data-for="nested-loop-join-nlj">Nested Loop Join, NLJ</a></li><li class="depth-1"><a href="#stupid-way" data-for="stupid-way">Stupid Way</a></li><li class="depth-1"><a href="#block-nested-loop" data-for="block-nested-loop">Block Nested Loop</a></li><li class="depth-1"><a href="#index-nested-loop-join" data-for="index-nested-loop-join">Index nested loop join</a></li><li class="depth-0"><a href="#sort-merge-join-smj" data-for="sort-merge-join-smj">Sort-Merge Join, SMJ</a></li><li class="depth-1"><a href="#example" data-for="example">Example</a></li><li class="depth-1"><a href="#io-count" data-for="io-count">IO Count</a></li><li class="depth-1"><a href="#best-when-worst-when" data-for="best-when-worst-when">Best when, Worst when</a></li><li class="depth-0"><a href="#hash-join-hj" data-for="hash-join-hj">Hash Join, HJ</a></li><li class="depth-1"><a href="#basic-hash-join" data-for="basic-hash-join">Basic Hash Join</a></li><li class="depth-1"><a href="#hash-table-content" data-for="hash-table-content">Hash Table Content</a></li><li class="depth-1"><a href="#probe-phase-optimization-sideways-information-passing" data-for="probe-phase-optimization-sideways-information-passing">Probe Phase Optimization: Sideways Information Passing</a></li><li class="depth-1"><a href="#cost-analysis-for-basic-hash-join" data-for="cost-analysis-for-basic-hash-join">Cost Analysis for Basic Hash Join</a></li><li class="depth-1"><a href="#grace-hash-join" data-for="grace-hash-join">GRACE Hash Join</a></li><li class="depth-1"><a href="#static-dynamic-hash" data-for="static-dynamic-hash">Static, Dynamic Hash</a></li><li class="depth-0"><a href="#join-comparison" data-for="join-comparison">Join Comparison</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal">(SNU GSDS) Bigdata and Knowledge Management Systems 01</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

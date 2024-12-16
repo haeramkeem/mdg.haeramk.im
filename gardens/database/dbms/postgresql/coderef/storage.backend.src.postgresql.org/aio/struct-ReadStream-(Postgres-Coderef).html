@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html><head><title>struct ReadStream (Postgres Coderef)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="struct ReadStream (Postgres Coderef)"/><meta property="og:description" content="코드 위치 (v17.1) File path: src/backend/storage/aio/read_stream.c Line: 109 Link: struct ReadStream VIM vi src/backend/storage/aio/read_stream.c +109 Read Stream Mode § Read stream mode 매번 buffer 를 하나씩 읽어들이는 것이 아닌, access pattern 을 지정해주면 그것에 따라 buffer 들을 prefetch 해주는 read mode 이다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../../static/icon.png"/><meta name="description" content="코드 위치 (v17.1) File path: src/backend/storage/aio/read_stream.c Line: 109 Link: struct ReadStream VIM vi src/backend/storage/aio/read_stream.c +109 Read Stream Mode § Read stream mode 매번 buffer 를 하나씩 읽어들이는 것이 아닌, access pattern 을 지정해주면 그것에 따라 buffer 들을 prefetch 해주는 read mode 이다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/struct-ReadStream-(Postgres-Coderef)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div><div class="recent-notes desktop-only"><h3>Recent</h3><ul class="recent-ul"><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../../../.." class="internal">매디쏜 디지딸 갈든</a></h3></div><p class="meta">Dec 16, 2024</p><ul class="tags"></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/부록---시험대비)-요약정리" class="internal">부록 - 시험대비) 요약정리</a></h3></div><p class="meta">Dec 16, 2024</p><ul class="tags"></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../../../../../gardens/web/originals/webprogramming.fall.2021.cse.cnu.ac.kr/(충남대)-웹-프로그래밍-강의록" class="internal">(충남대) 웹 프로그래밍 강의록</a></h3></div><p class="meta">Dec 16, 2024</p><ul class="tags"></ul></div></li></ul></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">struct ReadStream (Postgres Coderef)</h1><p class="content-meta ">Dec 14, 2024, 7 min read</p><ul class="tags "><li><a href="../../../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../../../tags/db-postgresql" class="internal tag-link">#db-postgresql</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 (v17.1) </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li>File path: <code>src/backend/storage/aio/read_stream.c</code></li>
+<li>Line: <code>109</code></li>
+<li>Link: <a href="https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L106-L154" class="external">struct ReadStream</a></li>
+<li>VIM</li>
+</ul>
+<pre><code>vi src/backend/storage/aio/read_stream.c +109
+</code></pre>
+</blockquote>
+<h2 id="read-stream-mode">Read Stream Mode<a aria-hidden="true" tabindex="-1" href="#read-stream-mode" class="internal"> §</a></h2>
+<ul>
+<li><em>Read stream mode</em> 매번 buffer 를 하나씩 읽어들이는 것이 아닌, access pattern 을 지정해주면 그것에 따라 buffer 들을 prefetch 해주는 read mode 이다.</li>
+<li>그리고 이에 대한 context 를 제공해주는 자료구조가 <code>struct ReadStream</code> 이다.</li>
+<li>여기서 access pattern 은 직접 지정해줄 수도 있고 (<code>callback</code>), sequential scan 을 자동으로 detect 하기도 한다.</li>
+<li>한번에 몇개나 읽어들일지 (<code>distance</code>) 에 대해서는 다음의 상황에 따라 adaptive 하게 지정된다:
+<ul>
+<li>(A) 만약에 이전에 요청한 것들이 이미 buffer 로 모두 올라왔다면, 하나만 읽어들인다.</li>
+<li>(B) 만약에 이전에 요청한 것들이 buffer 로 올라오는 중이고 <a href="../../../../../../../gardens/os/io/draft/Advice-(OS)" class="internal" data-slug="gardens/os/io/draft/Advice-(OS)">fadvice</a> 는 사용하지 못한다면, 읽어들이는 개수를 2배 증가시킨다. 다만, 이때는 설정값 (<code>io_combine_limit</code>) 보다 커질 수는 없다.</li>
+<li>(C) 만약에 이전에 요청한 것들이 buffer 로 올라오는 중이고 fadvice 도 사용할 수 있다면, 이때도 2배 증가시키되 설정값 (<code>io_combine_limit</code>) 보다도 커질 수 있다.</li>
+</ul>
+</li>
+<li>즉, 위와 같은 전략으로 읽어들이는 개수가 늘어날때는 크게, 줄어드는 것은 서서히 줄어들게 할 수 있다.
+<ul>
+<li>왜냐면 만약에 buffer 에 올라온 block 이 적을 때에는 많이 가져오도록 하고, 이미 많이 올라와 있다면 적게만 가져오게 해서 이 read stream 이 너무 많은 buffer 를 차지하지 않게 하기 위함이다.</li>
+</ul>
+</li>
+<li>이 내용에 대한 구현인 <a href="../../../../../../../gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/func-read_stream_next_buffer-(Postgres-Coderef)" class="internal" data-slug="gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/func-read_stream_next_buffer-(Postgres-Coderef)">read_stream_next_buffer()</a> 를 같이 보면 좋다.</li>
+</ul>
+<h2 id="struct-readstream-fields"><code>struct ReadStream</code> Fields<a aria-hidden="true" tabindex="-1" href="#struct-readstream-fields" class="internal"> §</a></h2>
+<ul>
+<li>일단 아래의 그림과 같이 크게는 두개의 circular queue 로 구성된다.
+<ul>
+<li>여기서 <code>buf/data</code> 는 buffer manager 의 에 있는 진짜 buffer 공간을 나타내는 것이다. 즉, <code>ReadStream</code> 에 대한 내용은 아니라는 것.</li>
+</ul>
+</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);">/**</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> * For example, if the callback returns block numbers 10, 42, 43, 44, 60 in</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> * successive calls, then these data structures might appear as follows:</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          buffers buf/data       ios</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          +----+  +-----+       +--------+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *    (where client use) -> |    |  |     |  +----+ 42..44 | &lt;- oldest_io_index</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          +----+  +-----+  |    +--------+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *   oldest_buffer_index -> | 10 |  |  ?  |  | +--+ 60..60 |</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          +----+  +-----+  | |  +--------+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          | 42 |  |  ?  |&lt;-+ |  |        | &lt;- next_io_index</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          +----+  +-----+    |  +--------+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          | 43 |  |  ?  |    |  |        |</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          +----+  +-----+    |  +--------+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          | 44 |  |  ?  |    |  |        |</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          +----+  +-----+    |  +--------+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          | 60 |  |  ?  |&lt;---+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          +----+  +-----+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *     next_buffer_index -> |    |  |     |</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *                          +----+  +-----+</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> *</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> * In the example, 5 buffers are pinned, and the next buffer to be streamed to</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> * the client is block 10.  Block 10 was a hit and has no associated I/O, but</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> * the range 42..44 requires an I/O wait before its buffers are returned, as</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> * does block 60.</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);"> */</span></span></code></pre></div>
+<ul>
+<li><code>buffers</code>: Prefetch 되어서 가져오고 있거나, 아니면 이미 가져온 block 들을 저장하는 놈이다. 이때,
+<ul>
+<li><code>oldest_buffer_index</code>: Circular queue head 이다.</li>
+<li><code>next_buffer_index</code>: Circular queue tail 이다.</li>
+<li><code>max_pinned_buffers</code>: Prefetch 가 완료되었거나, 아니면 진행중인 buffer 는 pinning 된다. 이때, 최대 몇개까지 pinning 할 수 있는지에 대한 정보이다.
+<ul>
+<li>즉, 최대로 prefetch 완료 혹은 진행중일 수 있는 buffer 의 개수이다.</li>
+<li>여기서 생각할 점은 이 pin count 는 정확하게는 “read stream 이 담당하는 buffer 들을 몇개나 pinning 했냐” 이다.</li>
+<li>따라서 이 pin count 가 감소한다고 해서 실제로 buffer 에서 pin 이 빠지는 것은 아니고 “더이상 담당하지 않음” 이라고 이해하는 것이 좋다.</li>
+</ul>
+</li>
+<li><code>queue_size</code>: <code>buffer</code> queue 의 크기이다.
+<ul>
+<li>이 값은 <code>max_pinned_buffers</code> 보다 1 더 크게 설정되는데,</li>
+<li>이것은 이 queue 가 circular queue 이고 client 는 queue head 의 하나 이전 데이터로 작업을 하기 때문에 head 와 tail 간에 1 의 gap 이 필요하기 때문이다.</li>
+</ul>
+</li>
+<li><code>pinned_buffers</code>: 현재 pinning 된 buffer 의 개수이다.
+<ul>
+<li>즉, 현재 prefetch 완료 혹은 진행중일 수 있는 buffer 의 개수이자</li>
+<li>현재의 <code>buffer</code> queue 의 size 이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>ios</code>: 해당 prefetch 를 담당하는 IO worker 들을 저장하는 놈이다. 이때,
+<ul>
+<li><code>oldest_io_index</code>: Circular queue head 이다.</li>
+<li><code>next_io_index</code>: Circular queue tail 이다.</li>
+<li><code>max_ios</code>: 최대로 운용할 수 있는 IO worker 의 개수이다.</li>
+<li><code>ios_in_progress</code>: 현재 운용되고 있는 IO worker 의 개수이다.
+<ul>
+<li>즉, 현재의 <code>ios</code> queue 의 size 이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>distance</code>: 한번에 몇개나 갖고올 것이냐.</li>
+<li><code>advice_enabled</code>: fadvice 를 사용할 수 있냐에 대한 여부.</li>
+<li><code>callback</code>, <code>callback_private_data</code>: Access pattern 에 대한 정보를 제공하는 field 이다.
+<ul>
+<li>여기서 <code>callback</code> 은 <a href="../../../../../../../gardens/c-cpp/c/type/Function-Pointer-(C-Type)" class="internal" data-slug="gardens/c-cpp/c/type/Function-Pointer-(C-Type)">Function pointer</a> 로, 매번 이 함수를 호출해 다음에 접근할 bloick number 를 받아온다.</li>
+</ul>
+</li>
+<li><code>seq_blocknum</code>: Sequential scan 인지 detect 하기 위해 이전 (혹은 이후) 에 접근한 block number 를 저장하는 곳이다.</li>
+<li><code>pending_read_blocknum</code>: 현재 IO 진행중인 block 번호.
+<ul>
+<li>아마 scan direction 에 따라 한방향으로만 prefetch 되기 때문에, 가장 작은 (작은 번호에서 큰 수로의 방향일 경우) 값이 담기지 않나 싶다.</li>
+</ul>
+</li>
+<li><code>pending_read_nblocks</code>: 현재 IO 진행중인 block 의 개수.</li>
+<li><code>per_buffer_data_size</code>: Queue head (<code>oldest_buffer_index</code>) 의 buffer data 의 크기</li>
+<li><code>per_buffer_data</code>: Queue head (<code>oldest_buffer_index</code>) 의 buffer data 를 가리키는 포인터</li>
+<li><code>fast_path</code>: 위에서 말한 (A) 시나리오인가에 대한 flag.
+<ul>
+<li>즉, 모든 buffer 가 prefetch 되었으면 이 flag 가 켜지게 된다.</li>
+</ul>
+</li>
+<li><code>buffered_blocknum</code>: Client 가 사용하고 있는 block 번호이다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#read-stream-mode" data-for="read-stream-mode">Read Stream Mode</a></li><li class="depth-0"><a href="#struct-readstream-fields" data-for="struct-readstream-fields">struct ReadStream Fields</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../../gardens/database/dbms/postgresql/coderef/Postgres-Code-Reference" class="internal">Postgres Code Reference</a></li><li><a href="../../../../../../../gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/func-heap_beginscan-(Postgres-Coderef)" class="internal">func heap_beginscan (Postgres Coderef)</a></li><li><a href="../../../../../../../gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/func-heap_fetch_next_buffer-(Postgres-Coderef)" class="internal">func heap_fetch_next_buffer (Postgres Coderef)</a></li><li><a href="../../../../../../../gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/func-read_stream_begin_relation-(Postgres-Coderef)" class="internal">func read_stream_begin_relation (Postgres Coderef)</a></li><li><a href="../../../../../../../gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/func-read_stream_get_block-(Postgres-Coderef)" class="internal">func read_stream_get_block (Postgres Coderef)</a></li><li><a href="../../../../../../../gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/func-read_stream_next_buffer-(Postgres-Coderef)" class="internal">func read_stream_next_buffer (Postgres Coderef)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2024</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../../postscript.js" type="module"></script></html>
