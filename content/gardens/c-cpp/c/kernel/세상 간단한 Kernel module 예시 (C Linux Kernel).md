@@ -6,7 +6,7 @@ date: 2024-05-16
 ---
 ## TL;DR
 
-- `main.c`
+- `hello.c`
 
 ```c
 #include <linux/init.h>
@@ -38,16 +38,20 @@ module_exit(hello_exit);
 - `Makefile`
 
 ```Makefile
-KERNELDIR   := /lib/modules/$(shell uname -r)/build
-PWD         := $(shell pwd)
+TARGET := hello
+KERNELDIR := /lib/modules/$(shell uname -r)/build
+PWD := $(shell pwd)
 
-obj-m       := hello.o
-hello-objs  := main.o
+obj-m := $(TARGET).o
 
 default:
-                $(MAKE) -C $(KERNELDIR) M=$(PWD) modules
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
 clean:
-                $(MAKE) -C $(KERNELDIR) M=$(PWD) clean
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) clean
+start:
+	sudo insmod ./$(TARGET).ko
+stop:
+	sudo rmmod $(TARGET)
 ```
 
 - 빌드
@@ -59,7 +63,7 @@ make
 - 적재
 
 ```bash
-sudo insmod ./hello.ko
+make start
 ```
 
 - 확인
@@ -69,3 +73,9 @@ sudo journalctl -kn1
 ```
 
 ![[Pasted image 20240515200736.png]]
+
+- 해제
+
+```bash
+make stop
+```
