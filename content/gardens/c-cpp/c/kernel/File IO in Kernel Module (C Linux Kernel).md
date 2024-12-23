@@ -8,6 +8,7 @@ date: 2024-12-21
 > [스댕 - 기본](https://stackoverflow.com/a/1184346)
 > [스댕 - kernel_read, kernel_write 지원](https://stackoverflow.com/a/53917617)
 > [스댕 - flip_open 리턴값](https://stackoverflow.com/a/58562444)
+> [스댕 - loff_t](https://stackoverflow.com/a/9713598)
 > [Linux journal](https://www.linuxjournal.com/article/8110)
 
 ## 주의
@@ -86,6 +87,7 @@ f_pwrite(struct file *file, loff_t offset, char *data, size_t size)
 
 - `pread()` 와 `pwrite()` 는 `kernel_read()`, `kernel_write()` 를 사용하면 된다.
 - 옛날글에는 `vfs_read()` 나 `vfs_write()` 를 사용하는 예시들이 있지만, kernel version `4.14` 부터는 사용 못한다고 한다.
+- 참고로 여기서 `loff_t` 는 long offset 으로, `long long int` 이다.
 
 ### `llseek()` -> `vfs_llseek()`, `fsync()` -> `vfs_fsync()`
 
