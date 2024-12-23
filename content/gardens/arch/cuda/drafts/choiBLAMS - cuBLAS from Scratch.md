@@ -163,6 +163,8 @@ matmul_kernel(float *A, float *B, float *C, int M, int N, int K)
 - SMEM 으로 올리는 부분을 그림으로 그려보면 다음과 같다.
 	- 사실 위 그림이랑 같이 보면 크게 어려울게 없다: `t` 는 `K` 를 `SGEMM_TS`(`32`) 단위로 iterate 하는 것이기에, `K` 방향의 offset 이 `t * SGEMM_TS` 이 된다는 것만 이해하면 나머지는 직관적으로 알 수 있다.
 - 다만 여기서 주목할 것은 모든 thread 가 합심하여 SMEM 으로 올리고 있기 때문에 `__syncthreads()` 가 필요하다는 것이다.
+	- 이 `__syncthreads()` 라는 것은 block 의 모든 thread 들이 도달할때까지 대기시키는 barrier 로, 저 `32x32` 공간에 전부 데이터가 올라올때까지 대기시키는 것이다.
+		- Warp 하나의 thread 에 대한 barrier 가 아닌, block 단위의 barrier 라는 점에 유의하자.
 	- 만약 여기서 sync 를 하지 않는다면, 아직 SMEM 에 덜 올라온 상태에서 연산이 시작되어 잘못된 값으로 연산을 하기 때문.
 
 ![[Pasted image 20241209020916.png]]
@@ -170,10 +172,16 @@ matmul_kernel(float *A, float *B, float *C, int M, int N, int K)
 - 그리고 연산하여 C 에 저장하는 것은 그림으로 그리면 위와 같다.
 	- 여기도 크게 어려울 것이 없다: `_A` 와 `_B` 에서 `K` 방향으로 iterate 하는 `k` 가 움직임에 따라 곱셈연산을 수행하며 그의 결과가 `acc` 에 담기고, 그 결과가 `C` 에 저장된다.
 - 이때의 결과는 750.0 GFLOPS 가 나왔다.
+	- 성능이 크게 뛰지 않는다고 생각할 수도 있는데, 그것은 이렇게 명시적인 SMEM caching 을 사용하지 않아도 SMEM 에는 어느정도 caching 이 되고 있기 때문이라고 한다.
 
 ![[Pasted image 20241208154019.png]]
 
 ## Kernel 3. 1D Blocktiling
+
+- Kernel 3 와 4 에서 사용할 *Blocktiling* 은 쉽게 말하면 thread 하나가 담당하는 구역을 tiling 하는 것이다.
+- 즉, 이전까지는 thread 하나가 C matrix 의 한 element 만을 담당했다면, 이제부터는 여러개의 element 를 연산하도록 하는 것.
+- 이렇게 하면 thread 하나가 담당하는 양이 늘어 warp 가 처리하는 양이 많아지기 때문에 warp scheduling overhead 를 낮출 수 있다.
+- 우선 1차원으로만 확장하는 1D Blocktiling 을 살펴보자.
 
 ```c
 #define SGEMM_TS 32
