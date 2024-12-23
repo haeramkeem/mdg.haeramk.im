@@ -32,11 +32,11 @@ aliases:
 		- [L561](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L561): prefetch 진행중인 buffer 가 없기 때문에, pending read count 도 당연히 1이다.
 		- [L562](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L562): #draft 이건 모르겠네
 	- [L564-L569](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L564-L569): `stream->buffers` circular queue 의 head (`stream->oldest_buffer_index`) 를 return 하기 위해, 이에 대한 정보를 local variable (`oldest_buffer_index`, `buffer`) 들로 읽어온다.
-	- [L571-L572](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L571-L572): [[func read_stream_get_block (Postgres Coderef)|read_stream_get_block()]] 를 호출해 다음으로 prefetch 할 block 을 알아온다.
+	- [L571-L572](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L571-L572): [[gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/func read_stream_get_block (Postgres Coderef)|read_stream_get_block()]] 를 호출해 다음으로 prefetch 할 block 을 알아온다.
 		- 이것을 하는 이유는 (A) 상황에서는 `stream->distance` 가 1이기 때문에, 하나만을 읽어오면 된다. 따라서 여기에서 prefetch 를 바로 시작하려는 속셈인 것.
 		- 이건 (B) 와 (C) 의 작동과는 차이가 있다. (B) 와 (C) 에서는 여러 block 을 prefetch 해야 하기 때문에, [[func read_stream_look_ahead (Postgres Coderef)|read_stream_look_ahead()]] 를 호출하는 것으로 prefetch 작업을 위임한다.
 	- [L574-L598](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L574-L598): 만약 다음으로 prefetch 할 block 이 valid 하다면, 이놈을 prefetch 해온다.
-		- [L576-L590](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L576-L590): [[func StartReadBufferImpl (Postgres Coderef)|StartReadBuffer()]] 로 buffer 를 읽어온다.
+		- [L576-L590](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L576-L590): [[func StartReadBuffersImpl (Postgres Coderef)|StartReadBuffer()]] 로 buffer 를 읽어온다.
 			- 만약 이 함수의 return 값이 `false` 라면, IO 를 기다릴 필요가 없다는 것이다. 따라서 이때는 `buffer` 를 바로 return 하여 다음에 본 함수가 호출되었을때도 IO 를 기다리지 않게 한다.
 		- [L592-L597](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L592-L597): 다음에 본 함수를 call 했을 때 IO 를 wait 할 수 있게 하기 위해 `stream` 의 값들을 조정해준다.
 	- [L599-L605](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/storage/aio/read_stream.c#L599-L605): 만약 다음으로 prefetch 할 block 이 invalid 하다면, 더 이상 block 이 없다는 것이므로 (즉, relation 을 모두 scan 했다는 뜻이므로) 모두 초기화해준다.
