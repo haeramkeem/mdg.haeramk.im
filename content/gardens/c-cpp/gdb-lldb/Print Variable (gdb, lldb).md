@@ -1,8 +1,12 @@
 ---
 tags:
   - lldb
+  - gdb
 date: 2024-07-02
 ---
+> [!info]- 참고한 것들
+> - [스댕 - watch](https://stackoverflow.com/a/3099725)
+
 ## TL;DR
 
 ### 변수 값 확인
@@ -24,8 +28,16 @@ frame variable
 fr v
 ```
 
-### Stop 시에 변수값 자동 출력
+### 변수 값 자동 출력
+
+- Stop 시에 변수 값을 자동으로 출력하게 하려면 이렇게 하면 된다.
 
 ```sh title="(lldb)"
 target stop-hook add -o "p ${변수명}"
+```
+
+- 변수 값이 바뀔때 마다 break 하며 변수 값 추적하기:
+
+```sh title="(gdb)"
+watch ${변수명}
 ```
