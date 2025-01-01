@@ -6,6 +6,7 @@ tags:
   - draft
 aliases:
   - FileMetaData
+  - File Meta Data
 ---
 > [!info] 코드 위치
 > - Line: `1106`
