@@ -5,11 +5,11 @@ tags:
 date: 2024-12-21
 ---
 > [!info]- 참고한 것들
-> [스댕 - 기본](https://stackoverflow.com/a/1184346)
-> [스댕 - kernel_read, kernel_write 지원](https://stackoverflow.com/a/53917617)
-> [스댕 - flip_open 리턴값](https://stackoverflow.com/a/58562444)
-> [스댕 - loff_t](https://stackoverflow.com/a/9713598)
-> [Linux journal](https://www.linuxjournal.com/article/8110)
+> - [스댕 - 기본](https://stackoverflow.com/a/1184346)
+> - [스댕 - kernel_read, kernel_write 지원](https://stackoverflow.com/a/53917617)
+> - [스댕 - flip_open 리턴값](https://stackoverflow.com/a/58562444)
+> - [스댕 - loff_t](https://stackoverflow.com/a/9713598)
+> - [Linux journal](https://www.linuxjournal.com/article/8110)
 
 ## 주의
 
