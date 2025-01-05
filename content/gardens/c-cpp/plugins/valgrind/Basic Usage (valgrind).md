@@ -27,11 +27,11 @@ aliases:
 
 ```bash
 valgrind \
---leak-check=full \
---show-leak-kinds=all \
---track-origins=yes \
---verbose \
-./executable
+	--leak-check=full \
+	--show-leak-kinds=all \
+	--track-origins=yes \
+	--verbose \
+	./executable
 ```
 
 - 옵션들 간단하게 알아보면
