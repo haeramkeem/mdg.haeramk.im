@@ -16,7 +16,7 @@ date: 2025-01-09
 
 - [[Parquet (Database Format)|Parquet]] 에서는 [[Run Length Encoding, RLE (Encoding)|RLE]] 와 [[Bit Packing, BP (Encoding)|BP]] 를 섞은 encoding 을 사용한다.
 	- 이 encoding 방식이 사용되는 경우는 한정적이다:
-		1) [[Dremel (Database Format)|Repetition Level]] 와 [[Dremel (Database Format)|Definition Level]] encoding 할 때
+		1) [[4. Nested Columnar Storage (Dremel, VLDB 10)|Repetition Level]] 와 [[4. Nested Columnar Storage (Dremel, VLDB 10)|Definition Level]] encoding 할 때
 		2) [[RLE Dictionary Encoding (Parquet Format)|RLE Dictionary Encoding]] 에서 dictionary indices 를 encoding 할 때
 		3) Boolean value 를 encoding 할 때 [[Plain Encoding (Parquet Format)|Plain Encoding]] 대신 사용
 - 일단 deprecated 된 BP Encoding 부터 알아보자.
@@ -59,7 +59,7 @@ bit label: ABCDEFGH IJKLMNOP QRSTUVWX
 
 - 저 `LENGTH` 는 `ENCODED DATA` 에 대한 byte 단위 사이즈인데, 이놈이 항상 붙는 것은 아니다.
 - 만약에 page header 같은데에 이 길이가 적히는 경우에는 굳이 적지 않게 된다.
-	- 가령 [data page header v1](https://github.com/apache/parquet-format/blob/d784f11f4485e64fdeaa614e0bde125f5132093d/src/main/thrift/parquet.thrift#L593-L615) 의 경우에는, [[Dremel (Database Format)|Definition Level]] 이나 [[Dremel (Database Format)|Repetition Level]] 에 RLE-BP Encoding 을 사용할 때 이놈의 데이터 사이즈를 적어줄 방법이 없기 때문에 이런 `LENGTH` 가 붙는다.
+	- 가령 [data page header v1](https://github.com/apache/parquet-format/blob/d784f11f4485e64fdeaa614e0bde125f5132093d/src/main/thrift/parquet.thrift#L593-L615) 의 경우에는, [[4. Nested Columnar Storage (Dremel, VLDB 10)|Definition Level]] 이나 [[4. Nested Columnar Storage (Dremel, VLDB 10)|Repetition Level]] 에 RLE-BP Encoding 을 사용할 때 이놈의 데이터 사이즈를 적어줄 방법이 없기 때문에 이런 `LENGTH` 가 붙는다.
 	- 하지만 [data page header v2](https://github.com/apache/parquet-format/blob/d784f11f4485e64fdeaa614e0bde125f5132093d/src/main/thrift/parquet.thrift#L637-L673) 에서는 이 사이즈를 적어주는 field 가 추가되었고, 따라서 더이상 저 `LENGTH` 가 붙지 않는다.
 - 공식문서에 나와있는 저 `LENGTH` 를 붙이냐 마냐에 대한 표는 다음과 같다.
 
