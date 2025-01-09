@@ -5,14 +5,20 @@ tags:
   - db-parquet
 aliases:
   - Parquet RLE-BP Hybrid Encoding
+  - Parquet Bit-packed Encoding
 date: 2025-01-09
 ---
 > [!info]- 참고한 것들
-> - [공홈](https://parquet.apache.org/docs/file-format/data-pages/encodings/#run-length-encoding--bit-packing-hybrid-rle--3)
+> - [공홈 (RLE-BP Hybrid)](https://parquet.apache.org/docs/file-format/data-pages/encodings/#run-length-encoding--bit-packing-hybrid-rle--3)
+> - [공홈 (Bit-packed)](https://parquet.apache.org/docs/file-format/data-pages/encodings/#bit-packed-deprecated-bit_packed--4)
 
 ## RLE-BP Hybrid Encoding
 
 - [[Parquet (Database Format)|Parquet]] 에서는 [[Run Length Encoding, RLE (Encoding)|RLE]] 와 [[Bit Packing, BP (Encoding)|BP]] 를 섞은 encoding 을 사용한다.
+	- 이 encoding 방식이 사용되는 경우는 한정적이다:
+		1) [[Dremel (Database Format)|Repetition Level]] 와 [[Dremel (Database Format)|Definition Level]] encoding 할 때
+		2) [[RLE Dictionary Encoding (Parquet Format)|RLE Dictionary Encoding]] 에서 dictionary indices 를 encoding 할 때
+		3) Boolean value 를 encoding 할 때 [[Plain Encoding (Parquet Format)|Plain Encoding]] 대신 사용
 - 일단 deprecated 된 BP Encoding 부터 알아보자.
 
 ## Bit-packed (Deprecated) (`BIT_PACKED=4`)
@@ -75,9 +81,9 @@ bit label: ABCDEFGH IJKLMNOP QRSTUVWX
 	- 즉, 이 `RUN` 은 그냥 하나의 단위이고, 저 단위는 RLE 로 encoding 되어있을 수도 있고 BP 로 encoding 되어있을 수도 있는 것.
 
 ```
-<----- RUN -----><----- RUN -----><----- RUN ------>
+<----- RUN -----><----- RUN -----><----- RUN ------> ...
 +--------+-------+--------+-------+--------+-------+
-| HEADER | VALUE | HEADER | VALUE | HEADER | VALUE | 
+| HEADER | VALUE | HEADER | VALUE | HEADER | VALUE | ...
 +--------+-------+--------+-------+--------+-------+
 ```
 
