@@ -3,6 +3,8 @@ tags:
   - database
   - db-format
 date: 2025-01-09
+aliases:
+  - Dremel
 ---
 > [!info] Dremel 링크
 > - [논문](https://dl.acm.org/doi/10.14778/1920841.1920886)
