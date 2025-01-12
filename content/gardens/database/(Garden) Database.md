@@ -70,9 +70,12 @@ date: 2024-07-29
 
 - 용어집
 	- [[BtrBlocks (Database Format)|BtrBlocks]]
+	- [[4. Nested Columnar Storage (Dremel, VLDB 10)|Definition Level]] (redirect [[(논문) Dremel - Interactive Analysis of Web-Scale Datasets|Dremel]])
 	- [[Parquet (Database Format)|Parquet]]
+	- [[4. Nested Columnar Storage (Dremel, VLDB 10)|Repetition Level]] (redirect [[(논문) Dremel - Interactive Analysis of Web-Scale Datasets|Dremel]])
 - 논문들
 	- [[(논문) BtrBlocks - Efficient Columnar Compression for Data Lakes|BtrBlocks - Efficient Columnar Compression for Data Lakes (SIGMOD'23)]]
+	- [[(논문) Dremel - Interactive Analysis of Web-Scale Datasets|Dremel - Interactive Analysis of Web-Scale Datasets (VLDB'10)]]
 
 ### Index
 

@@ -8,7 +8,7 @@ aliases:
 date: 2024-12-30
 ---
 > [!info]- 참고한 것들
-> - [공홈](https://parquet.apache.org/docs/file-format/data-pages/encodings/#PLAIN)
+> - [공홈](https://parquet.apache.org/docs/file-format/data-pages/encodings/#plain-plain--0)
 
 ## Raw Data Encoding
 

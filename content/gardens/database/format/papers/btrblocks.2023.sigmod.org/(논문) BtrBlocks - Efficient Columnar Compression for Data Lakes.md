@@ -1,7 +1,7 @@
 ---
 tags:
   - database
-  - db-encoding
+  - db-format
 date: 2024-08-09
 ---
 > [!info] BtrBlocks 링크

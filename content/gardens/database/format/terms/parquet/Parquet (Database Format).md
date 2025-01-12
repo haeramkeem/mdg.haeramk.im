@@ -51,3 +51,5 @@ date: 2024-12-03
 
 - 마찬가지로 구체적인 spec 은 다음의 작물에서 다뤄보자:
 	- [[Plain Encoding (Parquet Format)]]
+	- [[RLE Dictionary Encoding (Parquet Format)]]
+	- [[RLE-BP Hybrid Encoding (Parquet Format)]]
