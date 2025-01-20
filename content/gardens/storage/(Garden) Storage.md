@@ -12,6 +12,7 @@ date: 2024-04-23
 - 용어집
 	- [[Input Output per second, IOps (storage)|IOps]]
 	- [[Latency (Storage)|Latency]]
+	- [[Little's Law (Storage)|Little's Law]]
 	- [[Logical Block Addressing, LBA (Storage)|Logical Block Addressing, LBA]]
 	- [[Throughput (Storage)|Throughput]]
 
