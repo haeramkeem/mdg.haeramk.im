@@ -28,3 +28,5 @@ title: "(논문) Tiered Memory Management: Access Latency is the Key!"
 ## 목차
 
 - [[1. Introduction (Colloid, SOSP 24)|1. Introduction]]
+- [[2. Motivation (Colloid, SOSP 24)|2. Motivation]]
+- [[3. Colloid (Colloid, SOSP 24)|3. Colloid]]
