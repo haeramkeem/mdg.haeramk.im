@@ -1,10 +1,10 @@
 ---
 tags:
-  - arch
-  - arch-cache
+  - storage
+  - terms
+date: 2025-01-20
 aliases:
   - Little's Law
-date: 2025-01-20
 ---
 > [!info]- 참고한 것들
 > - [위키](https://en.wikipedia.org/wiki/Little%27s_law)
@@ -15,7 +15,7 @@ date: 2025-01-20
 - 이건 *John Little* 이라는 사람이 만든 queueing theory 이다.
 - 가령 다음의 예시를 생각해 보자.
 
-> 주인장 김씨가 용산구 윤씨의 재판 과정을 보기 위해 헌법재판소에 방문했다고 해보자.
+> [[index|주인장 김씨]] 가 용산구 윤씨의 재판 과정을 보기 위해 헌법재판소에 방문했다고 해보자.
 > 근데 사람이 너무나 많은 것이었다! 김씨가 세어보니 2시간동안 200명이 헌법재판소에 방문해서 줄을 섰고, 한 사람당 대기 시간은 평균 30분이었다.
 > 이때, 대기줄의 평균 길이는 얼마일까?
 
@@ -48,7 +48,7 @@ $$
 ## 활용
 
 - 이 수식을 활용해 latency 를 계산할 수도 있다. [[(논문) Tiered Memory Management - Access Latency is the Key|Colloid]] 에서의 용례를 그대로 가져와 보면,
-- [[Caching Home Agent, CHA (Intel Arch)|CHA]] 에서 제공하는 memory request 의 occupancy ($O$) 와 arrival rate ($R$) 를 위의 수식에 넣으면 latency ($D$) 를 구할 수 있다.
+- [[Caching Home Agent, CHA (Intel Arch)|CHA]] 에서 제공하는 memory request 의 occupancy ($O$) 와 arrival rate ($R$) 를 위의 수식에 넣으면 memory request latency ($D$) 를 구할 수 있다.
 - Occupancy 는 Little's law 에서 $L$ 에 해당하고, arrival rate 은 $\lambda$ 에 해당하며 latency 는 $W$ 에 해당한다.
 - 따라서 위의 수식에 따라 latency ($D$) 는:
 
