@@ -32,3 +32,4 @@ aliases:
 - [[1. Introduction (Colloid, SOSP 24)|1. Introduction]]
 - [[2. Motivation (Colloid, SOSP 24)|2. Motivation]]
 - [[3. Colloid (Colloid, SOSP 24)|3. Colloid]]
+- [[4. Colloid with Existing Memory Tiering Systems (Colloid, SOSP 24)|4. Colloid with Existing Memory Tiering Systems]]
