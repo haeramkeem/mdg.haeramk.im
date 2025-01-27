@@ -5,6 +5,8 @@ tags:
   - os-memory
 date: 2025-01-14
 title: "(논문) Tiered Memory Management: Access Latency is the Key!"
+aliases:
+  - Colloid
 ---
 > [!info] Colloid 링크
 > - [논문](https://dl.acm.org/doi/10.1145/3694715.3695968)
