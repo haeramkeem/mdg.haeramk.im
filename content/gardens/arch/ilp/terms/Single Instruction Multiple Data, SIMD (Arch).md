@@ -1,6 +1,7 @@
 ---
 tags:
   - arch
+  - arch-simd
 date: 2024-07-23
 aliases:
   - SIMD
