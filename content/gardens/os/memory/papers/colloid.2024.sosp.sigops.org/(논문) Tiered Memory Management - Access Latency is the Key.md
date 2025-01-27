@@ -3,7 +3,7 @@ tags:
   - os
   - paper-review
   - os-memory
-date: 2025-01-14
+date: 2025-01-27
 title: "(논문) Tiered Memory Management: Access Latency is the Key!"
 aliases:
   - Colloid
