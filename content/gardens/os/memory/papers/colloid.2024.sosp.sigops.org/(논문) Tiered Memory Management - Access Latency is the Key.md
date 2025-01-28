@@ -33,3 +33,4 @@ aliases:
 - [[2. Motivation (Colloid, SOSP 24)|2. Motivation]]
 - [[3. Colloid (Colloid, SOSP 24)|3. Colloid]]
 - [[4. Colloid with Existing Memory Tiering Systems (Colloid, SOSP 24)|4. Colloid with Existing Memory Tiering Systems]]
+- [[5. Evaluation (Colloid, SOSP 24)|5. Evaluation]]
