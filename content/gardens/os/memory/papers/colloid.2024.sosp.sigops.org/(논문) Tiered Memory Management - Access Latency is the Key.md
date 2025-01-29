@@ -35,3 +35,7 @@ aliases:
 - [[4. Colloid with Existing Memory Tiering Systems (Colloid, SOSP 24)|4. Colloid with Existing Memory Tiering Systems]]
 - [[5. Evaluation (Colloid, SOSP 24)|5. Evaluation]]
 - [[6-7. Related Work and Conclusion (Colloid, SOSP 24)|6-7. Related Work and Conclusion]]
+
+## 추가
+
+- [[Appendix. Colloid Coderef (Colloid, SOSP 24)|Appendix. Colloid Coderef]]
