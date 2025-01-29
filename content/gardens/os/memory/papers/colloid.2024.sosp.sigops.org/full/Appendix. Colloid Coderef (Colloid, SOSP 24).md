@@ -9,7 +9,7 @@ title: "(논문) Tiered Memory Management: Access Latency is the Key!, SOSP 2024
 > [!info] 본 글은 논문 [Tiered Memory Management: Access Latency is the Key! (SOSP 2024)](https://dl.acm.org/doi/10.1145/3694715.3695968) 의 [코드](https://github.com/webglider/hemem/tree/1b442e5758b14c557cfa06bbc93ba6cec0735387) 를 분석해본 글이다.
 
 > [!info]- 참고한 것들
-> - [Intel Xeon Processor Scalable Memory Family Uncore Performance Monitoring Reference Manual](https://www.intel.com/content/www/us/en/content-details/671389/intel-xeon-processor-scalable-memory-family-uncore-performance-monitoring-reference-manual.html)
+> - [3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual](https://www.intel.com/content/www/us/en/content-details/639778/3rd-gen-intel-xeon-processor-scalable-family-codename-ice-lake-uncore-performance-monitoring-reference-manual.html)
 > - [rdtscp](https://modoocode.com/en/inst/rdtscp)
 
 ## 개요
@@ -22,8 +22,8 @@ title: "(논문) Tiered Memory Management: Access Latency is the Key!, SOSP 2024
 - CHA 는 [[Uncore (Intel Arch)|Uncore]] subsystem 에 속하고 [[Model-Specific Register, MSR (Intel Arch)|MSR]] 레지스터를 통해 접근한다.
 - 때문에 앞으로 여러번 등장할 아래의 MSR address 표를 먼저 살펴보자.
 
-![[Pasted image 20250129161937.png]]
-> Intel Xeon Processor Scalable Memory Family Uncore Performance Monitoring Reference Manual pp.23
+![[Pasted image 20250129184343.png]]
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.31
 
 - 여기서 `Ctr` 은 counter register 로, counter 값을 가져오는 register 를 의미한다.
 - 그리고 `Ctrl` 은 control register 로, CHA counter 를 설정하기 위한 register 이다.
@@ -74,8 +74,7 @@ printf("wrmsr FILTER0 failed for cha: %d\n", cha);
 ```
 
 - 이 값은 [[#Uncore Performance Monitoring Registers|이 표]] 에서 `CHA 0` 의 `Filter 0` 에 해당하는 값이다. 즉, 이 값을 base 로 CHA box 번호에 따라 address 를 계산하는 것.
-- 그리고 표에서는 CHA box 번호가 증가할 때마다 `Filter 0` 의 주소가 `0x10` 씩 커지는데, Intel Icelake 에서는 이 값이 `0xE` 씩 커진다고 한다.
-	- 그래서 위 코드에 `(0xE * cha)` 로 되어 있는 것.
+- 그리고 표에서는 CHA box 번호가 증가할 때마다 `Filter 0` 의 주소가 `0xE` 씩 커진다. 그래서 위 코드에 `(0xE * cha)` 로 되어 있는 것.
 2. 그리고 다음은 Occupancy 와 Insert counter 를 초기화한다.
 
 > [!tip] 코드 위치
@@ -97,7 +96,7 @@ if (ret != 8) {
 }
 ```
 
-- 우선 `CHA_MSR_PMON_CTL_BASE` 은 `0x0E01L` 로 설정되고,
+- 여기서는 우선 `CHA_MSR_PMON_CTL_BASE` 은 `0x0E01L` 로 설정되고,
 
 > [!tip] 코드 위치
 > - [src/pebs.c:28](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L28)
@@ -108,33 +107,57 @@ if (ret != 8) {
 
 - 마찬가지로 이 값은 [[#Uncore Performance Monitoring Registers|위 표]] 에서 `CHA 0` 에 대한 `Ctrl 0` 의 address 인 것을 알 수 있다.
 	- 즉, filter 때와 마찬가지로 addressing 을 하는 것.
-- 그리고 `msr_val` 에서 하위 4byte (`0x00400135`, `0x00400136`) 를 살펴보면
-	- 하위 4byte 를 보는 이유는 상위 4byte (`0x00c81686` 하고 `0x00c81706`) 는 뭔지 모르겠기 때문.
-- 이놈은 아래와 같은 구조로 되어 있다.
+- 그리고 `msr_val` 의 값들에 대해 살펴보자. 이놈은 아래와 같은 구조로 되어 있다.
 
-![[Pasted image 20250129165458.png]]
-> Intel Xeon Processor Scalable Memory Family Uncore Performance Monitoring Reference Manual pp.61
+![[Pasted image 20250129184124.png]]
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.87
 
-- 그리고 저기 `Event Select` field 에의 `TOR Inserts` 와 `TOR Occupancy` 의 값은 다음과 같다.
+- 우선 하위 4byte (`0x00400135`, `0x00400136`) 부터 먼저 살펴보자.
+- 저기 `Event Select` field 에의 `TOR Inserts` 와 `TOR Occupancy` 의 값은 다음과 같다.
 	- `TOR` 은 table of request 로, request queue 라고 생각하면 된다.
 
-![[Pasted image 20250129165534.png]]
-> Intel Xeon Processor Scalable Memory Family Uncore Performance Monitoring Reference Manual pp.65
+![[Pasted image 20250129184022.png]]
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.92
 
 - 즉, 저 4byte 중에서 `0x35` 하고 `0x36` 이 각각 `TOR Inserts` 와 `TOR Occupancy` 를 뜻하는 것.
-- 그리고 다음 `0x01` 은 Umask (Unit mask) 로, 이 값에 해당하는 것은 IRQ 이다.
-	- 뭔지는 잘 모르겠네
-
-![[Pasted image 20250129170340.png]]
-> Intel Xeon Processor Scalable Memory Family Uncore Performance Monitoring Reference Manual pp.88
-
-![[Pasted image 20250129170435.png]]
-> Intel Xeon Processor Scalable Memory Family Uncore Performance Monitoring Reference Manual pp.89
-
+- 그리고 다음 `0x01` 은 Umask (Unit mask) 인데, 이 값이 의미하는 바는 상위 4byte 에서 알아보자.
 - 또한 다음의 `0x4` 는 `enable` field 로, local counter 를 enable 한다는 의미이다.
 
-![[Pasted image 20250129170639.png]]
-> Intel Xeon Processor Scalable Memory Family Uncore Performance Monitoring Reference Manual pp.18
+![[Pasted image 20250129185047.png]]
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.24
+
+- 그리고 중간에 지나친 Unit mask 와 나머지 4byte (`0x00c81686` 하고 `0x00c81706`) 를 알아보자.
+	- Ice lake 부터는 Unit mask field 와 Unit mask extend field 를 합쳐서 실제 Unit mask 를 설정하게 된다.
+- 우선, 위 코드를 보면 CHA 번호가 짝수면 local socket (default tier) 이고, 홀수면 remote socket (alternate tier) 인 것을 알 수 있을 것이다.
+- 위 코드에서 local socket 에서의 insert counter 를 위한 unit mask field 와 unit mask extend field 값은 다음과 같다:
+	- Unit mask field: `0x01`
+	- Unit mask extend field: `0x00c81686`
+- 그리고 이 값에 대한 설명은 다음과 같다:
+	- 보면, 이 값은 DRd (data read), locally-attached DDR memory request 인 것을 알 수 있다.
+
+![[Pasted image 20250129185905.png]]
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.126
+
+- 이 값은 occupancy counter 에도 동일하다.
+
+![[Pasted image 20250129185709.png]]
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.132
+
+- 또한 remote socket 에서의 insert counter 를 위한 unit mask field 와 unit mask extend field 값은 다음과 같다:
+	- Unit mask field: `0x01`
+	- Unit mask extend field: `0x00c81706`
+- 그리고 이 값에 대한 설명은 다음과 같다:
+	- 보면, 이 값은 DRd (data read), remotely-attached DDR memory request 인 것을 알 수 있다.
+
+![[Pasted image 20250129191927.png]]
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.126
+
+- 마찬가지로 이 값은 occupancy counter 에도 동일하다.
+
+![[Pasted image 20250129191945.png]]
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.132
+
+- 즉, 정리하자면 이 unit mask 로 어떤 tier 의 memory 에 대한 request 를 count 할지 지정하게 된다.
 
 ## [sample_cha_ctr()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L152-L166)
 
