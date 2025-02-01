@@ -49,7 +49,10 @@ if(colloid_msr_fd == -1) {
 ```
 
 - 그리고 모든 CHA box 들을 순회하면서, 다음의 작업을 해준다:
-1. 우선 filter 를 init 하는데, *Colloid* 에서는 filter 를 사용하지 않으므로 filter 를 `0x00000000` 으로 초기화해준다.
+
+### 1. Init filter
+
+- 우선 filter 를 init 하는데, *Colloid* 에서는 filter 를 사용하지 않으므로 filter 를 `0x00000000` 으로 초기화해준다.
 
 > [!tip] 코드 위치
 > - [src/pebs.c:183-189](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L183-L189)
@@ -75,7 +78,10 @@ printf("wrmsr FILTER0 failed for cha: %d\n", cha);
 
 - 이 값은 [[#Uncore Performance Monitoring Registers|이 표]] 에서 `CHA 0` 의 `Filter 0` 에 해당하는 값이다. 즉, 이 값을 base 로 CHA box 번호에 따라 address 를 계산하는 것.
 - 그리고 표에서는 CHA box 번호가 증가할 때마다 `Filter 0` 의 주소가 `0xE` 씩 커진다. 그래서 위 코드에 `(0xE * cha)` 로 되어 있는 것.
-2. 그리고 다음은 Occupancy 와 Insert counter 를 초기화한다.
+
+### 2. Init counters
+
+- 그리고 다음은 Occupancy 와 Insert counter 를 초기화한다.
 
 > [!tip] 코드 위치
 > - [src/pebs.c:198-210](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L198-L210)
@@ -158,6 +164,57 @@ if (ret != 8) {
 > 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.132
 
 - 즉, 정리하자면 이 unit mask 로 어떤 tier 의 memory 에 대한 request 를 count 할지 지정하게 된다.
+
+### 3. Init clocktics
+
+- 다음으로는 timing 을 위해 clocktick counter 를 초기화해준다.
+
+> [!tip] 코드 위치
+> - [src/pebs.c:212-217](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L212-L217)
+
+```c
+msr_num = CHA_MSR_PMON_CTL_BASE + (0xE * cha) + 2; // counter 2
+msr_val = 0x400000; // CLOCKTICKS
+ret = pwrite(colloid_msr_fd,&msr_val,sizeof(msr_val),msr_num);
+if (ret != 8) {
+	perror("wrmsr COUNTER2 failed");
+}
+```
+
+- 여기서 `msr_val` 이 `0x400000` 인 것은 clocktick 의 event select 가 `0x00` 이기 때문이다:
+
+![[Pasted image 20250201125501.png]]
+
+> 3rd Gen Intel Xeon Processor Scalable Family, Codename Ice Lake, Uncore Performance Monitoring Reference Manual pp.92
+
+### Init stats
+
+- 위의 내용까지가 각 CHA box 를 순회하면서 counter 들을 Init 하는 내용이었고, 마지막으로 HeMem + Colloid 에서 사용할 statistics 들을 초기화하면서 이 함수는 끝난다.
+
+> [!tip] 코드 위치
+> - [src/pebs.c:220-238](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L220-L238)
+
+```c
+// Initialize stats
+for(cha = 0; cha < NUM_CHA_BOXES; cha++) {
+	for(ctr = 0; ctr < NUM_CHA_COUNTERS; ctr++) {
+		cur_ctr_tsc[cha][ctr] = 0;
+		cur_ctr_val[cha][ctr] = 0;
+		sample_cha_ctr(cha, ctr);
+	}
+}
+
+smoothed_occ_local = 0.0;
+occ_local = 0.0;
+smoothed_occ_remote = 0.0;
+occ_remote = 0.0;
+smoothed_inserts_local = 0.0;
+inserts_local = 0.0;
+smoothed_inserts_remote = 0.0;
+inserts_remote = 0.0;
+p_lo = 0.0;
+p_hi = 1.0;
+```
 
 ## [sample_cha_ctr()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L152-L166)
 
