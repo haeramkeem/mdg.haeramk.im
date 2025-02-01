@@ -4,7 +4,7 @@ tags:
   - os-memory
   - paper-review
 date: 2025-01-29
-title: "(논문) Tiered Memory Management: Access Latency is the Key!, SOSP 2024 (Code Ref)"
+title: "(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (Code Ref)"
 ---
 > [!info] 본 글은 논문 [Tiered Memory Management: Access Latency is the Key! (SOSP 2024)](https://dl.acm.org/doi/10.1145/3694715.3695968) 의 [코드](https://github.com/webglider/hemem/tree/1b442e5758b14c557cfa06bbc93ba6cec0735387) 를 분석해본 글이다.
 
@@ -14,7 +14,7 @@ title: "(논문) Tiered Memory Management: Access Latency is the Key!, SOSP 2024
 
 ## 개요
 
-- 여기서는 [[(논문) Tiered Memory Management - Access Latency is the Key|Colloid]] 의 [[(논문) HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM|HeMem]] implementation code 를 살펴보도록 하자.
+- 여기서는 [[Tiered Memory Management - Access Latency is the Key! (SOSP'24)|Colloid]] 의 [[HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)|HeMem]] implementation code 를 살펴보도록 하자.
 - Code 는 [여기](https://github.com/webglider/hemem/tree/1b442e5758b14c557cfa06bbc93ba6cec0735387) 에 있다.
 
 ## Uncore Performance Monitoring Registers
