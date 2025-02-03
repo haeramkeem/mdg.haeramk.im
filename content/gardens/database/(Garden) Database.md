@@ -113,7 +113,7 @@ date: 2024-07-29
 	- [[Transaction, ACID (Database)|Transaction, ACID]]
 	- [[Multiversion Concurrency Control, MVCC (Database Transaction)|Multiversion Concurrency Control, MVCC]]
 - 논문들
-	- [[(논문) DIVA - Making MVCC Systems HTAP-Friendly|DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
+	- [[DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)|DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
 
 ### DBMS
 

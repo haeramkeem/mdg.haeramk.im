@@ -3,8 +3,8 @@ tags:
   - os
   - paper-review
   - os-memory
-date: 2025-01-14
-title: "(논문) Tiered Memory Management: Access Latency is the Key!"
+date: 2025-01-19
+title: "(논문) Tiered Memory Management: Access Latency is the Key! (SOSP'24)"
 aliases:
   - Colloid
 ---
@@ -29,6 +29,13 @@ aliases:
 
 ## 목차
 
-- [[1. Introduction (Colloid, SOSP 24)|1. Introduction]]
-- [[2. Motivation (Colloid, SOSP 24)|2. Motivation]]
-- [[3. Colloid (Colloid, SOSP 24)|3. Colloid]]
+- [[1. Introduction (Colloid, SOSP'24)|1. Introduction]]
+- [[2. Motivation (Colloid, SOSP'24)|2. Motivation]]
+- [[3. Colloid (Colloid, SOSP'24)|3. Colloid]]
+- [[4. Colloid with Existing Memory Tiering Systems (Colloid, SOSP'24)|4. Colloid with Existing Memory Tiering Systems]]
+- [[5. Evaluation (Colloid, SOSP'24)|5. Evaluation]]
+- [[6-7. Related Work and Conclusion (Colloid, SOSP'24)|6-7. Related Work and Conclusion]]
+
+## Appendix
+
+- [[Appendix. HeMem + Colloid Coderef (Colloid, SOSP'24)|Appendix. HeMem + Colloid Coderef]]

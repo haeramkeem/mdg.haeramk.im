@@ -62,7 +62,7 @@ date: 2024-07-29
 	- [[Virtual Address Space, VAS (Memory)|Virtual Address Space, VAS]]
 - 논문
 	- [[(논문) Practical, Transparent Operating System Support for Superpages|(Draft) Juan Navarro et al. Practical, Transparent Operating System Support for Superpages (OSDI '02)]]
-	- [[(논문) Tiered Memory Management - Access Latency is the Key|Tiered Memory Management: Access Latency is the Key! (SOSP '24)]]
+	- [[Tiered Memory Management - Access Latency is the Key! (SOSP'24)|Tiered Memory Management: Access Latency is the Key! (SOSP '24)]]
 
 ### Process Filesystem (`procfs`)
 

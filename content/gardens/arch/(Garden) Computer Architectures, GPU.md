@@ -13,14 +13,6 @@ date: 2024-07-29
 
 ### 용어집
 
-- [[Control Dependence (Arch)|Control Dependence]]
-- [[Data Dependence (Arch)|Data Dependence]]
-- [[Dependence (Arch)|Dependence]]
-- [[Endian (Arch)|Endian]]
-- [[Intrinsic Function (Arch)|Intrinsic Function]]
-- [[Program Counter, PC (Arch)|Program Counter, PC]]
-- [[Scalar, Superscalar Processing (Arch)|Scalar, Superscalar Processing]]
-- [[Single Instruction Multiple Data, SIMD (Arch)|Single Instruction Multiple Data, SIMD]]
 - [[CPU Cache (Arch)|CPU Cache]]
 	- [[Cache Write Policy (CPU Cache)|Cache Write Policy]]
 	- [[Direct-mapped Cache (CPU Cache)|Direct-mapped Cache]]
@@ -28,3 +20,12 @@ date: 2024-07-29
 	- [[Set Associative Cache (CPU Cache)|Set Associative Cache]]
 - [[CUDA (NVIDIA CUDA)|CUDA]]
 	- [[CUDA Execution Model (NVIDIA CUDA)|CUDA Execution Model]]
+- [[Dependence (Arch)|Dependence]]
+	- [[Control Dependence (Arch)|Control Dependence]]
+	- [[Data Dependence (Arch)|Data Dependence]]
+- [[Scalar, Superscalar Processing (Arch)|Scalar, Superscalar Processing]]
+	- [[Single Instruction Multiple Data, SIMD (Arch)|Single Instruction Multiple Data, SIMD]]
+- [[Endian (Arch)|Endian]]
+- [[Intrinsic Function (Arch)|Intrinsic Function]]
+- [[Program Counter, PC (Arch)|Program Counter, PC]]
+- [[Uncore (Intel Arch)|Uncore]]

@@ -2,6 +2,7 @@
 tags:
   - arch
   - terms
+  - arch-ilp
 aliases:
   - ILP
   - Scalar

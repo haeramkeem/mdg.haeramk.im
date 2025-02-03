@@ -4,6 +4,8 @@ tags:
   - os
   - os-procfs
 date: 2024-06-07
+aliases:
+  - procfs
 ---
 > [!info]- 참고한 것들
 > - [커널](https://docs.kernel.org/filesystems/proc.html)

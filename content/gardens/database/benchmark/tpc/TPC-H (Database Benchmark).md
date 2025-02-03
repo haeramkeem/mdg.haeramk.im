@@ -3,6 +3,8 @@ tags:
   - database
   - db-benchmark
 date: 2024-08-23
+aliases:
+  - TPC-H
 ---
 > [!info]- 참조한 것들
 > - [TPC-H Spec](https://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.1.pdf)
