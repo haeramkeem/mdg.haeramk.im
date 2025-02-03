@@ -36,8 +36,8 @@
 <ul>
 <li>우선, 현재의 많은 <a href="../../../../../../gardens/database/common/terms/Database-Management-System,-DBMS-(Database)" class="internal" data-slug="gardens/database/common/terms/Database-Management-System,-DBMS-(Database)">DBMS</a> 들은 data parallelism 을 충분히 활용하고 있지 않다.
 <ul>
-<li>즉, <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 가 줄 수 있는 많은 것들을 충분히 활용하지 못하고 있으며</li>
-<li><a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 말고도 GPU 혹은 TPU 와 같은 parallel HW 들이 많이 나오고 있는데</li>
+<li>즉, <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 가 줄 수 있는 많은 것들을 충분히 활용하지 못하고 있으며</li>
+<li><a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 말고도 GPU 혹은 TPU 와 같은 parallel HW 들이 많이 나오고 있는데</li>
 <li>CPU 의 frequency 및 core 의 개수가 정체되어 있는 이 시점에, 이런 parallelism 을 최대한 활용하는 것은 <a href="../../../../../../gardens/database/common/terms/Database-Management-System,-DBMS-(Database)" class="internal" data-slug="gardens/database/common/terms/Database-Management-System,-DBMS-(Database)">DBMS</a> 에게 있어 또 다른 성능 향상의 기회가 있을 것이다.</li>
 </ul>
 </li>
@@ -51,7 +51,7 @@
 <li>Naive scalar code 로 구현한 방법 (<code>Scalar</code>) 및</li>
 <li>Scalar code 를 이용해 vectorize 하는 방법 (<code>Scalar_T64</code>),</li>
 <li>Scalar code 를 compiler 에 의해 vectorized code 로 바꾸는 방법 (<code>Auto-vectorized</code>),</li>
-<li>그리고 명시적인 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> <a href="../../../../../../gardens/arch/terms/Intrinsic-Function-(Arch)" class="internal" data-slug="gardens/arch/terms/Intrinsic-Function-(Arch)">intrinsic</a> 을 사용하는 방법 (<code>SIMD</code>)</li>
+<li>그리고 명시적인 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> <a href="../../../../../../gardens/arch/terms/Intrinsic-Function-(Arch)" class="internal" data-slug="gardens/arch/terms/Intrinsic-Function-(Arch)">intrinsic</a> 을 사용하는 방법 (<code>SIMD</code>)</li>
 <li>네가지를 제시해 portability 를 늘렸다.</li>
 </ul>
 </li>

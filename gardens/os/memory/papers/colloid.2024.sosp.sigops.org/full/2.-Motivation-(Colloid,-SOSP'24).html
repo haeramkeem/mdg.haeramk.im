@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html><head><title>(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (2. Motivation)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (2. Motivation)"/><meta property="og:description" content="본 글은 논문 Tiered Memory Management: Access Latency is the Key! (SOSP 2024) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction 2."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 Tiered Memory Management: Access Latency is the Key! (SOSP 2024) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction 2."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (2. Motivation)</h1><p class="content-meta ">Jan 19, 2025, 13 min read</p><ul class="tags "><li><a href="../../../../../../tags/os" class="internal tag-link">#os</a></li><li><a href="../../../../../../tags/os-memory" class="internal tag-link">#os-memory</a></li><li><a href="../../../../../../tags/paper-review" class="internal tag-link">#paper-review</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="https://dl.acm.org/doi/10.1145/3694715.3695968" class="external">Tiered Memory Management: Access Latency is the Key! (SOSP 2024)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>목차 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/1.-Introduction-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/1.-Introduction-(Colloid,-SOSP'24)">1. Introduction</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)">2. Motivation (현재 글)</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/3.-Colloid-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/3.-Colloid-(Colloid,-SOSP'24)">3. Colloid</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/4.-Colloid-with-Existing-Memory-Tiering-Systems-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/4.-Colloid-with-Existing-Memory-Tiering-Systems-(Colloid,-SOSP'24)">4. Colloid with Existing Memory Tiering Systems</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/5.-Evaluation-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/5.-Evaluation-(Colloid,-SOSP'24)">5. Evaluation</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/6-7.-Related-Work-and-Conclusion-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/6-7.-Related-Work-and-Conclusion-(Colloid,-SOSP'24)">6-7. Related Work and Conclusion</a></li>
+</ul>
+</blockquote>
+<h2 id="20-overview">2.0 Overview<a aria-hidden="true" tabindex="-1" href="#20-overview" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>NXSECTION </p></div>
+                  
+                </div>
+<ul>
+<li><code>2.0</code> 은 overview 로, 논문에는 이런 section 은 없다.</li>
+</ul>
+</blockquote>
+<ul>
+<li>본 <a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)">Section</a> 에서는 SOTA 인 <a href="../../../../../../gardens/os/memory/papers/hemem.2021.sosp.sigops.org/HeMem---Scalable-Tiered-Memory-Management-for-Big-Data-Applications-and-Real-NVM-(SOSP'21)" class="internal" data-slug="gardens/os/memory/papers/hemem.2021.sosp.sigops.org/HeMem---Scalable-Tiered-Memory-Management-for-Big-Data-Applications-and-Real-NVM-(SOSP'21)">HeMem</a>, <a href="../../../../../../gardens/os/memory/papers/drafts/(논문)-MEMTIS---Efficient-Memory-Tiering-with-Dynamic-Page-Classification-and-Page-Size-Determination" class="internal" data-slug="gardens/os/memory/papers/drafts/(논문)-MEMTIS---Efficient-Memory-Tiering-with-Dynamic-Page-Classification-and-Page-Size-Determination">MEMTIS</a>, 그리고 <a href="../../../../../../gardens/os/memory/papers/drafts/(논문)-TPP---Transparent-Page-Placement-for-CXL-Enabled-Tiered-Memory" class="internal" data-slug="gardens/os/memory/papers/drafts/(논문)-TPP---Transparent-Page-Placement-for-CXL-Enabled-Tiered-Memory">TPP</a> 를 분석하며 다음에 대한 demonstration 을 한다:
+<ul>
+<li><em>Memory Interconnect Contention</em> 상황에서는, default tier 의 latency 는 5배까지 치솟을 수 있다는 것을 보인다.
+<ul>
+<li>CXL 의 HW spec 에 따른 latency 와 비교하면 이것은 2.5 배정도 더 큰 수치라고 한다.</li>
+</ul>
+</li>
+<li>위의 SOTA 들은 그냥 무지성으로 hot page 들을 default tier 에 때려박는데, <em>Memory Interconnect Contention</em> 상황에서는 이렇게 하는 것이 비효율적임을 보인다.
+<ul>
+<li>Optimal 에 비해 HeMem 의 경우에는 2.3배, TPP 의 경우에는 2.36배, MEMTIS 의 경우에는 2.46배 더 안좋다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="21-experimental-setup">2.1. Experimental Setup<a aria-hidden="true" tabindex="-1" href="#21-experimental-setup" class="internal"> §</a></h2>
+<ul>
+<li>HW 세팅은:
+<ul>
+<li>Socket 두개에 각각 Intel Xeon Platinum 8362 (32C, 1.25MB L2, 48MB <a href="../../../../../../gardens/arch/drafts/L1,-L2,-L3-Cache-(Arch)" class="internal" data-slug="gardens/arch/drafts/L1,-L2,-L3-Cache-(Arch)">LLC</a>) 가 들어있다.</li>
+<li>각 socket 은 <a href="../../../../../../gardens/arch/drafts/Ultra-Path-Interconnect,-UPI-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Ultra-Path-Interconnect,-UPI-(Intel-Arch)">UPI</a> 로 연결되어 있고, BW 는 75GB/s 이다.</li>
+<li>두 socket 의 한 CPU 만 쓰고 나머지 한 socket 은 remote memory 용도로만 사용한다.
+<ul>
+<li>즉, tiered memory 를 위한 장비가 없어서 이렇게 하는 것.</li>
+</ul>
+</li>
+<li>Memory 는 3200MHz DDR4 메모리 이고, local (사용하는 socket 의 memory slot, 즉 default tier) 은 32GB, remote (사용하지 않는 socket 의 memory slot, 즉 alternative tier) 은 92GB 가 꽂혀 있다.</li>
+<li>이때의 local memory 의 unloaded latency 는 70ns 이고, remote memory 는 135ns 이다.</li>
+</ul>
+</li>
+<li>Workload 세팅은:
+<ul>
+<li><a href="https://icl.utk.edu/projectsfiles/hpcc/RandomAccess/" class="external">Giga-updates per second (GUPS)</a> workload 를 사용하고,</li>
+<li><a href="../../../../../../gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)">Virtual Address Space</a> 상에서 연속된 72GB 의 buffer 를 working set 으로 한 뒤,</li>
+<li>여기서 24GB 를 랜덤하게 골라서 이놈이 hot data, 나머지 (48GB) 를 cold data 로 삼는다.
+<ul>
+<li>즉, hot data 는 default tier 에 쏙 들어가지만 전체 data 는 그렇지 않는 셈.</li>
+</ul>
+</li>
+<li>Access 는 page 에서 64byte object 를 랜덤하게 골라서 1:1 비율로 read, write 하되,</li>
+<li>90% 확률로 hot page 를 선택하고 나머지 10% 확률로 전체 page 중에 하나를 선택한다고 한다.
+<ul>
+<li>즉, hot page 와 cold page 의 비율이 1:2 이기 때문에 93.3% 의 확률로 hot page 에 접근하고 6.6% 의 확률로 cold page 에 접근하는 셈.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Workload 를 위한 core 할당은:
+<ul>
+<li>일단 전체 32 core 중에서 15개 (1-15) 는 workload 를 돌리는데 사용한다 (working thread).</li>
+<li>그리고 2개 (31, 32) 는 sampling 과 migration 작업에 사용한다 (mgmt thread).
+<ul>
+<li>여기서 sampling 은 page access count 등을 polling 하며 tiered memory system 에 필요한 데이터를 수집하는 놈이라고 생각하면 된다.</li>
+</ul>
+</li>
+<li>남은 15개 (16-30) 에는 <em>Antagonist</em> 를 돌린다.
+<ul>
+<li>즉, 방해하는놈이라고 생각하면 된다.</li>
+<li>이놈이 workload 와 별개의 memory request traffic 을 발생시켜 우리가 보고자 하는 <em>Memory Interconnect Contention</em> 상황을 만들어 낸다.</li>
+<li>구체적으로는, 이놈들은 default tier 에 pinning 된 50MB 의 데이터를 sequential 하게 1:1 비율로 read, write 한다.</li>
+</ul>
+</li>
+<li>참고로, CPU oversubscription 을 하지는 않았다.
+<ul>
+<li>즉, CPU pressure 를 주지는 않았다는 것.</li>
+<li>이것은 이 실험이 CPU overhead 를 위한 것이 아니기 때문이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그럼 저 antagonist 에 대해 좀 더 알아보면
+<ul>
+<li>위에서 말한대로 이놈은 memory traffic 을 발생시켜 <em>Memory Interconnect Contention</em> 을 유발하는데,</li>
+<li>Default tier 에만 발생시키고 alternative tier 에 대한 <em>Memory Interconnect Contention</em> 은 발생시키지 않았다.
+<ul>
+<li>왜냐면 alternative tier 는 default tier 보다 unloaded latency 가 크기 때문에 저런 현상이 발생해서 alternative tier 의 latency 가 올라가봤자 어차피 기존의 (HeMem, MEMTIS, TPP) 방식이 잘 먹힐 것이기 때문.</li>
+<li>때문에 antagonist 가 default tier 에 pinning 되어 여기에서만 지속적으로 traffic 을 발생시키는 것이다.</li>
+</ul>
+</li>
+<li>실험에서는 이 antagonist 의 수를 조절해가면서 steady state 일때의 throughput 을 측정한다.
+<ul>
+<li>즉, antagonist 를 0개, 5개, 10개, 15개 생성한 뒤 각각의 조건에서 steady state 가 될 때 까지 기둘린 다음, 성능을 측정한 것.</li>
+<li>저 antagonist 의 개수 (0, 5, 10, 15 개) 를 그래프에서는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mord">×</span></span></span></span></span> 으로 표기하고, 각각에 대해 antagonist 가 차지하는 대역폭은 전체의 0%, 51%, 61%, 70% 라고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>마지막으로, optimal throughput (best case) 는 다음과 같이 측정했다.
+<ul>
+<li>각 antagonist setting 에 대해, hot page 들을 manual 하게 default tier 와 alternative tier 에 10% 씩 양을 증가시키며 배치시켜보며 가장 최적의 성능이 나오는 지점을 찾는 노가다를 했다고 한다.</li>
+<li>즉, hot page 를 처음에는 모두 (100%) default tier 에 넣어보고, 다음에는 90% 만 default tier 에 넣어보고, 하는 작업을 반복하며 가장 throughput 이 잘 나오는 비율을 찾았다는 것.
+<ul>
+<li>4개의 setting 에 대해 10개 (0%, 10%, …, 100%) 의 경우의 수를 직접 해보며 찾았다는 소리이다.</li>
+</ul>
+</li>
+<li>본 논문이 hot page 를 모두 default tier 에 넣지 않는 것이 더 좋을 수도 있다는 생각에서 시작된 것이기에, 각 상황별 가장 최적의 비율을 직접 찾아봤다는 것으로 생각하면 된다.</li>
+<li>이때에는 Linux 의 <a href="https://man7.org/linux/man-pages/man2/mbind.2.html" class="external">mbind</a> API 를 사용했다고 하네.</li>
+</ul>
+</li>
+</ul>
+<h2 id="22-understanding-impact-of-memory-interconnect-contention-on-existing-memory-tiering-systems">2.2. Understanding Impact of Memory Interconnect Contention on Existing Memory Tiering Systems<a aria-hidden="true" tabindex="-1" href="#22-understanding-impact-of-memory-interconnect-contention-on-existing-memory-tiering-systems" class="internal"> §</a></h2>
+<h3 id="220-result">2.2.0. Result<a aria-hidden="true" tabindex="-1" href="#220-result" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>NXSECTION </p></div>
+                  
+                </div>
+<ul>
+<li><code>2.2.0</code> 은 실험 결과로, 논문에는 이런 section 은 없다.</li>
+</ul>
+</blockquote>
+<p><img src="../../../../../../images/Pasted-image-20250119190642.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0</span><span class="mord">×</span></span></span></span></span> 일 때를 보면
+<ul>
+<li>Best-case 일 때에 비해, HeMem 과 TPP 는 각각 1.5%, 4.6% 떨어진 수치를 보여주며 best-case 에 근접한 결과를 보여줬다.</li>
+<li>근데 MEMTIS 는 10.1% 의 감소를 보이며 비교적 큰 성능 하락이 있었는데, 이것은 MEMTIS 의 hugepage coalescing 에 문제가 있기 때문이라고 한다.
+<ul>
+<li>MEMTIS 는 access tracking information 으로 4Ki page 를 사용할지 2Mi page 를 사용할지 결정하는데,</li>
+<li>실험 도중에 2Mi page 를 4Ki page 로 쪼개는 것이 별로 도움이 안됨에도 불구하고 이렇게 쪼개며</li>
+<li>4Ki page 를 2Mi page 로 다시 합치는 것도 page table 을 scan 하면서 수행하기에 너무 오래걸려 steady state 가 되기 전에 이 작업이 다 끝나지 않아 이런 overhead 가 발생한다고 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그리고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mord">×</span></span></span></span></span> 로 갈수록 점점 best case 랑 간극이 벌어지게 된다.
+<ul>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mord">×</span></span></span></span></span> 에서도 HeMem, TPP, MEMTIS 는 각각 1.21배, 1.35배, 1.41배의 성능 하락이 나타나고</li>
+<li>최대 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mord">×</span></span></span></span></span>) 로는 각각 2.3배, 2.36배, 2.46배의 성능 하락이 나타난다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="221-under-memory-interconnect-contention-default-tier-access-latency-can-exceed-that-of-alternate-tier">2.2.1. Under memory interconnect contention, default tier access latency can exceed that of alternate tier.<a aria-hidden="true" tabindex="-1" href="#221-under-memory-interconnect-contention-default-tier-access-latency-can-exceed-that-of-alternate-tier" class="internal"> §</a></h3>
+<ul>
+<li>그럼 이때 각 tier 의 latency 를 살펴보자.
+<ul>
+<li>이 latency 는 <a href="../../../../../../gardens/arch/drafts/Caching-Home-Agent,-CHA-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Caching-Home-Agent,-CHA-(Intel-Arch)">CHA</a> 를 이용해 측정했다고 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20250119192002.png" width="auto" height="auto"/></p>
+<ul>
+<li>이 graph 를 통해 본 논문이 주장하는 바가 확인됨을 알 수 있다: 보면, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mord">×</span></span></span></span></span> 상황에서부터 default tier 의 latency 가 alternative tier 의 latency 를 뛰어넘는다.
+<ul>
+<li>수치적으로는, default tier 는 unload latency 에 비해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mord">×</span></span></span></span></span> 에서 각각 2.5배, 3.8배, 5배 증가하는 것을 볼 수 있고,</li>
+<li>Alternative tier 에 비해서는 각각 1.2배, 1.8배, 2.4배 증가한 것을 알 수 있다.</li>
+</ul>
+</li>
+<li>이 이유로는 BW 때문도 있지만 memory controller 의 queue occupancy 때문도 있다. 이에 대해서는 <a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/3.-Colloid-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/3.-Colloid-(Colloid,-SOSP'24)">Section 3</a> 에서 더 자세히 알아보자.</li>
+</ul>
+<h3 id="222-existing-systems-continue-to-greedily-place-hottest-pages-in-default-tier-under-memory-interconnect-contention">2.2.2. Existing systems continue to greedily place hottest pages in default tier under memory interconnect contention.<a aria-hidden="true" tabindex="-1" href="#222-existing-systems-continue-to-greedily-place-hottest-pages-in-default-tier-under-memory-interconnect-contention" class="internal"> §</a></h3>
+<ul>
+<li>그럼 각 tier 가 차지하는 BW 를 살펴보자.
+<ul>
+<li>BW 를 보는 이유는 이것으로 각 상황에 대해, 어떤 tier 가 많이 사용되는지를 알 수 있기 때문이다.</li>
+<li>즉, default tier 가 많이 사용된다면 default tier 에 hot page 가 많다고 추론할 수 있는 셈.</li>
+<li>이것은 <a href="../../../../../../gardens/arch/drafts/Memory-Bandwidth-Monitoring,-MBM-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Memory-Bandwidth-Monitoring,-MBM-(Intel-Arch)">MBM</a> 을 이용해 알아냈다고 한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20250119192113.png" width="auto" height="auto"/></p>
+<ul>
+<li>보면, best case 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord">×</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mord">×</span></span></span></span></span> 에 대해 default tier 가 차지하는 BW 는 전체의 25%, 4.5%, 4% 를 차지하고 있는 것을 알 수 있다.
+<ul>
+<li>즉, <em>memory interconnect contention</em> 이 늘어남에 따라 default tier 에 배치되는 hot page 의 양은 점점 줄어들고 alternative tier 에 배치되는 hot page 의 양은 점점 많아진다는 것이다.</li>
+<li>이것은 <a href="#221-under-memory-interconnect-contention-default-tier-access-latency-can-exceed-that-of-alternate-tier" class="internal">Section 2.2.1</a> 에서 본 것처럼 <em>memory interconnect contention</em> 상황에서는 default tier 가 latency 가 더 커서 더이상 optimal 하지 않기 때문이다.</li>
+</ul>
+</li>
+<li>반면에, HeMem 와 TPP, MEMTIS 는 모두 이러한 비율이 <em>memory interconnect contention</em> 이 늘어나도 비슷하게 유지되는 것을 볼 수 있다 (HeMem, TPP, MEMTIS 각각에 대해 적어도 90%, 75%, 85% 를 차지한다고 한다).</li>
+<li>따라서 이렇게 무지성으로 default tier 에 hot page 를 박는 것이 문제의 근원이라고 할 수 있는 셈.</li>
+<li>이것을 좀 수치적으로 따져보면 다음과 같다:</li>
+<li>일단 각 core 는 한번에 보내는 memory request 의 개수가 한정되어 있다. 이 수를 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span> 이라고 해보자.</li>
+<li>그리고 throughput 은 다음과 같이 정의되는데:</li>
+</ul>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">o</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.05764em;">lS</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></span></div>
+<ul>
+<li>그럼 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">o</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.05764em;">lS</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></span> 는 한번에 보내는 양 (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span>) 와 object size (64byte) 의 곱이고, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span></span></span></span></span> 은 latency (<span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></span>) 이기 때문에 throughput 은 다음과 같다.</li>
+</ul>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">L</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">64</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></span></div>
+<ul>
+<li>따라서 latency 에 반비례해서 throughput 이 바뀐다는 것을 알 수 있는데, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0</span><span class="mord">×</span></span></span></span></span> 에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mord">×</span></span></span></span></span> 로 바뀜에 따라 latency 는 3.5 배 늘어나고, throughput 은 HeMem, TPP, MEMTIS 각각 3.42배, 3.39배, 3.29배 작아진다고 한다 <sup><a href="#user-content-fn-throughput" id="user-content-fnref-throughput" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup>.</li>
+</ul>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-throughput">
+<p>사실 이부분은 근거를 못찾았다. 2.2.0 에서는 throughput 이 2.3배 정도 감소한다고 했고, 2.2.1 에서는 latency 가 5배 늘어났는데, 그럼 안맞는것 아닌가. <a href="#user-content-fnref-throughput" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#20-overview" data-for="20-overview">2.0 Overview</a></li><li class="depth-0"><a href="#21-experimental-setup" data-for="21-experimental-setup">2.1. Experimental Setup</a></li><li class="depth-0"><a href="#22-understanding-impact-of-memory-interconnect-contention-on-existing-memory-tiering-systems" data-for="22-understanding-impact-of-memory-interconnect-contention-on-existing-memory-tiering-systems">2.2. Understanding Impact of Memory Interconnect Contention on Existing Memory Tiering Systems</a></li><li class="depth-1"><a href="#220-result" data-for="220-result">2.2.0. Result</a></li><li class="depth-1"><a href="#221-under-memory-interconnect-contention-default-tier-access-latency-can-exceed-that-of-alternate-tier" data-for="221-under-memory-interconnect-contention-default-tier-access-latency-can-exceed-that-of-alternate-tier">2.2.1. Under memory interconnect contention, default tier access latency can exceed that of alternate tier.</a></li><li class="depth-1"><a href="#222-existing-systems-continue-to-greedily-place-hottest-pages-in-default-tier-under-memory-interconnect-contention" data-for="222-existing-systems-continue-to-greedily-place-hottest-pages-in-default-tier-under-memory-interconnect-contention">2.2.2. Existing systems continue to greedily place hottest pages in default tier under memory interconnect contention.</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/Tiered-Memory-Management---Access-Latency-is-the-Key!-(SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key! (SOSP'24)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/1.-Introduction-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (1. Introduction)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (2. Motivation)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/3.-Colloid-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (3. Colloid)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/4.-Colloid-with-Existing-Memory-Tiering-Systems-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (4. Colloid with existing memory tiering systems)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/5.-Evaluation-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (5. Evaluation)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/6-7.-Related-Work-and-Conclusion-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (6-7. Related Work and Conclusion)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>

@@ -45,12 +45,12 @@
 <h3 id="21-many-simd-widths">2.1. Many SIMD widths<a aria-hidden="true" tabindex="-1" href="#21-many-simd-widths" class="internal"> §</a></h3>
 <h4 id="211-challenge">2.1.1. Challenge<a aria-hidden="true" tabindex="-1" href="#211-challenge" class="internal"> §</a></h4>
 <ul>
-<li><a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 는 처음에는 64bit register 로 시작했지만 지금은 8배나 늘어 512bit 을 지원한다.
+<li><a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 는 처음에는 64bit register 로 시작했지만 지금은 8배나 늘어 512bit 을 지원한다.
 <ul>
 <li>가령 x86 의 AVX512 등.</li>
 </ul>
 </li>
-<li>기존의 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> instruction 들은 특정 사이즈의 register 에만 집중해 왔다.</li>
+<li>기존의 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> instruction 들은 특정 사이즈의 register 에만 집중해 왔다.</li>
 <li>가령 SIMD-BP128 과 같은 4-way interleaving 방식은 128bit register 에 <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 된 값 4개를 할당해 처리한다 (int 는 32bit 이므로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">32</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span>)
 <ul>
 <li>이 방법을 이용해 bit 가 연속적으로 packed 되어 있으면 필요했을법한 cross-lane instructions 들 (<code>PERMUTE</code>, <code>BITSHUFFLE</code>) 을 우회해 왔다 <sup><a href="#user-content-fn-permute-bitshuffle" id="user-content-fnref-permute-bitshuffle" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup>.</li>
@@ -101,7 +101,7 @@
 <li>위 그림이 interleaved <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 를 나타낸 그림이다.
 <ul>
 <li>일단 각 value 들은 3bit 로 <a href="../../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a> 되어있는 상태다. (파란색, 분홍색, 노란색이 각각 1bit 임)</li>
-<li>그리고 하나의 <code>FLMM1024</code> word (<a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 로 처리되는 단위) 는 1024bit 이고,</li>
+<li>그리고 하나의 <code>FLMM1024</code> word (<a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 로 처리되는 단위) 는 1024bit 이고,</li>
 <li>이것으로 1024 개의 value 를 표현하기 위해서는 당연히 3개의 word 가 필요하다.
 <ul>
 <li>1value = 3bit, 1024value = 3072bit = 3word</li>
@@ -132,10 +132,10 @@
 <h3 id="22-heterogeneous-isas">2.2. Heterogeneous ISAs<a aria-hidden="true" tabindex="-1" href="#22-heterogeneous-isas" class="internal"> §</a></h3>
 <h4 id="221-challenge">2.2.1. Challenge<a aria-hidden="true" tabindex="-1" href="#221-challenge" class="internal"> §</a></h4>
 <ul>
-<li>새로운 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 가 도입되면, instruction 의 관점에서 다음의 두가지 비대칭이 생긴다고 한다:
+<li>새로운 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 가 도입되면, instruction 의 관점에서 다음의 두가지 비대칭이 생긴다고 한다:
 <ul>
 <li>일단 새로 도입된 instruction 이 기존에는 없는 기능이거나</li>
-<li>기존에 있던 instruction 이 새로운 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 에서는 지원하지 않는 경우</li>
+<li>기존에 있던 instruction 이 새로운 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 에서는 지원하지 않는 경우</li>
 </ul>
 </li>
 <li>이 두 가지 중 어느것이든 여기에 의존하고 있는 data layout 은 문제가 생기게 된다.</li>
@@ -147,9 +147,9 @@
 </ul>
 <h4 id="222-contribution">2.2.2. Contribution<a aria-hidden="true" tabindex="-1" href="#222-contribution" class="internal"> §</a></h4>
 <ul>
-<li>따라서 FastLanes 에서는 이런 호환성 문제를 없애기 위해, ISA 종류와 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 크기 모두에 무관한 virtual instruction set 을 새로 정의하여 사용한다.
+<li>따라서 FastLanes 에서는 이런 호환성 문제를 없애기 위해, ISA 종류와 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 크기 모두에 무관한 virtual instruction set 을 새로 정의하여 사용한다.
 <ul>
-<li>즉, 모든 ISA, 그리고 모든 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 크기에서 공통적으로 제공하는 간단한 기능만을 사용하여 FastLanes 를 구현했다는 것.</li>
+<li>즉, 모든 ISA, 그리고 모든 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 크기에서 공통적으로 제공하는 간단한 기능만을 사용하여 FastLanes 를 구현했다는 것.</li>
 <li>이들을 기존의 ISA 를 이용해 구현하는 것은 아주 간단하다.
 <ul>
 <li>그냥 동일한 기능을 하는 <a href="../../../../../../gardens/arch/terms/Intrinsic-Function-(Arch)" class="internal" data-slug="gardens/arch/terms/Intrinsic-Function-(Arch)">intrinsic</a> 을 여러번 호출하면 되기 때문.</li>
@@ -214,8 +214,8 @@
 </li>
 <li>그리고 <code>SHIFT</code> 를 한다는 것은 원하지 않는 bit 들도 이동되기 때문이다.
 <ul>
-<li><code>SHIFT</code> 로 bit 가 이동된다는 것은 어떤 bit 들은 다른 lane 에 할당된다는 것이고, 이건 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> instruction 들에서는 발생하지 않는 것이기 때문이다.</li>
-<li>즉, bit 가 lane 에 걸쳐 이동하는 것은 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 에서는 허용되지 않기 때문.</li>
+<li><code>SHIFT</code> 로 bit 가 이동된다는 것은 어떤 bit 들은 다른 lane 에 할당된다는 것이고, 이건 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> instruction 들에서는 발생하지 않는 것이기 때문이다.</li>
+<li>즉, bit 가 lane 에 걸쳐 이동하는 것은 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 에서는 허용되지 않기 때문.</li>
 <li>따라서 masking 을 통해 원하는 bit 만 골라내 다른 bit 들이 lane 을 넘어가는 일이 없도록 한다.</li>
 </ul>
 </li>
@@ -271,9 +271,9 @@
 <h3 id="23-dealing-with-sequential-data-dependencies">2.3. Dealing with Sequential Data Dependencies<a aria-hidden="true" tabindex="-1" href="#23-dealing-with-sequential-data-dependencies" class="internal"> §</a></h3>
 <h4 id="231-basic-transposition-idea">2.3.1. Basic <em>Transposition</em> idea<a aria-hidden="true" tabindex="-1" href="#231-basic-transposition-idea" class="internal"> §</a></h4>
 <ul>
-<li><a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 를 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 로 처리하기에는 <a href="../../../../../../gardens/arch/terms/Data-Dependence-(Arch)" class="internal" data-slug="gardens/arch/terms/Data-Dependence-(Arch)">Data Dependency</a> 문제가 있다.
+<li><a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 를 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 로 처리하기에는 <a href="../../../../../../gardens/arch/dependence/terms/Data-Dependence-(Arch)" class="internal" data-slug="gardens/arch/dependence/terms/Data-Dependence-(Arch)">Data Dependency</a> 문제가 있다.
 <ul>
-<li>즉, <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 에서는 바로 이전의 값을 알아야 다음 값을 알아낼 수 있는데 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 에서는 바로 이전의 값이 바로 옆의 lane 에 들어가기 때문.</li>
+<li>즉, <a href="../../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a> 에서는 바로 이전의 값을 알아야 다음 값을 알아낼 수 있는데 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 에서는 바로 이전의 값이 바로 옆의 lane 에 들어가기 때문.</li>
 </ul>
 </li>
 <li>아래 그림은 이 문제를 그림으로 보여준 것이다.</li>
@@ -301,13 +301,13 @@
 </ul>
 <p><img src="../../../../../../images/Pasted-image-20240904163133.png" width="auto" height="auto"/></p>
 <ul>
-<li>즉, base 여러개를 각 lane 에 넣고, 그것과 동일한 순서대로 다음에 처리될 값들을 넣으면 인접하지 않은 값들에 dependency 가 생기기 때문에 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 로 처리하는게 가능해진다.</li>
+<li>즉, base 여러개를 각 lane 에 넣고, 그것과 동일한 순서대로 다음에 처리될 값들을 넣으면 인접하지 않은 값들에 dependency 가 생기기 때문에 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 로 처리하는게 가능해진다.</li>
 <li>이 layout 이 바로 <em>Transposition</em> 이다. 즉, 데이터의 위치를 병렬처리하기 좋게 바꾼다는 것.
 <ul>
 <li>이때의 base 값들은 columnar foramt 의 header (아마 metadata) 에 들어가 있다.</li>
 </ul>
 </li>
-<li><a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> register 단위로 보자면, 이렇게 처리된다고 할 수 있다.</li>
+<li><a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> register 단위로 보자면, 이렇게 처리된다고 할 수 있다.</li>
 </ul>
 <p><img src="../../../../../../images/Pasted-image-20240904163717.png" width="auto" height="auto"/></p>
 <ul>
@@ -515,7 +515,7 @@
 <li>하지만 이러한 구현법은 run length 가 짧을 때 decoding 시에 문제가 많다.
 <ul>
 <li>일단 scalar 버전에서는 run length 가 짧아 inner loop 이 금방금방 끝나므로 pipeline branch misprediction 이 많이 뜬다.</li>
-<li>Vectorize RLE 에서는 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> reg 에다가 value 를 전부 채워서 한번에 <code>STORE</code> 하는 식으로 처리되는데, 이 <a href="../../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> reg 크기보다 run length 가 더 길어야 효과가 있다.
+<li>Vectorize RLE 에서는 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> reg 에다가 value 를 전부 채워서 한번에 <code>STORE</code> 하는 식으로 처리되는데, 이 <a href="../../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> reg 크기보다 run length 가 더 길어야 효과가 있다.
 <ul>
 <li>물론 overlapping 한다고 치면 run 개수만큼의 <code>STORE</code> 로 충분하지만, run length 가 짧으면 그만큼 run 개수는 많다는 의미이므로 vectorize 의 큰 이점은 없다고 할 수 있다.</li>
 </ul>

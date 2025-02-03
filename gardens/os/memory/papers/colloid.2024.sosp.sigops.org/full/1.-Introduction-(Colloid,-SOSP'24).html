@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html><head><title>(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (1. Introduction)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (1. Introduction)"/><meta property="og:description" content="본 글은 논문 Tiered Memory Management: Access Latency is the Key! (SOSP 2024) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction (현재 글) 2."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 Tiered Memory Management: Access Latency is the Key! (SOSP 2024) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction (현재 글) 2."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/1.-Introduction-(Colloid,-SOSP'24)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (1. Introduction)</h1><p class="content-meta ">Jan 19, 2025, 10 min read</p><ul class="tags "><li><a href="../../../../../../tags/os" class="internal tag-link">#os</a></li><li><a href="../../../../../../tags/os-memory" class="internal tag-link">#os-memory</a></li><li><a href="../../../../../../tags/paper-review" class="internal tag-link">#paper-review</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="https://dl.acm.org/doi/10.1145/3694715.3695968" class="external">Tiered Memory Management: Access Latency is the Key! (SOSP 2024)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>목차 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/1.-Introduction-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/1.-Introduction-(Colloid,-SOSP'24)">1. Introduction (현재 글)</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)">2. Motivation</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/3.-Colloid-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/3.-Colloid-(Colloid,-SOSP'24)">3. Colloid</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/4.-Colloid-with-Existing-Memory-Tiering-Systems-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/4.-Colloid-with-Existing-Memory-Tiering-Systems-(Colloid,-SOSP'24)">4. Colloid with Existing Memory Tiering Systems</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/5.-Evaluation-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/5.-Evaluation-(Colloid,-SOSP'24)">5. Evaluation</a></li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/6-7.-Related-Work-and-Conclusion-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/6-7.-Related-Work-and-Conclusion-(Colloid,-SOSP'24)">6-7. Related Work and Conclusion</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>NXSECTION </p></div>
+                  
+                </div>
+<ul>
+<li>이후에 등장하는 <code>1.x.</code> section 들은 논문 본문에는 없고 주인장이 임의로 자른것이다.</li>
+</ul>
+</blockquote>
+<h2 id="11-tiered-memory">1.1. Tiered Memory<a aria-hidden="true" tabindex="-1" href="#11-tiered-memory" class="internal"> §</a></h2>
+<ul>
+<li>Memory 의 중요성은 나날이 커지고 있다.
+<ul>
+<li>가령 in-memory DB, graph processing engine, ML framework 들은 모두 이 memory 의 크기 혹은 대역폭에 영향을 받는다.</li>
+<li>그리고 cloud vendor 들에서 가장 큰 비용을 차지하는 것 또한 memory 이다.</li>
+</ul>
+</li>
+<li>하지만 <a href="../../../../../../gardens/arch/drafts/Double-Data-Rate,-DDR-(Arch)" class="internal" data-slug="gardens/arch/drafts/Double-Data-Rate,-DDR-(Arch)">DDR</a> 을 통해 CPU 에 노출되는 DRAM 은 확장성이 부족해 용량과 대역폭을 늘리기는 쉽지 않다.
+<ul>
+<li>“램슬롯” 이 부족해 더이상 메모리를 늘리지 못하는 상황을 생각하면 된다. 그만큼 이 DDR 은 확장성이 가난하다는 것.</li>
+<li>이 문제는 점점 심각해진다: CPU core 개수와 core 당의 concurrent memory request 의 개수는 기술이 발전하며 점점 커지기 때문에, 이 DDR 의 한계점이 bottleneck 이 된다.</li>
+<li>가령 최신의 Intel CPU 들은 memory 대역폭에 비해 몇배나 더 많은 memory traffic 을 만들어낼 수 있다고 한다 (Cascade Lake 는 2.98배, Ice Lake 는 3.31배, Sapphire Rapids 는 4.5배).</li>
+<li>심지어 AMD CPU 는 거의 10배에 가까운 traffic 을 생성해 낼 수 있다 (AMD Genoa 는 9.37 배의 traffic 을 쏟아낼 수 있을 정도로 빠르다).</li>
+</ul>
+</li>
+<li>따라서 이런 문제를 해결하기 위해 <a href="../../../../../../gardens/arch/drafts/Tiered-Memory-Architecture-(Arch)" class="internal" data-slug="gardens/arch/drafts/Tiered-Memory-Architecture-(Arch)">Tiered memory architecture</a> 가 등장하게 된다.
+<ul>
+<li>이것은 이름이 시사하는 것처럼 <a href="../../../../../../gardens/os/memory/terms/Memory-Hierarchy-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Memory-Hierarchy-(Memory)">Memory hierarchy</a> 에서 main memory 계층을 두개로 분리하여 “빠른 메모리” 와 “느린 메모리” 로 구성하는 것이다.</li>
+<li>구체적으로는 기존의 DDR 메모리가 하나의 tier 이고 DDR 이 아닌 방식으로 <a href="../../../../../../gardens/os/io/terms/Direct-Memory-Access,-DMA-(OS)" class="internal" data-slug="gardens/os/io/terms/Direct-Memory-Access,-DMA-(OS)">cache coherent</a> 한 메모리를 다른 방식으로 CPU 에서 접근 가능하게 하는 것이다.</li>
+<li>이 방식에서 요즘 각광을 받고 있는 것이 <a href="../../../../../../gardens/arch/drafts/Compute-Express-Link,-CXL-(Arch)" class="internal" data-slug="gardens/arch/drafts/Compute-Express-Link,-CXL-(Arch)">CXL</a> 이다: 이놈의 경우에는 기존의 메모리를 <a href="../../../../../../gardens/storage/pci/drafts/Peripheral-Component-Interconnect-Express,-PCIe-(PCIe)" class="internal" data-slug="gardens/storage/pci/drafts/Peripheral-Component-Interconnect-Express,-PCIe-(PCIe)">PCIe</a> 로 장착해 CPU 에서 접근 가능하게 해준다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="12-is-fast-memory-really-fast">1.2. Is Fast Memory Really “Fast”<a aria-hidden="true" tabindex="-1" href="#12-is-fast-memory-really-fast" class="internal"> §</a></h2>
+<ul>
+<li>이런 tiered memory architecture 에서는 DDR 에 추가적으로 장착한 메모리의 경우에는 대역폭은 높지만 latency 는 길기 때문에, latency 가 짧은 DDR 와 같이 사용할 때 “어떻게 메모리를 할당해 줄 것인가” 가 성능에 큰 영향을 미치게 된다.
+<ul>
+<li>가령 자주 접근되는 hot page 의 경우에는 latency 가 짧은 쪽에 두는 것이 좋을거자나 그치?</li>
+</ul>
+</li>
+<li>그래서 이 “어떻게” 에 대한 연구가 많이 진행되어 왔는데, 이에 대한 최신의 SOTA 는 <a href="../../../../../../gardens/os/memory/papers/hemem.2021.sosp.sigops.org/HeMem---Scalable-Tiered-Memory-Management-for-Big-Data-Applications-and-Real-NVM-(SOSP'21)" class="internal" data-slug="gardens/os/memory/papers/hemem.2021.sosp.sigops.org/HeMem---Scalable-Tiered-Memory-Management-for-Big-Data-Applications-and-Real-NVM-(SOSP'21)">HeMem</a>, <a href="../../../../../../gardens/os/memory/papers/drafts/(논문)-MEMTIS---Efficient-Memory-Tiering-with-Dynamic-Page-Classification-and-Page-Size-Determination" class="internal" data-slug="gardens/os/memory/papers/drafts/(논문)-MEMTIS---Efficient-Memory-Tiering-with-Dynamic-Page-Classification-and-Page-Size-Determination">MEMTIS</a>, 그리고 <a href="../../../../../../gardens/os/memory/papers/drafts/(논문)-TPP---Transparent-Page-Placement-for-CXL-Enabled-Tiered-Memory" class="internal" data-slug="gardens/os/memory/papers/drafts/(논문)-TPP---Transparent-Page-Placement-for-CXL-Enabled-Tiered-Memory">TPP</a> 이다.</li>
+<li>이 연구들에서 공통적으로 가정하고 있는 것은 “hot page 는 default tier (즉, DDR 메모리) 에 두는 것이 가장 빠를 것이다” 이고, 따라서 hot page 를 최대한 많이 default tier 에 두려고 한다.
+<ul>
+<li>즉, default tier 는 항상 alternative tier 에 비해 빠를 것 (latency 가 작을 것) 이라는 것.</li>
+</ul>
+</li>
+<li>하지만 본 논문에서는 이 가정을 깨는 것에서 부터 시작한다: memory request 가 동시다발적으로 많이 날라가는 경우에는, default tier 의 latency 는 alternative tier 에 비해 커질 수 있다는 것이다.
+<ul>
+<li>심지어 bandwidth 가 아직 많이 남았음에도 이런 현상이 관측될 수 있다.</li>
+<li>이런 현상을 논문에서는 <em>Memory Interconnect Contention</em> 이라고 부른다. 즉, CPU-memory 사이의 datapath 에 대한 contention 이라는 것.</li>
+<li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)" class="internal" data-slug="gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)">Section 2</a> 에서 이에 대한 실험의 결과가 나오는데, 이러한 <em>Memory Interconnect Contention</em> 상황에서는 default tier 의 latency 는 기존의 5배까지 치솟을 수 있고, CXL 와 비교하면 이 latency 는 CXL 보다 2.5 배나 더 크다고 한다.</li>
+<li>따라서 기존의 연구들이 공통적으로 깔고 있던 가정이 깨지게 되었으므로, 이 상황 속에서는 기존의 연구들의 성능 또한 가난하게 나오게 된다: 구체적으로는, optimal 한 성능에 비해 2.3 배나 낮게 나온다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="13-colloid">1.3. Colloid<a aria-hidden="true" tabindex="-1" href="#13-colloid" class="internal"> §</a></h2>
+<ul>
+<li>본 논문에서 제시한 system 의 이름은 <em>Colloid</em> 로, 이름처럼 default tier 와 alternative tier 가 잘 섞일 수 있게 해준다.
+<ul>
+<li><em>Colloid</em> 에서는 “Balancing access latency” 라는 하나의 원칙에 따라 모든 memory placement 가 결정된다.</li>
+<li>즉, latency 가 작은 tier 에 memory page 를 배치하면 이 tier 의 latency 는 올라가고 반대로 기존에는 latency 가 높았던 tier 의 latency 는 작아지게 된다는 것.</li>
+<li>이것은 CPU 가 보낼 수 있는 memory request 의 양은 한정되어있기 때문이다.</li>
+<li>한정된 traffic 이 들어오는 상황에서, alternative tier 로 가는 traffic 을 default tier 로 보내게 된다면 default tier 에 더 많은 traffic 이 들어오기 때문에 latency 는 늘어나지만 alternative tier 에 들오는 traffic 은 줄어들어 이놈의 latency 도 줄어든다.</li>
+<li>결과적으로는 average latency 는 작아지게 되고, default tier 와 alternative tier 의 latency 가 같아지는 지점이 최소가 된다.</li>
+</ul>
+</li>
+<li>이 원칙 하나로 memory placement 를 조절하는 것만으로도 많은 것이 고려된다고 한다.
+<ul>
+<li>일단 각 tier 의 기본 latency (unloaded latency) 가 자연스럽게 고려된다. 두 tier 가 모두 unloaded 인 상황에서는, default tier 가 latency 가 더 낮을 것이기 때문에 여기에 hot page 들이 배치된다.</li>
+<li>또한, 위에서 말한 <em>Memory Interconnect Contention</em> 상황 또한 커버가 된다. 간단하게 말하면 이 상황에서는 default tier latency 가 alternative tier latency 보다 클 수도, 작을 수도 있기 때문에, 이때에는 더 작은 latency 를 가지는 tier 에 배치하면 되는 것.</li>
+</ul>
+</li>
+<li>이러한 system 을 위해서는 두 가지가 필요할 것이다: (1) 어떻게 각 tier 의 access latency 를 측정할 것이냐. (2) 이렇게 측정한 latency 로 어떻게 memory placement 를 수행할 것이냐.
+<ul>
+<li>따라서 <em>Colloid</em> 에서는 이 두가지에 대한 해결책을 제시한다.</li>
+<li>우선 (1) 을 위해 대부분의 최신 server 들에 탑재되는 HW 로 per-tier queue occupancy 와 request arrival rate 를 알아내고, <em>Little’s law</em> (나중에 설명함) 에 따라 이것으로 access latency 를 계산하는 방법을 제시한다.</li>
+<li>그리고 (2) 를 위해 위에서 계산한 access latency 와 추가적인 per-page access tracking information 으로 memory page placement algorithm 을 제시한다.</li>
+</ul>
+</li>
+<li><em>Colloid</em> 는 지금까지 등장한 DDR, CXL 등과 같은 memory architecture 들과 잘 호환되고, 기존의 memory placement 기법 (가령 hugepage 등) 과도 잘 호환된다고 한다.</li>
+<li>이를 보이기 위해 본 논문에서는 <em>Colloid</em> 를 HeMem, MEMTIS, TPP 와 결합하여 구현하고, 그에 대한 실험 결과를 공개한다.</li>
+<li>또한 <em>Memory Interconnect Contention</em> 및 core count, object size 등과 같은 다양한 실험조건들을 변화시키며 실험을 진행하였고, 이러한 상황 속에서도 <em>Colloid</em> 가 near-optimal 한 성능을 보여준다는 것을 증명한다.</li>
+<li>마지막으로, <em>Colloid</em> 의 반응속도에 대한 실험도 하여 workload 혹은 <em>Memory Interconnect Contention</em> 이 변화되었을 때도 민첩하게 그에 따라 대응하는 것 또한 증명한다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#11-tiered-memory" data-for="11-tiered-memory">1.1. Tiered Memory</a></li><li class="depth-0"><a href="#12-is-fast-memory-really-fast" data-for="12-is-fast-memory-really-fast">1.2. Is Fast Memory Really &quot;Fast&quot;</a></li><li class="depth-0"><a href="#13-colloid" data-for="13-colloid">1.3. Colloid</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/Tiered-Memory-Management---Access-Latency-is-the-Key!-(SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key! (SOSP'24)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/1.-Introduction-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (1. Introduction)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/2.-Motivation-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (2. Motivation)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/3.-Colloid-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (3. Colloid)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/4.-Colloid-with-Existing-Memory-Tiering-Systems-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (4. Colloid with existing memory tiering systems)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/5.-Evaluation-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (5. Evaluation)</a></li><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/6-7.-Related-Work-and-Conclusion-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (6-7. Related Work and Conclusion)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>

@@ -23,7 +23,7 @@
 <li>각 factor 들을 향상시키는 방법은 architecture 에 따라 달라질 수 있다.</li>
 <li>CPU 한테 저 factor 들을 적용해 보자.
 <ul>
-<li>Parallelism: CPU 에는 core 가 여러개고 (multicore) 각각 <a href="../../../../../gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)" class="internal" data-slug="gardens/arch/terms/Scalar,-Superscalar-Processing-(Arch)">ILP</a> 를 지원한다.</li>
+<li>Parallelism: CPU 에는 core 가 여러개고 (multicore) 각각 <a href="../../../../../gardens/arch/ilp/Scalar,-Superscalar-Processing-(Arch)" class="internal" data-slug="gardens/arch/ilp/Scalar,-Superscalar-Processing-(Arch)">ILP</a> 를 지원한다.</li>
 <li>Frequency: 오래걸리는 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-(Arch)">Instruction</a> 을 기준으로 frequency 가 설정되니까 이 오래걸리는 instruction 을 multi-step 으로 나눠서 frequency 를 올리는 방법을 해왔으나,
 <ul>
 <li>Power consumption (발열) 등의 문제로 이것을 올리는 데는 한계가 있다.</li>
@@ -122,7 +122,7 @@
 <li>여기서 Fetch, Decode logic 이 1개라는 것은 <a href="../../../../../gardens/arch/terms/Program-Counter,-PC-(Arch)" class="internal" data-slug="gardens/arch/terms/Program-Counter,-PC-(Arch)">PC</a> 가 1개고, 이 instruction 를 모든 ALU 가 실행한다는 것이다.
 <ul>
 <li>즉, 동일한 instruction 에 데이터만 바꿔서 (각각 ALU 에서 처리될 데이터는 Execution context 에 있겠지) 한번에 저만큼을 쫙쫙 계산하는 것.</li>
-<li>따라서 SIMD 라고 할 수 있는데, NVIDIA 에서는 이 용어 말고 (아무래도 <a href="../../../../../gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 는 보통 CPU <a href="../../../../../gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)" class="internal" data-slug="gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)">ISA</a> 를 의미하니깐) <em>Single Instruction, Multiple Threads</em> (<em>SIMT</em>) 라고 한다.</li>
+<li>따라서 SIMD 라고 할 수 있는데, NVIDIA 에서는 이 용어 말고 (아무래도 <a href="../../../../../gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)" class="internal" data-slug="gardens/arch/ilp/terms/Single-Instruction-Multiple-Data,-SIMD-(Arch)">SIMD</a> 는 보통 CPU <a href="../../../../../gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)" class="internal" data-slug="gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)">ISA</a> 를 의미하니깐) <em>Single Instruction, Multiple Threads</em> (<em>SIMT</em>) 라고 한다.</li>
 <li>여기서 thread 는 너가 생각하는 <a href="../../../../../gardens/os/process/drafts/Thread-(Process)" class="internal" data-slug="gardens/os/process/drafts/Thread-(Process)">Thread</a> 와 비슷하면서 좀 다르다. 이건 바로 뒤에 설명함</li>
 </ul>
 </li>
