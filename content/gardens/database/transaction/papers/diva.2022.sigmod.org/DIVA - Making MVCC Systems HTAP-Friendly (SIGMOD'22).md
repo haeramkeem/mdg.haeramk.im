@@ -7,6 +7,7 @@ aliases:
   - Diva
   - diva
 date: 2024-10-06
+title: "(논문) DIVA: Making MVCC Systems HTAP-Friendly (SIGMOD'22)"
 ---
 > [!info] DIVA 링크
 > - [논문](https://dl.acm.org/doi/10.1145/3514221.3526135)
@@ -34,5 +35,5 @@ date: 2024-10-06
 
 > [!fail] #draft Partial-ready 상태입니다.
 
-- [[1. Introduction (DIVA, SIGMOD 22)|1. Introduction]]
-- [[3. Design Overview of DIVA (DIVA, SIGMOD 22)|3. Design Overview of DIVA]]
+- [[1. Introduction (DIVA, SIGMOD'22)|1. Introduction]]
+- [[3. Design Overview of DIVA (DIVA, SIGMOD'22)|3. Design Overview of DIVA]]
