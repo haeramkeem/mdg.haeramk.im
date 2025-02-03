@@ -30,7 +30,10 @@ title: "(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (
 - `Filter` 은 counter 값을 filtering 하기 위한 filter 를 설정하는 filter register 이다.
 - 각 셀의 16진수 값들은 해당 register 에 대한 주소값이다.
 
-## [colloid_setup()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L168-L239)
+## colloid_setup()
+
+> [!tip] 코드 위치
+> - [colloid_setup()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L168-L239)
 
 - 일단 여기에서 stat 들을 init 하는 것을 확인할 수 있다.
 - 우선 MSR 을 file 로서 open 한다.
@@ -216,7 +219,10 @@ p_lo = 0.0;
 p_hi = 1.0;
 ```
 
-## [sample_cha_ctr()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L152-L166)
+## sample_cha_ctr()
+
+> [!tip] 코드 위치
+> - [sample_cha_ctr()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L152-L166)
 
 - 이 함수에서는 CHA counter 를 읽는 것을 한다.
 
@@ -254,9 +260,12 @@ prev_ctr_tsc[cha][ctr] = cur_ctr_tsc[cha][ctr];
 cur_ctr_tsc[cha][ctr] = rdtscp();
 ```
 
-## [colloid_update_stats()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L241C13-L274)
+## colloid_update_stats()
 
-- 이 함수에서는 [[#[sample_cha_ctr()](https //github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c L152-L166)|sample_cha_ctr()]] 를 호출해 CHA counter 를 읽어오고, (counter 값이 아닌) occupancy 와 insert count 를 계산한다.
+> [!tip] 코드 위치
+> - [colloid_update_stats()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L241C13-L274)
+
+- 이 함수에서는 [[#sample_cha_ctr()]] 를 호출해 CHA counter 를 읽어오고, (counter 값이 아닌) occupancy 와 insert count 를 계산한다.
 - 일단 아래에서 counter value 들을 다 읽어온다.
 	- 여기서 `CHA0` 은 local, `CHA1` 은 remote 이고
 	- `CTR0` 은 occupancy, `CTR1` 은 inserts 이다.
@@ -324,13 +333,19 @@ inserts_remote = (double)cum_inserts;
 smoothed_inserts_remote = COLLOID_EWMA*((double)cum_inserts) + (1-COLLOID_EWMA)*smoothed_inserts_remote;
 ```
 
-## [pebs_init()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L1772-L1875)
+## pebs_init()
 
-- 여기서는 [[Appendix. HeMem Coderef (HeMem, SOSP'21)#[pebs_init()](https //github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c L621-L689)|HeMem 의 pebs_init()]] 와 유사하게, sampling thread 인 [[#[pebs_scan_thread()](https //github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c L296-L439)|pebs_scan_thread()]] 와 migration thread 인 [[#[pebs_policy_thread()](https //github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c L841-L1637)|pebs_policy_thread()]] 를 생성한다.
+> [!tip] 코드 위치
+> - [pebs_init()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L1772-L1875)
 
-## [pebs_scan_thread()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L296-L439)
+- 여기서는 [[Appendix. HeMem Coderef (HeMem, SOSP'21)#pebs_init()|HeMem 의 pebs_init()]] 와 유사하게, sampling thread 인 [[#pebs_scan_thread()]] 와 migration thread 인 [[#pebs_policy_thread()]] 를 생성한다.
 
-- 전체적으로는 [[Appendix. HeMem Coderef (HeMem, SOSP'21)#[pebs_scan_thread](https //github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c L111-L214)|HeMem 의 pebs_scan_thread()]] 에서와 유사하지만, 조금 다른점이 있다.
+## pebs_scan_thread()
+
+> [!tip] 코드 위치
+> - [pebs_scan_thread()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L296-L439)
+
+- 전체적으로는 [[Appendix. HeMem Coderef (HeMem, SOSP'21)#pebs_scan_thread()|HeMem 의 pebs_scan_thread()]] 에서와 유사하지만, 조금 다른점이 있다.
 
 > [!tip] 코드 위치
 > - [src/pebs.c:350-354](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L350-L354)
@@ -345,9 +360,12 @@ if(!page->ring_present){
 
 - 우선 HeMem 에서는 hotness 에 따른 ring 에 page 를 넣은 이후 ring 에서 꺼내며 각 tier 별 hotness list 에 page 를 넣는 식이었다면,
 - Colloid 에서는 histogram bin 을 사용하여 빠르게 원하는 $\Delta p$ 를 찾도록 한다.
-- 따라서 Colloid 에서는 hot, cold ring 이 아닌 `update_ring` 에 page 를 넣고 [[#[pebs_policy_thread()](https //github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c L841-L1637)|pebs_policy_thread()]] 에서 해당 page 를 histogram 에 넣는다.
+- 따라서 Colloid 에서는 hot, cold ring 이 아닌 `update_ring` 에 page 를 넣고 [[#pebs_policy_thread()]] 에서 해당 page 를 histogram 에 넣는다.
 
-## [pebs_policy_thread()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L841-L1637)
+## pebs_policy_thread()
+
+> [!tip] 코드 위치
+> - [pebs_policy_thread()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L841-L1637)
 
 - 이 함수에서는 `update_ring` 을 비우며 page 들을 histogram bin 에 넣고 $\Delta p$ 에 따라 page 들을 migration 한다.
 
@@ -375,7 +393,7 @@ while(!ring_buf_empty(update_ring) && num_ring_reqs < HOT_RING_REQS_THRESHOLD) {
 ```
 
 - 일단 위의 코드가 `update_ring` 을 비우는 곳이다.
-	- `update_ring` 에서 page 를 빼서 [[#[histogram_update()](https //github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c L509-L544)|histogram_update()]] 를 통해 해당 histogram bin 으로 넣어준다.
+	- `update_ring` 에서 page 를 빼서 [[#histogram_update()]] 를 통해 해당 histogram bin 으로 넣어준다.
 
 > [!tip] 코드 위치
 > - [src/pebs.c:1030-1034](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L1030-L1034)
@@ -414,7 +432,7 @@ for(int i = 0; i < MAX_HISTOGRAM_BINS; i++) {
 
 - 그리고 여기서 total access count 를 계산한다.
 	- 각 histogram bin 에는 해당 histogram bin 의 index 와 access count 가 일치하는 page 들이 들어있기 때문에, index 와 bin 의 entry count 를 곱하여 총합하는 것으로 total access count 를 계산할 수 있다.
-	- 다만 [[#[histogram_update()](https //github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c L509-L544)|histogram_update()]] 함수에서 알 수 있다시피, 만약에 access count 가 `MAX_HISTOGRAM_BINS` 를 넘어가게 되면 `MAX_HISTOGRAM_BINS - 1` 로 index 가 산정된다. 따라서 이런 방식은 일부 page 들에 대해 access count 가 누락된다는 점에서 다소 부정확할 수 있다.
+	- 다만 [[#histogram_update()]] 함수에서 알 수 있다시피, 만약에 access count 가 `MAX_HISTOGRAM_BINS` 를 넘어가게 되면 `MAX_HISTOGRAM_BINS - 1` 로 index 가 산정된다. 따라서 이런 방식은 일부 page 들에 대해 access count 가 누락된다는 점에서 다소 부정확할 수 있다.
 		- 이 부분에 대해서는 만약에 "approx. total access count 를 구한다" 로 가정한다면 봐줄 수 있는 부분이니까 넘어가자.
 
 > [!tip] 코드 위치
@@ -638,7 +656,10 @@ target_delta -= best_delta;
 
 - 또한 여러 page 들을 옮기기 떄문에, 한번 page 들을 옮길때 마다 `target_delta` 값을 감소시켜서 옮겨지는 page 들의 access probability 의 총합이 $\Delta p$ 가 되게 한다.
 
-## [histogram_update()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L509-L544)
+## histogram_update()
+
+> [!tip] 코드 위치
+> - [histogram_update()](https://github.com/webglider/hemem/blob/1b442e5758b14c557cfa06bbc93ba6cec0735387/src/pebs.c#L509-L544)
 
 - 이 함수에서는 page 를 access count 에 따라 histogram 에 넣어준다.
 

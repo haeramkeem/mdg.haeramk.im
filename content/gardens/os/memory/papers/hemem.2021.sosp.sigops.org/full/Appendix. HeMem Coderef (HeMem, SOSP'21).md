@@ -11,7 +11,10 @@ title: "(논문) HeMem: Scalable Tiered Memory Management for Big Data Applicati
 
 - HeMem 의 코드를 간략하게 살펴보자.
 
-## [pebs_init()](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L621-L689)
+## pebs_init()
+
+> [!tip] 코드 위치
+> - [pebs_init()](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L621-L689)
 
 - 여기서는 [[Processor Event Based Sampling, PEBS (Intel Arch)|PEBS]] sampling 에 대한 전반적인 init 을 한다.
 	- [src/pebs.c:629-636](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L629-L636) 에서는 PEBS 를 [perf_event_mmap_page](https://github.com/torvalds/linux/blob/2014c95afecee3e76ca4a56956a936e23283f05b/include/uapi/linux/perf_event.h#L577-L753) 라는 kernel 자료구조에 [perf_setup()](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L60-L97) 함수를 이용해 [[Memory-mapped File IO, MMAP (OS)|MMAP]] 하는 과정을 거친다. 즉, 이 메모리 공간을 읽음으로서 PEBS sampling 이 되는 것.
@@ -31,10 +34,13 @@ assert(r == 0);
 ```
 
 - 위 두 함수 중에서
-	- [[#[pebs_scan_thread](https //github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c L111-L214)|pebs_scan_thread()]] 에서는 주기적으로 PEBS sampling 을 수행하고
-	- [[#[pebs_policy_thread](https //github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c L390-L550)|pebs_policy_thread()]] 에서는 주기적으로 sampling 한 결과에 따라 migration 을 진행한다.
+	- [[#pebs_scan_thread()]] 에서는 주기적으로 PEBS sampling 을 수행하고
+	- [[#pebs_policy_thread()]] 에서는 주기적으로 sampling 한 결과에 따라 migration 을 진행한다.
 
-## [pebs_scan_thread](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L111-L214)
+## pebs_scan_thread()
+
+> [!tip] 코드 위치
+> - [pebs_scan_thread()](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L111-L214)
 
 - 여기서는 core 의 개수 (`PEBS_NPROCS`) 와 access type 의 개수 (총 `NPBUFTYPES` 만큼 있고 `DRAMREAD`, `NVMREAD`, `WRITE` 세 종류가 있음) 에 따라 for loop 을 돌며 PEBS sampling 한다.
 - 그리고 각 loop 마다 다음의 작업을 수행한다.
@@ -93,7 +99,7 @@ else if ((page->accesses[WRITE] < HOT_WRITE_THRESHOLD) && (page->accesses[DRAMRE
 - 이 access counter 와 static threshold 를 비교해서 hotness 를 판단한다.
 	- 보면 각 access type 에 대해 threshold 와 비교해 hotness 를 판단하고
 	- 해당 page 가 판단된 hotness 와 다르다면 "request" 를 생성해서 해당 page 의 hotness 를 바꾼다.
-	- 이 request 는 뒤에서 [[#[pebs_policy_thread](https //github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c L390-L550)|pebs_policy_thread()]] 에서 처리된다. 즉, request 를 만들어 놓으면 이 policy thread 가 여기에 있는 page 들을 hotness 에 따른 list 에 넣는다.
+	- 이 request 는 뒤에서 [[#pebs_policy_thread()]] 에서 처리된다. 즉, request 를 만들어 놓으면 이 policy thread 가 여기에 있는 page 들을 hotness 에 따른 list 에 넣는다.
 
 > [!tip] 코드 위치
 > - [src/pebs.c:172-176](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L172-L176)
@@ -109,9 +115,12 @@ if (page->accesses[j] > PEBS_COOLING_THRESHOLD) {
 - 마지막으로 여기서는 access counter 와 `COOLING_THRESHOLD` 를 비교하여 cooling 이 필요한지 판단한다.
 	- 그리고, cooling 이 필요하다면 flag 를 켜서 추후에 cooling 이 진행되도록 한다.
 
-## [pebs_policy_thread](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L390-L550)
+## pebs_policy_thread()
 
-- 이 함수를 요약하자면, [[#[pebs_scan_thread](https //github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c L111-L214)|pebs_scan_thread()]] 에서 hot 이라고 판단한 NVM page 들을 DRAM 으로 옮기는 작업을 한다.
+> [!tip] 코드 위치
+> - [pebs_policy_thread()](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L390-L550)
+
+- 이 함수를 요약하자면, [[#pebs_scan_thread()]] 에서 hot 이라고 판단한 NVM page 들을 DRAM 으로 옮기는 작업을 한다.
 
 > [!tip] 코드 위치
 > - [src/pebs.c:415-460](https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L415-L460)
@@ -131,7 +140,7 @@ while(!ring_buf_empty(hot_ring) && num_ring_reqs < HOT_RING_REQS_THRESHOLD) {
 }
 ```
 
-- 우선 ring buffer 를 쭉 훑으면서 [[#[pebs_scan_thread](https //github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c L111-L214)|pebs_scan_thread()]] 에서의 request 들에 따라 각 page 를 해당 tier 의 hot, cold list 에 추가한다.
+- 우선 ring buffer 를 쭉 훑으면서 [[#pebs_scan_thread()]] 에서의 request 들에 따라 각 page 를 해당 tier 의 hot, cold list 에 추가한다.
 	- 여기서는 `free_ring` 에 있는 free page request 들을 각 tier 의 free page list (`dram_free_list`, `nvm_free_list`) 로 넣어주고
 	- `hot_ring` 에 있는 hot page request 들을 각 tier 의 hot page list (`dram_hot_list`, `nvm_hot_list`) 로 넣어주며
 	- 또한 `cold_ring` 에 있는 cold page request 들을 각 tier 의 cold page list (`dram_cold_list`, `nvm_cold_list`) 로 넣어준다.
