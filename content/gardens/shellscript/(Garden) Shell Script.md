@@ -145,6 +145,10 @@ date: 2024-04-23
 	- [[psql - 설정 확인|설정 확인]]
 - Slurm
 	- [[Slurm - 기본적인 사용법|기본적인 사용법]]
+- `ssh`
+	- [[ssh - Config 파일|Config 파일]]
+	- [[ssh - Keypair 생성하기|Keypair 생성하기]]
+	- [[ssh - Keypair 추가하기|Keypair 추가하기]]
 - `tar`
 	- [[tar - 다운로드 와 압축해제를 동시에|다운로드 와 압축해제를 동시에]]
 	- [[tar - 파일 압축 하기|파일 압축하기]]
