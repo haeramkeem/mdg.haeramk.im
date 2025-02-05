@@ -10,28 +10,10 @@ date: 2025-02-04
 
 ## TL;DR
 
-1. SSH key 를 생성한다.
-	- 아래 명령어의 옵션들은 사실 필요 없긴 하다.
-		- `-t`: 굳이 RSA key 일 필요는 없다.
-		- `-b`: 굳이 2048 bit 일 필요도 없다.
-		- `-C`: 굳이 comment 를 지울 필요도 없다. 근데 `username@hostname` 으로 comment 가 자동으로 붙는게 뵈기 싫어서 지움
-
-```bash
-ssh-keygen -t rsa -b 2048 -C ""
-```
-
-2. SSH config 을 작성한다.
-
-```
-Host ${alias 적당히}
-	HostName ${주소}
-	Port ${포트번호}
-	PreferredAuthentications publickey
-	IdentityFile ${SSH key 경로}
-```
-
+1. SSH key 를 생성한다 ([[ssh - Keypair 생성하기|ssh keypair 생성 가이드]]).
+2. SSH config 을 작성한다 ([[ssh - Config 파일|ssh config 가이드]]).
 3. SSH public key 를 등록한다.
-	- 이건 github 인지 gitlab 인지 등에 따라 다르다. 적당히 개인 설정에서 찾아서 등록하자.
+	- 이건 web dashboard 의 `Preference/SSH Keys` 에서 할 수 있다.
 4. 다음의 명령어로 잘 되는지 확인하자.
 
 ```bash
