@@ -3,6 +3,8 @@ tags:
   - shellscript
   - bash-git
 date: 2025-02-04
+aliases:
+  - GitLab private server 에 SSH key 추가하기
 ---
 > [!info]- 참고한 것들
 > - [GitLab SSH key 가이드](https://docs.gitlab.com/ee/user/ssh.html)

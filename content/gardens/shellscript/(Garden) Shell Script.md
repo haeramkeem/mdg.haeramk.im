@@ -84,6 +84,7 @@ date: 2024-04-23
 	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
 - `git`
 	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
+	- [[git - 기본 editor 를 VIM 으로 바꾸기|기본 editor 를 VIM 으로 바꾸기]]
 	- [[git - 이전 commit 다시 sign 하기|이전 commit 다시 sign 하기]]
 - HAProxy
 	- [[HAProxy - Routing rule 설정하기|Routing rule 설정하기]]

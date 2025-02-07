@@ -3,6 +3,8 @@ tags:
   - shellscript
   - bash-git
 date: 2024-09-02
+aliases:
+  - 이전 commit 다시 sign 하기
 ---
 > [!info]- 참고한 것들
 > - [Medium 블로그](https://medium.com/@aamir.shehzad3346875/how-to-sign-previous-commit-that-have-already-been-pushed-4683a7060e19)
