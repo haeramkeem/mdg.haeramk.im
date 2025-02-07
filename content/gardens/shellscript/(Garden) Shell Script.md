@@ -83,6 +83,7 @@ date: 2024-04-23
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
 	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
 - `git`
+	- [[git - Commit message 바꾸기|Commit message 바꾸기]]
 	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
 	- [[git - 기본 editor 를 VIM 으로 바꾸기|기본 editor 를 VIM 으로 바꾸기]]
 	- [[git - 이전 commit 다시 sign 하기|이전 commit 다시 sign 하기]]
