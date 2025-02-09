@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html><head><title>(논문) HeMem: Scalable Tiered Memory Management for Big Data Applications and Real NVM, SOSP'21 (Code Ref)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) HeMem: Scalable Tiered Memory Management for Big Data Applications and Real NVM, SOSP'21 (Code Ref)"/><meta property="og:description" content="본 글은 논문 HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP&amp;#039;21) 의 코드 를 분석해본 글이다. 개요 § HeMem 의 코드를 간략하게 살펴보자. pebs_init() § 코드 위치 pebs_init() 여기서는 PEBS sampling 에 대한 전반적인 init 을 한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP&amp;#039;21) 의 코드 를 분석해본 글이다. 개요 § HeMem 의 코드를 간략하게 살펴보자. pebs_init() § 코드 위치 pebs_init() 여기서는 PEBS sampling 에 대한 전반적인 init 을 한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/os/memory/papers/hemem.2021.sosp.sigops.org/full/Appendix.-HeMem-Coderef-(HeMem,-SOSP'21)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) HeMem: Scalable Tiered Memory Management for Big Data Applications and Real NVM, SOSP'21 (Code Ref)</h1><p class="content-meta ">Feb 09, 2025, 9 min read</p><ul class="tags "><li><a href="../../../../../../tags/os" class="internal tag-link">#os</a></li><li><a href="../../../../../../tags/os-memory" class="internal tag-link">#os-memory</a></li><li><a href="../../../../../../tags/paper-review" class="internal tag-link">#paper-review</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="../../../../../../gardens/os/memory/papers/hemem.2021.sosp.sigops.org/HeMem---Scalable-Tiered-Memory-Management-for-Big-Data-Applications-and-Real-NVM-(SOSP'21)" class="internal" data-slug="gardens/os/memory/papers/hemem.2021.sosp.sigops.org/HeMem---Scalable-Tiered-Memory-Management-for-Big-Data-Applications-and-Real-NVM-(SOSP'21)">HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)</a> 의 <a href="https://github.com/cuhk-mass/hemem" class="external">코드</a> 를 분석해본 글이다.</p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="개요">개요<a aria-hidden="true" tabindex="-1" href="#개요" class="internal"> §</a></h2>
+<ul>
+<li>HeMem 의 코드를 간략하게 살펴보자.</li>
+</ul>
+<h2 id="pebs_init">pebs_init()<a aria-hidden="true" tabindex="-1" href="#pebs_init" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L621-L689" class="external">pebs_init()</a></li>
+</ul>
+</blockquote>
+<ul>
+<li>여기서는 <a href="../../../../../../gardens/arch/drafts/Processor-Event-Based-Sampling,-PEBS-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Processor-Event-Based-Sampling,-PEBS-(Intel-Arch)">PEBS</a> sampling 에 대한 전반적인 init 을 한다.
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L629-L636" class="external">src/pebs.c:629-636</a> 에서는 PEBS 를 <a href="https://github.com/torvalds/linux/blob/2014c95afecee3e76ca4a56956a936e23283f05b/include/uapi/linux/perf_event.h#L577-L753" class="external">perf_event_mmap_page</a> 라는 kernel 자료구조에 <a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L60-L97" class="external">perf_setup()</a> 함수를 이용해 <a href="../../../../../../gardens/os/io/terms/Memory-mapped-File-IO,-MMAP-(OS)" class="internal" data-slug="gardens/os/io/terms/Memory-mapped-File-IO,-MMAP-(OS)">MMAP</a> 하는 과정을 거친다. 즉, 이 메모리 공간을 읽음으로서 PEBS sampling 이 되는 것.</li>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L638-L667" class="external">src/pebs.c:638-667</a> 에서는 사용할 <a href="../../../../../../gardens/os/process/drafts/Lock-(Process)" class="internal" data-slug="gardens/os/process/drafts/Lock-(Process)">Mutex</a> 들을 초기화한다.</li>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L669-L677" class="external">src/pebs.c:669-677</a> 에서는 사용할 ring buffer 들을 초기화한다.</li>
+</ul>
+</li>
+<li>그리고 아래의 코드에서 PEBS 를 sampling 하고 migration 하는 thread 들을 생성한다.</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L679-L683" class="external">src/pebs.c:679-683</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> r </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">pthread_create</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">scan_thread</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> pebs_scan_thread</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">assert</span><span style="color:var(--shiki-color-text);">(r </span><span style="color:var(--shiki-token-keyword);">==</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">r </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">pthread_create</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">kswapd_thread</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> pebs_policy_thread</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">assert</span><span style="color:var(--shiki-color-text);">(r </span><span style="color:var(--shiki-token-keyword);">==</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">);</span></span></code></pre></div>
+<ul>
+<li>위 두 함수 중에서
+<ul>
+<li><a href="#pebs_scan_thread" class="internal">pebs_scan_thread()</a> 에서는 주기적으로 PEBS sampling 을 수행하고</li>
+<li><a href="#pebs_policy_thread" class="internal">pebs_policy_thread()</a> 에서는 주기적으로 sampling 한 결과에 따라 migration 을 진행한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="pebs_scan_thread">pebs_scan_thread()<a aria-hidden="true" tabindex="-1" href="#pebs_scan_thread" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L111-L214" class="external">pebs_scan_thread()</a></li>
+</ul>
+</blockquote>
+<ul>
+<li>여기서는 core 의 개수 (<code>PEBS_NPROCS</code>) 와 access type 의 개수 (총 <code>NPBUFTYPES</code> 만큼 있고 <code>DRAMREAD</code>, <code>NVMREAD</code>, <code>WRITE</code> 세 종류가 있음) 에 따라 for loop 을 돌며 PEBS sampling 한다.</li>
+<li>그리고 각 loop 마다 다음의 작업을 수행한다.</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L128" class="external">src/pebs.c:128</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">struct</span><span style="color:var(--shiki-color-text);"> perf_event_mmap_page </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);">p </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> perf_page[i][j];</span></span></code></pre></div>
+<ul>
+<li>일단 <code>perf_event_mmap_page</code> 구조체를 통해 mmap 된 PEBS 에 접근하여 sample 을 가져온다.</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L149" class="external">src/pebs.c:149</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">page </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">get_hemem_page</span><span style="color:var(--shiki-color-text);">(pfn);</span></span></code></pre></div>
+<ul>
+<li>그리고 <em>Page Frame Number</em> 를 이용해 <a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/hemem.c#L1220-L1223" class="external">get_hemem_page()</a> 로 HeMem 내부에서 관리하는 hash table 을 찾아 HeMem 이 관리하는 page metadata 를 찾아온다.
+<ul>
+<li>보면 HeMem 에서는 system 의 모든 page 가 아닌 HeMem 에서 관리하는 page 들에 대해서만 tiered memory management 를 수행한다.</li>
+<li>즉, HeMem 이 userspace library 이기 때문에 이놈을 사용하는 client 의 page 들을 관리하는 것.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L152-L153" class="external">src/pebs.c:152-153</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[j]</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">tot_accesses[j]</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">;</span></span></code></pre></div>
+<ul>
+<li>다음에는 access counter 를 증가시켜주고</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L154-L168" class="external">src/pebs.c:154-168</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[WRITE] </span><span style="color:var(--shiki-token-keyword);">>=</span><span style="color:var(--shiki-color-text);"> HOT_WRITE_THRESHOLD) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">!</span><span style="color:var(--shiki-token-constant);">page</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">hot </span><span style="color:var(--shiki-token-keyword);">||</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">!</span><span style="color:var(--shiki-token-constant);">page</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">ring_present) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-function);">make_hot_request(page)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">else</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[DRAMREAD] </span><span style="color:var(--shiki-token-keyword);">+</span><span style="color:var(--shiki-color-text);"> page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[NVMREAD] </span><span style="color:var(--shiki-token-keyword);">>=</span><span style="color:var(--shiki-color-text);"> HOT_READ_THRESHOLD) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">!</span><span style="color:var(--shiki-token-constant);">page</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">hot </span><span style="color:var(--shiki-token-keyword);">||</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">!</span><span style="color:var(--shiki-token-constant);">page</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">ring_present) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-function);">make_hot_request(page)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">else</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> ((page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[WRITE] </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> HOT_WRITE_THRESHOLD) </span><span style="color:var(--shiki-token-keyword);">&amp;&amp;</span><span style="color:var(--shiki-color-text);"> (page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[DRAMREAD] </span><span style="color:var(--shiki-token-keyword);">+</span><span style="color:var(--shiki-color-text);"> page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[NVMREAD] </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> HOT_READ_THRESHOLD)) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-constant);">page</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">hot </span><span style="color:var(--shiki-token-keyword);">||</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">!</span><span style="color:var(--shiki-token-constant);">page</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">ring_present) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-function);">make_cold_request(page)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
+<ul>
+<li>이 access counter 와 static threshold 를 비교해서 hotness 를 판단한다.
+<ul>
+<li>보면 각 access type 에 대해 threshold 와 비교해 hotness 를 판단하고</li>
+<li>해당 page 가 판단된 hotness 와 다르다면 “request” 를 생성해서 해당 page 의 hotness 를 바꾼다.</li>
+<li>이 request 는 뒤에서 <a href="#pebs_policy_thread" class="internal">pebs_policy_thread()</a> 에서 처리된다. 즉, request 를 만들어 놓으면 이 policy thread 가 여기에 있는 page 들을 hotness 에 따른 list 에 넣는다.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L172-L176" class="external">src/pebs.c:172-176</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (page</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[j] </span><span style="color:var(--shiki-token-keyword);">></span><span style="color:var(--shiki-color-text);"> PEBS_COOLING_THRESHOLD) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	global_clock</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	need_cool_dram </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">true</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	need_cool_nvm </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">true</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
+<ul>
+<li>마지막으로 여기서는 access counter 와 <code>COOLING_THRESHOLD</code> 를 비교하여 cooling 이 필요한지 판단한다.
+<ul>
+<li>그리고, cooling 이 필요하다면 flag 를 켜서 추후에 cooling 이 진행되도록 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="pebs_policy_thread">pebs_policy_thread()<a aria-hidden="true" tabindex="-1" href="#pebs_policy_thread" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L390-L550" class="external">pebs_policy_thread()</a></li>
+</ul>
+</blockquote>
+<ul>
+<li>이 함수를 요약하자면, <a href="#pebs_scan_thread" class="internal">pebs_scan_thread()</a> 에서 hot 이라고 판단한 NVM page 들을 DRAM 으로 옮기는 작업을 한다.</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L415-L460" class="external">src/pebs.c:415-460</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">num_ring_reqs </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">while</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">!</span><span style="color:var(--shiki-token-function);">ring_buf_empty</span><span style="color:var(--shiki-color-text);">(hot_ring) </span><span style="color:var(--shiki-token-keyword);">&amp;&amp;</span><span style="color:var(--shiki-color-text);"> num_ring_reqs </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> HOT_RING_REQS_THRESHOLD) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	page </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">struct</span><span style="color:var(--shiki-color-text);"> hemem_page</span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);">)</span><span style="color:var(--shiki-token-function);">ring_buf_get(hot_ring)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (page </span><span style="color:var(--shiki-token-keyword);">==</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">continue</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">update_current_cool_page(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">cur_cool_in_dram</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">cur_cool_in_nvm</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> page)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">page</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">ring_present </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">false</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	num_ring_reqs</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">make_hot(page)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
+<ul>
+<li>우선 ring buffer 를 쭉 훑으면서 <a href="#pebs_scan_thread" class="internal">pebs_scan_thread()</a> 에서의 request 들에 따라 각 page 를 해당 tier 의 hot, cold list 에 추가한다.
+<ul>
+<li>여기서는 <code>free_ring</code> 에 있는 free page request 들을 각 tier 의 free page list (<code>dram_free_list</code>, <code>nvm_free_list</code>) 로 넣어주고</li>
+<li><code>hot_ring</code> 에 있는 hot page request 들을 각 tier 의 hot page list (<code>dram_hot_list</code>, <code>nvm_hot_list</code>) 로 넣어주며</li>
+<li>또한 <code>cold_ring</code> 에 있는 cold page request 들을 각 tier 의 cold page list (<code>dram_cold_list</code>, <code>nvm_cold_list</code>) 로 넣어준다.</li>
+<li>위에 적어놓은 코드는 <code>hot_ring</code> 을 처리하는 코드만 복사해온 것.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L462-L464" class="external">src/pebs.c:462-464</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);">// move each hot NVM page to DRAM</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (migrated_bytes </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">; migrated_bytes </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> PEBS_KSWAPD_MIGRATE_RATE;) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	p </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">dequeue_fifo(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">nvm_hot_list)</span><span style="color:var(--shiki-color-text);">;</span></span></code></pre></div>
+<ul>
+<li>그리고 loop 를 돌며 NVM 의 hot page 들을 DRAM 으로 옮긴다.
+<ul>
+<li>우선 위의 코드에서 보이는 것 처럼 <code>nvm_hot_list</code> 에서 page 를 하나 갖고온다.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L472-L477" class="external">src/pebs.c:472-477</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> ((p</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[WRITE] </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> HOT_WRITE_THRESHOLD) </span><span style="color:var(--shiki-token-keyword);">&amp;&amp;</span><span style="color:var(--shiki-color-text);"> (p</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[DRAMREAD] </span><span style="color:var(--shiki-token-keyword);">+</span><span style="color:var(--shiki-color-text);"> p</span><span style="color:var(--shiki-token-keyword);">-></span><span style="color:var(--shiki-color-text);">accesses[NVMREAD] </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> HOT_READ_THRESHOLD)) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-comment);">// it has been cooled, need to move it into the cold list</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">p</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">hot </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">false</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">enqueue_fifo(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">nvm_cold_list</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> p)</span><span style="color:var(--shiki-color-text);">; </span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">continue</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
+<ul>
+<li>만약 해당 page 가 원래는 hot list 에 있었으나, 이후의 cooling 작업에 의해 cold page 가 된 경우, 위의 코드에 의해 이놈은 다시 <code>nvm_cold_list</code> 로 옮겨진다.</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L480-L481" class="external">src/pebs.c:480-481</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);">// find a free DRAM page</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">np </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">dequeue_fifo</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">dram_free_list);</span></span></code></pre></div>
+<ul>
+<li>만약 그렇지 않고 이놈이 확실히 DRAM 으로 올라가야되는 놈이라면, 위 코드에서처럼 DRAM 에서 free page 를 하나 가져온다.</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L483-L505" class="external">src/pebs.c:483-505</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (np </span><span style="color:var(--shiki-token-keyword);">!=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">assert(</span><span style="color:var(--shiki-token-keyword);">!</span><span style="color:var(--shiki-token-function);">(</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">present))</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">LOG(</span><span style="color:var(--shiki-token-string-expression);">&quot;</span><span style="color:var(--shiki-token-constant);">%lx</span><span style="color:var(--shiki-token-string-expression);">: cold </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);"> -> hot </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">\t slowmem.hot: </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">, slowmem.cold: </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">\t fastmem.hot: </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">, fastmem.cold: </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">\n&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">	</span><span style="color:var(--shiki-token-constant);">p</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">va</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">p</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">devdax_offset</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">devdax_offset</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">nvm_hot_list</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">numentries</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">nvm_cold_list</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">numentries</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">dram_hot_list</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">numentries</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">dram_cold_list</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">numentries)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">	old_offset </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">p</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">devdax_offset;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">pebs_migrate_up(p</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">devdax_offset)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">devdax_offset </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> old_offset;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">in_dram </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">false</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">present </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">false</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">hot </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">false</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">; i </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> NPBUFTYPES; i</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">accesses[i] </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">tot_accesses[i] </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">enqueue_fifo(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">dram_hot_list</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> p)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">enqueue_fifo(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">nvm_free_list</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> np)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">	migrated_bytes </span><span style="color:var(--shiki-token-keyword);">+=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">pt_to_pagesize(</span><span style="color:var(--shiki-token-constant);">p</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">pt)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">break</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
+<ul>
+<li>만약 DRAM 에 free page 가 있으면, 위의 코드에서 이 free page 에 NVM 의 hot page 를 복사하며 migrate 를 진행한다.
+<ul>
+<li>보면 <a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L231-L244" class="external">pebs_migrate_up()</a> 를 통해 page 를 promotion 하고</li>
+<li>Access count 들을 다시 0으로 초기화하며</li>
+<li><code>dram_hot_list</code> 에다가는 migration 한 DRAM page 를 넣고</li>
+<li>NVM 에 있는 해당 page 는 이제 DRAM 으로 promotion 되었으므로 <code>nvm_free_list</code> 에다가 이 NVM page 를 넣는다.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L507-L508" class="external">src/pebs.c:507-508</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);">// no free dram page, try to find a cold dram page to move down</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">cp </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">dequeue_fifo</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">dram_cold_list);</span></span></code></pre></div>
+<ul>
+<li>하지만 DRAM 에 free page 가 없을 경우에는, DRAM 의 cold page 를 하나 NVM 으로 옮긴 다음에 여기에다 NVM 의 hot page 를 채워넣는다.
+<ul>
+<li>따라서 우선 위의 코드에서 보이는 것처럼 <code>dram_cold_list</code> 에서 page 를 하나 가져온 후</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L516-L537" class="external">src/pebs.c:516-537</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);">// find a free nvm page to move the cold dram page to</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">np </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">dequeue_fifo</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">nvm_free_list);</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (np </span><span style="color:var(--shiki-token-keyword);">!=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">NULL</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">assert(</span><span style="color:var(--shiki-token-keyword);">!</span><span style="color:var(--shiki-token-function);">(</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">present))</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">LOG(</span><span style="color:var(--shiki-token-string-expression);">&quot;</span><span style="color:var(--shiki-token-constant);">%lx</span><span style="color:var(--shiki-token-string-expression);">: hot </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);"> -> cold </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">\t slowmem.hot: </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">, slowmem.cold: </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">\t fastmem.hot: </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">, fastmem.cold: </span><span style="color:var(--shiki-token-constant);">%lu</span><span style="color:var(--shiki-token-string-expression);">\n&quot;</span><span style="color:var(--shiki-token-punctuation);">,</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">	</span><span style="color:var(--shiki-token-constant);">cp</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">va</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">cp</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">devdax_offset</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">devdax_offset</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">nvm_hot_list</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">numentries</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">nvm_cold_list</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">numentries</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">dram_hot_list</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">numentries</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">dram_cold_list</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">numentries)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">	old_offset </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">cp</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">devdax_offset;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">pebs_migrate_down(cp</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> </span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-token-function);">devdax_offset)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">devdax_offset </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> old_offset;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">in_dram </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">true</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">present </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">false</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">hot </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">false</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">; i </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> NPBUFTYPES; i</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">accesses[i] </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-constant);">np</span><span style="color:var(--shiki-token-punctuation);">-></span><span style="color:var(--shiki-color-text);">tot_accesses[i] </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">enqueue_fifo(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">nvm_cold_list</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> cp)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">enqueue_fifo(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">dram_free_list</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-token-function);"> np)</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">}</span></span></code></pre></div>
+<ul>
+<li>위 코드에서 알 수 있는 것 처럼 해당 page 를 <a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L216-L229" class="external">pebs_migrate_down()</a> 를 이용해 NVM 으로 옮긴다.</li>
+</ul>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>코드 위치 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L479-L481" class="external">src/pebs.c:479-481</a></li>
+</ul>
+</blockquote>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="c" data-theme="default"><code data-language="c" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (tries </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">; tries </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">2</span><span style="color:var(--shiki-color-text);">; tries</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-comment);">// find a free DRAM page</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	np </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">dequeue_fifo(</span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-token-function);">dram_free_list)</span><span style="color:var(--shiki-color-text);">;</span></span></code></pre></div>
+<ul>
+<li>그리고는 for loop 에 의해 다시 위로 올라가 <a href="https://github.com/cuhk-mass/hemem/blob/03c3a06b80a7cead57fad53433fde34834381ede/src/pebs.c#L231-L244" class="external">pebs_migrate_up()</a> 를 통해 page 를 promotion 한다.
+<ul>
+<li>위의 for loop 을 보면 이 것은 최대 두번 실행된다. 즉, 두번의 try 동안 DRAM 의 free page 를 찾아 promotion 하지 못하면 실패하게 되는 것.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#개요" data-for="개요">개요</a></li><li class="depth-0"><a href="#pebs_init" data-for="pebs_init">pebs_init()</a></li><li class="depth-0"><a href="#pebs_scan_thread" data-for="pebs_scan_thread">pebs_scan_thread()</a></li><li class="depth-0"><a href="#pebs_policy_thread" data-for="pebs_policy_thread">pebs_policy_thread()</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/os/memory/papers/colloid.2024.sosp.sigops.org/full/Appendix.-HeMem-+-Colloid-Coderef-(Colloid,-SOSP'24)" class="internal">(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (Code Ref)</a></li><li><a href="../../../../../../gardens/os/memory/papers/hemem.2021.sosp.sigops.org/HeMem---Scalable-Tiered-Memory-Management-for-Big-Data-Applications-and-Real-NVM-(SOSP'21)" class="internal">(논문) HeMem: Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>

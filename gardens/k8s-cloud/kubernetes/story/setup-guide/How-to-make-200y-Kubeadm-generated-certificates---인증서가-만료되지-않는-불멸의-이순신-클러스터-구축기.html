@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html><head><title>How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기"/><meta property="og:description" content="적고 보니 글이 좀 기네요. 마음의 평정심을 갖고 차근차근 해봅시다. Pain point - 왜 이런짓을? § 기본적으로 Kubeadm 은 CA 인증서는 10년, CA-signed 인증서는 1년 뒤에 만료되도록 설정하여 인증서를 발급한다. 그 이유는 주기적으로 인증서를 재발급하도록 하여 보안 강화 CA-Signed 인증서 만료기간을 1년 이상으로 하는 것은 Security Issue 를 야기할 수 있다고 여기 에서 그랬다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="적고 보니 글이 좀 기네요. 마음의 평정심을 갖고 차근차근 해봅시다. Pain point - 왜 이런짓을? § 기본적으로 Kubeadm 은 CA 인증서는 10년, CA-signed 인증서는 1년 뒤에 만료되도록 설정하여 인증서를 발급한다. 그 이유는 주기적으로 인증서를 재발급하도록 하여 보안 강화 CA-Signed 인증서 만료기간을 1년 이상으로 하는 것은 Security Issue 를 야기할 수 있다고 여기 에서 그랬다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기</h1><p class="content-meta ">Jan 04, 2024, 16 min read</p><ul class="tags "><li><a href="../../../../../tags/kubernetes" class="internal tag-link">#kubernetes</a></li><li><a href="../../../../../tags/kube-setup" class="internal tag-link">#kube-setup</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>적고 보니 글이 좀 기네요. 마음의 평정심을 갖고 차근차근 해봅시다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="pain-point---왜-이런짓을">Pain point - 왜 이런짓을?<a aria-hidden="true" tabindex="-1" href="#pain-point---왜-이런짓을" class="internal"> §</a></h2>
+<ul>
+<li>기본적으로 <a href="https://kubernetes.io/docs/reference/setup-tools/kubeadm" class="external">Kubeadm</a> 은 CA 인증서는 10년, CA-signed 인증서는 1년 뒤에 만료되도록 설정하여 인증서를 발급한다.</li>
+<li>그 이유는
+<ul>
+<li>주기적으로 인증서를 재발급하도록 하여 보안 강화
+<ul>
+<li>CA-Signed 인증서 만료기간을 1년 이상으로 하는 것은 Security Issue 를 야기할 수 있다고 <a href="https://github.com/kubernetes/kubeadm/issues/1505#issuecomment-482798539" class="external">여기</a> 에서 그랬다.</li>
+</ul>
+</li>
+<li>주기적으로 클러스터 버전을 업그레이드 하도록 유도
+<ul>
+<li>Kubeadm 은 클러스터 버전 업그레이드 시에 인증서도 재발급하는 정책으로 <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/#automatic-certificate-renewal" class="external">클러스터 관리자들이 주기적으로 버전을 업그레이드 하여 클러스터 버전을 최신으로 유지시키고 동시에 보안성도 강화</a> 하도록 유도하더라.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>하지만 이것은 폐쇄망 환경일 때 오히려 방해가 되기도 한다.
+<ul>
+<li>높은 보안 수준을 위해 폐쇄망으로 클러스터를 구축했기에 오히려 인증서 재발급을 통한 보안 강화는 굳이? 의 느낌을 준다.</li>
+<li>폐쇄망 환경을 요구하는 보안이 중요한 곳에서는 소프트웨어 보안 심사 등을 버전마다 받는 것이 힘들기 때문에 그냥 한 버전으로 고정시켜 놓기도 한다.
+<ul>
+<li>또한 폐쇄망에서 클러스터 버전을 업그레이드 하는 것은 생각보다 고되다. <code>.deb</code> 등의 패키지 파일, 컨테이너 이미지 파일 등을 전부 다운받아 폐쇄망 환경으로 갖고 들어가 작업해야 하기 때문.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>따라서 나는 이 클러스터를 적어도 내가 살아 있는 한 인증서가 만료되지 않게 하려고 한다.</li>
+</ul>
+<h2 id="kubeadm-인증서-분석">Kubeadm 인증서 분석<a aria-hidden="true" tabindex="-1" href="#kubeadm-인증서-분석" class="internal"> §</a></h2>
+<ul>
+<li>쿠버네티스 Control plane 이 사용하는 인증서에 대한 것은 <a href="../../../../../gardens/k8s-cloud/kubernetes/story/Kubernetes-Control-Plane-TLS-explained---컨트롤-플레인-인증서-톺아보기" class="internal" data-slug="gardens/k8s-cloud/kubernetes/story/Kubernetes-Control-Plane-TLS-explained---컨트롤-플레인-인증서-톺아보기">컨트롤 플레인 인증서 톺아보기 문서</a>를 확인하자.</li>
+<li>요약하면 클러스터가 생성될 때 <code>ca</code>, <code>etcd-ca</code>, <code>front-proxy-ca</code> 가 생성되고 이것들을 이용해 각 Control plane 구성요소들이 사용할 인증서들이 생성되게 된다.</li>
+<li>따라서 기간을 임의로 바꿀 때에도 동일한 순서로 가면 된다
+<ul>
+<li>즉, <code>ca</code>, <code>etcd-ca</code>, <code>front-proxy-ca</code> 를 먼저 생성한 후에, 이것들을 이용해 각 Control plane 구성요소들이 사용할 인증서를 생성하면 된다</li>
+</ul>
+</li>
+</ul>
+<h2 id="step-1-ca-인증서-생성하기">Step 1. CA 인증서 생성하기<a aria-hidden="true" tabindex="-1" href="#step-1-ca-인증서-생성하기" class="internal"> §</a></h2>
+<ul>
+<li>솔직히 CA 인증서 생성하는 것은 Configuration file 만 있으면 명령어 한줄로 끝난다</li>
+</ul>
+<h3 id="ca-인증서-생성하기"><code>ca</code> 인증서 생성하기<a aria-hidden="true" tabindex="-1" href="#ca-인증서-생성하기" class="internal"> §</a></h3>
+<h4 id="tldr">TL;DR!<a aria-hidden="true" tabindex="-1" href="#tldr" class="internal"> §</a></h4>
+<ul>
+<li><code>ca.conf</code> 파일</li>
+</ul>
+<pre><code>[req]
+distinguished_name = cert_dn
+x509_extensions = v3_req
+prompt = no
+
+[cert_dn]
+CN = kubernetes
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment, keyCertSign
+basicConstraints = critical, CA:TRUE
+subjectKeyIdentifier = hash
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.0 = kubernetes
+</code></pre>
+<ul>
+<li><code>ca.conf</code> 로 200년짜리 (<code>73000</code>) 인증서 생성</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">req</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-x509</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-new</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-nodes</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-newkey</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">rsa:2048</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-keyout</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">ca.key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-out</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">ca.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-config</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">ca.conf</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-days</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">73000</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-set_serial</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span></span></code></pre></div>
+<h4 id="그래도-왜-이래-되는지-한번-보고-가야겠지">그래도 왜 이래 되는지 한번 보고 가야겠지?<a aria-hidden="true" tabindex="-1" href="#그래도-왜-이래-되는지-한번-보고-가야겠지" class="internal"> §</a></h4>
+<ul>
+<li>일단 <code>ca</code> 인증서를 openssl 로 한번 확인해보자</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">x509</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-in</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/ca.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-text</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-noout</span></span></code></pre></div>
+<ul>
+<li>그럼 아래와 같은 결과가 나온다</li>
+</ul>
+<pre><code>Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 0 (0x0)
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN = kubernetes
+        Validity
+            Not Before: Jan 00 00:00:00 0000 GMT
+            Not After : Jan 00 00:00:00 0000 GMT
+        Subject: CN = kubernetes
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    ### 뭔가 심오한 알파벳들 ###
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment, Certificate Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier:
+                ### 뭔가 심오한 알파벳들 ###
+            X509v3 Subject Alternative Name:
+                DNS:kubernetes
+    Signature Algorithm: sha256WithRSAEncryption
+        ### 뭔심알 ###
+</code></pre>
+<ul>
+<li>물론 위 항목들을 모조리 파헤치며 알아보면 좋겠지만, 몇가지만 살펴 보며 이 항목들이 어떻게 TL;DR 에 반영되었는지 살펴보자.
+<ul>
+<li>4 번째 줄 - <code>Serial Number: 0 (0x0)</code>
+<ul>
+<li>인증서의 <a href="../../../../../gardens/cybersecurity/PKIX/terms/Serial-Number-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Serial-Number-(PKIX)">시리얼 번호</a> 를 0으로 설정한다는 뜻이다.</li>
+<li><code>openssl</code> 명령어의 <code>-set_serial 0</code> 옵션을 통해 설정할 수 있다.</li>
+</ul>
+</li>
+<li>6 번째 줄 - <code>Issuer: CN = kubernetes</code>
+<ul>
+<li>인증서를 발급해준 기관의 <a href="../../../../../gardens/cybersecurity/PKIX/terms/Distinguished-Name,-DN-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Distinguished-Name,-DN-(PKIX)">CN</a>.</li>
+<li>이것은 별도로 설정하지 않았다.
+<ul>
+<li>인증서 생성시 서명할 CA 인증서를 지정하지 않으면, 스스로 서명한 (Self-signed) 인증서가 생성되기 때문.</li>
+<li>즉, 여기서의 <code>Issuer</code> 는 아래 <code>Subject</code> 항목과 동일한 주체이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>10 번째 줄 - <code>Subject: CN = kubernetes</code>
+<ul>
+<li>인증서 자체에 대한 <a href="../../../../../gardens/cybersecurity/PKIX/terms/Distinguished-Name,-DN-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Distinguished-Name,-DN-(PKIX)">CN</a>.</li>
+<li>이것은 <code>ca.conf</code> 파일의 <code>CN = kubernetes</code> 항목을 통해 설정할 수 있다.</li>
+</ul>
+</li>
+<li>13 번째 줄 - <code>RSA Public-Key: (2048 bit)</code>
+<ul>
+<li>인증서 생성시, 2048 bit 의 RSA 키쌍을 사용한다는 뜻이다.</li>
+<li><code>openssl</code> 명령어의 <code>-newkey rsa:2048</code> 옵션을 통해 설정할 수 있다.</li>
+</ul>
+</li>
+<li>18 번째 줄 - <code>X509v3 Key Usage: critical</code>, 19 번째 줄 - <code>Digital Signature, Key Encipherment, Certificate Sign</code>
+<ul>
+<li>인증서의 <a href="../../../../../gardens/cybersecurity/PKIX/terms/x509v3---Key-Usage,-Extended-Key-Usage,-KU,-EKU-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/x509v3---Key-Usage,-Extended-Key-Usage,-KU,-EKU-(PKIX)">Key Usage</a> 를 명시하는 부분인데, 주목할 것은 지금 우리가 생성하는 인증서가 CA 이기 때문에 저 <a href="../../../../../gardens/cybersecurity/PKIX/terms/x509v3---Key-Usage,-Extended-Key-Usage,-KU,-EKU-(PKIX)#certificate-signing-keycertsign" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/x509v3---Key-Usage,-Extended-Key-Usage,-KU,-EKU-(PKIX)">Certificate Sign</a> 이 반드시 포함되어야 한다는 것이다.</li>
+<li>이것은 <code>ca.conf</code> 파일의 <code>keyUsage = critical, digitalSignature, keyEncipherment, keyCertSign</code> 를 통해 설정할 수 있다.</li>
+</ul>
+</li>
+<li>20 번째 줄 - <code>X509v3 Basic Constraints: critical</code>, 21 번째 줄 - <code>CA:TRUE</code>
+<ul>
+<li>인증서의 <a href="../../../../../gardens/cybersecurity/PKIX/terms/x509v3---Basic-Constraints-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/x509v3---Basic-Constraints-(PKIX)">Basic Constraints</a> 를 명시하는 부분인데, 당연히 CA 인증서이기 때문에 <code>CA:TRUE</code> 로 설정되어 있어야 한다.</li>
+<li>이것은 <code>ca.conf</code> 파일의 <code>basicConstraints = critical, CA:TRUE</code> 부분을 통해 명시할 수 있다.</li>
+</ul>
+</li>
+<li>22 번째 줄 - <code>X509v3 Subject Key Identifier</code>
+<ul>
+<li>인증서의 <a href="../../../../../gardens/cybersecurity/PKIX/draft/Subject-Key-Identifier,-SKID-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/draft/Subject-Key-Identifier,-SKID-(PKIX)">SKID</a> 를 명시하는 부분이다.</li>
+<li>이것은 <code>ca.conf</code> 파일의 <code>subjectKeyIdentifier = hash</code> 항목을 통해 설정할 수 있다.</li>
+</ul>
+</li>
+<li>24 번째 줄 - <code>X509v3 Subject Alternative Name:</code>, 25 번째 줄 - <code>DNS:kubernetes</code>
+<ul>
+<li>인증서에 대한 <a href="../../../../../gardens/cybersecurity/PKIX/terms/Subject-Alternative-Name,-SAN-(PKIX)" class="internal" data-slug="gardens/cybersecurity/PKIX/terms/Subject-Alternative-Name,-SAN-(PKIX)">SAN</a>.</li>
+<li>이것은 <code>ca.conf</code> 파일의 <code>DNS.0 = kubernetes</code> 항목을 통해 설정할 수 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="etcd-ca-인증서-생성하기"><code>etcd-ca</code> 인증서 생성하기<a aria-hidden="true" tabindex="-1" href="#etcd-ca-인증서-생성하기" class="internal"> §</a></h3>
+<ul>
+<li><code>ca</code> 인증서 생성할때처럼 추적해보면 아래와 같은 TL;DR 이 될 거시여</li>
+</ul>
+<h4 id="tldr-1">TL;DR<a aria-hidden="true" tabindex="-1" href="#tldr-1" class="internal"> §</a></h4>
+<ul>
+<li><code>etcd-ca.conf</code> 파일</li>
+</ul>
+<pre><code>[req]
+distinguished_name = cert_dn
+x509_extensions = v3_req
+prompt = no
+
+[cert_dn]
+CN = etcd-ca
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment, keyCertSign
+basicConstraints = critical, CA:TRUE
+subjectKeyIdentifier = hash
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.0 = etcd-ca
+</code></pre>
+<ul>
+<li><code>etcd-ca.conf</code> 로 200년짜리 (<code>73000</code>) 인증서 생성</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">req</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-x509</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-new</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-nodes</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-newkey</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">rsa:2048</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-keyout</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">etcd-ca.key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-out</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">etcd-ca.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-config</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">etcd-ca.conf</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-days</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">73000</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-set_serial</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span></span></code></pre></div>
+<h3 id="front-proxy-ca-인증서-생성하기"><code>front-proxy-ca</code> 인증서 생성하기<a aria-hidden="true" tabindex="-1" href="#front-proxy-ca-인증서-생성하기" class="internal"> §</a></h3>
+<ul>
+<li>마찬가지로,</li>
+</ul>
+<h4 id="tldr-2">TL;DR<a aria-hidden="true" tabindex="-1" href="#tldr-2" class="internal"> §</a></h4>
+<ul>
+<li><code>front-proxy-ca.conf</code> 파일</li>
+</ul>
+<pre><code>[req]
+distinguished_name = cert_dn
+x509_extensions = v3_req
+prompt = no
+
+[cert_dn]
+CN = front-proxy-ca
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment, keyCertSign
+basicConstraints = critical, CA:TRUE
+subjectKeyIdentifier = hash
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.0 = front-proxy-ca
+</code></pre>
+<ul>
+<li><code>front-proxy-ca.conf</code> 로 200년짜리 (<code>73000</code>) 인증서 생성</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">req</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-x509</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-new</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-nodes</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-newkey</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">rsa:2048</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-keyout</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">front-proxy-ca.key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-out</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">front-proxy-ca.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-config</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">front-proxy-ca.conf</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-days</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">73000</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-set_serial</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span></span></code></pre></div>
+<ul>
+<li>여기까지 하면 필요한 CA 인증서들이 모두 생성된다.</li>
+</ul>
+<h2 id="step-2-ca-signed-인증서-생성-준비-하기">Step 2. CA-Signed 인증서 생성 (준비) 하기<a aria-hidden="true" tabindex="-1" href="#step-2-ca-signed-인증서-생성-준비-하기" class="internal"> §</a></h2>
+<ul>
+<li>CA-Signed 인증서를 위와 같은 방법으로 <code>openssl</code> 을 이용해 분석해서 생성할 수도 있지만, 파일 갯수가 많아도 너무 많아서 귀찮다.</li>
+<li>그래서 Kubeadm 코드를 변경하고 직접 빌드해서 원큐에 해결하는 방법을 사용해 보자.</li>
+</ul>
+<h3 id="지피지기-백전백승-원본-코드에는-어떻게-돼있나">지피지기 백전백승: 원본 코드에는 어떻게 돼있나?<a aria-hidden="true" tabindex="-1" href="#지피지기-백전백승-원본-코드에는-어떻게-돼있나" class="internal"> §</a></h3>
+<ul>
+<li>뭐 인자 혹은 환경변수로 기간을 주입해 줄 수 있다면 정말 좋겠지만, 안타깝게도 원본 코드에는 1년이 하드코딩으로 박혀 있다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="go" data-theme="default"><code data-language="go" data-theme="default"><span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-comment);">// CertificateValidity defines the validity for all the signed certificates generated by kubeadm</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	CertificateValidity </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> time.Hour </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">24</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">365</span></span></code></pre></div>
+<blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/master/cmd/kubeadm/app/constants/constants.go#L48-L49" class="external">github://kubernetes/kubernetes/cmd/kubeadm/app/constants/constants.go</a></p>
+</blockquote>
+<ul>
+<li>그래서 저부분을 바꾸고 새로 빌드하면 될 것 같다는 생각이 든다.</li>
+</ul>
+<h3 id="kubeadm-버전-확인">Kubeadm 버전 확인<a aria-hidden="true" tabindex="-1" href="#kubeadm-버전-확인" class="internal"> §</a></h3>
+<ul>
+<li>Kubeadm 버전에 맞는 개발환경을 구성하기 위해, Kubeadm 버전을 확인해 본다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">kubeadm</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">version</span></span></code></pre></div>
+<pre><code>kubeadm version: &amp;version.Info{Major:&quot;1&quot;, Minor:&quot;24&quot;, GitVersion:&quot;v1.24.15&quot;, GitCommit:&quot;2c67202dc0bb96a7a837cbfb8d72e1f34dfc2808&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2023-06-14T09:54:33Z&quot;, GoVersion:&quot;go1.19.10&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+</code></pre>
+<ul>
+<li>그럼 이제 여기에 맞는 개발환경을 구성해 보자.</li>
+</ul>
+<h3 id="개발환경-구성하기">개발환경 구성하기<a aria-hidden="true" tabindex="-1" href="#개발환경-구성하기" class="internal"> §</a></h3>
+<ul>
+<li>Go 설치하고 뭐하고 뭐하고 하는 것은 너무 번거롭고, 로컬 환경의 영향을 너무 많이 받는다.</li>
+<li>그래서 Docker (+ Docker compose) 를 이용해 간단하게 개발환경을 구성해보자.</li>
+<li><code>Dockerfile</code> 은 아래처럼 작성하면 된다:</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="dockerfile" data-theme="default"><code data-language="dockerfile" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">ARG</span><span style="color:var(--shiki-color-text);"> GOVERSION=1.19.10</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-keyword);">FROM</span><span style="color:var(--shiki-color-text);"> golang:${GOVERSION}-alpine</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-keyword);">RUN</span><span style="color:var(--shiki-color-text);"> apk update \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    &amp;&amp; apk add gcc musl-dev vim git \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    &amp;&amp; rm -rf /var/cache/apk</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-keyword);">ENV</span><span style="color:var(--shiki-color-text);"> GOPATH=/go</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">WORKDIR</span><span style="color:var(--shiki-color-text);"> ${GOPATH}/src/k8s.io</span></span></code></pre></div>
+<ul>
+<li>간단하게 설명하자면,
+<ul>
+<li>기반 이미지는 <a href="../../../../../gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기#kubeadm-버전-확인" class="internal" data-slug="gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기">여기</a> 에서 확인한 Go 버전이 <code>1.19.10</code> 이었으니까 동일한 버전을 사용하되, 이미지 사이즈를 줄이기 위해 <a href="https://www.alpinelinux.org/" class="external">Alpine</a> 배포판을 사용했다.</li>
+<li><a href="../../../../../gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기#kubeadm-버전-확인" class="internal" data-slug="gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기">여기</a> 에서 확인한 컴파일러가 <code>gcc</code> 이기 때문에 동일하게 이것을 설치해 주고, 이외에 <code>vim</code>, <code>git</code> 등의 툴을 설치해 준다.</li>
+<li>그리고 Go 개발에 필요한 환경변수와 경로를 지정해주면 일단 끝.</li>
+</ul>
+</li>
+<li>또한 <code>docker-compose.yaml</code> 는 다음과 같이 적어주면 된다:</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="yaml" data-theme="default"><code data-language="yaml" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">services</span><span style="color:var(--shiki-token-keyword);">:</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">  </span><span style="color:var(--shiki-token-keyword);">go-devel</span><span style="color:var(--shiki-token-keyword);">:</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-keyword);">image</span><span style="color:var(--shiki-token-keyword);">:</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">go-devel</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-keyword);">build</span><span style="color:var(--shiki-token-keyword);">:</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">      </span><span style="color:var(--shiki-token-keyword);">context</span><span style="color:var(--shiki-token-keyword);">:</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">.</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">      </span><span style="color:var(--shiki-token-keyword);">dockerfile</span><span style="color:var(--shiki-token-keyword);">:</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">Dockerfile</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-keyword);">platform</span><span style="color:var(--shiki-token-keyword);">:</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">linux/amd64</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-keyword);">command</span><span style="color:var(--shiki-token-keyword);">:</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">sh</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-keyword);">volumes</span><span style="color:var(--shiki-token-keyword);">:</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">      - </span><span style="color:var(--shiki-token-string-expression);">.:/mnt/out</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">    </span><span style="color:var(--shiki-token-keyword);">restart</span><span style="color:var(--shiki-token-keyword);">:</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">'no'</span></span></code></pre></div>
+<ul>
+<li>이것도 간단하게 설명하면,
+<ul>
+<li>빌드한 결과를 컨테이너 밖으로 빼내기 위해 <code>volumes</code> 를 이용해 현재 디렉토리를 컨테이너 안의 <code>/mnt/out</code> 에 마운트 한다.</li>
+<li><code>platform</code> 옵션은 <a href="../../../../../gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기#kubeadm-버전-확인" class="internal" data-slug="gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기">여기</a> 에서 확인한 <code>Platform</code> 값을 사용하면 된다.</li>
+</ul>
+</li>
+<li>그럼 이제 진짜 개발환경으로 진입해 보자.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">docker</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">compose</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">run</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">--rm</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-it</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">go-devel</span></span></code></pre></div>
+<p><img src="../../../../../images/Pasted-image-20231222185444.png" width="auto" height="auto"/></p>
+<ul>
+<li>그 다음, Kubernetes 소스 코드를 클론받는다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">git</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">clone</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">https://github.com/kubernetes/kubernetes.git</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">.</span></span></code></pre></div>
+<p><img src="../../../../../images/Pasted-image-20231222191641.png" width="auto" height="auto"/></p>
+<ul>
+<li>이전의 Kubeadm 버전을 사용하기 위해, <a href="../../../../../gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기#kubeadm-버전-확인" class="internal" data-slug="gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기">여기</a> 에서 확인한 <code>GitCommit</code> 값인 <code>2c67202dc0bb96a7a837cbfb8d72e1f34dfc2808</code> 으로 되돌아 간다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">git</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">reset</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">--hard</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">2</span><span style="color:var(--shiki-token-string);">c67202dc0bb96a7a837cbfb8d72e1f34dfc2808</span></span></code></pre></div>
+<p><img src="../../../../../images/Pasted-image-20231222191732.png" width="auto" height="auto"/></p>
+<ul>
+<li><code>vim</code> 으로 파일을 열어서 수정해 준다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="go" data-theme="default"><code data-language="go" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);">// vim ./cmd/kubeadm/app/constants/constants.go</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);">//	CertificateValidity = time.Hour * 24 * 365</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	CertificateValidity </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> time.Hour </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">24</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">365</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">199</span></span></code></pre></div>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>아래의 명령어로 <code>vim</code> 말고 <code>sed</code> 로 수정해줘도 됩니다.</p></div>
+                  
+                </div>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sed</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-ri</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string-expression);">'s|(.*)CertificateValidity = time.Hour * 24 * 365(.*)|\1CertificateValidity = time.Hour * 24 * 365 * 199\2|g'</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">./cmd/kubeadm/app/constants/constants.go</span></span></code></pre></div>
+</blockquote>
+<ul>
+<li>그 다음 빌드</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">go</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">build</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">./cmd/kubeadm/kubeadm.go</span></span></code></pre></div>
+<ul>
+<li>빌드가 완료됐으면, 바이너리를 마운트된 경로로 이동 (+헷갈리지 않기 위해 이름도 바꿔주자) 한다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">mv</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">./kubeadm</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/mnt/out/kubeadm-custom</span></span></code></pre></div>
+<ul>
+<li>여기까지 왔으면, 필요한 파일들은 모두 준비된 것이다.</li>
+</ul>
+<h2 id="step-3-인증서-적용하기">Step 3. 인증서 적용하기<a aria-hidden="true" tabindex="-1" href="#step-3-인증서-적용하기" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>Control Plane 노드의 설정을 변경하는 것이기에, 중요 데이터는 미리 백업해 두어야 합니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>만일 고가용성을 위해 Control Plane 노드를 여러개로 구성했다면, <a href="https://edykim.com/ko/post/simultaneous-typing-of-all-open-panes-in-tmux/" class="external">tmux 의 터미널 동시입력 기능</a> 등을 이용해 모든 노드에서 동시에 CA 인증서가 변경될 수 있도록 해주세요.</p></div>
+                  
+                </div>
+</blockquote>
+<ul>
+<li>생성한 인증서를 각 위치에 복사해 준다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">cp</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">ca.*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">cp</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">front-proxy-ca.*</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">cp</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">etcd-ca.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/ca.crt</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">cp</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">etcd-ca.key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/etcd/ca.key</span></span></code></pre></div>
+<ul>
+<li>생성한 커스텀 Kubeadm 으로 CA-Signed 인증서들을 생성해 준다.</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">./kubeadm-custrom</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">certs</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">renew</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">all</span></span></code></pre></div>
+<ul>
+<li>이후에는 controlplane component 들을 재시작해준다.</li>
+</ul>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 설명 추가! </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="step-4-kubelet-설정하기">Step 4. Kubelet 설정하기<a aria-hidden="true" tabindex="-1" href="#step-4-kubelet-설정하기" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 설명 추가! </p></div>
+                  
+                </div>
+</blockquote>
+<ul>
+<li>위의 과정이 끝나면, <code>kube-apiserver</code>, <code>etcd</code>, <code>kube-controller-manager</code> 등의 component 들은 다 살아날 것이다.</li>
+<li>근데 각 node 의 kubelet 이 먹통이 된다.
+<ul>
+<li>이것은 kubelet 이 사용하는 인증서의 CA 와 새로 생성한 CA 가 (당연히) 다르기 때문.</li>
+</ul>
+</li>
+<li>따라서 각 노드를 클러스터에서 제외했다가 새로 합류하거나,</li>
+<li>혹은 아래의 방법으로 Kubelet 이 사용할 인증서를 새로 발급해 주면 된다.
+<ul>
+<li>아래의 방법에는 새로 발급한 CA 인증서가 필요하니, 이 인증서를 <code>rsync</code> 같은 걸로 복사해 와서 발급하면 된다.</li>
+</ul>
+</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-comment);">#!/bin/bash</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-comment);"># Create CSR (Certificate Signing Request) config file</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">cat</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">&lt;&lt;</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-color-text);">EOF</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">></span><span style="color:var(--shiki-color-text);"> kubelet-client.cnf</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">[req]</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">distinguished_name = cert_dn</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">x509_extensions = v3_req</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">prompt = no</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-string);">[cert_dn]</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">CN = system:node:</span><span style="color:var(--shiki-token-string-expression);">$(</span><span style="color:var(--shiki-token-function);">hostname</span><span style="color:var(--shiki-token-string-expression);">)</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">O = system:nodes</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-string);">[v3_req]</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">keyUsage = critical, digitalSignature, keyEncipherment</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">extendedKeyUsage = clientAuth</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">basicConstraints = critical, CA:FALSE</span></span>
+<span data-line><span style="color:var(--shiki-token-string);">subjectKeyIdentifier = hash</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">EOF</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-comment);"># Create cert and sign w/ ca cert</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">req</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-new</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-nodes</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-newkey</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">rsa:2048</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-keyout</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client.key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-out</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client.csr</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-config</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client.cnf</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">sudo</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">openssl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">x509</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-req</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-in</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client.csr</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-extensions</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">v3_req</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-extfile</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client.cnf</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-CA</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/ca.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-CAkey</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">/etc/kubernetes/pki/ca.key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-CAcreateserial</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-out</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-days</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">36500</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-sha256</span></span>
+<span data-line><span style="color:var(--shiki-token-function);">cat</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client.crt</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client.key</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">></span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">kubelet-client-</span><span style="color:var(--shiki-token-string-expression);">$(</span><span style="color:var(--shiki-token-function);">date</span><span style="color:var(--shiki-token-string-expression);"> </span><span style="color:var(--shiki-token-string);">+%Y-%m-%d-%H-%M-%S</span><span style="color:var(--shiki-token-string-expression);">)</span><span style="color:var(--shiki-token-string);">.pem</span></span></code></pre></div></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#pain-point---왜-이런짓을" data-for="pain-point---왜-이런짓을">Pain point - 왜 이런짓을?</a></li><li class="depth-0"><a href="#kubeadm-인증서-분석" data-for="kubeadm-인증서-분석">Kubeadm 인증서 분석</a></li><li class="depth-0"><a href="#step-1-ca-인증서-생성하기" data-for="step-1-ca-인증서-생성하기">Step 1. CA 인증서 생성하기</a></li><li class="depth-1"><a href="#ca-인증서-생성하기" data-for="ca-인증서-생성하기">ca 인증서 생성하기</a></li><li class="depth-1"><a href="#etcd-ca-인증서-생성하기" data-for="etcd-ca-인증서-생성하기">etcd-ca 인증서 생성하기</a></li><li class="depth-1"><a href="#front-proxy-ca-인증서-생성하기" data-for="front-proxy-ca-인증서-생성하기">front-proxy-ca 인증서 생성하기</a></li><li class="depth-0"><a href="#step-2-ca-signed-인증서-생성-준비-하기" data-for="step-2-ca-signed-인증서-생성-준비-하기">Step 2. CA-Signed 인증서 생성 (준비) 하기</a></li><li class="depth-1"><a href="#지피지기-백전백승-원본-코드에는-어떻게-돼있나" data-for="지피지기-백전백승-원본-코드에는-어떻게-돼있나">지피지기 백전백승: 원본 코드에는 어떻게 돼있나?</a></li><li class="depth-1"><a href="#kubeadm-버전-확인" data-for="kubeadm-버전-확인">Kubeadm 버전 확인</a></li><li class="depth-1"><a href="#개발환경-구성하기" data-for="개발환경-구성하기">개발환경 구성하기</a></li><li class="depth-0"><a href="#step-3-인증서-적용하기" data-for="step-3-인증서-적용하기">Step 3. 인증서 적용하기</a></li><li class="depth-0"><a href="#step-4-kubelet-설정하기" data-for="step-4-kubelet-설정하기">Step 4. Kubelet 설정하기</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/k8s-cloud/(Garden)-Kubernetes,-Cloud" class="internal">(Garden) Kubernetes, Cloud</a></li><li><a href="../../../../../gardens/k8s-cloud/kubernetes/story/setup-guide/How-to-make-200y-Kubeadm-generated-certificates---인증서가-만료되지-않는-불멸의-이순신-클러스터-구축기" class="internal">How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>
