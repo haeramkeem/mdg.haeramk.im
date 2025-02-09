@@ -44,3 +44,7 @@ date: 2025-02-01
 ## 목차
 
 > [!fail] #draft Partial-ready 상태입니다.
+
+## Appendix
+
+- [[Appendix. HeMem Coderef (HeMem, SOSP'21)|Appendix. HeMem Coderef]]

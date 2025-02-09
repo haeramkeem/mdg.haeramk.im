@@ -23,6 +23,6 @@ date: 2024-07-18
 
 ### 사례로 이해하기
 
-- 떠오르는 대표적인 사례는 [[(Garden) Kubernetes|Kubernetes]] 의 etcd 이다.
+- 떠오르는 대표적인 사례는 [[(Garden) Kubernetes, Cloud|Kubernetes]] 의 etcd 이다.
 	- 이놈은 여러 node 들이 뭐 NFS 로 mount 된 공유 디스크를 사용하는 것이 아니고, 각 node 의 local disk 를 이용해 하나의 DB 를 제공한다.
 	- 즉, 이놈은 사용하는 disk 까지도 별도로 분리되어 있기 때문에 *shared-nothing* 이라고 할 수 있는 것.

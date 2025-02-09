@@ -83,6 +83,9 @@ date: 2024-04-23
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
 	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
 - `git`
+	- [[git - Commit message 바꾸기|Commit message 바꾸기]]
+	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
+	- [[git - 기본 editor 를 VIM 으로 바꾸기|기본 editor 를 VIM 으로 바꾸기]]
 	- [[git - 이전 commit 다시 sign 하기|이전 commit 다시 sign 하기]]
 - HAProxy
 	- [[HAProxy - Routing rule 설정하기|Routing rule 설정하기]]
@@ -144,6 +147,10 @@ date: 2024-04-23
 	- [[psql - 설정 확인|설정 확인]]
 - Slurm
 	- [[Slurm - 기본적인 사용법|기본적인 사용법]]
+- `ssh`
+	- [[ssh - Config 파일|Config 파일]]
+	- [[ssh - Keypair 생성하기|Keypair 생성하기]]
+	- [[ssh - Keypair 추가하기|Keypair 추가하기]]
 - `tar`
 	- [[tar - 다운로드 와 압축해제를 동시에|다운로드 와 압축해제를 동시에]]
 	- [[tar - 파일 압축 하기|파일 압축하기]]

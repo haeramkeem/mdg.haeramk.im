@@ -11,6 +11,8 @@ aliases:
 > [!info] Colloid 링크
 > - [논문](https://dl.acm.org/doi/10.1145/3694715.3695968)
 > - [코드](https://github.com/host-architecture/colloid)
+> - [주인장 논문 발표 영상 (Haeram Kim, Jan 31 2025, SNU)](https://youtu.be/08lyQ_RbiaU?si=OcMGxLX9wJk1O1Pu)
+> - [주인장 논문 발표 자료 (Haeram Kim, Jan 31 2025, SNU)](https://1drv.ms/b/c/12a2aef6bd5b0c74/EX9gccMoyDtLvClMwXX1H8sBYKO-YQLejL-Ya2xofpUIXw?e=SjM7iH)
 
 ## 개요
 
