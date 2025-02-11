@@ -13,7 +13,7 @@ date: 2024-07-18
 - 여기에는 두가지 접근 방법이 있다:
 	- *Procedural*: 이것은 어떤 데이터를 접근하는 것을 "절차" 적으로 명시하는 것을 의미한다.
 		- 이 *Procedural* 한 방법에는 *Relational Algebra* 가 포함된다.
-			- 즉, [[Relational Data Model (Database)|Relational model]] 이 제시하는 high-level language 는 declarative 하지는 않다는 것.
+			- 즉, [[Relational Data Model (Data Model)|Relational model]] 이 제시하는 high-level language 는 declarative 하지는 않다는 것.
 		- 수학에서도 곱하기가 더하기보다 먼저 수행되는 것과 마찬가지의 "순서" 가 존재하는 부류이다.
 	- *Non-procedural (Declarative)*: 이것은 진짜로 데이터를 접근하는 것에 대한 "우리가 받기를 예상하는 결과" 를 명시하는 것이다.
 		- 이 방법에는 *Relational Calculus* 가 있으며

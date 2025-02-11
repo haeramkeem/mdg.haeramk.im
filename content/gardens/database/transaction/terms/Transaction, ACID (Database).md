@@ -33,9 +33,9 @@ aliases:
 
 ### Consistency
 
-- "데이터의 일관성" 은 쉽게 말하면 [[Schema (Database)|schema]] 를 잘 지키는 것으로 생각하면 된다.
+- "데이터의 일관성" 은 쉽게 말하면 [[Schema, Namespace (Data Model)|schema]] 를 잘 지키는 것으로 생각하면 된다.
 - 가령 엑셀로 비유하면,
-	- Column `Student ID` 에는 "현재 재학중인 학생의 학번만을 넣겠다!" 라고 정했다고 해보자. (이게 [[Schema (Database)|schema]] 에 대응된다.)
+	- Column `Student ID` 에는 "현재 재학중인 학생의 학번만을 넣겠다!" 라고 정했다고 해보자. (이게 [[Schema, Namespace (Data Model)|schema]] 에 대응된다.)
 	- 그러면 모든 row 의 해당 column 에는 재학중인 학생의 학번을 넣어야지, `1840-12345` 와 같은 1840년도 입학생이 들어가 있으면 안될 것이다.
 - 이렇게 "정한 규칙을 잘 지키기" 가 consistency 이고, 모든 *transaction* 은 이 consistency 를 깨서는 안된다.
 

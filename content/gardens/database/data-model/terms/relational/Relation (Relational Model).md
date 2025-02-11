@@ -25,11 +25,4 @@ aliases:
 	- 즉, 현실 세계에서 tearz 를 부른 형들은 `name="Wu-Tang Clan"`, `year=1992`, `country="USA"` 라는 특징들을 가지고 있다고 생각할 수 있다.
 	- 이것을 반대로 생각해 보면 이 특징들 사이에는 현실세계의 우탱클랜 하나를 설명해준다는 "관계" 가 있는 것.
 	- 그리고 이 "관계" 들을 모은 것이 Relation, 즉 Table 인 것이다.
-- 그래서 *n-ary relation* 이라는 것은 *table w/ n column* 이라는 말과 같다.
-
-## Tuple, Domain
-
-- 그리고 얘는 그냥 위 table 에서의 한 row 이다.
-- "한 대상의 특징을 나타내는 값들의 집합" 이라고 정의되지만, 그냥 table 에서의 row 라고 이해해도 된다.
-- 하나의 값은 *Domain* 이라고도 불리고, `NULL` 은 (허용되는 한) 모든 attribute 의 domain 이 될 수 있다.
-- *Tuple* 은 *Record*, *Row* 와 동일하다고 생각해도 된다.
+- 그래서 *n-ary relation* 이라는 것은 table w/ n-[[Record (Relational Model)|Column]] 이라는 말과 같다.

@@ -16,7 +16,7 @@ aliases:
 	- 가장 흔한 형태는 [[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 에 쌓여있는 데이터를 사용하는 것이다.
 		- 여기에 있는 데이터를 가져다가, OLAP 에서 사용하기 편한 형태로 변환하여 OLAP 에 넣어 사용하는 것이 일반적이다.
 		- 이때의 "OLAP 에서 사용하기 편한 형태로 변환" 을 해주는 놈을 [[Extract-Transform-Load, ETL (Modern Database)|ETL]] 라고 하며,
-		- [[Relational Data Model (Database)|Relational]] 데이터의 경우에는 row-store 를 column-store 로 변환하는 작업을 해준다. (더 자세한 내용은 [[Extract-Transform-Load, ETL (Modern Database)|ETL]] 문서를 참고하자.)
+		- [[Relational Data Model (Data Model)|Relational]] 데이터의 경우에는 row-store 를 column-store 로 변환하는 작업을 해준다. (더 자세한 내용은 [[Extract-Transform-Load, ETL (Modern Database)|ETL]] 문서를 참고하자.)
 		- 이렇게 Relational-OLTP 에 ETL + OLAP 를 붙여서 사용하는 것을 [[Data Warehouse (Modern Database)|Data Warehouse]] 라고 부른다.
 	- 아니면, 그냥 S3 같은 object storage 에 데이터를 때려넣고, 여기에 OLAP 을 붙일 수도 있다.
 		- 이때 때려넣는 데이터는 structured (relational) 에 제한되지 않고 다양하게 넣을 수도 있다.

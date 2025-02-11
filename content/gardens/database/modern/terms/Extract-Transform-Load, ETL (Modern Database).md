@@ -19,7 +19,7 @@ aliases:
 
 ## Modern OLAP DBMS
 
-- 근데 왜 이런 짓을 할까? [[Relational Data Model (Database)|Relational data]] 의 경우를 생각해 보자.
+- 근데 왜 이런 짓을 할까? [[Relational Data Model (Data Model)|Relational data]] 의 경우를 생각해 보자.
 - 여기에서, 보통은 [[Relation (Relational Model)|tuple]] 단위로 데이터를 저장하게 된다.
 	- 즉, 한 tuple 은 연속된 공간에 저장하게 된다는 것.
 	- 이것을 *row-store* 라고도 한다.

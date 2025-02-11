@@ -15,7 +15,7 @@ aliases:
 
 ## Relational Data Model
 
-- 초기의 [[Database Management System, DBMS (Database)|DBMS]] 의 경우에는 Logical layer (가령 [[Schema (Database)|Schema]] 같은) 와 Physical layer (실제 구현) 간에 너무 coupling 이 심했다고 한다.
+- 초기의 [[Database Management System, DBMS (Database)|DBMS]] 의 경우에는 Logical layer (가령 [[Schema, Namespace (Data Model)|Schema]] 같은) 와 Physical layer (실제 구현) 간에 너무 coupling 이 심했다고 한다.
 	- 그래서 schema 가 변경되면 DBMS 코드를 수정해야 하는 문제가 있었다.
 	- 물론 근데 이것은 인간의 노동력이 컴퓨터보다 더 쌌기 때문에 이런 단순 반복 작업이 가능했던 것.
 - 이것을 본 IBM 의 Ted Codd 란 수학자가 생각해낸 것이:

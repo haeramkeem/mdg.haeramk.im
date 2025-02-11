@@ -11,7 +11,7 @@ date: 2024-08-22
 
 ## "[4차원 속독법](https://www.4dsrs.com/)"
 
-- 생각해 보면 일반적인 [[Relational Data Model (Database)|relational data model]] 은 1차원이라고 할 수 있다.
+- 생각해 보면 일반적인 [[Relational Data Model (Data Model)|relational data model]] 은 1차원이라고 할 수 있다.
 	- 엄연히 table 로 표현될 수 있는데 뭔놈의 1차원이냐.. 라고 할 수 있는데
 	- Attribute 만 보면 1차원이 맞자나?
 - *Multi-Dimensional Data Model* 은 더 많은 "차원" 을 표현하기 위한 [[Data Model (Database)|data model]] 이다.
