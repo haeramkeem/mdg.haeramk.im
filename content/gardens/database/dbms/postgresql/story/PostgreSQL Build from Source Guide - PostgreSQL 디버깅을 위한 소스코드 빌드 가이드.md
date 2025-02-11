@@ -68,7 +68,7 @@ export LD_LIBRARY_PATH=`pwd`/env/lib
 - 그래서 [[디버깅 시작하기 (gdb, lldb)|process 에 gdb 붙이기 가이드]] 에서 말한 것을 이용하면, 다음과 같이 `gdb` 를 붙일 수 있다.
 
 ```bash
-gdb `ps -x | grep postgres | grep idle | awk '{print $1}'`
+gdb -p `ps -x | grep postgres | grep idle | awk '{print $1}'`
 ```
 
 - 다만 idle process 가 없을 수 있다; 평소에는 idle process 를 미리 만들어 놓는데, 한동안 request 가 안들어오면 지워버리는듯
