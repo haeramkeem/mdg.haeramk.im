@@ -4,6 +4,11 @@ tags:
   - data-model
   - relational-model
 date: 2024-07-17
+aliases:
+  - Relational Data Model
+  - Relational Database
+  - Relational Database Management System
+  - RDBMS
 ---
 > [!info]- 참고한 것들
 > - [[01. Relational Model and Algebra|CMU-15445, Intro. to Database Systems]]
@@ -29,3 +34,4 @@ date: 2024-07-17
 	- *Structure*: DB 의 relation 과 내용물 등을 ==정의하기 위한 방법==
 	- *Integrity*: DB 를 일관된 상태로 유지하기 위한 ==Constraint==
 	- *Manipulation*: DB 에 접근하여 조회 및 수정하기 위한 ==API==
+- 또한 이러한 data model 을 제공하는 DBMS 는 *Relational Database Management System* (*RDBMS*) 라고 부른다.

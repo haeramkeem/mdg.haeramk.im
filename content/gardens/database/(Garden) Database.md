@@ -42,6 +42,7 @@ date: 2024-07-29
 	- [[Relational Data Model (Database)|Relational Data Model]]
 		- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
 		- [[Private Key, PK (Relational Model)|Private Key, PK]]
+		- [[Record (Relational Model)|Record]]
 		- [[Relation (Relational Model)|Relation]]
 
 ### Encoding
@@ -71,6 +72,7 @@ date: 2024-07-29
 - 용어집
 	- [[BtrBlocks (Database Format)|BtrBlocks]]
 	- [[4. Nested Columnar Storage (Dremel, VLDB 10)|Definition Level]] (redirect [[(논문) Dremel - Interactive Analysis of Web-Scale Datasets|Dremel]])
+	- [[Partition Attribute Across, PAX (Database Format)|Partition Attribute Across, PAX]]
 	- [[Parquet (Database Format)|Parquet]]
 	- [[4. Nested Columnar Storage (Dremel, VLDB 10)|Repetition Level]] (redirect [[(논문) Dremel - Interactive Analysis of Web-Scale Datasets|Dremel]])
 - 논문들
