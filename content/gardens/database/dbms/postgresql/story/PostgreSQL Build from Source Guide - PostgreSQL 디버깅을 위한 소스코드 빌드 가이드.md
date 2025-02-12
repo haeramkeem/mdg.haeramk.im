@@ -39,6 +39,8 @@ make
 make install
 ```
 
+## Server 시작
+
 - 여기서는 dynamic lib 들이 전부 저 `env/lib` 에 설치된다. 그래서 이 lib path 를 지정해 줘야됨.
 	- 보면 알겠지만 `export` 이기 때문에 shell 을 다시 시작하면 다시 해줘야 한다.
 	- 매번 하는게 귀찮아도 여기서는 debugging 이 목적이니까 일단 해주자.
@@ -47,19 +49,30 @@ make install
 export LD_LIBRARY_PATH=`pwd`/env/lib
 ```
 
-- 그리고 이렇게 하면 server 가 시작된다.
+- 먼저 아래 명령어로 init 을 해주고
 
 ```bash
 ./env/bin/initdb -D ./env/data
+```
+
+- 그리고 이렇게 하면 server 가 시작된다.
+
+```bash
 ./env/bin/pg_ctl -D ./env/data -l logfile start
 ```
 
-- 그리고 이렇게 해서 session 을 열면 된다.
+- Session 을 열때는 아래의 명령어를 사용하면 된다.
 	- 기본적인 username 은 `postgres` 인데, 굳이 입력하지 않아도 된다.
 	- 그리고 기본적인 database name 도 `postgres` 이다. 아래에 `postgres` 가 이거임
 
 ```bash
 ./env/bin/psql postgres
+```
+
+- Server 끌 때는 `stop` 을 해주면 된다.
+
+```bash
+./env/bin/pg_ctl -D ./env/data -l logfile stop
 ```
 
 ## GDB 붙이기

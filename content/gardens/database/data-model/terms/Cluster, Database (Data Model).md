@@ -28,3 +28,7 @@ date: 2025-02-11
 - *Database* 라는 말의 정의는 "현실 세계의 특정 부분을 반영하는 연관된 데이터들이 정리 정돈된 덩어리" 이다.
 	- 즉, Data + structure + real-world aspect 라고 할 수 있는 것.
 - 하나의 *Cluster* 에는 여러 *Database* 가 있을 수 있고, 여기에는 여러개의 [[Schema, Namespace (Data Model)|Schema]] 가 들어갈 수 있다.
+
+### Catalog
+
+- 이 *Database* 는 *Catalog* 로 불리기도 하고, [[Database Management System, DBMS (Database)|DBMS]] 내에서 이것에 대한 metadata 를 관리하는 object 는 *System Catalog* 라고도 불린다.

@@ -163,7 +163,9 @@ date: 2024-07-29
 	- [[PostgreSQL Build from Source Guide - PostgreSQL 디버깅을 위한 소스코드 빌드 가이드|PostgreSQL 디버깅을 위한 소스코드 빌드 가이드]]
 - 용어집
 	- [[Background Writer (PostgreSQL)|Background Writer]]
+	- [[Postgres Server, Postmaster (PostgreSQL)|Postgres Server, Postmaster]]
 	- [[Shared Buffer (PostgreSQL)|Shared Buffer]]
+	- [[Tablespace (PostgreSQL)|Tablespace]]
 
 #### RocksDB
 

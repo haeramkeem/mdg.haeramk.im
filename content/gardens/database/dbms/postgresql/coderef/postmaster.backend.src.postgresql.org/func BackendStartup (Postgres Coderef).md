@@ -3,22 +3,23 @@ tags:
   - database
   - db-postgresql
 aliases:
-  - BackendStartup
+  - BackendStartup()
 date: 2024-11-23
 ---
-> [!info]- 코드 위치 (v16.4)
-> - File path
-> ```
-> src/backend/postmaster/postmaster.c
-> ```
-> - Line: `4116`
-> - Link: [BackendStartup()](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4108-L4230)
-
 ## Overview
 
-- [[Postmaster (Postgres)|Postmaster]] 에서 [[Backend (Postgres)|Backend]] process 를 fork 하는 함수이다.
+- [[Postgres Server, Postmaster (PostgreSQL)|Postmaster]] 에서 [[Backend (Postgres)|Backend]] process 를 fork 하는 함수이다.
 
 ## Line ref
+
+### v16.4
+
+> [!info]- 코드 위치 (v16.4)
+> - Location
+> ```
+> src/backend/postmaster/postmaster.c:4116
+> ```
+> - Link: [BackendStartup()](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4108-L4230)
 
 - [L4121-L4132](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4121-L4132): [[type Backend (Postgres Coderef)|Backend]] 구조체를 생성한다.
 - [L4134-L4163](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4134-L4163): Random cancel key 를 생성하는 등의 [[type Backend (Postgres Coderef)|Backend]] 구조체를 초기화한다.
@@ -33,6 +34,20 @@ date: 2024-11-23
 	- `4211-4214`: Log message 출력
 	- `4216-4222`: `4121` 번째 줄에서 생성한 `Backend` 구조체의 값들을 설정해주고
 	- `4224-4227`: 그 구조체를 array 에 추가한다.
-		- 이것은 모든 [[Backend (Postgres)|Backend process]] 를 [[Postmaster (Postgres)|Postmaster process]] 에서 관리하기 위함이다.
+		- 이것은 모든 [[Backend (Postgres)|Backend process]] 를 [[Postgres Server, Postmaster (PostgreSQL)|Postmaster process]] 에서 관리하기 위함이다.
 		- Postmaster 는 이 주소공간을 통해 문제가 생긴 backend process 를 정리해주는 작업을 하되,
 		- 정상적인 경우에는 이 주소공간을 절대 건드리지 않는다.
+
+### v17.1
+
+> [!warning]- 이 부분은 #draft 상태입니다.
+> - [ ] 내용 정리
+
+> [!info]- 코드 위치 (v17.1)
+> - Location
+> ```
+> src/backend/postmaster/postmaster.c:3544
+> ```
+> - Link: [BackendStartup()](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/postmaster/postmaster.c#L3536-L3630)
+
+- [L3593-L3595](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/postmaster/postmaster.c#L3593-L3595): `v17.1` 에서는 여기서 [[func PostgresMain (Postgres Coderef)|BackendRun()]] 이 아닌 [[func BackendMain (Postgres Coderef)|BackendMain()]] 을 호출해서 [[func PostgresMain (Postgres Coderef)|PostgresMain()]] 으로 들어간다.

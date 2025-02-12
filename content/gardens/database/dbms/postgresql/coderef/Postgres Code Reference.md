@@ -12,17 +12,31 @@ date: 2024-11-21
 
 ### `access`
 
-- Types
-	- [[struct HeapTupleData (Postgres Coderef)|HeapTupleData]]
-	- [[struct HeapTupleHeaderData (Postgres Coderef)|HeapTupleHeaderData]]
+#### `heapam` (Heap Access Method)
+
 - Funcs
 	- [[func heap_beginscan (Postgres Coderef)|heap_beginscan]]
 	- [[func heap_fetch_next_buffer (Postgres Coderef)|heap_fetch_next_buffer]]
 	- [[func heap_getnextslot (Postgres Coderef)|heap_getnextslot]]
 	- [[func heapgettup_pagemode (Postgres Coderef)|heapgettup_pagemode]]
 	- [[func initscan (Postgres Coderef)|initscan]]
+
+#### `htup` (Heap Tuple)
+
+- Types
+	- [[struct HeapTupleData (Postgres Coderef)|HeapTupleData]]
+	- [[struct HeapTupleHeaderData (Postgres Coderef)|HeapTupleHeaderData]]
+
+#### `tableam` (Table Access Method)
+
+- Funcs
 	- [[func table_beginscan (Postgres Coderef)|table_beginscan]]
 	- [[func table_scan_getnextslot (Postgres Coderef)|table_scan_getnextslot]]
+
+#### `tupdesc` (Tuple Descriptor)
+
+- Types
+	- [[struct TupleDesc (Postgres Coderef)|TupleDesc]]
 
 ### `executor`
 
