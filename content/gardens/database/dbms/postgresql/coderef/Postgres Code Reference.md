@@ -37,6 +37,19 @@ date: 2024-11-21
 
 - Types
 	- [[struct TupleDesc (Postgres Coderef)|TupleDesc]]
+- Funcs
+	- [[func CreateTemplateTupleDesc (Postgres Coderef)|CreateTemplateTupleDesc]]
+	- [[func TupleDescInitEntry (Postgres Coderef)|TupleDescInitEntry]]
+
+### `catalog`
+
+- Types
+	- [[struct Form_pg_attribute (Postgres Coderef)|Form_pg_attribute]]
+
+### `commands`
+
+- Funcs
+	- [[func BuildDescForRelation (Postgres Coderef)|BuildDescForRelation]]
 
 ### `executor`
 

@@ -32,4 +32,5 @@ date: 2025-02-12
 - `constr`: Tuple contraint 정보
 	- 이놈에 대해서는 만약 constraint 가 없거나 위에서 말한 대로 query result 같은 on-disk tuple 의 경우에는 `NULL` 로 설정된다.
 - `attrs`: Tuple attribute 정보
-	- 이것은 [[struct FormData_pg_attribute (Postgres Coderef)|FormData_pg_attribute]] 의 배열로 정의되어 각 attribute 에 대한 정보를 저장된다.
+	- 이것은 [[struct Form_pg_attribute (Postgres Coderef)|FormData_pg_attribute]] 의 배열로 정의되어 각 attribute 에 대한 정보를 저장된다.
+	- 이때 `struct` definition 상에서는 fixed-sized array 이나, [[func CreateTemplateTupleDesc (Postgres Coderef)|CreateTemplateTupleDesc()]] 에서 보면 variable-sized 로 할당해주고 있는 것을 알 수 있다.
