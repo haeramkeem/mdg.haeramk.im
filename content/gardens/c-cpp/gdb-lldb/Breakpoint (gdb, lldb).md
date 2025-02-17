@@ -49,3 +49,17 @@ del ${아이디}
 ```sh title="(lldb)"
 breakpoint delete ${아이디}
 ```
+
+### Breakpoint 대상 확인
+
+- `gdb` 에 인식된 파일 목록 확인하기:
+
+```bash
+info sources
+```
+
+- `gdb` 에 인식된 함수 목록 확인하기:
+
+```bash
+info functions
+```
