@@ -30,18 +30,20 @@ date: 2024-07-29
 
 - [[Data Model (Database)|Data Model]]
 - 용어집
-	- [[Data Manipulation Language, DML (Database)|Data Manipulation Language, DML]]
-	- [[Schema (Database)|Schema]]
-	- [[Document Data Model (Database)|Document Data Model]]
-	- [[Multi-Dimensional Data Model (Database)|Multi-Dimensional Data Model]]
+	- [[Cluster, Database (Data Model)|Cluster, Database]]
+	- [[Data Manipulation Language, DML (Data Model)|Data Manipulation Language, DML]]
+	- [[Schema, Namespace (Data Model)|Schema, Namespace]]
+	- [[Document Data Model (Data Model)|Document Data Model]]
+	- [[Multi-Dimensional Data Model (Data Model)|Multi-Dimensional Data Model]]
 		- [[Cube (Multi-dimensional Model)|Cube]]
 		- [[Dimension, Dimension Table (Multi-dimensional Model)|Dimension, Dimension Table]]
 		- [[Measure, Fact Table (Multi-dimensional Model)|Measure, Fact Table]]
 		- [[Snowflake Schema (Multi-dimensional Model)|Snowflake Schema]]
 		- [[Star Schema (Multi-dimensional Model)|Star Schema]]
-	- [[Relational Data Model (Database)|Relational Data Model]]
+	- [[Relational Data Model (Data Model)|Relational Data Model]]
 		- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
 		- [[Private Key, PK (Relational Model)|Private Key, PK]]
+		- [[Record (Relational Model)|Record]]
 		- [[Relation (Relational Model)|Relation]]
 
 ### Encoding
@@ -71,6 +73,7 @@ date: 2024-07-29
 - 용어집
 	- [[BtrBlocks (Database Format)|BtrBlocks]]
 	- [[4. Nested Columnar Storage (Dremel, VLDB 10)|Definition Level]] (redirect [[(논문) Dremel - Interactive Analysis of Web-Scale Datasets|Dremel]])
+	- [[Partition Attribute Across, PAX (Database Format)|Partition Attribute Across, PAX]]
 	- [[Parquet (Database Format)|Parquet]]
 	- [[4. Nested Columnar Storage (Dremel, VLDB 10)|Repetition Level]] (redirect [[(논문) Dremel - Interactive Analysis of Web-Scale Datasets|Dremel]])
 - 논문들
@@ -160,7 +163,9 @@ date: 2024-07-29
 	- [[PostgreSQL Build from Source Guide - PostgreSQL 디버깅을 위한 소스코드 빌드 가이드|PostgreSQL 디버깅을 위한 소스코드 빌드 가이드]]
 - 용어집
 	- [[Background Writer (PostgreSQL)|Background Writer]]
+	- [[Postgres Server, Postmaster (PostgreSQL)|Postgres Server, Postmaster]]
 	- [[Shared Buffer (PostgreSQL)|Shared Buffer]]
+	- [[Tablespace (PostgreSQL)|Tablespace]]
 
 #### RocksDB
 

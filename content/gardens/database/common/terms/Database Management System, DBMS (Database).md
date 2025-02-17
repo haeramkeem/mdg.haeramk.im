@@ -9,10 +9,6 @@ aliases:
 > - [[01. Relational Model and Algebra|CMU-15445, Intro. to Database Systems]]
 > - [MongoDB](https://www.mongodb.com/resources/basics/databases/data-lake-vs-data-warehouse-vs-database)
 
-## Database
-
-- *Database* 라는 말의 정의는 "현실 세계의 특정 부분을 반영하는 연관된 데이터들이 정리 정돈된 덩어리" 이다.
-
 ## Database Management System, DBMS
 
 - [[#Database]] 를 관리하는 소프트웨어를 일컫는다.
@@ -51,5 +47,5 @@ aliases:
 
 - DBMS 는 경장히 general 한 용어이고, 여기에는 많은 분류가 가능하다.
 - [[Data Model (Database)|데이터 모델]] 에 따라서는 다음 정도로 분류해 볼 수 있다:
-	- [[Relational Data Model (Database)|Relational]]: Relational DBMS (RDBMS)
-	- [[Document Data Model (Database)|Document]]: NoSQL
+	- [[Relational Data Model (Data Model)|Relational]]: Relational DBMS (RDBMS)
+	- [[Document Data Model (Data Model)|Document]]: NoSQL

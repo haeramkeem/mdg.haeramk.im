@@ -2,10 +2,9 @@
 tags:
   - database
   - db-format
-  - terms
-  - draft
 aliases:
-  - PAX
+  - N-ary Storage Model
+  - NSM
 ---
 > [!fail]- 본 글은 #draft 상태입니다.
 > - [ ] 내용 정리

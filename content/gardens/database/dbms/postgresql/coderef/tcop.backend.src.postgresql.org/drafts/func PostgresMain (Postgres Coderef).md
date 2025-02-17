@@ -4,8 +4,6 @@ tags:
   - db-postgresql
   - draft
 aliases:
-  - PostgresMain
-  - BackendRun
   - PostgresMain()
   - BackendRun()
 ---

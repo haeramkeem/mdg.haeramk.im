@@ -4,13 +4,18 @@ tags:
   - data-model
   - relational-model
 date: 2024-07-17
+aliases:
+  - Relational Data Model
+  - Relational Database
+  - Relational Database Management System
+  - RDBMS
 ---
 > [!info]- 참고한 것들
 > - [[01. Relational Model and Algebra|CMU-15445, Intro. to Database Systems]]
 
 ## Relational Data Model
 
-- 초기의 [[Database Management System, DBMS (Database)|DBMS]] 의 경우에는 Logical layer (가령 [[Schema (Database)|Schema]] 같은) 와 Physical layer (실제 구현) 간에 너무 coupling 이 심했다고 한다.
+- 초기의 [[Database Management System, DBMS (Database)|DBMS]] 의 경우에는 Logical layer (가령 [[Schema, Namespace (Data Model)|Schema]] 같은) 와 Physical layer (실제 구현) 간에 너무 coupling 이 심했다고 한다.
 	- 그래서 schema 가 변경되면 DBMS 코드를 수정해야 하는 문제가 있었다.
 	- 물론 근데 이것은 인간의 노동력이 컴퓨터보다 더 쌌기 때문에 이런 단순 반복 작업이 가능했던 것.
 - 이것을 본 IBM 의 Ted Codd 란 수학자가 생각해낸 것이:
@@ -29,3 +34,4 @@ date: 2024-07-17
 	- *Structure*: DB 의 relation 과 내용물 등을 ==정의하기 위한 방법==
 	- *Integrity*: DB 를 일관된 상태로 유지하기 위한 ==Constraint==
 	- *Manipulation*: DB 에 접근하여 조회 및 수정하기 위한 ==API==
+- 또한 이러한 data model 을 제공하는 DBMS 는 *Relational Database Management System* (*RDBMS*) 라고 부른다.

@@ -17,7 +17,7 @@ aliases:
 ![[Pasted image 20240822145344.png]]
 > [출처: ThoughtSpot](https://www.thoughtspot.com/data-trends/data-modeling/star-schema-vs-snowflake-schema)
 
-- 위 그림에서 보는 것 처럼, [[Star Schema (Multi-dimensional Model)|star schema]] 의 [[Dimension, Dimension Table (Multi-dimensional Model)|dimension table]] 또한 정규화한 [[Schema (Database)|schema]] 를 (눈꽃을 닮았다고 해서) *Snowflake Schema* 라고 부른다.
+- 위 그림에서 보는 것 처럼, [[Star Schema (Multi-dimensional Model)|star schema]] 의 [[Dimension, Dimension Table (Multi-dimensional Model)|dimension table]] 또한 정규화한 [[Schema, Namespace (Data Model)|schema]] 를 (눈꽃을 닮았다고 해서) *Snowflake Schema* 라고 부른다.
 - 이건 star schema 와 비교했을 때 이런 장단점을 가진다:
 	- 일단 star schema 보다 더 normalize 되어있다는 점에서,
 		- (데이터 중복이 적기 때문에) 더 저장공간을 적게 필요로 하고

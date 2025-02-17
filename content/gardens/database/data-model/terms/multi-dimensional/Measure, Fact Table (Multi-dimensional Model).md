@@ -12,7 +12,7 @@ aliases:
 
 ## Measure, Fact Table
 
-- *Measure* 은 [[Multi-Dimensional Data Model (Database)|Multi-dimensional data model]] 에서 실제 "숫자 값" 을 의미한다.
+- *Measure* 은 [[Multi-Dimensional Data Model (Data Model)|Multi-dimensional data model]] 에서 실제 "숫자 값" 을 의미한다.
 	- 가령 "$35" 와 같은 실제 "값" 들을 의미하는 것.
 - 그리고 얘들이 담기는 테이블을 *Fact Table* 라고 부른다.
 

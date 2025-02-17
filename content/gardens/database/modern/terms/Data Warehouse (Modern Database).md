@@ -8,13 +8,13 @@ date: 2024-07-17
 
 ## 데이터 창고
 
-- 한마디로 말하면, [[Relational Data Model (Database)|Relational data]] 를 위한 [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 시스템이라고 할 수 있다.
+- 한마디로 말하면, [[Relational Data Model (Data Model)|Relational data]] 를 위한 [[On-Line Analytical Processing, OLAP (Modern Database)|OLAP]] 시스템이라고 할 수 있다.
 	- 그래서 이름이 "창고" 인 것: 데이터들이 정리정돈 되어 있기 때문에.
 
 ![[Pasted image 20240708162624.png]]
 
 - 이놈에게는 몇가지 특징이 있다.
-	1) 우선 위에서 말한 대로 데이터는 [[Relational Data Model (Database)|relational data model]] 을 따른다.
+	1) 우선 위에서 말한 대로 데이터는 [[Relational Data Model (Data Model)|relational data model]] 을 따른다.
 	2) 데이터 소스는 [[On-Line Transactional Processing, OLTP (Modern Database)|OLTP]] 이다.
 		- 즉, 어떤 데이터를 *Data Warehouse* 에서 사용하기 위해서는 반드시 OLTP 를 거쳐야 한다.
 	3) *Proprietary data format* 을 가진다.

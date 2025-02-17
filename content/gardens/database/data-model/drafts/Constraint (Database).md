@@ -1,9 +1,9 @@
 ---
 tags:
   - database
-  - db-postgresql
+  - data-model
 aliases:
-  - Postmaster
+  - Constraint
 ---
 > [!fail]- 본 글은 #draft 상태입니다.
 > - [ ] 내용 정리
