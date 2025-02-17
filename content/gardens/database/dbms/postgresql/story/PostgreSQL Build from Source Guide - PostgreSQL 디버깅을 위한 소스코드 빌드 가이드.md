@@ -78,7 +78,7 @@ export LD_LIBRARY_PATH=`pwd`/env/lib
 ## GDB 붙이기
 
 - Postgres 는 thread based 가 아니고 process based 이기 때문에, client request 가 들어오면 idle process 에서 이것을 처리한다.
-- 그래서 [[디버깅 시작하기 (gdb, lldb)|process 에 gdb 붙이기 가이드]] 에서 말한 것을 이용하면, 다음과 같이 `gdb` 를 붙일 수 있다.
+- 그래서 [[gdb - 디버깅 시작하기|process 에 gdb 붙이기 가이드]] 에서 말한 것을 이용하면, 다음과 같이 `gdb` 를 붙일 수 있다.
 
 ```bash
 gdb -p `ps -x | grep postgres | grep idle | awk '{print $1}'`
