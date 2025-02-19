@@ -1,6 +1,6 @@
 ---
 tags:
-  - lldb
+  - gdb
 date: 2024-11-22
 aliases:
   - gdb

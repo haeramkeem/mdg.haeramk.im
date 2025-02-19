@@ -1,6 +1,5 @@
 ---
 tags:
-  - lldb
   - gdb
 date: 2024-12-16
 ---
@@ -12,12 +11,12 @@ date: 2024-12-16
 
 ### Thread 정보 확인
 
-```sh title="(gdb)"
+```bash
 thread
 ```
 
 ### 한 thread 에서만 debugging
 
-```sh title="(gdb)"
+```bash
 set scheduler-locking step
 ```

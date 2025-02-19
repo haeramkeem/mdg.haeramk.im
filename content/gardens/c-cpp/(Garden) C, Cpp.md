@@ -82,13 +82,18 @@ date: 2024-07-29
 		- [[Map 원소 존재여부 검사하기 (C++ STL)|Map 원소 존재여부 검사하기]]
 		- [[Map 원소 추가하기 (C++ STL)|Map 원소 추가하기]]
 
+### GCC, LLVM
+
+- `gcc`
+	- [[gcc - Preprocessing Config 확인하기|Preprocessing Config 확인하기]]
+
 ### GDB, LLDB
 
-- [[Breakpoint (gdb, lldb)|Breakpoint]]
-- [[Print Variable (gdb, lldb)|Print Variable]]
-- [[Running Process (gdb, lldb)|Running Process]]
-- [[Thread (gdb, lldb)|Thread]]
-- [[디버깅 시작하기 (gdb, lldb)|디버깅 시작하기]]
+- [[gdb - Breakpoint 걸기|Breakpoint 걸기]]
+- [[gdb - Variable 값 확인하기|Print Variable 값 확인하기]]
+- [[gdb - Process 진행하기|Running Process 진행하기]]
+- [[gdb - Thread 디버깅하기|Thread 디버깅하기]]
+- [[gdb - 디버깅 시작하기|디버깅 시작하기]]
 
 ### Plugins
 

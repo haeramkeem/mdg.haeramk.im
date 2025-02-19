@@ -1,6 +1,5 @@
 ---
 tags:
-  - lldb
   - gdb
 date: 2024-07-02
 ---
