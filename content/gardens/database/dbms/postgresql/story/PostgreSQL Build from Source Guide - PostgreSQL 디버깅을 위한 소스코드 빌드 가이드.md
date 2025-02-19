@@ -35,7 +35,7 @@ mkdir -pv ./env/data
 - 컴파일, 설치
 
 ```bash
-make
+make -j`nproc`
 make install
 ```
 
