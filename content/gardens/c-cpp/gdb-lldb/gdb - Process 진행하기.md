@@ -4,17 +4,19 @@ tags:
   - gdb
 date: 2024-12-16
 ---
+> [!tip] `lldb` 에도 동일하다.
+
 ## TL;DR
 
 ### Process 시작
 
-```sh title="(gdb,lldb)"
+```bash
 run
 ```
 
 ### 다음 breakpoint 까지 이어서 진행
 
-```sh title="(gdb,lldb)"
+```bash
 continue
 # 혹은
 c
@@ -22,18 +24,18 @@ c
 
 ### Next: 다음줄로 진행
 
-```sh title="(gdb,lldb)"
+```bash
 n
 ```
 
 ### Step: 함수 호출
 
-```sh title="(gdb,lldb)"
+```bash
 s
 ```
 
 ### 함수 Call Stack 확인
 
-```sh title="(gdb)"
+```bash
 backtrace
 ```

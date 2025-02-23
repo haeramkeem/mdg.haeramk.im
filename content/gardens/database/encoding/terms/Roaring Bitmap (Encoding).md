@@ -3,6 +3,8 @@ tags:
   - database
   - db-encoding
 date: 2024-08-06
+aliases:
+  - Roaring Bitmap
 ---
 > [!info]- 참고한 것들
 > - [[2. Background (BtrBlocks, SIGMOD 23)#2.2.7. NULL Storage Using Roaring Bitmaps.|BtrBlocks - Efficient Columnar Compression for Data Lakes, SIGMOD'23]]
@@ -20,7 +22,7 @@ date: 2024-08-06
 > 사진 출처: [Roaring Bitmap 공식 사이트의 logo 를 보시라](https://roaringbitmap.org/)
 
 - [[Bitmap (Encoding)|Bitmap]] 이 정수 집합 연산을 빠르게 해주니까 좋기는 한데, 몇가지 문제점이 있다.
-	1. 집합의 원소가 적으면 (이를 *Sparse* 하다고 한다) 좀 비효율적이다.
+	1. 집합의 원소가 적으면 (이를 *Sparse* 하다고 한다) 좀 비효율적일 수 있다.
 		- 만약 내가 집합에 하나의 정수 8,388,608 ($2^{23}$) 를 추가했다고 해보자.
 		- 이게 집합이 아니라 배열이라면, 그냥 정수 하나만 추가하는 것이기에 4byte 의 공간만을 차지한다.
 		- 하지만, bitmap 에서는 이거 하나를 위해 $2^{23}$ 개의 bit, 즉 1MiB 의 공간이 필요하다.
