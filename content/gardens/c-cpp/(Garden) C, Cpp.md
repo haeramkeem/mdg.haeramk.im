@@ -100,6 +100,8 @@ date: 2024-07-29
 - `ctags`
 	- [[Basic Usage (ctags)|Basic Usage]]
 	- [[Debug Compile (cmake)|Debug Compile]]
+- `gprof`
+	- [[Basic Usage (gprof)|Basic Usage]]
 - `make`, `cmake`
 	- [[Library Configuration (cmake)|Library Configuration]]
 	- [[Macro Setup (make, cmake)|Macro Setup]]
