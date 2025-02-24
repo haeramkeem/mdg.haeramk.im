@@ -103,6 +103,8 @@ date: 2024-07-29
 - `gprof`
 	- [[Basic Usage (gprof)|Basic Usage]]
 - `make`, `cmake`
+	- [[Basic Usage (cmake)|Basic Usage]]
+	- [[Debug Compile (cmake)|Debug Compile]]
 	- [[Library Configuration (cmake)|Library Configuration]]
 	- [[Macro Setup (make, cmake)|Macro Setup]]
 - `valgrind`
