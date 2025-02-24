@@ -25,3 +25,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug ${경로}
 ```sh
 lldb ${경로}
 ```
+
+```sh
+gdb ${경로}
+```
