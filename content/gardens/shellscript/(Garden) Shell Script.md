@@ -145,6 +145,8 @@ date: 2024-04-23
 	- [[psql - Backslash Command 정리|Backslash Command 정리]]
 	- [[psql - 기본 접속 방법|기본 접속 방법]]
 	- [[psql - 설정 확인|설정 확인]]
+- Python
+	- [[(책) 점프 투 파이썬 정리록]]
 - Slurm
 	- [[Slurm - 기본적인 사용법|기본적인 사용법]]
 - `ssh`
