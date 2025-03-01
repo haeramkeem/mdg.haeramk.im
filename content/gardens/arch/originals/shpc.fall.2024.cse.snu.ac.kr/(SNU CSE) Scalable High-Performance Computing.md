@@ -2,7 +2,9 @@
 tags:
   - originals
   - snu-shpc24f
+  - arch
 date: 2024-09-01
+title: (SNU CSE) Scalable High-Performance Computing
 ---
 ## 개요
 
@@ -18,7 +20,7 @@ date: 2024-09-01
 
 ## 목차
 
-> [!fail] #draft 학기 종료 후 모두 업데이트될 예정입니다.
+> [!warning] #draft 일부 내용이 아직 정리되지 않았습니다.
 
 > [!info] `08` 강
 > - 은 ML 기초 내용이라 스킵했습니다.
