@@ -3,6 +3,8 @@ tags:
   - c
   - cmake
 date: 2024-05-07
+aliases:
+  - Instrument Function
 ---
 > [!info]- 참고한 것들
 > - [스댕 - instrument function, dlfcn 예시](https://unix.stackexchange.com/a/386903)

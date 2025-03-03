@@ -11,7 +11,7 @@ aliases:
 date: 2025-02-11
 ---
 > [!info]- 참고한 것들
-> - [[05. Storage (Part 3 - File Format)|서울대 정형수 교수님 데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템 강의 (Fall 2024)]]
+> - [[05. Storage Part 3 - File Format|서울대 정형수 교수님 데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템 강의 (Fall 2024)]]
 
 ## Hybrid Row-Columnar
 

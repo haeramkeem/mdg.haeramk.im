@@ -18,6 +18,11 @@ aliases:
 
 ## 작물들
 
+### Cgroup, Docker
+
+- 스토리
+	- [[간단한 Cgroup 사용법]]
+
 ### Kubernetes
 
 - 오리지널 시리즈
@@ -27,6 +32,7 @@ aliases:
 - 용어집
 	- [[Finalizer (Kubernetes)|Finalizer]]
 - 스토리
+	- [[Kube-proxy - iptables vs ipvs mode performance comparison]]
 	- [[Kubeconfig 파일로 Kube apiserver 에 직접 cURL 찔러보기]]
 	- [[Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기|컨트롤 플레인 인증서 톺아보기]]
 	- [[Security model in etcd - etcd 에서 사용되는 인증서들|etcd 에서 사용되는 인증서들]]

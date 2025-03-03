@@ -30,11 +30,9 @@ aliases:
 - [[(Garden) Network, Protocol|네트워크]]
 - [[(Garden) Operating Systems, Linux|운영체제]]
 - [[(Garden) Programming Language, Compiler|프로그래밍 언어, 컴파일러]]
-- [[(Garden) Python|파이썬]]
 - [[(Garden) Shell Script|쉘스크립트]]
 - [[(Garden) Storage|스토리지]]
-- [[(Garden) Software Engineering|소프트웨어 공학]]
-- [[(Garden) Web|웹개발]]
+- [[(Garden) Etc.|기타]]
 
 그리고 저는 정원일 혹은 농사일 둘 다와 무관한 [이런걸로](https://www.linkedin.com/in/haeram-kim-277404220) 먹고사는 사람입니다.
 
