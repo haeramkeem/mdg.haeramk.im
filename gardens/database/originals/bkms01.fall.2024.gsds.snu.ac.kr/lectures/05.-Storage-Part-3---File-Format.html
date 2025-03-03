@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html><head><title>5. Storage Part 3 - File Format (SNU GSDS BKMS-01)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="5. Storage Part 3 - File Format (SNU GSDS BKMS-01)"/><meta property="og:description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Checkin (Revisit Storage part 2) § Index-organized storage B-tree index 를 위해 sorting 하여 page 단위로 데이터를 저장하는 방식 Log-structured storage Index-organized storage 에서의 IO amp, fragmentation, random IO 문제를 해결하기 위해 update 를 delta insert 로 바꾸어 sequential IO 를 하는 방식 이제 workload 에 따라 필요한 net data 의 특징이 다르고, 해당 data 특성에 맞게 IO amp 를 더욱 줄이고자 하는 column store 에 대해 배워보자."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&amp;quot; 강의를 필기한 내용입니다. 목차 Checkin (Revisit Storage part 2) § Index-organized storage B-tree index 를 위해 sorting 하여 page 단위로 데이터를 저장하는 방식 Log-structured storage Index-organized storage 에서의 IO amp, fragmentation, random IO 문제를 해결하기 위해 update 를 delta insert 로 바꾸어 sequential IO 를 하는 방식 이제 workload 에 따라 필요한 net data 의 특징이 다르고, 해당 data 특성에 맞게 IO amp 를 더욱 줄이고자 하는 column store 에 대해 배워보자."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/lectures/05.-Storage-Part-3---File-Format"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">5. Storage Part 3 - File Format (SNU GSDS BKMS-01)</h1><p class="content-meta ">Sep 18, 2024, 7 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-bkms24f" class="internal tag-link">#snu-bkms24f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 데이터사이언스대학원 정형수 교수님의 &quot;데이터사이언스 응용을 위한 빅데이터 및 지식 관리 시스템&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal" data-slug="gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="checkin-revisit-storage-part-2">Checkin (Revisit Storage part 2)<a aria-hidden="true" tabindex="-1" href="#checkin-revisit-storage-part-2" class="internal"> §</a></h2>
+<ul>
+<li>Index-organized storage
+<ul>
+<li>B-tree index 를 위해 sorting 하여 page 단위로 데이터를 저장하는 방식</li>
+</ul>
+</li>
+<li>Log-structured storage
+<ul>
+<li>Index-organized storage 에서의 IO amp, fragmentation, random IO 문제를 해결하기 위해 update 를 delta insert 로 바꾸어 sequential IO 를 하는 방식</li>
+</ul>
+</li>
+<li>이제 workload 에 따라 필요한 net data 의 특징이 다르고, 해당 data 특성에 맞게 IO amp 를 더욱 줄이고자 하는 column store 에 대해 배워보자.</li>
+</ul>
+<h2 id="database-workloads">Database workloads<a aria-hidden="true" tabindex="-1" href="#database-workloads" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241021191023.png" width="auto" height="auto"/></p>
+<ul>
+<li>OLTP (On-Line Transaction Processing): 값을 “변경” 하는 것이 주된 목적인 workload
+<ul>
+<li>이놈은 적은 데이터를 조회하며
+<ul>
+<li>여기서 “적은 데이터” 는 “적은 수의 tuple” 로 생각하면 된다.</li>
+</ul>
+</li>
+<li>빠른 성능과 ACID 를 요구하고</li>
+<li>간단한 형태의 INSERT, UPDATE, DELETE query 가 많다.
+<ul>
+<li>가령 아래와 같은 애들</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241021191245.png" width="auto" height="auto"/></p>
+<ul>
+<li>OLAP (On-Line Analytical Processing): 많은 양의 데이터를 “분석” 하는 것이 목적인 workload
+<ul>
+<li>이놈은 많은 데이터를 읽어들여 그것을 aggregate 한다.
+<ul>
+<li>여기서 “많은 데이터” 는 “적은 수의 column 에 대한 table 전체 데이터” 로 생각하면 된다.</li>
+</ul>
+</li>
+<li>복잡한 형태의 SFW (SELECT FROM WHERE) query 가 사용된다.
+<ul>
+<li>가령 아래와 같은 query 들</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241021191256.png" width="auto" height="auto"/></p>
+<ul>
+<li>HTAP (Hybrid Transaction + Analytical Processing): OLTP + OLAP</li>
+<li>OLTP 와 OLAP 각각의 query 가 요구하는 데이터는 정리하자면
+<ul>
+<li>OLTP 는 적은 수의 tuple 전체</li>
+<li>OLAP 는 적은 수의 column 에 대한 table 전체</li>
+<li>가 된다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="storage-models">Storage models<a aria-hidden="true" tabindex="-1" href="#storage-models" class="internal"> §</a></h2>
+<ul>
+<li>Relational model 은 데이터를 기술하기 위한 high-level abstraction 일 뿐이고, 실제로 그것을 어떻게 physical 하게 저장할지는 storage (disk) manager 가 해야 한다.
+<ul>
+<li>이 “어떻게 저장?” 이 storage model 인 것.</li>
+</ul>
+</li>
+</ul>
+<h2 id="n-ary-storage-model-nsm">N-ary Storage Model (NSM)<a aria-hidden="true" tabindex="-1" href="#n-ary-storage-model-nsm" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241021191439.png" width="auto" height="auto"/></p>
+<ul>
+<li><em>N-ary Storage Model</em> (<em>NSM</em>) 이놈은 N 개의 tuple 들을 저장하는 것임. 즉, row-oriented store.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241021191604.png" width="auto" height="auto"/></p>
+<ul>
+<li>그래서 OLTP query 에서는 위 그림처럼 Index 로 RID 를 찾아 해당 tuple 을 읽어오거나 아니면 그냥 page 의 빈 slot 에 저장하는 식으로 간편하게 처리된다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241021191714.png" width="auto" height="auto"/></p>
+<ul>
+<li>근데 OLAP query 에서는 위 그림에서 보이는 것 처럼 실제로 필요한 데이터는 적은 수의 column 들인데, page 전체를 읽으면 다른 column 들도 전부 읽히기 때문에 read amp 가 심해진다.
+<ul>
+<li>왼쪽 아래의 Disk 부분에서 어둡게 표시된 곳이 읽어들인 page 이라는 것을 감안해 위의 두 그림을 비교해 보면 차이가 확연하게 드러날 것이다.</li>
+<li>이 read amp 는 조금 더 생각해 보면 사용되지 않을 데이터를 caching 해놓은 격이기 때문에 성능을 더 악화시킨다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="decomposition-storage-model-dsm">Decomposition Storage Model (DSM)<a aria-hidden="true" tabindex="-1" href="#decomposition-storage-model-dsm" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20241021191924.png" width="auto" height="auto"/></p>
+<ul>
+<li><em>Decomposition Storage Model</em> (<em>DSM</em>) 이놈은 tuple 들을 column 방향으로 저장하는 것임. 즉, column 방향으로 쪼갠다고 해서 <em>Decomposition</em> 인 것이고 따라서 columnar-oriented store 인 것.
+<ul>
+<li><a href="https://dl.acm.org/doi/10.1145/971699.318923" class="external">이놈은 SIGMOD’85 에 등장했다.</a></li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20241021192010.png" width="auto" height="auto"/></p>
+<ul>
+<li>이렇게 하면 읽어야 할 file 들의 개수가 훨씬 적어진다.
+<ul>
+<li>“Database File” 에서 진한 회색으로 표시된 file 들의 개수를 비교해 보면 차이가 크죠?</li>
+</ul>
+</li>
+<li>그리고 이 데이터들이 인접하게 저장되어 있다는 점은 caching 에도 아주 잘 맞는다.</li>
+<li>하지만 당연하게도 OLTP query 에는 아주 쥐약이다.</li>
+</ul>
+<h3 id="tuple-identification">Tuple identification<a aria-hidden="true" tabindex="-1" href="#tuple-identification" class="internal"> §</a></h3>
+<ul>
+<li>이렇게 column data 만 있을 때 이놈이 어떤 tuple 의 것인지 어떻게 아느냐</li>
+<li><em>Fixed-length offsets</em>: 그냥 원래의 tuple 순서대로 저장하는 것</li>
+<li><em>Embeded tuple IDs</em>: compression 을 효과적으로 하기 위함 등의 이유로 인해 순서가 바뀌는 경우, 각각의 ID 를 같이 적어주는 것
+<ul>
+<li>이때는 당연히 추가적인 공간이 필요하니까 overhead 가 있다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="variable-sized-data">Variable sized data<a aria-hidden="true" tabindex="-1" href="#variable-sized-data" class="internal"> §</a></h3>
+<ul>
+<li>그냥 같은 크기가 되도록 padding 을 넣거나
+<ul>
+<li>물론 이렇게만 하면 공간 활용도가 안좋아지지만, DSM 은 compression 이 용이하기 때문에 더 좋게 할 수 있다.</li>
+</ul>
+</li>
+<li>아니면 <a href="../../../../../gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)">Dictionary</a> 를 적용한댄다.</li>
+</ul>
+<h2 id="hybrid-storage-mode-partition-attribute-across-pax">Hybrid Storage Mode, Partition Attribute Across (PAX)<a aria-hidden="true" tabindex="-1" href="#hybrid-storage-mode-partition-attribute-across-pax" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="success">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                  <div class="callout-title-inner"><p>옮겨짐: </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/format/terms/Partition-Attribute-Across,-PAX-(Database-Format)" class="internal" data-slug="gardens/database/format/terms/Partition-Attribute-Across,-PAX-(Database-Format)">Partition Attribute Across, PAX (Database Format)</a></li>
+</ul>
+</blockquote>
+<h2 id="compression">Compression<a aria-hidden="true" tabindex="-1" href="#compression" class="internal"> §</a></h2>
+<ul>
+<li>기본적으로 loseless scheme 을 사용한다. 당연히 원본의 데이터를 보존해야 하기 때문.</li>
+<li>동일한 데이터를 최대한 적은 bit 로 표현하는게 목표다.</li>
+<li>압축하는 단위는 block of tuple, tuple, attribute (domain), column (DSM) 정도로 구분할 수 있다.</li>
+<li>compressed query 연구가 되고 있긴 하지만 일반적으로는 decompress 한 다음에 query execution 을 한다.
+<ul>
+<li>MySQL InnoDB 에서는 Mod Log (Modification Log) 에 compression metadata 가 담겨서 이걸 통해 다시 decompress 한다.</li>
+</ul>
+</li>
+<li>얘네들은 이미 알고있으니까 넘어감: <a href="../../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a>, <a href="../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a>, <a href="../../../../../gardens/database/encoding/terms/Bitmap-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bitmap-(Encoding)">Bitmap</a>, <a href="../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a>, <a href="../../../../../gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)">DICT</a></li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#checkin-revisit-storage-part-2" data-for="checkin-revisit-storage-part-2">Checkin (Revisit Storage part 2)</a></li><li class="depth-0"><a href="#database-workloads" data-for="database-workloads">Database workloads</a></li><li class="depth-0"><a href="#storage-models" data-for="storage-models">Storage models</a></li><li class="depth-0"><a href="#n-ary-storage-model-nsm" data-for="n-ary-storage-model-nsm">N-ary Storage Model (NSM)</a></li><li class="depth-0"><a href="#decomposition-storage-model-dsm" data-for="decomposition-storage-model-dsm">Decomposition Storage Model (DSM)</a></li><li class="depth-1"><a href="#tuple-identification" data-for="tuple-identification">Tuple identification</a></li><li class="depth-1"><a href="#variable-sized-data" data-for="variable-sized-data">Variable sized data</a></li><li class="depth-0"><a href="#hybrid-storage-mode-partition-attribute-across-pax" data-for="hybrid-storage-mode-partition-attribute-across-pax">Hybrid Storage Mode, Partition Attribute Across (PAX)</a></li><li class="depth-0"><a href="#compression" data-for="compression">Compression</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/format/terms/Partition-Attribute-Across,-PAX-(Database-Format)" class="internal">Partition Attribute Across, PAX (Database Format)</a></li><li><a href="../../../../../gardens/database/originals/bkms01.fall.2024.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-01" class="internal">(SNU GSDS) Bigdata and Knowledge Management Systems 01</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

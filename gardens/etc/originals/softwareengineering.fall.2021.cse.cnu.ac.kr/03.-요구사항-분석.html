@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html><head><title>3. 요구사항 분석 (충남대 소프트웨어 공학 강의록)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="3. 요구사항 분석 (충남대 소프트웨어 공학 강의록)"/><meta property="og:description" content="충남대학교 컴퓨터공학과 김현수 교수님의 &amp;quot;소프트웨어 공학&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 요구사항 분석 과정 § ”어떻게 구현할지”가 아닌 “무엇을 구현할지”에 관심을 가져야 한다 그래서 뭐 뻔한얘기지만 일단 문제가 무엇인지를 파악하기 위해 문제가 발생하게된 배경과 그 문제의 성격, 문제가 미치는 범위에 대해 파악한다 그리고 사용자가 소프트웨어에 대해 어떤 것을 필요로 하는지 취합 하고 취합한 요구사항을 분석하고 문서로 작성한 후 사용자가 요구한 사항과 일치하는지 검토하고 일치하지 않는다면 다시 취합하는 과정부터 반복한다 조금 더 자세히 알아보면 도메인 분석 § 일단 도메인은 다음의 예로 이해하는 것이 최고다 ATM을 개발한다고 할 때의 도메인은 은행 업무 이고 도메인 전문가는 은행원 이 된다 즉, 도메인이라는 것은 해당 소프트웨어를 사용할 고객이 일하는 분야(비즈니스, 기술)를 일컫는 것이고 도메인 전문가는 그 도메인의 업무를 잘 알고 이해하고있는 사람을 일컫는 것이다 도메인 분석을 통해 얻을 수 있는 이점은 다음과 같다 일단 이해당사자(고객 / 사용자, 개발자, 관리자)들 간 더욱 효과적으로 소통할 수 있고 따라서 빠르게 요구사항을 취합할 수 있어 개발기간이 단축될 수 있다 또한 문제를 더 심도있게 이해할 수 있기 때문에 더 좋은 결과물을 낼 수 있고 따라서 트렌드를 예측할 수 있어 미래를 예측해 볼 수 있기 때문에 확장성이 높은 결과물을 낼 수 있게 된다 도메인 분석서의 구조 § 개요 - 이 글이 무엇에 대한 것인지, 이 글을 읽을 대상은 누구인지 등등 용어 - 이 글에서 등장하는 용어들에 대한 설명 개괄적 지식 - 도메인 전문가가 알고 있는 해당 도메인에 대한 지식(뭐 이 비즈니스가 어떻게 돌아간다던지, 어떤 기술을 이용한다던지, 기술이 어떻게 동작한다던지 등등) 고객과 사용자 - 이 소프트웨어를 누가 의뢰했는지(고객), 그리고 이 소프트웨어를 누가 사용할 것인지(사용자) 환경 - 소프트웨어가 구동될 환경 작업과 수행절차 - 해당 프로젝트에 동원되는 인력들에 대해 그들이 담당하는 작업과 절차, 그리고 (특히 도메인 전문가에 대해) 그들만이 알고있는 노하우(쉬운 방법) 경쟁 소프트웨어 - 이미 시장에서 판매되어 사용되고 있는지의 여부와 장단점 다른 도메인과의 유사성 - 우리가 다루고 있는 도메인과 유사한 도메인이 있다면 그것과의 공통점과 차이점 예를들어 도서 대출시스템과 영화 대출 시스템 등 문제 정의 § 문제라는 것은 고객이나 상요자가 직면한 어려움이고 이 문제를 해결하는 것은 일반덕으로 소프트웨어의 개발을 필요로 하고 문제의 해경른 생산성이나 매출을 높일 수 있는 기회가 되기도 한다 범위 설정 § 범위를 설정한다는 것은 우리가 개발하고자 하는 소프트웨어가 해결할 수 있는 모든 문제들을 생각해 보는 것이다 만약 범위가 너무 크다면, 일부는 배제해야 할 것이고 범위가 너무 좁다면 해당 소프트웨어가 우리의 궁극적으로 해결하고자 하는 문제 파악하고 이를 해결 할 수 있는지 검토해 봐야 한다 요구사항 추출 § 요구사항 : 짧고 간결하게 표현된, 관련자들이 동의한, 문제를 해결하기 위한, 소프트웨어가 제공해야 할 기능 요구사항에 따른 프로젝트의 분류 § 요구사항이 결정되지 않은 A와 C의 경우에는 보통 상업용 SW인 경우가 많고 고객에 의해 요구사항이 결정된 B와 D의 경우에는 의뢰 SW인 경우가 많다 요구사항의 분석 § 기능적 요구사항은 결과물이 제공해야 할 기능을을 말하는 것이다 입력 기능 : 사용자 혹은 다른 시스템으로부터 어떤 정보를 입력할 수 있는 지 출력 기능 : 사용자 혹은 다른 시스템에게 어떤 정보를 출력할 수 있는 지 저장 기능 : 시스템이 어떤 정보를 저장할 수 있는 지 컴퓨팅 기능 : 시스템이 어떤 연산을 할 수 있는 지 타이밍과 동기화 : 특히 하드웨어 장치제어나 리얼타임 프로젝트의 경우, 즉각적인 반응이 가능한지 비기능적 요구사항은 기능이 아닌 성능이나 효율, 반응시간, 품질등을 말하는 것이다 얘네는 객관적인 지표(수치)로 검증이 가능해야 하며, 구현 이후 검증절차가 반드시 이루어져야 함 소프트웨어의 품질 특성 측면 반응시간 : 요청에 대한 결과가 얼마나 빠르게 나오는 지 처리량 : 분당 처리 트랜잭션의 수가 몇개인지 자원 사용량 : 사용하는 메모리, 전기 등의 자원은 얼마정도인지 신뢰성 : 시스템이 고장나지 않고 제대로 동작할 가능성은 얼마나 되는지 가용성 : 시스템이 실행되고 준비되어있는 시간은 얼마나 되는지 - Down-Time(DT) 은 기준 시간(예를들어 1년) 중에 얼마나 되는지 고장에서의 회복 : 고장으로 인해 발생할 수 있는 피해의 최대치는 어느정도인지 유지보수, 확장, 재사용성의 허용 : 유지보수나 시스템의 확장, 그것을 재사용하는 것이 어느 정도까지 가능한지 환경과 기술적 측면 플랫폼 : 소프트웨어가 돌아가는 환경 - 뭐 예를 들면 최소 램 4Gb짜리 윈도우 컴퓨터에서 돌아갈 수 있도록 해라 사용 기술 : 소프트웨어를 만드는데 사용할 프로그래밍 언어나 프레임워크, 라이브러리 등의 기술 - 뭐 예를 들어 전자정부 프레임워크를 이용해 자바로 개발해라 계획과 방법론적인 측면 방법론 : 사용할 개발 프로세스(방법론) - 뭐 애자일을 이용해라 등 비용과 납기일 : 얼마를 이용해서 개발해라, 언제까지 개발해라 - 보통 계약서에 많이 명시됨 예시 보고 기능적 / 비기능적 요소 구별하는 문제는 안나온댄다 요구사항 추출 방법 § 관찰 : 사용자의 업무를 관찰하는 것 - 숨겨진 문제를 파악하기에 좋음 인터뷰 : 관련 당사자를 만나 인터뷰함 - 요구사항의 오해를 줄일 수 있음 브레인스토밍 : 아이디어를 정제하지 않고 쏟아내는 것 - 요구사항의 고려 범위가 넓어질 수 있음 프로토타이핑 : 시범적인 시스템 구현 - 요구사항에 대한 빠르고 현실적인 피드백을 받을 수 있음 유스케이스 분석 : 시스템 외부 기능 파악 - 체계적 요구사항 분석 - 뭔지 모르겠음 관찰 § 사용자의 업무를 관찰하고 기록 숨겨진 문제를 파악하기에 좋고 자세한 설명도 들을 수 있음 예를 들어 비디오 촬영을 하며 기록할 수 있다 하지만 시간이 많이 소요된다는 단점이 있다 인터뷰 § 관련자 뿐만 아니라 경쟁 제품 이용자나 마케팅 담당자와 같은 관련 없는 사람들에게도 인터뷰를 진행함 그리고 인터뷰 대상자들의 여유시간에 진행 - 시간에 쫒기면 안된다네 대상자 선정 → 일정 계획 → 질문 작성 → 인터뷰 → 분석 및 정리의 과정으로 이루어진다 또한 양질의 질문을 마련해놓는 등 미리 철저히 계획하여야 효율적으로 많은 정보를 얻어낼 수 있음 위의 경우는 좀 알아둘 필요가 있음 - 일단 최소한으로 시스템이 갖춰야 할 것이 뭔지 먼저 파악하고, 그리고 다른 부가 기능들에 대해 질문을 하는 것이 좋다 - 이런 우선순위에 대한 고민 없이 그냥 물어보면 너무나도 많은 아이디어가 나올 가능성이 있어 쓸데없는 기능이 시스템에 포함될 가능성이 있다 이것도 걍 보고 읽어도 될듯 브레인스토밍 § 뭔지는 알제? 걍 생각나는 아이디어 다 쏟아내는거 하지만 회의가 약간 산으로 갈 수도 있기 때문에 훈련된 요원이 진행을 맡는 것이 좋댄다 Joint Application Development(JAD) : 브레인 스토밍의 한 방법으로 시스템 개발에 대해 논의할 때 개발자들끼리 하는 것이 아닌 최종 사용자를 포함시켜 같이 브레인스토밍을 해 요구사항을 정의해 나가는 것 보통 카페같은 별도의 장소를 마련해 모여서 집중적으로 브레인스토밍을 하는 방식으로 진행된다 브레인스토밍의 과정은 다음과 같다 저기 보면 5번 문항이 뭔 소린가 할 수 있는데 종이 한장을 마련하고 질문을 던진 후 한사람부터 시작해 그 질문과 관련된 아이디어를 하나 적고 다음사람으로 넘겨줌."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 김현수 교수님의 &amp;quot;소프트웨어 공학&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 요구사항 분석 과정 § ”어떻게 구현할지”가 아닌 “무엇을 구현할지”에 관심을 가져야 한다 그래서 뭐 뻔한얘기지만 일단 문제가 무엇인지를 파악하기 위해 문제가 발생하게된 배경과 그 문제의 성격, 문제가 미치는 범위에 대해 파악한다 그리고 사용자가 소프트웨어에 대해 어떤 것을 필요로 하는지 취합 하고 취합한 요구사항을 분석하고 문서로 작성한 후 사용자가 요구한 사항과 일치하는지 검토하고 일치하지 않는다면 다시 취합하는 과정부터 반복한다 조금 더 자세히 알아보면 도메인 분석 § 일단 도메인은 다음의 예로 이해하는 것이 최고다 ATM을 개발한다고 할 때의 도메인은 은행 업무 이고 도메인 전문가는 은행원 이 된다 즉, 도메인이라는 것은 해당 소프트웨어를 사용할 고객이 일하는 분야(비즈니스, 기술)를 일컫는 것이고 도메인 전문가는 그 도메인의 업무를 잘 알고 이해하고있는 사람을 일컫는 것이다 도메인 분석을 통해 얻을 수 있는 이점은 다음과 같다 일단 이해당사자(고객 / 사용자, 개발자, 관리자)들 간 더욱 효과적으로 소통할 수 있고 따라서 빠르게 요구사항을 취합할 수 있어 개발기간이 단축될 수 있다 또한 문제를 더 심도있게 이해할 수 있기 때문에 더 좋은 결과물을 낼 수 있고 따라서 트렌드를 예측할 수 있어 미래를 예측해 볼 수 있기 때문에 확장성이 높은 결과물을 낼 수 있게 된다 도메인 분석서의 구조 § 개요 - 이 글이 무엇에 대한 것인지, 이 글을 읽을 대상은 누구인지 등등 용어 - 이 글에서 등장하는 용어들에 대한 설명 개괄적 지식 - 도메인 전문가가 알고 있는 해당 도메인에 대한 지식(뭐 이 비즈니스가 어떻게 돌아간다던지, 어떤 기술을 이용한다던지, 기술이 어떻게 동작한다던지 등등) 고객과 사용자 - 이 소프트웨어를 누가 의뢰했는지(고객), 그리고 이 소프트웨어를 누가 사용할 것인지(사용자) 환경 - 소프트웨어가 구동될 환경 작업과 수행절차 - 해당 프로젝트에 동원되는 인력들에 대해 그들이 담당하는 작업과 절차, 그리고 (특히 도메인 전문가에 대해) 그들만이 알고있는 노하우(쉬운 방법) 경쟁 소프트웨어 - 이미 시장에서 판매되어 사용되고 있는지의 여부와 장단점 다른 도메인과의 유사성 - 우리가 다루고 있는 도메인과 유사한 도메인이 있다면 그것과의 공통점과 차이점 예를들어 도서 대출시스템과 영화 대출 시스템 등 문제 정의 § 문제라는 것은 고객이나 상요자가 직면한 어려움이고 이 문제를 해결하는 것은 일반덕으로 소프트웨어의 개발을 필요로 하고 문제의 해경른 생산성이나 매출을 높일 수 있는 기회가 되기도 한다 범위 설정 § 범위를 설정한다는 것은 우리가 개발하고자 하는 소프트웨어가 해결할 수 있는 모든 문제들을 생각해 보는 것이다 만약 범위가 너무 크다면, 일부는 배제해야 할 것이고 범위가 너무 좁다면 해당 소프트웨어가 우리의 궁극적으로 해결하고자 하는 문제 파악하고 이를 해결 할 수 있는지 검토해 봐야 한다 요구사항 추출 § 요구사항 : 짧고 간결하게 표현된, 관련자들이 동의한, 문제를 해결하기 위한, 소프트웨어가 제공해야 할 기능 요구사항에 따른 프로젝트의 분류 § 요구사항이 결정되지 않은 A와 C의 경우에는 보통 상업용 SW인 경우가 많고 고객에 의해 요구사항이 결정된 B와 D의 경우에는 의뢰 SW인 경우가 많다 요구사항의 분석 § 기능적 요구사항은 결과물이 제공해야 할 기능을을 말하는 것이다 입력 기능 : 사용자 혹은 다른 시스템으로부터 어떤 정보를 입력할 수 있는 지 출력 기능 : 사용자 혹은 다른 시스템에게 어떤 정보를 출력할 수 있는 지 저장 기능 : 시스템이 어떤 정보를 저장할 수 있는 지 컴퓨팅 기능 : 시스템이 어떤 연산을 할 수 있는 지 타이밍과 동기화 : 특히 하드웨어 장치제어나 리얼타임 프로젝트의 경우, 즉각적인 반응이 가능한지 비기능적 요구사항은 기능이 아닌 성능이나 효율, 반응시간, 품질등을 말하는 것이다 얘네는 객관적인 지표(수치)로 검증이 가능해야 하며, 구현 이후 검증절차가 반드시 이루어져야 함 소프트웨어의 품질 특성 측면 반응시간 : 요청에 대한 결과가 얼마나 빠르게 나오는 지 처리량 : 분당 처리 트랜잭션의 수가 몇개인지 자원 사용량 : 사용하는 메모리, 전기 등의 자원은 얼마정도인지 신뢰성 : 시스템이 고장나지 않고 제대로 동작할 가능성은 얼마나 되는지 가용성 : 시스템이 실행되고 준비되어있는 시간은 얼마나 되는지 - Down-Time(DT) 은 기준 시간(예를들어 1년) 중에 얼마나 되는지 고장에서의 회복 : 고장으로 인해 발생할 수 있는 피해의 최대치는 어느정도인지 유지보수, 확장, 재사용성의 허용 : 유지보수나 시스템의 확장, 그것을 재사용하는 것이 어느 정도까지 가능한지 환경과 기술적 측면 플랫폼 : 소프트웨어가 돌아가는 환경 - 뭐 예를 들면 최소 램 4Gb짜리 윈도우 컴퓨터에서 돌아갈 수 있도록 해라 사용 기술 : 소프트웨어를 만드는데 사용할 프로그래밍 언어나 프레임워크, 라이브러리 등의 기술 - 뭐 예를 들어 전자정부 프레임워크를 이용해 자바로 개발해라 계획과 방법론적인 측면 방법론 : 사용할 개발 프로세스(방법론) - 뭐 애자일을 이용해라 등 비용과 납기일 : 얼마를 이용해서 개발해라, 언제까지 개발해라 - 보통 계약서에 많이 명시됨 예시 보고 기능적 / 비기능적 요소 구별하는 문제는 안나온댄다 요구사항 추출 방법 § 관찰 : 사용자의 업무를 관찰하는 것 - 숨겨진 문제를 파악하기에 좋음 인터뷰 : 관련 당사자를 만나 인터뷰함 - 요구사항의 오해를 줄일 수 있음 브레인스토밍 : 아이디어를 정제하지 않고 쏟아내는 것 - 요구사항의 고려 범위가 넓어질 수 있음 프로토타이핑 : 시범적인 시스템 구현 - 요구사항에 대한 빠르고 현실적인 피드백을 받을 수 있음 유스케이스 분석 : 시스템 외부 기능 파악 - 체계적 요구사항 분석 - 뭔지 모르겠음 관찰 § 사용자의 업무를 관찰하고 기록 숨겨진 문제를 파악하기에 좋고 자세한 설명도 들을 수 있음 예를 들어 비디오 촬영을 하며 기록할 수 있다 하지만 시간이 많이 소요된다는 단점이 있다 인터뷰 § 관련자 뿐만 아니라 경쟁 제품 이용자나 마케팅 담당자와 같은 관련 없는 사람들에게도 인터뷰를 진행함 그리고 인터뷰 대상자들의 여유시간에 진행 - 시간에 쫒기면 안된다네 대상자 선정 → 일정 계획 → 질문 작성 → 인터뷰 → 분석 및 정리의 과정으로 이루어진다 또한 양질의 질문을 마련해놓는 등 미리 철저히 계획하여야 효율적으로 많은 정보를 얻어낼 수 있음 위의 경우는 좀 알아둘 필요가 있음 - 일단 최소한으로 시스템이 갖춰야 할 것이 뭔지 먼저 파악하고, 그리고 다른 부가 기능들에 대해 질문을 하는 것이 좋다 - 이런 우선순위에 대한 고민 없이 그냥 물어보면 너무나도 많은 아이디어가 나올 가능성이 있어 쓸데없는 기능이 시스템에 포함될 가능성이 있다 이것도 걍 보고 읽어도 될듯 브레인스토밍 § 뭔지는 알제? 걍 생각나는 아이디어 다 쏟아내는거 하지만 회의가 약간 산으로 갈 수도 있기 때문에 훈련된 요원이 진행을 맡는 것이 좋댄다 Joint Application Development(JAD) : 브레인 스토밍의 한 방법으로 시스템 개발에 대해 논의할 때 개발자들끼리 하는 것이 아닌 최종 사용자를 포함시켜 같이 브레인스토밍을 해 요구사항을 정의해 나가는 것 보통 카페같은 별도의 장소를 마련해 모여서 집중적으로 브레인스토밍을 하는 방식으로 진행된다 브레인스토밍의 과정은 다음과 같다 저기 보면 5번 문항이 뭔 소린가 할 수 있는데 종이 한장을 마련하고 질문을 던진 후 한사람부터 시작해 그 질문과 관련된 아이디어를 하나 적고 다음사람으로 넘겨줌."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/03.-요구사항-분석"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">3. 요구사항 분석 (충남대 소프트웨어 공학 강의록)</h1><p class="content-meta ">Oct 02, 2021, 23 min read</p><ul class="tags "><li><a href="../../../../tags/sw-eng" class="internal tag-link">#sw-eng</a></li><li><a href="../../../../tags/cnu-sweng21f" class="internal tag-link">#cnu-sweng21f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 김현수 교수님의 &quot;소프트웨어 공학&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="요구사항-분석-과정">요구사항 분석 과정<a aria-hidden="true" tabindex="-1" href="#요구사항-분석-과정" class="internal"> §</a></h2>
+<ul>
+<li>”어떻게 구현할지”가 아닌 “무엇을 구현할지”에 관심을 가져야 한다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image1.png"/></p>
+<ul>
+<li>그래서 뭐 뻔한얘기지만</li>
+<li>일단 문제가 무엇인지를 파악하기 위해 문제가 발생하게된 배경과 그 문제의 성격, 문제가 미치는 범위에 대해 파악한다</li>
+<li>그리고 사용자가 소프트웨어에 대해 어떤 것을 필요로 하는지 취합 하고</li>
+<li>취합한 요구사항을 분석하고 문서로 작성한 후</li>
+<li>사용자가 요구한 사항과 일치하는지 검토하고 일치하지 않는다면 다시 취합하는 과정부터 반복한다</li>
+<li>조금 더 자세히 알아보면</li>
+</ul>
+<h2 id="도메인-분석">도메인 분석<a aria-hidden="true" tabindex="-1" href="#도메인-분석" class="internal"> §</a></h2>
+<ul>
+<li>일단 <strong>도메인</strong>은 다음의 예로 이해하는 것이 최고다</li>
+<li>ATM을 개발한다고 할 때의 <strong>도메인</strong>은 은행 업무 이고 <strong>도메인 전문가</strong>는 은행원 이 된다</li>
+<li>즉, <strong>도메인</strong>이라는 것은 해당 소프트웨어를 사용할 고객이 일하는 분야(비즈니스, 기술)를 일컫는 것이고</li>
+<li><strong>도메인 전문가</strong>는 그 도메인의 업무를 잘 알고 이해하고있는 사람을 일컫는 것이다</li>
+<li>도메인 분석을 통해 얻을 수 있는 이점은 다음과 같다
+<ol>
+<li>일단 이해당사자(고객 / 사용자, 개발자, 관리자)들 간 더욱 효과적으로 소통할 수 있고</li>
+<li>따라서 빠르게 요구사항을 취합할 수 있어 개발기간이 단축될 수 있다</li>
+<li>또한 문제를 더 심도있게 이해할 수 있기 때문에 더 좋은 결과물을 낼 수 있고</li>
+<li>따라서 트렌드를 예측할 수 있어 미래를 예측해 볼 수 있기 때문에 확장성이 높은 결과물을 낼 수 있게 된다</li>
+</ol>
+</li>
+</ul>
+<h3 id="도메인-분석서의-구조">도메인 분석서의 구조<a aria-hidden="true" tabindex="-1" href="#도메인-분석서의-구조" class="internal"> §</a></h3>
+<ol>
+<li>개요 - 이 글이 무엇에 대한 것인지, 이 글을 읽을 대상은 누구인지 등등</li>
+<li>용어 - 이 글에서 등장하는 용어들에 대한 설명</li>
+<li>개괄적 지식 - 도메인 전문가가 알고 있는 해당 도메인에 대한 지식(뭐 이 비즈니스가 어떻게 돌아간다던지, 어떤 기술을 이용한다던지, 기술이 어떻게 동작한다던지 등등)</li>
+<li>고객과 사용자 - 이 소프트웨어를 누가 의뢰했는지(고객), 그리고 이 소프트웨어를 누가 사용할 것인지(사용자)</li>
+<li>환경 - 소프트웨어가 구동될 환경</li>
+<li>작업과 수행절차 - 해당 프로젝트에 동원되는 인력들에 대해 그들이 담당하는 작업과 절차, 그리고 (특히 도메인 전문가에 대해) 그들만이 알고있는 노하우(쉬운 방법)</li>
+<li>경쟁 소프트웨어 - 이미 시장에서 판매되어 사용되고 있는지의 여부와 장단점</li>
+<li>다른 도메인과의 유사성 - 우리가 다루고 있는 도메인과 유사한 도메인이 있다면 그것과의 공통점과 차이점
+<ul>
+<li>예를들어 도서 대출시스템과 영화 대출 시스템 등</li>
+</ul>
+</li>
+</ol>
+<h3 id="문제-정의">문제 정의<a aria-hidden="true" tabindex="-1" href="#문제-정의" class="internal"> §</a></h3>
+<ul>
+<li><strong>문제</strong>라는 것은 고객이나 상요자가 직면한 어려움이고</li>
+<li>이 문제를 해결하는 것은 일반덕으로 소프트웨어의 개발을 필요로 하고</li>
+<li>문제의 해경른 생산성이나 매출을 높일 수 있는 기회가 되기도 한다</li>
+</ul>
+<h3 id="범위-설정">범위 설정<a aria-hidden="true" tabindex="-1" href="#범위-설정" class="internal"> §</a></h3>
+<ul>
+<li><strong>범위를 설정</strong>한다는 것은 우리가 개발하고자 하는 소프트웨어가 해결할 수 있는 모든 문제들을 생각해 보는 것이다</li>
+<li>만약 <strong>범위</strong>가 너무 크다면, 일부는 배제해야 할 것이고</li>
+<li><strong>범위</strong>가 너무 좁다면 해당 소프트웨어가 우리의 궁극적으로 해결하고자 하는 문제 파악하고 이를 해결 할 수 있는지 검토해 봐야 한다</li>
+</ul>
+<h2 id="요구사항-추출">요구사항 추출<a aria-hidden="true" tabindex="-1" href="#요구사항-추출" class="internal"> §</a></h2>
+<ul>
+<li><strong>요구사항</strong> : 짧고 간결하게 표현된, 관련자들이 동의한, 문제를 해결하기 위한, 소프트웨어가 제공해야 할 기능</li>
+</ul>
+<h3 id="요구사항에-따른-프로젝트의-분류">요구사항에 따른 프로젝트의 분류<a aria-hidden="true" tabindex="-1" href="#요구사항에-따른-프로젝트의-분류" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image2.png"/></p>
+<ul>
+<li>요구사항이 결정되지 않은 A와 C의 경우에는 보통 상업용 SW인 경우가 많고</li>
+<li>고객에 의해 요구사항이 결정된 B와 D의 경우에는 의뢰 SW인 경우가 많다</li>
+</ul>
+<h3 id="요구사항의-분석">요구사항의 분석<a aria-hidden="true" tabindex="-1" href="#요구사항의-분석" class="internal"> §</a></h3>
+<ul>
+<li><strong>기능적 요구사항</strong>은 결과물이 제공해야 할 기능을을 말하는 것이다
+<ul>
+<li><strong>입력 기능</strong> : 사용자 혹은 다른 시스템으로부터 어떤 정보를 입력할 수 있는 지</li>
+<li><strong>출력 기능</strong> : 사용자 혹은 다른 시스템에게 어떤 정보를 출력할 수 있는 지</li>
+<li><strong>저장 기능</strong> : 시스템이 어떤 정보를 저장할 수 있는 지</li>
+<li><strong>컴퓨팅 기능</strong> : 시스템이 어떤 연산을 할 수 있는 지</li>
+<li><strong>타이밍과 동기화</strong> : 특히 하드웨어 장치제어나 리얼타임 프로젝트의 경우, 즉각적인 반응이 가능한지</li>
+</ul>
+</li>
+<li><strong>비기능적 요구사항</strong>은 기능이 아닌 성능이나 효율, 반응시간, 품질등을 말하는 것이다
+<ul>
+<li>얘네는 객관적인 지표(수치)로 검증이 가능해야 하며, 구현 이후 검증절차가 반드시 이루어져야 함</li>
+<li><strong>소프트웨어의 품질 특성 측면</strong>
+<ul>
+<li><strong>반응시간</strong> : 요청에 대한 결과가 얼마나 빠르게 나오는 지</li>
+<li><strong>처리량</strong> : 분당 처리 트랜잭션의 수가 몇개인지</li>
+<li><strong>자원 사용량</strong> : 사용하는 메모리, 전기 등의 자원은 얼마정도인지</li>
+<li><strong>신뢰성</strong> : 시스템이 고장나지 않고 제대로 동작할 가능성은 얼마나 되는지</li>
+<li><strong>가용성</strong> : 시스템이 실행되고 준비되어있는 시간은 얼마나 되는지 - <strong>Down-Time(DT)</strong> 은 기준 시간(예를들어 1년) 중에 얼마나 되는지</li>
+<li><strong>고장에서의 회복</strong> : 고장으로 인해 발생할 수 있는 피해의 최대치는 어느정도인지</li>
+<li><strong>유지보수, 확장, 재사용성의 허용</strong> : 유지보수나 시스템의 확장, 그것을 재사용하는 것이 어느 정도까지 가능한지</li>
+</ul>
+</li>
+<li><strong>환경과 기술적 측면</strong>
+<ul>
+<li><strong>플랫폼</strong> : 소프트웨어가 돌아가는 환경 - 뭐 예를 들면 최소 램 4Gb짜리 윈도우 컴퓨터에서 돌아갈 수 있도록 해라</li>
+<li><strong>사용 기술</strong> : 소프트웨어를 만드는데 사용할 프로그래밍 언어나 프레임워크, 라이브러리 등의 기술 - 뭐 예를 들어 전자정부 프레임워크를 이용해 자바로 개발해라</li>
+</ul>
+</li>
+<li><strong>계획과 방법론적인 측면</strong>
+<ul>
+<li><strong>방법론</strong> : 사용할 개발 프로세스(방법론) - 뭐 애자일을 이용해라 등</li>
+<li><strong>비용과 납기일</strong> : 얼마를 이용해서 개발해라, 언제까지 개발해라 - 보통 계약서에 많이 명시됨</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>예시 보고 기능적 / 비기능적 요소 구별하는 문제는 안나온댄다</li>
+</ul>
+<h3 id="요구사항-추출-방법">요구사항 추출 방법<a aria-hidden="true" tabindex="-1" href="#요구사항-추출-방법" class="internal"> §</a></h3>
+<ol>
+<li><strong>관찰</strong> : 사용자의 업무를 관찰하는 것 - 숨겨진 문제를 파악하기에 좋음</li>
+<li><strong>인터뷰</strong> : 관련 당사자를 만나 인터뷰함 - 요구사항의 오해를 줄일 수 있음</li>
+<li><strong>브레인스토밍</strong> : 아이디어를 정제하지 않고 쏟아내는 것 - 요구사항의 고려 범위가 넓어질 수 있음</li>
+<li><strong>프로토타이핑</strong> : 시범적인 시스템 구현 - 요구사항에 대한 빠르고 현실적인 피드백을 받을 수 있음</li>
+<li><strong>유스케이스 분석</strong> : 시스템 외부 기능 파악 - 체계적 요구사항 분석 - 뭔지 모르겠음</li>
+</ol>
+<h3 id="관찰">관찰<a aria-hidden="true" tabindex="-1" href="#관찰" class="internal"> §</a></h3>
+<ul>
+<li>사용자의 업무를 관찰하고 기록</li>
+<li>숨겨진 문제를 파악하기에 좋고 자세한 설명도 들을 수 있음</li>
+<li>예를 들어 비디오 촬영을 하며 기록할 수 있다</li>
+<li>하지만 시간이 많이 소요된다는 단점이 있다</li>
+</ul>
+<h3 id="인터뷰">인터뷰<a aria-hidden="true" tabindex="-1" href="#인터뷰" class="internal"> §</a></h3>
+<ul>
+<li>관련자 뿐만 아니라 경쟁 제품 이용자나 마케팅 담당자와 같은 관련 없는 사람들에게도 인터뷰를 진행함</li>
+<li>그리고 인터뷰 대상자들의 여유시간에 진행 - 시간에 쫒기면 안된다네</li>
+<li>대상자 선정 → 일정 계획 → 질문 작성 → 인터뷰 → 분석 및 정리의 과정으로 이루어진다</li>
+<li>또한 양질의 질문을 마련해놓는 등 미리 철저히 계획하여야 효율적으로 많은 정보를 얻어낼 수 있음</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image3.png"/></p>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image4.png"/></p>
+<ul>
+<li>위의 경우는 좀 알아둘 필요가 있음 - 일단 최소한으로 시스템이 갖춰야 할 것이 뭔지 먼저 파악하고, 그리고 다른 부가 기능들에 대해 질문을 하는 것이 좋다 - 이런 우선순위에 대한 고민 없이 그냥 물어보면 너무나도 많은 아이디어가 나올 가능성이 있어 쓸데없는 기능이 시스템에 포함될 가능성이 있다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image5.png"/></p>
+<ul>
+<li>이것도 걍 보고 읽어도 될듯</li>
+</ul>
+<h3 id="브레인스토밍">브레인스토밍<a aria-hidden="true" tabindex="-1" href="#브레인스토밍" class="internal"> §</a></h3>
+<ul>
+<li>뭔지는 알제? 걍 생각나는 아이디어 다 쏟아내는거</li>
+<li>하지만 회의가 약간 산으로 갈 수도 있기 때문에 훈련된 요원이 진행을 맡는 것이 좋댄다</li>
+<li><strong>Joint Application Development(JAD)</strong> : 브레인 스토밍의 한 방법으로 시스템 개발에 대해 논의할 때 개발자들끼리 하는 것이 아닌 최종 사용자를 포함시켜 같이 브레인스토밍을 해 요구사항을 정의해 나가는 것
+<ul>
+<li>보통 카페같은 별도의 장소를 마련해 모여서 집중적으로 브레인스토밍을 하는 방식으로 진행된다</li>
+</ul>
+</li>
+<li>브레인스토밍의 과정은 다음과 같다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image6.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image6.png"/></p>
+<ul>
+<li>저기 보면 5번 문항이 뭔 소린가 할 수 있는데 종이 한장을 마련하고 질문을 던진 후 한사람부터 시작해 그 질문과 관련된 아이디어를 하나 적고 다음사람으로 넘겨줌. 그럼 다음사람은 그걸 받고 전사람이 적은 것을 참고하거나 아니면 새로운 아이디어를 하나 적고 다음사람에게 넘겨주는 방식으로 진행됨</li>
+<li>그니까 5번 문항의 종이 한장에 하나의 아이디어를 적으라는 것은 내차례가 오면 한가지의 아이디어만 적으라는 소리다</li>
+<li>저기 <strong>토론을 유도할 질문</strong>이라는 게 있는데 그건 아래 사진 참고해라</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image7.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image7.png"/></p>
+<ul>
+<li><strong>토론을 유도할 질문</strong>이기 때문에 예 아니오로 답변할 수 있는 단순한 질문이 아닌 아이디어가 나올 수 있는 질문을 마련해야 된다</li>
+</ul>
+<h3 id="프로토타이핑">프로토타이핑<a aria-hidden="true" tabindex="-1" href="#프로토타이핑" class="internal"> §</a></h3>
+<ul>
+<li><strong>프로토타입</strong>은 뭐 알겠지만 시스템의 예상 가능한 기능 몇가지를 빠르고 단순하게 만들어 본 것이다</li>
+<li><strong>Paper prototype</strong> : UI를 종이에 그리고 화살표 등으로 사용 시나리오를 보여주는 형태
+<ul>
+<li>이러한 프로토타입을 보고 있으면 또 새로운 아이디어가 떠오르기도 하고, 다양한 피드백들을 받을 수 있기 때문에 단순하지만 효율적이다</li>
+<li>또한 작성방법이 쉽기 때문에 각자의 관점에 따른 여러가지의 프로토타입을 병행하여 작성해 비교하는 방식으로 진행하는 것도 가능하다</li>
+</ul>
+</li>
+<li><strong>Mock-up the UI</strong> : 프로토타이핑 전용 언어로 프로그램을 작성해 작동 과정을 좀 더 동적으로 보여주는 것
+<ul>
+<li>하지만 작동 과정만 시나리오에 따라 보여주기 때문에 컴퓨팅이나 DB, 다른 시스템과의 상호작용 등은 불가능하다</li>
+</ul>
+</li>
+<li>또한 시스템의 알고리즘이나 데이터베이스같은 특별한 측면에 대해서 실현가능성 등을 보기 위해 프로토타입을 만들어보기도 한다</li>
+</ul>
+<h2 id="요구사항-문서화">요구사항 문서화<a aria-hidden="true" tabindex="-1" href="#요구사항-문서화" class="internal"> §</a></h2>
+<ul>
+<li>요구사항을 문서화 할때는</li>
+<li>요구사항의 outline만 대강 잡는 식으로 간단하게 문서화하기도 하고</li>
+<li>수천 페이지의 복잡하고 자세한 명세를 하는것도 가능하다</li>
+<li>또한 대규모 시스템의 경우에는 시스템을 서브시스템으로 나누어서 계층적으로 정리하기도 한다</li>
+</ul>
+<h3 id="상세-수준-정하기">상세 수준 정하기<a aria-hidden="true" tabindex="-1" href="#상세-수준-정하기" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image8.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image8.png"/></p>
+<ul>
+<li>위에서 <strong>개발을 위한 계약</strong>부분은 외주 계약의 경우에는 우리가 원하는 것을 자세하게 적어줄 필요가 있고, 정부기관 계약의 경우에는 정해진 양식이 있어 그거에 따라 적어야 될 경우도 있다는 것을 말하고 있는 것이다.</li>
+</ul>
+<h3 id="문서의-구성">문서의 구성<a aria-hidden="true" tabindex="-1" href="#문서의-구성" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image9.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image9.png"/></p>
+<ul>
+<li>일단 명세서의 구성을 자세히 살펴보면 위와 같다</li>
+<li><strong>Introduction</strong> 부분에는 문서의 목적, 범주, 용어 등을 적어주면 된다</li>
+<li>그리고 <strong>External Interface Requirements</strong>부분을 좀 보면
+<ul>
+<li><strong>User Interface</strong>는 니가 아는 그 UI를 말하는 거고</li>
+<li><strong>Hardware Interface</strong>는 잘 이해 안되는데 SW가 탑재되어 작동하게 될 HW에 대한 인터페이스를 말한댄다</li>
+<li><strong>Software Interface</strong>는 해당 시스템과 다른 시스템이 어떻게 상호작용 하는지를 말하는 거고</li>
+<li><strong>Communication Interface</strong>는 걍 통신 인터페이스다</li>
+</ul>
+</li>
+<li>그리고 <strong>System Feature</strong>에는 기능적 요구사항이 주로 들어간다고 보면 되고</li>
+<li><strong>Other Nonfunctional Requirements</strong>에는 비기능적 요구사항</li>
+<li><strong>Other Requirements</strong>는 위의 항목에 넣기 애매한 그 외의 제약조건들이 들어간다</li>
+</ul>
+<h3 id="introduction">Introduction<a aria-hidden="true" tabindex="-1" href="#introduction" class="internal"> §</a></h3>
+<ul>
+<li>다음의 네가지가 들어간다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image10.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image10.png"/></p>
+<ul>
+<li><strong>Stakeholder</strong> 는 프로젝트와 금전적 등의 이익관계가 있는 사람들을 말한다
+<ul>
+<li>뭐 고객, 사용자, 개발자, 관리자 등</li>
+</ul>
+</li>
+</ul>
+<h3 id="external-interface-requirements">External Interface Requirements<a aria-hidden="true" tabindex="-1" href="#external-interface-requirements" class="internal"> §</a></h3>
+<ul>
+<li>위에서 말한거처럼 소프트웨어와 사용자, 하드웨어, 다른 시스템 등등과의 소통에 있어 필요한 인터페이스를 설명하는 부분 이다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image11.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image11.png"/></p>
+<ul>
+<li>UI 는 걍 한번 읽어봐라</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image12.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image12.png"/></p>
+<ul>
+<li><strong>Hardware Interface</strong> 는 위에서 말한거처럼 시스템이 작동하게 될 하드웨어에 대해 기술하는 부분이라고 생각하면 될거같다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image13.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image13.png"/></p>
+<ul>
+<li>솔직히 필기하는것보다는 설명 한번 읽어보고 사례를 통해 감을 잡는게 나을거같다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image14.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image14.png"/></p>
+<ul>
+<li>위에서 간력한 설명만 보면 <strong>Software Interface</strong>와 <strong>Communication Interface</strong>와 무슨 차이점이 있는건지 헷갈릴 수 있는데</li>
+<li>사례와 자세한 설명을 보면 <strong>Software Interface</strong>는 어떤 외부 시스템과 어떠한 flow를 통해 어떤 것을 소통할 것인지가 중점인 반면, <strong>Communication Interface</strong>는 시스템에서 사용할 HTTP와 같은 표준 프로토콜이나 API 형식 등에 대해 논하고 있는 것을 알 수 있다.</li>
+</ul>
+<h3 id="system-feature">System Feature<a aria-hidden="true" tabindex="-1" href="#system-feature" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image15.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image15.png"/></p>
+<ul>
+<li>그리고 아래의 사례에서도 계속 확인할 수 있는 내용인데 각 요구사항은 일련 번호나 태그 등의 <strong>식별자</strong>로 유일하게 식별되야 한다더라</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image16.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image16.png"/></p>
+<ul>
+<li>사례도 한번 읽어봐라</li>
+</ul>
+<h3 id="other-nonfunctional-requirements">Other Nonfunctional Requirements<a aria-hidden="true" tabindex="-1" href="#other-nonfunctional-requirements" class="internal"> §</a></h3>
+<ul>
+<li><strong>비기능적 요구사항</strong>인데</li>
+<li>비기능적 요구사항들 중에 해당 비기능에 대해 요구사항이 없으면 생략할 수도 있다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image17.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image17.png"/></p>
+<ul>
+<li>우선 <strong>성능 제약 조건</strong>인데 읽으면 된다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image18.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image18.png"/></p>
+<ul>
+<li><strong>신뢰성 제약 조건</strong>에 대한 내용이다.</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image19.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image19.png"/></p>
+<ul>
+<li><strong>보안 제약 조건</strong>에 대한 내용이다.</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image20.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image20.png"/></p>
+<ul>
+<li>위처럼 다영한 측면의 품질에 대해서 제약조건(요구사항)을 마련할 수 있다.</li>
+</ul>
+<h3 id="other-requirements">Other Requirements<a aria-hidden="true" tabindex="-1" href="#other-requirements" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image21.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image21.png"/></p>
+<ul>
+<li><strong>하드웨어 제약조건</strong>의 예시로 하드와 램의 크기에대해 요구사항을 명시하거나 통신 대역폭에 관한 내용을 명시할 수도 있다</li>
+</ul>
+<h2 id="요구사항-검토">요구사항 검토<a aria-hidden="true" tabindex="-1" href="#요구사항-검토" class="internal"> §</a></h2>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image22.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image22.png"/></p>
+<ul>
+<li>저기서 <strong>80대 20 법칙</strong>은 20의 투자로 80의 문제를 해결 할 수 있느냐이다
+<ul>
+<li>즉, <strong>80대 20 법칙</strong>을 만족하는 것은 우선순위가 높은 것이고 그렇지 않으면 우선순위가 낮아지게 되는 것으로 생각할 수 있다</li>
+</ul>
+</li>
+<li>그리고 마지막 <strong>설계 제한</strong>은 요구사항 명세를 할 때에는 요구사항의 구현보다는 어떤 요구사항이 있을지에 더 포커스를 맞추고 있기 때문에 구현의 관점때문에 요구사항을 너무 적게 잡은 것은 아닌지 등을 검토해 볼 필요가 있는 것</li>
+</ul>
+<h2 id="요구사항-변경-관리">요구사항 변경 관리<a aria-hidden="true" tabindex="-1" href="#요구사항-변경-관리" class="internal"> §</a></h2>
+<ul>
+<li>비즈니스가 변한다던가, 기술이 변경된다던가, 문제를 더 심도있게 이해했다거나의 이슈를 통해 요구사항은 계속해서 바뀔 수 있다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/03_12f12474277a4d9d8a660c4b5b610685/image23.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB04%20-%20%E1%84%8B%E1%85%AD%E1%84%80%E1%85%AE%E1%84%89%E1%85%A1%E1%84%92%E1%85%A1%E1%86%BC%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2012f12474277a4d9d8a660c4b5b610685/image23.png"/></p>
+<ul>
+<li>고려해야될 점은 위와 같다</li>
+<li>저 중에서 마지막 <strong>위장된 확장</strong>은 요구사항의 명세는 보다 나은 시스템의 구축에 집중해야 하기 때문에 시스템의 규모를 확장하는 것은 되도록이면 피하는게 좋다는 것이다.
+<ul>
+<li>즉, 기능을 늘리기보다는 지금 있는 기능을 더 좋게 하는 것이 목적이 되어야 한다는 것이다</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#요구사항-분석-과정" data-for="요구사항-분석-과정">요구사항 분석 과정</a></li><li class="depth-0"><a href="#도메인-분석" data-for="도메인-분석">도메인 분석</a></li><li class="depth-1"><a href="#도메인-분석서의-구조" data-for="도메인-분석서의-구조">도메인 분석서의 구조</a></li><li class="depth-1"><a href="#문제-정의" data-for="문제-정의">문제 정의</a></li><li class="depth-1"><a href="#범위-설정" data-for="범위-설정">범위 설정</a></li><li class="depth-0"><a href="#요구사항-추출" data-for="요구사항-추출">요구사항 추출</a></li><li class="depth-1"><a href="#요구사항에-따른-프로젝트의-분류" data-for="요구사항에-따른-프로젝트의-분류">요구사항에 따른 프로젝트의 분류</a></li><li class="depth-1"><a href="#요구사항의-분석" data-for="요구사항의-분석">요구사항의 분석</a></li><li class="depth-1"><a href="#요구사항-추출-방법" data-for="요구사항-추출-방법">요구사항 추출 방법</a></li><li class="depth-1"><a href="#관찰" data-for="관찰">관찰</a></li><li class="depth-1"><a href="#인터뷰" data-for="인터뷰">인터뷰</a></li><li class="depth-1"><a href="#브레인스토밍" data-for="브레인스토밍">브레인스토밍</a></li><li class="depth-1"><a href="#프로토타이핑" data-for="프로토타이핑">프로토타이핑</a></li><li class="depth-0"><a href="#요구사항-문서화" data-for="요구사항-문서화">요구사항 문서화</a></li><li class="depth-1"><a href="#상세-수준-정하기" data-for="상세-수준-정하기">상세 수준 정하기</a></li><li class="depth-1"><a href="#문서의-구성" data-for="문서의-구성">문서의 구성</a></li><li class="depth-1"><a href="#introduction" data-for="introduction">Introduction</a></li><li class="depth-1"><a href="#external-interface-requirements" data-for="external-interface-requirements">External Interface Requirements</a></li><li class="depth-1"><a href="#system-feature" data-for="system-feature">System Feature</a></li><li class="depth-1"><a href="#other-nonfunctional-requirements" data-for="other-nonfunctional-requirements">Other Nonfunctional Requirements</a></li><li class="depth-1"><a href="#other-requirements" data-for="other-requirements">Other Requirements</a></li><li class="depth-0"><a href="#요구사항-검토" data-for="요구사항-검토">요구사항 검토</a></li><li class="depth-0"><a href="#요구사항-변경-관리" data-for="요구사항-변경-관리">요구사항 변경 관리</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/(충남대)-소프트웨어-공학-강의록" class="internal">(충남대) 소프트웨어 공학 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

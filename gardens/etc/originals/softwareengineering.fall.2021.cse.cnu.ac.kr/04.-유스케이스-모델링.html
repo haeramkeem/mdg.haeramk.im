@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html><head><title>4. 유스케이스 모델링 (충남대 소프트웨어 공학 강의록)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="4. 유스케이스 모델링 (충남대 소프트웨어 공학 강의록)"/><meta property="og:description" content="충남대학교 컴퓨터공학과 김현수 교수님의 &amp;quot;소프트웨어 공학&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 유스케이스 모델링 § 얘는 요구사항을 좀 더 명확하고 많이 수집하기 위해 사용한댄다 일단 유스케이스라는 것은 사용사례라고도 하는데 사용자가 어떠한 요청을 할 수 있고, 그 요청에 대해 어떠한 처리가 이루어지고, 그로인해 어떠한 결과를 사용자에게 주어 사용자가 어떠한 경험을 하게 되는지를 명세한 것이라고 할 수 있다 즉, 시스템이 어떤 기능(function, service)을 제공하는지, 그리고 그 기능들은 어떠한 프로세스로 이루어지는지 설명한 것이라고도 말할 수 있는것 걍 시스템이 제공하는 기능들 각각을 유스케이스라고 생각하면 될듯 대충 뭔지 감은 오제? 뭐 피피티에는 프로세스에 대해서 조직이나 개인 사용자에게 가치 있는 것을 생산하기 위해 필요한 사건, 행동, 거래의 연속 이라고 어려운 말을 적어놨는데 그냥 처리 과정이라고 심플하게 이해해도 될거같음 그리고 이렇게 보면 시나리오와도 비슷한거같다는 느낌을 받을 수 있는데 실제로는 시나리오는 어떠한 목표를 위해 수행되는 일련의 행동이고 가능한 모든 시나리오를 모은 것을 유스케이스라고 한댄다 즉, 시나리오는 유스케이스의 한 원소인 셈 뭔소린지 감이 안온다면 예시 보면 감이올거임 계좌 출금 요청 이라는 유스케이스는 잔고가 충분한 계좌에서의 출금 이랑 잔고가 부족한 계좌에서의 출금 이라는 시나리오들로 구성될 수 있는 것 유스케이스의 목적 § 기능 요구사항(시스템이 뭘 해야하는지)를 명확하고 일관된 설명으로 제공하고자 하는 것에 그 목적이 있다 그리고 이러한 가능 요구사항을 개발자들에게 전달해 개발과정에 도움이 되고자 하는 것이며 유스케이스는 테스트 케이스를 작성하는데에도 참고할 만한 자료가 되고 뭐 기능 요구사항에서 프로그램적인 클래스나 메소드들을 도출해 내는 과정에도 도움이 되고 유스케이스 모델을 변경해서 시스템을 변경하거나 확장하는 것을 단순화핫할 수도 있댄다 유스케이스 모델링을 하고 나면 Usecase Diagram과 Usecase Description두가지의 결과물이 산출된다 Usecase Diagram, Description § 일단 가운데 네모가 시스템 이고 네모 안에 들어가있는 동그라미들이 시스템이 제공하는 기능(유스케이스) 이다 그리고 양옆에 사람이 있는데 얘네들은 사용자(Actor) 이다 위의 예시를 보면 일반 사용자는 첫번째 기능을 사용할 수 있고 뭐 보험사 직원같은 경우에는 세가지 기능을 다 사용할 수 있는 것을 한눈에 볼 수 있다 즉, 시스템이 제공하는 기능과 그 기능을 어떤 사람들이 이용하는지 그림으로 나타낸 것을 Usecase Diagram이라고 하더라 단, 이때의 기능은 사용자 관점에서의 기능들만 명시하게 된다 뭐 위의 그림에서도 쉽게 알 수 있듯이 시스템, 기능, 사용자 세개의 구성요소로 이루어진댄다 그리고 각각의 그림에 대한 자세한 설명을 하는 부분을 Usecase Description이라고 한댄다 유스케이스 모델링 절차 § 1."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="충남대학교 컴퓨터공학과 김현수 교수님의 &amp;quot;소프트웨어 공학&amp;quot; 강의를 필기한 내용입니다. 다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. 유스케이스 모델링 § 얘는 요구사항을 좀 더 명확하고 많이 수집하기 위해 사용한댄다 일단 유스케이스라는 것은 사용사례라고도 하는데 사용자가 어떠한 요청을 할 수 있고, 그 요청에 대해 어떠한 처리가 이루어지고, 그로인해 어떠한 결과를 사용자에게 주어 사용자가 어떠한 경험을 하게 되는지를 명세한 것이라고 할 수 있다 즉, 시스템이 어떤 기능(function, service)을 제공하는지, 그리고 그 기능들은 어떠한 프로세스로 이루어지는지 설명한 것이라고도 말할 수 있는것 걍 시스템이 제공하는 기능들 각각을 유스케이스라고 생각하면 될듯 대충 뭔지 감은 오제? 뭐 피피티에는 프로세스에 대해서 조직이나 개인 사용자에게 가치 있는 것을 생산하기 위해 필요한 사건, 행동, 거래의 연속 이라고 어려운 말을 적어놨는데 그냥 처리 과정이라고 심플하게 이해해도 될거같음 그리고 이렇게 보면 시나리오와도 비슷한거같다는 느낌을 받을 수 있는데 실제로는 시나리오는 어떠한 목표를 위해 수행되는 일련의 행동이고 가능한 모든 시나리오를 모은 것을 유스케이스라고 한댄다 즉, 시나리오는 유스케이스의 한 원소인 셈 뭔소린지 감이 안온다면 예시 보면 감이올거임 계좌 출금 요청 이라는 유스케이스는 잔고가 충분한 계좌에서의 출금 이랑 잔고가 부족한 계좌에서의 출금 이라는 시나리오들로 구성될 수 있는 것 유스케이스의 목적 § 기능 요구사항(시스템이 뭘 해야하는지)를 명확하고 일관된 설명으로 제공하고자 하는 것에 그 목적이 있다 그리고 이러한 가능 요구사항을 개발자들에게 전달해 개발과정에 도움이 되고자 하는 것이며 유스케이스는 테스트 케이스를 작성하는데에도 참고할 만한 자료가 되고 뭐 기능 요구사항에서 프로그램적인 클래스나 메소드들을 도출해 내는 과정에도 도움이 되고 유스케이스 모델을 변경해서 시스템을 변경하거나 확장하는 것을 단순화핫할 수도 있댄다 유스케이스 모델링을 하고 나면 Usecase Diagram과 Usecase Description두가지의 결과물이 산출된다 Usecase Diagram, Description § 일단 가운데 네모가 시스템 이고 네모 안에 들어가있는 동그라미들이 시스템이 제공하는 기능(유스케이스) 이다 그리고 양옆에 사람이 있는데 얘네들은 사용자(Actor) 이다 위의 예시를 보면 일반 사용자는 첫번째 기능을 사용할 수 있고 뭐 보험사 직원같은 경우에는 세가지 기능을 다 사용할 수 있는 것을 한눈에 볼 수 있다 즉, 시스템이 제공하는 기능과 그 기능을 어떤 사람들이 이용하는지 그림으로 나타낸 것을 Usecase Diagram이라고 하더라 단, 이때의 기능은 사용자 관점에서의 기능들만 명시하게 된다 뭐 위의 그림에서도 쉽게 알 수 있듯이 시스템, 기능, 사용자 세개의 구성요소로 이루어진댄다 그리고 각각의 그림에 대한 자세한 설명을 하는 부분을 Usecase Description이라고 한댄다 유스케이스 모델링 절차 § 1."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/04.-유스케이스-모델링"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">4. 유스케이스 모델링 (충남대 소프트웨어 공학 강의록)</h1><p class="content-meta ">Oct 11, 2021, 20 min read</p><ul class="tags "><li><a href="../../../../tags/sw-eng" class="internal tag-link">#sw-eng</a></li><li><a href="../../../../tags/cnu-sweng21f" class="internal tag-link">#cnu-sweng21f</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>충남대학교 컴퓨터공학과 김현수 교수님의 &quot;소프트웨어 공학&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>다소 잘못된 내용과 구어적 표현 이 포함되어 있을 수 있습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="유스케이스-모델링">유스케이스 모델링<a aria-hidden="true" tabindex="-1" href="#유스케이스-모델링" class="internal"> §</a></h2>
+<ul>
+<li>얘는 요구사항을 좀 더 명확하고 많이 수집하기 위해 사용한댄다</li>
+<li>일단 <strong>유스케이스</strong>라는 것은 <strong>사용사례</strong>라고도 하는데 사용자가 어떠한 요청을 할 수 있고, 그 요청에 대해 어떠한 처리가 이루어지고, 그로인해 어떠한 결과를 사용자에게 주어 사용자가 어떠한 경험을 하게 되는지를 명세한 것이라고 할 수 있다</li>
+<li>즉, 시스템이 어떤 기능(function, service)을 제공하는지, 그리고 그 기능들은 어떠한 프로세스로 이루어지는지 설명한 것이라고도 말할 수 있는것
+<ul>
+<li>걍 시스템이 제공하는 기능들 각각을 유스케이스라고 생각하면 될듯</li>
+</ul>
+</li>
+<li>대충 뭔지 감은 오제?</li>
+<li>뭐 피피티에는 프로세스에 대해서 조직이나 개인 사용자에게 가치 있는 것을 생산하기 위해 필요한 사건, 행동, 거래의 연속 이라고 어려운 말을 적어놨는데 그냥 처리 과정이라고 심플하게 이해해도 될거같음</li>
+<li>그리고 이렇게 보면 <strong>시나리오</strong>와도 비슷한거같다는 느낌을 받을 수 있는데</li>
+<li>실제로는 <strong>시나리오</strong>는 어떠한 목표를 위해 수행되는 일련의 행동이고 가능한 모든 시나리오를 모은 것을 <strong>유스케이스</strong>라고 한댄다
+<ul>
+<li>즉, 시나리오는 유스케이스의 한 원소인 셈</li>
+<li>뭔소린지 감이 안온다면 예시 보면 감이올거임</li>
+<li>계좌 출금 요청 이라는 유스케이스는 잔고가 충분한 계좌에서의 출금 이랑 잔고가 부족한 계좌에서의 출금 이라는 시나리오들로 구성될 수 있는 것</li>
+</ul>
+</li>
+</ul>
+<h3 id="유스케이스의-목적">유스케이스의 목적<a aria-hidden="true" tabindex="-1" href="#유스케이스의-목적" class="internal"> §</a></h3>
+<ul>
+<li>기능 요구사항(시스템이 뭘 해야하는지)를 명확하고 일관된 설명으로 제공하고자 하는 것에 그 목적이 있다</li>
+<li>그리고 이러한 가능 요구사항을 개발자들에게 전달해 개발과정에 도움이 되고자 하는 것이며</li>
+<li>유스케이스는 테스트 케이스를 작성하는데에도 참고할 만한 자료가 되고</li>
+<li>뭐 기능 요구사항에서 프로그램적인 클래스나 메소드들을 도출해 내는 과정에도 도움이 되고</li>
+<li>유스케이스 모델을 변경해서 시스템을 변경하거나 확장하는 것을 단순화핫할 수도 있댄다</li>
+<li>유스케이스 모델링을 하고 나면 <strong>Usecase Diagram</strong>과 <strong>Usecase Description</strong>두가지의 결과물이 산출된다</li>
+</ul>
+<h2 id="usecase-diagram-description">Usecase Diagram, Description<a aria-hidden="true" tabindex="-1" href="#usecase-diagram-description" class="internal"> §</a></h2>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image1.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image1.png"/></p>
+<ul>
+<li>일단 가운데 네모가 시스템 이고</li>
+<li>네모 안에 들어가있는 동그라미들이 시스템이 제공하는 기능(유스케이스) 이다</li>
+<li>그리고 양옆에 사람이 있는데 얘네들은 사용자(Actor) 이다</li>
+<li>위의 예시를 보면 일반 사용자는 첫번째 기능을 사용할 수 있고 뭐 보험사 직원같은 경우에는 세가지 기능을 다 사용할 수 있는 것을 한눈에 볼 수 있다</li>
+<li>즉, 시스템이 제공하는 기능과 그 기능을 어떤 사람들이 이용하는지 그림으로 나타낸 것을 <strong>Usecase Diagram</strong>이라고 하더라</li>
+<li>단, 이때의 기능은 사용자 관점에서의 기능들만 명시하게 된다</li>
+<li>뭐 위의 그림에서도 쉽게 알 수 있듯이 <strong>시스템</strong>, <strong>기능</strong>, <strong>사용자</strong> 세개의 구성요소로 이루어진댄다</li>
+<li>그리고 각각의 그림에 대한 자세한 설명을 하는 부분을 <strong>Usecase Description</strong>이라고 한댄다</li>
+</ul>
+<h2 id="유스케이스-모델링-절차">유스케이스 모델링 절차<a aria-hidden="true" tabindex="-1" href="#유스케이스-모델링-절차" class="internal"> §</a></h2>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image2.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image2.png"/></p>
+<h3 id="1-시스템-정의">1. 시스템 정의<a aria-hidden="true" tabindex="-1" href="#1-시스템-정의" class="internal"> §</a></h3>
+<ul>
+<li>어떤 기능들이 시스템에 포함되고, 어떤것들이 들어가지 않는지를 기술하는 것</li>
+</ul>
+<h3 id="2-액터-찾기">2. 액터 찾기<a aria-hidden="true" tabindex="-1" href="#2-액터-찾기" class="internal"> §</a></h3>
+<ul>
+<li>액터라는 것을 위에서는 그냥 사용자라고 대충 말했지만, 좀 더 정확하게 말하면 시스템을 사용하는 객체의 역할이라고 말할 수 있음
+<ul>
+<li>시스템을 사용하는 사람이 아닌 객체라고 표현한 것은 사용하는 주체가 사람일 수도 있지만 하드웨어일 수도 있고, 다른 시스템일 수도 있기 때문이고</li>
+<li><strong>역할</strong>이라는 말뜻은 아래의 예시 보면 좀 감이 올거다
+<ul>
+<li>은행 시스템의 경우에 대출을 담당하는 사람은 대출 담당 역할 을 맡고 있는 것이고</li>
+<li>해당 은행에 계좌를 가지고 이용하는 사람은 고객의 역할 을 맡고 있는 것</li>
+<li>뭐 역할이라는 말의 의미를 분류, 그룹의 뉘앙스로 이해해도 될거같음</li>
+</ul>
+</li>
+<li>액터는 <strong>주 액터</strong> - 기능을 사용하고 결과를 받아보는 대상과 <strong>부 액터</strong> - 기능이 잘 작동하게하기 위해 지원해주는 대상으로 분류할 수 있댄다</li>
+<li>그리고 유스케이스는 해당 유스케이스를 처음에 작동시키는 <strong>Initiating actor</strong>와 유스케이스를 사용하는 <strong>Participating actor</strong>가 있더라</li>
+<li>여기서 <strong>Initiating actor</strong>가 반드시 필요하다는 사실에 주목할 것 - 해당 유스케이스를 개시/작동시키는 액터가 반드시 있어야 된다</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image3.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image3.png"/></p>
+<ul>
+<li>액터를 찾는 것은 위의 그림에 나와있는 고민을 해보면 된다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image4.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image4.png"/></p>
+<ul>
+<li>액터는 위의 그림처럼 졸라맨으로 그리거나, Actor 클래스로 표현한다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image5.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image5.png"/></p>
+<ul>
+<li>그리고 위처럼 상속관계를 이용해 일반화된 액터를 표현하는 것도 가능하다</li>
+<li>액터들의 공통점을 생각해 하나의 액터로 일반화시키는 것</li>
+</ul>
+<h3 id="3-유스케이스-찾기">3. 유스케이스 찾기<a aria-hidden="true" tabindex="-1" href="#3-유스케이스-찾기" class="internal"> §</a></h3>
+<ul>
+<li>유스케이스를 찾기에 앞서 유스케이스가 만족해야 하는 특징들 몇가지를 다시 한번 정리해보면
+<ul>
+<li>반드시 액터에 의해 개시되어야 함</li>
+<li>액터에게 결과를 제공해야함</li>
+<li>어떤 기능의 일부분만 제공하는 것이 아닌 특정 기능의 전부를 제공하는 완전한 형태여야 함 - 요청과 그에 대한 결과가 명확하게 드러나야된다는 것</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image6.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image6.png"/></p>
+<ul>
+<li>유스케이스를 찾을때는 위의 질문들을 생각하면서 어떤 유스케이스가 있을지 고민해보면 된다</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image7.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image7.png"/></p>
+<ul>
+<li>유스케이스를 찾고 나서는 위에서 설명한 Usecase Diagram을 통해 그림으로 표현한다</li>
+</ul>
+<h3 id="4-유스케이스-기술description">4. 유스케이스 기술(Description)<a aria-hidden="true" tabindex="-1" href="#4-유스케이스-기술description" class="internal"> §</a></h3>
+<ul>
+<li>유스케이스의 기술에는 다음과 같은 것을 포함시키면 된다
+<ul>
+<li>유스케이스가 달성하고자 하는 궁극적인 목표</li>
+<li>유스케이스의 개시와 관련된 것 - 방법, 조건 등등</li>
+<li>전형적인 처리 순서(Typical flow) - 정상적으로 작동할때의 처리순서</li>
+<li>예외적인 처리순서(Alternative flow) - 뭐 어떤 에러가 발생했다던지 그러한 경우에의 처리 - 이건 너무 자세히 적지 말아야 한댄다</li>
+<li>유스케이스가 완료되어 결과물을 액터에게 전달하는 방법, 시점, 조건 등</li>
+<li>유스케이스를 작성할때는 <strong>텍스트</strong>로 표현하거나, 플로우 차트등을 이용한 시각자료인 <strong>Activity diagram</strong>등을 활용할 수 있다</li>
+<li>또한 일정한 <strong>템플릿(형식)</strong> 을 만들어놓고 활용할 수도 있다</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image8.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image8.png"/></p>
+<ul>
+<li>뭐 이런식으로 템플릿을 정해서 하면 된댄다</li>
+<li>위의 그림을 좀 자세히 보면
+<ul>
+<li><strong>Brief description</strong>에 뭐 유스케이스의 목표라던지 그런게 들어가고</li>
+<li>Secondary actor는 굳이 안적어도 되고</li>
+<li><strong>Precondition</strong>은 유스케이스의 개시 조건을 말하는거고</li>
+<li><strong>Main flow</strong>는 뭐 니가 생각하는 그거 맞고</li>
+<li><strong>Postcondition</strong>은 유스케이스의 종료조건을 말하는거고</li>
+<li><strong>Alternative flow</strong>도 위에서 설명한 그거다</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image9.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image9.png"/></p>
+<ul>
+<li>뭐 예시 한번 읽어보면 이해될거임</li>
+</ul>
+<h3 id="5-유스케이스-간의-관계-정의">5. 유스케이스 간의 관계 정의<a aria-hidden="true" tabindex="-1" href="#5-유스케이스-간의-관계-정의" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image10.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image10.png"/></p>
+<ul>
+<li><strong>일반화(Generalization)</strong> : 니가 생각하는 상속 말하는거 맞음
+<ul>
+<li>뭐 부모의 플로우나 그런것들을 다 물려받고</li>
+<li>자식 유스케이스에서는 부모의 유스케이스 플로우에 과정을 추가할 수 있고(Override의 개념)</li>
+<li>부모 유스케이스를 사용할 수 있는 곳에는 자식 유스케이스로 대체할 수 있는 등</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image11.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image11.png"/></p>
+<ul>
+<li><strong>포함 관계(Include Relationship)</strong> : 공통적으로 수행하는 플로우를 묶는것
+<ul>
+<li>뭐 상속과 비슷하기는 하다고 생각할 수 있는데 상속은 의미적인 부분에서 일반화시키거나 구체화하는 것인 반면</li>
+<li>포함관계는 의미적으로는 관련이 없지만 공통된 절차가 들어있다면 그것을 모으는 것을 의미함</li>
+<li>뭐 위의 예시 보면 뭔소린지 감올거임</li>
+<li>상속은 말그대로 클래스 상속이라고 생각하면 되고 포함관계는 마치 공통된 코드를 함수를 만들어 분리하는 것의 차이 정도로 생각하면 된다</li>
+<li>함수를 만들어 분리하는 것과 유사하기 때문에 유스케이스의 진행 플로우 중간에 다른 유스케이스를 포함하는 것이 가능하다 - 코드 실행 중간에 함수를 호출해 그쪽으로 흐름이 넘어가는 것과 유사</li>
+<li>그리고 포함되는 유스케이스가 완전할 경우에는 일반적인 유스케이스처럼 액터의 개시에 의해 즉시 사용 가능하지만 완전하지 않은 불완전한 유스케이스인경우에는 액터가 직접적으로 개시하는 것은 안된다</li>
+<li>Including use case = <strong>Base use case</strong></li>
+<li>Included use case = <strong>Inclusion use case</strong></li>
+<li>그리고 당연히 Base usecase의 경우에는 Inclusion usecase의 플로우를 필요로 하기 때문에 Base usecase없이는 불완전한 유스케이스가 된다</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image12.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image12.png"/></p>
+<ul>
+<li><strong>확장관계(Extension Relationship)</strong> : 이것도 일반화 관계랑 좀 유사하다
+<ul>
+<li>플로우를 진행하다가 특정 지점에서 특정 조건을 만족하면 추가적인 플로우를 진행한 후 원래의 플로우로 돌아갈 때 그 추가되는 유스케이스를 <strong>Extension Usecase</strong>라고 하고, 원래의 유스케이스를 <strong>Base Usecase</strong>, 그리고 이 둘의 관계를 <strong>확장관계</strong>라 하더라</li>
+<li>이것도 플로우의 중간에 흐름이 달라진다는 면에서는 포함관계와 어느정도 유사하다고 볼 수 있지만 포함관계의 경우에는 공통된 부분을 묶는 것에 관심이 있었으면, 얘는 특정 조건시에만 호출되어야 하는 분기문 정도로 생각할 수 있음</li>
+<li><strong>Base Usecase</strong>에 추가되는 지점을 <strong>Entension Point</strong>라고 한다</li>
+<li>특정 조건이 맞아야 확장된다는 특징은 Alternative flow를 모델링하는데에도 사용할 수 있다</li>
+<li>그리고 포함관계와 또 다른 차이점은 포함관계는 Base usecase만으로는 불완전하지만 확장관계의 경우에는 Base usecase만으로도 독립적으로 작동하는 완전한 유스케이스라는 것이다</li>
+<li>당연히 Extension usecase는 파편이기 때문에 보통 불완전하다</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-유스케이스-검증">6. 유스케이스 검증<a aria-hidden="true" tabindex="-1" href="#6-유스케이스-검증" class="internal"> §</a></h3>
+<ul>
+<li>올바르게, 만들어진 명세에 따라, 고객 또는 최종 사용자의 요구를 충족시키는 방향으로 개발되었는가를 <strong>확인(Verification)</strong>, <strong>검증(Validation)</strong> 하는 것</li>
+<li><strong>Usecase work through</strong>라는 과정을 통해 검증할 수 있다
+<ul>
+<li>이것은 액터 그룹, 시스템 그룹을 나누어 역할극을 하고 역할극에 참여하지 않은 사람들이 보고 결함을 찾으려고 노력하는 하나의 방법론이다</li>
+</ul>
+</li>
+</ul>
+<h2 id="usecase-realization">Usecase Realization<a aria-hidden="true" tabindex="-1" href="#usecase-realization" class="internal"> §</a></h2>
+<ul>
+<li>유스케이스를 프로그램으로 구현하는 것</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image13.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image13.png"/></p>
+<ul>
+<li>실제 세계(RW, Real World)에서의 유스케이스들이 컴퓨터 세계(CW, Computer World)에서 어떻게 구현되는가를 보이는 것</li>
+<li>뭐 당연한 얘기지만 하나의 유스케이스는 다양한 클래스들과 오퍼레이션(함수)들을 조합하여 완성된다</li>
+</ul>
+<h2 id="주의할-점">주의할 점<a aria-hidden="true" tabindex="-1" href="#주의할-점" class="internal"> §</a></h2>
+<ul>
+<li>Actor generalization, Use case generalization, including, extending등의 방법은 최대한 자제해야 한다 - 모델을 단순화하는 것이 명확하게 드러나고 이해관계자들이 그렇게 하는 것의 의미에 대해 이해할 수 있을 때에만 수행해래는 의미</li>
+</ul>
+<h3 id="actor-generalization">Actor Generalization<a aria-hidden="true" tabindex="-1" href="#actor-generalization" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image14.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image14.png"/></p>
+<ul>
+<li>이걸</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image15.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image15.png"/></p>
+<ul>
+<li>이렇게 바꿈</li>
+<li>보다시피 일반화를 해서 다이어그램이 단순해 지는것이 명확할 때만 사용해야 된다는 것 기억해라</li>
+</ul>
+<h3 id="include-relationship">Include Relationship<a aria-hidden="true" tabindex="-1" href="#include-relationship" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image16.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image16.png"/></p>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image17.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image17.png"/></p>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image18.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image18.png"/></p>
+<ul>
+<li>위처럼 사용할 수 있는데 이것도</li>
+<li>다이어그램이 단순화되는 것이 명확할 때만 사용해야 한다</li>
+<li>Include관계에서 주의해야 할 점이 기능을 최대한 쪼개서 include하는 것을 지양해야된다는 것(<strong>Avoid Decomposition</strong>)이다</li>
+<li>최대한 쪼개려 하지 말고 액터가 바라보는 기능단위로 유스케이스들을 구성하는게 바람직하다더라</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image19.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image19.png"/></p>
+<ul>
+<li>위의 그림처럼 하나의 루트에서 시작해서 각기 뻗어나가거나 너무 많은 계층 구조를 가지게 되는 것은 바람직 하지 않고</li>
+<li>계층구조가 많아봐야 2단계로 이루어지는 상태가 바람직하다더라</li>
+</ul>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image20.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image20.png"/></p>
+<ul>
+<li>위의 그림처럼 너무 세부적인 기능을 유스케이스로 만드는 것도 피해야 된다</li>
+</ul>
+<h3 id="extend-relationship">Extend Relationship<a aria-hidden="true" tabindex="-1" href="#extend-relationship" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image21.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image21.png"/></p>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image22.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image22.png"/></p>
+<ul>
+<li>위처럼 사용할 수 있는데 이것도</li>
+<li>다이어그램이 단순화되는 것이 명확할 때만 사용해야 한다</li>
+</ul>
+<h3 id="유스케이스-순서화를-피해라">유스케이스 순서화를 피해라<a aria-hidden="true" tabindex="-1" href="#유스케이스-순서화를-피해라" class="internal"> §</a></h3>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image23.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image23.png"/></p>
+<ul>
+<li>위의 그림처럼 순서가 중요한 경우에는 그것을 유스케이스 다이어그램에 표현하지 말아야 한다</li>
+<li>순서가 필요한 경우에는 Use case description의 precondition을 이용해라</li>
+</ul>
+<h2 id="작성시에의-팁">작성시에의 팁<a aria-hidden="true" tabindex="-1" href="#작성시에의-팁" class="internal"> §</a></h2>
+<p><img src="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/images/04_0d55e4d053b446868888aaca94cf18b8/image24.png" alt="%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB05%20-%20%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%B3%20%E1%84%86%E1%85%A9%E1%84%83%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5%E1%86%BC%200d55e4d053b446868888aaca94cf18b8/image24.png"/></p>
+<ul>
+<li>위의 그림에서도 주목해야 할 것은</li>
+<li>유스케이스 모델링도 요구사항 명세의 하나의 과정이기 때문에 How가 아니라 What에 집중해야 된다는 것과</li>
+<li>위에서 설명한거처럼 더이상 분할이 안될때까지 기능을 분리해서 작성하는 것이 아닌 액터가 바라보는 기능 단위로 유스케이스 작성을 해야된다는 것이다</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#유스케이스-모델링" data-for="유스케이스-모델링">유스케이스 모델링</a></li><li class="depth-1"><a href="#유스케이스의-목적" data-for="유스케이스의-목적">유스케이스의 목적</a></li><li class="depth-0"><a href="#usecase-diagram-description" data-for="usecase-diagram-description">Usecase Diagram, Description</a></li><li class="depth-0"><a href="#유스케이스-모델링-절차" data-for="유스케이스-모델링-절차">유스케이스 모델링 절차</a></li><li class="depth-1"><a href="#1-시스템-정의" data-for="1-시스템-정의">1. 시스템 정의</a></li><li class="depth-1"><a href="#2-액터-찾기" data-for="2-액터-찾기">2. 액터 찾기</a></li><li class="depth-1"><a href="#3-유스케이스-찾기" data-for="3-유스케이스-찾기">3. 유스케이스 찾기</a></li><li class="depth-1"><a href="#4-유스케이스-기술description" data-for="4-유스케이스-기술description">4. 유스케이스 기술(Description)</a></li><li class="depth-1"><a href="#5-유스케이스-간의-관계-정의" data-for="5-유스케이스-간의-관계-정의">5. 유스케이스 간의 관계 정의</a></li><li class="depth-1"><a href="#6-유스케이스-검증" data-for="6-유스케이스-검증">6. 유스케이스 검증</a></li><li class="depth-0"><a href="#usecase-realization" data-for="usecase-realization">Usecase Realization</a></li><li class="depth-0"><a href="#주의할-점" data-for="주의할-점">주의할 점</a></li><li class="depth-1"><a href="#actor-generalization" data-for="actor-generalization">Actor Generalization</a></li><li class="depth-1"><a href="#include-relationship" data-for="include-relationship">Include Relationship</a></li><li class="depth-1"><a href="#extend-relationship" data-for="extend-relationship">Extend Relationship</a></li><li class="depth-1"><a href="#유스케이스-순서화를-피해라" data-for="유스케이스-순서화를-피해라">유스케이스 순서화를 피해라</a></li><li class="depth-0"><a href="#작성시에의-팁" data-for="작성시에의-팁">작성시에의 팁</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/etc/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/(충남대)-소프트웨어-공학-강의록" class="internal">(충남대) 소프트웨어 공학 강의록</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>
