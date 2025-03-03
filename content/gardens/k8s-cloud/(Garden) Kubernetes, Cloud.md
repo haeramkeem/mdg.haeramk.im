@@ -32,6 +32,7 @@ aliases:
 - 용어집
 	- [[Finalizer (Kubernetes)|Finalizer]]
 	- [[Network Policy (Kubernetes)|Network Policy]]
+	- [[Rule-Based Aceess Control, RBAC (Kubernetes)|Rule-Based Aceess Control, RBAC]]
 - 스토리
 	- [[Kube-proxy - iptables vs ipvs mode performance comparison]]
 	- [[Kubeconfig 파일로 Kube apiserver 에 직접 cURL 찔러보기]]
