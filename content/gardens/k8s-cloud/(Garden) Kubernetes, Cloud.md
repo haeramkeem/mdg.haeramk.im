@@ -31,6 +31,7 @@ aliases:
 	- [[제 4회 테크 데이 - Kubernetes Korea Group 커뮤니티 기술 세미나 참석 기록]]
 - 용어집
 	- [[Finalizer (Kubernetes)|Finalizer]]
+	- [[Network Policy (Kubernetes)|Network Policy]]
 - 스토리
 	- [[Kube-proxy - iptables vs ipvs mode performance comparison]]
 	- [[Kubeconfig 파일로 Kube apiserver 에 직접 cURL 찔러보기]]
