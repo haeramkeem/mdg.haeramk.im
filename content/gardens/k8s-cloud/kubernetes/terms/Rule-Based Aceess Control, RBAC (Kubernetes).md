@@ -53,7 +53,7 @@ rules:
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
 ```
-	
+
 - 뭐 보다시피 `resources` 와 `verbs` 항목에 배열로 값을 넣어야 되는데
 - 주의할점은 `verbs` 에 `"list"` 는 반드시 있어야 한다: 얘가 없으면 `apiGroups` 와 `resources` 를 읽어오지 못한다.
 - 그리고 `apiGroups` 항목은 `resources` 에 드가는 (무언가) 들에 대해 `apiVersion` 들을 적어주는 부분이다
@@ -66,7 +66,7 @@ rules:
 ## RoleBinding
 
 - 얘는 뭐 SA 랑 Role 이랑 엮어주는 놈이기 때문에 별거 없다.
-	
+
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -82,7 +82,7 @@ roleRef:
   name: pod-reader
   apiGroup: rbac.authorization.k8s.io
 ```
-	
+
 - `sebjects` 에 엮을 SA 를 명시하고
 - `roleRef` 에 엮을 Role 을 명시한다.
 
@@ -103,7 +103,7 @@ roleRef:
 ![[Pasted image 20250303122231.png]]
 
 4. 그리고 `ServiceAccount` 만들면 Access Token 이 하나 생성된다.
-	- _**주의**_ : 쿠버네티스 1.24 부터는 SA 를 생성해도 Access Token 이 자동으로 생성되지 않는다
+	- **주의** : 쿠버네티스 1.24 부터는 SA 를 생성해도 Access Token 이 자동으로 생성되지 않는다
 		- 실습 당시에는 EKS 에서 1.24 를지원하지 않아서 어쩔 수 없이 이전 버전으로 했으나 알아두길
 	- `kubectl describe` 로 토큰 값 복사해놓자.
 
