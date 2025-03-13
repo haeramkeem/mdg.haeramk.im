@@ -29,3 +29,12 @@ lldb ${경로}
 ```sh
 gdb ${경로}
 ```
+
+## Tip
+
+- Debug mode 일 때만 특정 compile option 을 주기 위해서는, `CMAKE_CXX_FLAGS_DEBUG` 를 사용하면 된다.
+- 가령 다음과 같이 해줄 수 있다.
+
+```cmake
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+```
