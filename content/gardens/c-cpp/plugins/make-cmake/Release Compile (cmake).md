@@ -17,3 +17,9 @@ endif()
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 ```
+
+- 인자로 넣으려면, 다음과 같이 한다.
+
+```sh
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE=-O3 ${경로}
+```
