@@ -27,10 +27,10 @@ cmake ${PROJECT_ROOT}
 ```json
 [
 {
-  "directory": "/path/to/directory",
-  "command": "/usr/bin/cc   -O3 -DNDEBUG -std=gnu99 -Wall -Wextra -Wpedantic -Wmissing-prototypes -Werror -o /path/to/obj_file.c.o -c /path/to/source_file.c",
-  "file": "/path/to/source_file.c",
-  "output": "/path/to/obj_file.c.o"
+	"directory": "/path/to/directory",
+	"command": "/usr/bin/cc   -O3 -DNDEBUG -std=gnu99 -Wall -Wextra -Wpedantic -Wmissing-prototypes -Werror -o /path/to/obj_file.c.o -c /path/to/source_file.c",
+	"file": "/path/to/source_file.c",
+	"output": "/path/to/obj_file.c.o"
 },
 ...
 ]

@@ -5,6 +5,8 @@ tags:
 date: 2025-03-13
 ---
 > [!info]- 참고한 것들
+> - [스댕](https://stackoverflow.com/a/15998680)
+> - [티스토리 블로그](https://pr0gr4m.tistory.com/entry/Linux-Kernel-5-Kernel-Timer-jiffies-ktime)
 
 ## 시간 알아내기
 
