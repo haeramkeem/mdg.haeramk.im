@@ -106,6 +106,7 @@ date: 2024-04-23
 	- [[journalctl - Kernel log 보기|Kernel log 보기]]
 	- [[journalctl - Log level 필터링하기|Log level 필터링하기]]
 	- [[journalctl - Log 비활성화하기|Log 비활성화하기]]
+	- [[journalctl - 부팅 로그 보기|부팅 로그 보기]]
 	- [[journalctl - 시점으로 필터링하기|시점으로 필터링하기]]
 - `less`
 	- [[less - Color code 보여주기|Color code 보여주기]]

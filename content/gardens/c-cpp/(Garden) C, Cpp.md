@@ -23,6 +23,7 @@ date: 2024-07-29
 	- [[Direct IO, O_DIRECT (C File IO)|Direct IO, O_DIRECT]]
 - Kernel
 	- [[File IO in Kernel Module (C Linux Kernel)|File IO in Kernel Module]]
+	- [[Get Current Timestamp (C Linux Kernel)|Get Current Timestamp]]
 	- [[Printk Formatting (C Linux Kernel)|Printk Formatting]]
 	- [[세상 간단한 Kernel module 예시 (C Linux Kernel)|세상 간단한 Kernel module 예시]]
 - Memory
@@ -107,5 +108,8 @@ date: 2024-07-29
 	- [[Debug Compile (cmake)|Debug Compile]]
 	- [[Library Configuration (cmake)|Library Configuration]]
 	- [[Macro Setup (make, cmake)|Macro Setup]]
+	- [[Make Clean (make, cmake)|Make Clean]]
+	- [[Print Compile Flags (cmake)|Print Compile Flags]]
+	- [[Release Compile (cmake)|Release Compile]]
 - `valgrind`
 	- [[Basic Usage (valgrind)|Basic Usage]]
