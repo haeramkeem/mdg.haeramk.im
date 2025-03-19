@@ -1,12 +1,22 @@
 ---
 tags:
   - cmake
+  - make
 date: 2025-03-11
 ---
 > [!info]- 참고한 것들
-> - [스댕](https://stackoverflow.com/a/61471216)
+> - [스댕 - make](https://stackoverflow.com/a/5820364)
+> - [스댕 - cmake](https://stackoverflow.com/a/61471216)
 
-## TL;DR
+## TL;DR (Make)
+
+- `make` 에서는 dry run option 인 `-n` 을 사용하면 된다.
+
+```bash
+make -n
+```
+
+## TL;DR (CMake)
 
 - `CMakeLists.txt` 에 다음의 줄을 추가하면 된다.
 

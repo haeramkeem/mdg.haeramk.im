@@ -109,7 +109,7 @@ date: 2024-07-29
 	- [[Library Configuration (cmake)|Library Configuration]]
 	- [[Macro Setup (make, cmake)|Macro Setup]]
 	- [[Make Clean (make, cmake)|Make Clean]]
-	- [[Print Compile Flags (cmake)|Print Compile Flags]]
+	- [[Print Compile Flags (make, cmake)|Print Compile Flags]]
 	- [[Release Compile (cmake)|Release Compile]]
 - `valgrind`
 	- [[Basic Usage (valgrind)|Basic Usage]]
