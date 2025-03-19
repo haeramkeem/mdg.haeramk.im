@@ -87,6 +87,9 @@ date: 2024-04-23
 	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
 	- [[git - 기본 editor 를 VIM 으로 바꾸기|기본 editor 를 VIM 으로 바꾸기]]
 	- [[git - 이전 commit 다시 sign 하기|이전 commit 다시 sign 하기]]
+- `grep`
+	- [[grep - 기본 사용법|기본 사용법]]
+	- [[grep - 파일 이름 함께 출력하기|파일 이름 함께 출력하기]]
 - HAProxy
 	- [[HAProxy - Routing rule 설정하기|Routing rule 설정하기]]
 	- [[HAProxy - Statistics page 설정하기|Statistics page 설정하기]]
@@ -173,3 +176,6 @@ date: 2024-04-23
 - `wc`
 	- [[wc - Line 수 세기|Line 수 세기]]
 	- [[wc - 글자수 세기|글자수 세기]]
+- `xargs`
+	- [[xargs - 기본 사용법|기본 사용법]]
+	- [[xargs - 문자열 trimming 하기|문자열 trimming 하기]]

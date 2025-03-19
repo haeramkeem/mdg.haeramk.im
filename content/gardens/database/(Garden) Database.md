@@ -65,6 +65,7 @@ date: 2024-07-29
 	- [[Prefix Code (Encoding)|Prefix Code]]
 	- [[Roaring Bitmap (Encoding)|Roaring Bitmap]]
 	- [[Run Length Encoding, RLE (Encoding)|Run Length Encoding, RLE]]
+	- [[Zig-Zag (Encoding)|Zig-Zag Encoding]]
 - 논문들
 	- [[(논문) The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code|The FastLanes Compression Layout - Decoding 100 Billion Integers per Second with Scalar Code (VLDB'23)]]
 
