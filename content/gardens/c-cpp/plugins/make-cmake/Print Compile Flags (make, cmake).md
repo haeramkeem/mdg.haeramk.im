@@ -6,7 +6,8 @@ date: 2025-03-11
 ---
 > [!info]- 참고한 것들
 > - [스댕 - make](https://stackoverflow.com/a/5820364)
-> - [스댕 - cmake](https://stackoverflow.com/a/61471216)
+> - [스댕 - cmake (1)](https://stackoverflow.com/a/3379246)
+> - [스댕 - cmake (2)](https://stackoverflow.com/a/61471216)
 
 ## TL;DR (Make)
 
@@ -18,17 +19,39 @@ make -n
 
 ## TL;DR (CMake)
 
-- `CMakeLists.txt` 에 다음의 줄을 추가하면 된다.
-
-```cmake
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-```
-
-- 그 다음에 `cmake` 를 하면
+- 우선 `-DCMAKE_VERBOSE_MAKEFILE=ON` 를 넣어서 `cmake` 를 해준다.
 	- 보통 `cmake` 를 쓸 때 `build` 디렉토리를 만들어 그 안으로 들어가 사용하기 때문에, 저 `${PROJECT_ROOT}` 에 `..` 를 넣어주면 된다.
 
+> [!tip]- `CMakeLists.txt` 에 넣으려면?
+> ```cmake
+> set(CMAKE_VERBOSE_MAKEFILE ON)
+> ```
+
 ```bash
-cmake ${PROJECT_ROOT}
+cmake -DCMAKE_VERBOSE_MAKEFILE=ON ${PROJECT_ROOT}
+```
+
+- 그리고 빌드를 하면
+	- 보통 `${BUILD_DIR}` 는 `.` 를 넣어주면 된다.
+
+```bash
+cmake --build ${BUILD_DIR}
+```
+
+- 빌드를 하면서 그동안 표시되지 않았던 build command 들이 전부 표시된다.
+
+### 다른 방법
+
+- 위 방법이 낫기는 하지만, 다음과 같이 할 수도 있다.
+- `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` 를 넣어서 `cmake` 를 하면 된다.
+
+> [!tip]- `CMakeLists.txt` 에 넣으려면?
+> ```cmake
+> set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+> ```
+
+```bash
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ${PROJECT_ROOT}
 ```
 
 - `compile_commands.json` 라는 파일이 만들어진다.
