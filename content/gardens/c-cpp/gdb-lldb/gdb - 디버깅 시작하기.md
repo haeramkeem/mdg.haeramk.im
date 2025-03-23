@@ -8,6 +8,7 @@ aliases:
 ---
 > [!info]- 참고한 것들
 > - [스댕 - ptrace](https://stackoverflow.com/a/32274645)
+> - [스댕 - args](https://stackoverflow.com/a/6121299)
 
 ## 개요
 
@@ -40,6 +41,12 @@ gdb /path/to/binary
 
 ```bash
 gdb -p $PID
+```
+
+- Program arguments 를 넣고싶다면, `--args` 옵션을 사용하면 된다.
+
+```sh
+gdb --args /path/to/binary arg1 arg2
 ```
 
 ## `lldb`

@@ -21,6 +21,7 @@ aliases:
 
 - Variable-sized 에서는 해당 수가 몇개의 bit 으로 이루어져 있는지를 알아야 할 것이다.
 - 이때의 bit size 를 알아내는 핵심 아이디어는 "모든 *자연수* 는 이진수가 1로 시작" 한다는 것이다.
+	- "이진수가" 1로 시작한다는 말이다. byte 내에서의 MSB가 1이라는 것이 아님
 - 따라서 어떤 수가 $N$ 개의 bit 로 이루어져 있다는 것을 나타내기 위해 이 most significant bit `1` 앞에다가 $N-1$ 개의 `0` 을 붙이는 것이 *Elias Gamma Coding* 이다.
 
 ### Encoding 예시
