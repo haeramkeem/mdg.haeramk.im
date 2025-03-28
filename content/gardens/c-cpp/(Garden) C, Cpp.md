@@ -32,6 +32,7 @@ date: 2024-07-29
 - POSIX Thread
 	- [[세상 간단한 POSIX thread (pthread) 예시 (C Thread)|세상 간단한 POSIX thread (pthread) 예시]]
 - String
+	- [[Color Codes (C String)|Color Codes]]
 	- [[Numeric String Utils (C String)|Numeric String Utils]]
 - 자료형
 	- [[Function Pointer (C Type)|Function Pointer]]
