@@ -46,10 +46,10 @@ f_open(const char *path, int flags, int rights)
 ```
 
 - File open 은, `flip_open()` 을 사용하면 된다.
-- 이때 `flip_open()` 의 return 값은 정상적인 경우라면 `struct file*` 이지만, 그렇지 않을 때에는 음수 errno 번호를 준다.
-	- 가령 파일이 존재하지 않을 때는 errno `NOEXT` 인 `2` 를 return 하는데, 대신 이것의 음수인 `-2` 가 실제로는 return 된다.
+- 이때 `flip_open()` 의 return 값은 정상적인 경우라면 `struct file*` 이지만, 그렇지 않을 때에는 음수 [[Error Number, errno (C)|errno]] 번호를 준다.
+	- 가령 파일이 존재하지 않을 때는 [[Error Number, errno (C)|errno]] `NOEXT` 인 `2` 를 return 하는데, 대신 이것의 음수인 `-2` 가 실제로는 return 된다.
 	- 이것은 `flip_open()` 의 반환값이 `NULL` 인지 확인하는 것으로 성공 여부를 확인할 수 없다는 말이다.
-	- 따라서 이것이 정상적인 `struct file*` 인지 확인하기 위해서는 위 예시처럼 `IS_ERR()` macro 를 사용해야 하고, 이것을 errno 로 뽑아내기 위해서는 `PTR_ERR()` macro 를 사용해야 한다.
+	- 따라서 이것이 정상적인 `struct file*` 인지 확인하기 위해서는 위 예시처럼 `IS_ERR()` macro 를 사용해야 하고, 이것을 [[Error Number, errno (C)|errno]] 로 뽑아내기 위해서는 `PTR_ERR()` macro 를 사용해야 한다.
 - 그리고 주의할점은 여기서 파일의 경로는 절대경로를 사용해야 한다는 것이다. `~` 나 `.` 를 사용하면 kernel module 입장에서는 경로를 알 수 없기 때문.
 
 ```c

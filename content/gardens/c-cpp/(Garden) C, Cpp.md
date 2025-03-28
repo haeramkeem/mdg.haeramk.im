@@ -19,6 +19,8 @@ date: 2024-07-29
 
 - Debug
 	- [[함수 진입, 탈출 메세지 출력하기 (C Debug)|함수 진입, 탈출 메세지 출력하기]]
+- Error
+	- [[Error Number, errno (C)|Error Number, errno]]
 - IO
 	- [[Direct IO, O_DIRECT (C File IO)|Direct IO, O_DIRECT]]
 - Kernel
