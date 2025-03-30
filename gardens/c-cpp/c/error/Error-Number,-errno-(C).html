@@ -41,7 +41,7 @@
 <li>위 예시에서는 <code>&quot;not-exist-file&quot;</code> 라는 존재하지 않는 파일을 open 하려고 하는 모습이다.</li>
 <li>따라서 이때는 당연히 음수 <code>fd</code> 가 반환되고, 이때의 <code>errno</code> 와 error message 를 출력해보면 다음과 같다.</li>
 </ul>
-<p><img src="../../../../Pasted-image-20250328162037.png" width="auto" height="auto"/></p>
+<p><img src="../../../../images/Pasted-image-20250328162037.png" width="auto" height="auto"/></p>
 <ul>
 <li>위에서 확인할 수 있다시피, 2 번은 <code>ENOENT</code> 로서 파일이 존재하지 않는다는 것을 의미한다.</li>
 <li>각 번호가 어떤것인지는 bash 에서 <code>errno</code> 명령어로 확인해 볼 수 있다.
