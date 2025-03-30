@@ -124,6 +124,7 @@ int main() {
 	- IO size 가 512byte 의 배수여야 한다.
 	- File offset 도 512byte 의 배수여야 한다.
 	- Memory 의 buffer 는 512byte 에 align 되어 있어야 한다.
+- 만약 이 조건이 지켜지지 않는다면, [[Error Number, errno (C)|errno]] 를 출력해봤을 때 `Invalid argument` 라는 에러가 뜬다.
 - 이를 위해서 저 `posix_memalign()` 를 사용하는 것.
 	- 이놈은 [[Memory Dynamic Allocation (C Memory)|malloc]] 처럼 동적할당을 해주되, 해당 memory 공간이 align 되어 있도록 할당해준다.
 - 이놈의 함수 선언은 요래 돼있다.

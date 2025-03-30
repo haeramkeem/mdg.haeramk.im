@@ -151,12 +151,17 @@ date: 2024-04-23
 	- [[psql - 설정 확인|설정 확인]]
 - Python
 	- [[(책) 점프 투 파이썬 정리록]]
+- `sed`
+	- [[sed - Color code 삭제하기|Color code 삭제하기]]
+	- [[sed - i 옵션에 대해 Linux 와 MacOS 에서의 차이점|i 옵션에 대해 Linux 와 MacOS 에서의 차이점]]
+	- [[sed - Regex 사용하기|Regex 사용하기]]
 - Slurm
 	- [[Slurm - 기본적인 사용법|기본적인 사용법]]
 - `ssh`
 	- [[ssh - Config 파일|Config 파일]]
 	- [[ssh - Keypair 생성하기|Keypair 생성하기]]
 	- [[ssh - Keypair 추가하기|Keypair 추가하기]]
+	- [[ssh - Known Hosts 관리하기|Known Hosts 관리하기]]
 - `tar`
 	- [[tar - 다운로드 와 압축해제를 동시에|다운로드 와 압축해제를 동시에]]
 	- [[tar - 파일 압축 하기|파일 압축하기]]
