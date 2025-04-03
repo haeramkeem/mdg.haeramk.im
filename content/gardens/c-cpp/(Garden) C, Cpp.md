@@ -36,6 +36,8 @@ date: 2024-07-29
 - String
 	- [[Color Codes (C String)|Color Codes]]
 	- [[Numeric String Utils (C String)|Numeric String Utils]]
+- Time
+	- [[마이크로초 구하기 (C Time)|마이크로초 구하기]]
 - 자료형
 	- [[Function Pointer (C Type)|Function Pointer]]
 	- [[Struct (C Type)|Struct]]
