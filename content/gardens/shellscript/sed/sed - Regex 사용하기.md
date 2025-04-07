@@ -3,6 +3,8 @@ tags:
   - bash-sed
   - shellscript
 date: 2025-03-24
+aliases:
+  - sed
 ---
 > [!info]- 참고한 것들
 > - [스댕](https://stackoverflow.com/a/17511700)
