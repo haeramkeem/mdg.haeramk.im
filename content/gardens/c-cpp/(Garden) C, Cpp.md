@@ -23,6 +23,7 @@ date: 2024-07-29
 	- [[Error Number, errno (C)|Error Number, errno]]
 - IO
 	- [[Direct IO, O_DIRECT (C File IO)|Direct IO, O_DIRECT]]
+	- [[Lseek System Call (C File IO)|Lseek System Call]]
 	- [[Open System Call (C File IO)|Open System Call]]
 	- [[Standard Error (C Standard IO)|Standard Error]]
 	- [[Standard Output (C Standard IO)|Standard Output]]
