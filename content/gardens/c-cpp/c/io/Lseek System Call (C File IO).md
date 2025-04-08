@@ -6,6 +6,9 @@ date: 2025-04-08
 aliases:
   - lseek
 ---
+> [!info]- 참고한 것들
+> - [Man7](https://man7.org/linux/man-pages/man2/lseek.2.html)
+
 ## TL;DR
 
 > [!tip] Header 정보
