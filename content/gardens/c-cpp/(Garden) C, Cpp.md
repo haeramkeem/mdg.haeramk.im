@@ -23,6 +23,8 @@ date: 2024-07-29
 	- [[Error Number, errno (C)|Error Number, errno]]
 - IO
 	- [[Direct IO, O_DIRECT (C File IO)|Direct IO, O_DIRECT]]
+	- [[Standard Error (C Standard IO)|Standard Error]]
+	- [[Standard Output (C Standard IO)|Standard Output]]
 - Kernel
 	- [[File IO in Kernel Module (C Linux Kernel)|File IO in Kernel Module]]
 	- [[Get Current Timestamp (C Linux Kernel)|Get Current Timestamp]]
