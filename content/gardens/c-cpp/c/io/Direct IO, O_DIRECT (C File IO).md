@@ -108,7 +108,8 @@ int main() {
 
 > [!tip] 기타 함수 참고
 > - [[Memory Utils (C Memory)|memcpy, memset]]
-> - [[C - File IO syscall (open, write, read, fsync, close)|open, write, read, close]]
+> - [[Open System Call (C File IO)|open]]
+> - [[C - File IO syscall (open, write, read, fsync, close)|write, read, close]]
 
 ### O_DIRECT
 

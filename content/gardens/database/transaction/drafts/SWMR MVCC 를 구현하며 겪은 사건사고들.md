@@ -118,7 +118,8 @@ if (dec_num != hex_num) { /* ... */ }
 - Array -> LinkedList 변경
 - Free after read 문제
 - GC
-	- 
+
+> [!fail] 여기부터는 나중에 정리
 
 ## 비고: C 정리
 
@@ -127,6 +128,6 @@ if (dec_num != hex_num) { /* ... */ }
 - [[Struct (C Type)]]
 - [[C - Basic file IO (fopen, fwrite, fread, fclose)]]
 - [[Memory Dynamic Allocation (C Memory)]]
-- [[C - 메모리에 데이터 저장하기 (memset, memcpy)]]
+- [[Memory Utils (C Memory)]]
 - [[Numeric String Utils (C String)]]
 - [[C - File IO syscall (open, write, read, fsync, close)]]
