@@ -88,8 +88,10 @@ date: 2024-04-23
 - `git`
 	- [[git - Commit message 바꾸기|Commit message 바꾸기]]
 	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
+	- [[git - Tag 추가하기|Tag 추가하기]]
 	- [[git - 기본 editor 를 VIM 으로 바꾸기|기본 editor 를 VIM 으로 바꾸기]]
 	- [[git - 이전 commit 다시 sign 하기|이전 commit 다시 sign 하기]]
+	- [[git - 일부분만 add 하기|일부분만 add 하기]]
 - `grep`
 	- [[grep - 기본 사용법|기본 사용법]]
 	- [[grep - 파일 이름 함께 출력하기|파일 이름 함께 출력하기]]
