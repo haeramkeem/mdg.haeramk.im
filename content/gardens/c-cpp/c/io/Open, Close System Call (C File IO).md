@@ -47,7 +47,7 @@ O_RDWR | O_CREAT
 	- `O_WRONLY`: 쓰기 전용 (write only).
 	- `O_CREAT`: 만약에 파일이 없으면 생성한다.
 	- `O_DIRECT`: Linux page cache 를 사용하지 않고 [[Direct IO, O_DIRECT (C File IO)|Direct IO]] 를 사용한다.
-	- `O_SYNC`: Synchronize IO 를 한다. 즉, [[Write System Call (C File IO)|write]] 할 때 실제로 disk 에 데이터가 쓰일때까지 함수가 return 되지 않는다.
+	- `O_SYNC`: Synchronize IO 를 한다. 즉, [[Read, Write System Call (C File IO)|write]] 할 때 실제로 disk 에 데이터가 쓰일때까지 함수가 return 되지 않는다.
 
 ## `close()`
 

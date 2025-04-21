@@ -130,4 +130,5 @@ if (dec_num != hex_num) { /* ... */ }
 - [[Memory Dynamic Allocation (C Memory)]]
 - [[Memory Utils (C Memory)]]
 - [[Numeric String Utils (C String)]]
-- [[C - File IO syscall (write, read, fsync)]]
+- [[Fsync System Call (C File IO)]]
+- [[Read, Write System Call (C File IO)]]
