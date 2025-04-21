@@ -19,7 +19,7 @@ aliases:
 ## Overview
 
 - [[struct ReadStream (Postgres Coderef)|Read Stream Mode]] 로 다음 buffer 를 읽는 것을 총괄하는 함수이다.
-- [[struct ReadStream (Postgres Coderef)|여기]] 에서 말한 것처럼, (A) 모든 prefetch 가 완료되어 buffer 로 전부 올라온 경우 (B) prefetch 가 진행중이고 [[C - File IO syscall (open, write, read, fsync, close)|fsync]] 를 사용할 수 없는 경우, (C) prefetch 가 진행중이고 [[C - File IO syscall (open, write, read, fsync, close)|fsync]] 를 사용할 수 있는 경우 세가지로 나뉜다.
+- [[struct ReadStream (Postgres Coderef)|여기]] 에서 말한 것처럼, (A) 모든 prefetch 가 완료되어 buffer 로 전부 올라온 경우 (B) prefetch 가 진행중이고 [[C - File IO syscall (write, read, fsync)|fsync]] 를 사용할 수 없는 경우, (C) prefetch 가 진행중이고 [[C - File IO syscall (write, read, fsync)|fsync]] 를 사용할 수 있는 경우 세가지로 나뉜다.
 	- Read stream mode 에서의 작동방식은 [[struct ReadStream (Postgres Coderef)|여기]] 에 설명해놓았으니 앞으로의 내용을 이해하기 위해서는 이 내용을 알고 있어야 한다.
 
 ## Line Ref
