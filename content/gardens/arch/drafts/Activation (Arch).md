@@ -63,7 +63,7 @@ aliases:
 #### 2. Current context 저장
 
 - 함수가 종료되고 다시 원래대로 돌아왔을 때, 실행되기 전과 동일한 상태로 실행되어야 한다.
-- 그래서 현재의 register 값들 또한 stack 에 저장하는데, 이때 중요한 것은 [[Program Counter, PC (Arch)|program counter]] (`PC`) 값을 저장한다는 것이다.
+- 그래서 현재의 register 값들 또한 stack 에 저장하는데, 이때 중요한 것은 [[Program Counter, PC (CPU Arch)|program counter]] (`PC`) 값을 저장한다는 것이다.
 	- 이것이 바로 return address 가 된다; 즉, 함수가 종료되었을 때 돌아와야할 주소는, 함수 호출 직전의 `PC` 값이기 떄문.
 - 참고로 모든 register 값을 저장하지는 않는다. 일단은 필요한 값들 (특히 `PC`) 만 저장한다고 생각하자.
 - 그리고 여기까지 한 다음에 함수 코드로 점프하게 된다.

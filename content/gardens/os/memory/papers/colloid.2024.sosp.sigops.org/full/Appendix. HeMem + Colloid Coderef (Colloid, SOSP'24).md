@@ -19,7 +19,7 @@ title: "(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (
 
 ## Uncore Performance Monitoring Registers
 
-- CHA 는 [[Uncore (Intel Arch)|Uncore]] subsystem 에 속하고 [[Model-Specific Register, MSR (Intel Arch)|MSR]] 레지스터를 통해 접근한다.
+- CHA 는 [[Uncore (Intel CPU Arch)|Uncore]] subsystem 에 속하고 [[Model-Specific Register, MSR (Intel CPU Arch)|MSR]] 레지스터를 통해 접근한다.
 - 때문에 앞으로 여러번 등장할 아래의 MSR address 표를 먼저 살펴보자.
 
 ![[Pasted image 20250129184343.png]]

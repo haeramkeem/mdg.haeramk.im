@@ -6,7 +6,7 @@ tags:
   - draft
 date: 2024-12-06
 ---
-> [!fail]- 본 글은 #draft 상태입니다.
+> [!warning]- 본 글은 부분적으로 #draft 상태입니다.
 > - [ ] 내용 추가
 
 > [!info]- 참고한 것들
@@ -226,9 +226,13 @@ matmul_kernel(float *A, float *B, float *C, int M, int N, int K)
 }
 ```
 
+> [!warning] #draft 설명 추가 필요
+
 ![[Pasted image 20241208154135.png]]
 
 ## Kernel 4. 2D Blocktiling
+
+> [!warning] #draft 설명 추가 필요
 
 ```c
 __global__ void
@@ -277,6 +281,8 @@ matmul_kernel(float *A, float *B, float *C, int M, int N, int K)
 ![[Pasted image 20241208171219.png]]
 
 ## Kernel 5. Vectorization
+
+> [!warning] #draft 설명 추가 필요
 
 ```c
 __global__ void

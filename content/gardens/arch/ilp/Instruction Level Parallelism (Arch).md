@@ -7,7 +7,7 @@ aliases:
   - ILP
   - Scalar
   - Superscalar
-  - Instruction level parallelism
+  - Instruction Level Parallelism
 date: 2024-10-18
 ---
 > [!info]- 참고한 것들
