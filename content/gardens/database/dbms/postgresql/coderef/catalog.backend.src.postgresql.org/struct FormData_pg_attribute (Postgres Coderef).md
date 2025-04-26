@@ -6,7 +6,6 @@ aliases:
   - FormData_pg_attribute
   - struct FormData_pg_attribute
   - Form_pg_attribute
-date: 2025-02-12
 ---
 > [!info]- 코드 위치 (v17.1)
 > - Location (`struct FormData_pg_attribute`)

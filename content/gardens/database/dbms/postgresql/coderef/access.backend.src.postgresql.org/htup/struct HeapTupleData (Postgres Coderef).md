@@ -12,11 +12,10 @@ aliases:
 > [!info]- 코드 위치 (v17.1)
 > - File path: `src/include/access/htup.h`
 > - Line: `62`
+> ```
+> src/include/access/htup.h:62
+> ```
 > - Link: [struct HeapTupleData](https://github.com/postgres/postgres/blob/REL_17_1/src/include/access/htup.h#L30-L71)
-> - VIM
-> ```
-> vi src/include/access/htup.h +62
-> ```
 
 ## Overview
 
@@ -25,7 +24,7 @@ aliases:
 
 ```
 +------------------------+
-| HeapTupleData (t_self) |
+| HeapTupleData (t_data) |
 +-------------------|----+
                     |
   +-(first version)-+
@@ -45,4 +44,7 @@ aliases:
 
 ## Field Ref
 
-> [!fail] #draft 나중에 정리합니다.
+- `t_len`: `t_data` 가 가리키는 놈의 byte length.
+- `t_self`: #draft Tuple 이 속한 page 와 slot 정보인듯
+- `t_tableOid`: Tuple 이 속한 table 의 object ID.
+- `t_data`: [[struct HeapTupleHeaderData (Postgres Coderef)|HeapTupleHeaderData]] 를 가리키는 포인터.
