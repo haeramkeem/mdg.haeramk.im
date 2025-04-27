@@ -28,7 +28,9 @@ date: 2024-07-29
 ### CPU
 
 - 용어집
+	- [[Pipeline Hazard (Arch)|Pipeline Hazard]]
 	- [[Program Counter, PC (CPU Arch)|Program Counter, PC]]
+	- [[Structure Hazard (Arch)|Structure Hazard]]
 	- [[Uncore (Intel CPU Arch)|Uncore]]
 
 ### NVIDIA CUDA

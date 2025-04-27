@@ -19,3 +19,4 @@ title: (SNU CSE) Advanced Computer Architectures
 ## 목차
 
 - [[01. Course Overview]]
+- [[02. Instruction Level Parallelism]]

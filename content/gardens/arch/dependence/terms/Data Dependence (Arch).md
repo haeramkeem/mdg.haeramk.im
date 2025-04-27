@@ -13,6 +13,7 @@ aliases:
   - Input dependence
   - Data dependence
   - Memory dependence
+  - WAW dependence
 date: 2024-10-18
 ---
 > [!info]- 참고한 것들
@@ -24,7 +25,9 @@ date: 2024-10-18
 - 어떤 레지스터 혹은 메모리 공간에 대해 [[Dependence (Arch)|Dependence]] 가 있는 것을 *Data dependence* (혹은 *Memory dependence*) 라고 한다.
 - 여기에는 다음의 네 종류가 있다:
 
-### Flow dependence
+### Flow dependence (Data dependence)
+
+![[Pasted image 20250426223520.png]]
 
 ```
 P: A = ...
@@ -40,8 +43,11 @@ flowchart LR
 - Flow dependence ($\delta^{t}$) 란 동일한 메모리 공간에 연산결과를 (1) 저장하고 (2) 읽어가는 두 연산을 말한다.
 	- [[#True, False dependence|True dependence]] 에 속한다.
 - 즉, Read-after-write (RAW) 관계인 것.
+- 다만, 어떤 강의에서는 이것을 data dependence 라고 말하기도 하는듯.
 
 ### Anti dependence
+
+![[Pasted image 20250426223607.png]]
 
 ```
 P: ... = A
@@ -59,6 +65,8 @@ flowchart LR
 - 즉, Write-after-read (WAR) 인 것.
 
 ### Output dependence
+
+![[Pasted image 20250426223625.png]]
 
 ```
 P: A = ...

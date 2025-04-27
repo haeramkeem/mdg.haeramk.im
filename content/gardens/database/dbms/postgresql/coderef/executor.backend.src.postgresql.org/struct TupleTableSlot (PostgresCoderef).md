@@ -17,20 +17,18 @@ aliases:
 > 	- File path: `src/include/executor/tuptable.h`
 > 	- Line: `114`
 > 	- Link: [struct TupleTableSlot](https://github.com/postgres/postgres/blob/REL_17_1/src/include/executor/tuptable.h#L113-L131)
-> 	- VIM
 > ```
-> vi src/include/executor/tuptable.h +114
+> src/include/executor/tuptable.h:114
 > ```
 > - `TupleTableSlot` Implementations:
 > 	- File path: `src/include/executor/tuptable.h`
 > 	- Line: `244` (`VirtualTTS`), `253` (`HeapTTS`), `267` (`BufferHeapTTS`), `282` (`MinimalTTS`)
 > 	- Link: [struct TupleTableSlot (implementations)](https://github.com/postgres/postgres/blob/REL_17_1/src/include/executor/tuptable.h#L240-L301)
-> 	- VIM
 > ```
-> vi src/include/executor/tuptable.h +244
-> vi src/include/executor/tuptable.h +253
-> vi src/include/executor/tuptable.h +267
-> vi src/include/executor/tuptable.h +282
+> src/include/executor/tuptable.h:244
+> src/include/executor/tuptable.h:253
+> src/include/executor/tuptable.h:267
+> src/include/executor/tuptable.h:282
 > ```
 
 ## Overview
