@@ -124,10 +124,11 @@ if (dec_num != hex_num) { /* ... */ }
 ## 비고: C 정리
 
 - [[Direct IO, O_DIRECT (C File IO)]]
-- [[C - POSIX thread mutex]]
+- [[POSIX Mutex (C POSIX Thread)]]
 - [[Struct (C Type)]]
-- [[C - Basic file IO (fopen, fwrite, fread, fclose)]]
+- [[Basic file IO (C File IO)]]
 - [[Memory Dynamic Allocation (C Memory)]]
 - [[Memory Utils (C Memory)]]
 - [[Numeric String Utils (C String)]]
-- [[C - File IO syscall (write, read, fsync)]]
+- [[Fsync System Call (C File IO)]]
+- [[Read, Write System Call (C File IO)]]

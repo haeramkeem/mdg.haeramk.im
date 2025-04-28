@@ -44,7 +44,7 @@ date: 2024-11-21
 ### `catalog`
 
 - Types
-	- [[struct Form_pg_attribute (Postgres Coderef)|Form_pg_attribute]]
+	- [[struct FormData_pg_attribute (Postgres Coderef)|Form_pg_attribute]]
 
 ### `commands`
 

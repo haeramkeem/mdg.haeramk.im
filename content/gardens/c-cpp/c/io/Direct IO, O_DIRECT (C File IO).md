@@ -109,7 +109,7 @@ int main() {
 > [!tip] 기타 함수 참고
 > - [[Memory Utils (C Memory)|memcpy, memset]]
 > - [[Open, Close System Call (C File IO)|open]]
-> - [[C - File IO syscall (write, read, fsync)|write, read]]
+> - [[Read, Write System Call (C File IO)|read, write]]
 
 ### O_DIRECT
 
