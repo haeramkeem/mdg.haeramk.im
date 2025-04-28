@@ -131,8 +131,8 @@
 <li>그리고 <a href="https://github.com/host-architecture/colloid/tree/master" class="external">여기</a> 에 application 이 사용하는 core 개수를 변화시켰을 때 <sup><a href="#user-content-fn-evaluation-application-core" id="user-content-fnref-evaluation-application-core" data-footnote-ref aria-describedby="footnote-label" class="internal">3</a></sup> 와 read-write ratio 를 변화시켰을 때 <sup><a href="#user-content-fn-evaluation-rw-ratio" id="user-content-fnref-evaluation-rw-ratio" data-footnote-ref aria-describedby="footnote-label" class="internal">4</a></sup> 의 실험 결과가 있다고 한다.</li>
 </ul>
 </li>
-<li>일단 <a href="../../../../../../gardens/arch/drafts/Compute-Express-Link,-CXL-(Arch)" class="internal" data-slug="gardens/arch/drafts/Compute-Express-Link,-CXL-(Arch)">CXL</a> 을 사용하게 되면, DRAM memory 보다 대략 latency 가 2배정도 차이난다고 한다. 그래서 지금까지의 실험에서는 default tier 와 alternate tier 간의 latency 가 1.9 배 차이나도록 하고 있었다고 한다.</li>
-<li>근데 이 unloaded latency 를 바꾸기 위해, 이 실험에 대해서만 <a href="../../../../../../gardens/arch/terms/Uncore-(Intel-Arch)" class="internal" data-slug="gardens/arch/terms/Uncore-(Intel-Arch)">uncore frequency</a> 를 조정해 alternate tier 의 latency 를 1.9 배에서 2.7 배 까지 변화시킬 수 있었다고 한다.
+<li>일단 <a href="../../../../../../gardens/arch/memory/drafts/Compute-Express-Link,-CXL-(Arch)" class="internal" data-slug="gardens/arch/memory/drafts/Compute-Express-Link,-CXL-(Arch)">CXL</a> 을 사용하게 되면, DRAM memory 보다 대략 latency 가 2배정도 차이난다고 한다. 그래서 지금까지의 실험에서는 default tier 와 alternate tier 간의 latency 가 1.9 배 차이나도록 하고 있었다고 한다.</li>
+<li>근데 이 unloaded latency 를 바꾸기 위해, 이 실험에 대해서만 <a href="../../../../../../gardens/arch/cpu/terms/Uncore-(Intel-CPU-Arch)" class="internal" data-slug="gardens/arch/cpu/terms/Uncore-(Intel-CPU-Arch)">uncore frequency</a> 를 조정해 alternate tier 의 latency 를 1.9 배에서 2.7 배 까지 변화시킬 수 있었다고 한다.
 <ul>
 <li>근데 이렇게 uncore frequency 를 건드는 것은 alternate tier 의 bandwidth 를 줄이는 side-effect 도 있다고 한다.</li>
 <li>따라서, 제시되는 값들은 “보수적인 수치” 라고 할 수 있다: 실제로는 해당 latency 를 가지는 alternate tier 의 bandwidth 는 이것보다 클 것이기 때문에, memory bandwidth saturation 에 의한 latency 의 증가가 이것보다는 더 적을 것이기 때문이다.</li>

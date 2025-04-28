@@ -83,7 +83,7 @@
 <ul>
 <li>HeMem 의 작동 과정을 간단히 살펴보면
 <ol>
-<li>Busy-polling thread 를 이용해 일정 기간마다 (fixed sampling rate) <a href="../../../../../../gardens/arch/drafts/Processor-Event-Based-Sampling,-PEBS-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Processor-Event-Based-Sampling,-PEBS-(Intel-Arch)">Processor Event Based Sampling, PEBS</a> 를 측정하여 page 별 access frequency 를 측정한다.</li>
+<li>Busy-polling thread 를 이용해 일정 기간마다 (fixed sampling rate) <a href="../../../../../../gardens/arch/cpu/drafts/Processor-Event-Based-Sampling,-PEBS-(Intel-Arch)" class="internal" data-slug="gardens/arch/cpu/drafts/Processor-Event-Based-Sampling,-PEBS-(Intel-Arch)">Processor Event Based Sampling, PEBS</a> 를 측정하여 page 별 access frequency 를 측정한다.</li>
 <li>각 tier 에 있는 page 들에 대한 hot list 와 cool list 를 유지하고, PEBS 로 측정한 frequency 가 일정 threshold 를 넘으면 hot list 에 추가되는 방식이다.
 <ul>
 <li>즉, 이말은 tier 별로 hot list 와 cool list 가 있는 셈이다.</li>
@@ -97,7 +97,7 @@
 <ul>
 <li>Latency 를 측정하는 것은 (4) 번에서의 page migration thread 에서 담당한다.
 <ul>
-<li>즉, (4) 번 thread 에서 10ms 마다 page migration 을 할 때 <a href="../../../../../../gardens/arch/drafts/Caching-Home-Agent,-CHA-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Caching-Home-Agent,-CHA-(Intel-Arch)">CHA</a> 를 읽어들여 queue occupancy 와 request rate 를 측정하는 것.</li>
+<li>즉, (4) 번 thread 에서 10ms 마다 page migration 을 할 때 <a href="../../../../../../gardens/arch/cache/drafts/Caching-Home-Agent,-CHA-(Intel-Cache-Arch)" class="internal" data-slug="gardens/arch/cache/drafts/Caching-Home-Agent,-CHA-(Intel-Cache-Arch)">CHA</a> 를 읽어들여 queue occupancy 와 request rate 를 측정하는 것.</li>
 </ul>
 </li>
 <li><em>Colloid</em> 의 page placement algorithm 또한 (4) 번 thread 에 구현된다.

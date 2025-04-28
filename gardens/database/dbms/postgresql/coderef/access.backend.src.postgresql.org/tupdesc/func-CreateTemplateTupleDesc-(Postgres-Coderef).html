@@ -25,7 +25,7 @@
 <li><a href="https://github.com/postgres/postgres/blob/REL_17_1/src/backend/access/common/tupdesc.c#L76-L89" class="external">L76-L89</a>: TupleDesc 공간을 할당한다.
 <ul>
 <li>여기서 눈여겨볼 것은 TupleDesc 에서 <code>attrs</code> 전까지의 길이 (<code>offsetof(struct TupleDescData, attrs)</code>) 와</li>
-<li>인자로 받은 <a href="../../../../../../../gardens/database/data-model/terms/relational/Record-(Relational-Model)" class="internal" data-slug="gardens/database/data-model/terms/relational/Record-(Relational-Model)">Attribute</a> 개수 만큼의 <a href="../../../../../../../gardens/database/dbms/postgresql/coderef/catalog.backend.src.postgresql.org/struct-Form_pg_attribute-(Postgres-Coderef)" class="internal" data-slug="gardens/database/dbms/postgresql/coderef/catalog.backend.src.postgresql.org/struct-Form_pg_attribute-(Postgres-Coderef)">FormData_pg_attribute</a> 공간 크기 (<code>natts * sizeof(FormData_pg_attribute)</code>) 의 합을 할당하고 있는 것을 알 수 있다.</li>
+<li>인자로 받은 <a href="../../../../../../../gardens/database/data-model/terms/relational/Record-(Relational-Model)" class="internal" data-slug="gardens/database/data-model/terms/relational/Record-(Relational-Model)">Attribute</a> 개수 만큼의 <a href="../../../../../../../gardens/database/dbms/postgresql/coderef/catalog.backend.src.postgresql.org/struct-FormData_pg_attribute-(Postgres-Coderef)" class="internal" data-slug="gardens/database/dbms/postgresql/coderef/catalog.backend.src.postgresql.org/struct-FormData_pg_attribute-(Postgres-Coderef)">FormData_pg_attribute</a> 공간 크기 (<code>natts * sizeof(FormData_pg_attribute)</code>) 의 합을 할당하고 있는 것을 알 수 있다.</li>
 <li>즉, TupleDesc 의 struct definition 상에서는 <code>attrs</code> 가 fixed-sized array 이지만 실제로는 variable-sized 인 것.</li>
 </ul>
 </li>

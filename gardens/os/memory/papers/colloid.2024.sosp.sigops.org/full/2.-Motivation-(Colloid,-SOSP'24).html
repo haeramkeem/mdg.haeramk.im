@@ -61,8 +61,8 @@
 <ul>
 <li>HW 세팅은:
 <ul>
-<li>Socket 두개에 각각 Intel Xeon Platinum 8362 (32C, 1.25MB L2, 48MB <a href="../../../../../../gardens/arch/drafts/L1,-L2,-L3-Cache-(Arch)" class="internal" data-slug="gardens/arch/drafts/L1,-L2,-L3-Cache-(Arch)">LLC</a>) 가 들어있다.</li>
-<li>각 socket 은 <a href="../../../../../../gardens/arch/drafts/Ultra-Path-Interconnect,-UPI-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Ultra-Path-Interconnect,-UPI-(Intel-Arch)">UPI</a> 로 연결되어 있고, BW 는 75GB/s 이다.</li>
+<li>Socket 두개에 각각 Intel Xeon Platinum 8362 (32C, 1.25MB L2, 48MB <a href="../../../../../../gardens/arch/cache/drafts/L1,-L2,-L3-Cache-(Arch)" class="internal" data-slug="gardens/arch/cache/drafts/L1,-L2,-L3-Cache-(Arch)">LLC</a>) 가 들어있다.</li>
+<li>각 socket 은 <a href="../../../../../../gardens/arch/interconnect/drafts/Ultra-Path-Interconnect,-UPI-(Intel-Interconnect-Arch)" class="internal" data-slug="gardens/arch/interconnect/drafts/Ultra-Path-Interconnect,-UPI-(Intel-Interconnect-Arch)">UPI</a> 로 연결되어 있고, BW 는 75GB/s 이다.</li>
 <li>두 socket 의 한 CPU 만 쓰고 나머지 한 socket 은 remote memory 용도로만 사용한다.
 <ul>
 <li>즉, tiered memory 를 위한 장비가 없어서 이렇게 하는 것.</li>
@@ -179,7 +179,7 @@
 <ul>
 <li>그럼 이때 각 tier 의 latency 를 살펴보자.
 <ul>
-<li>이 latency 는 <a href="../../../../../../gardens/arch/drafts/Caching-Home-Agent,-CHA-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Caching-Home-Agent,-CHA-(Intel-Arch)">CHA</a> 를 이용해 측정했다고 한다.</li>
+<li>이 latency 는 <a href="../../../../../../gardens/arch/cache/drafts/Caching-Home-Agent,-CHA-(Intel-Cache-Arch)" class="internal" data-slug="gardens/arch/cache/drafts/Caching-Home-Agent,-CHA-(Intel-Cache-Arch)">CHA</a> 를 이용해 측정했다고 한다.</li>
 </ul>
 </li>
 </ul>
@@ -199,7 +199,7 @@
 <ul>
 <li>BW 를 보는 이유는 이것으로 각 상황에 대해, 어떤 tier 가 많이 사용되는지를 알 수 있기 때문이다.</li>
 <li>즉, default tier 가 많이 사용된다면 default tier 에 hot page 가 많다고 추론할 수 있는 셈.</li>
-<li>이것은 <a href="../../../../../../gardens/arch/drafts/Memory-Bandwidth-Monitoring,-MBM-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Memory-Bandwidth-Monitoring,-MBM-(Intel-Arch)">MBM</a> 을 이용해 알아냈다고 한다.</li>
+<li>이것은 <a href="../../../../../../gardens/arch/memory/drafts/Memory-Bandwidth-Monitoring,-MBM-(Intel-Memory-Arch)" class="internal" data-slug="gardens/arch/memory/drafts/Memory-Bandwidth-Monitoring,-MBM-(Intel-Memory-Arch)">MBM</a> 을 이용해 알아냈다고 한다.</li>
 </ul>
 </li>
 </ul>

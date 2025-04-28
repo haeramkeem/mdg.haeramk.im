@@ -19,7 +19,7 @@
 <li>근데 애매한 값들에 대해서는 fixed-size 보다 좀 더 많은 byte 를 사용할 수도 있다.</li>
 </ul>
 </li>
-<li>아이디어는 수를 <a href="../../../../gardens/arch/terms/Endian-(Arch)" class="internal" data-slug="gardens/arch/terms/Endian-(Arch)">Little endian</a> 으로 표현하되, MSB 는 “continuation bits”, 즉 “계속할지 말지” 를 결정하는 것으로 reserve 해놓는 것이다.
+<li>아이디어는 수를 <a href="../../../../gardens/arch/representation/terms/Endian-(Arch)" class="internal" data-slug="gardens/arch/representation/terms/Endian-(Arch)">Little endian</a> 으로 표현하되, MSB 는 “continuation bits”, 즉 “계속할지 말지” 를 결정하는 것으로 reserve 해놓는 것이다.
 <ul>
 <li>따라서 MSB 가 1이라면 다음 byte 가 더 있음을 나타내고</li>
 <li>0이라면 이것이 가장 마지막 byte 라는 것을 의미한다.</li>
@@ -57,7 +57,7 @@ AB CDEFGHI JKLMNOP
       AB  CDEFGHI  JKLMNOP
 </code></pre>
 <ul>
-<li>마지막으로 이것을 <a href="../../../../gardens/arch/terms/Endian-(Arch)" class="internal" data-slug="gardens/arch/terms/Endian-(Arch)">Little endian</a> 으로 바꿔주면 완성이다.</li>
+<li>마지막으로 이것을 <a href="../../../../gardens/arch/representation/terms/Endian-(Arch)" class="internal" data-slug="gardens/arch/representation/terms/Endian-(Arch)">Little endian</a> 으로 바꿔주면 완성이다.</li>
 </ul>
 <pre><code>11011111 10001001 00000011
  JKLMNOP  CDEFGHI       AB

@@ -49,7 +49,7 @@
 <ul>
 <li>고려한 tiered memory system architecture 는 위 그림과 같다.
 <ul>
-<li>모든 tier 의 메모리는 CPU 의 physical address space 에 노출되고, <code>LOAD</code> 나 <code>STORE</code> 등의 instruction 으로 <a href="../../../../../../gardens/os/io/terms/Direct-Memory-Access,-DMA-(OS)" class="internal" data-slug="gardens/os/io/terms/Direct-Memory-Access,-DMA-(OS)">cache coherence</a> 한 방식으로 접근이 가능하며, 동일한 <a href="../../../../../../gardens/arch/drafts/Memory-Consistency-Model-(Arch)" class="internal" data-slug="gardens/arch/drafts/Memory-Consistency-Model-(Arch)">memory consistency model</a> 을 사용한다.</li>
+<li>모든 tier 의 메모리는 CPU 의 physical address space 에 노출되고, <code>LOAD</code> 나 <code>STORE</code> 등의 instruction 으로 <a href="../../../../../../gardens/os/io/terms/Direct-Memory-Access,-DMA-(OS)" class="internal" data-slug="gardens/os/io/terms/Direct-Memory-Access,-DMA-(OS)">cache coherence</a> 한 방식으로 접근이 가능하며, 동일한 <a href="../../../../../../gardens/arch/memory/drafts/Memory-Consistency-Model-(Arch)" class="internal" data-slug="gardens/arch/memory/drafts/Memory-Consistency-Model-(Arch)">memory consistency model</a> 을 사용한다.</li>
 <li>가장 unloaded latency 가 작은 tier 를 <em>default tier</em> 라고 부르고, 나머지는 전부 <em>alternate tier</em> 라고 부른다.</li>
 <li>각 tier 는 별도의 controller 에 의해 관리된다.</li>
 </ul>
@@ -57,7 +57,7 @@
 <li>이러한 architecture 는 대부분의 tiered memory system 에서 흔하게 사용하는 방식이다:
 <ul>
 <li>보통 default tier 는 DDR memory 이고, memory controller 에 의해 관리된다.</li>
-<li>그리고 alternate tier 는 CXL 이나 <a href="../../../../../../gardens/arch/drafts/High-Bandwidth-Memory,-HBM-(Arch)" class="internal" data-slug="gardens/arch/drafts/High-Bandwidth-Memory,-HBM-(Arch)">HBM</a> 등으로 구성될 수 있다.</li>
+<li>그리고 alternate tier 는 CXL 이나 <a href="../../../../../../gardens/arch/memory/drafts/High-Bandwidth-Memory,-HBM-(Arch)" class="internal" data-slug="gardens/arch/memory/drafts/High-Bandwidth-Memory,-HBM-(Arch)">HBM</a> 등으로 구성될 수 있다.</li>
 </ul>
 </li>
 <li><em>Colloid</em> 는 fixed time period 인 <em>Quantum</em> 마다 동일한 작업을 하는 것을 기준으로 design 되었다.
@@ -167,7 +167,7 @@
 <li>Cache 에 있는 데이터가 memory 에 쓰이는 것은 write back 될때로, asynchronous 하기 때문에 실제로 memory 에 write request 가 오는 경우는 read 에 비해서는 아주 적다고 생각하면 된다.</li>
 </ul>
 </li>
-<li>Latency 를 측정하는 방법으로는, <a href="../../../../../../gardens/arch/drafts/Caching-Home-Agent,-CHA-(Intel-Arch)" class="internal" data-slug="gardens/arch/drafts/Caching-Home-Agent,-CHA-(Intel-Arch)">CHA</a> 를 이용한다.
+<li>Latency 를 측정하는 방법으로는, <a href="../../../../../../gardens/arch/cache/drafts/Caching-Home-Agent,-CHA-(Intel-Cache-Arch)" class="internal" data-slug="gardens/arch/cache/drafts/Caching-Home-Agent,-CHA-(Intel-Cache-Arch)">CHA</a> 를 이용한다.
 <ul>
 <li>요즘의 CPU 들은 이러한 HW counter 들을 다 가지고 있고, <em>Colloid</em> 는 Intel 의 memory access counter 인 CHA 를 사용하는 것.</li>
 <li>CHA 에 대해서 간단히 살펴보면:
