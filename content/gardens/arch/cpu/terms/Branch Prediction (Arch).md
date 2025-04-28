@@ -12,6 +12,9 @@ date: 2025-04-28
 > [!warning] #draft 본 글은 토막글 상태입니다.
 > - [ ] 내용 추가
 
+> [!info]- 참고한 것들
+> - [[02. Instruction Level Parallelism|서울대 유승주 교수님 고급 컴퓨터 구조 강의 (Spring 2025)]]
+
 ## Branch Prediction
 
 - *Branch prediction* 이라는 것은, [[Instruction Pipeline (Arch Instruction)|Pipeline]] 으로 instruction 을 실행하는 환경에서 branch instruction 이 있으면 다음에 어떤 instruction 을 실행해야 할 지 알 수 없기 때문에, 미리 예측하여 실행하는 것이다.
