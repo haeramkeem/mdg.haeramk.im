@@ -28,6 +28,8 @@ date: 2024-07-29
 ### CPU
 
 - 용어집
+	- [[Branch Prediction (Arch)|Branch Prediction]]
+	- [[Data Forwarding (Arch)|Data Forwarding]]
 	- [[Pipeline Hazard (Arch)|Pipeline Hazard]]
 	- [[Program Counter, PC (CPU Arch)|Program Counter, PC]]
 	- [[Structure Hazard (Arch)|Structure Hazard]]

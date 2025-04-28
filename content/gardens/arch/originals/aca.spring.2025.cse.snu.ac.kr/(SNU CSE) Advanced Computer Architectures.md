@@ -20,3 +20,4 @@ title: (SNU CSE) Advanced Computer Architectures
 
 - [[01. Course Overview]]
 - [[02. Instruction Level Parallelism]]
+- [[03. Tomasulo's Algorithm and Branch Prediction]]
