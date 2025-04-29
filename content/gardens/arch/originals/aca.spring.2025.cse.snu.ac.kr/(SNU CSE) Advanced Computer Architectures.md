@@ -23,3 +23,4 @@ title: (SNU CSE) Advanced Computer Architectures
 - [[03. Tomasulo's Algorithm and Branch Prediction]]
 - [[04. Speculation, Interrupts, In-Order Completion]]
 - [[05. Data Level Parallelism]]
+- [[06. GPU Architecture]]
