@@ -24,3 +24,4 @@ title: (SNU CSE) Advanced Computer Architectures
 - [[04. Speculation, Interrupts, In-Order Completion]]
 - [[05. Data Level Parallelism]]
 - [[06. GPU Architecture]]
+- [[07. Memory Hierarchy]]
