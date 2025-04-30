@@ -10,7 +10,7 @@ date: 2024-11-23
 
 - [[Postgres Server, Postmaster (PostgreSQL)|Postmaster]] 에서 [[Backend (Postgres)|Backend]] process 를 fork 하는 함수이다.
 
-## Line ref
+## Line Ref
 
 ### v16.4
 
@@ -27,7 +27,7 @@ date: 2024-11-23
 	- `4166`: 여기의 `backend_forkexec()` 은 Windows 운영체제에는 `fork()` syscall 이 없기 때문에 해당 기능을 수행해 주는 함수라고 생각하면 된다.
 - [L4169-L4193](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4169-L4193): `fork()` 된 child process (즉, `pid` 가 `0`) 에서의 logic 이다.
 	- `4168-4177`: Backend 는 postmaster 와 별개의 process 이기 때문에 postmaster 가 사용하던 자원들을 정리해 준다
-	- `4179-4192`: Backend initiation 작업을 해주고 [[func PostgresMain (Postgres Coderef)|BackendRun]] 으로 backend 를 시작한다.
+	- `4179-4192`: Backend initiation 작업을 해주고 [[func BackendRun (Postgres Coderef)|BackendRun()]] 으로 backend 를 시작한다.
 - [L4196-L4209](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4196-L4209): `fork()` 한 parent process 에서의 logic 인데, `fork()` 를 실패했을 때의 logic 이다 (즉, `pid` 가 음수).
 	- 여기서는 뭐 error message 를 출력하고 `STATUS_ERROR` 를 return 하는 것으로 끝난다.
 - [L4211-L4229](https://github.com/postgres/postgres/blob/REL_16_4/src/backend/postmaster/postmaster.c#L4211-L4229): 여기는 parent process 에서 `fork()` 에 성공했을 때의 logic 이다 (즉, `pid` 가 양수).
@@ -50,4 +50,4 @@ date: 2024-11-23
 > ```
 > - Link: [BackendStartup()](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/postmaster/postmaster.c#L3536-L3630)
 
-- [L3593-L3595](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/postmaster/postmaster.c#L3593-L3595): `v17.1` 에서는 여기서 [[func PostgresMain (Postgres Coderef)|BackendRun()]] 이 아닌 [[func BackendMain (Postgres Coderef)|BackendMain()]] 을 호출해서 [[func PostgresMain (Postgres Coderef)|PostgresMain()]] 으로 들어간다.
+- [L3593-L3595](https://github.com/postgres/postgres/blob/REL_17_1/src/backend/postmaster/postmaster.c#L3593-L3595): `v17.1` 에서는 여기서 [[func BackendRun (Postgres Coderef)|BackendRun()]] 이 아닌 [[func BackendMain (Postgres Coderef)|BackendMain()]] 을 호출해서 [[func PostgresMain (Postgres Coderef)|PostgresMain()]] 으로 들어간다.

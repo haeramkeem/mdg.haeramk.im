@@ -2,6 +2,7 @@
 tags:
   - database
   - db-postgresql
+  - story
 date: 2024-12-16
 ---
 ## 개요
@@ -9,6 +10,8 @@ date: 2024-12-16
 - 본 작물에서는 PostgreSQL 에서 sequential scan (가령 `SELECT * FROM table;`) 을 했을때의 function call stack 을 정리해 본다.
 
 ## Stack
+
+- 우선 [[Common Query Execution (Postgres Coderef)|공통 로직]] 을 처리한 다음, [[# Executor, Access Method Call Path|Executor, Access Method Call Path]] 부터 시작한다.
 
 ### Executor, Access Method Call Path
 
