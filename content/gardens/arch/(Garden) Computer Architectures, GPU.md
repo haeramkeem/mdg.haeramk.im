@@ -32,6 +32,7 @@ date: 2024-07-29
 	- [[Data Forwarding (Arch)|Data Forwarding]]
 	- [[Pipeline Hazard (Arch)|Pipeline Hazard]]
 	- [[Program Counter, PC (CPU Arch)|Program Counter, PC]]
+	- [[Register Renaming (Arch)|Register Renaming]]
 	- [[Structure Hazard (Arch)|Structure Hazard]]
 	- [[Uncore (Intel CPU Arch)|Uncore]]
 

@@ -5,9 +5,8 @@ tags:
 aliases:
   - Streaming Multiprocessor
   - SM
+  - Scalar Processor
   - SP
-  - LD-ST
-  - SFU
 ---
 > [!info]- 참고한 것들
 > - [[09. GPU Architectures|서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024)]]
