@@ -18,9 +18,6 @@ aliases:
 
 ## Abstract
 
-> [!tip] 간단 요약본
-> - [[4. Eleda Design (Eleda, VLDB'18)]]
-
 - DBMS 는 log buffer 에 log 를 적고, [[Write Ahead Log, WAL (Database Recovery)|WAL]] principle 에 따라 flush 하여 logging-recovery 의 방식으로 효율적인 [[Transaction, ACID (Database)|ACID]] 를 제공한다.
 - 하지만 중앙화된 logging system 은 multicore 시대가 옴에 따라 scalability issue 가 생겨났고, synchronous I/O 에 의한 delay 도 overhead 가 커지고 있다.
 - 그래서 이 논문에서는 scalability 가 높은 자료구조인 *GRACEHOPPER* 와, latency hinding 을 통해 synchronous I/O 상황에서도 빠르고 확장성이 높은 logging architecture 인 *ELEDA* 를 제시한다.
