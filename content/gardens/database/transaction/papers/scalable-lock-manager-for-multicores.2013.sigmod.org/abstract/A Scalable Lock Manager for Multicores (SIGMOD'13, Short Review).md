@@ -5,8 +5,9 @@ tags:
 date: 2025-05-05
 title: (논문 요약) A Scalable Lock Manager for Multicores (SIGMOD'13)
 ---
-> [!info] 논문 링크
-> - [논문](https://dl.acm.org/doi/pdf/10.1145/2463676.2465271)
+> [!info] 원본 논문
+> - 이 글은 [A Scalable Lock Manager for Multicores (SIGMOD'13)](https://dl.acm.org/doi/pdf/10.1145/2463676.2465271) 논문을 읽고 정리한 글입니다.
+> - 별도의 명시가 없으면, 본 논문에서 그림을 가져왔습니다.
 
 ## Motivation
 

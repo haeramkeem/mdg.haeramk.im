@@ -110,6 +110,8 @@ date: 2024-07-29
 	- [[Log Message Schemes (Database Recovery)|Physiological Logging]]
 	- [[STEAL, NO_STEAL Policy (Database Recovery)|STEAL, NO_STEAL Policy]]
 	- [[Write Ahead Log, WAL (Database Recovery)|Write Ahead Log, WAL]]
+- 논문들
+	- [[Scalable Database Logging for Multicores (VLDB'18)]]
 
 ### Transaction
 
@@ -118,6 +120,7 @@ date: 2024-07-29
 	- [[Multiversion Concurrency Control, MVCC (Database Transaction)|Multiversion Concurrency Control, MVCC]]
 - 논문들
 	- [[DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)|DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]
+	- [[A Scalable Lock Manager for Multicores (SIGMOD'13)]]
 
 ### DBMS
 
