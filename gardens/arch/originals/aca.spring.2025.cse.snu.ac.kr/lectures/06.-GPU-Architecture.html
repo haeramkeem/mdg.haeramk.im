@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html><head><title>06. GPU Architecture (Advanced Computer Architectures, SNU CSE)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="06. GPU Architecture (Advanced Computer Architectures, SNU CSE)"/><meta property="og:description" content="서울대학교 컴퓨터공학부 유승주 교수님의 &amp;quot;고급 컴퓨터 구조&amp;quot; 강의를 필기한 내용입니다. 목차 #draft 본 강의록은 아직 정리가 완료되지 않았습니다. NVIDIA V100 Architecture § 원래는 저 fetch / decode 로 묶인 한 단위가 SM 으로 불렸는데 V100 에 와서는 이 단위는 Sub-core 라고 이름붙게 되고 이 sub-core 여러개가 묶인 것이 하나의 SM 이 된다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학부 유승주 교수님의 &amp;quot;고급 컴퓨터 구조&amp;quot; 강의를 필기한 내용입니다. 목차 #draft 본 강의록은 아직 정리가 완료되지 않았습니다. NVIDIA V100 Architecture § 원래는 저 fetch / decode 로 묶인 한 단위가 SM 으로 불렸는데 V100 에 와서는 이 단위는 Sub-core 라고 이름붙게 되고 이 sub-core 여러개가 묶인 것이 하나의 SM 이 된다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/lectures/06.-GPU-Architecture"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">06. GPU Architecture (Advanced Computer Architectures, SNU CSE)</h1><p class="content-meta ">Mar 20, 2025, 10 min read</p><ul class="tags "><li><a href="../../../../../tags/arch" class="internal tag-link">#arch</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-aca25s" class="internal tag-link">#snu-aca25s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학부 유승주 교수님의 &quot;고급 컴퓨터 구조&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures" class="internal" data-slug="gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures">목차</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>#draft 본 강의록은 아직 정리가 완료되지 않았습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<h2 id="nvidia-v100-architecture">NVIDIA V100 Architecture<a aria-hidden="true" tabindex="-1" href="#nvidia-v100-architecture" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250428230339.png" width="auto" height="auto"/></p>
+<ul>
+<li>원래는 저 fetch / decode 로 묶인 한 단위가 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/09/Streaming-Multiprocessor,-SM-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/09/Streaming-Multiprocessor,-SM-(Arch)">SM</a> 으로 불렸는데</li>
+<li>V100 에 와서는 이 단위는 <em>Sub-core</em> 라고 이름붙게 되고 이 <em>sub-core</em> 여러개가 묶인 것이 하나의 SM 이 된다.
+<ul>
+<li>그리고 그에 따라 저 <em>sub-core</em> 들이 <a href="../../../../../gardens/arch/cuda/drafts/CUDA-Memory-Model-(NVIDIA-CUDA)" class="internal" data-slug="gardens/arch/cuda/drafts/CUDA-Memory-Model-(NVIDIA-CUDA)">Shared memory</a> 를 공유하게 되고,</li>
+<li><em>Sub-core</em> 에 <a href="../../../../../gardens/arch/cuda/terms/CUDA-Execution-Model-(NVIDIA-CUDA)" class="internal" data-slug="gardens/arch/cuda/terms/CUDA-Execution-Model-(NVIDIA-CUDA)">Warp</a> 가 하나씩 돌게 된다.</li>
+</ul>
+</li>
+<li>그래서 위와 같은 architecture 에서는, 하나의 warp 에서 32개의 <a href="../../../../../gardens/arch/cuda/terms/CUDA-Execution-Model-(NVIDIA-CUDA)" class="internal" data-slug="gardens/arch/cuda/terms/CUDA-Execution-Model-(NVIDIA-CUDA)">Thread</a> 가 돈다는 가정 하에, SM 에서 한번에 실행되는 warp 는 4개일 것이고, 한번에 도는 thread 의 개수는 128 개일 것이다.
+<ul>
+<li>하지만 이 말이 <a href="../../../../../gardens/arch/cuda/terms/CUDA-Execution-Model-(NVIDIA-CUDA)" class="internal" data-slug="gardens/arch/cuda/terms/CUDA-Execution-Model-(NVIDIA-CUDA)">Thread block</a> 의 크기가 128 이 된다는 것은 아니다.</li>
+<li>뒤에서도 설명하겠지만, Thread block 은 SM 에 scheduling 되는 단위이고, 이것은 register 의 잔량과 shared memory 의 잔량에 의해 결정된다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="sub-core">Sub-core<a aria-hidden="true" tabindex="-1" href="#sub-core" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250428230819.png" width="auto" height="auto"/></p>
+<ul>
+<li>이 <em>sub-core</em> 를 좀 자세히 보면 다음과 같다.
+<ul>
+<li>일단 이놈은 하나의 fetch - decode logic 을 따라가고,</li>
+<li>여러개의 functional unit 들 아래</li>
+<li>Warp 60 개에 대한 register 들이 쭉 있다.
+<ul>
+<li>그리고 각 warp register 들을 자세히 보면 32 개의 column 이 있다. 즉, 하나의 column 이 하나의 thread 에게 할당되는 register 들인 것이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428231115.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 자세히 보면 functional unit 들 중에서 노란색 상자로 그려져 있는 FP32 연산이 16개가 있고, 살구색 상자로 그려져 있는 INT32 연산도 16개 있는 것을 알 수 있다.
+<ul>
+<li>즉, warp 는 32 개 인데 이를 위한 functional unit 은 그의 절반인 16개 밖에 없는 것이다.</li>
+<li>이에 따라서 왼쪽의 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)">Pipeline</a> 처럼 한번 fetch 를 한 다음에는 FP32 와 INT32 연산에 2cycle 씩 걸리게 되는 것이다.</li>
+<li>거기에 보라색으로 표현되어 있는 functional unit 은 8개밖에 없는 것을 보면, 이것에 대한 연산은 4cycle 이 걸린다고 유추해볼 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="thread-block-scheduling-example-w-1d-convolution-code">Thread Block Scheduling Example (w/ 1D-Convolution Code)<a aria-hidden="true" tabindex="-1" href="#thread-block-scheduling-example-w-1d-convolution-code" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250428231603.png" width="auto" height="auto"/></p>
+<ul>
+<li>이러한 architecture 하에, 어떻게 thread block 이 SM 에 scheduling 되는지 <a href="../../../../../gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/lectures/05.-Data-Level-Parallelism" class="internal" data-slug="gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/lectures/05.-Data-Level-Parallelism">이전 강의</a> 에서의 1D-Convolution 예시를 가지고 알아보자.
+<ul>
+<li>일단 하나의 thread block 에는 128 thread 가 들어간다고 가정하면, 이놈이 필요한 데이터는 130개의 FP32 이다.
+<ul>
+<li>왜냐면 Window size 가 3인 1D-Convolution 이므로 128개에 추가적으로 2개가 더 필요한 것.</li>
+</ul>
+</li>
+<li>즉, 이는 520byte 에 해당하므로, shared memory 에 520byte 만큼의 여유 공간이 있어야 <a href="../../../../../gardens/arch/cuda/terms/CUDA-Execution-Model-(NVIDIA-CUDA)" class="internal" data-slug="gardens/arch/cuda/terms/CUDA-Execution-Model-(NVIDIA-CUDA)">Thread block scheduler</a> 는 해당 SM 에 thread block 을 할당해줄 수 있다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428232238.png" width="auto" height="auto"/></p>
+<ul>
+<li>Thread block 을 SM 에 할당할 때는, thread block scheduler 는 더 이상 할당할 수 없을 때 까지 계속 각 SM 들에게 thread block 을 할당해 준다.
+<ul>
+<li>위 예제에서는 좀 그림이 다르게 그려져 있다; 그냥 저 두 Core 0 과 1 이 각각 SM 이고, fetch-decode 가 하나씩 있는 것은 그냥 그려려니 해라.</li>
+</ul>
+</li>
+<li>각 SM 에서 할당할 수 있는지 없는지를 판단하는 것은 크게 2개의 요소에 의해 결정된다: 사용할 수 있는 register file 의 개수와 shared memory 잔량.
+<ul>
+<li>그래서 위의 예제에서는 shared memory 의 잔량이 1.5KB 인데, 하나의 thread block 은 520byte 를 요구하기 때문에 세개까지는 할당하지 못하는 것이다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428232524.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 신나게 실행을 하다가 어떤 thread block 이 끝나서 위 그림처럼 빈 공간이 생기면,</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428232742.png" width="auto" height="auto"/></p>
+<ul>
+<li>그 자리에 또 다음 thread block 을 할당해주는 식으로 흘러간다.</li>
+</ul>
+<h2 id="latency-hiding">Latency Hiding<a aria-hidden="true" tabindex="-1" href="#latency-hiding" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/lectures/05.-Data-Level-Parallelism" class="internal" data-slug="gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/lectures/05.-Data-Level-Parallelism">이전 강의</a> 에서 말한 것 처럼, SM 에는 thread 가 최대한 많이 들어있어야 memory access 등에 의해 warp 에 stall 이 발생하더라도 다른 warp 를 꺼내 실행하여 latency hiding 을 할 수 있는 가능성이 열린다.</li>
+<li>그럼 어떻게 하면 더 많은 thread 를 넣을 수 있는지 살펴보자.</li>
+</ul>
+<h3 id="tiling">Tiling<a aria-hidden="true" tabindex="-1" href="#tiling" class="internal"> §</a></h3>
+<ul>
+<li>위의 thread block scheduling 을 보면 SM 에 할당할 수 있는 thread 의 개수는 일단 shared memory 에 의해 제한된다는 것을 알 수 있다.</li>
+<li>근데 input data 의 크기는 이 shared memory 보다 크기 때문에 이것을 적당히 잘라서 shared memory 로 올릴 수 있도록 해야 한다. 이것이 <em>Tiling</em> 이다.</li>
+</ul>
+<h3 id="cuda-compute-capability">CUDA Compute Capability<a aria-hidden="true" tabindex="-1" href="#cuda-compute-capability" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429000048.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 표는 <a href="https://en.wikipedia.org/wiki/CUDA#Technical_specifications" class="external">위키피디아</a> 에 나와있는 CUDA Compute Capability 인데, 이놈을 읽는 방법을 간단히 알아보자.
+<ul>
+<li>일단 맨 첫줄은 Thread block 의 최대 크기를 나타낸다. 즉, 이것은 SM 에 scheduling 하는 단위의 최대 크기인 것. CUDA 6.0 기준으로, 이 값은 1024 (1K) 이다.</li>
+<li>그리고 빨간색 화살표가 나타내는 값은 32bit register 의 최대 개수이다. 마찬가지로 CUDA 6.0 기준으로, 이 값은 64K 이다.</li>
+<li>마지막으로 파란색 화살표가 나타내는 값은 SM 에 할당될 수 있는 최대 thread 의 개수이다. 이것은 CUDA 6.0 기준으로 2048 (2K) 이다.
+<ul>
+<li>이 부분에서 저 thread block size 와 헷갈릴 수 있다. Thread block size 는 SM 에 “한번에” 몇개의 thread 를 할당할 수 있는지를 나타내는 값이고, 이 값은 SM 에 할당될 수 있는 thread 의 최대 개수이다. 즉, SM 에 thread block 여러개가 할당되었을 때 이 값을 넘을 수는 없다는 의미이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이것에 대해 예시로 좀 알아보자. 우선 내가 짠 kernel 이 필요로 하는 32bit register 의 개수가 64개라고 해보자.
+<ul>
+<li>SM 의 register 의 최대 개수 (빨간 화살표) 로 계산한, 하나의 SM 에서 이 kernel 을 실행할 수 있는 thread 의 개수는 1K 개 인것을 알 수 있다.</li>
+<li>이때, 일단 이것은 첫번째 줄에 있는 thread block 의 최대 thread 개수인 1024 (1K) 개를 넘지는 않는다.</li>
+<li>그런데, 저 파란색 화살표가 가리키고 있는 SM 에 들어갈 수 있는 최대 thread 개수인 2048 (2K) 개에 비하면 절반밖에 안되는 것을 알 수 있다.</li>
+<li>따라서 SM 에는 thread 가 최대 2K 까지 들어갈 수 있는데 register 최대개수에 걸려 1K 밖에 넣을 수 없고, 이 경우에는 <em>Occupancy</em> 가 50% (1K / 2K) 인 것을 알 수 있다.</li>
+</ul>
+</li>
+<li>하지만 이때 kernel 을 최적화해서 kernel 이 필요로 하는 32bit register 의 개수가 32개로 줄였다고 해보자.
+<ul>
+<li>그럼 32bit register 의 총 개수인 64K 를 이용해 thread 의 최대 개수를 계산해 보면 2K 가 되고,</li>
+<li>따라서 이때의 <em>Occupancy</em> 는 100% (2K / 2K) 가 되는 것을 알 수 있다.</li>
+<li>다만, 이때 주의할 것은 그렇다고 thread block 의 크기가 2K 인 것은 아니다. 왜냐면 첫번째 줄에 나와있는 thread block 의 최대 크기가 1K 인 만큼, 이때에도 여전히 thread block 의 수는 1K 이다. 하지만 이제 SM 에 thread 를 2K 개 까지 넣을 수 있으므로, SM 에는 thread block 두개가 scheduling 되게 되는 것이다.</li>
+</ul>
+</li>
+<li>여기서 주의할 점은 <em>Occupancy</em> 가 100% 가 된다고 해서 utilization 이 100% 가 되는 것은 아니라는 것이다.
+<ul>
+<li>가령 memory access 가 많은 경우라면, Occupancy 가 100% 여도 결국에는 이 latency 를 hiding 하지 못해서 stall 이 발생하게 된다.</li>
+<li>하지만 반대로 compute heavy 한 작업이라면, 이러한 높은 occupancy 는 좋은 성능을 가져올 수 있다.</li>
+</ul>
+</li>
+</ul>
+<blockquote class="callout" data-callout="failure">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
+                  <div class="callout-title-inner"><p>이후 강의는 나중에 정리할 예정입니다. </p></div>
+                  
+                </div>
+</blockquote></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#nvidia-v100-architecture" data-for="nvidia-v100-architecture">NVIDIA V100 Architecture</a></li><li class="depth-1"><a href="#sub-core" data-for="sub-core">Sub-core</a></li><li class="depth-0"><a href="#thread-block-scheduling-example-w-1d-convolution-code" data-for="thread-block-scheduling-example-w-1d-convolution-code">Thread Block Scheduling Example (w/ 1D-Convolution Code)</a></li><li class="depth-0"><a href="#latency-hiding" data-for="latency-hiding">Latency Hiding</a></li><li class="depth-1"><a href="#tiling" data-for="tiling">Tiling</a></li><li class="depth-1"><a href="#cuda-compute-capability" data-for="cuda-compute-capability">CUDA Compute Capability</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures" class="internal">(SNU CSE) Advanced Computer Architectures</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

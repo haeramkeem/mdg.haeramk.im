@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html><head><title>07. Memory Hierarchy (Advanced Computer Architectures, SNU CSE)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="07. Memory Hierarchy (Advanced Computer Architectures, SNU CSE)"/><meta property="og:description" content="서울대학교 컴퓨터공학부 유승주 교수님의 &amp;quot;고급 컴퓨터 구조&amp;quot; 강의를 필기한 내용입니다. 목차 Memory Hierarchy § 일단 기술 발전 상황은 흔히 들었던 얘기다. Single core power 는 계속 증가하다가 정체되기 시작한다. 이에 따라 multicore 시대가 오고, 따라서 전체적인 compute power 는 계속 증가하는 추세를 보인다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학부 유승주 교수님의 &amp;quot;고급 컴퓨터 구조&amp;quot; 강의를 필기한 내용입니다. 목차 Memory Hierarchy § 일단 기술 발전 상황은 흔히 들었던 얘기다. Single core power 는 계속 증가하다가 정체되기 시작한다. 이에 따라 multicore 시대가 오고, 따라서 전체적인 compute power 는 계속 증가하는 추세를 보인다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/lectures/07.-Memory-Hierarchy"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">07. Memory Hierarchy (Advanced Computer Architectures, SNU CSE)</h1><p class="content-meta ">Mar 27, 2025, 29 min read</p><ul class="tags "><li><a href="../../../../../tags/arch" class="internal tag-link">#arch</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-aca25s" class="internal tag-link">#snu-aca25s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학부 유승주 교수님의 &quot;고급 컴퓨터 구조&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures" class="internal" data-slug="gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="memory-hierarchy">Memory Hierarchy<a aria-hidden="true" tabindex="-1" href="#memory-hierarchy" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250429005124.png" width="auto" height="auto"/></p>
+<ul>
+<li>일단 기술 발전 상황은 흔히 들었던 얘기다.
+<ul>
+<li>Single core power 는 계속 증가하다가 정체되기 시작한다.</li>
+<li>이에 따라 multicore 시대가 오고, 따라서 전체적인 compute power 는 계속 증가하는 추세를 보인다.</li>
+<li>근데 DRAM 은 그 속도를 따라오지 못하고 그 격차는 점점 벌어지게 된다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429005146.png" width="auto" height="auto"/></p>
+<ul>
+<li>이러한 간극을 줄이기 위해 Memory Hierarchy 가 등장하게 된다.
+<ul>
+<li>일단 간단히 생각해 보면 data access latency 는 데이터가 있는 위치까지의 distance 에 영향을 받는다.</li>
+<li>근데 capacity 가 커질수록 당연히 매체 (medium) 의 크기도 커지고, 따라서 distance 도 커져 latency 도 커지게 된다고 직관적으로 이해할 수 있을 것이다.</li>
+<li>따라서 점점 더 작은 capacity 를 가지지만 더욱 빠른 매체를 계층적으로 (Hierarchy) 배치하여 자주 사용하는, 혹은 앞으로 사용할 데이터를 더 빠르게 접근할 수 있게 해주는 것이 기본 아이디어인 셈.</li>
+</ul>
+</li>
+</ul>
+<h2 id="locality">Locality<a aria-hidden="true" tabindex="-1" href="#locality" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250429010001.png" width="auto" height="auto"/></p>
+<ul>
+<li>위에서 “자주 사용되는, 혹은 앞으로 사용할 데이터를 빠르게 접근” 한다고 했다.</li>
+<li>즉, 이 말이 곧 <em>Locality</em> 를 의미하는 것이고 따라서 locality 가 없다면 caching 은 별 의미가 없다.</li>
+<li>그래서 위의 memory access trace 를 보면
+<ul>
+<li>일자로 쭉 뻗어있는 놈은 같은놈이 계속 사용된다는 것이다. 즉, 이것이 <a href="../../../../../gardens/os/replacement/terms/Locality-(Replacement)" class="internal" data-slug="gardens/os/replacement/terms/Locality-(Replacement)">Temporal locality</a> 이다.</li>
+<li>반면에, 넓은 주소 공간에 걸쳐서 두껍게 trace 가 찍혀있는 부분에 대해서는 주변의 것들이 같이 사용된다는 것이다. 즉, 이것이 <a href="../../../../../gardens/os/replacement/terms/Locality-(Replacement)" class="internal" data-slug="gardens/os/replacement/terms/Locality-(Replacement)">Spatial locality</a> 인 것.</li>
+</ul>
+</li>
+<li>이 두 locality 에 대해서는 접근법이 다르다.
+<ul>
+<li>일단 temporal locality 에 대해서는 이놈을 계속 붙들고 있어야 하기 때문에 <a href="../../../../../gardens/os/replacement/draft/Replacement-Policy-(OS)" class="internal" data-slug="gardens/os/replacement/draft/Replacement-Policy-(OS)">Replacement Policy</a> 가 중요하다.</li>
+<li>반면에 spatial locality 에 대해서는 주변 애들을 같이 caching 해야 하기 때문에 Prefetching 이 중요하다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="terminology--metrics">Terminology &amp; Metrics<a aria-hidden="true" tabindex="-1" href="#terminology--metrics" class="internal"> §</a></h2>
+<ul>
+<li><em>Hit</em>: 원하는 데이터가 cache 에 있는 것.
+<ul>
+<li><em>Hit rate</em>: 전체 request 중에 Hit 이 발생한 비율.</li>
+<li><em>Hit time</em>: Hit 일 때, 그 데이터를 가져오는 총 시간. 즉, 이것은 Hit 인지 판단하는 시간과 데이터를 가져오는 시간의 합이다.</li>
+</ul>
+</li>
+<li><em>Miss</em>: 원하는 데이터가 cache 에 없는 것.
+<ul>
+<li><em>Miss rate</em>: 전체 request 중에 Hit 이 발생한 비율. 즉, 1 에서 <em>Hit rate</em> 을 뺀 것과 동일하다.</li>
+<li><em>Miss penalty</em>: Miss 가 났을 때, 그 데이터를 가져오는 총 시간. 즉, 이것은 lower level memory 로 부터 가져오는 시간과 Miss 인지 판단하는 시간의 합이다.</li>
+</ul>
+</li>
+<li><em>Misses Per Killo Instructions</em> (<em>MPKI</em>): 이것이 결국에는 Miss rate 이긴 한데, 다음과 같이 계산한다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429011326.png" width="auto" height="auto"/></p>
+<ul>
+<li>Average memory access time 은 말 그대로 memory access 에 걸리는 평균 시간으로, 다음과 같이 계산할 수 있다.
+<ul>
+<li>이놈을 줄이는 것은 항상 좋다. 다만, 이 수식이 의미하는 것처럼 Hit time, Miss rate, Miss penalty 가 모두 잘 조화되어야 한다.</li>
+<li>가령, Miss rate 를 줄이더라도 Miss penalty 가 아주 커져버리면 결과적으로 별로 의미가 없어지게 되는 것.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429011433.png" width="auto" height="auto"/></p>
+<ul>
+<li><em>Block</em>: caching 단위, 보통 우리가 access 하는 단위보다 크다
+<ul>
+<li>CPU cache 에서는 cacheline 이라고 생각하면 될듯</li>
+</ul>
+</li>
+</ul>
+<h2 id="impact-of-memory-access-latency">Impact of Memory Access Latency<a aria-hidden="true" tabindex="-1" href="#impact-of-memory-access-latency" class="internal"> §</a></h2>
+<ul>
+<li>간단한 예시로 memory access latency 가 가지는 영향력에 대해 알아보자.</li>
+<li>다음은 CPI (Cycles Per Instruction) 이 1 인 아주 간단하고 이상적인 상황에서의 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)">Pipeline</a> 이다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429012102.png" width="auto" height="auto"/></p>
+<ul>
+<li>하지만 이때 memory access latency 가 두배가 되어버리면, CPI 가 순식간에 2배가 되어버린다.
+<ul>
+<li>왜냐면 Fetch 에 두배나 더 많은 시간이 걸리기 때문.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429012130.png" width="auto" height="auto"/></p>
+<h2 id="block-placement">Block Placement<a aria-hidden="true" tabindex="-1" href="#block-placement" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250429012902.png" width="auto" height="auto"/></p>
+<ul>
+<li>많이 봐온 그림이니까 간단하게만 정리하고 넘어가자</li>
+<li>일단 <em>Associative</em> 라는 것은 말 그대로 “연관” 된다는 것이다.
+<ul>
+<li>따라서 Fully associative 는 어떤 block 이 cache 의 모든 entry 에 연관될 수 있다, 즉 모든 entry 에 들어갈 수 있다는 뜻이 되는거고,</li>
+<li>Set associative 는 어떤 block 이 “Set” 이라는 단위 내에서 연관될 수 있다, 즉, “Set” 내에서의 모든 entry 에 들어갈 수 있다는 뜻이 된다.</li>
+</ul>
+</li>
+<li>그리고 <em>Set</em> 이라는 것은 이것도 말 그대로 “집합” 이다.
+<ul>
+<li>집합에는 원소가 순서와 중복이 없이 들어갈 수 있다는 점을 생각하면 된다.</li>
+<li>즉, Set 내에서는 중복되지 않은 block 에 대해, 어느 위치에도 (Set-associative) 갈 수 있다는 의미가 되는 것.</li>
+<li>이 set 의 크기에 따라 N-way 라는 말이 붙는다. 즉, set entry 가 N 일 때, N-way set 라고 부르는 것.</li>
+</ul>
+</li>
+</ul>
+<h3 id="fully-associative-cache">Fully-Associative Cache<a aria-hidden="true" tabindex="-1" href="#fully-associative-cache" class="internal"> §</a></h3>
+<ul>
+<li>위에서 말한 대로, block 이 cache entry 의 어디든 갈 수 있는 경우.</li>
+<li>Fully-associative cache 는 <a href="../../../../../gardens/os/memory/terms/Translation-Lookaside-Buffer,-TLB-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Translation-Lookaside-Buffer,-TLB-(Memory)">TLB</a> 와 같은 특수한 경우가 아니라면 거의 사용되지 않는다.
+<ul>
+<li>왜냐면 block 이 어디에든 갈 수 있기 때문에 원하는 block 이 있는지, 있다면 어디에 있는지 확인하기 위해 linear search 를 하거나 복잡한 회로를 사용해야 하기 때문이다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="direct-mapped-cache">Direct-Mapped Cache<a aria-hidden="true" tabindex="-1" href="#direct-mapped-cache" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429102923.png" width="auto" height="auto"/></p>
+<ul>
+<li>만약 Set 의 크기가 1 이라면, 그건 direct-mapped cache 가 된다. 즉, 어떤 block 이 들어갈 수 있는 위치는 하나의 cache entry 밖에 안되는 것.
+<ul>
+<li>즉, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">oc</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">u</span><span class="mord mathnormal">m</span></span><span class="mspace allowbreak"></span><span class="mspace" style="margin-right:0.6667em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">mod</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">c</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">ry</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></span> 로 cache entry 가 결정된다.</li>
+</ul>
+</li>
+<li>당연하게도 block 이 들어갈 수 있는 cache entry 가 하나밖에 없으므로 conflict 시에는 무조건 replacement 를 해줘야 하는 문제가 있다.</li>
+<li>Direct-mapped cache 는 구현이 간편해서 종종 사용된다.
+<ul>
+<li>이것은 단순히 “간편함” 과 연관되는 것만은 아니다. 구현이 간단하다는 말은 hit time 이 아주 빠르다는 말이 되기 때문에 average memory access latency 를 줄이는데 도움이 될 수 있다.</li>
+<li>또한 이때는 mem index 에 cache size 를 modulo 해서 어느 entry 에 있는지 찾는다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="n-way-associative-cache">N-Way Associative Cache<a aria-hidden="true" tabindex="-1" href="#n-way-associative-cache" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429102842.png" width="auto" height="auto"/></p>
+<ul>
+<li>N 개의 cache entry 를 묶어 set 으로 관리하는 cache.</li>
+<li>Direct-mapped 와는 다르게, block 이 들어갈 수 있는 cache entry 가 N 개이므로 conflict 가 발생하더라도 N 개 까지는 방어가 된다.
+<ul>
+<li>즉, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">oc</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">u</span><span class="mord mathnormal">m</span></span><span class="mspace allowbreak"></span><span class="mspace" style="margin-right:0.6667em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">mod</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">se</span><span class="mord mathnormal" style="margin-right:0.05764em;">tS</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></span> 로 cache entry 가 결정된다.</li>
+</ul>
+</li>
+<li>이로 인해, N 번 까지는 conflict 가 안나므로 체감상 cache size 가 N 배 커진 것 같은 “환상” 을 만들어 준다.
+<ul>
+<li>하지만 실제로 cache size 가 커지지는 않았으므로, 이러한 set-assiciative cache 의 효과가 좋은 것.</li>
+</ul>
+</li>
+<li>N-way associative cache 가 가장 많이 사용된다.
+<ul>
+<li>이놈은 mem index 에 num. of set 을 modulo 해서 어느 set 에 있는지 찾고, 그 안에서 block 을 찾는 형태로 구현된다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="miss-types">Miss Types<a aria-hidden="true" tabindex="-1" href="#miss-types" class="internal"> §</a></h2>
+<ul>
+<li><em>Compulsory</em>: block 에 처음 접근할 때 발생하는 것
+<ul>
+<li>이것은 prefetch 혹은 큰 cache line size 등으로 줄일 수 있다.</li>
+</ul>
+</li>
+<li><em>Capacity</em>: cache size 가 부족해서 발생하는 것
+<ul>
+<li>이것은 그냥 cache size 를 늘리는 수 밖에는 없다.</li>
+</ul>
+</li>
+<li><em>Conflict</em>: 서로 다른 block 들이 같은 cache entry 에 들어가고자 해서 발생하는 것
+<ul>
+<li>이것은 그냥 cache size 를 늘리거나 set size 를 늘려서 속일 수도 있다.</li>
+</ul>
+</li>
+<li><em>Coherence</em>: write 로 인해 invalidate 되어서 miss 가 나는 것</li>
+</ul>
+<h2 id="finding-block-in-a-cache">Finding Block In a Cache<a aria-hidden="true" tabindex="-1" href="#finding-block-in-a-cache" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250429104907.png" width="auto" height="auto"/></p>
+<ul>
+<li>우선 알다시피 memory address 을 위와 같은 layout 으로 나눠서 활용하게 된다.
+<ul>
+<li><em>Block offset</em> (<em>Data select</em>, <em>Byte select</em>): block 안에서 원하는 byte 를 찾을 때 쓰는 것
+<ul>
+<li>이놈의 크기가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span></span> bit 라면, block 의 size 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span></span></span></span></span></span></span></span></span></span></span></span> byte 가 된다.</li>
+</ul>
+</li>
+<li><em>Block address</em>: block 을 찾기 위한 address
+<ul>
+<li>이놈은 어떤 cache 냐에 따라 <em>Tag</em> 와 <em>Index</em> 로 나뉜다.</li>
+<li><em>Tag</em> 는 cache 에 있는 이 block 이 내가 찾는 놈이 맞는지 검사하는데 사용되고</li>
+<li><em>Index</em> 는 cache 내에서의 cache entry index 번호이다.</li>
+<li>이들이 어떻게 사용되냐는 cache 의 종류에 따라 다르다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="direct-mapped-cache-1">Direct-Mapped Cache<a aria-hidden="true" tabindex="-1" href="#direct-mapped-cache-1" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429104529.png" width="auto" height="auto"/></p>
+<ul>
+<li>보면, 우선 Cache index 로 cache entry 를 찾고,</li>
+<li>Cache tag 를 이용해 이 cache entry 가 내가 찾는 block 이 맞는지 검사한 후,</li>
+<li>맞다면 block 안에서 byte 를 byte select 로 골라간다.</li>
+</ul>
+<h3 id="n-way-associative-cache-1">N-Way Associative Cache<a aria-hidden="true" tabindex="-1" href="#n-way-associative-cache-1" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429104718.png" width="auto" height="auto"/></p>
+<ul>
+<li>N-way associative cache 는 위처럼 N 개의 direct-mapped cache 가 있는 형상을 하고 있다.
+<ul>
+<li>그리고 이 N 개의 direct-mapped cache 에 걸쳐 있는 한 row 가 하나의 set 이 된다.</li>
+</ul>
+</li>
+<li>다만 direct mapped cache 와의 차이점은 cache index 로 set entry 를 고른다는 것이다.</li>
+<li>그래서 우선 cache index 로 set entry 를 고른 후, set 내의 두 cache entry (예시의 그림은 2-way associative 이기 때문에) 에 대해 cache tag 를 parallel 하게 검사한다.</li>
+<li>그 다음 나온 cache block 에 대해, byte select 로 byte 를 가져가게 되는 것이다.</li>
+<li>Address layout 과 관련해서, direct-mapped 와의 차이점은 저 cache index 의 크기가 다르다는 것이다.
+<ul>
+<li>Direct-mapped cache 에서 cache entry size 가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 개였다면,</li>
+<li>2-way associative cache 에서는 이 cache entry 들이 2개씩 하나의 set 에 들어가게 되므로 set 의 개수는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord">/2</span></span></span></span></span> 개 인 것이다.</li>
+<li>따라서 direct-mapped cache 에 비해 2-way associative cache 의 cache index 의 크기가 1bit 더 작은 것이다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="fully-associative-cache-1">Fully Associative Cache<a aria-hidden="true" tabindex="-1" href="#fully-associative-cache-1" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429104837.png" width="auto" height="auto"/></p>
+<ul>
+<li>Fully associative cache 에서는 cache index 없이 모든 cache address 부분을 tag 으로 사용한다.</li>
+<li>그래서 모든 cache entry 에 대한 cache tag 를 parallel 하게 한번에 비교하고, 그에 따라 cache entry 를 선택하여 byte select 로 값을 읽어가게 되는 것이다.</li>
+</ul>
+<h2 id="replacement">Replacement<a aria-hidden="true" tabindex="-1" href="#replacement" class="internal"> §</a></h2>
+<ul>
+<li>당연히 cache 에서는 자리가 부족하기 때문에 누군가는 evict 되어야 한다.</li>
+<li>이때, 누구를 뺄 것이냐.</li>
+</ul>
+<h3 id="least-recently-used-lru">Least Recently Used, LRU<a aria-hidden="true" tabindex="-1" href="#least-recently-used-lru" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429110946.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/os/replacement/terms/Least-Recently-Used,-LRU-(Replacement)" class="internal" data-slug="gardens/os/replacement/terms/Least-Recently-Used,-LRU-(Replacement)">LRU</a> 를 사용하면 high-priority -> low priority 방향의 queue 에서 최근 접근된 tag 를 high-priority 에 넣는다.
+<ul>
+<li>알다시피 LRU 는 잘 사용되지 않는다.
+<ul>
+<li>Scan 에서 hit rate 가 곱창나기도 하고</li>
+<li>Mgmt 에 space overhead 가 크기 떄문</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="re-reference-interval-prediction-rrip">Re-Reference Interval Prediction, RRIP<a aria-hidden="true" tabindex="-1" href="#re-reference-interval-prediction-rrip" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429111001.png" width="auto" height="auto"/></p>
+<ul>
+<li>이건 접근되면 바로 MRU 에 넣지 않고 일단 queue 에서의 LRU 바로 앞에 (뒤에서 두번째) 에 넣은 다음</li>
+<li>한번 더 접근되면 그때 MRU 로 옮긴다.</li>
+<li>이렇게 하는 이유는 데이터가 단 한번만 접근될 때도 있기 때문에 한번 접근되었을 때 바로 최우선순위로 올리지 않고 한번 더 지켜보는 것이다.</li>
+<li>지금도 그런지는 모르겠는데 이전에는 intel 의 <a href="../../../../../gardens/arch/cache/drafts/L1,-L2,-L3-Cache-(Arch)" class="internal" data-slug="gardens/arch/cache/drafts/L1,-L2,-L3-Cache-(Arch)">LLC</a> 에서 이렇게 했다고 한다.</li>
+</ul>
+<h2 id="write-policy">Write Policy<a aria-hidden="true" tabindex="-1" href="#write-policy" class="internal"> §</a></h2>
+<ul>
+<li>간단히 복습만 하고 지나가면</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429111944.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/cache/terms/Cache-Write-Policy-(CPU-Cache)" class="internal" data-slug="gardens/arch/cache/terms/Cache-Write-Policy-(CPU-Cache)">Write through</a> 는 말 그대로 write 시에 memory 에 까지 쓰는 것이고</li>
+<li><a href="../../../../../gardens/arch/cache/terms/Cache-Write-Policy-(CPU-Cache)" class="internal" data-slug="gardens/arch/cache/terms/Cache-Write-Policy-(CPU-Cache)">Write back</a> 은 cache 에다가만 쓰고, 나중에 evict 할 때 memory 에 쓰자는 정책이다.</li>
+</ul>
+<h3 id="write-buffer">Write Buffer<a aria-hidden="true" tabindex="-1" href="#write-buffer" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429112112.png" width="auto" height="auto"/></p>
+<ul>
+<li>알다시피 Write through 를 하게 되면 무조건 memory 로 가기 때문에 성능이 곱창날 수 있다.</li>
+<li>또한, Write back 을 한다고 해도 dirty block 에 대한 evict 가 빈번해지면 이때도 memory access 가 많아져 마찬가지로 곱창이 난다.</li>
+<li>이를 방지하기 위해 write buffer 를 활용할 수 있다:
+<ul>
+<li>Write through 에서는 write 시에 memory 까지 가지 않고 저 write buffer 에 쓰도록 하거나</li>
+<li>Write back 에서는 dirty block 이 evict 될 때 저 write buffer 로 가게 한 다음</li>
+<li>Write buffer 가 다 차면 그때 한꺼번에 flush 해버리는 것.</li>
+</ul>
+</li>
+<li>그리고 이놈은 추가적인 cache 로도 작용해, cache miss 가 났을때 여기에서 가져갈 수도 있는 가능성을 만들어준다.</li>
+</ul>
+<h2 id="block-size">Block Size<a aria-hidden="true" tabindex="-1" href="#block-size" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250429113816.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그래프에서 알 수 있다시피, block size 를 증가시키면서 실행해보면 32, 64B 에서 miss rate 가 가장 적게 나오고 이후로는 다시 증가한다.</li>
+<li>일단 block size 가 증가한다는 것은 spatial locality 가 좋아지기 때문에 일정 수준까지는 cache hit 이 늘어난다.</li>
+<li>하지만 block size 가 증가한다는 것은 cache 내의 block 개수가 줄어듦을 의미하기 때문에 conflict 가 더 많이 발생하게 된다.
+<ul>
+<li>또한 block size 가 클수록 cache 로 올려야 하는 데이터의 양이 많아지기 때문에 miss penalty 가 크다.</li>
+</ul>
+</li>
+<li>따라서 이 둘은 tradeoff 관계이다.</li>
+</ul>
+<h3 id="sequential-access-spatial-locality">Sequential Access (Spatial Locality)<a aria-hidden="true" tabindex="-1" href="#sequential-access-spatial-locality" class="internal"> §</a></h3>
+<ul>
+<li>Sequential access 를 할 때는 당연히 block size 를 키워서 spatial locality 를 키우는 게 좋다.</li>
+<li>아래 그림을 보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429114134.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 상황은 block 한개 당 cache entry 에 넣는 경우이다. 이때 8개의 block 에 sequential access 를 하면 8개 모두 compulsory miss 가 난다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429114117.png" width="auto" height="auto"/></p>
+<ul>
+<li>하지만 만약에 cache entry size 를 키워서 block 을 두개씩 넣는다고 해보자. 그럼 8개의 block 에 sequential access 를 했을 때, compulsory miss 4번과 hit 4번이 발생하여 성능이 좋아지게 된다.</li>
+</ul>
+<h3 id="random-access-w-temporal-locality">Random Access w/ Temporal Locality<a aria-hidden="true" tabindex="-1" href="#random-access-w-temporal-locality" class="internal"> §</a></h3>
+<ul>
+<li>하지만, sequential 이 아닌 random access 를 하되 여러번 반복해서 접근하는 경우에는 상황이 달라진다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429114148.png" width="auto" height="auto"/></p>
+<ul>
+<li>만약에 cache entry 에 block 하나씩이 들어간다면, 첫 8번의 접근은 compulsory miss 가 나지만 두번째 8번의 접근은 모두 hit 이 나게 된다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429114202.png" width="auto" height="auto"/></p>
+<ul>
+<li>하지만 cache entry 에 block 을 두개씩 넣고, 만약 접근하는 애들이 conflict 관계에 있다면 위와 같은 상황이 발생할 수 있다.
+<ul>
+<li>보면 첫 8번의 access 를 할 때는, 4번 정도는 동일하게 compulsory miss 가 난다.</li>
+<li>근데 다음 4 번의 경우에는 conflict miss 가 나더니</li>
+<li>두번째 8번의 access 를 할 때는 모두 conflict miss 가 나게 되는 것이다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="conclusion">Conclusion<a aria-hidden="true" tabindex="-1" href="#conclusion" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250429115308.png" width="auto" height="auto"/></p>
+<ul>
+<li>따라서 정리해 보면 sequential access 일때는 spatial locality 가 높은 larger block size 가 유리하지만, temporal locality 가 중요할 때에는 conflict 가 적게 나야 하기 때문에 smaller block size 를 가져가서 더 많은 cache entry 를 갖는 것이 유리하다.
+<ul>
+<li>이런 tradeoff 를 고려했을 때, 많은 CPU 들에서 block size 를 32byte 혹은 64byte 로 정한다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="cache-size-square-root-rule">Cache Size, Square-Root Rule<a aria-hidden="true" tabindex="-1" href="#cache-size-square-root-rule" class="internal"> §</a></h2>
+<ul>
+<li>Cache size 가 커지는 것은 좋기는 하지만 그 영향은 그리 크지 않을 수 있다.</li>
+<li>보통 block size 가 4배 늘어나면, cache miss 는 2배 (4의 2제곱근) 만큼 줄어든다고 한다.
+<ul>
+<li>따라서 이것을 <em>Square-root rule</em> 이라고 부른다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="set-size-21-cache-rule">Set Size, 2:1 Cache Rule<a aria-hidden="true" tabindex="-1" href="#set-size-21-cache-rule" class="internal"> §</a></h2>
+<ul>
+<li>그럼 set size 를 변화시키면 성능은 어떻게 변할까. 아래의 그래프를 보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429120003.png" width="auto" height="auto"/></p>
+<ul>
+<li>보면 (1) cache size 가 4KB 인 1-way cache 와 (2) cache size 가 2KB 인 2-way cache 의 miss rate 가 유사한 것을 볼 수 있다.</li>
+<li>따라서 같은 cache size 일 때, set size 를 늘리면 그에 맞게 miss rate 가 떨어진다.
+<ul>
+<li>그래서 set size 를 늘리면 cache size 도 그만큼 늘어나는 것 같은 느낌을 준다고 (illusion) 표현하는 것이다.</li>
+</ul>
+</li>
+<li>이것을 <em>2:1 Cache Rule</em> 이라고 한다.
+<ul>
+<li>사이즈가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span></span> 인 1-way cache 는 사이즈가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mord">/2</span></span></span></span></span> 인 2-way cache 와 miss rate 가 동일하다는 것.</li>
+</ul>
+</li>
+<li>하지만 위에서 말한 것처럼 miss rate 가 전부가 아니다.
+<ul>
+<li>왜냐면 set size 가 커질수록 비교해야 하는 tag 의 수가 많아지기 때문에, hit time 이 커져 전체적인 access latency 가 오히려 안좋아지고 power consumption 도 커지게 되는 문제가 있다.</li>
+</ul>
+</li>
+<li>아래의 표를 보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429120240.png" width="auto" height="auto"/></p>
+<ul>
+<li>이 표에서 빨간색 글자는 set size 가 커졌음에도 성능이 좋아지지 않은 놈을 표시하는 것이다.</li>
+<li>따라서 보면 cache size 가 4KB 를 넘어가면 오히려 2-way 일때부터 성능이 안좋아지는 것을 알 수 있다.
+<ul>
+<li>물론 이것은 좀 옛날 데이터여서 지금이랑은 다르긴 하지만, 이러한 경향성은 동일하기 때문에 보통은 많아봤자 set size 를 8 보다 크게 하지는 않는다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="victim-cache">Victim Cache<a aria-hidden="true" tabindex="-1" href="#victim-cache" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250429122249.png" width="auto" height="auto"/></p>
+<ul>
+<li>이것은 Direct-mapped cache 를 사용하되, 적은 양의 victim cache 를 두어서 evict 된 놈들을 잠깐 저장하는 방법이다.
+<ul>
+<li>그래서 위의 예시를 보면, 원래는 conflict miss 가 났어야 하는 두 block 에 대해, 하나는 cache 에 있고 하나는 evict 되었지만 victim cache 에 저장되어 있는 덕분에 conflict miss 가 나지 않는 것을 볼 수 있다.</li>
+</ul>
+</li>
+<li>이렇게 함으로써 direct-mapped cache 의 빠른 hit time 을 가져가면서, 2-way associative cache 와 유사한 효과를 낼 수 있다.</li>
+<li>근데 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/04/Instruction-Pipeline-(Arch-Instruction)">Pipeline</a> 와 관련해서 문제가 있어서, 요즘은 잘 사용되지는 않는다고 한다.</li>
+</ul>
+<h2 id="pseudo-associative-cache">Pseudo-Associative Cache<a aria-hidden="true" tabindex="-1" href="#pseudo-associative-cache" class="internal"> §</a></h2>
+<ul>
+<li>얘는 Cuckoo Hash 와 유사한 전략을 취하는 방법이다.</li>
+<li>Direct-mapped cache 를 사용하되, conflict 가 나면 modulo 가 아닌 다른 방법으로 새로운 cache index 를 계산해 거기에 비어있으면 넣는 것이다.</li>
+<li>그리고 다시 그 block 을 찾을 때는, 처음에는 modulo 로 접근했다가 tag 가 다르면 아까의 방법으로 새로운 cache index 를 계산해 그곳에 방문한다.</li>
+<li>그래서 이 두 방법을 다 시도해도 없으면 그때 cache miss 가 되는 것이다.</li>
+<li>따라서 이 두번째 접근은 첫 시도때 바로 hit 이 나는 것보다는 당연히 delay 가 있기 때문에 이 경우에 대해 <em>Pseudo-hit</em> (<em>Slot hit</em>) 이라고 부른다.</li>
+<li>그리고 direct-mapped cache 이지만 마치 2-way associative cache 와 같은 효과가 나기 때문에 이 방법을 <em>Pseudo-associative cache</em> 라고 부르는 것이다.</li>
+<li>하지만 이 방법도 잘 쓰이지는 않는다고 한다: 이놈도 뭐 pipeline 관련해서 문제가 있고, cuckoo hash 처럼 SW 로 구현하는 것이 아니고 HW 로 구현하기에는 까다롭다고 한다.</li>
+</ul>
+<h2 id="inclusive-exclusive-cache-policy">Inclusive, Exclusive Cache Policy<a aria-hidden="true" tabindex="-1" href="#inclusive-exclusive-cache-policy" class="internal"> §</a></h2>
+<ul>
+<li><em>Inclusive Policy</em>: 상위 레벨의 cache 에 있는 데이터를 하위 레벨의 cache 에도 동일하게 유지하는 정책이다.</li>
+<li><em>Exclusive Policy</em>: 반대로, 상위 레벨의 cache 에 데이터가 올라가면, 하위 레벨에서는 그것을 지워 둘 간의 중복된 데이터가 없게 하는 방법이다.</li>
+<li>이 둘은 tradeoff 가 있다:
+<ul>
+<li>Inclusive 를 하게 되면 데이터의 중복은 있지만, dirty 가 아닌 block 에 대해서는 그냥 해당 block 을 덮어씌우는 것으로 eviction 이 가능하다.</li>
+<li>반대로, Exclusive 를 하게 되면 데이터의 중복은 없지만, eviction 을 할 때 dirty 가 아니라 하더라도 하위 level 로 데이터를 옮겨줘야 하는 overhead 가 발생한다.</li>
+</ul>
+</li>
+<li>따라서 보통 상위 레벨과 하위 레벨의 크기 차이가 많이 나는 경우에는 Inclusive 로 하고, 차이가 적은 경우에는 Exclusive 로 한다.
+<ul>
+<li>요즘은 대부분 크기 차이가 많이 나기 때문에 Inclusive 를 사용한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="read-write-priority">Read, Write Priority<a aria-hidden="true" tabindex="-1" href="#read-write-priority" class="internal"> §</a></h2>
+<ul>
+<li>CPU 에는 Load unit 과 Store unit 이 따로 있기 때문에 read request 와 write request 가 동시에 들어올 수 있다.</li>
+<li>이런 경우에, read request 를 더 높은 우선순위로 처리한다.
+<ul>
+<li>왜냐면 write request 의 경우에는 별도의 write buffer 를 사용하는 등의 방법으로 async 하게 할 수 있지만</li>
+<li>Read request 의 경우에는 그런 것이 불가능하기 때문.</li>
+</ul>
+</li>
+</ul>
+<h2 id="virtually-indexed-physically-tagged-vipt-cache">Virtually Indexed Physically Tagged (VIPT) Cache<a aria-hidden="true" tabindex="-1" href="#virtually-indexed-physically-tagged-vipt-cache" class="internal"> §</a></h2>
+<ul>
+<li>Cache 에서는 어떤 memory address 를 사용하는게 좋을까. 다음의 세 선택지가 있다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429130708.png" width="auto" height="auto"/></p>
+<ul>
+<li>우선 첫번째는 cache 에서는 무조건 physical address 를 사용하도록 하고, 따라서 cache 에 접근하기 전에 무조건 <a href="../../../../../gardens/os/memory/terms/Translation-Lookaside-Buffer,-TLB-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Translation-Lookaside-Buffer,-TLB-(Memory)">TLB</a> 를 들르게 하는 방법이다.
+<ul>
+<li>하지만 이 방법은 TLB 를 들르는 시간이 문제가 된다: 일단 TLB 에 들르는 것 자체의 latency 도 있거니와, 만약에 TLB miss 가 나버리면 multi-level page table 때문에 여러번 memory 를 왔다갔다 해야 하고, 따라서 latency 가 아주 커져버린다.</li>
+</ul>
+</li>
+<li>그리고 두번째는 cache 에서는 무조건 <a href="../../../../../gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Virtual-Address-Space,-VAS-(Memory)">Virtual Address</a> 를 사용하도록 하는 것이다.
+<ul>
+<li>이렇게 하면 저 TLB 에 의한 latency 는 사라진다. 하지만 VAS 는 각 process 마다 갖고 있는 것이기에, cache 에 어떤 process 의 virtual address 인지를 같이 명시해 줘야 한다 (aliasing problem).</li>
+</ul>
+</li>
+<li>이것을 해결하기 위해 나온 방법이 저 세번째 이다.
+<ul>
+<li>Cache 와 TLB 에 parallel 하게 접근해버리는 것.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429131150.png" width="auto" height="auto"/></p>
+<ul>
+<li>그래서 전반적인 구조는 위와 같다. 이것을 TLB side 와 cache side 각각에 대해 알아보자.
+<ul>
+<li>일단 TLB 는 <em>Virtual Page Number</em> (<em>VPN</em>) 을 <em>Physical Page Number</em> (<em>PPN</em>) 으로 바꿔주는 놈이란 것을 기억하자.</li>
+<li>만약 page size 가 4K 라면, 32bit 주소 체계에서 page offset 12bit 을 제외한 20bit 가 VPN 이 된다.</li>
+<li>그래서 이 VPN 을 TLB 에 넣으면, PPN 이 나오게 될 것이다.</li>
+</ul>
+</li>
+<li>그리고 cache side 에서는, cache tag 은 PPN 과 동일한 20bit 로 하고 나머지 12bit 중에서 cache index 에 6bit, 나머지 byte select 에 6bit 을 주는 layout 을 사용한다.
+<ul>
+<li>그렇게 하면 일단 입력받은 memory address 가 virtual address 인지 physical address 인지와 무관하게 cache index 로 cache entry 에 접근할 수 있을 것이다.</li>
+<li>그럼 이때 cache entry 에 적혀있는 tag 는 PPN 이 된다.</li>
+<li>따라서 cache entry 의 tag 에 있는 PPN 과 TLB 로부터 얻어온 PPN 을 비교하면 일단 이놈이 hit 인지 아닌지 알 수 있게 된다.</li>
+<li>그리고 나머지 6bit byte select 로 block 내에서 원하는 block 을 찾으면 되는 것이다.</li>
+</ul>
+</li>
+<li>이렇게 하면 TLB 와 cache access 를 parallel 하게 처리할 수 있고, cache 에 불필요하게 process ID 같은 것도 넣을 필요가 없다.</li>
+<li>하지만 이 방법도 한계가 있다. 이 방법을 이용하면 cache size 가 4K 로 제한된다.
+<ul>
+<li>왜인지를 살펴보면, cache index 와 byte offset 을 합친 크기가 무조건 12bit 이어야지 PPN 와 cache tag 를 동일한 크기로 만들 수 있기 때문에, 이 12bit 로 표현할 수 있는 byte 의 개수는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">12</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4096</span></span></span></span></span> byte 로 제한된다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="32kb-4-way-set-associative-cache">32KB, 4-Way Set Associative Cache<a aria-hidden="true" tabindex="-1" href="#32kb-4-way-set-associative-cache" class="internal"> §</a></h3>
+<ul>
+<li>그래서 위와 같은 한계점을 돌파하기 위해, 다음과 같이 한다고 한다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250429132636.png" width="auto" height="auto"/></p>
+<ul>
+<li>우선 위에서는 direct-mapping 을 기준으로 cache size max 가 4K 였기 때문에, 일단 이것을 4-way associative 로 하면 cache size 를 16K 로 만들 수 있을 것이다.</li>
+<li>그리고 TLB + 4-way set associative 전체를 두개를 구비하고, virtual address 의 12번째 bit 을 이용해 이 둘 중 하나를 선택하도록 하면 총 사이즈가 32K 인 cache 를 구성할 수 있다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#memory-hierarchy" data-for="memory-hierarchy">Memory Hierarchy</a></li><li class="depth-0"><a href="#locality" data-for="locality">Locality</a></li><li class="depth-0"><a href="#terminology--metrics" data-for="terminology--metrics">Terminology &amp; Metrics</a></li><li class="depth-0"><a href="#impact-of-memory-access-latency" data-for="impact-of-memory-access-latency">Impact of Memory Access Latency</a></li><li class="depth-0"><a href="#block-placement" data-for="block-placement">Block Placement</a></li><li class="depth-1"><a href="#fully-associative-cache" data-for="fully-associative-cache">Fully-Associative Cache</a></li><li class="depth-1"><a href="#direct-mapped-cache" data-for="direct-mapped-cache">Direct-Mapped Cache</a></li><li class="depth-1"><a href="#n-way-associative-cache" data-for="n-way-associative-cache">N-Way Associative Cache</a></li><li class="depth-0"><a href="#miss-types" data-for="miss-types">Miss Types</a></li><li class="depth-0"><a href="#finding-block-in-a-cache" data-for="finding-block-in-a-cache">Finding Block In a Cache</a></li><li class="depth-1"><a href="#direct-mapped-cache-1" data-for="direct-mapped-cache-1">Direct-Mapped Cache</a></li><li class="depth-1"><a href="#n-way-associative-cache-1" data-for="n-way-associative-cache-1">N-Way Associative Cache</a></li><li class="depth-1"><a href="#fully-associative-cache-1" data-for="fully-associative-cache-1">Fully Associative Cache</a></li><li class="depth-0"><a href="#replacement" data-for="replacement">Replacement</a></li><li class="depth-1"><a href="#least-recently-used-lru" data-for="least-recently-used-lru">Least Recently Used, LRU</a></li><li class="depth-1"><a href="#re-reference-interval-prediction-rrip" data-for="re-reference-interval-prediction-rrip">Re-Reference Interval Prediction, RRIP</a></li><li class="depth-0"><a href="#write-policy" data-for="write-policy">Write Policy</a></li><li class="depth-1"><a href="#write-buffer" data-for="write-buffer">Write Buffer</a></li><li class="depth-0"><a href="#block-size" data-for="block-size">Block Size</a></li><li class="depth-1"><a href="#sequential-access-spatial-locality" data-for="sequential-access-spatial-locality">Sequential Access (Spatial Locality)</a></li><li class="depth-1"><a href="#random-access-w-temporal-locality" data-for="random-access-w-temporal-locality">Random Access w/ Temporal Locality</a></li><li class="depth-1"><a href="#conclusion" data-for="conclusion">Conclusion</a></li><li class="depth-0"><a href="#cache-size-square-root-rule" data-for="cache-size-square-root-rule">Cache Size, Square-Root Rule</a></li><li class="depth-0"><a href="#set-size-21-cache-rule" data-for="set-size-21-cache-rule">Set Size, 2:1 Cache Rule</a></li><li class="depth-0"><a href="#victim-cache" data-for="victim-cache">Victim Cache</a></li><li class="depth-0"><a href="#pseudo-associative-cache" data-for="pseudo-associative-cache">Pseudo-Associative Cache</a></li><li class="depth-0"><a href="#inclusive-exclusive-cache-policy" data-for="inclusive-exclusive-cache-policy">Inclusive, Exclusive Cache Policy</a></li><li class="depth-0"><a href="#read-write-priority" data-for="read-write-priority">Read, Write Priority</a></li><li class="depth-0"><a href="#virtually-indexed-physically-tagged-vipt-cache" data-for="virtually-indexed-physically-tagged-vipt-cache">Virtually Indexed Physically Tagged (VIPT) Cache</a></li><li class="depth-1"><a href="#32kb-4-way-set-associative-cache" data-for="32kb-4-way-set-associative-cache">32KB, 4-Way Set Associative Cache</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures" class="internal">(SNU CSE) Advanced Computer Architectures</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html><head><title>04. Speculation, Interrupts, In-Order Completion (Advanced Computer Architectures, SNU CSE)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="04. Speculation, Interrupts, In-Order Completion (Advanced Computer Architectures, SNU CSE)"/><meta property="og:description" content="서울대학교 컴퓨터공학부 유승주 교수님의 &amp;quot;고급 컴퓨터 구조&amp;quot; 강의를 필기한 내용입니다. 목차 Process State § Interrupt 와 Branch prediction 간에는 유사점이 있다. 우선 알다시피 모든 intruction 의 실행 이후에는 interrupt checking 을 하고 interrupt 가 있으면 interrupt service routine 을 실행한다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 컴퓨터공학부 유승주 교수님의 &amp;quot;고급 컴퓨터 구조&amp;quot; 강의를 필기한 내용입니다. 목차 Process State § Interrupt 와 Branch prediction 간에는 유사점이 있다. 우선 알다시피 모든 intruction 의 실행 이후에는 interrupt checking 을 하고 interrupt 가 있으면 interrupt service routine 을 실행한다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/lectures/04.-Speculation,-Interrupts,-In-Order-Completion"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">04. Speculation, Interrupts, In-Order Completion (Advanced Computer Architectures, SNU CSE)</h1><p class="content-meta ">Mar 13, 2025, 21 min read</p><ul class="tags "><li><a href="../../../../../tags/arch" class="internal tag-link">#arch</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-aca25s" class="internal tag-link">#snu-aca25s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 컴퓨터공학부 유승주 교수님의 &quot;고급 컴퓨터 구조&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures" class="internal" data-slug="gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures">목차</a></li>
+</ul>
+</blockquote>
+<h2 id="process-state">Process State<a aria-hidden="true" tabindex="-1" href="#process-state" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/arch/cpu/drafts/Interrupt-(Arch)" class="internal" data-slug="gardens/arch/cpu/drafts/Interrupt-(Arch)">Interrupt</a> 와 <a href="../../../../../gardens/arch/cpu/terms/Branch-Prediction-(Arch)" class="internal" data-slug="gardens/arch/cpu/terms/Branch-Prediction-(Arch)">Branch prediction</a> 간에는 유사점이 있다.
+<ul>
+<li>우선 알다시피 모든 intruction 의 실행 이후에는 interrupt checking 을 하고 interrupt 가 있으면 interrupt service routine 을 실행한다.</li>
+<li>이것을 위해서는 interrupt service routine 을 실행하기 전에 state 를 저장해 놓았다가 실행 후에 다시 이 state 를 불러와서 이어가야 할 필요가 있다.</li>
+<li>근데 branch misprediction 시에도 이러한 기능이 필요하다: branch prediction 이라는 것은 기본적으로 speculative execution 이기 때문에, 만약에 misprediction 시에는 원래의 자리로 돌아와 다른 instruction 을 실행해 주어야 하기 때문.</li>
+<li>즉, 이 둘 다 상태를 “기억” 해놓았다가, 원래의 위치로 “돌아와야” 할 필요가 있는 것이다.</li>
+</ul>
+</li>
+<li>그런데 이렇게 “기억” 하는 것은 쉽지가 않다.
+<ul>
+<li>왜냐면 어떤 instruction 을 실행하는 것 중간에 끊겼고, 다시 돌아왔을 때 정확하게 그 시점부터 다시 시작하기 위해서는 각 functional unit 이 그 시점에 뭘 하고있었는지를 전부 다 저장해 놓아야 하기 때문.</li>
+<li>또한, 그렇다고 해서 너무 대충 기억해 버리면, 이미 완료한 instruction 을 다시 실행해야 할 수도 있다.</li>
+</ul>
+</li>
+<li>때문에, 간단하지만 정확한 precise process state definition 이 필요하다.</li>
+</ul>
+<h2 id="in-order-completion">In-order Completion<a aria-hidden="true" tabindex="-1" href="#in-order-completion" class="internal"> §</a></h2>
+<ul>
+<li>간단하지만 정확한 process state 를 추적하기 위한 방법은
+<ul>
+<li>일단 process state 를 memory state 로 규정하고
+<ul>
+<li>여기서 memory 라는 것은 main memory 뿐 아니라, register file 도 포함이다.</li>
+</ul>
+</li>
+<li>In-order 로 memory state 를 변경하는 것이다.</li>
+<li>이렇게 하면 process state 가 모두 memory state 에 있기 때문에, 이것들만 다시 복구해서 실행하면 되는 것이다.</li>
+<li>만약에 Out-of-order execution 을 하게 되면, 어떤 순서로 실행을 했는지 또한 어딘가에 저장해놔야 하기 때문에 더욱 복잡해진다.</li>
+</ul>
+</li>
+<li>In-order 를 “instruction 순서 그대로” 로 정의하고 out-of-order 를 “Instruction 순서와는 다르게” 라고 정의할 때
+<ul>
+<li>일단 issue 는 in-order 로 하고, 실행하는 것은 out-of-order 로 하되, 종료하며 memory state 를 변경하는 것은 다시 in-order 로 하겠다는 말이다.</li>
+</ul>
+</li>
+<li>In-order 로 memory state 를 변경한다는 말은
+<ul>
+<li>Instruction 이 종료된 뒤에 memory state 를 변경하는 것을 이 instruction 이 더 이상 speculative 하지 않을 때 수행하겠다는 것이다.</li>
+<li>즉, branch prediction 을 하여 speculative 가 되거나, 아니면 이전 instruction 보다 먼저 끝나서 speculative 가 되었을 경우에는, memory state 를 변경하지 않고 어딘가에 저장해 놓았다가 더이상 speculative 하지 않게 되면 이 저장해 놓은 애들을 memory state 에 반영한다는 것.</li>
+<li>따라서 이런 것을 <em>In-order Completion</em> 혹은 <em>In-order Commit</em> 라고 한다.</li>
+<li><em>Commit</em> 대신 <em>Retire</em> 이란 말을 사용하기도 한다. 즉, 이 용어는 instruction 의 실행을 완료한 뒤 in-order 로 process state 까지 바꾸어 완전히 종료되는 것을 말하는 것.</li>
+</ul>
+</li>
+</ul>
+<h2 id="reorder-buffer-rob">Reorder Buffer (ROB)<a aria-hidden="true" tabindex="-1" href="#reorder-buffer-rob" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250428102952.png" width="auto" height="auto"/></p>
+<ul>
+<li>그래서 임시로 값들을 저장하기 위한 추가적인 register 들이 필요하다.</li>
+<li>이때 임시로 사용하는 Input register 들은 <a href="../../../../../gardens/arch/cpu/drafts/Reservation-Station-(Arch)" class="internal" data-slug="gardens/arch/cpu/drafts/Reservation-Station-(Arch)">Reservation Station</a> 에 이미 있기 때문에 임시로 사용할 Output register 들만 있으면 된다.</li>
+<li>임시로 사용할 Output register 들은 새로운 component 인 <em>Reorder Buffer</em> (<em>ROB</em>) 에 구비된다.</li>
+</ul>
+<h3 id="tomasulo-with-rob-example">Tomasulo with ROB Example<a aria-hidden="true" tabindex="-1" href="#tomasulo-with-rob-example" class="internal"> §</a></h3>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>약자 정리 </p></div>
+                  
+                </div>
+<ul>
+<li><code>EX</code>: Execution</li>
+<li><code>ROB</code>: Reorder Buffer</li>
+<li><code>RS</code>: Reservation Station</li>
+</ul>
+</blockquote>
+<p><img src="../../../../../images/Pasted-image-20250428105307.png" width="auto" height="auto"/></p>
+<ul>
+<li>그래서 위와 같이 ROB 까지 전부 있는 상황에서 <a href="../../../../../gardens/arch/ilp/drafts/Tomasulo's-Algorithm-(Arch)" class="internal" data-slug="gardens/arch/ilp/drafts/Tomasulo's-Algorithm-(Arch)">Tomasulo</a> 가 어떻게 굴러가는지 확인해 보자.</li>
+<li>기존에는 Issue, Execute, Write 세 stage 가 있었다면, 여기에는 Commit 이라는 stage 하나가 더 추가되게 된다.
+<ul>
+<li>Commit stage 에서는 write stage 이후 in-order 가 되면 register 에 쓰거나 아니면 (<code>STORE</code> 의 경우) memory 에 쓴다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="cycle-1">Cycle 1<a aria-hidden="true" tabindex="-1" href="#cycle-1" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428105326.png" width="auto" height="auto"/></p>
+<ul>
+<li>우선, 첫번째 <code>LD</code> 가 issue 된다.
+<ul>
+<li>여기서 중요한 점은 ROB 에 우선 등록을 한 뒤에 instruction 을 한다는 것이다.</li>
+<li>즉, ROB 에 등록을 하여 ROB 에 valid entry 가 있을 때에만 이놈을 issue 한다.</li>
+<li>따라서 만약에 ROB 가 꽉 차서 더 이상 자리가 없을 때에도 stall 이 발생하게 된다.</li>
+</ul>
+</li>
+<li>그리고 아래에 register result state 를 보면, output register 인 <code>F6</code> 에 ROB 의 index 인 1 이 등록되는 것을 확인할 수 있다.</li>
+</ul>
+<h4 id="cycle-2">Cycle 2<a aria-hidden="true" tabindex="-1" href="#cycle-2" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428105613.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 2 에서는 첫번째 <code>LD</code> 는 EX1 이 되고, 두번째 <code>LD</code> 가 issue 된다.
+<ul>
+<li>여기에서도 cycle 1 와 동일하게 ROB, Register result status, Load buffer 가 다 채워지는 것을 볼 수 있다.</li>
+</ul>
+</li>
+<li>그리고 여기서 눈여겨볼 것은 저 head 와 tail 이다.
+<ul>
+<li>즉, 이 ROB 는 ring buffer 의 형태로 작동하고, 따라서 head 는 commit 되지 않은 가장 오래된 entry 를, tail 은 commit 되지 않은 가장 최신의 entry 를 추적하게 된다.
+<ul>
+<li>따라서 entry 1 이 head 가 되고, entry 2 가 tail 이 되는 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="cycle-3">Cycle 3<a aria-hidden="true" tabindex="-1" href="#cycle-3" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428105756.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 3 에서는 첫번째 <code>LD</code> 는 EX 가 끝나고 write stage 가 되고, 두번째 <code>LD</code> 는 EX1 에 진입한다.</li>
+<li>또한 <code>MULTD</code> 가 issue 된다.
+<ul>
+<li>여기서 RS 를 확인해 보면 사실 기존의 Tomasulo 랑 다를 것은 없는데 여기에 적히는 내용들이 좀 달라진다.
+<ul>
+<li>보면 일단 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 는 그대로 register <code>F4</code> 를 복사해와서 <code>Regs[F4]</code> 가 되지만</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 는 <code>F2</code> 를 기다리고 있기 때문에 ROB 의 entry 2 번이 명시 되어 ROB 에 값이 적힐 때 까지 대기하게 되고</li>
+<li>Dest 는 ROB 의 entry 3 번이 적혀서 이 instruction 의 write stage 에서 ROB entry 3 에 결과가 적힌다는 것을 명시하고 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="cycle-4">Cycle 4<a aria-hidden="true" tabindex="-1" href="#cycle-4" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428110707.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 4에서는 첫번째 <code>LD</code> 가 commit 된다.
+<ul>
+<li>그래서 이 시점에 (그림에는 표현이 되어있지 않지만) ROB 1 의 결과 (<code>Mem[load1]</code>) 가 register <code>F6</code> 에 적히게 되고,</li>
+<li>Head pointer 또한 ROB 2 로 움직이게 된다.</li>
+</ul>
+</li>
+<li>그리고 두번째 <code>LD</code> 가 write stage 에 진입한다.</li>
+<li>그래서 ROB 2 를 대기하고 있던 <code>MULTD</code> 에 대해, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 에 ROB 2 의 결과 (<code>Mem[45 + Regs[R3]]</code>) 가 복사되며 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 가 사라지게 된다.
+<ul>
+<li>따라서 이에 따라 <code>MULTD</code> 가 EX1 에 진입한다.</li>
+</ul>
+</li>
+<li>또한 <code>SUBD</code> 가 ROB 4 에 채워지며 issue 된다.</li>
+</ul>
+<h4 id="cycle-5">Cycle 5<a aria-hidden="true" tabindex="-1" href="#cycle-5" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428112601.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 6 에서는 두번째 <code>LD</code> 가 commit 되어, ROB 의 head pointer 가 움직인다.</li>
+<li>또한 <code>MULTD</code> 와 <code>SUBD</code> 의 EX stage 가 하나씩 추가되고 (각각 EX2, EX1)
+<ul>
+<li>당연히 얘네들은 아직 EX 중이기 때문에 head pointer 가 움직이지 않는다.</li>
+</ul>
+</li>
+<li><code>DIVD</code> 가 ROB 에 추가되고 issue 된다.
+<ul>
+<li>그래서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 인 <code>F6</code> 은 이미 첫번째 <code>LD</code> 로 인해 commit 되었으므로 해당 값을 복사해오고 (<code>Regs[F6]</code>)</li>
+<li><code>F0</code> 은 <code>MULTD</code> 에 의존하기 때문에 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 에 <code>MULTD</code> 의 ROB entry 인 3 이 들어가게 된다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="cycle-6">Cycle 6<a aria-hidden="true" tabindex="-1" href="#cycle-6" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428113157.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 6 에서는 <code>ADDD</code> 가 ROB 6 에 등록되며 issue 된다.
+<ul>
+<li>따라서 RS 에는, 이놈이 F8 에 의존하고 있기 때문에 F8 에 대한 ROB entry 인 4 가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 에 등록되게 된다.</li>
+</ul>
+</li>
+<li>그리고 <code>MULTD</code> 와 <code>SUBD</code> 는 여전히 EX 중이고 (각각 EX3, EX2)</li>
+<li><code>DIVD</code> 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 가 해소되지 않았기 때문에 여전히 issue 상태에서 stall 되어 있다.</li>
+</ul>
+<h4 id="cycle-7">Cycle 7<a aria-hidden="true" tabindex="-1" href="#cycle-7" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428113634.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 7 에서는 <code>SUBD</code> 가 write stage 에 진입하며, 이놈을 기다리고 있던 <code>ADDD</code> 의 RS 에 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 로써 ROB 4 가 등록되고, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 는 사라진다.
+<ul>
+<li>그리고 그와 동시에 <code>ADDD</code> 는 EX1 에 진입한다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="cycle-8">Cycle 8<a aria-hidden="true" tabindex="-1" href="#cycle-8" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428114010.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 8 에서는 <code>MULTD</code> 가 계속 실행되고 있어서 바뀌는 것은 없는데,</li>
+<li>여기서 눈여겨볼 것은 <code>SUBD</code> 가 write stage 에서 멈춰있는 것이다.
+<ul>
+<li>즉, 아직 이전 instruction 인 <code>MULTD</code> 가 아직 commit 되지 않았기 때문에, <code>SUBD</code> 도 commit 하지 못하고 write 상태에 머물러 있는 것이다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="cycle-9">Cycle 9<a aria-hidden="true" tabindex="-1" href="#cycle-9" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428114143.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 9 에서는 <code>ADDD</code> 가 write stage 에 진입한다.</li>
+<li>이것 말고는 따로 볼건 없음</li>
+</ul>
+<h4 id="cycle-13-skip-cycle-10--12">Cycle 13 (Skip cycle 10 ~ 12)<a aria-hidden="true" tabindex="-1" href="#cycle-13-skip-cycle-10--12" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428114240.png" width="auto" height="auto"/></p>
+<ul>
+<li>Cycle 10 ~ 12 까지는 계속 <code>MULTD</code> 가 돌고 있기 때문에 생략하고 cycle 13 을 보면</li>
+<li>이때 드디어 <code>MULTD</code> 가 write stage 로 가며 이놈을 대기하고있던 <code>DIVD</code> 에 결과값 (<code>#2xRegs[F4]</code>) 이 전파된다.</li>
+</ul>
+<h4 id="cycle-14-15">Cycle 14, 15<a aria-hidden="true" tabindex="-1" href="#cycle-14-15" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428114529.png" width="auto" height="auto"/></p>
+<ul>
+<li>두 LD 가 모두 commit 이기 때문에 cycle 14 에서는 <code>MULTD</code> 가 commit 을 하고</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428114544.png" width="auto" height="auto"/></p>
+<ul>
+<li>이에 따라 write stage 에서 대기하고 있던 <code>SUBD</code> 가 연달아 commit 된다.
+<ul>
+<li>그리고 head pointer 도 움직이는 것을 볼 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="example-summary">Example Summary<a aria-hidden="true" tabindex="-1" href="#example-summary" class="internal"> §</a></h4>
+<p><img src="../../../../../images/Pasted-image-20250428131516.png" width="auto" height="auto"/></p>
+<ul>
+<li>그래서 결과적으로 위와 같이 되는 것을 볼 수 있다: Issue 와 Commit 은 in-order 로 수행되고, EX 와 WB 은 out-of-order 로 수행된다.</li>
+</ul>
+<h3 id="handling-branch-misprediction-w-rob">Handling Branch Misprediction w/ ROB<a aria-hidden="true" tabindex="-1" href="#handling-branch-misprediction-w-rob" class="internal"> §</a></h3>
+<p><img src="../../../../../images/Pasted-image-20250428132526.png" width="auto" height="auto"/></p>
+<ul>
+<li>ROB 를 이용하면 <a href="../../../../../gardens/arch/cpu/terms/Branch-Prediction-(Arch)" class="internal" data-slug="gardens/arch/cpu/terms/Branch-Prediction-(Arch)">Branch misprediction</a> 시에 날리는 것도 아주 간단하다. 그냥 branch 이후의 모든 ROB entry 들을 날려버리면 된다.
+<ul>
+<li>Branch 가 EX 중이라면, 그 뒤에 있는 애들은 모두 EX 가 끝났다 할지라도 전부 uncommit 상태이기 때문에 branch 의 EX 가 끝나고 WB 이 되면 branch 이후 어디로 가야할지가 결정된다.</li>
+<li>따라서 이 시점에 만약 prediction 이 틀렸다면, branch 이후에 있는 ROB 를 전부 날려주기만 하면 얘네들은 commit 되지 않았기 때문에 memory 나 register file 은 건들 필요 없이 전부 rollback 이 된다.</li>
+<li>그리고 나서 ROB tail 도 branch 로 땡겨지게 된다.</li>
+</ul>
+</li>
+<li>위 예제로 설명을 하면,
+<ul>
+<li>ROB 5 에 branch 가 있다면, 이놈이 WB 이기 때문에 이미 branch probing 이 종료되었고 따라서 prediction 이 맞았는지 아닌지 알 수 있다.</li>
+<li>만약에 아니라면, ROB 6 ~ 10 를 다 날려주면 되는 것.</li>
+<li>그리고 다음 cycle 에 5번에 ROB head 와 tail 이 모두 위치하게 된다.
+<ul>
+<li>위 그림에 있는 저 ROB head 는 다음 cycle 에 저렇게 될거다 라고 생각하면 될듯.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="rob--tomasulo-limitations">ROB + Tomasulo Limitations<a aria-hidden="true" tabindex="-1" href="#rob--tomasulo-limitations" class="internal"> §</a></h3>
+<ul>
+<li>이 방법이 장점만 있는 것은 아니다.
+<ul>
+<li>일단 Reg -> RS -> ROB -> Reg 의 data copy 가 일어나기 때문에 비효율적이고</li>
+<li>ROB 가 Common Data Bus 에 붙기 때문에 CDB 에 걸리는 부하가 더 심해진다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="superscalar-multi-issue-processor">Superscalar (Multi-issue Processor)<a aria-hidden="true" tabindex="-1" href="#superscalar-multi-issue-processor" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250428134035.png" width="auto" height="auto"/></p>
+<ul>
+<li><a href="../../../../../gardens/arch/ilp/Instruction-Level-Parallelism-(Arch)" class="internal" data-slug="gardens/arch/ilp/Instruction-Level-Parallelism-(Arch)">Superscalar</a> 에서는 Fetch / Decode 가 여러개 있어서 한 cycle 에서 여러개의 instruction 을 issue 할 수 있는 processor 를 말한다.</li>
+</ul>
+<h3 id="w-or-wo-speculation">W/ or w/o Speculation<a aria-hidden="true" tabindex="-1" href="#w-or-wo-speculation" class="internal"> §</a></h3>
+<ul>
+<li>Superscalar 와 branch prediction 는 연관성이 없다: Superscalar 를 하면서 branch prediction 을 안할 수도 있다.</li>
+<li>근데 당연히 branch prediction 을 하는 것이 더 성능이 좋다. 아래의 예시를 보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428134225.png" width="auto" height="auto"/></p>
+<ul>
+<li>2 개씩 issue 한다고 했을 때, branch prediction 를 하지 않는다면 5번째줄의 BNE 때문에 이후의 <code>LD</code>, <code>DADDIU</code> 등이 쭉 밀리게 된다.
+<ul>
+<li>그래서 얘네들의 EX 가 cycle 8, 9 등의 시간에 시작된다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428134238.png" width="auto" height="auto"/></p>
+<ul>
+<li>하지만 branch prediction 을 하는 위의 예제를 보면, EX 가 훨씬 더 일찍 시작되어 전반적으로 일찍 끝나는 것을 알 수 있다.</li>
+</ul>
+<h3 id="how-much-speculation">How Much Speculation?<a aria-hidden="true" tabindex="-1" href="#how-much-speculation" class="internal"> §</a></h3>
+<ul>
+<li>근데 당연하게도 Superscalar 에서 branch prediction 이 항상 좋은 것은 아니다.
+<ul>
+<li>한번에 여러 instruction 들을 issue 하기 때문에, branch misprediction 시에 당연히 날라가는 instruction 의 수도 많아지고,
+<ul>
+<li>단순히 날라가는 instruction 의 수 뿐 아니라 <a href="../../../../../gardens/arch/cache/CPU-Cache-(Arch)" class="internal" data-slug="gardens/arch/cache/CPU-Cache-(Arch)">Cache</a> 나 <a href="../../../../../gardens/os/memory/terms/Translation-Lookaside-Buffer,-TLB-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Translation-Lookaside-Buffer,-TLB-(Memory)">TLB</a> 도 날려야 할 수 있기 때문에 이로 인한 penalty 가 아주 커질 수 있다.</li>
+</ul>
+</li>
+<li>Branch prediction 을 해서 쭉 진행하던 중에 또 다른 branch 를 만났을 경우에 어떻게 해야 하는지도 난감하다.
+<ul>
+<li>만일 계속 prediction 을 해서 진행하다 보면, 어떤 것은 recovery 하고 어떤 것은 recovery 하지 말아야 하는 지 결정해야 되는 등의 구현 복잡도가 커진다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>반대로 branch prediction 을 했을 때의 좋은점은 당연히 성능이다.
+<ul>
+<li>이것은 memory access 가 있는 경우에 더 효과가 커진다.</li>
+<li>왜냐면 branch prediction 을 해서 이후의 memory access 를 먼저 실행하게 되면, latency hiding 이 되기 때문에 memory access time 이 줄어드는 효과를 가져온다.</li>
+<li>또한 요즘의 CPU 들은 당연히 cache 를 사용하여 speculative memory access 를 하기 때문에 branch prediction 으로 인한 speculative execution 과 cache 를 이용한 speculative memory access 가 만나면 효과가 상당히 커진다.</li>
+</ul>
+</li>
+<li>따라서 이 둘 사이의 balance 를 맞춰서 얼마나 speculative 할지 결정하는 것이 중요하다.
+<ul>
+<li>그래서 cache, TLB 까지 고려해서 misprediction penalty 가 얼마나 될 지를 가늠하고, speculative amount 를 정한다고 한다.</li>
+<li>그리고 이 크기는 ROB 의 크기로서 구체화된다: 이놈이 다 차면 더 이상 speculative execution 을 하지 못하기 때문</li>
+<li>그래서 branch 를 만날 때 마다 branch prediction 을 하고 저 “얼마나 speculate 할까” 에 따라서 해당 만큼의 instruction 들을 memory 에서 읽어온다고 한다.</li>
+<li>뭐 구체적으로 어떻게 하는지는 안배움</li>
+</ul>
+</li>
+<li>참고로 instruction fetch / decode logic 을 <em>Frontend</em> 라고 한다.
+<ul>
+<li>이부분이 복잡하기 때문에 보통 이부분에서 performance 가 많이 결정된다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="forward-store-to-load-buffer">Forward Store to Load Buffer<a aria-hidden="true" tabindex="-1" href="#forward-store-to-load-buffer" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250427183157.png" width="auto" height="auto"/></p>
+<ul>
+<li>Load buffer 와 Store buffer 도 Common Data Bus 로 연결되어 있어서 만약에 Store 하려는 놈의 memory 주소와 Load 하는 놈의 주소가 같다면, Store 하는 값을 Load buffer 로 보내버린다.</li>
+<li>즉, 원래는 Store 를 한 후, 다시 Load 를 통해 memory 에서 갖고와야 하는데 이건 너무 latency 가 크기 때문에 Store 하려는 것을 Load buffer 에 바로 찔러서 Load 시에는 memory access 를 하지 않아도 되게 하는 것.</li>
+</ul>
+<h2 id="load--store-disambiguation">Load / Store Disambiguation<a aria-hidden="true" tabindex="-1" href="#load--store-disambiguation" class="internal"> §</a></h2>
+<ul>
+<li>Memory access instruction 에 대해서도 speculative 하게 하기도 한다.
+<ul>
+<li>가령 두 memory access instruction 에 대해, 이 둘의 memory address 가 다르다면 이 둘을 out-of-order execution 을 하거나</li>
+<li>아니면 혹시 접근하는 주소가 나중에 결정된다면, 미리 이 주소도 예측해서 접근하는 방법을 사용하기도 한다.</li>
+</ul>
+</li>
+<li>이렇게 해서 memory request 에 대한 utilization 을 최대한 끌어올리는 것이다.</li>
+</ul>
+<h2 id="very-long-instruction-word-vliw">Very Long Instruction Word (VLIW)<a aria-hidden="true" tabindex="-1" href="#very-long-instruction-word-vliw" class="internal"> §</a></h2>
+<ul>
+<li><a href="../../../../../gardens/arch/ilp/Instruction-Level-Parallelism-(Arch)" class="internal" data-slug="gardens/arch/ilp/Instruction-Level-Parallelism-(Arch)">VLIW</a> 은 여러 instruction 들을 하나의 instruction 으로 묶어서 사용하는 것인데,</li>
+<li>어떤 애들을 어떻게 묶을건지는 모두 compiler 가 결정한다.</li>
+<li>하지만 요즘은 거의 사용되지 않는다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428144318.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 예시를 보면 5개의 연산을 묶는다고 쳐도, 이상적으로는 5배의 성능 향상이 있어야 하겠지만, memory access 등 때문에 실제로는 그다지 parallel 하게 실행되지 않는다고 한다.
+<ul>
+<li>뭐 5개를 묶어도 기껏해야 2-3 배라고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="limitations-to-ilp">Limitations to ILP<a aria-hidden="true" tabindex="-1" href="#limitations-to-ilp" class="internal"> §</a></h2>
+<ul>
+<li>ILP 가 이상적으로 작동하려면 다음처럼 되어야 한다:
+<ul>
+<li><a href="../../../../../gardens/arch/cpu/terms/Register-Renaming-(Arch)" class="internal" data-slug="gardens/arch/cpu/terms/Register-Renaming-(Arch)">Register Renaming</a>: 가용한 register 가 무한대</li>
+<li><a href="../../../../../gardens/arch/cpu/terms/Branch-Prediction-(Arch)" class="internal" data-slug="gardens/arch/cpu/terms/Branch-Prediction-(Arch)">Branch Prediction</a>: 항상 prediction 이 맞음</li>
+<li>Jump Prediction: 항상 어디로 jump 할지 사전에 알고 있음</li>
+<li>Memory Access: 미리 알려진 메모리 주소에 대해, 독립적으로 접근</li>
+</ul>
+</li>
+<li>근데 당연히 이렇게 될 리가 없다: 아래의 실험을 보자.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250428143332.png" width="auto" height="auto"/></p>
+<ul>
+<li>보면 빨간색이 이런 모든 자원이 무한대라고 했을 경우에의 성능이고, 그 뒤로 초록색, 파란색 등이 window size (가령 ROB 의 크기) 를 제한했을 때의 성능이다.
+<ul>
+<li>따라서 이상적인 상황들과는 다르게 이러한 제약들에 따라 성능이 크게 저하되는 것을 알 수 있다.</li>
+</ul>
+</li>
+<li>그럼 이 window size 를 더 늘리면 되지 않냐 라고 생각할 수 있는데, 이게 그리 쉬운 일이 아니다.
+<ul>
+<li>가령 cycle 당 issue 할 수 있는 instruction 의 수를 3-6 에서 6-12 로 두배 늘리면 다음과 같은 부하가 발생한다:
+<ul>
+<li>Cycle 당 memory access instruction 3-4 개를 처리해야 하고</li>
+<li>Cycle 당 2-3 개의 branch 를 처리해야 하며</li>
+<li>Cycle 당 12-24 개의 instruction 을 fetch 해와야 하고</li>
+<li>Cycle 당 20개가 넘는 register 들에 대해 renaming 을 컨트롤해야 한다고 한다.</li>
+</ul>
+</li>
+<li>물론 이런 부하들을 모두 처리하도록 구현할 수는 있다: 근데 문제는 이렇게 하면 power consumption 이 너무 많아져 발열문제가 생기고 발열을 낮추기 위해서는 어쩔 수 없이 clock freq 를 낮추며 성능을 희생해야 한다.</li>
+</ul>
+</li>
+<li>이러한 것들이 ILP 에 관한 성능 개선은 이제 점점 멈추고 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/09/Graphic-Processing-Unit,-GPU-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/09/Graphic-Processing-Unit,-GPU-(Arch)">GPU</a> 와 같은 별도의 <a href="../../../../../gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/01/Accelerator-(Arch)" class="internal" data-slug="gardens/arch/originals/shpc.fall.2024.cse.snu.ac.kr/drafts/01/Accelerator-(Arch)">Accelerator</a> 가 각광을 받는 배경이 된다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#process-state" data-for="process-state">Process State</a></li><li class="depth-0"><a href="#in-order-completion" data-for="in-order-completion">In-order Completion</a></li><li class="depth-0"><a href="#reorder-buffer-rob" data-for="reorder-buffer-rob">Reorder Buffer (ROB)</a></li><li class="depth-1"><a href="#tomasulo-with-rob-example" data-for="tomasulo-with-rob-example">Tomasulo with ROB Example</a></li><li class="depth-1"><a href="#handling-branch-misprediction-w-rob" data-for="handling-branch-misprediction-w-rob">Handling Branch Misprediction w/ ROB</a></li><li class="depth-1"><a href="#rob--tomasulo-limitations" data-for="rob--tomasulo-limitations">ROB + Tomasulo Limitations</a></li><li class="depth-0"><a href="#superscalar-multi-issue-processor" data-for="superscalar-multi-issue-processor">Superscalar (Multi-issue Processor)</a></li><li class="depth-1"><a href="#w-or-wo-speculation" data-for="w-or-wo-speculation">W/ or w/o Speculation</a></li><li class="depth-1"><a href="#how-much-speculation" data-for="how-much-speculation">How Much Speculation?</a></li><li class="depth-0"><a href="#forward-store-to-load-buffer" data-for="forward-store-to-load-buffer">Forward Store to Load Buffer</a></li><li class="depth-0"><a href="#load--store-disambiguation" data-for="load--store-disambiguation">Load / Store Disambiguation</a></li><li class="depth-0"><a href="#very-long-instruction-word-vliw" data-for="very-long-instruction-word-vliw">Very Long Instruction Word (VLIW)</a></li><li class="depth-0"><a href="#limitations-to-ilp" data-for="limitations-to-ilp">Limitations to ILP</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures" class="internal">(SNU CSE) Advanced Computer Architectures</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>
