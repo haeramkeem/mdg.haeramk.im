@@ -11,7 +11,8 @@ date: 2024-07-29
 
 - [[(CMU 15-445) Intro. to Database Systems]]
 - [[(CMU 15-721) Advanced Database Systems]]
-- [[(SNU GSDS) Bigdata and Knowledge Management Systems 01]]
+- [[(SNU GSDS) Bigdata and Knowledge Management Systems 1]]
+- [[(SNU GSDS) Bigdata and Knowledge Management Systems 2]]
 
 ### Common
 
@@ -111,6 +112,7 @@ date: 2024-07-29
 	- [[STEAL, NO_STEAL Policy (Database Recovery)|STEAL, NO_STEAL Policy]]
 	- [[Write Ahead Log, WAL (Database Recovery)|Write Ahead Log, WAL]]
 - 논문들
+	- [[Border-Collie - A Wait-free, Read-optimal Algorithm for Database Logging on Multicore Hardware (SIGMOD'19)]]
 	- [[Scalable Database Logging for Multicores (VLDB'18)]]
 
 ### Transaction

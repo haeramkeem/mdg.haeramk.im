@@ -4,7 +4,7 @@ tags:
   - database
   - snu-bkms25s
 date: 2025-03-05
-title: (SNU GSDS) Bigdata and Knowledge Management Systems 02
+title: (SNU GSDS) Bigdata and Knowledge Management Systems 2
 ---
 ## 강의 정보
 
@@ -17,3 +17,4 @@ title: (SNU GSDS) Bigdata and Knowledge Management Systems 02
 - [[03. Spin Locks and Contention]]
 - [[4. Eleda Design (Eleda, VLDB'18)|04. A Scalable Lock Manager for Multicores]] (*redirect*)
 - [[05. Scalable Database Logging]]
+- [[06. Latch-Free OLTP Indexes]]
