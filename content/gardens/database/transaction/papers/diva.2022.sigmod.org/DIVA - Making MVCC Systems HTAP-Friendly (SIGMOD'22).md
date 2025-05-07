@@ -37,3 +37,5 @@ title: "(논문) DIVA: Making MVCC Systems HTAP-Friendly (SIGMOD'22)"
 
 - [[1. Introduction (DIVA, SIGMOD'22)|1. Introduction]]
 - [[3. Design Overview of DIVA (DIVA, SIGMOD'22)|3. Design Overview of DIVA]]
+- [[4. Provisional Version Indexing (DIVA, SIGMOD'22)|4. Provisional Version Indexing]]
+- [[5. Version Garbage Collection (DIVA, SIGMOD'22)|5. Version Garbage Collection]]

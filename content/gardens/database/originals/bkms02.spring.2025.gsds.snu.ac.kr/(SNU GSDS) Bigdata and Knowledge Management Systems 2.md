@@ -19,3 +19,10 @@ title: (SNU GSDS) Bigdata and Knowledge Management Systems 2
 - [[05. Scalable Database Logging]]
 - [[06. Latch-Free OLTP Indexes]]
 - [[07. Multi-Version Concurrency Control]]
+- [[08. Long-Lived Transaction]]
+- [[09. Fast Version Search in MVCC Databases]]
+- [[5. Version Garbage Collection (DIVA, SIGMOD'22)|10. Unraveling Design Concerns in HTAP DBMSs]] (*redirect*)
+- [[11. Hardware-accelerated Query Processing]]
+- [[13. Cloud-native OLAP and HTAP DBMSs]]
+- [[14. Data Format and Encoding]]
+- 
