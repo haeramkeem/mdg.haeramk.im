@@ -25,4 +25,4 @@ title: (SNU GSDS) Bigdata and Knowledge Management Systems 2
 - [[11. Hardware-accelerated Query Processing]]
 - [[13. Cloud-native OLAP and HTAP DBMSs]]
 - [[14. Data Format and Encoding]]
-- 
+- [[15. Query Compilation and Code Generation]]
