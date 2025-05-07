@@ -4,7 +4,7 @@ tags:
   - snu-bkms24f
   - database
 date: 2024-09-01
-title: (SNU GSDS) Bigdata and Knowledge Management Systems 01
+title: (SNU GSDS) Bigdata and Knowledge Management Systems 1
 ---
 ## 강의 정보
 
