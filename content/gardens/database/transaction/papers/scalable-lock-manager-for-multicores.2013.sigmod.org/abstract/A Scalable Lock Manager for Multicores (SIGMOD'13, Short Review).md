@@ -78,7 +78,7 @@ title: (논문 요약) A Scalable Lock Manager for Multicores (SIGMOD'13)
 
 ![[Pasted image 20250505212141.png]]
 
-- 여기도 별건 없다. (1) [[Test and Set, TAS|TAS]] 로 tail 을 바꿔주고, (2) 기존의 tail 이었던 놈의 next 를 바꿔주며, (3) [[#Staged De-allocation]] 에서 말한 것 처럼 몇몇 `OBSOLETE` node 들의 pointer 들을 바꿔준다.
+- 여기도 별건 없다. (1) [[Test and Set, TAS (C Atomic)|TAS]] 로 tail 을 바꿔주고, (2) 기존의 tail 이었던 놈의 next 를 바꿔주며, (3) [[#Staged De-allocation]] 에서 말한 것 처럼 몇몇 `OBSOLETE` node 들의 pointer 들을 바꿔준다.
 - 근데 [[Mellor-Crummey and Scott Lock, MCS Lock (Lock Data Structure)|MCS Lock]] 에서처럼, 이렇게 하면 저 (1) 와 (2) 사이에서 invariant 가 깨질 수 있다.
 - 따라서 node iteration 은 아래와 같이 수행된다.
 

@@ -15,7 +15,7 @@ title: (SNU GSDS) Bigdata and Knowledge Management Systems 2
 ## 목차
 
 - [[03. Spin Locks and Contention]]
-- [[4. Eleda Design (Eleda, VLDB'18)|04. A Scalable Lock Manager for Multicores]] (*redirect*)
+- [[A Scalable Lock Manager for Multicores (SIGMOD'13, Short Review)|04. A Scalable Lock Manager for Multicores]] (*redirect*)
 - [[05. Scalable Database Logging]]
 - [[06. Latch-Free OLTP Indexes]]
 - [[07. Multi-Version Concurrency Control]]

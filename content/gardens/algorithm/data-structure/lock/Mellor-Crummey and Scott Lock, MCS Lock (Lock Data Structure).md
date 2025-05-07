@@ -22,7 +22,7 @@ aliases:
 ![[Pasted image 20250505172307.png]]
 
 - 위 그림에서 저 빨간놈이 lock acquire 를 하려고 한다고 해보자.
-- 그럼 일단 CLH 에서와 마찬가지로 qnode 를 하나 생성하고 (빨간색 qnode), tail 에 대해 [[Test and Set, TAS|TAS]] 를 해서 다음과 같은 상태로 만든다.
+- 그럼 일단 CLH 에서와 마찬가지로 qnode 를 하나 생성하고 (빨간색 qnode), tail 에 대해 [[Test and Set, TAS (C Atomic)|TAS]] 를 해서 다음과 같은 상태로 만든다.
 
 ![[Pasted image 20250505172516.png]]
 
@@ -51,6 +51,6 @@ aliases:
 - 즉, linked list 의 node 들이 "연결" 되어 있어야 한다는 representation invariant 가 깨지게 된다.
 - 이것을 해결하는 방법은 여러가지가 될 수 있는데, 대표적으로는 다음과 같이 해결한다.
 	- 우선 보라색은 자신의 qnode 의 next 를 보고 NULL 인지 확인한다. 만약에 NULL 이 아니라면, 그놈으로 가서 깨워주고 return 한다.
-	- 근데 만약 NULL 일 경우에는, 위의 경우처럼 가짜 NULL 인지 파악해야 한다. 그래서 tail 에 대해 [[Compare and Swap, CAS|CAS]] 를 때려서, 만약 tail 이 NULL 이면 NULL 을 overwrite 하고 NULL 이 아니면 swap 하지 않고 tail 의 값을 받아온다.
+	- 근데 만약 NULL 일 경우에는, 위의 경우처럼 가짜 NULL 인지 파악해야 한다. 그래서 tail 에 대해 [[Compare and Swap, CAS (C Atomic)|CAS]] 를 때려서, 만약 tail 이 NULL 이면 NULL 을 overwrite 하고 NULL 이 아니면 swap 하지 않고 tail 의 값을 받아온다.
 	- 그리고 만약 받아온 값이 tail 의 값이라면 (즉, NULL 이 아니라면) 뒤에 기다리고 있는 놈이 있는데 아직 next 를 설정하지 않았다는 의미이므로 waiting 을 하게 된다.
 		- 그래서 이 waiting 을 하는 동안 release 하는 놈이 delay 되므로, 이것이 MCS 의 drawback 이 된다.

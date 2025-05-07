@@ -27,7 +27,7 @@ title: "(논문 요약) Border-Collie: A Wait-free, Read-optimal Algorithm for D
 
 ![[Pasted image 20250506000208.png]]
 
-- 이때 위 그림처럼 DB thread (양) 은 [[Fetch And Add, FAA|FAA]] 으로 LSN 공간을 할당받고 (`mylsn`),
+- 이때 위 그림처럼 DB thread (양) 은 [[Fetch And Add, FAA (C Atomic)|FAA]] 으로 LSN 공간을 할당받고 (`mylsn`),
 
 ![[Pasted image 20250506000221.png]]
 

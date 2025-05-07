@@ -6,6 +6,7 @@ date: 2025-05-05
 title: "(논문) Border-Collie: A Wait-free, Read-optimal Algorithm for Database Logging on Multicore Hardware (SIGMOD'19)"
 aliases:
   - Border-Collie
+  - "Border-Collie: A Wait-free, Read-optimal Algorithm for Database Logging on Multicore Hardware (SIGMOD'19)"
 ---
 > [!info] Border-Collie 링크
 > - [논문](https://dl.acm.org/doi/pdf/10.1145/3299869.3300071)
