@@ -30,7 +30,9 @@ aliases:
 	- 즉, LSN 이 더 큰 log entry 는 그렇지 않은 것에 비해 최신의 log 인 것.
 - 각 [[Slotted Page (Database Format)|Page]] 에는 *LSN* 이 명시되어 있어 해당 page 를 변경한 마지막 log 를 식별할 수 있게 한다.
 	- 따라서 이것으로 recovery 시에 해당 page 를 변경한 마지막 log 을 빨리 알아내어 복구할 수 있게 된다.
-- 각 log 의 내용은 (아마?) fixed size 인 것 같다: 그래서 이 LSN 만으로도 file 의 offset 을 알아낼 수 있다고 한다.
+- LSN 은 어떤 무한히 늘어나는 가상의 파일이 있다고 가정했을 때, 여기에 저장되는 log 의 offset 이 LSN 이 된다.
+	- 즉, 1씩 증가하는 counter 는 아닌 셈이고
+	- 따라서 physical file 내에서도 이 LSN 으로 log 의 위치를 특정할 수 있게 된다.
 
 > [!tip] LSN 과 DB replication
 > - 이놈은 database replication 에도 사용된다고 한다: [[Viewstamped Replication Protocol, VR (Distributed Computing)|VR]]
