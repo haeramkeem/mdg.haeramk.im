@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html><head><title>7. Multi-Version Concurrency Control (Bigdata and Knowledge Management Systems 2, SNU GSDS)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="7. Multi-Version Concurrency Control (Bigdata and Knowledge Management Systems 2, SNU GSDS)"/><meta property="og:description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;빅데이터 및 지식 관리 시스템 2&amp;quot; 강의를 필기한 내용입니다. 목차 완성되지 않은 강의록 사진이랑 보충 설명 넣고, Hekaton, HyPer, SAP HANA 는 별도의 논문 리뷰 작물로 분리할 계획입니다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;빅데이터 및 지식 관리 시스템 2&amp;quot; 강의를 필기한 내용입니다. 목차 완성되지 않은 강의록 사진이랑 보충 설명 넣고, Hekaton, HyPer, SAP HANA 는 별도의 논문 리뷰 작물로 분리할 계획입니다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/lectures/07.-Multi-Version-Concurrency-Control"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">7. Multi-Version Concurrency Control (Bigdata and Knowledge Management Systems 2, SNU GSDS)</h1><p class="content-meta ">Mar 26, 2025, 11 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-bkms25s" class="internal tag-link">#snu-bkms25s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 데이터사이언스대학원 정형수 교수님의 &quot;빅데이터 및 지식 관리 시스템 2&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-2" class="internal" data-slug="gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-2">목차</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>완성되지 않은 강의록 </p></div>
+                  
+                </div>
+<ul>
+<li>사진이랑 보충 설명 넣고, Hekaton, HyPer, SAP HANA 는 별도의 논문 리뷰 작물로 분리할 계획입니다.</li>
+<li>그리고 작물 migration 이후에는 alias 도 바꿔주는 것 잊지 말자.</li>
+</ul>
+</blockquote>
+<h2 id="mvcc-복습">MVCC 복습<a aria-hidden="true" tabindex="-1" href="#mvcc-복습" class="internal"> §</a></h2>
+<h3 id="basic-concept">Basic Concept<a aria-hidden="true" tabindex="-1" href="#basic-concept" class="internal"> §</a></h3>
+<ul>
+<li>MVCC: Single logival object, multiple physical versions
+<ul>
+<li>목적은 reader 와 writer 간의 blocking 을 하지 않도록 하는 것이다.</li>
+<li>Writer 와 writer 간의 blocking 은 당연히 발생한다.</li>
+<li>부여받은 Timestamp 를 기준으로, snapshot read 를 하도록 한다. 즉, 이전의 snapshot 을 보게 되므로 time-travel 이 되는 것.</li>
+</ul>
+</li>
+</ul>
+<h3 id="version-storage">Version Storage<a aria-hidden="true" tabindex="-1" href="#version-storage" class="internal"> §</a></h3>
+<ul>
+<li>Version storage 의 representation invariant 는 어떤 버전이 있다면, 그 버전을 필요로 하는 놈은 그것을 찾을 수 있어야 한다는 것이다.</li>
+<li>종류
+<ul>
+<li><em>Append-only</em>, <em>In-row</em>: Table 에 version 을 그냥 때려박는 형식</li>
+<li><em>Time-travel</em>, <em>Off-row</em>: Version 을 table space 에서 분리해서 별도의 저장공간에 저장하는 것.</li>
+<li><em>Delta</em>: Version 에 전체 tuple 이 아닌, 변경사항만 적는 것.</li>
+</ul>
+</li>
+<li>순서
+<ul>
+<li><em>Old-to-New</em> (<em>O2N</em>): Version chain traversal 을 할 때, 오래된 것에서 최신의 것 순서로 방문하게 되는 것.</li>
+<li><em>New-to-Old</em> (<em>N2O</em>): 반대로 version chain traversal 을 할 때, 최신의 것에서 오래된 것 순서로 방문하게 되는 것.</li>
+<li>O2N 의 경우에는 write 쿼리를 할 때 version chain 의 맨 마지막에 달아야 하기 때문에 version chain 을 끝까지 따라가야 하고, 각 version traversal 에 대해 write latch 를 붙잡는다. 이에 따라 read query 가 write latch 들에 의해 막혀 read 성능이 나빠진다.</li>
+<li>N2O 의 경우에는 OLAP 쿼리의 경우에 옛날 version 을 찾으러 version chain 을 쭉 따라가야 하고, 각 version traversal 을 할 때 page read latch 를 모두 붙잡기 때문에 latch 를 많이 잡게 된다. 이에 따라 write query 는 이 read latch 들에 계속 붙잡히기 때문에 성능이 구려진다.</li>
+</ul>
+</li>
+<li>Postgres 는 in-row, append only, O2N 방식</li>
+<li>MySQL 에서는 time-travel storage 가 있음
+<ul>
+<li>MySQL, Oracle 의 undo segment (rollback segment)</li>
+<li>MSSQL 의 Persistent Version Storage (PVS)</li>
+<li>여기서 recovery 의 undo 도 담당한다</li>
+<li>보통 delta 로 구현된다</li>
+</ul>
+</li>
+</ul>
+<h3 id="garbage-collection">Garbage Collection<a aria-hidden="true" tabindex="-1" href="#garbage-collection" class="internal"> §</a></h3>
+<ul>
+<li>만약 연속된 두 txn 의 begin timestamp 사이에 어떤 version 이 되면, 그놈은 아무도 못보기 때문에 dead version 이 되고 이 두 begin timestamp 사이를 dead zone 이라고 한다.</li>
+<li>Tuple level GC: 별도의 vaccumer 가 version traversal 을 하면서 version 하나씩 지운다.
+<ul>
+<li>주의할 것은 이것을 SeqScan 에서처럼 하면 안된다.
+<ul>
+<li>SeqScan 할 때 version chase 를 안하고 그냥 xmin, xmax 만 보고 visibility 를 판단하니까 동일한 로직을 활용해 vacuumer 가 global min ts 를 가지고 이놈이 못보는 tuple 들은 전부 날려주면 되지 않겠나 싶겠지만 이렇게 하면 안된다.</li>
+<li>왜냐면 linked list 생각해 보면 어떤 node 를 지운다는 것은 그것을 가리키고 있는 prev node 의 next pointer 도 고쳐줘야 하기 때문에, 이렇게 지우게 되면 version chain 이 끊긴다.</li>
+<li>또한, 어차피 vacuumer 가 global min ts 를 가지고 있으니까 어차피 앞애 애들은 전부 날려도 되고, 따라서 chain 도 안끊기지 않냐라고 생각할 수 있는데 chain head 와의 연결이 끊어지므로 이것도 불가능하다.</li>
+</ul>
+</li>
+<li>근데 보통은 이 tuple level GC 는 vacuumer 하나로는 감당이 안된다. 그래서 몇몇 최적화가 들어가는데</li>
+<li>Postgres 에서는 cooperative 방식으로 scan txn 이 자신이 할 수 있는 만큼은 지워주게 되며
+<ul>
+<li>물론 이렇게 하면 scan throughput 은 좀 떨어지긴 한다.</li>
+</ul>
+</li>
+<li>MySQL 에서는 undo space 의 page 를 보고 어떤 delta 들이 지워질 수 있는지 bitmap 으로 확인을 쭉 한 다음, 대부분 다 날릴 수 있으면 이 page 를 rebuild 하는 방식으로 하기도 한다.</li>
+</ul>
+</li>
+<li>Transaction-level GC: 이놈은 transaction 의 read, write set 을 가지고 있고 그럼 전체 system 입장에서는 누가 누구를 보고있는지가 파악이 되기 때문에 못보는 tuple 은 system 이 한번에 날리는 방식이랜다.
+<ul>
+<li>당연히 read, write set 을 갖고있어야 하기 때문에 memory footprint 가 커 in-memory 에서만 사용한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="in-memory-db-1-ms-hekaton">In-memory DB 1: <a href="https://dl.acm.org/doi/10.1145/2463676.2463710" class="external">MS Hekaton</a><a aria-hidden="true" tabindex="-1" href="#in-memory-db-1-ms-hekaton" class="internal"> §</a></h2>
+<ul>
+<li>여기서는 in-row 방식으로 version 을 관리하는데, 다음과 같이 수행한다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250506172813.png" width="auto" height="auto"/></p>
+<ul>
+<li>Update 를 할 때 txn id 를 최신 version 의 end ts 에 적어놓고 그 다음에 begin ts 를 txn id 로 하는 record 를 적어놓는다.
+<ul>
+<li>이때는 commit 되지 않았다는 의미에서 이 txn id 의 MSB 을 1 로 켜놓는다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250506172844.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 commit 할때 적어놓은 txn id 를 commit id 로 교체한다.
+<ul>
+<li>당연히 이때는 MSB 를 끈다.</li>
+<li>따라서 이러한 방식이 OCC 에서 write set 와 같은 효과를 내는 것이다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250506173552.png" width="auto" height="auto"/></p>
+<ul>
+<li>따라서 만약에 최신버전을 봐야하는 read txn 의 경우에는 write txn 이 begin ts 에 적어둔 txn id 를 보면 (즉, MSB 가 1인), 이놈은 내가 못읽는구나 라고 생각하고 그 이전 버전을 읽는다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250506173615.png" width="auto" height="auto"/></p>
+<ul>
+<li>만약에 write txn 이 다른 write txn 이 적어둔 txn id 를 보면, txn id 가 내가 먼저냐 아니냐에 따라 OCC 면 abort 를 하던지, PCC 면 stall 을 하던지 한다.</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250506175224.png" width="auto" height="auto"/></p>
+<ul>
+<li>이놈은 모든 txn 의 상태를 볼 수 있는 global txn map 이 있고, 각 txn 은 lifetime 동안 위와 같이 상태가 변하게 된다.</li>
+<li>보면 특이한게 <em>Post-Processing</em> 이 있다: 이 단계에서 write txn 은 commit 을 할 때 txn id 를 commit id 로 바꾸는 작업을 한다.
+<ul>
+<li>때문에 update 한 record 가 많아질수록 commit overhead 가 커지는데, 그럼에도 불구하고 이 방식이 가능한 것은 Hekaton 이 in-memory DB 이기 때문이다.</li>
+<li>이런 post-processing 의 경우에는 random write 이기 때문에 in-memory 에서는 유리하지만 disk-based 가 되면 성능이 곱창난다.</li>
+<li>따라서 disk-based 에서는 이렇게 commit id 를 적어놓는게 아니고 txn id 만 적은 다음 commit 여부는 commit log 를 보고 결정하는 방식을 취하게 된다.</li>
+</ul>
+</li>
+<li>그리고 Hekaton 에서는 어떤 predicate 으로 어떤 table 에 어디부터 접근했는지를 Scan set 이라는 이름으로 저장해 놓고, scan 을 할때 새로 insert 된 놈이 있는지를 검사한다.
+<ul>
+<li>즉, 이렇게 함으로써 serializable isolation level 을 보장하는 것</li>
+<li>이렇게 full serializable 을 제공해 주기 위해 BwTree 같은 latch-free 자료구조를 최대한 많이 썼다고 한다.</li>
+<li>그래서 실제 성능도 잘 나온다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="in-memory-db-2-tum-hyper">In-memory DB 2: <a href="https://dl.acm.org/doi/10.1145/2723372.2749436" class="external">TUM HyPer</a><a aria-hidden="true" tabindex="-1" href="#in-memory-db-2-tum-hyper" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250506175819.png" width="auto" height="auto"/></p>
+<ul>
+<li>HyPer 는 columnar DBMS 이고, 위 그림처럼 delta storage 를 사용해서 delta column 에서 이 delta storage 를 가리키게 하는 구조로 이루어져 있다.</li>
+<li>그리고 이 delta storage 에서는 per-txn 으로 delta 를 적어주고 이것을 이용해 transaction-level GC 를 한다.
+<ul>
+<li>즉, 누가 누구를 보고 있는지를 추적하여 못보는 애들은 한번에 날려버릴 수 있도록 하는 것.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../../../../images/Pasted-image-20250506175900.png" width="auto" height="auto"/></p>
+<ul>
+<li>그리고 read serializable 을 위해서 HyPer 에서는 precision locking 을 이용한다.
+<ul>
+<li>이건 predicate locking 와 비슷한거다.</li>
+<li>scan 을 할 때 이 delta storage 를 보면서, scan predicate 에 걸리는 놈이 있는지 확인하고 만약에 있으면 이것을 abort 하는 방식이다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="in-memory-db-3-sap-hana">In-memory DB 3: <a href="https://dl.acm.org/doi/10.14778/2536222.2536251" class="external">SAP HANA</a><a aria-hidden="true" tabindex="-1" href="#in-memory-db-3-sap-hana" class="internal"> §</a></h2>
+<p><img src="../../../../../images/Pasted-image-20250506180232.png" width="auto" height="auto"/></p>
+<ul>
+<li>SAP HANA 에서는 데이터를 N2O 방향으로 저장한다.</li>
+<li>여기서 table storage 에서는, version 이 존재하는지 가리키는 system column 을 추가하고</li>
+<li>Version storage 에서는, RID 를 key 로 하고 version chain 을 value 로 하는 hashtable 을 빌드해서 version chain 을 빠르게 찾을 수 있게 한다.</li>
+<li>그리고 <em>Txn context</em> 라는 global txn map 을 관리하고 있고, 각 txn 이 생성한 version 들을 tracking 해서 transaction-level GC 를 수행한다.
+<ul>
+<li>또한 이 자료구조를 이용해 group commit 을 한다고 한다.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#mvcc-복습" data-for="mvcc-복습">MVCC 복습</a></li><li class="depth-1"><a href="#basic-concept" data-for="basic-concept">Basic Concept</a></li><li class="depth-1"><a href="#version-storage" data-for="version-storage">Version Storage</a></li><li class="depth-1"><a href="#garbage-collection" data-for="garbage-collection">Garbage Collection</a></li><li class="depth-0"><a href="#in-memory-db-1-ms-hekaton" data-for="in-memory-db-1-ms-hekaton">In-memory DB 1: MS Hekaton</a></li><li class="depth-0"><a href="#in-memory-db-2-tum-hyper" data-for="in-memory-db-2-tum-hyper">In-memory DB 2: TUM HyPer</a></li><li class="depth-0"><a href="#in-memory-db-3-sap-hana" data-for="in-memory-db-3-sap-hana">In-memory DB 3: SAP HANA</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-2" class="internal">(SNU GSDS) Bigdata and Knowledge Management Systems 2</a></li><li><a href="../../../../../gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/lectures/15.-Query-Compilation-and-Code-Generation" class="internal">15. Query Compilation and Code Generation (Bigdata and Knowledge Management Systems 2, SNU GSDS)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

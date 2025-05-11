@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html><head><title>14. Data Format and Encoding (Bigdata and Knowledge Management Systems 2, SNU GSDS)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="14. Data Format and Encoding (Bigdata and Knowledge Management Systems 2, SNU GSDS)"/><meta property="og:description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;빅데이터 및 지식 관리 시스템 2&amp;quot; 강의를 필기한 내용입니다. 목차 완성되지 않은 강의록 사진이랑 보충 설명을 더 넣을 예정입니다. Data Formats § 정형 데이터와 비정형 데이터 등 데이터의 포맷간 차이에 의해 처리하는 방법이 달라질 수 있고, 따라서 이런 차이를 줄일 수 있는 방법이 연구되고 있다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="서울대학교 데이터사이언스대학원 정형수 교수님의 &amp;quot;빅데이터 및 지식 관리 시스템 2&amp;quot; 강의를 필기한 내용입니다. 목차 완성되지 않은 강의록 사진이랑 보충 설명을 더 넣을 예정입니다. Data Formats § 정형 데이터와 비정형 데이터 등 데이터의 포맷간 차이에 의해 처리하는 방법이 달라질 수 있고, 따라서 이런 차이를 줄일 수 있는 방법이 연구되고 있다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/lectures/14.-Data-Format-and-Encoding"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">14. Data Format and Encoding (Bigdata and Knowledge Management Systems 2, SNU GSDS)</h1><p class="content-meta ">Apr 21, 2025, 4 min read</p><ul class="tags "><li><a href="../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../tags/originals" class="internal tag-link">#originals</a></li><li><a href="../../../../../tags/snu-bkms25s" class="internal tag-link">#snu-bkms25s</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>서울대학교 데이터사이언스대학원 정형수 교수님의 &quot;빅데이터 및 지식 관리 시스템 2&quot; 강의를 필기한 내용입니다. </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-2" class="internal" data-slug="gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-2">목차</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="warning">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                  <div class="callout-title-inner"><p>완성되지 않은 강의록 </p></div>
+                  
+                </div>
+<ul>
+<li>사진이랑 보충 설명을 더 넣을 예정입니다.</li>
+</ul>
+</blockquote>
+<h2 id="data-formats">Data Formats<a aria-hidden="true" tabindex="-1" href="#data-formats" class="internal"> §</a></h2>
+<ul>
+<li>정형 데이터와 비정형 데이터 등 데이터의 포맷간 차이에 의해 처리하는 방법이 달라질 수 있고, 따라서 이런 차이를 줄일 수 있는 방법이 연구되고 있다.</li>
+<li>OLAP 과 OLTP 의 접근 방법의 차이는:
+<ul>
+<li>OLAP query 를 처리할 때는 sequential scan 을 하면서, 원하는 column value 를 찾고 그 value 가 속한 row 의 다른 column value 를 stitch (materialize) 할 필요가 있다.
+<ul>
+<li>한 column 만 보는 경우는 드물기 때문.</li>
+</ul>
+</li>
+<li>OLTP 는 index 를 사용하여 row 전체에 접근한다.</li>
+</ul>
+</li>
+<li>Format, encoding 의 최종 목적은 query processing 에 필요한 데이터만 빠르게 IO 하는 것이다
+<ul>
+<li>Compression: 필요한 데이터의 사이즈를 줄여 IO amount 를 줄임.
+<ul>
+<li>요즘은 compression 을 활용해서 logical denormalization 하는 방법도 나온다고 한다.
+<ul>
+<li>즉, denormalization 을 해서 big table 을 만들긴 하되, <a href="../../../../../gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)">DICT</a> 와 같은 encoding 으로 실제 사이즈는 작게 가져가는 것.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Data skipping: 안읽어도 되는건 읽지 말자.</li>
+<li>Data parallelism / Vectorization: 읽은 것은 빠르게 처리하자.</li>
+</ul>
+</li>
+</ul>
+<h2 id="storage-models">Storage Models<a aria-hidden="true" tabindex="-1" href="#storage-models" class="internal"> §</a></h2>
+<ul>
+<li><em>N-ary Storage Model</em> (<em>NSM</em>): row-oriented format
+<ul>
+<li>NSM 은 당연히 필요없는 column 까지 읽히기 때문에 OLAP 에서 read amp 가 안좋다.</li>
+</ul>
+</li>
+<li><em>Decomposition Storage Model</em> (<em>DSM</em>): columnar format
+<ul>
+<li>DSM 에서는 각 column 당 하나의 file 을 사용한다.</li>
+<li>근데 그렇다고 하나의 file 에 다 넣으면 header 와 nullmap 이 아주 커지기 때문에 적정 크기를 configuration 으로 노출시킨다.</li>
+<li>Column value 를 stitch 하기 위해서는 이 column value 가 어떤 row 에 속해있는지를 알아야 하고, 그 다음 해당 column 에 대한 file 을 읽어 stitch 를 해야 한다.
+<ul>
+<li>어떤 row 에 속해있는지를 나타내기 위해 row 순서를 바꾸지 않거나, 아니면 row id 를 embedding 한다.</li>
+<li>당연히 row 순서를 바꾸지 않았을 때 point lookup 을 하기 위해서는 데이터 사이즈를 fixed-length 로 해야 된다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>Partition Attribute Across</em> (<em>PAX</em>): row-column hybrid format
+<ul>
+<li>PAX 의 장점들은:
+<ul>
+<li>일단 column stitch 할 때 같은 파일을 보면 되고</li>
+<li>Row group 들로 구분이 되어 있기 때문에 OLTP 에 대해서도 그렇게 성능이 떨어지지는 않으며</li>
+<li>Row group 안에서는 columnar 로 되어 있기 때문에 OLAP 에 대해서도 sequential read 를 할 수 있어 성능이 나쁘지 않다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="compression">Compression<a aria-hidden="true" tabindex="-1" href="#compression" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="success">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                  <div class="callout-title-inner"><p>옮겨짐: </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Dictionary-Encoding-(Encoding)">DICT</a></li>
+<li><a href="../../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a></li>
+<li><a href="../../../../../gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bit-Packing,-BP-(Encoding)">BP</a></li>
+<li><a href="../../../../../gardens/database/encoding/terms/Patching,-Mostly-Encoding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Patching,-Mostly-Encoding-(Encoding)">Patching</a></li>
+<li><a href="../../../../../gardens/database/encoding/terms/Bitmap-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Bitmap-(Encoding)">Bitmap</a></li>
+<li><a href="../../../../../gardens/database/encoding/terms/Delta-Coding-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Delta-Coding-(Encoding)">DELTA</a></li>
+</ul>
+</blockquote>
+<h2 id="nested-schema">Nested Schema<a aria-hidden="true" tabindex="-1" href="#nested-schema" class="internal"> §</a></h2>
+<blockquote class="callout" data-callout="success">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                  <div class="callout-title-inner"><p>내용 옮겨짐: </p></div>
+                  
+                </div>
+<ul>
+<li><a href="../../../../../gardens/database/format/papers/dremel.2010.pvldb.vldb.org/full/4.-Nested-Columnar-Storage-(Dremel,-VLDB-10)" class="internal" data-slug="gardens/database/format/papers/dremel.2010.pvldb.vldb.org/full/4.-Nested-Columnar-Storage-(Dremel,-VLDB-10)">Repetition Level</a></li>
+<li><a href="../../../../../gardens/database/format/papers/dremel.2010.pvldb.vldb.org/full/4.-Nested-Columnar-Storage-(Dremel,-VLDB-10)" class="internal" data-slug="gardens/database/format/papers/dremel.2010.pvldb.vldb.org/full/4.-Nested-Columnar-Storage-(Dremel,-VLDB-10)">Definition Level</a></li>
+</ul>
+</blockquote></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#data-formats" data-for="data-formats">Data Formats</a></li><li class="depth-0"><a href="#storage-models" data-for="storage-models">Storage Models</a></li><li class="depth-0"><a href="#compression" data-for="compression">Compression</a></li><li class="depth-0"><a href="#nested-schema" data-for="nested-schema">Nested Schema</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/database/originals/bkms02.spring.2025.gsds.snu.ac.kr/(SNU-GSDS)-Bigdata-and-Knowledge-Management-Systems-2" class="internal">(SNU GSDS) Bigdata and Knowledge Management Systems 2</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>
