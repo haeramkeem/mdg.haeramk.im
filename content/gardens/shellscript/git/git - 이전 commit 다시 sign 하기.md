@@ -12,6 +12,7 @@ aliases:
 ## 왜?
 
 - Github 에서 PR rule 을 지정할 때 "모든 commit 이 서명 (sign) 되어있어야 함" 이란 rule 을 강제할 수 있다.
+	- 이에 대한 가이드는 [[git - Signing Key 설정하기|여기]] 에 있다.
 - 근데 GPG 혹은 SSH 키를 변경하였을 경우 이전 키를 Github 에서 지우면 이전 commit 들이 `Unverfied` 상태가 될 수 있다.
 - 이때 새로 생성한 키로 이전 commit 을 다시 서명하여 push 하는 것으로 문제를 해결할 수 있다.
 

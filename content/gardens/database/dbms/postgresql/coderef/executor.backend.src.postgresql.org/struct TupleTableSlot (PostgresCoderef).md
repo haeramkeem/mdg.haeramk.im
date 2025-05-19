@@ -33,7 +33,7 @@ aliases:
 
 ## Overview
 
-- `TupleTableSlot` (줄여서 `tts`) 는 [[Materialization (Database Query Optimization)|Materialization]] 된 tuple 이라고 생각하면 된다.
+- `TupleTableSlot` (줄여서 `tts`) 는 [[Materialization (Database Query Plan)|Materialization]] 된 tuple 이라고 생각하면 된다.
 - 즉, disk (그리고 그게 memory 로 올라온 buffer) 에서의 format 이 아닌, query execution 에서 갖고다니는 format 을 말한다.
 - 크게 네 종류가 있다.
 	- 여기서 `base` 라는 field 가 나오게 되는데, 간단하게 생각하면 OOP 에서 상속이라고 생각하면 된다.
