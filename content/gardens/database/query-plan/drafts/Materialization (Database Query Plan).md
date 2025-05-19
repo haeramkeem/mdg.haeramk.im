@@ -1,8 +1,8 @@
 ---
 tags:
   - database
-  - db-query-optimizer
   - draft
+  - db-query-plan
 aliases:
   - Materialization
   - Early materialization
