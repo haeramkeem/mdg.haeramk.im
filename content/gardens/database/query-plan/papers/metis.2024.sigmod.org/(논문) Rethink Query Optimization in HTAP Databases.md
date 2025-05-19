@@ -13,6 +13,10 @@ date: 2025-05-18
 
 - SIGMOD (Proc. Mgmt. of Data) 2024 년도에 소개된 Metis 논문을 읽고 정리해 보자.
 
+## Abstract
+
+- 
+
 ## 목차
 
 [[5. Demain Model (Metis, SIGMOD'24)|5. Demain Model]]
