@@ -4,7 +4,8 @@ tags:
   - bash-apt
 date: 2024-01-11
 ---
-> [!info] [출처](https://askubuntu.com/a/44124)
+> [!info]- 참고한 것들
+> - [스댕](https://askubuntu.com/a/44124)
 
 ## 개요
 
