@@ -83,4 +83,5 @@ aliases:
 > - 왜냐면 이 설정에 투자하는 시간이 너무 아깝기 때문.
 
 - 설정 가이드
-	- [[Terraform - 간단한 EC2 생성 가이드|간단한 EC2 생성 가이드]]
+	- [[Terraform - 간단한 AWS EC2 생성 가이드|간단한 AWS EC2 생성 가이드]]
+	- [[Terraform - 간단한 GCP GCE 생성 가이드|간단한 GCP GCE 생성 가이드]]
