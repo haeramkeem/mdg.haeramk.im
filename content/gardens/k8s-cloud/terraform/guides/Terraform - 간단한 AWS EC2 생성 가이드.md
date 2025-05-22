@@ -11,7 +11,7 @@ date: 2025-05-22
 
 - 그냥 이것을 사용하면 된다.
 
-```terraform title="main.tf" {2,54,58-59}
+```terraform title="main.tf" {2,54,58-59,66}
 provider "aws" {
   region = "ap-northeast-2" # Seoul
 }
@@ -65,7 +65,7 @@ resource "aws_security_group" "ssh" {
 
 resource "aws_key_pair" "default" {
   key_name   = "ec2_key"
-  public_key = file("/path/to/public_key")
+  public_key = file("/path/to/key.pub")
 }
 
 resource "aws_instance" "instance" {
@@ -75,6 +75,11 @@ resource "aws_instance" "instance" {
   vpc_security_group_ids      = [aws_security_group.ssh.id]
   key_name                    = aws_key_pair.default.key_name
   associate_public_ip_address = true
+
+  root_block_device {
+    volume_size = 100
+    volume_type = "gp3"
+  }
 
   tags = {
     Name = "Instance"
@@ -86,7 +91,7 @@ resource "aws_eip" "ssh_ip" {
   domain   = "vpc"
 }
 
-output "instance_ssh_ip" {
+output "ssh_ip" {
   value = aws_eip.ssh_ip.public_ip
 }
 ```
@@ -97,6 +102,7 @@ output "instance_ssh_ip" {
 	- 58번째 줄의 `ami`: 지금은 Ubuntu 22.04 로 되어있는데, 다른 cloud image 를 사용할 거면 바꿔주면 된다.
 		- Ubuntu 의 다른 AMI 들은 [여기](https://cloud-images.ubuntu.com/locator/ec2/) 에서 찾자.
 	- 59번째 줄의 `instance_type`: 원하는 instance type 을 적어주면 된다.
+	- 66번째 줄의 `volume_size`: 원하는 disk size 를 적어주면 된다.
 - Resouce 생성:
 
 ```bash
@@ -107,5 +113,5 @@ terraform apply
 - SSH 접속:
 
 ```sh
-ssh -i /path/to/private_key ubuntu@$(terraform output -raw instance_ssh_ip)
+ssh -i /path/to/key.pub ubuntu@$(terraform output -raw ssh_ip)
 ```
