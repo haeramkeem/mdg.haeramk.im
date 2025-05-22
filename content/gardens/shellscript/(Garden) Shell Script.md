@@ -49,6 +49,7 @@ date: 2024-04-23
 	- [[apt - 패키지 레포지토리 알아내기|패키지 레포지토리 알아내기]]
 	- [[apt - 패키지 하나만 버전 업그레이드하기|패키지 하나만 버전 업그레이드하기]]
 	- [[apt - Kernel 업그레이드 하기|Kernel 업그레이드 하기]]
+	- [[apt - 패키지와 버전 검색하기|패키지와 버전 검색하기]]
 - `arp`
 	- [[arp - ARP 테이블 요소 삭제하기|ARP 테이블 요소 삭제하기]]
 	- [[arp - ARP 테이블 확인하기|ARP 테이블 확인하기]]
@@ -130,6 +131,8 @@ date: 2024-04-23
 	- [[ncat - TCP 메세지 보내기|TCP 메세지 보내기]]
 - NFS
 	- [[NFS - Server, Client 설치하기|Server, Client 설치하기]]
+- NVIDIA
+	- [[NVIDIA - CUDA Toolkit, Driver 설치하기|CUDA Toolkit, Driver 설치하기]]
 - `nvme-cli`
 	- [[nvme-cli - 데이터 기본 입출력하기|데이터 기본 입출력하기]]
 	- [[nvme-cli - 디바이스 조회하기|디바이스 조회하기]]
