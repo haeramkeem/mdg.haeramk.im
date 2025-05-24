@@ -86,9 +86,20 @@ output "ssh_ip" {
 	- 3번째 줄의 `region`: 지금은 서울 (`asia-northeast3`) 로 되어 있고, 다른곳을 사용하고 싶으면 바꿔주면 된다.
 	- 4, 30번째 줄의 `zone`: 사용할 availability zone. 필요하면 바꿔주자.
 	- 29번째 줄의 `machine_type`: 사용할 instance type. 지금은 `n1-standard-1` 이다.
+		- Machine type 은 [이거](https://cloud.google.com/compute/docs/general-purpose-machines) 를 참고하자.
 	- 34번째 줄의 `image`: 사용할 OS image. 지금은 Ubuntu 22.04 이다.
 	- 35번째 줄의 `size`: 사용할 디스크의 크기 (GB). 지금은 100G 이다.
 	- 49번째 줄의 `ssh-keys`: 사용할 SSH key 경로.
+- 만약 GPU 를 사용하고 싶다면, `google_compute_instance` 안에 이놈을 넣으면 된다.
+	- GPU 종류는 [이거](https://cloud.google.com/compute/docs/gpus) 를 참고하자.
+
+```terraform
+guest_accelerator {
+  type  = "nvidia-tesla-t4"
+  count = 1
+}
+```
+
 - Resouce 생성:
 
 ```bash

@@ -102,6 +102,7 @@ output "ssh_ip" {
 	- 58번째 줄의 `ami`: 지금은 Ubuntu 22.04 로 되어있는데, 다른 cloud image 를 사용할 거면 바꿔주면 된다.
 		- Ubuntu 의 다른 AMI 들은 [여기](https://cloud-images.ubuntu.com/locator/ec2/) 에서 찾자.
 	- 59번째 줄의 `instance_type`: 원하는 instance type 을 적어주면 된다.
+		- GPU 를 사용하고싶다면 [이거](https://docs.aws.amazon.com/en_us/dlami/latest/devguide/gpu.html) 를 참고하자.
 	- 66번째 줄의 `volume_size`: 원하는 disk size 를 적어주면 된다.
 - Resouce 생성:
 
