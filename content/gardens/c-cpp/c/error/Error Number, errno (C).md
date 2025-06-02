@@ -31,10 +31,10 @@ aliases:
 
 int main(void)
 {
-	int fd = open(file: "not-exist-file", oflag: O_RDONLY, 0644);
+	int fd = open("not-exist-file", O_RDONLY, 0644);
 	if (fd < 0)
 	{
-		printf(format: "Errno: %d, message: '%s'\n", errno, strerror(errnum: errno));
+		printf("Errno: %d, message: '%s'\n", errno, strerror(errno));
 	}
 }
 ```
