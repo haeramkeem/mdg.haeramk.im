@@ -14,6 +14,7 @@ date: 2024-04-23
 
 ### 스토리
 
+- [[Linux Kernel Build Guide - 리눅스 커널 빌드 가이드|리눅스 커널 빌드 가이드]]
 - [[TAR vs GZIP - 뭔차이지?]]
 - [[디스크 마운트하기]]
 
@@ -160,6 +161,8 @@ date: 2024-04-23
 	- [[psql - 설정 확인|설정 확인]]
 - Python
 	- [[(책) 점프 투 파이썬 정리록]]
+- `rsync`
+	- [[rsync - SSH Key 사용하기|SSH Key 사용하기]]
 - `sed`
 	- [[sed - Color code 삭제하기|Color code 삭제하기]]
 	- [[sed - i 옵션에 대해 Linux 와 MacOS 에서의 차이점|i 옵션에 대해 Linux 와 MacOS 에서의 차이점]]
@@ -169,7 +172,7 @@ date: 2024-04-23
 - `ssh`
 	- [[ssh - Config 파일|Config 파일]]
 	- [[ssh - Keypair 생성하기|Keypair 생성하기]]
-	- [[ssh - Keypair 추가하기|Keypair 추가하기]]
+	- [[ssh - Remote 에 Keypair 추가하기|Remote 에 Keypair 추가하기]]
 	- [[ssh - Known Hosts 관리하기|Known Hosts 관리하기]]
 - `sudo`
 	- [[sudo - 사용자 변경하기|사용자 변경하기]]
