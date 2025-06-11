@@ -94,6 +94,7 @@ date: 2024-04-23
 	- [[git - Tag 추가하기|Tag 추가하기]]
 	- [[git - 기본 editor 를 VIM 으로 바꾸기|기본 editor 를 VIM 으로 바꾸기]]
 	- [[git - 이전 commit 다시 sign 하기|이전 commit 다시 sign 하기]]
+	- [[git - 인증서 확인 비활성화하기|인증서 확인 비활성화하기]]
 	- [[git - 일부분만 add 하기|일부분만 add 하기]]
 - `grep`
 	- [[grep - 기본 사용법|기본 사용법]]
