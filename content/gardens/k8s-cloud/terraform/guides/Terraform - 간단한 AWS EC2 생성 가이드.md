@@ -114,5 +114,5 @@ terraform apply
 - SSH 접속:
 
 ```sh
-ssh -i /path/to/key.pub ubuntu@$(terraform output -raw ssh_ip)
+ssh -i /path/to/key ubuntu@$(terraform output -raw ssh_ip)
 ```

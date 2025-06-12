@@ -9,6 +9,9 @@ date: 2025-05-22
 
 ## TL;DR
 
+> [!tip] `gcloud` 설치
+> - [Google GCP 공식문서](https://cloud.google.com/sdk/docs/install)
+
 - 우선 `gcloud` 로 로그인해준다.
 
 ```bash
@@ -78,7 +81,6 @@ resource "google_compute_instance" "vm_instance" {
 output "ssh_ip" {
   value = google_compute_address.ssh_ip.address
 }
-
 ```
 
 - 몇가지 바꿀만한 것을 보면
@@ -110,5 +112,5 @@ terraform apply
 - SSH 접속:
 
 ```sh
-ssh -i /path/to/key.pub ubuntu@$(terraform output -raw ssh_ip)
+ssh -i /path/to/key ubuntu@$(terraform output -raw ssh_ip)
 ```
