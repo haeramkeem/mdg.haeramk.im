@@ -85,3 +85,4 @@ aliases:
 - 설정 가이드
 	- [[Terraform - 간단한 AWS EC2 생성 가이드|간단한 AWS EC2 생성 가이드]]
 	- [[Terraform - 간단한 GCP GCE 생성 가이드|간단한 GCP GCE 생성 가이드]]
+	- [[Terraform - 간단한 MS Azure VM 생성 가이드|간단한 MS Azure VM 생성 가이드]]
