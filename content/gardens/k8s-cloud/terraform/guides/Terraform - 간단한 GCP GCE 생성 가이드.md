@@ -9,6 +9,9 @@ date: 2025-05-22
 
 ## TL;DR
 
+> [!tip] `gcloud` 설치
+> - [Google GCP 공식문서](https://cloud.google.com/sdk/docs/install)
+
 - 우선 `gcloud` 로 로그인해준다.
 
 ```bash
@@ -78,15 +81,16 @@ resource "google_compute_instance" "vm_instance" {
 output "ssh_ip" {
   value = google_compute_address.ssh_ip.address
 }
-
 ```
 
 - 몇가지 바꿀만한 것을 보면
 	- 2번째 줄의 `project`: 사용하고자 하는 project 의 id 를 적어주면 된다.
 	- 3번째 줄의 `region`: 지금은 서울 (`asia-northeast3`) 로 되어 있고, 다른곳을 사용하고 싶으면 바꿔주면 된다.
+		- 참고로 요금은 IOWA (`us-central1`) 이 꽤 싼것처럼 보인다.
 	- 4, 30번째 줄의 `zone`: 사용할 availability zone. 필요하면 바꿔주자.
 	- 29번째 줄의 `machine_type`: 사용할 instance type. 지금은 `n1-standard-1` 이다.
 		- Machine type 은 [이거](https://cloud.google.com/compute/docs/general-purpose-machines) 를 참고하자.
+		- 그리고 pricing 관련해서는 [이거](https://cloud.google.com/compute/vm-instance-pricing) 를 참고하자.
 	- 34번째 줄의 `image`: 사용할 OS image. 지금은 Ubuntu 22.04 이다.
 	- 35번째 줄의 `size`: 사용할 디스크의 크기 (GB). 지금은 100G 이다.
 	- 49번째 줄의 `ssh-keys`: 사용할 SSH key 경로.
@@ -110,5 +114,5 @@ terraform apply
 - SSH 접속:
 
 ```sh
-ssh -i /path/to/key.pub ubuntu@$(terraform output -raw ssh_ip)
+ssh -i /path/to/key ubuntu@$(terraform output -raw ssh_ip)
 ```

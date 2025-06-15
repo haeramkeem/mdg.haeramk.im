@@ -32,7 +32,7 @@ cp -v /boot/config-$(uname -r) .config
 make menuconfig
 ```
 
-- 그리고 Ubuntu 의 경우에는 높은 확률로 `No rule to make target 'debian/canonical-certs.pem` 라는 에러를 만나게 되는데, 이걸 방지하기 위해 아래의 명령어로 관련 설정을 disable 해준다.
+- 그리고 Ubuntu 의 경우에는 높은 확률로 `No rule to make target 'debian/canonical-certs.pem'` 라는 에러를 만나게 되는데, 이걸 방지하기 위해 아래의 명령어로 관련 설정을 disable 해준다.
 
 ```bash
 scripts/config --disable SYSTEM_TRUSTED_KEYS

@@ -25,3 +25,4 @@ title: (SNU CSE) Advanced Computer Architectures
 - [[05. Data Level Parallelism]]
 - [[06. GPU Architecture]]
 - [[07. Memory Hierarchy]]
+- [[08. Cache Optimizations]]
