@@ -36,7 +36,7 @@
 </ul>
 <div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">make</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">menuconfig</span></span></code></pre></div>
 <ul>
-<li>그리고 Ubuntu 의 경우에는 높은 확률로 <code>No rule to make target 'debian/canonical-certs.pem</code> 라는 에러를 만나게 되는데, 이걸 방지하기 위해 아래의 명령어로 관련 설정을 disable 해준다.</li>
+<li>그리고 Ubuntu 의 경우에는 높은 확률로 <code>No rule to make target 'debian/canonical-certs.pem'</code> 라는 에러를 만나게 되는데, 이걸 방지하기 위해 아래의 명령어로 관련 설정을 disable 해준다.</li>
 </ul>
 <div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">scripts/config</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">--disable</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">SYSTEM_TRUSTED_KEYS</span></span>
 <span data-line><span style="color:var(--shiki-token-function);">scripts/config</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">--disable</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">SYSTEM_REVOCATION_KEYS</span></span></code></pre></div>

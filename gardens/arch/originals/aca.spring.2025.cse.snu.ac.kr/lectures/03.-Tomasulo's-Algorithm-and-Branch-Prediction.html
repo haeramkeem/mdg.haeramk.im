@@ -129,7 +129,7 @@
 <li>마지막으로 <code>SUBD</code> 가 issue 된다. 이때 눈여겨볼 것은 이때의 Reservation Station 의 상태이다.
 <ul>
 <li>일단 두번째 피연산자인 <code>F2</code> 는 두번째 <code>LOAD</code> 에 의존하고 있으므로 (RAW) <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 에 Load2 가 명시된다.</li>
-<li>첫번째 피연산자인 <code>F6</code> 은 첫번째 <code>LOAD</code> 에 의존하고 있는데, 첫번째 <code>LOAD</code> 는 cycle 3 에서 EX 가 끝났기 때문에 이 결과를 Common Data Bus 를 이용해 받아서 Reservation Station 에 복사한다.
+<li>첫번째 피연산자인 <code>F6</code> 은 첫번째 <code>LOAD</code> 에 의존하고 있는데, 첫번째 <code>LOAD</code> 는 cycle 4 에서 WB 가 끝났기 때문에 이 결과를 Common Data Bus 를 이용해 받아서 Reservation Station 에 복사한다.
 <ul>
 <li>이 것이 위 그림에서 <code>M(A1)</code> 이고, 이에 따라 Register result status 에도 바뀐 것을 볼 수 있다.</li>
 </ul>
@@ -258,7 +258,7 @@
 <ul>
 <li>이번에는 Tomasulo algorithm 에서, loop 에 대한 예시를 보고 가자.
 <ul>
-<li>왼쪽 위의 instruction list 는 loop 을 돌며 실행하게 되는 instruction 을 unroll 해서 보여준 것이고</li>
+<li>왼쪽 위의 instruction list 는 loop 을 돌며 실행하게 되는 instruction 을 <a href="../../../../../gardens/pl/optimization/terms/Loop-Unroll-(PL-Optimization)" class="internal" data-slug="gardens/pl/optimization/terms/Loop-Unroll-(PL-Optimization)">unroll</a> 해서 보여준 것이고</li>
 <li>오른쪽 아래의 instrcution list 는 loop 가 있는 원본의 code 이다.</li>
 <li>그리고 왼쪽 아래에 R1 register 의 값이 나와있다.</li>
 </ul>
