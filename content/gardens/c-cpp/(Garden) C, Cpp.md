@@ -33,6 +33,7 @@ date: 2024-07-29
 	- [[Printk Formatting (C Linux Kernel)|Printk Formatting]]
 	- [[세상 간단한 Kernel module 예시 (C Linux Kernel)|세상 간단한 Kernel module 예시]]
 - Memory
+	- [[free - Invalid next size 에러 (C Memory)|free - Invalid next size 에러]]
 	- [[Memory Dynamic Allocation (C Memory)|Memory Dynamic Allocation]]
 	- [[Memory Utils (C Memory)|Memory Utils]]
 - POSIX Thread
