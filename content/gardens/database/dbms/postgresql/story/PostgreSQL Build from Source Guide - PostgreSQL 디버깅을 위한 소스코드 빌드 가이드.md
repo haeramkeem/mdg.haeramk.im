@@ -13,7 +13,7 @@ date: 2024-11-20
 > - [기본 접속 정보](https://postgresql.kr/docs/9.5/manage-ag-createdb.html)
 
 > [!tip]- 설치한 버전
-> [Release 16.4](https://github.com/postgres/postgres/releases/tag/REL_16_4)
+> - [Release 16.4](https://github.com/postgres/postgres/releases/tag/REL_16_4)
 
 ## 디버깅을 위한 설치
 

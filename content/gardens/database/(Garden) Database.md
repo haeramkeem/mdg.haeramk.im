@@ -133,6 +133,11 @@ date: 2024-07-29
 > [!info] 범위
 > - 여기에는 DBMS-specific 한 내용을 담을거임
 
+#### DuckDB
+
+- 스토리
+	- [[DuckDB Build from Source Guide - DuckDB 디버깅을 위한 소스코드 빌드 가이드|DuckDB 디버깅을 위한 소스코드 빌드 가이드]]
+
 #### Elasticsearch
 
 - 스토리
