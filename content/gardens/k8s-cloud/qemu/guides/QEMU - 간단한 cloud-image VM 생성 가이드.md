@@ -85,7 +85,6 @@ sudo qemu-system-x86_64 \
 -smp {{ Core 수 }} \
 -m {{ Memory 사이즈 }} \
 -nographic \
--snapshot \
 -netdev id=net00,type=user,hostfwd=tcp::{{ 사용할 SSH port }}-:22 \
 -device virtio-net-pci,netdev=net00 \
 -drive if=virtio,format=qcow2,file=vm.img \
