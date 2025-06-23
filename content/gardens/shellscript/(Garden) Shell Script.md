@@ -88,6 +88,9 @@ date: 2024-04-23
 	- [[find - Wildcard 탐색|Wildcard 탐색]]
 	- [[find - 파일 이름 whitespace 처리하기|파일 이름 whitespace 처리하기]]
 - `git`
+	- [[git -  Commit hash 출력하기|Commit hash 출력하기]]
+	- [[git -  Untracked file 들 삭제하기|Untracked file 들 삭제하기]]
+	- [[git -  변경 (삭제, 생성) 된 파일 이름들 출력하기|변경 (삭제, 생성) 된 파일 이름들 출력하기]]
 	- [[git - Commit message 바꾸기|Commit message 바꾸기]]
 	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
 	- [[git - Signing Key 설정하기|Signing Key 설정하기]]
