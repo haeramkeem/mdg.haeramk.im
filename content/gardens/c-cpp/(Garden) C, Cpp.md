@@ -46,6 +46,8 @@ date: 2024-07-29
 - 자료형
 	- [[Function Pointer (C Type)|Function Pointer]]
 	- [[Struct (C Type)|Struct]]
+- 기타
+	- [[Command Arguments (C)|Command Arguments]]
 
 ### C++
 
