@@ -93,6 +93,7 @@ date: 2024-04-23
 	- [[git -  변경 (삭제, 생성) 된 파일 이름들 출력하기|변경 (삭제, 생성) 된 파일 이름들 출력하기]]
 	- [[git - Commit message 바꾸기|Commit message 바꾸기]]
 	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
+	- [[git - Pull Policy 를 Rebase 로 설정하기|Pull Policy 를 Rebase 로 설정하기]]
 	- [[git - Signing Key 설정하기|Signing Key 설정하기]]
 	- [[git - Tag 추가하기|Tag 추가하기]]
 	- [[git - 기본 editor 를 VIM 으로 바꾸기|기본 editor 를 VIM 으로 바꾸기]]
