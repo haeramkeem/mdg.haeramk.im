@@ -167,7 +167,8 @@ date: 2024-04-23
 - Python
 	- [[(책) 점프 투 파이썬 정리록]]
 - `rsync`
-	- [[rsync - SSH Key 사용하기|SSH Key 사용하기]]
+	- [[rsync - SSH 옵션들 사용하기|SSH 옵션들 사용하기]]
+	- [[rsync - 기본 사용법|기본 사용법]]
 - `sed`
 	- [[sed - Color code 삭제하기|Color code 삭제하기]]
 	- [[sed - i 옵션에 대해 Linux 와 MacOS 에서의 차이점|i 옵션에 대해 Linux 와 MacOS 에서의 차이점]]
