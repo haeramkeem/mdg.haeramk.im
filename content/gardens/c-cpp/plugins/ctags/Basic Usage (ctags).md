@@ -13,7 +13,7 @@ aliases:
 > - `apt`
 >
 > ```bash
-> sudo apt install -y universal-ctags
+> sudo apt-get install -y universal-ctags
 > ```
 
 ## 개요

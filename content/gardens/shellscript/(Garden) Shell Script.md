@@ -93,6 +93,7 @@ date: 2024-04-23
 	- [[git -  변경 (삭제, 생성) 된 파일 이름들 출력하기|변경 (삭제, 생성) 된 파일 이름들 출력하기]]
 	- [[git - Commit message 바꾸기|Commit message 바꾸기]]
 	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
+	- [[git - Pull Policy 를 Rebase 로 설정하기|Pull Policy 를 Rebase 로 설정하기]]
 	- [[git - Signing Key 설정하기|Signing Key 설정하기]]
 	- [[git - Tag 추가하기|Tag 추가하기]]
 	- [[git - 기본 editor 를 VIM 으로 바꾸기|기본 editor 를 VIM 으로 바꾸기]]
@@ -166,7 +167,8 @@ date: 2024-04-23
 - Python
 	- [[(책) 점프 투 파이썬 정리록]]
 - `rsync`
-	- [[rsync - SSH Key 사용하기|SSH Key 사용하기]]
+	- [[rsync - SSH 옵션들 사용하기|SSH 옵션들 사용하기]]
+	- [[rsync - 기본 사용법|기본 사용법]]
 - `sed`
 	- [[sed - Color code 삭제하기|Color code 삭제하기]]
 	- [[sed - i 옵션에 대해 Linux 와 MacOS 에서의 차이점|i 옵션에 대해 Linux 와 MacOS 에서의 차이점]]
