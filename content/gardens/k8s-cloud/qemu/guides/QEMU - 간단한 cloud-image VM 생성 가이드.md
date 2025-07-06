@@ -6,6 +6,7 @@ date: 2025-06-18
 ---
 > [!info]- 참고한 것들
 > - [어떤 블로그](https://stevescargall.com/blog/2024/12/a-step-by-step-guide-on-using-cloud-images-with-qemu-9-on-ubuntu-24.04/)
+> - [스댕 - QEMU 강제종료](https://superuser.com/a/1211516)
 
 ## TL;DR
 
@@ -96,3 +97,11 @@ sudo qemu-system-x86_64 \
 ```bash
 ssh -i vm-key -p {{ 사용할 SSH port }} ubuntu@localhost
 ```
+
+### QEMU 강제종료
+
+- QEMU VM 을 강제종료할 때는, 아래처럼 하면 된다:
+	1) `Ctrl + a` 를 누른다.
+	2) 키를 떼고,
+	3) `x` 를 누른다.
+- 여기서 조심할 것은 `x` 를 누를 때는 `Ctrl` 이 눌려있으면 안된다는 것이다.
