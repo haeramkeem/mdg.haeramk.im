@@ -91,6 +91,7 @@ date: 2024-04-23
 	- [[git -  Commit hash 출력하기|Commit hash 출력하기]]
 	- [[git -  Untracked file 들 삭제하기|Untracked file 들 삭제하기]]
 	- [[git -  변경 (삭제, 생성) 된 파일 이름들 출력하기|변경 (삭제, 생성) 된 파일 이름들 출력하기]]
+	- [[git - Branch 간 변경사항 추적하기|Branch 간 변경사항 추적하기]]
 	- [[git - Commit message 바꾸기|Commit message 바꾸기]]
 	- [[git - GitLab private server 에 SSH key 추가하기|GitLab private server 에 SSH key 추가하기]]
 	- [[git - Pull Policy 를 Rebase 로 설정하기|Pull Policy 를 Rebase 로 설정하기]]
