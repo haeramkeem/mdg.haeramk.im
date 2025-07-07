@@ -158,6 +158,8 @@ date: 2024-04-23
 	- [[openssl - 인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기|인증서가 어떤 CA 인증서에 의해 서명되었는지 확인하기]]
 	- [[openssl - 인증서에서 CSR (Certificate Signing Request) 뽑아내기|인증서에서 CSR (Certificate Signing Request) 뽑아내기]]
 	- [[openssl - 파일 hash 하기|파일 hash 하기]]
+- `pbcopy`
+	- [[pbcopy - 기본 사용법|기본 사용법]]
 - `ping`
 	- [[ping - 1개만 보내기|1개만 보내기]]
 	- [[ping - Timeout 설정하기|Timeout 설정하기]]
