@@ -54,6 +54,8 @@ date: 2024-04-23
 - `arp`
 	- [[arp - ARP 테이블 요소 삭제하기|ARP 테이블 요소 삭제하기]]
 	- [[arp - ARP 테이블 확인하기|ARP 테이블 확인하기]]
+- `bear`
+	- [[bear - 기본 사용법|기본 사용법]]
 - `ca-certificates`
 	- [[ca-certificates - 인증서 신뢰하기|인증서 신뢰하기]]
 - `column`
