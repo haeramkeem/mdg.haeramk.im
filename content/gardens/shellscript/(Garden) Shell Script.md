@@ -185,6 +185,8 @@ date: 2024-04-23
 	- [[ssh - Keypair 생성하기|Keypair 생성하기]]
 	- [[ssh - Remote 에 Keypair 추가하기|Remote 에 Keypair 추가하기]]
 	- [[ssh - Known Hosts 관리하기|Known Hosts 관리하기]]
+- `stat`
+	- [[stat - 기본 사용법|기본 사용법]]
 - `sudo`
 	- [[sudo - 사용자 변경하기|사용자 변경하기]]
 - `tar`
