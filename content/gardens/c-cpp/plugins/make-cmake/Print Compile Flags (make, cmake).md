@@ -40,10 +40,17 @@ cmake --build ${BUILD_DIR}
 
 - 빌드를 하면서 그동안 표시되지 않았던 build command 들이 전부 표시된다.
 
-### 다른 방법
+## `compile_commands.json`
 
-- 위 방법이 낫기는 하지만, 다음과 같이 할 수도 있다.
-- `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` 를 넣어서 `cmake` 를 하면 된다.
+- Clangd 에 쑤셔넣기 위해 [[bear - 기본 사용법|compile_commands.json]] 를 뽑아내는 방법도 간단하게 정리
+
+### Make
+
+- 이거는 [[bear - 기본 사용법|bear]] 쓰자.
+
+### CMake
+
+- CMake 에서는 `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` 를 넣어서 `cmake` 를 하면 된다.
 
 > [!tip]- `CMakeLists.txt` 에 넣으려면?
 > ```cmake
