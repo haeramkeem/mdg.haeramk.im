@@ -20,10 +20,10 @@ date: 2025-06-18
 
 1. 원하는 Cloud image 를 다운로드한다.
 	- 우분투는 [여기](https://cloud-images.ubuntu.com/) 에서 이미지들을 확인할 수 있고, 여기서 `-cloudimg-amd64.img` 로 이름붙은 놈을 다운로드 하면 된다.
-	- 아래 예시는 Ubuntu 22.04 이미지를 다운로드하는 명령어이다.
+	- 아래 예시는 Ubuntu 24.04 (`noble`) 이미지를 다운로드하는 명령어이다.
 
 ```bash
-curl -L https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img -o vm.img
+curl -L https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img -o vm.img
 ```
 
 2. 이놈을 그냥 사용하면 root directory size 가 2GB 정도밖에 안된다. 따라서 아래 명령어로 size 를 늘려준다.
@@ -84,7 +84,7 @@ sudo qemu-system-x86_64 \
 -cpu host \
 -machine type=q35,accel=kvm \
 -smp {{ Core 수 }} \
--m {{ Memory 사이즈 }} \
+-m {{ Memory 사이즈 }}G \
 -nographic \
 -netdev id=net00,type=user,hostfwd=tcp::{{ 사용할 SSH port }}-:22 \
 -device virtio-net-pci,netdev=net00 \
@@ -104,4 +104,4 @@ ssh -i vm-key -p {{ 사용할 SSH port }} ubuntu@localhost
 	1) `Ctrl + a` 를 누른다.
 	2) 키를 떼고,
 	3) `x` 를 누른다.
-- 여기서 조심할 것은 `x` 를 누를 때는 `Ctrl` 이 눌려있으면 안된다는 것이다.
+- 여기서 조심할 것은 `x` 를 누를 때는 `Ctrl + a` 가 눌려있으면 안된다는 것이다.
