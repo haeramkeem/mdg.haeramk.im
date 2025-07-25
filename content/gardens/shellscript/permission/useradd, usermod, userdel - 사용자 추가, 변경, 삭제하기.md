@@ -5,10 +5,13 @@ tags:
 date: 2025-07-21
 aliases:
   - useradd
+  - usermod
+  - userdel
 ---
 > [!info]- 참고한 것들
 > - [공문](https://linux.die.net/man/8/useradd)
 > - [어떤 블로그](https://www.cyberciti.biz/faq/linux-change-user-group-uid-gid-for-all-owned-files/)
+> - [어떤 블로그 - userdel](https://stackdiary.com/tutorials/delete-user-in-ubuntu/)
 
 ## TL;DR
 
@@ -24,4 +27,10 @@ sudo useradd -r -m -g ${그룹 ID} -u ${유저 ID} ${유저 이름}
 
 ```bash
 sudo usermod -u ${새로운 유저 ID} ${유저 이름}
+```
+
+- 사용자를 삭제할 때는 `userdel` 을 사용하면 된다.
+
+```bash
+sudo userdel -r ${유저 이름}
 ```

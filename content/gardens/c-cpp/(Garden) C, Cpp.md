@@ -36,6 +36,8 @@ date: 2024-07-29
 	- [[free - Invalid next size 에러 (C Memory)|free - Invalid next size 에러]]
 	- [[Memory Dynamic Allocation (C Memory)|Memory Dynamic Allocation]]
 	- [[Memory Utils (C Memory)|Memory Utils]]
+- Process
+	- [[atexit - 기본 사용법 (C Process)|atexit - 기본 사용법]]
 - POSIX Thread
 	- [[세상 간단한 POSIX thread (pthread) 예시 (C Thread)|세상 간단한 POSIX thread (pthread) 예시]]
 - String

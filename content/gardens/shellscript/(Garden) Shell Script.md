@@ -164,7 +164,8 @@ date: 2024-04-23
 	- [[pbcopy - 기본 사용법|기본 사용법]]
 - Permission (Linux)
 	- [[groupadd, groupmod - 그룹 추가, 변경하기]]
-	- [[useradd, usermod - 사용자 추가, 변경하기]]
+	- [[passwd - 사용자 비밀번호 변경하기]]
+	- [[useradd, usermod, userdel - 사용자 추가, 변경, 삭제하기]]
 - `ping`
 	- [[ping - 1개만 보내기|1개만 보내기]]
 	- [[ping - Timeout 설정하기|Timeout 설정하기]]
