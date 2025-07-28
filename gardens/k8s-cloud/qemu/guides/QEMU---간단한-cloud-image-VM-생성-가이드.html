@@ -29,11 +29,11 @@
 <li>원하는 Cloud image 를 다운로드한다.
 <ul>
 <li>우분투는 <a href="https://cloud-images.ubuntu.com/" class="external">여기</a> 에서 이미지들을 확인할 수 있고, 여기서 <code>-cloudimg-amd64.img</code> 로 이름붙은 놈을 다운로드 하면 된다.</li>
-<li>아래 예시는 Ubuntu 22.04 이미지를 다운로드하는 명령어이다.</li>
+<li>아래 예시는 Ubuntu 24.04 (<code>noble</code>) 이미지를 다운로드하는 명령어이다.</li>
 </ul>
 </li>
 </ol>
-<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">curl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-L</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-o</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">vm.img</span></span></code></pre></div>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="bash" data-theme="default"><code data-language="bash" data-theme="default"><span data-line><span style="color:var(--shiki-token-function);">curl</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-L</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">-o</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">vm.img</span></span></code></pre></div>
 <ol start="2">
 <li>이놈을 그냥 사용하면 root directory size 가 2GB 정도밖에 안된다. 따라서 아래 명령어로 size 를 늘려준다.
 <ul>
@@ -83,7 +83,7 @@
 <span data-line><span style="color:var(--shiki-color-text);">-cpu </span><span style="color:var(--shiki-token-string);">host</span><span style="color:var(--shiki-color-text);"> \</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">-machine </span><span style="color:var(--shiki-token-string);">type=q35,accel=kvm</span><span style="color:var(--shiki-color-text);"> \</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">-smp </span><span style="color:var(--shiki-token-string);">{{</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">Core</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">수</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">}}</span><span style="color:var(--shiki-color-text);"> \</span></span>
-<span data-line><span style="color:var(--shiki-color-text);">-m </span><span style="color:var(--shiki-token-string);">{{</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">Memory</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">사이즈</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">}}</span><span style="color:var(--shiki-color-text);"> \</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">-m </span><span style="color:var(--shiki-token-string);">{{</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">Memory</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">사이즈</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">}}G</span><span style="color:var(--shiki-color-text);"> \</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">-nographic \</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">-netdev </span><span style="color:var(--shiki-token-string);">id=net00,type=user,hostfwd=tcp::{{</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">사용할</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">SSH</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">port</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-string);">}}-:22</span><span style="color:var(--shiki-color-text);"> \</span></span>
 <span data-line><span style="color:var(--shiki-color-text);">-device </span><span style="color:var(--shiki-token-string);">virtio-net-pci,netdev=net00</span><span style="color:var(--shiki-color-text);"> \</span></span>
@@ -102,7 +102,7 @@
 <li><code>x</code> 를 누른다.</li>
 </ol>
 </li>
-<li>여기서 조심할 것은 <code>x</code> 를 누를 때는 <code>Ctrl</code> 이 눌려있으면 안된다는 것이다.</li>
+<li>여기서 조심할 것은 <code>x</code> 를 누를 때는 <code>Ctrl + a</code> 가 눌려있으면 안된다는 것이다.</li>
 </ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
 	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
 	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
