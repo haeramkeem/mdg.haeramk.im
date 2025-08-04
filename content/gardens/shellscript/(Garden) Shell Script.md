@@ -196,6 +196,10 @@ date: 2024-04-23
 	- [[stat - 기본 사용법|기본 사용법]]
 - `sudo`
 	- [[sudo - 사용자 변경하기|사용자 변경하기]]
+- Systemd
+	- [[systemd - DNS Cache 바이든 날리면|DNS Cache 바이든 날리면]]
+	- [[systemd - 등록된 Unit 들 확인하기|등록된 Unit 들 확인하기]]
+	- [[systemd - 세상 간단한 Unit 예시|세상 간단한 Unit 예시]]
 - `tar`
 	- [[tar - 다운로드 와 압축해제를 동시에|다운로드 와 압축해제를 동시에]]
 	- [[tar - 파일 압축 하기|파일 압축하기]]
