@@ -4,23 +4,37 @@ tags:
   - network
   - bgp
 date: 2024-05-26
+aliases:
+  - AS
+  - ASN
+  - Border Gateway
+  - Boundary Router
+  - Autonomous System
 ---
 > [!info]- 참고한 것들
 > - [[3. BGP|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
+> - [어떤 네이버 블로그](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=cni1577&logNo=221559412098)
+> - [클라우드플레어](https://www.cloudflare.com/learning/network-layer/what-is-an-autonomous-system/)
 
 ## AS, Autonomous System, 자율 시스템
 
-- 동일한 routing policy (protocol) 를 따르는 네트워크의 집합
-- 인데, 간단하게 생각하면 그냥 한 기관이라고 생각하면 된다.
-	- 하나의 기관은 하나의 내부 관리 조직에 의해 동일한 routing policy (protocol) 를 사용하여 관리되는 경우가 많기 때문
-	- 가령 SNU 처럼 하나의 학교일 수도 있고, [[Internet Service Provider, ISP (Network)|ISP]] 도 AS 를 운영한다.
+- 일단 Autonomous System 을 한국어로 번역해 보면 **자율 시스템** 이다.
+- 그럼 뭐가 자율적이냐: 하나의 네트워크 관리 조직 (뭐 예를 들면 KT 와 같은 [[Internet Service Provider, ISP (Network)|ISP]]) 에 의해 자율적으로 운영되는 시스템이라고 이해해 볼 수 있다.
+- 그래서 AS 를 정의내려보면 아래와 같다.
+	1. AS 내의 라우터들은 일관된 라우팅 프로토콜(*Unified routing policy*)을 사용한다.
+	2. AS 내의 라우터들은 하나의 네트워크 관리 조직에 의해 관리된다.
+- 흔하게 AS 에 대해 드는 예는 학내망이다.
+    - 학내에는 여러 라우터와 어러 LAN 이 존재하는데
+    - 결국에는 얘네는 하나의 조직(학교)에 의해 일관된 라우팅 프로토콜로 관리되기 때문에 학내망이 AS 가 되는 것.
+- 그리고 결국 인터넷이란게 이 AS 들의 모임이라고 할 수 있다.
 
 > [!tip] 주의 - 그렇다고 기관과 AS 가 동의어라는 것은 아니다.
 > - 하나의 기관이 여러 AS 를 운용하는 경우도 있다.
 > - 그냥 이해의 편의를 위한 한 예시로 AS 를 기관으로 생각하면 좋다는 것.
 
 - 각 AS 는 *AS Number (ASN)* 이라는 고유한 식별자로 구분되며, AS 가 자율적으로 운용할 수 있는 IP addr block 을 갖게 된다.
-	- 저 ASN 과 IP addr block 은 모두 인터넷 생태계에서 자원이므로, 이것은 [[Internet Registry System (Network)]] 와 같은 곳으로부터 할당받는다.
+	- 저 ASN 과 IP addr block 은 모두 인터넷 생태계에서 자원이므로, 이것은 [[Internet Registry System (Network)|Internet Registry System]] 와 같은 곳으로부터 할당받는다.
+- 그리고 AS 의 가장자리에서 다른 AS 와의 통신을 담당하는 라우터를 *Border Gateway* 혹은 *Boundary Router* 라고 한다.
 
 ## Provider/Customer
 

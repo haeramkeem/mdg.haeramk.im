@@ -2,7 +2,10 @@
 tags:
   - terms
   - network
-date: 2024-05-26
+date: 2023-02-02
+aliases:
+  - Classless Inter-Domain Routing
+  - CIDR
 ---
 > [!info]- 참고한 것들
 > - [Difference Between CIDR and VLSM (with Comparison Chart, Example and Merits) - Tech Differences](https://techdifferences.com/difference-between-cidr-and-vlsm.html)

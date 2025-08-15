@@ -2,7 +2,10 @@
 tags:
   - network
   - terms
-date: 2024-05-26
+date: 2023-02-02
+aliases:
+  - Split Horizon Problem
+  - Route Loop
 ---
 > [!info]- 참고한 것들
 > - [KT](http://www.ktword.co.kr/test/view/view.php?m_temp1=2489)

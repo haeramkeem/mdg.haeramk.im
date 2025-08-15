@@ -198,6 +198,7 @@ date: 2024-04-23
 	- [[sudo - 사용자 변경하기|사용자 변경하기]]
 - Systemd
 	- [[systemd - DNS Cache 바이든 날리면|DNS Cache 바이든 날리면]]
+	- [[systemd - Unit 상태 체크하기|Unit 상태 체크하기]]
 	- [[systemd - 등록된 Unit 들 확인하기|등록된 Unit 들 확인하기]]
 	- [[systemd - 세상 간단한 Unit 예시|세상 간단한 Unit 예시]]
 - `tar`

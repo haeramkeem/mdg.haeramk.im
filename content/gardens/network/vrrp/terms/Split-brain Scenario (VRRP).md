@@ -2,7 +2,9 @@
 tags:
   - network
   - 스토리
-date: 2024-06-02
+date: 2023-02-02
+aliases:
+  - Split-brain Scenario
 ---
 > [!info]- 참고한 것들
 > - [Understanding and Avoiding Split Brain Scenarios](https://us.sios.com/blogs/split-brain-scenarios/)

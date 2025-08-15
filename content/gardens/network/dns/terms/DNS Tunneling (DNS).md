@@ -4,6 +4,8 @@ tags:
   - network
   - dns
 date: 2024-03-24
+aliases:
+  - DNS Tunneling
 ---
 > [!info]- 참고한 것들
 > - [어떤 회사 사이트](https://www.cynet.com/attack-techniques-hands-on/how-hackers-use-dns-tunneling-to-own-your-network/)

@@ -4,6 +4,9 @@ tags:
   - network
   - bgp
 date: 2024-05-25
+aliases:
+  - IRR
+  - Internet Routing Registry
 ---
 > [!info]- 참고한 것들
 > - [[5. RPKI, BGPSEC#1. IRR (Internet Routing Registry)|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]

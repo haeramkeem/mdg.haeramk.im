@@ -4,6 +4,8 @@ tags:
   - network
   - dns
 date: 2024-05-27
+aliases:
+  - DNS over Encryption
 ---
 ## 소개
 

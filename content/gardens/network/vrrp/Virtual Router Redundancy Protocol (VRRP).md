@@ -2,10 +2,14 @@
 tags:
   - network
   - 스토리
-date: 2024-06-02
+date: 2023-02-02
+aliases:
+  - Virtual Router Redundancy Protocol
+  - VRRP
 ---
 > [!info]- 참고한 것들
 > - [RFC3768](https://www.rfc-editor.org/rfc/rfc3768.html)
+> - [네이버 블로그](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=sik7854&logNo=221869000354)
 
 > [!into] 본 문서는 [RFC3768](https://www.rfc-editor.org/rfc/rfc3768.html) 를 읽고 정리한 글입니다. 글이 좀 깁니다.
 

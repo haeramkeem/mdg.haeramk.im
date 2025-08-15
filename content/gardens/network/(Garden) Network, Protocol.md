@@ -69,6 +69,7 @@ date: 2024-07-29
 
 ### HTTP
 
+- [[HTTP with TLS, HTTPS (Network)|HTTP with TLS, HTTPS]]
 - [[Hyper Text Transfer Protocol (HTTP)]]
 - 용어집
 	- [[Method (HTTP)|HTTP Method]]

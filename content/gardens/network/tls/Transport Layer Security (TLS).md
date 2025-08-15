@@ -6,6 +6,7 @@ tags:
 date: 2024-05-29
 aliases:
   - TLS
+  - Transport Layer Security
 ---
 > [!info]- 참고한 것들
 > - [[11. TLS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
@@ -13,8 +14,9 @@ aliases:
 
 ## De-facto Internet Security Standard
 
-- 이제는 말하지 않아도 다들 아는 통신 보안 프로토콜
-	- 이전의 SSL 프로토콜을 개선해서 표준화한 것이라 한다.
+- L5 Session Layer 에서 암복호화에 사용되는 프로토콜은 SSL 하고 TLS 가 있는데
+- SSL 는 IETF 에 의해 2015년에 완전히 Deprecated 됐다.
+- 따라서 요즘 쓰이는 프로토콜은 TLS 이고 이제는 말하지 않아도 다들 아는 통신 보안 프로토콜이다.
 	- [[Public Key Infrastructure X509, PKIX (PKIX)|PKIX]] 를 활용한다.
 - 대략적으로 다음과 같이 쪼개어 볼 수 있다고 한다.
 	- Handshake Protocol: 비대칭키를 이용해 대칭키를 교환하기 위한 과정

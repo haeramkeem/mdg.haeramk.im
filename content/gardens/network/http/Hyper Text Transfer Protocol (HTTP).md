@@ -4,6 +4,9 @@ tags:
   - network
   - http
 date: 2024-06-02
+aliases:
+  - HTTP
+  - Hyper Text Transfer Protocol
 ---
 > [!info]- 참고한 것들
 > - [구름과자](https://www.cloudflare.com/learning/ddos/glossary/hypertext-transfer-protocol-http/)

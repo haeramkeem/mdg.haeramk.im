@@ -2,7 +2,9 @@
 tags:
   - terms
   - network
-date: 2024-05-26
+date: 2023-02-02
+aliases:
+  - IP Class
 ---
 > [!info]- 참고한 것들
 > - [[Network] IP주소 클래스(A,B,C class)란?](https://limkydev.tistory.com/168)

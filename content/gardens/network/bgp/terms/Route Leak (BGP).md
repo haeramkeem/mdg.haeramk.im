@@ -4,6 +4,8 @@ tags:
   - network
   - bgp
 date: 2024-05-26
+aliases:
+  - Route Leak
 ---
 > [!info]- 참고한 것들
 > - [[5. RPKI, BGPSEC#2. Route leak||서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
