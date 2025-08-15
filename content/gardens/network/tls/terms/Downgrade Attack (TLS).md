@@ -4,6 +4,8 @@ tags:
   - network
   - tls
 date: 2024-05-29
+aliases:
+  - Downgrade Attack
 ---
 > [!info]- 참고한 것들
 > - [[11. TLS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]

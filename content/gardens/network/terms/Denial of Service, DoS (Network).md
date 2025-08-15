@@ -3,6 +3,9 @@ tags:
   - terms
   - network
 date: 2024-05-29
+aliases:
+  - Denial of Service
+  - DoS
 ---
 > [!info]- 참고한 것들
 > - [[12. DDos (1)|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]

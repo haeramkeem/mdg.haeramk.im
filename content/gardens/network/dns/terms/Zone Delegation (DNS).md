@@ -3,6 +3,8 @@ tags:
   - terms
   - network
 date: 2024-03-24
+aliases:
+  - DNS Zone Delegation
 ---
 > [!info]- 참고한 것들
 > - [어떤 회사 블로그](https://www.catchpoint.com/dns-monitoring/dns-delegation)

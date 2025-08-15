@@ -4,6 +4,8 @@ tags:
   - network
   - dns
 date: 2024-03-25
+aliases:
+  - DNS Zone
 ---
 > [!info]- 참고한 것들
 > - [[6. DNS|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]

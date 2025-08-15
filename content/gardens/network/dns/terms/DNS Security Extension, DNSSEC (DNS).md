@@ -4,6 +4,9 @@ tags:
   - network
   - dns
 date: 2024-05-27
+aliases:
+  - DNS Security Extension
+  - DNSSEC
 ---
 > [!info]- 참고한 것들
 > - [[8. DNSSEC|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]

@@ -2,7 +2,9 @@
 tags:
   - terms
   - network
-date: 2024-05-27
+date: 2023-02-02
+aliases:
+  - TCP-IP Suite
 ---
 ## 란?
 
