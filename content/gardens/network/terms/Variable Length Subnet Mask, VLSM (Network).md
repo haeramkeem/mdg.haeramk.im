@@ -2,7 +2,10 @@
 tags:
   - terms
   - network
-date: 2024-05-26
+date: 2023-02-02
+aliases:
+  - Variable Length Subnet Mask
+  - VLSM
 ---
 > [!info]- 참고한 것들
 > - [Introduction of Variable Length Subnet Mask (VLSM) - GeeksforGeeks](https://www.geeksforgeeks.org/introduction-of-variable-length-subnet-mask-vlsm/)

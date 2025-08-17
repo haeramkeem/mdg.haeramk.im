@@ -4,6 +4,9 @@ tags:
   - network
   - bgp
 date: 2024-05-25
+aliases:
+  - BGP
+  - Border Gateway Protocol
 ---
 > [!info]- 참고한 것들
 > - [BGP의 개념 (Border Gateway Protocol)](https://ddongwon.tistory.com/97)

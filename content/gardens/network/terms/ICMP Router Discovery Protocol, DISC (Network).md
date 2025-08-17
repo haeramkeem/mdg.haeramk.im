@@ -2,7 +2,10 @@
 tags:
   - terms
   - network
-date: 2024-05-26
+date: 2023-02-02
+aliases:
+  - ICMP Router Discovery Protocol
+  - DISC
 ---
 ## 란?
 

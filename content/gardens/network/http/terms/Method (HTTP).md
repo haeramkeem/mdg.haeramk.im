@@ -3,7 +3,9 @@ tags:
   - terms
   - network
   - http
-date: 2024-06-02
+date: 2023-02-02
+aliases:
+  - HTTP Method
 ---
 ## HTTP Methods
 

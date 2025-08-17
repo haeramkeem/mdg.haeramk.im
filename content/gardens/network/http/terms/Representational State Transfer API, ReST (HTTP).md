@@ -3,7 +3,10 @@ tags:
   - terms
   - network
   - http
-date: 2024-06-02
+date: 2023-02-02
+aliases:
+  - Representational State Transfer API
+  - ReST
 ---
 ## ReST
 

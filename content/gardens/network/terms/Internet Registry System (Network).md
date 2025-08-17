@@ -3,6 +3,8 @@ tags:
   - terms
   - network
 date: 2024-05-26
+aliases:
+  - Internet Registry System
 ---
 > [!info]- 참고한 것들
 > - [[5. RPKI, BGPSEC]]

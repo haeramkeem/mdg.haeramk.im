@@ -2,7 +2,10 @@
 tags:
   - terms
   - network
-date: 2023-05-26
+date: 2023-02-02
+aliases:
+  - OSI 7 Layer Model
+  - OSI 7 Layer
 ---
 ## 란?
 
