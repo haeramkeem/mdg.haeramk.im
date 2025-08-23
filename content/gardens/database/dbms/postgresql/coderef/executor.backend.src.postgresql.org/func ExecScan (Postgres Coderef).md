@@ -5,6 +5,7 @@ tags:
 aliases:
   - ExecScan
   - ExecScan()
+date: 2024-12-15
 ---
 > [!info]- 코드 위치 (v17.1)
 > - File path: `src/backend/executor/execScan.c`

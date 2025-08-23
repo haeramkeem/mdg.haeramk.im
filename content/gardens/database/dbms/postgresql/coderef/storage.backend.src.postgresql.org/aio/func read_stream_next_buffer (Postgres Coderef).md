@@ -6,6 +6,7 @@ tags:
 aliases:
   - read_stream_next_buffer
   - read_stream_next_buffer()
+date: 2024-12-15
 ---
 > [!info]- 코드 위치 (v17.1)
 > - File path: `src/backend/storage/aio/read_stream.c`

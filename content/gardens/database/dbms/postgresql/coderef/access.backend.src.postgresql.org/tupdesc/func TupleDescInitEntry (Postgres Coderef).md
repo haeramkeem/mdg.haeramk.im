@@ -4,6 +4,7 @@ tags:
   - db-postgresql
 aliases:
   - TupleDescInitEntry()
+date: 2025-02-16
 ---
 > [!info]- 코드 위치 (v17.1)
 > - Location
