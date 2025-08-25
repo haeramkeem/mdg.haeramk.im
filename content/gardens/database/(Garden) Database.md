@@ -101,6 +101,10 @@ date: 2024-07-29
 	- [[On-Line Analytical Processing, OLAP (Modern Database)|On-Line Analytical Processing, OLAP]]
 	- [[On-Line Transactional Processing, OLTP (Modern Database)|On-Line Transactional Processing, OLTP]]
 
+### Operations
+
+- [[JOIN (DB Opration)|JOIN]]
+
 ### Query Plan
 
 - 논문들
