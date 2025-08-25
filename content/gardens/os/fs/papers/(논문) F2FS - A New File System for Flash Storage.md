@@ -3,6 +3,7 @@ tags:
   - 논문
   - os
   - snu-aos24s
+date: 2024-04-14
 ---
 > [!info] 본 논문은 [F2FS: A New File System for Flash Storage (FAST '15)](https://www.usenix.org/conference/fast15/technical-sessions/presentation/lee) 를 읽고 정리한 글입니다.
 

@@ -1,3 +1,9 @@
+---
+tags:
+  - story
+  - storage
+date: 2024-08-04
+---
 ## 개요
 
 - [NVMeVirt](https://www.usenix.org/conference/fast23/presentation/kim-sang-hoon) 에 대해 디버깅한 것들을 모아보자.

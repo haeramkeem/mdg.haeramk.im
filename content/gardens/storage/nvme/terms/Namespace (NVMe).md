@@ -2,6 +2,7 @@
 tags:
   - terms
   - storage
+date: 2024-03-16
 ---
 > [!info] 참고한 자료
 > - [NVMe document](https://nvmexpress.org/resource/nvme-namespaces/)

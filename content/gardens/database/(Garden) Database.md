@@ -20,6 +20,7 @@ date: 2024-07-29
 	- [[Database - 어떤 언어가 하탈까?]]
 - 용어집
 	- [[Database Management System, DBMS (Database)|Database Management System]]
+	- [[NoSQL DBMS (Database)|NoSQL DBMS]]
 
 ### Benchmark
 

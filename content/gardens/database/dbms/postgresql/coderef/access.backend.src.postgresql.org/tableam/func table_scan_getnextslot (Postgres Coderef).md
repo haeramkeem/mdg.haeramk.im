@@ -5,6 +5,7 @@ tags:
 aliases:
   - table_scan_getnextslot
   - table_scan_getnextslot()
+date: 2024-12-15
 ---
 > [!info]- 코드 위치 (v17.1)
 > - File path: `src/include/access/tableam.h`

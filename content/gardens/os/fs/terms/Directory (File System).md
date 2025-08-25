@@ -6,6 +6,7 @@ tags:
 aliases:
   - Directory
   - directory
+date: 2024-09-29
 ---
 > [!info]- 참고한 것들
 > - [[08. Filesystem Overview|서울대 김진수 교수님 고급운영체제 강의 (Spring 2024)]]

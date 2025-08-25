@@ -47,5 +47,5 @@ aliases:
 
 - DBMS 는 경장히 general 한 용어이고, 여기에는 많은 분류가 가능하다.
 - [[Data Model (Database)|데이터 모델]] 에 따라서는 다음 정도로 분류해 볼 수 있다:
-	- [[Relational Data Model (Data Model)|Relational]]: Relational DBMS (RDBMS)
-	- [[Document Data Model (Data Model)|Document]]: NoSQL
+	- [[Relational Data Model (Data Model)|Relational]]: [[Relational Data Model (Data Model)|Relational DBMS (RDBMS)]]
+	- [[Document Data Model (Data Model)|Document]]: [[NoSQL DBMS (Database)|NoSQL]]

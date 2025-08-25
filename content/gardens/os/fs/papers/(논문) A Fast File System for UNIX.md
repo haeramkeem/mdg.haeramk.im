@@ -3,6 +3,7 @@ tags:
   - os
   - snu-aos24s
   - 논문
+date: 2024-03-30
 ---
 > [!info] 본 글은 [Marshall K. McKusick](https://en.wikipedia.org/wiki/Marshall_Kirk_McKusick) 의 논문 [A Fast File System for UNIX (ACM TOCS '84)](https://dl.acm.org/doi/pdf/10.1145/989.990) 를 읽고 정리한 글입니다.
 
