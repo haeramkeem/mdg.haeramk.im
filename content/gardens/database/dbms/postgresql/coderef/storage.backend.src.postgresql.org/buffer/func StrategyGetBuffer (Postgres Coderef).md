@@ -33,7 +33,7 @@ aliases:
 	- (b) 다음으로 ([[type BufferDesc (Postgres Coderef)|BufferDesc]] 의) `state` 로 조건을 따져본다.
 		- 만약 reference count 가 0 보다 크다면, 그냥 `trycounter` 를 하나 줄이고다시 (a) 로 돌아가 CLOCK 한 tick 을 더 움직인다.
 			- 이때 만약 `trycounter` 가 0이라면, 이것은 모든 buffer 가 현재 사용중이라는 소리다. 이때는 더 이상 시도하지 않고 실패한 것으로 끝낸다.
-			- 물론 여러번 시도할 수 있지만, infinite loop 을 방지하기 위해 실패처리하고 [[Transaction, ACID (Database)|Transaction]] 을 재시작한다고 한다.
+			- 물론 여러번 시도할 수 있지만, infinite loop 을 방지하기 위해 실패처리하고 [[Transaction (Database)|Transaction]] 을 재시작한다고 한다.
 		- 만약 그렇지 않다면, 이놈은 현재 사용되고 있지 않다는 얘기다. 이때 usage count 를 확인한다.
 			- 만약 usage count 가 0이 아니라면, usage count 를 1 감소시킨다.
 				- 여기서 중요한 것은 이 경우에 `trycounter` 를 다시 buffer 개수로 초기화시켜버린다는 것이다.

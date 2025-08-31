@@ -22,7 +22,7 @@ aliases:
 > 출처: 네이버 영어사전
 
 - Log 는 위의 사진처럼 어떤 작업의 일지, 기록 등을 뜻하는 단어이다.
-- 이와 비슷하게, [[Database Management System, DBMS (Database)|DBMS]] 에서 *Log* 는 DBMS 가 작업한 것에 대한 기록이고, 따라서 [[Transaction, ACID (Database)|Transaction]] 이 수행한 operation 들이 sequential 하게 파일에 저장된다.
+- 이와 비슷하게, [[Database Management System, DBMS (Database)|DBMS]] 에서 *Log* 는 DBMS 가 작업한 것에 대한 기록이고, 따라서 [[Transaction (Database)|Transaction]] 이 수행한 operation 들이 sequential 하게 파일에 저장된다.
 
 ## Log Sequence Number, LSN
 
@@ -41,9 +41,9 @@ aliases:
 ## Log Types
 
 - DBMS 에서 recovery 가 필요한 상황은 다음과 같이 정리해 볼 수 있다.
-	- *[[Transaction, ACID (Database)|Transaction]] failure*:
+	- *[[Transaction (Database)|Transaction]] failure*:
 		- Tx 를 commit 하는 것은 여러개의 page write 을 필요로 할 수 있는데,
-		- Tx 가 실패하면 [[Transaction, ACID (Database)|Atomicity]] 를 위해 이 page write 들을 원상복구시킬 필요가 있다.
+		- Tx 가 실패하면 [[Transaction (Database)|Atomicity]] 를 위해 이 page write 들을 원상복구시킬 필요가 있다.
 		- 이를 위한 log 가 [[#Undo Log Ctrl + Z|UNDO log]] 이다.
 	- *DBMS crash* (*Node reboot*):
 		- DBMS 혹은 Node (즉, Server) 가 뻗는 경우에 persistent 하게 disk 에 저장되어 있어야 했지만 아직까지는 memory 에만 저장되어 있어서 사라진 애들을 복구할 필요가 있다.
@@ -56,7 +56,7 @@ aliases:
 - 따라서 "이후 상태" 를 로깅해놓고, recovery 시에 이 *Redo Log* 를 보면서 이후 상태로 되돌리게 된다.
 - 위에서 말한것 처럼, 이놈은 committed transaction 을 복구할 때 사용된다.
 	- [[FORCE, NO_FORCE Policy (Database Recovery)|NO_FORCE]] 정책에서는 commit 이 항상 disk 에 저장되지는 않기 때문에, crash 시에 committed transaction 을 이 redo log 를 보면서 transaction 이 정상적으로 끝난 상태로 되돌리게 된다.
-	- 즉, [[Transaction, ACID (Database)|Durability]] 를 보장하기 위한 것.
+	- 즉, [[Transaction (Database)|Durability]] 를 보장하기 위한 것.
 
 ### Undo Log: Ctrl + Z
 
@@ -65,7 +65,7 @@ aliases:
 - 위에서 말한것 처럼, 이놈은 transaction rollback 에 사용된다.
 	- Transaction rollback 을 하면 transaction 이전 상태로 되돌려야 하기 때문에, 이놈을 보면서 되돌리는 것.
 	- [[STEAL, NO_STEAL Policy (Database Recovery)|STEAL]] 정책에서는 commit 되지 않은 update 가 flush 될 수 있기 때문에, tx failure 시에 이런 flush 된 애들까지 되돌리기 위해 *Undo log* 가 필요하다.
-	- 즉, [[Transaction, ACID (Database)|Atomicity]] 를 보장하기 위한 것이다.
+	- 즉, [[Transaction (Database)|Atomicity]] 를 보장하기 위한 것이다.
 
 ## Checkpoint
 
