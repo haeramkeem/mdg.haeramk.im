@@ -127,7 +127,8 @@ date: 2024-07-29
 ### Transaction
 
 - 용어집
-	- [[Transaction, ACID (Database)|Transaction, ACID]]
+	- [[ACID (Database Transaction)|ACID]]
+	- [[Transaction (Database)|Transaction]]
 	- [[Multiversion Concurrency Control, MVCC (Database Transaction)|Multiversion Concurrency Control, MVCC]]
 - 논문들
 	- [[DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)|DIVA - Making MVCC Systems HTAP-Friendly (SIGMOD'22)]]

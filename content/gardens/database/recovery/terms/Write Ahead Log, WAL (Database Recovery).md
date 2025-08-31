@@ -20,7 +20,7 @@ date: 2024-10-10
 
 - 일단 Data page buffer 외에도 log buffer 가 있어서 여기에 log 가 쌓이고 나중에 flush 되는데,
 - 여기서 flush 가 언제 되느냐가 중요하다.
-	- Log 는 기본적으로 recovery 를 위한 것이므로 [[Transaction, ACID (Database)|Atomicity]] 와 [[Transaction, ACID (Database)|Durability]] 가 깨지기 직전에는 log 가 flush 되어야 할 것이다. 그래야 failure 시에 [[Algorithms for Recovery and Isolation Exploiting Semantics, ARIES (Database Recovery)|Recovery]] 를 할 것이므로.
+	- Log 는 기본적으로 recovery 를 위한 것이므로 [[Transaction (Database)|Atomicity]] 와 [[Transaction (Database)|Durability]] 가 깨지기 직전에는 log 가 flush 되어야 할 것이다. 그래야 failure 시에 [[Algorithms for Recovery and Isolation Exploiting Semantics, ARIES (Database Recovery)|Recovery]] 를 할 것이므로.
 	- Atomicity 가 깨지는 것은 page 가 [[STEAL, NO_STEAL Policy (Database Recovery)|STEAL]] 될 때이다: 따라서 이때 [[Log (Database Recovery)|UNDO]] log 를 flush 한다.
 	- Durability 가 깨지는 것은 txn 이 buffer 에만 write 하고 `COMMIT` 할 때이다: 따라서 txn 이 `COMMIT` 할 때 [[Log (Database Recovery)|REDO]] log 를 flush 한다.
 		- 이것은 `COMMIT` 의 조건이 된다: REDO flush 까지 완료되어야 `COMMIT` 되었다고 판단한다.
