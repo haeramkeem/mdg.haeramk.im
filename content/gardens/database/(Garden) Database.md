@@ -128,6 +128,7 @@ date: 2024-07-29
 
 - 용어집
 	- [[ACID (Database Transaction)|ACID]]
+	- [[Isolation Level (Database Transaction)|Isolation Level]]
 	- [[Transaction (Database)|Transaction]]
 	- [[Multiversion Concurrency Control, MVCC (Database Transaction)|Multiversion Concurrency Control, MVCC]]
 - 논문들
