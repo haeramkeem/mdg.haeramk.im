@@ -44,6 +44,7 @@ date: 2024-07-29
 		- [[Star Schema (Multi-dimensional Model)|Star Schema]]
 	- [[Relational Data Model (Data Model)|Relational Data Model]]
 		- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
+		- [[Normalization (Relational Model)|Normalization]]
 		- [[Private Key, PK (Relational Model)|Private Key, PK]]
 		- [[Record (Relational Model)|Record]]
 		- [[Relation (Relational Model)|Relation]]
