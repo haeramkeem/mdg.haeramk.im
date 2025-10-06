@@ -3,6 +3,8 @@ tags:
   - terms
   - data-structure
 date: 2024-04-06
+aliases:
+  - Sorted run
 ---
 > [!info]- 참고한 것들
 > - [Flink 0.3 시절 공식문서](https://nightlies.apache.org/flink/flink-table-store-docs-release-0.3/docs/concepts/lsm-trees/)
