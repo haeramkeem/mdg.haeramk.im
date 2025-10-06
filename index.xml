@@ -9,7 +9,7 @@
     <title>(Garden) Algorithm, Data Structure</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</guid>
-    <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § Algorithm § Sort Merge Sort Data Structure § Linear Sorted Run Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST .</description>
+    <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § Algorithm § Sort Merge Sort Data Structure § Linear Deque Sorted Run Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST .</description>
     <pubDate>Mon, 29 Jul 2024 00:00:00 GMT</pubDate>
   </item><item>
     <title>Merge Sort (Algorithm)</title>
@@ -17,6 +17,12 @@
     <guid>https://mdg.haeramk.im/gardens/algorithm/algorithm/sort/Merge-Sort-(Algorithm)</guid>
     <description> 본 글은 #draft 상태입니다. 그림 추가 예제 코드 추가 가 뭔데? § Divide-and-conquer 를 이용한 sort 방식이다. 원하는 배열을 정렬되어 있는 배열들의 집합으로 나눈 다음, 이것을 합치는 방식으로 진행된다. 이것을 좀 더 구체적으로 확인해 보자.</description>
     <pubDate>Sat, 06 Apr 2024 00:00:00 GMT</pubDate>
+  </item><item>
+    <title>Deque (Data Structure)</title>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Deque-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Deque-(Data-Structure)</guid>
+    <description>Deque § Double-ended queue 즉, 앞뒤로의 삽입 삭제가 가능한 큐를 의미한다. Requirements § C++ 표준에서 요구하는 deque 의 요구사항은 다음과 같다 앞뒤로의 삽입 삭제가(push_front(), pop_front(), push_back(), pop_back()) O(1) 로 작동해야 한다.</description>
+    <pubDate>Fri, 12 Nov 2021 00:00:00 GMT</pubDate>
   </item><item>
     <title>Sorted Run (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Sorted-Run-(Data-Structure)</link>
@@ -34,7 +40,7 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 29 Sep 2025 05:55:38 GMT</pubDate>
+    <pubDate>Mon, 06 Oct 2025 08:33:50 GMT</pubDate>
   </item><item>
     <title>Bloom Filter (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/map/Bloom-Filter-(Data-Structure)</link>
@@ -58,13 +64,7 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/draft/Circular-Queue-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/draft/Circular-Queue-(Data-Structure)</guid>
     <description> 참고한 것들 서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024) 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 29 Sep 2025 05:55:38 GMT</pubDate>
-  </item><item>
-    <title>Directed Acyclic Graph, DAG (Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/draft/Directed-Acyclic-Graph,-DAG-(Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/draft/Directed-Acyclic-Graph,-DAG-(Data-Structure)</guid>
-    <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 29 Sep 2025 05:55:38 GMT</pubDate>
+    <pubDate>Mon, 06 Oct 2025 08:33:50 GMT</pubDate>
   </item>
     </channel>
   </rss>
