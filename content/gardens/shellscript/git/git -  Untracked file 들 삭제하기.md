@@ -18,3 +18,9 @@ aliases:
 ```bash
 git clean -dfx
 ```
+
+- 만약 subdirectory 에 대해서 날리고 싶으면, 그냥 뒤에 경로를 적어주면 된다.
+
+```bash
+git clean -dfx /path/to
+```
