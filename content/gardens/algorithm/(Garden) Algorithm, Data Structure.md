@@ -18,6 +18,7 @@ date: 2024-07-29
 - Linear
 	- [[Deque (Data Structure)|Deque]]
 	- [[Sorted Run (Data Structure)|Sorted Run]]
+	- [[Stack, Queue, Container Adapter (Data Structure)|Stack, Queue, Container Adapter]]
 - Lock
 	- [[Mellor-Crummey and Scott Lock, MCS Lock (Lock Data Structure)|Mellor-Crummey and Scott Lock, MCS Lock]]
 - Map
