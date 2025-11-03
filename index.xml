@@ -9,7 +9,7 @@
     <title>(Garden) Algorithm, Data Structure</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</guid>
-    <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § Algorithm § Sort Merge Sort Data Structure § Linear Deque Sorted Run Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST .</description>
+    <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § Algorithm § Sort Merge Sort Data Structure § Linear Deque Sorted Run Stack, Queue, Container Adapter Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST .</description>
     <pubDate>Mon, 29 Jul 2024 00:00:00 GMT</pubDate>
   </item><item>
     <title>Merge Sort (Algorithm)</title>
@@ -30,6 +30,12 @@
     <description> 참고한 것들 Flink 0.3 시절 공식문서 LSM tree 자바 구현과정 블로그 글 가 뭔데? § 사진 출처 한마디로 설명하면 “Key 를 기준으로 (1) 중복 없이 (2) 정렬된 (3) overlay 되지 않은 key-value data file 들의 집합” 정도가 된다.</description>
     <pubDate>Sat, 06 Apr 2024 00:00:00 GMT</pubDate>
   </item><item>
+    <title>Stack, Queue, Container Adapter (Data Structure)</title>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Stack,-Queue,-Container-Adapter-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Stack,-Queue,-Container-Adapter-(Data-Structure)</guid>
+    <description>Container Adapter § 컨테이너 어답터는 간단하게 말해서 기존의 컨테이너의 기능을 축소시키는 것이다. 즉, 많은 기능을 제공하는 컨테이너를 하나 만들어놓고 그걸 기반으로 하되 특정 기능만 사용할 수 있게 함으로써 실수로 허용되지 않는 작업을 수행하는 것을 막을 수 있는 것이다.</description>
+    <pubDate>Fri, 12 Nov 2021 00:00:00 GMT</pubDate>
+  </item><item>
     <title>Mellor-Crummey and Scott Lock, MCS Lock (Lock Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</guid>
@@ -40,7 +46,7 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 27 Oct 2025 00:46:39 GMT</pubDate>
+    <pubDate>Mon, 03 Nov 2025 00:46:57 GMT</pubDate>
   </item><item>
     <title>Bloom Filter (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/map/Bloom-Filter-(Data-Structure)</link>
@@ -59,12 +65,6 @@
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/Binary-Search-Tree,-BST-(Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 보강하기 그림 추가하기 BST § 트리 생성 규칙은 다음과 같다. Node 는 어떤 값 (Key 라고 부르기도 한다) 을 담고 있다. Node 의 자식은 최대 2개이다. Node 의 왼쪽 자식의 값은 본인의 값보다 작고, 오른쪽 자식의 값은 본인의 값보다 커야 한다.</description>
     <pubDate>Sat, 06 Apr 2024 00:00:00 GMT</pubDate>
-  </item><item>
-    <title>Circular Queue (Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/draft/Circular-Queue-(Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/draft/Circular-Queue-(Data-Structure)</guid>
-    <description> 참고한 것들 서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024) 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 27 Oct 2025 00:46:39 GMT</pubDate>
   </item>
     </channel>
   </rss>
