@@ -90,6 +90,7 @@ date: 2024-07-29
 	- [[2. Bw-Tree Essentials (OpenBwTree, SIGMOD 18)|Buzz Word Tree, Bw-Tree]] (redirect [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|OpenBwTree]])
 - 논문들
 	- [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|Building a Bw-Tree Takes More Than Just Buzz Words (SIGMOD'18)]]
+	- [[(논문) How to Grow an LSM-tree?|How to Grow an LSM-tree? (SIGMOD'25)]]
 
 ### Modern
 
