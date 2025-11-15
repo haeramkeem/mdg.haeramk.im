@@ -2,8 +2,10 @@
 tags:
   - terms
   - data-structure
-  - tree
+  - ds-tree
 date: 2024-04-06
+aliases:
+  - B Tree
 ---
 > [!info] 참조한 것들
 > - [어떤 B-Tree 소개 블로그 글](https://rebro.kr/169?category=484170)

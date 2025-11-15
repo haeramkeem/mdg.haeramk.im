@@ -2,8 +2,10 @@
 tags:
   - terms
   - data-structure
-  - tree
+  - ds-tree
 date: 2024-04-06
+aliases:
+  - BST
 ---
 > [!warning]- 본 글은 #draft 상태입니다.
 > - [ ] 내용 보강하기
