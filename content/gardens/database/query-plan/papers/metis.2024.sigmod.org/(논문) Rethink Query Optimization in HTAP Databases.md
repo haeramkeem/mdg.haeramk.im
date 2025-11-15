@@ -3,6 +3,8 @@ tags:
   - database
   - db-query-plan
 date: 2025-05-18
+aliases:
+  - Metis
 ---
 > [!info] Metis 링크
 > - [논문](https://dl.acm.org/doi/pdf/10.1145/3626750)
@@ -15,7 +17,7 @@ date: 2025-05-18
 
 ## Abstract
 
-- 
+> [!fail] #draft 나중에 정리할 예정입니다.
 
 ## 목차
 
