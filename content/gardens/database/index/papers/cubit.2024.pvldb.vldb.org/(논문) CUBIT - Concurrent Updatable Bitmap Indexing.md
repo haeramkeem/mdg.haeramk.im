@@ -34,3 +34,4 @@ title: "(논문) CUBIT: Concurrent Updatable Bitmap Indexing"
 > [!fail] #draft 나중에 정리할 예정입니다.
 
 - [[1. Introduction (CUBIT, VLDB 24)|1. Introduction]]
+- [[4. CUBIT Design (CUBIT, VLDB 24)|4. CUBIT Design]]
