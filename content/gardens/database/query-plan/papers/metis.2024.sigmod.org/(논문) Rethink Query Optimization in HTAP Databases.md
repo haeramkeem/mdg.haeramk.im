@@ -3,9 +3,12 @@ tags:
   - database
   - db-query-plan
 date: 2025-05-18
+aliases:
+  - Metis
 ---
 > [!info] Metis 링크
 > - [논문](https://dl.acm.org/doi/pdf/10.1145/3626750)
+> - [주인장 논문 발표 자료 (Haeram Kim, May 21 2025, SNU)](https://1drv.ms/b/c/12a2aef6bd5b0c74/ETjNUXLuFDBJiq_AQbtHi6UBia4f6BgTujUoYdEaLxPxUA?e=387SW4)
 
 ## 개요
 
@@ -15,7 +18,7 @@ date: 2025-05-18
 
 ## Abstract
 
-- 
+> [!fail] #draft 나중에 정리할 예정입니다.
 
 ## 목차
 
