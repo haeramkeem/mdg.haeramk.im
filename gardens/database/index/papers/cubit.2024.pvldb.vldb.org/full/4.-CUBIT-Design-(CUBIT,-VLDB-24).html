@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html><head><title>(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (4. CUBIT Design)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (4. CUBIT Design)"/><meta property="og:description" content="본 글은 논문 CUBIT: Concurrent Updatable Bitmap Indexing (VLDB&amp;#039;24) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction (현재 글) 4."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 CUBIT: Concurrent Updatable Bitmap Indexing (VLDB&amp;#039;24) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction (현재 글) 4."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/4.-CUBIT-Design-(CUBIT,-VLDB-24)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (4. CUBIT Design)</h1><p class="content-meta ">Nov 16, 25, 24 min read</p><ul class="tags "><li><a href="../../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../../tags/db-index" class="internal tag-link">#db-index</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="https://dl.acm.org/doi/10.14778/3705829.3705854" class="external">CUBIT: Concurrent Updatable Bitmap Indexing (VLDB'24)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>목차 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/1.-Introduction-(CUBIT,-VLDB-24)" class="internal" data-slug="gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/1.-Introduction-(CUBIT,-VLDB-24)">1. Introduction (현재 글)</a></li>
+<li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/4.-CUBIT-Design-(CUBIT,-VLDB-24)" class="internal" data-slug="gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/4.-CUBIT-Design-(CUBIT,-VLDB-24)">4. CUBIT Design</a></li>
+</ul>
+</blockquote>
+<h2 id="40-prologue">4.0. Prologue<a aria-hidden="true" tabindex="-1" href="#40-prologue" class="internal"> §</a></h2>
+<h3 id="401--api">4.0.1.  API<a aria-hidden="true" tabindex="-1" href="#401--api" class="internal"> §</a></h3>
+<ul>
+<li>기본적인 index API 를 모두 제공한다:
+<ul>
+<li><code>QUERY</code>: Read operation.</li>
+<li><code>UPDATE</code>: 모든 bitvector 를 읽어서 현재의 값을 알아내고, update 하려는 값으로 bit flip 을 하는 operation.</li>
+<li><code>DELETE</code>: <a href="../../../../../../gardens/database/index/drafts/Bitmap-Index-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/Bitmap-Index-(Database-Index)">Bitmap Index</a> 에서 해당 row 를 지우는 operation.</li>
+<li><code>INSERT</code>: 모든 bitvector 의 맨 끝에 새로운 bit 를 추가하는 operation.</li>
+</ul>
+</li>
+<li>그리고 내부적으로 사용하는 management command 가 하나 있다:
+<ul>
+<li><code>MERGE</code>: Out-of-place 로 누적된 log 들을 bitvector 에 합치는 operation.</li>
+</ul>
+</li>
+<li>이 모든 operation 들은 atomic 하게 구현되어 있다.</li>
+</ul>
+<h3 id="402-forward-progress">4.0.2. Forward Progress<a aria-hidden="true" tabindex="-1" href="#402-forward-progress" class="internal"> §</a></h3>
+<ul>
+<li>모든 <code>QUERY</code> operation 은 wait-free 이다.
+<ul>
+<li>반면 기존의 tree-based index 는 UDI 가 read 를 blocking 하거나 restart 를 유도할 수도 있다는 점에서 더 효율적이다.</li>
+</ul>
+</li>
+<li>그리고, 두 가지 버전으로 구현해 놓았다.
+<ul>
+<li>Write-write conflict 를 linearize 하기 위해 latch 를 사용하는 버전인 <em>CUBIT-lk</em> 과</li>
+<li>Latch-free 로 helping mechanism 을 사용하는 버전인 <em>CUBIT-lf</em> 가 있다고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="41-horizontal-update-delta-hud">4.1. Horizontal Update Delta (HUD)<a aria-hidden="true" tabindex="-1" href="#41-horizontal-update-delta-hud" class="internal"> §</a></h2>
+<ul>
+<li>CUBIT 은 기존의 다른 bitmap index 처럼 column 의 각 distinct value 에 대해 모든 row 를 bit 에 대응시켜 existence 를 나타내는 value bitmap (VB) 를 사용하고, 이것은 <a href="../../../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a>, <a href="../../../../../../gardens/database/encoding/drafts/Word-Aligned-Hybrid,-WAH-(Encoding)" class="internal" data-slug="gardens/database/encoding/drafts/Word-Aligned-Hybrid,-WAH-(Encoding)">WAH</a> 등으로 encoding 된 상태로 유지된다.</li>
+<li>그리고 UDI 를 할 때는, row-wise 로 어떤 row 가 어떤 value 에서 어떤 value 로 변경되었는지를 나타내는 자료구조인 <em>Horizontal Update Delta (HUD)</em> 를 사용하여 out-of-place 로 logging 해두고, 이것을 다시 VB 에 만영하는 것은 deferring 하는 방식이다.</li>
+<li>따라서 이렇게 하면, UDI 를 처리할 때 직접 VB 혹은 다른 bitvector 를 수정하지 않기 때문에 비싼 decode-flip-encode cycle 작업을 할 필요도 없고 bitvector 전체에 대한 latch 를 잡을 필요도 없다.</li>
+<li>이와 같은 특성 덕분에 기존의 bitmap index 에서의 문제인 contention 을 많이 줄일 수 있다.</li>
+</ul>
+<h3 id="411-organization-of-hud">4.1.1. Organization of HUD<a aria-hidden="true" tabindex="-1" href="#411-organization-of-hud" class="internal"> §</a></h3>
+<ul>
+<li>HUD 는 logical 하게는 bit-matrix 의 한 row 라고 생각하면 된다.</li>
+<li>즉, target column 에 distinct value 가 10, 20, 30 이렇게 세개가 있다면, HUD 는 기본적으로 다음과 같이 초기화된다는 것.</li>
+</ul>
+<pre><code>      10  20  30
+     +---+---+---+
+HUD: | 0 | 0 | 0 |
+     +---+---+---+
+</code></pre>
+<ul>
+<li>이때, 값이 20 에서 10 으로 update 되었다면 이것에 대한 HUD 는:</li>
+</ul>
+<pre><code>      10  20  30
+     +---+---+---+
+HUD: | 1 | 1 | 0 |
+     +---+---+---+
+</code></pre>
+<ul>
+<li>가 된다.
+<ul>
+<li>이것만 보고 값이 20 에서 10 으로 update 된 것인지 10 에서 20 으로 update 된 것인지 어떻게 알 수 있냐 라고 생각할 수 있는데, 이것은 현재의 VB 로 알 수 있다.</li>
+<li>가령 현재 값이 20 이었으므로 현재 20 에는 bit 가 1 로 켜져 있고, 10 에는 bit 가 0 으로 꺼져있게 되는데</li>
+<li>이 HUD 의 bit 들을 XOR 하면 20 의 bit 는 다시 0 으로 꺼지게 되고, 10 의 bit 는 1 로 켜지게 되는 것.</li>
+<li>즉, 이렇게 생성된 HUD 를 VB 에 on-demand 로 적용시켜가며 bitmap index read 를 하는 것이다.</li>
+</ul>
+</li>
+<li>보다시피, 대부분의 UDI case 에서는 bit 가 최대 2개만 켜지게 된다.
+<ul>
+<li>Update 는 값을 바꾸는 것이기 때문에 2개가 켜지고,</li>
+<li>Delete 는 값을 삭제하는 것이기 때문에 현재의 값에 대한 bit 하나를 켜게 되며</li>
+<li>Insert 는 값을 추가하는 것이기 때문에 추가할 값 하나에 대한 bit 를 켜게 된다.</li>
+</ul>
+</li>
+<li>따라서, physical 하게는 HUD 는 다음과 같이 표현된다.</li>
+</ul>
+<pre><code>&lt;row_id, n_bits, pos_0, pos_1, ...>
+</code></pre>
+<ul>
+<li>여기서
+<ul>
+<li><code>row_id</code> 는 이 HUD 에 대한 row ID 이고</li>
+<li><code>n_bits</code> 는 몇개의 bit 가 이 HUD 에 있는지 (일반적으로는 최대 2),</li>
+<li><code>pos_0</code>, <code>pos_1</code>, … 는 각 bit 들의 position 이다 (이것도 일반적으로는 최대 <code>pos_1</code> 까지).</li>
+</ul>
+</li>
+<li>위에서의 예시를 HUD 표현으로 바꿔보면 (row ID 가 2 이라고 가정)</li>
+</ul>
+<pre><code>&lt;2, 2, 1, 2>
+</code></pre>
+<ul>
+<li>가 되는 것이다.</li>
+</ul>
+<h3 id="412-benefits">4.1.2. Benefits<a aria-hidden="true" tabindex="-1" href="#412-benefits" class="internal"> §</a></h3>
+<p><img src="../../../../../../images/Pasted-image-20251116122530.png" width="auto" height="auto"/></p>
+<ul>
+<li>위 그림에서 보이는 것 처럼 HUD 는 delta log 에 out-of-place 로 쭉 쌓이게 되는데, 이 delta log 를 쭉 읽어서 HUD set 을 구하게 되면 그것이 snapshot 이 되는 셈이다.</li>
+<li>따라서 UDI 를 할 때 VB 를 변경하느라 decode-flip-encode 를 할 필요도 없고, UDI 를 하는 와중에도 read 가 latch 를 잡을 필요가 없다.</li>
+</ul>
+<h3 id="413-hud-has-small-size">4.1.3. HUD Has Small Size<a aria-hidden="true" tabindex="-1" href="#413-hud-has-small-size" class="internal"> §</a></h3>
+<ul>
+<li>위에서 말한 것 처럼, HUD 는 보통 bit 가 최대 2 개 켜지기 때문에 사이즈가 아주 작다.</li>
+<li>그리고 아주 드문 경우에 더 많은 bit 가 켜지기도 한다고 한다 <sup><a href="#user-content-fn-extended-paper" id="user-content-fnref-extended-paper" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup>.</li>
+</ul>
+<h2 id="42-delta-log">4.2. Delta Log<a aria-hidden="true" tabindex="-1" href="#42-delta-log" class="internal"> §</a></h2>
+<ul>
+<li>그럼 이 delta log 에 대해 좀 더 자세히 알아보자.</li>
+<li>별로 어려울 것은 없다. 각 HUD 는 <em>UDI Log Entry (ULE)</em> 라는 이름의 linked list entry 에 담겨 <em>Delta Log</em> 라는 linked list 로 관리된다.</li>
+<li>그리고 이 ULE 에는 monotonic 하게 증가하는 commit timestamp (<em>commit-ts</em>) 가 명시되고, 이것을 이용해 delta log 에서 snapshot 을 뽑아낼 수 있는 것이다.</li>
+<li>사소한 detail 들을 좀 알아보면,
+<ul>
+<li>이 list 에는 HEAD 와 TAIL pointer 가 있어서 list 의 시작과 끝을 가리키고, HEAD 에서부터 TAIL 까지 ULE 의 commit-ts 는 계속 증가하도록 유지된다.</li>
+<li>그리고 list 에는 처음에 비어있는 ULE 를 넣어서 항상 list 가 비지 않게 관리한다고 한다. 이것은 그냥 구현/관리상의 편의인듯.</li>
+</ul>
+</li>
+<li>이렇게 함으로써 bitmap index 의 UDI 가 단순히 linked list append 로 바뀌기 때문에 critical section 이 크게 짧아지게 된다.</li>
+</ul>
+<h3 id="421-example">4.2.1. Example<a aria-hidden="true" tabindex="-1" href="#421-example" class="internal"> §</a></h3>
+<ul>
+<li>위의 figure 6 을 보면 이해가 될텐데,</li>
+<li>Figure 6-b 을 간단히 설명해 보면 timestamp = 1 로 delta log 를 traverse 했을 때의 결과가 6-b 의 아래쪽 HUD set 이고, timestamp = 4 로 delta log 를 traverse 했을 때의 결과가 위쪽 HUD set 이다.</li>
+<li>이렇듯 어떤 timestamp range 를 가지고 이 delta log 를 traverse 하냐에 따라 서로 다른 snapshot 을 가지게 되고, 따라서 각기 다른 version 의 bitmap index 를 바라보게 되는 것이다.</li>
+</ul>
+<h2 id="43-merging-huds-to-vbs">4.3. Merging HUDs to VBs<a aria-hidden="true" tabindex="-1" href="#43-merging-huds-to-vbs" class="internal"> §</a></h2>
+<p><img src="../../../../../../images/Pasted-image-20251117084734.png" width="auto" height="auto"/></p>
+<ul>
+<li>이러한 delta list 가 있다면 당연히 어떻게 이들을 consolidate 하여 원본의 VB 에 적용시킬까가 문제가 된다.</li>
+<li>CUBIT 에서는 이것을 지원하기 위해 VB 도 multi-versioning 으로 관리한다.</li>
+</ul>
+<h3 id="431-multi-versioning-vbs">4.3.1. Multi-Versioning VBs<a aria-hidden="true" tabindex="-1" href="#431-multi-versioning-vbs" class="internal"> §</a></h3>
+<ul>
+<li>우선 target column 의 각 distinct value 에 대한 VB 들 또한 list 로 관리된다.
+<ul>
+<li>즉, 하나의 distinct value 당 하나의 VB instance list 가 있다고 생각하면 된다.</li>
+</ul>
+</li>
+<li>CUBIT 의 background maintenance thread 는 merge 하려는 VB 에 대해 private copy 를 뜨고, read 할 때 처럼 이 thread 가 발급받은 start-ts 로 delta log 를 traverse 하여 HUD set 을 만든 뒤, 이 HUD set 을 VB private copy 에 적용한다.</li>
+<li>그리고 이것을 새로운 VB 로써 VB instance list 에 추가한다.</li>
+<li>이때, VB instance list entry 에는 어떤 내용이 들어가나 알아보자.
+<ul>
+<li>우선 다른 UDI 와 마찬가지로 commit-ts 가 적힌다.</li>
+<li>그리고 이 VB instance 의 이전 버전을 가리키는 <code>prev</code> pointer 도 갖고 있으며</li>
+<li>이 VB instance 를 instance list 에 추가할 때 다른 UDI 처럼 <code>MERGE</code> operation 에 대한 ULE 를 delta log 에 추가하는데, 이 ULE 를 가리키는 <code>start_delta</code> 도 VB instance list entry 에 적어준다.</li>
+</ul>
+</li>
+<li>이렇게 하면, bitmap index 를 read 할 때는 이렇게 하면 된다.
+<ul>
+<li>우선 자신의 timestamp 로 VB instance list 를 traverse 하면서 VB instance list entry 에 적힌 commit-ts 로 자신이 읽을 수 있는 VB instance set 을 만든다.
+<ul>
+<li>즉, 만약 어떤 VB instance 를 봤는데 commit-ts 가 자신의 것보다 크다면, 이것을 읽지 않고 <code>prev</code> 로 이전 version 으로 traverse 하는 것.</li>
+<li>만약 commit-ts 가 자신의 것보다 작다면, 이것이 내가 읽어야 하는 VB instance 가 된다: 당연히 이놈 이후의 (<code>prev</code> 로 연결된) 다른 VB instance 는 이 commit-ts 보다 더 작으므로, 조건을 만족하는 첫번째 놈이 내가 읽을 수 있는 가장 최신의 것이 되는 것이다.</li>
+</ul>
+</li>
+<li>이 VB instance 에 대해, <code>start_delta</code> 가 가리키는 ULE 로 넘어가서 여기서부터 delta log traverse 를 하며 HUD set 을 만들어 나가면 되는 것이다.</li>
+</ul>
+</li>
+<li>즉, 이렇게 HUD set 을 새로운 VB instance 에 merge 하고 이놈에 대한 ULE 를 적어줌으로써 traverse 해야 할 delta log 의 양을 줄이게 되는 것이다.</li>
+</ul>
+<h3 id="432-synthetic-ule">4.3.2. Synthetic ULE<a aria-hidden="true" tabindex="-1" href="#432-synthetic-ule" class="internal"> §</a></h3>
+<ul>
+<li>하나의 VB 를 merge 한 뒤에는, 적용된 HUD 들은 correctness 를 위해 좀 수정되어야 할 필요가 있다 <sup><a href="#user-content-fn-synthetic-ule" id="user-content-fnref-synthetic-ule" data-footnote-ref aria-describedby="footnote-label" class="internal">2</a></sup>.
+<ul>
+<li>Update 를 생각해 보면, 값이 바뀌는 것이기 때문에 HUD 는 VB 두개가 수정되는 연산을 의미하게 된다.</li>
+<li>하지만 VB merge 를 하면 하나의 VB 만 수정한 것이기에, 수정되지 않은 나머지 하나에 대해서도 고려를 해줘야 한다는 것.</li>
+</ul>
+</li>
+<li>하지만 이미 delta log 에 들어있는 ULE 를 직접 수정하는 것은 (아무래도 in-place update 이기 때문에) concurrency 의 측면에서 너무 복잡하다.</li>
+<li>그래서 이들을 <code>MERGE</code> operation 에 대한 ULE 에 적어주게 되는데, 이것을 <em>Synthetic ULE</em> 라고 한다.
+<ul>
+<li>위의 예시를 통해 설명해 보면,</li>
+<li>Value 30 에 대한 VB 에 대해 <code>MERGE</code> 를 했기 때문에 여기에 apply 되는 HUD 는 <code>&lt;row_id=5, n_bits=2, pos=2, pos=3></code> 이랑 <code>&lt;row_id=7, n_bits=1, pos=3></code> 이다.</li>
+<li>그럼 HUD <code>&lt;row_id=5, n_bits=2, pos=2, pos=3></code> 에서 <code>pos=3</code> 이 apply 된 것이기 때문에, <code>pos=2</code> 는 아직 반영되지 않은 상태인 것.</li>
+<li>따라서 이놈을 Synthetic ULE 의 HUD 에 <code>&lt;row_id=5, n_bits=1, pos=2></code> 로 적어주는 것이다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="44-segmented-bitvectors">4.4. Segmented Bitvectors<a aria-hidden="true" tabindex="-1" href="#44-segmented-bitvectors" class="internal"> §</a></h2>
+<ul>
+<li>CUBIT 에서는 각 bitvector 를 고정 개수의 bit 들을 담는 단위인 segment 로 나누고, 이 segment 각각에 대해 encoding 을 하여 관리하는 방법을 취한다.</li>
+</ul>
+<h3 id="441-benefits">4.4.1. Benefits<a aria-hidden="true" tabindex="-1" href="#441-benefits" class="internal"> §</a></h3>
+<ul>
+<li>이렇게 하면 좋은점이 있다:</li>
+</ul>
+<ol>
+<li>우선, defer 되긴 했지만 결국에는 이 HUD 를 apply 하느라 decode-flip-encode 를 해야 하는데, 이렇게 segment 단위로 쪼개놓으면 원하는 segment 에 대해서만 decode-flip-encode 를 하면 되기 때문에 이 decode-flip-encode cycle 의 비용을 한정지을 수 있다.</li>
+<li>또한, 모든 VB 들에 대해 동일한 개수의 segment 로 나뉘어지기 때문에 다른 VB 들 간의 bitwise operation 도 수월해진다: 여러 VB 에 대해서 원하는 row 가 있는 segment 들 끼리만 bitwise operation 을 하면 되기 때문.</li>
+</ol>
+<h2 id="45-snapshotting">4.5. Snapshotting<a aria-hidden="true" tabindex="-1" href="#45-snapshotting" class="internal"> §</a></h2>
+<ul>
+<li>Snapshotting 을 위해서는 하나의 global timstamp variable 이 사용되고, 이 것은 두가지의 용도로 사용된다.
+<ul>
+<li><em>start-ts</em>: 이것은 모든 operation 이 처음 시작할 때 global timestamp 로부터 읽어들인 값이다.</li>
+<li><em>commit-ts</em>: 이것은 UDI 혹은 <code>MERGE</code> 했을 때 증가하는 값으로, ULE 혹은 VB instance list entry 에 적히는 값이다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="451-multi-versioning-hud-sets">4.5.1. Multi-Versioning HUD Sets<a aria-hidden="true" tabindex="-1" href="#451-multi-versioning-hud-sets" class="internal"> §</a></h3>
+<ul>
+<li>Bitmap index 을 읽을 때는</li>
+</ul>
+<ol>
+<li>Delta log HEAD 에서부터 시작해 자신의 <em>start-ts</em> 보다 <em>commit-ts</em> 가 큰 ULE 가 나올 때 까지 delta log 를 traverse 한 뒤</li>
+<li>이 ULE 에 적힌 HUD 들을 모두 모아 HUD set 을 만들게 된다.
+<ul>
+<li>이때, 만약 동일한 row 에 대한 HUD 가 서로 다른 ULE 에서 등장하게 된다면, 당연히 가장 최신 것을 봐야 하므로 ULE 의 <em>commit-ts</em> 가 더 높은 놈을 취한다.</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>이 과정은 당연히 delta log 가 짧을 수록 더 빨라지므로, <a href="#43-merging-huds-to-vbs" class="internal">4.3</a> 에서 설명한 merge 로써 이 과정을 가속시킬 수 있다.</li>
+</ul>
+<h3 id="452-applying-hud-sets">4.5.2. Applying HUD Sets<a aria-hidden="true" tabindex="-1" href="#452-applying-hud-sets" class="internal"> §</a></h3>
+<ul>
+<li>위 과정을 통해 얻어낸 HUD set 을 VB 에 적용하면, 해당 HUD set 을 snapshot 으로 하는 bitmap index 가 탄생하게 된다.
+<ul>
+<li>즉, 다른 <em>start-ts</em> 를 가진 두 worker 는 delta log traversal 을 하며 서로 다른 HUD set 을 가지게 될 것이고, 따라서 서로 다른 bitmap index version 을 바라보게 된다.</li>
+</ul>
+</li>
+<li>만약 HUD set 이 너무 크다면, HUD set 을 row ID 기준으로 정렬해서 VB 의 segment 별로 HUD 를 뿌리고, 여러 thread 들을 spawn 해서 HUD set apply 를 수행한다고 한다.</li>
+</ul>
+<h2 id="46-index-operations">4.6. Index Operations<a aria-hidden="true" tabindex="-1" href="#46-index-operations" class="internal"> §</a></h2>
+<h3 id="461-queries">4.6.1. Queries<a aria-hidden="true" tabindex="-1" href="#461-queries" class="internal"> §</a></h3>
+<ul>
+<li>Read query <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></span> 가 어떻게 원하는 값 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span></span> 에 대해 이 bitmap index 를 읽는지 정리해 보자.</li>
+</ul>
+<ol>
+<li>우선 global timestamp 를 읽어 <em>start-ts</em> 를 결정한다 (<code>Q.start_ts</code>).</li>
+<li>그리고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span></span> 에 대한 VB instance list 를 traverse 하면서, <code>Q.start_ts</code> 보다 작거나 같은 <em>commit-ts</em> 를 갖는 첫번째 VB instance <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span></span> 를 결정한다 (이놈의 <em>commit-ts</em> 를 <code>V.commit_ts</code> 라고 하자).</li>
+<li>이놈의 <em>start-delta</em> pointer (<code>V.start_delta</code>) 를 따라서 delta log 에 진입한다.</li>
+<li>여기서부터 delta log 를 traverse 하면서 <code>Q.start_ts</code> 보다 큰 <em>commit-ts</em> 를 갖는 ULE 가 나올 때까지 간다.
+<ul>
+<li>이때 ULE 의 HUD 들을 모두 모으며 HUD set 을 만든다. 만약 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span></span> 에 대한 HUD 가 아니라면, 무시한다.</li>
+</ul>
+</li>
+<li>이렇게 결정된 HUD set 이 존재한다면 (즉, 비어있지 않다면) 이 HUD set 을 private copy 된 VB 에 적용한다.
+<ul>
+<li>이 과정에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span></span> 가 segmentation 되어 있다면, 각 segment 에 대한 HUD apply 를 여러 thread 를 이용해 parallel 하게 수행한다.</li>
+<li>이 parallel HUD apply 는 서로 blocking 하는 것이 없기 때문에, 당연히 linear scaling 이 가능하다. 즉, thread 개수에 비례해 성능이 올라가는 것.</li>
+</ul>
+</li>
+<li>만약 HUD set 의 크기가 일정 threshold 를 넘는다면, HUD set 이 적용된 private copy 를 CUBIT background maintenance thread 에게 넘겨서 <code>MERGE</code> 를 수행한다.
+<ul>
+<li>즉, 이렇게 함으로써 background thread 가 merge 할 필요 없이 이미 merge 가 완료된 bitvector 를 VB instance list 에 넣을 수 있게 하는 것.</li>
+</ul>
+</li>
+</ol>
+<h3 id="462-udis">4.6.2. UDIs<a aria-hidden="true" tabindex="-1" href="#462-udis" class="internal"> §</a></h3>
+<ul>
+<li>UDI 에 대해서는 어떻게 처리하는지 보자.</li>
+</ul>
+<ol>
+<li>우선 Update 와 Delete 에 대해서는 기존의 값이 무엇인지 알아야 하기 때문에, query 에서와 마찬가지로 <em>start-ts</em> 를 발급받아 모든 value 에 대한 VB 를 읽는다.
+<ul>
+<li>각 VB 를 읽는 것은 <a href="#461-queries" class="internal">4.6.1</a> 의 전 과정과 동일하다.</li>
+<li>다만, 이때는 읽어야 할 VB 가 많기 때문에, 전체 distinct value 들을 특정 range 로 묶어서 각 range 를 한 thread 가 담당하는 식으로 parallelize 한다.</li>
+<li>당연히 insert 를 할 때는 기존의 값을 몰라도 되기 때문에 이 과정을 하지 않는다.</li>
+</ul>
+</li>
+<li>그리고 ULE 를 생성하며 (logical) bit flip 을 진행한다.
+<ul>
+<li>Update 의 경우에는 기존의 값과 새로운 값에 모두 bit 를 올린 HUD 를 ULE 에 담고</li>
+<li>Delete 의 경우에는 기존의 값에 bit 을 올린 HUD 를 ULE 에 담고</li>
+<li>Insert 의 경우에는 새로운 값에 bit 을 올리고 row ID 를 하나 올린 HUD 를 ULE 에 담는다.</li>
+</ul>
+</li>
+<li>마지막으로 이렇게 생성된 ULE 를 delta log 에 넣으며 마무리된다.</li>
+</ol>
+<h2 id="47-synchronization-mechanisms">4.7. Synchronization Mechanisms<a aria-hidden="true" tabindex="-1" href="#47-synchronization-mechanisms" class="internal"> §</a></h2>
+<ul>
+<li>이렇게 하면 일단 UDI 와 read (query) 간의 blocking 은 없어 보인다.</li>
+<li>하지만 UDI-UDI 간의 conflict 는 막아야 하는데, 이것을 어떻게 하는지 알아보자.
+<ul>
+<li>이것을 막아야 하는 이유는 간단하다: UDI 들은 각자의 <em>start-ts</em> 를 갖고 있고, 따라서 서로 다른 bitmap index version 을 바라보고 있기 때문에 inconsistency 가 생기기 때문.</li>
+<li>즉, 내가 시작한 다음에 내가 update 하려는 놈을 누군가가 먼저 update 해놓았다면, 내 update 로 이 update 를 overwrite 하면 안되기 때문이다.</li>
+</ul>
+</li>
+<li>이를 위한 첫번째 접근은 다음과 같다 (<em>CUBIT-lk</em>).
+<ol>
+<li>우선 global latch 를 두고, ULE 를 delta log 에 추가하기 전에 이놈을 먼저 잡는다.</li>
+<li>잡고 나서는 내 <em>start-ts</em> 와 TAIL 의 <em>commit-ts</em> 사이에 있는 ULE 들을 쭉 훑으며 내가 추가하려는 HUD 의 row ID 가 이미 추가되어 있는지 확인한다.</li>
+<li>만약 추가되어 있다면, latch 를 놓고 처음부터 (새로운 <em>start-ts</em>) 다시 시작한다.</li>
+<li>만약 추가되어 있지 않다면, global timestamp 를 하나 증가시킨 뒤, 이 timestamp 값을 ULE 의 <em>commit-ts</em> 에 적어서 ULE 를 delta log 에 추가한 다음 latch 를 놓는다.
+<ul>
+<li>이 시점에서 이 ULE 가 global 하게 visible 해지는 것이다.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="471-overhead">4.7.1. Overhead<a aria-hidden="true" tabindex="-1" href="#471-overhead" class="internal"> §</a></h3>
+<ul>
+<li>일단 보다시피 read query 는 latch 를 아예 잡지 않는다.</li>
+<li>UDI 에 대해서는 비록 global latch 를 잡기는 하지만, delta log 를 읽고 ULE 를 추가하는 작업밖에 하지 않기 때문에 bitvector 단위로 latch 를 잡아 decode-flip-encode 를 하는 것에 비해 critical section 시간이 훨씬 짧다고 한다.</li>
+<li>따라서 뒤의 evaluation 에서 확인할 수 있듯이, 이 <em>CUBIT-lk</em> 로도 다른 baseline 에 비해 훨씬 덜한 contention 과 tail latency 를 달성할 수 있다.</li>
+</ul>
+<h3 id="472-optimizations">4.7.2. Optimizations<a aria-hidden="true" tabindex="-1" href="#472-optimizations" class="internal"> §</a></h3>
+<ul>
+<li>하지만 skewness 가 큰 경우에는 그럼에도 불구하고 contention 이 매우 큰데, 이를 해결하기 위한 방법 (<em>CUBIT-lf</em>) 을 알아보자.</li>
+</ul>
+<h4 id="4721-consolidation-array">4.7.2.1. Consolidation Array<a aria-hidden="true" tabindex="-1" href="#4721-consolidation-array" class="internal"> §</a></h4>
+<ul>
+<li>일단 <em>Consolidation Array</em> 라는 기법을 사용하는데, 이것은 만약 UDI conflict 가 난다면 HUD 를 합쳐서 하나의 ULE 에 넣는다는 것이다 <sup><a href="#user-content-fn-consolidate-array" id="user-content-fnref-consolidate-array" data-footnote-ref aria-describedby="footnote-label" class="internal">3</a></sup>.</li>
+</ul>
+<h4 id="4722-making-cubit-latch-free">4.7.2.2. Making CUBIT Latch-Free<a aria-hidden="true" tabindex="-1" href="#4722-making-cubit-latch-free" class="internal"> §</a></h4>
+<ul>
+<li>여기서의 아이디어는 <em>helping-mechanism</em> 이다.</li>
+<li>즉, <a href="../../../../../../gardens/c-cpp/c/atomic/drafts/Compare-and-Swap,-CAS-(C-Atomic)" class="internal" data-slug="gardens/c-cpp/c/atomic/drafts/Compare-and-Swap,-CAS-(C-Atomic)">CAS</a> 를 통해 delta log 에 ULE 를 append 해보고, 실패하면 (내가 한발 늦었다는 것이기 때문에) 현재의 tail 에 있는 ULE 가 끝나도록 도와준다.
+<ul>
+<li>이를 위해서는 ULE 를 delta log 에 추가하기 전에, 이 작업이 어떤 것인지를 다른 worker 도 알 수 있게 하기 위해 ULE 에 적어둔다.
+<ul>
+<li>가령 뭐 value 를 10 에서 20 으로 바꾸는 작업이랄지 그런것들</li>
+</ul>
+</li>
+<li>그럼 CAS 가 실패하면, tail ULE 에 접근해서 이놈이 어떤 작업인지를 확인하고, 이 작업이 빨리 끝날 수 있도록 도와주는 식으로 수행된다.
+<ul>
+<li>즉, 즉석으로 parallel worker 로 편입되는 것; 가령 update 전에 모든 VB 를 읽어야 하는 작업에 투입되는 등.</li>
+</ul>
+</li>
+<li>더 자세한 과정은 잘 모르겠다 <sup><a href="#user-content-fn-extended-paper" id="user-content-fnref-extended-paper-2" data-footnote-ref aria-describedby="footnote-label" class="internal">1</a></sup>.</li>
+</ul>
+</li>
+<li>그리고 도와준 다음에 retry 하는 식으로 이루어 진다.</li>
+<li>이렇게 하면 blocking 된 놈이 마냥 busy-wait 하는게 아니기 때문에 ULE 를 추가하는 작업의 시간이 더욱 짧아지고, 따라서 contention 도 줄어들게 된다.</li>
+</ul>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes<a aria-hidden="true" tabindex="-1" href="#footnote-label" class="internal"> §</a></h2>
+<ol>
+<li id="user-content-fn-extended-paper">
+<p><a href="https://arxiv.org/abs/2410.16929" class="external">더 긴 버전의 논문</a> 에 있다고 한다. <a href="#user-content-fnref-extended-paper" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a> <a href="#user-content-fnref-extended-paper-2" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩<sup>2</sup></a></p>
+</li>
+<li id="user-content-fn-synthetic-ule">
+<p>논리적으로 그렇긴 하지만, 굳이 필요한가 라는 생각이 든다. 어차피 merge 되지 않은 VB 는 delta log 에서 더 옛날의 ULE 부터 읽어나갈 텐데, 그럼 이런 synthetic ule 없이도 정확하게 읽을 수 있는 것 아닌가. <a href="#user-content-fnref-synthetic-ule" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+<li id="user-content-fn-consolidate-array">
+<p>코드를 확인해봐야 할 듯; 어떻게 합쳐서 누구의 ULE 에 넣는 것인지 <a href="#user-content-fnref-consolidate-array" data-footnote-backref class="data-footnote-backref internal" aria-label="Back to content">↩</a></p>
+</li>
+</ol>
+</section></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#40-prologue" data-for="40-prologue">4.0. Prologue</a></li><li class="depth-1"><a href="#401--api" data-for="401--api">4.0.1.  API</a></li><li class="depth-1"><a href="#402-forward-progress" data-for="402-forward-progress">4.0.2. Forward Progress</a></li><li class="depth-0"><a href="#41-horizontal-update-delta-hud" data-for="41-horizontal-update-delta-hud">4.1. Horizontal Update Delta (HUD)</a></li><li class="depth-1"><a href="#411-organization-of-hud" data-for="411-organization-of-hud">4.1.1. Organization of HUD</a></li><li class="depth-1"><a href="#412-benefits" data-for="412-benefits">4.1.2. Benefits</a></li><li class="depth-1"><a href="#413-hud-has-small-size" data-for="413-hud-has-small-size">4.1.3. HUD Has Small Size</a></li><li class="depth-0"><a href="#42-delta-log" data-for="42-delta-log">4.2. Delta Log</a></li><li class="depth-1"><a href="#421-example" data-for="421-example">4.2.1. Example</a></li><li class="depth-0"><a href="#43-merging-huds-to-vbs" data-for="43-merging-huds-to-vbs">4.3. Merging HUDs to VBs</a></li><li class="depth-1"><a href="#431-multi-versioning-vbs" data-for="431-multi-versioning-vbs">4.3.1. Multi-Versioning VBs</a></li><li class="depth-1"><a href="#432-synthetic-ule" data-for="432-synthetic-ule">4.3.2. Synthetic ULE</a></li><li class="depth-0"><a href="#44-segmented-bitvectors" data-for="44-segmented-bitvectors">4.4. Segmented Bitvectors</a></li><li class="depth-1"><a href="#441-benefits" data-for="441-benefits">4.4.1. Benefits</a></li><li class="depth-0"><a href="#45-snapshotting" data-for="45-snapshotting">4.5. Snapshotting</a></li><li class="depth-1"><a href="#451-multi-versioning-hud-sets" data-for="451-multi-versioning-hud-sets">4.5.1. Multi-Versioning HUD Sets</a></li><li class="depth-1"><a href="#452-applying-hud-sets" data-for="452-applying-hud-sets">4.5.2. Applying HUD Sets</a></li><li class="depth-0"><a href="#46-index-operations" data-for="46-index-operations">4.6. Index Operations</a></li><li class="depth-1"><a href="#461-queries" data-for="461-queries">4.6.1. Queries</a></li><li class="depth-1"><a href="#462-udis" data-for="462-udis">4.6.2. UDIs</a></li><li class="depth-0"><a href="#47-synchronization-mechanisms" data-for="47-synchronization-mechanisms">4.7. Synchronization Mechanisms</a></li><li class="depth-1"><a href="#471-overhead" data-for="471-overhead">4.7.1. Overhead</a></li><li class="depth-1"><a href="#472-optimizations" data-for="472-optimizations">4.7.2. Optimizations</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/(논문)-CUBIT---Concurrent-Updatable-Bitmap-Indexing" class="internal">(논문) CUBIT: Concurrent Updatable Bitmap Indexing</a></li><li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/1.-Introduction-(CUBIT,-VLDB-24)" class="internal">(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (1. Introduction)</a></li><li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/4.-CUBIT-Design-(CUBIT,-VLDB-24)" class="internal">(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (4. CUBIT Design)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html><head><title>(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (1. Introduction)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (1. Introduction)"/><meta property="og:description" content="본 글은 논문 CUBIT: Concurrent Updatable Bitmap Indexing (VLDB&amp;#039;24) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction (현재 글) 4."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../../static/icon.png"/><meta name="description" content="본 글은 논문 CUBIT: Concurrent Updatable Bitmap Indexing (VLDB&amp;#039;24) 를 읽고 정리한 글입니다. 별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. 목차 1. Introduction (현재 글) 4."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/1.-Introduction-(CUBIT,-VLDB-24)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (1. Introduction)</h1><p class="content-meta ">Nov 15, 25, 12 min read</p><ul class="tags "><li><a href="../../../../../../tags/database" class="internal tag-link">#database</a></li><li><a href="../../../../../../tags/db-index" class="internal tag-link">#db-index</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>본 글은 논문 <a href="https://dl.acm.org/doi/10.14778/3705829.3705854" class="external">CUBIT: Concurrent Updatable Bitmap Indexing (VLDB'24)</a> 를 읽고 정리한 글입니다.</p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>별도의 명시가 없는 한, 본 글의 모든 그림은 위 논문에서 가져왔습니다. </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>목차 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/1.-Introduction-(CUBIT,-VLDB-24)" class="internal" data-slug="gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/1.-Introduction-(CUBIT,-VLDB-24)">1. Introduction (현재 글)</a></li>
+<li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/4.-CUBIT-Design-(CUBIT,-VLDB-24)" class="internal" data-slug="gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/4.-CUBIT-Design-(CUBIT,-VLDB-24)">4. CUBIT Design</a></li>
+</ul>
+</blockquote>
+<h2 id="11-access-path-selection">1.1. Access Path Selection<a aria-hidden="true" tabindex="-1" href="#11-access-path-selection" class="internal"> §</a></h2>
+<ul>
+<li>읽어야 할 column 이 정해진 다음에는, <a href="../../../../../../gardens/database/common/terms/Database-Management-System,-DBMS-(Database)" class="internal" data-slug="gardens/database/common/terms/Database-Management-System,-DBMS-(Database)">DBMS</a> 는 이놈을 어떻게 읽어야 할 지 결정한다.</li>
+<li>“어떻게 읽어야 할 지” 라는 것에는, selectivity 가 아주 낮은 경우에는 <a href="../../../../../../gardens/database/index/drafts/B+-Tree-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/B+-Tree-(Database-Index)">B+ Tree</a> 나 <a href="../../../../../../gardens/algorithm/data-structure/tree/drafts/Trie-(Data-Structure)" class="internal" data-slug="gardens/algorithm/data-structure/tree/drafts/Trie-(Data-Structure)">Trie</a> 와 같은 tree 기반의 index 를 이용해 scan 하고 그렇지 않다면 그냥 full sequential scan 을 하는 것이 좋다는 것이 일반적인 통념이다.</li>
+</ul>
+<h2 id="12-bitmap-indexes">1.2. Bitmap Indexes<a aria-hidden="true" tabindex="-1" href="#12-bitmap-indexes" class="internal"> §</a></h2>
+<ul>
+<li>여기에 추가적으로, <a href="../../../../../../gardens/database/index/drafts/Cardinality-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/Cardinality-(Database-Index)">Cardinality</a> 가 낮은 경우에는, <a href="../../../../../../gardens/database/index/drafts/Bitmap-Index-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/Bitmap-Index-(Database-Index)">Bitmap Index</a> 를 사용할 수 있다.</li>
+<li>이놈은 (1) index 를 구성하고자 하는 column 에 대해 (2) 각 distinct value 마다 bitmap 을 두어서 (이것을 <em>bitvector</em> 라고 한다) (3) 어떤 row 가 이 distinct value 인지 표시하는 방법이다.
+<ul>
+<li>즉, 어떤 column 이 10, 20, 30 의 값만 가진다면, 10, 20, 30 에 해당하는 세개의 bitmap 을 만든 다음 어떤 row 의 column value 가 10 이면 해당하는 bitmap 의 bit 을 1 로 키는 것이다.</li>
+</ul>
+</li>
+<li>따라서 해당 column 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span> 개의 distinct value 를 가지고 있고, 총 row 의 개수가 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 이라면 이때의 bit-matrix 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 의 bit 를 가지게 되는 것이다.
+<ul>
+<li>이때문에 column 의 cardinality 가 낮아야 되는 것이다: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span> 가 작아야 bit-matrix 의 크기도 작아지고, cardinality 는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mord">/</span><span class="mord mathnormal">n</span></span></span></span></span> 으로 계산되니까.</li>
+</ul>
+</li>
+<li>그리고 query 를 처리할 때는 이놈을 가지고 간단한 bitwise 연산만으로 어떤 row 를 읽어야 하는지 알 수 있다 (자세한 내용은 뒤에서 알아보자).</li>
+</ul>
+<h2 id="13-bitmap-index-as-a-secondary-index">1.3. Bitmap Index as a Secondary Index<a aria-hidden="true" tabindex="-1" href="#13-bitmap-index-as-a-secondary-index" class="internal"> §</a></h2>
+<ul>
+<li>Bitmap index 는 <a href="../../../../../../gardens/database/index/drafts/Index-(Database)" class="internal" data-slug="gardens/database/index/drafts/Index-(Database)">Secondary index</a> 로 사용하면 좋은데, 그 이유는</li>
+</ul>
+<ol>
+<li>우선 메모리 사용량이 적다:
+<ul>
+<li>(Cardinality 가 작다는 전제 하에) bit-wise 이기 때문이기도 하고,</li>
+<li>뭐 tree 구조에서 필요한 pointer 와 같은 metadata 성의 데이터가 없기 때문이다.</li>
+</ul>
+</li>
+<li>Clustered 되어 있다.
+<ul>
+<li>이 말은 logical order 와 physical order 와 같다는 말인데,</li>
+<li>보통 secondary index 로서의 tree 는 primary index 와는 다르게 logical order 순서대로 physical 하게 저장되어 있지 않기 때문에 랜덤한 순서로 physical data 를 읽게 되고, 따라서 <a href="../../../../../../gardens/database/format/drafts/Slotted-Page-(Database-Format)" class="internal" data-slug="gardens/database/format/drafts/Slotted-Page-(Database-Format)">Pagination</a> 에 의해 read amp 가 늘어난다.</li>
+<li>하지만 bitmap index 는 logical order 와 physical order 가 같기 때문에 read amp 도 줄고 sequential memory access 이기 때문에 hardware prefetch 와 <a href="../../../../../../gardens/os/memory/terms/Translation-Lookaside-Buffer,-TLB-(Memory)" class="internal" data-slug="gardens/os/memory/terms/Translation-Lookaside-Buffer,-TLB-(Memory)">TLB</a> miss 가 적어 더 빠르게 작동한다.</li>
+</ul>
+</li>
+<li>Composition 에 더 친화적이다.
+<ul>
+<li>이것은 primary key 같은 애들이 compositive 하게 구성되어 있어서 (즉, 여러 column 으로 구성되어 있어서) foreign key 도 compositive 한데, 여기에 index 를 구성하는 경우인데,</li>
+<li>기존의 B+Tree 와 같은 경우는 그냥 composite key 를 넣어야 해서 느린 반면</li>
+<li>Bitmap index 를 사용하면 그냥 이 column 들 각각에 bitmap index 를 구성하고 이들의 bitwise operation 으로 어떤 row 를 읽어야 할 지 결정할 수 있기 때문에 더 단순하고 빠르다.</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>이와 같은 특성때문에 기존의 B+Tree based index 보다 92% 더 적은 메모리 사용량을 보였고, scan 속도도 대략 2배정도 더 빨랐다고 한다.</li>
+<li>또한, 기존에는 selectivity 가 아주 낮아야만 index scan 가 더 좋았지만, bitmap scan 으로는 selectivity 가 10% 일 때 까지도 sequential scan 보다 더 좋았다고 한다.</li>
+</ul>
+<h2 id="14-challenges-with-bitmap-indexes">1.4. Challenges with Bitmap Indexes<a aria-hidden="true" tabindex="-1" href="#14-challenges-with-bitmap-indexes" class="internal"> §</a></h2>
+<ul>
+<li>하지만 이런 bitmap index 에는 치명적인 약점이 있는데, 바로 UDI (Update, Delete, Insert) 이다.</li>
+<li>기존까지의 방법을 알아보면,
+<ol>
+<li>우선 update 가 발생했을 때 해당하는 bitvector 를 전부 rebuild 하거나</li>
+<li>Batch update 를 하거나 (즉, 일시적으로 batch update 를 위해 성능이 하락하게 됨)</li>
+<li>Multi-versioning + segmentation 을 하거나</li>
+<li>추가적인 bitvector 를 이용해 out-of-place 방식을 취한다.
+<ul>
+<li>이 논문에서 나온 기존 연구인 <a href="https://ieeexplore.ieee.org/document/4274960" class="external">UCB (Update Conscious Bitmap Index)</a> 에서는 이 추가적인 bitvector 로 invalidate (즉, delete) 를 하고</li>
+<li>저자의 이전 논문인 <a href="https://dl.acm.org/doi/10.1145/2882903.2915964" class="external">UpBit</a> 에서는 update buffer 처럼 사용한다 (뒤에 자세히 나온다).</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>하지만 이러한 방법은 딱봐도 비효율적이거나 (1, 2번) 실제로 테스트해보니 비효율적이었다고 한다.</li>
+<li>구체적으로는,</li>
+</ul>
+<p><img src="../../../../../../images/Pasted-image-20251115213858.png" width="auto" height="auto"/></p>
+<ol>
+<li>Scalable 하지 않다는 (즉, multicore 에서는 성능이 떨어지는) 문제가 있다.
+<ul>
+<li>위 그래프를 보면 (왼쪽), 다른 solution 들은 4-core 에서부터 성능이 더 이상 오르지 않고 있고</li>
+<li>UpBit 의 경우에도 16-core 에서부터 성능이 꺾이고 있는 것을 볼 수 있다.</li>
+<li>또한 오른쪽 그래프를 보면 16-core 에서의 tail latency 를 측정한 것인데, 아주 안좋은 것을 확인할 수 있다.</li>
+</ul>
+</li>
+<li>또한, 기존 연구들에서는 무거운 decode-flip-encode cycle 을 사용하고 있었다.
+<ul>
+<li>이것은 encoding 과 관련된 것인데, 보통 bitmap 은 사이즈를 줄이기 위해 <a href="../../../../../../gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)" class="internal" data-slug="gardens/database/encoding/terms/Run-Length-Encoding,-RLE-(Encoding)">RLE</a> 나 <a href="../../../../../../gardens/database/encoding/drafts/Word-Aligned-Hybrid,-WAH-(Encoding)" class="internal" data-slug="gardens/database/encoding/drafts/Word-Aligned-Hybrid,-WAH-(Encoding)">WAH</a> 로 encoding 을 한다.</li>
+<li>따라서 이것을 update 하기 위해서는 decode 한 다음 bit flip 을 하고, 다시 encode 를 하는 과정이 필요한 것.</li>
+<li>이건 dataset 이 크다면 아주 무거운 연산이 되기에 당연히 비효율적이 된다.</li>
+</ul>
+</li>
+<li>마지막으로 skewness 가 크다면 잘 대응하지 못한다는 것이다.</li>
+</ol>
+<h2 id="15-our-approach">1.5. Our Approach<a aria-hidden="true" tabindex="-1" href="#15-our-approach" class="internal"> §</a></h2>
+<ul>
+<li>CUBIT 은 상기한 문제를 해결하고 있는데, 요약하자면 latch-free out-of-place UDI 를 지원하고 decode-flip-encode 가 아닌 encoding 상태에서 바로 read / UDI 가 가능하게 만들었다.</li>
+</ul>
+<h3 id="a-horizontal-update-deltas">(A) Horizontal Update Deltas<a aria-hidden="true" tabindex="-1" href="#a-horizontal-update-deltas" class="internal"> §</a></h3>
+<ul>
+<li>우선 이 논문에서는 bit-matrix 에서 update 되어 flip 될 bit 들을 row 단위로 abstract 하는 자료구조인 <em>Horizontal Update Delta (HUD)</em> 를 제시한다.</li>
+<li>그리고 이놈에 대한 처리는 out-of-place 로 atomic 하게 하여 bitvector 전체에 대해 latch 를 잡아야 하는 문제를 해결한다.</li>
+</ul>
+<h3 id="b-lightweight-snapshots">(B) Lightweight Snapshots<a aria-hidden="true" tabindex="-1" href="#b-lightweight-snapshots" class="internal"> §</a></h3>
+<ul>
+<li>또한 (1) Compact Delta (2) Batch-update (3) Segmentation 기법으로 Lightweight snapshot 을 구현하였으며, 따라서 read 와 UDI 가 서로 다른 snapshot 을 사용하게 하여 UDI 가 수행되는 와중에도 read 가 가능하도록 만들었다.</li>
+<li>반면, tree 의 경우에는 <a href="../../../../../../gardens/database/index/papers/openbwtree.2018.sigmod.org/full/2.-Bw-Tree-Essentials-(OpenBwTree,-SIGMOD-18)" class="internal" data-slug="gardens/database/index/papers/openbwtree.2018.sigmod.org/full/2.-Bw-Tree-Essentials-(OpenBwTree,-SIGMOD-18)">BwTree</a> 를 사용한다고 하더라도 atomicity 가 보장되는 범위가 더 좁기 때문에 UDI 가 read 에 영향을 미쳐 더 안좋다고 한다.</li>
+</ul>
+<h3 id="c-scalable-synchronization">(C) Scalable Synchronization<a aria-hidden="true" tabindex="-1" href="#c-scalable-synchronization" class="internal"> §</a></h3>
+<ul>
+<li>Bitmap index 가 contention 이 심한 이유는 bitmap index 가 cardinality 가 작은 경우에 사용되기 때문이다.
+<ul>
+<li>일반적인 경우라면 update 를 할 때 row 하나 혹은 넓게 잡아도 한 <a href="../../../../../../gardens/database/format/drafts/Slotted-Page-(Database-Format)" class="internal" data-slug="gardens/database/format/drafts/Slotted-Page-(Database-Format)">Page</a> 에 latch 를 잡게 되지만</li>
+<li>Bitmap index 에서 update 를 할때 bitvector 에 latch 를 잡아버리면 위의 경우보다 더 contention 이 심해진다.</li>
+<li>생각해 보면 row 나 page 에 대한 latch 는 dataset 이 큰 경우에는 전체 dataset 의 크기에 비해 아주 작은 양을 protection 하지만, 만약 column 의 distinct value 가 10 개인데 그중 하나의 bitvector 를 잡으면 (uniform 이라고 한다면) 전체의 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/10</span></span></span></span></span> 을 protection 하는 꼴이기 때문.</li>
+<li>이것은 skewness 가 크다면 더 심각해진다: 동일하게 distinct value 가 10 개이고 그중 2 개의 값이 전체 dataset 의 90% 를 차지한다면, 이들에 대한 bitvector latch 를 잡는 것은 전체의 90% 를 protect 해버리기 때문.</li>
+</ul>
+</li>
+<li>따라서 CUBIT 에서는 consolidation-aware 하게 설계하고 (뭔지는 뒤에 나온다) helping mechanism 을 사용하여 (즉, 그냥 spin-wait 을 하는게 아니고 다른 작업을 도와주는) 방식으로 이런 contention 을 줄인다.</li>
+</ul>
+<h2 id="16-broader-applicability">1.6. Broader Applicability<a aria-hidden="true" tabindex="-1" href="#16-broader-applicability" class="internal"> §</a></h2>
+<p><img src="../../../../../../Pasted-image-20251115221406.png" width="auto" height="auto"/></p>
+<ul>
+<li>따라서 이 CUBIT 의 영향을 하나의 그림으로 표현하게 되면 위와 같은 그래프로 나타낼 수 있다.
+<ul>
+<li>Selectivity 가 아주 적은 경우 (few tuple) 인 경우에는 당연히 B+ Tree 가 좋고</li>
+<li>10% 를 넘어서는 수준이 되면 full sequential scan 이 더 좋으며</li>
+<li>그 중간 구간에서는 bitmap index 가 좋다.</li>
+<li>그리고 기존까지는 update rate 가 적은 경우에만 bitmap index 를 사용할 수 있었다면,</li>
+<li>CUBIT 은 update rate 가 높은 경우에서까지 지 bitmap index 를 사용할 수 있도록 확장시킨 것이다.</li>
+</ul>
+</li>
+<li>이러한 장점때문에 CUBIT 은 batch-update 를 하는 <a href="../../../../../../gardens/database/modern/terms/Extract-Transform-Load,-ETL-(Modern-Database)" class="internal" data-slug="gardens/database/modern/terms/Extract-Transform-Load,-ETL-(Modern-Database)">ETL</a> 기반의 <a href="../../../../../../gardens/database/modern/terms/On-Line-Analytical-Processing,-OLAP-(Modern-Database)" class="internal" data-slug="gardens/database/modern/terms/On-Line-Analytical-Processing,-OLAP-(Modern-Database)">OLAP</a> DBMS 혹은 <a href="../../../../../../gardens/database/modern/terms/Hybrid-Transactional-and-Analytical-Processing,-HTAP-(Modern-Database)" class="internal" data-slug="gardens/database/modern/terms/Hybrid-Transactional-and-Analytical-Processing,-HTAP-(Modern-Database)">HTAP</a> 시스템에서 활용될 수 있고,</li>
+<li>Index 로서 활용하는 것 뿐 아니라 <a href="../../../../../../gardens/database/operation/JOIN-(DB-Opration)" class="internal" data-slug="gardens/database/operation/JOIN-(DB-Opration)">JOIN</a> 이나 Aggregation operator 에서 필요한 정보를 줄 수도 있다고 한다.</li>
+</ul>
+<h2 id="17-contributions">1.7. Contributions<a aria-hidden="true" tabindex="-1" href="#17-contributions" class="internal"> §</a></h2>
+<ol>
+<li>기존의 updatable bitmap index 를 multicore 에서 돌려 이들의 bottleneck 을 찾았고, 이것을 (1) Horizontal Update Delta (2) Lightweight snapshotting (3) latch-free design 으로 해결한 in-memory bitmap index 인 CUBIT 을 제시한다.</li>
+<li>구현된 CUBIT 을 다른 baseline 들과 비교하여 multicore 환경에서 테스트하였고, 최대 16배의 throughput, 그리고 read latency 는 최대 13배, UDI latency 는 최대 220배 줄였다.</li>
+<li>또한 이 CUBIT 을 DuckDB 와 <a href="https://dl.acm.org/doi/10.14778/2735508.2735511" class="external">DBx1000</a> 에 구현하였고, <a href="../../../../../../gardens/database/benchmark/tpc/TPC-H-(Database-Benchmark)" class="internal" data-slug="gardens/database/benchmark/tpc/TPC-H-(Database-Benchmark)">TPC-H</a> 와 <a href="../../../../../../gardens/database/benchmark/draft/CH-benCHmark-(Database-Benchmark)" class="internal" data-slug="gardens/database/benchmark/draft/CH-benCHmark-(Database-Benchmark)">CH-benCHmark</a> 로 실험하였다.
+<ul>
+<li>DBx1000 에 구현한 CUBIT 으로는 TPC-H 을 돌려봤을 때 <a href="../../../../../../gardens/database/index/drafts/Adaptive-Index-Tree,-ART-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/Adaptive-Index-Tree,-ART-(Database-Index)">ART</a>, <a href="../../../../../../gardens/database/index/papers/openbwtree.2018.sigmod.org/full/2.-Bw-Tree-Essentials-(OpenBwTree,-SIGMOD-18)" class="internal" data-slug="gardens/database/index/papers/openbwtree.2018.sigmod.org/full/2.-Bw-Tree-Essentials-(OpenBwTree,-SIGMOD-18)">BwTree</a>, <a href="../../../../../../gardens/database/index/drafts/B+-Tree-(Database-Index)" class="internal" data-slug="gardens/database/index/drafts/B+-Tree-(Database-Index)">B+ Tree</a> 에 비해 최대 2.2 배의 성능 향상과 92% 의 메모리 사용량 감소가 있었다고 한다.</li>
+<li>또한 DuckDB 에서의 TPC-H 실험에서는, 22 개 중의 12 개 query 에서 최대 2.7 배의 성능 향상이 있었다고 한다.</li>
+</ul>
+</li>
+<li>이러한 점을 감안했을 때, CUBIT 으로써 HTAP 환경에서도 bitmap index 를 사용할 수 있도록 그 활용성을 확장했다.</li>
+</ol></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#11-access-path-selection" data-for="11-access-path-selection">1.1. Access Path Selection</a></li><li class="depth-0"><a href="#12-bitmap-indexes" data-for="12-bitmap-indexes">1.2. Bitmap Indexes</a></li><li class="depth-0"><a href="#13-bitmap-index-as-a-secondary-index" data-for="13-bitmap-index-as-a-secondary-index">1.3. Bitmap Index as a Secondary Index</a></li><li class="depth-0"><a href="#14-challenges-with-bitmap-indexes" data-for="14-challenges-with-bitmap-indexes">1.4. Challenges with Bitmap Indexes</a></li><li class="depth-0"><a href="#15-our-approach" data-for="15-our-approach">1.5. Our Approach</a></li><li class="depth-1"><a href="#a-horizontal-update-deltas" data-for="a-horizontal-update-deltas">(A) Horizontal Update Deltas</a></li><li class="depth-1"><a href="#b-lightweight-snapshots" data-for="b-lightweight-snapshots">(B) Lightweight Snapshots</a></li><li class="depth-1"><a href="#c-scalable-synchronization" data-for="c-scalable-synchronization">(C) Scalable Synchronization</a></li><li class="depth-0"><a href="#16-broader-applicability" data-for="16-broader-applicability">1.6. Broader Applicability</a></li><li class="depth-0"><a href="#17-contributions" data-for="17-contributions">1.7. Contributions</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/(논문)-CUBIT---Concurrent-Updatable-Bitmap-Indexing" class="internal">(논문) CUBIT: Concurrent Updatable Bitmap Indexing</a></li><li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/1.-Introduction-(CUBIT,-VLDB-24)" class="internal">(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (1. Introduction)</a></li><li><a href="../../../../../../gardens/database/index/papers/cubit.2024.pvldb.vldb.org/full/4.-CUBIT-Design-(CUBIT,-VLDB-24)" class="internal">(논문) CUBIT: Concurrent Updatable Bitmap Indexing, VLDB 2024 (4. CUBIT Design)</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2025</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../../postscript.js" type="module"></script></html>
