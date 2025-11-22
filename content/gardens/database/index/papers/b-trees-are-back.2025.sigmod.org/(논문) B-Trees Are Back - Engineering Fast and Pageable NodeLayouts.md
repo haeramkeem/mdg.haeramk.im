@@ -7,6 +7,7 @@ title: "(논문) B-Trees Are Back: Engineering Fast and Pageable NodeLayouts"
 ---
 > [!info] B-Trees Are Back 링크
 > - [논문](https://dl.acm.org/doi/10.1145/3709664)
+> - [주인장 논문 발표 자료 (Haeram Kim, Nov 21 2025, SNU)](https://1drv.ms/b/c/12a2aef6bd5b0c74/IQBPwWCJGUUXQYNBNGASn29cAZNyYtY1ooQ_tfBAFVO7viA?e=Cz6K6a)
 
 ## 개요
 
