@@ -9,6 +9,7 @@ title: "(논문) CUBIT: Concurrent Updatable Bitmap Indexing"
 ---
 > [!info] CUBIT 링크
 > - [논문](https://dl.acm.org/doi/10.14778/3705829.3705854)
+> - [주인장 논문 발표 자료 (Haeram Kim, Nov 21 2025, SNU)](https://1drv.ms/b/c/12a2aef6bd5b0c74/IQCy-MShKnTFRKcQz2TzufoMAYLO2cBIWV0zPjVlk2OVjZk?e=rjaIXd)
 
 ## 개요
 
