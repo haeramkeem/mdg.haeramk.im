@@ -65,7 +65,7 @@ msr_num = CHA_MSR_PMON_FILTER0_BASE + (0xE * cha); // Filter0
 msr_val = 0x00000000; // default; no filtering
 ret = pwrite(colloid_msr_fd,&msr_val,sizeof(msr_val),msr_num);
 if (ret != 8) {
-printf("wrmsr FILTER0 failed for cha: %d\n", cha);
+	printf("wrmsr FILTER0 failed for cha: %d\n", cha);
 	perror("wrmsr FILTER0 failed");
 }
 ```
