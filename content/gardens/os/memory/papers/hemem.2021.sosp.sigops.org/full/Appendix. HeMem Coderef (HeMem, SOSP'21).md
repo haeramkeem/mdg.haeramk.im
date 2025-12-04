@@ -6,7 +6,7 @@ tags:
 title: "(논문) HeMem: Scalable Tiered Memory Management for Big Data Applications and Real NVM, SOSP'21 (Code Ref)"
 date: 2025-02-09
 ---
-> [!info] 본 글은 논문 [[HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)]] 의 [코드](https://github.com/cuhk-mass/hemem) 를 분석해본 글이다.
+> [!info] 본 글은 논문 [[(논문) HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)]] 의 [코드](https://github.com/cuhk-mass/hemem) 를 분석해본 글이다.
 
 ## 개요
 
