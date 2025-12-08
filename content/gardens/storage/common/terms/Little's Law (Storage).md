@@ -47,7 +47,7 @@ $$
 
 ## 활용
 
-- 이 수식을 활용해 latency 를 계산할 수도 있다. [[Tiered Memory Management - Access Latency is the Key! (SOSP'24)|Colloid]] 에서의 용례를 그대로 가져와 보면,
+- 이 수식을 활용해 latency 를 계산할 수도 있다. [[(논문) Tiered Memory Management - Access Latency is the Key! (SOSP'24)|Colloid]] 에서의 용례를 그대로 가져와 보면,
 - [[Caching Home Agent, CHA (Intel Cache Arch)|CHA]] 에서 제공하는 memory request 의 occupancy ($O$) 와 arrival rate ($R$) 를 위의 수식에 넣으면 memory request latency ($D$) 를 구할 수 있다.
 - Occupancy 는 Little's law 에서 $L$ 에 해당하고, arrival rate 은 $\lambda$ 에 해당하며 latency 는 $W$ 에 해당한다.
 - 따라서 위의 수식에 따라 latency ($D$) 는:

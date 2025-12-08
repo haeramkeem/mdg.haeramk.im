@@ -14,7 +14,7 @@ title: "(논문) Tiered Memory Management: Access Latency is the Key!, SOSP'24 (
 
 ## 개요
 
-- 여기서는 [[Tiered Memory Management - Access Latency is the Key! (SOSP'24)|Colloid]] 의 [[HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)|HeMem]] implementation code 를 살펴보도록 하자.
+- 여기서는 [[(논문) Tiered Memory Management - Access Latency is the Key! (SOSP'24)|Colloid]] 의 [[(논문) HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)|HeMem]] implementation code 를 살펴보도록 하자.
 - Code 는 [여기](https://github.com/webglider/hemem/tree/1b442e5758b14c557cfa06bbc93ba6cec0735387) 에 있다.
 
 ## Uncore Performance Monitoring Registers
@@ -65,7 +65,7 @@ msr_num = CHA_MSR_PMON_FILTER0_BASE + (0xE * cha); // Filter0
 msr_val = 0x00000000; // default; no filtering
 ret = pwrite(colloid_msr_fd,&msr_val,sizeof(msr_val),msr_num);
 if (ret != 8) {
-printf("wrmsr FILTER0 failed for cha: %d\n", cha);
+	printf("wrmsr FILTER0 failed for cha: %d\n", cha);
 	perror("wrmsr FILTER0 failed");
 }
 ```

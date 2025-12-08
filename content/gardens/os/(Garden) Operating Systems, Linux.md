@@ -61,8 +61,9 @@ date: 2024-07-29
 	- [[Translation Lookaside Buffer, TLB (Memory)|Translation Lookaside Buffer, TLB]]
 	- [[Virtual Address Space, VAS (Memory)|Virtual Address Space, VAS]]
 - 논문
+	- [[(논문) Tiered Memory Management - Access Latency is the Key! (SOSP'24)|Tiered Memory Management: Access Latency is the Key! (SOSP '24)]]
+	- [[(논문) HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)|HeMem - Scalable Tiered Memory Management for Big Data Applications and Real NVM (SOSP'21)]]
 	- [[(논문) Practical, Transparent Operating System Support for Superpages|(Draft) Juan Navarro et al. Practical, Transparent Operating System Support for Superpages (OSDI '02)]]
-	- [[Tiered Memory Management - Access Latency is the Key! (SOSP'24)|Tiered Memory Management: Access Latency is the Key! (SOSP '24)]]
 
 ### Process Filesystem (`procfs`)
 
@@ -78,4 +79,4 @@ date: 2024-07-29
 	- [[Locality (Replacement)|Locality]]
 	- [[Pseudo-LRU (Replacement)|Pseudo-LRU]]
 - 논문들
-	- [[(논문) ARC - A Self-Tuning, Low Overhead Replacement Cache|(Draft) ARC - A Self-Tuning, Low Overhead Replacement Cache (FAST '03)]]
+	- [[1. Introduction (ARC, FAST'03)|(Draft) ARC - A Self-Tuning, Low Overhead Replacement Cache (FAST '03)]]
