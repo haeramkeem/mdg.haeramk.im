@@ -1,18 +1,19 @@
 ---
-date: 2026-03-08
 tags:
   - algorithm
   - algorithm-leetcode
+date: 2026-03-08
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/find-unique-binary-string)
 
-## 1. Brute force
+> [!tip] 요약
+> - Brute force 로 굴려도 성능 잘 나온다.
+
+## 최종
 
 > [!info]- 결과
 > ![[Pasted image 20260308112411.png]]
-
-### Solution
 
 - 이 문제에 대해 brute force 로 가능할 것 같다고 생각한 이유는:
 	- String size 가 $N$ 일 때, 입력 string 의 개수도 $N$ 이다. 즉, 가능한 정답의 개수는 $2^N - N$ 개 이므로 전체 집합 중에서 정답이 차지하는 비중이 엄청나게 크다. 따라서 그냥 최대값 ($2^N - 1$) 부터 1씩 감소시키며 정답인지 아닌지 판단해주는 것만으로도 금방 정답을 찾을 수 있을 것이라 생각했다.

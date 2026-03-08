@@ -29,5 +29,9 @@ date: 2024-07-29
 
 ### Coding Interview
 
+> [!info]- 기존 코드 저장소
+> - [github.com/haeramkeem/alGo](https://github.com/haeramkeem/alGo)
+
 - Leetcode
+	- [[(LeetCode) 102. Binary Tree Level Order Traversal|102. Binary Tree Level Order Traversal]]
 	- [[(LeetCode) 1980. Find Unique Binary String|1980. Find Unique Binary String]]
