@@ -34,6 +34,8 @@ date: 2024-07-29
 
 - BFS
 	- [[(LeetCode) 102. Binary Tree Level Order Traversal|LeetCode 102. Binary Tree Level Order Traversal]]
-	- [[(LeetCode) 199. Binary Tree Right Side View]]
+	- [[(LeetCode) 199. Binary Tree Right Side View|LeetCode 199. Binary Tree Right Side View]]
+- Binary search
+	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 - Brute force
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
