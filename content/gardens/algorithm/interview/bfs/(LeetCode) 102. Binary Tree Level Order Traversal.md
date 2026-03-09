@@ -698,36 +698,36 @@ public:
 		if (!root) {
 			return {};
 		}
-	
+
 		queue<TreeNode*> q;
 		root->val = marshal(0, root->val);
 		q.push(root);
-	
+
 		vector<vector<int>> result;
 		while (!q.empty()) {
 			auto head = q.front();
 			int level = unmarshal_lv(head->val);
 			int val = unmarshal_val(head->val);
-	
+
 			if (result.size() - 1 == level) {
 				result[level].push_back(val);
 			} else {
 				result.push_back({val});
 			}
-	
+
 			if (head->left) {
 				head->left->val = marshal(level + 1, head->left->val);
 				q.push(head->left);
 			}
-	
+
 			if (head->right) {
 				head->right->val = marshal(level + 1, head->right->val);
 				q.push(head->right);
 			}
-	
+
 			q.pop();
 		}
-	
+
 		return result;
 	}
 };
