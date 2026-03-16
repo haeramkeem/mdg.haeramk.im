@@ -32,6 +32,7 @@ aliases:
 - [[(Garden) Programming Language, Compiler|프로그래밍 언어, 컴파일러]]
 - [[(Garden) Shell Script|쉘스크립트]]
 - [[(Garden) Storage|스토리지]]
+- [[(Garden) 그의 운명에 대한 아주 개인적인 생각|그의 운명에 대한 아주 개인적인 생각]]
 - [[(Garden) Etc.|기타]]
 
 그리고 저는 정원일 혹은 농사일 둘 다와 무관한 [이런걸로](https://www.linkedin.com/in/haeram-kim-277404220) 먹고사는 사람입니다.
