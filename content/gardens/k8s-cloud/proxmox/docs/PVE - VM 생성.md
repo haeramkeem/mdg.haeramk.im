@@ -12,9 +12,12 @@ date: 2024-04-22
 - Cloud image 를 사용할 수 없기 때문에 갓절수 없이 깡통 VM 하나 생성해서 복사하면서 쓰기로 한다.
 	- 물론 뭐 cli 로 qcow 이미지 압축해제해서 사용하는 예시들이 인터넷에 많이 있긴 하다.
 - 사용환경에서는 이놈을 복사해서:
-	1. Hostname 변경
+	1. 자원 변경
+		- CPU, memory 할당량을 원하는대로 바꿔주고
+		- [[PVE - VM Disk 사이즈 바꾸기|Disk 사이즈도 바꿔준다]].
+	2. Hostname 변경
 		- 깡통에 있는 hostname 도 그대로 가져오기 때문에 간지나는걸로 하나 만들어서 바꿔주자.
-
+		- `hostnamectl` 의 `set-hostname` subcommand 를 사용하면 된다.
 ## Cloud init 설정 + template 화
 
 - Cloud init 생성
