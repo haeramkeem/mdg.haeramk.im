@@ -67,12 +67,15 @@ aliases:
 	- [[HCI Comparison - PVE, Harvester, oVirt...]]
 - 설정 가이드
 	- [[PVE - CA 신뢰하기|CA 신뢰하기]]
+	- [[PVE - Intel e1000e Detected Hardware Unit Hang 에러|Intel e1000e Detected Hardware Unit Hang 에러]]
 	- [[PVE - Multi-node SDN 설정하기|Multi-node SDN 설정하기]]
 	- [[PVE - NAT + Clustering 삽질|NAT + Clustering 삽질]]
 	- [[PVE - NVMe Emulation (ZNS, FDP)|NVMe Emulation (ZNS, FDP)]]
 	- [[PVE - NVMe Emulation for VM|NVMe Emulation for VM]]
 	- [[PVE - Simple SDN 설정하기|Simple SDN 설정하기]]
+	- [[PVE - VM Disk 사이즈 바꾸기|VM Disk 사이즈 바꾸기]]
 	- [[PVE - VM 생성|VM 생성]]
+	- [[PVE - Windows 10 VM 설치|Windows 10 VM 설치]]
 	- [[PVE - WireGuard 설정하기|WireGuard 설정하기]]
 	- [[PVE - 추가적인 디스크 마운트하기|추가적인 디스크 마운트하기]]
 
