@@ -21,9 +21,16 @@
 </li>
 <li>사용환경에서는 이놈을 복사해서:
 <ol>
+<li>자원 변경
+<ul>
+<li>CPU, memory 할당량을 원하는대로 바꿔주고</li>
+<li><a href="../../../../gardens/k8s-cloud/proxmox/docs/PVE---VM-Disk-사이즈-바꾸기" class="internal" data-slug="gardens/k8s-cloud/proxmox/docs/PVE---VM-Disk-사이즈-바꾸기">Disk 사이즈도 바꿔준다</a>.</li>
+</ul>
+</li>
 <li>Hostname 변경
 <ul>
 <li>깡통에 있는 hostname 도 그대로 가져오기 때문에 간지나는걸로 하나 만들어서 바꿔주자.</li>
+<li><code>hostnamectl</code> 의 <code>set-hostname</code> subcommand 를 사용하면 된다.</li>
 </ul>
 </li>
 </ol>
