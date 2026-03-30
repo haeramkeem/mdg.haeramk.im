@@ -110,6 +110,8 @@ date: 2024-04-23
 	- [[HAProxy - Routing rule 설정하기|Routing rule 설정하기]]
 	- [[HAProxy - Statistics page 설정하기|Statistics page 설정하기]]
 	- [[HAProxy - 설치하기|설치하기]]
+- `hostnamectl`
+	- [[hostnamectl - Hostname 변경하기|Hostname 변경하기]]
 - `ip`
 	- [[ip - NIC 에서 IP 지우기|NIC 에서 IP 지우기]]
 	- [[ip - Routing table 보기, 추가하기|Routing table 보기, 추가하기]]
