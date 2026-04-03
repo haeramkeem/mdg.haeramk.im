@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - arch
 date: 2024-12-01
 aliases:

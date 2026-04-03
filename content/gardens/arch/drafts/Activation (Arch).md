@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - arch
   - story
   - draft

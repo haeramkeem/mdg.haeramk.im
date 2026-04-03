@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - c
   - c-process
 date: 2025-07-25

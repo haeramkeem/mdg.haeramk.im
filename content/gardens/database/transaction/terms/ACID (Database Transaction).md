@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-transaction
 date: 2024-07-18

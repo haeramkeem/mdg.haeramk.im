@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - originals
   - arch
   - snu-aca25s

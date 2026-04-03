@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - wg-easy
   - kube-setup

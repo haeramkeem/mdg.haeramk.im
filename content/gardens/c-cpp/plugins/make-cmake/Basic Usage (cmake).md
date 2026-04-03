@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - c-cpp
   - c-cpp-cmake
 aliases:

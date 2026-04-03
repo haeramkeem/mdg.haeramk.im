@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - storage
   - storage-csd
   - story

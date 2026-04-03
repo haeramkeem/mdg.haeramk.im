@@ -1,4 +1,6 @@
 ---
+tags:
+  - mdg
 date: 2024-07-29
 ---
 ## 개요
@@ -11,10 +13,6 @@ date: 2024-07-29
 
 - [[(SNU CSE) Advanced Computer Architectures]]
 - [[(SNU CSE) Scalable High-Performance Computing]]
-
-### Common
-
-- [[Intrinsic Function (Arch)|Intrinsic Function]]
 
 ### Cache
 

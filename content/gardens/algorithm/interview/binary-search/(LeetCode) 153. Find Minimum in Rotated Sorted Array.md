@@ -1,7 +1,9 @@
 ---
 tags:
+  - mdg
   - algorithm
-  - algorithm-leetcode
+  - interview
+  - binary-search
 date: 2026-03-09
 ---
 > [!info] 문제 링크

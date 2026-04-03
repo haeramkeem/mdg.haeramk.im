@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - terms
   - network
 date: 2024-06-26

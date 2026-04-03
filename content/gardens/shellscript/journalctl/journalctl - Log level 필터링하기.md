@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - bash-dmesg
   - shellscript
   - bash-journalctl

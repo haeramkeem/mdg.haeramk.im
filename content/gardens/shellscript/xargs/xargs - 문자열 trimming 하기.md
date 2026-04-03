@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - bash-xargs
 date: 2025-03-17
 ---

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - network
   - 스토리
 date: 2023-02-02

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-format
 date: 2024-08-09

@@ -1,4 +1,7 @@
 ---
+tags:
+  - mdg
+  - algorithm
 date: 2024-07-29
 ---
 ## 개요

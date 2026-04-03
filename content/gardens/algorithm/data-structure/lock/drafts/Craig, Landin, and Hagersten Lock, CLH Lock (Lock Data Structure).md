@@ -1,7 +1,10 @@
 ---
 tags:
-  - terms
+  - mdg
+  - algorithm
   - data-structure
+  - lock
+  - drafts
 aliases:
   - Craig, Landin, and Hagersten Lock
   - CLH Lock

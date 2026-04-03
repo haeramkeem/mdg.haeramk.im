@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - 논문
   - storage
 ---

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - originals
   - kubernetes
 date: 2023-01-27

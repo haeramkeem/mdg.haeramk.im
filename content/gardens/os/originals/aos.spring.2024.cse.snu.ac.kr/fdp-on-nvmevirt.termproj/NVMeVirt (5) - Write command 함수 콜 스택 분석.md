@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - 삽질록
   - storage
   - nvme

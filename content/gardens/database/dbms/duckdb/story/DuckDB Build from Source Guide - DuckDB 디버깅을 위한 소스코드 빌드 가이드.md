@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-duckdb
 date: 2025-06-16

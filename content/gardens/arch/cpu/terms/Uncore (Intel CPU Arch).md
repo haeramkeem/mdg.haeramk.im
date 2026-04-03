@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - arch
   - arch-cpu
 date: 2025-01-27

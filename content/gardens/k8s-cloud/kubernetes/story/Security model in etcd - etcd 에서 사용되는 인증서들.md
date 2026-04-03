@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - etcd
 date: 2023-12-21

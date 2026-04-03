@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - kube-setup
 date: 2024-01-04

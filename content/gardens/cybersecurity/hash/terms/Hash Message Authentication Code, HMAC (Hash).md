@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - terms
   - security
 date: 2024-05-27

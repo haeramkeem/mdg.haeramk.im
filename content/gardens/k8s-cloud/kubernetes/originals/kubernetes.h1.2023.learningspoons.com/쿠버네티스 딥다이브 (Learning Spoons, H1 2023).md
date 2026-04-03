@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - originals
   - kubernetes
   - kube-deepdive

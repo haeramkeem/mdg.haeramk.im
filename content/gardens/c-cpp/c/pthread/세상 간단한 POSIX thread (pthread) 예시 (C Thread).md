@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - c
   - c-pthread
 date: 2024-09-08

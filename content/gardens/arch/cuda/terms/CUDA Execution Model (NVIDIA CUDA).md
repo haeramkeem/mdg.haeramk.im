@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - arch
   - arch-cuda
 date: 2024-11-04

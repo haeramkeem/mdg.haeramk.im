@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - conference
 date: 2024-01-04

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - nvme
   - os
   - snu-aos24s

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - bash-sed
   - shellscript
 date: 2025-03-24

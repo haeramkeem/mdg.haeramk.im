@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - nfs-subdir-external-provisioner
   - kube-setup

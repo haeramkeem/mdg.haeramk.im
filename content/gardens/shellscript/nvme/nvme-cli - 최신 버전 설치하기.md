@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - nvme
   - shellscript
   - nvme-cli

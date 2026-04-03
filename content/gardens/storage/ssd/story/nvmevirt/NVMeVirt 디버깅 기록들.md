@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - story
   - storage
 date: 2024-08-04

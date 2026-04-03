@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - data-model
 date: 2024-07-18

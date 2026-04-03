@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - shellscript
   - apt
   - linux-kernel

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - os
   - os-distributed
 date: 2024-07-18

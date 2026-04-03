@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - dns
   - network
   - snu-comnet24s

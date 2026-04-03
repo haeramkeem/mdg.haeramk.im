@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - cpp
   - cpp-smart-pointer
 date: 2024-07-01

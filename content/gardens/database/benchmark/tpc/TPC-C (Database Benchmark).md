@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-benchmark
 date: 2024-08-23

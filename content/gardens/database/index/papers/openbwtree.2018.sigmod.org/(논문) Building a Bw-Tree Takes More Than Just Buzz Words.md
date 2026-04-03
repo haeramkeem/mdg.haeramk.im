@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-index
 date: 2024-10-04

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-transaction
 date: 2025-09-09

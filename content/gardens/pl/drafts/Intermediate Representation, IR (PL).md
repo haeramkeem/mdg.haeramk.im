@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - pl
 aliases:
   - Intermediate Representation

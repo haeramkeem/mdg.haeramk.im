@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-postgresql
 date: 2024-11-20

@@ -1,7 +1,9 @@
 ---
 tags:
+  - mdg
   - algorithm
-  - algorithm-leetcode
+  - interview
+  - brute-force
 date: 2026-03-08
 ---
 > [!info] 문제 링크

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - proxmox
 date: 2024-04-22
 ---

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - db-encoding
 date: 2024-08-06
 aliases:

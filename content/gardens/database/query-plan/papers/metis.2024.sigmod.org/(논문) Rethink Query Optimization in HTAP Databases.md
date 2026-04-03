@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-query-plan
 date: 2025-05-18

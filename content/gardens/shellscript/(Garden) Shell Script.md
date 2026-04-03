@@ -1,4 +1,6 @@
 ---
+tags:
+  - mdg
 date: 2024-04-23
 ---
 > Mark Farina - mu.sh room jazz
