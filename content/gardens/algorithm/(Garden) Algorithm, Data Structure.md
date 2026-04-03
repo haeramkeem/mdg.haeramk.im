@@ -41,4 +41,6 @@ date: 2024-07-29
 - Binary search
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 - Brute force
-	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
+	- [[gardens/algorithm/interview/brute-force/(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
+- Dynamic programming
+	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
