@@ -53,5 +53,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 완주하지 못한 선수]]
 - String
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
+- Stack
+	- [[(프로그래머스) 같은 숫자는 싫어]]
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
