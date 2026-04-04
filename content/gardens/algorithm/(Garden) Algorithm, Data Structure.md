@@ -44,6 +44,7 @@ date: 2024-07-29
 	- [[gardens/algorithm/interview/brute-force/(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 - Dynamic programming
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
+	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
 	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
 - String
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
