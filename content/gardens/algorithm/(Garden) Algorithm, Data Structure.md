@@ -44,6 +44,7 @@ date: 2024-07-29
 	- [[gardens/algorithm/interview/brute-force/(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 - Dynamic programming
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
+	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
 	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
