@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - kubernetes-dashboard
   - kube-setup

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - terms
   - os
   - os-procfs

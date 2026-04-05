@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - cpp
   - cpp-pointer
 date: 2024-07-12

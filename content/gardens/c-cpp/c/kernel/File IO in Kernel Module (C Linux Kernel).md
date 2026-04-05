@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - c
   - linux-kernel
 date: 2024-12-21

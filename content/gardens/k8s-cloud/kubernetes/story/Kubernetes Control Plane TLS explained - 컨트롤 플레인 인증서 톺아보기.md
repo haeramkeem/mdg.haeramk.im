@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - tls
 date: 2023-12-21

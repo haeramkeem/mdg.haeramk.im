@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - shellscript
   - bash-nvidia
 date: 2025-05-22

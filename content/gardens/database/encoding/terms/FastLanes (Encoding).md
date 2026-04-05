@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-encoding
 date: 2024-09-15
@@ -35,7 +36,7 @@ aliases:
 	- `Scalar_T64`: C++ Scalar integer type `uint64` 를 SIMD 처럼 사용한 버전
 		- 즉, SIMD 자료형이 아닌 Scalar 자료형 `uint64` 를 사용하는데, 이것을 마치 64bit SIMD register 처럼 사용하는 것이다.
 		- 예를 들면 `uint8` 연산 8개를 `uint64` 연산 하나로 처리하겠다는 것.
-	- `SIMD`: SIMD [[Intrinsic Function (Arch)|intrinsic]] 을 사용한 버전
+	- `SIMD`: SIMD [[Intrinsic Function (PL Function)|intrinsic]] 을 사용한 버전
 - 이런 접근 방식에 따라,
 	- SIMD 를 지원하지 않는 CPU architecture 에 대해서는 `Scalar` 혹은 `Scalar_T64` 를 사용할 수 있기 때문에 과거의 architecture 를 커버할 수 있고
 	- SIMD 를 지원하는 현대의 많은 CPU architecture 에 대해서는 `SIMD` 혹은 `Auto_vectorized` 를 사용할 수 있기 때문에 현대의 architecture 가 커버되며

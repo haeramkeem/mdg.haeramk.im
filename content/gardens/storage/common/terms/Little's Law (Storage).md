@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - storage
   - terms
 date: 2025-01-20

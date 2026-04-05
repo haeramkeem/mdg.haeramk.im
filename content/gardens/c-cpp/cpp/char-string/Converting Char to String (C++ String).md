@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - cpp
   - cpp-string
 date: 2024-05-08

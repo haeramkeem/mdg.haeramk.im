@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - cilium
   - kube-setup

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-benchmark
 aliases:

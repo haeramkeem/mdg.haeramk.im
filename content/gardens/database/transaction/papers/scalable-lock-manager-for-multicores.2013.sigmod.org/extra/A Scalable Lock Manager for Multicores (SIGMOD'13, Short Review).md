@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-concurrency
 date: 2025-05-05

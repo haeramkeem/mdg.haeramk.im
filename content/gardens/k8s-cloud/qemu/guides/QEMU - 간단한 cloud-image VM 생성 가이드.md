@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - qemu
   - guides
 date: 2025-06-18

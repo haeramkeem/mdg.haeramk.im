@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - cmu-15445
   - database
   - bustub

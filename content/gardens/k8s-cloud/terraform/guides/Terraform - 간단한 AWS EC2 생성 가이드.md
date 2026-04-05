@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - terraform
   - guides
 date: 2025-05-22

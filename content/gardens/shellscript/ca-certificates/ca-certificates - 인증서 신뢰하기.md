@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - shellscript
   - bash-ca-certificates
 date: 2024-03-05

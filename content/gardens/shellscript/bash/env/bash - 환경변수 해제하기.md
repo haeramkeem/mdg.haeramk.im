@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - shellscript
   - bash-env
 date: 2024-09-30

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - draft
   - db-query-plan

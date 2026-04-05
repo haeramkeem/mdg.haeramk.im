@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - dns
   - network
   - 논문

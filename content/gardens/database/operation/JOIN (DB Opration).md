@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-operation
 date: 2025-08-25

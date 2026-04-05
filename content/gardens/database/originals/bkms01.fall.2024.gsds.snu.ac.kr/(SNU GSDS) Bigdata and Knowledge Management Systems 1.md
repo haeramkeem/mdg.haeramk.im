@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - originals
   - snu-bkms24f
   - database

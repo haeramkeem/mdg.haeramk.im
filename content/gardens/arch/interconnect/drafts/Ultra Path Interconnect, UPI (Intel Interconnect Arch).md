@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - arch
   - arch-interconnect
   - arch-intel

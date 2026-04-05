@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - proxmox
   - nvme
 date: 2024-04-22

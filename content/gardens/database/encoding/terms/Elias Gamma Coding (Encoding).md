@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-encoding
 date: 2024-09-07

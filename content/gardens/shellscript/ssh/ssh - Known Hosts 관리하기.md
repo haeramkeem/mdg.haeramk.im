@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - bash-ssh
   - shellscript
 date: 2025-03-24

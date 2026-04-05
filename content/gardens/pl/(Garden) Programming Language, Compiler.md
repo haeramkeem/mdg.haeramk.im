@@ -1,4 +1,6 @@
 ---
+tags:
+  - mdg
 date: 2024-07-29
 ---
 ## 개요
@@ -17,6 +19,7 @@ date: 2024-07-29
 
 - 용어집
 	- [[First, Second Class Citizen (PL Function)|First, Second Class Citizen]]
+	- [[Intrinsic Function (PL Function)|Intrinsic Function]]
 
 ### Optimization
 

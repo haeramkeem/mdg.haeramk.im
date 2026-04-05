@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - os
   - 논문
   - snu-aos24s

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - shellscript
   - iptables
 date: 2024-07-09

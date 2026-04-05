@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - bash-grep
 date: 2025-03-17
 aliases:

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - arch
   - arch-ndp
 aliases:

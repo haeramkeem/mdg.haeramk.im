@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - kubernetes
   - kube-apiserver
 date: 2024-01-08

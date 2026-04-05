@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - bash-path
 date: 2025-03-31
 aliases:

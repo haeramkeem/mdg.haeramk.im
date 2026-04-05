@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
   - db-format
   - db-parquet

@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - c
   - c-string
 date: 2025-03-28

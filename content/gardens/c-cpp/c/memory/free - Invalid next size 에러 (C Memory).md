@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - c
   - c-memory
 date: 2025-06-15

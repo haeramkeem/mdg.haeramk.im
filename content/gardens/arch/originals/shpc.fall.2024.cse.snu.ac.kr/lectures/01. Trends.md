@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - originals
   - snu-shpc24f
   - arch

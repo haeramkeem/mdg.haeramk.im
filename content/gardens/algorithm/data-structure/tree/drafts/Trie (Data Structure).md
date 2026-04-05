@@ -1,8 +1,10 @@
 ---
 tags:
-  - terms
+  - mdg
+  - algorithm
   - data-structure
-  - ds-tree
+  - tree
+  - drafts
 aliases:
   - Trie
 ---

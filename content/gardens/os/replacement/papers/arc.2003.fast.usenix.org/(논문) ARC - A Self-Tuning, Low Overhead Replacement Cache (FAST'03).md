@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - os
   - os-replacement
 date: 2024-05-22

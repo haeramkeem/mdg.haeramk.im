@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - os-distributed
 aliases:
   - Consensus

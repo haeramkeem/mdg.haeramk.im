@@ -1,4 +1,7 @@
 ---
+tags:
+  - mdg
+  - algorithm
 date: 2024-07-29
 ---
 ## 개요
@@ -39,3 +42,26 @@ date: 2024-07-29
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 - Brute force
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
+	- [[(프로그래머스) 최소직사각형]]
+- Dynamic programming
+	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
+	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
+	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
+	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
+	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
+	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
+- Graph
+	- [[(프로그래머스) 가장 먼 노드]]
+- Mapset
+	- [[(프로그래머스) 완주하지 못한 선수]]
+- Priority queue
+	- [[(프로그래머스) 더 맵게]]
+- Sort
+	- [[(프로그래머스) K번째수]]
+- String
+	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
+	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
+- Stack
+	- [[(프로그래머스) 같은 숫자는 싫어]]
+- Subarray
+	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]

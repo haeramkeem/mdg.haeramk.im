@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - 삽질록
   - proxmox
 date: 2024-08-13

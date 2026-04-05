@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - proxmox
   - 스토리
 date: 2024-08-16

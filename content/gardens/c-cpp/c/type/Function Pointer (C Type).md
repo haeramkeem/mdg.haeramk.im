@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - c
   - c-type
 date: 2024-10-02

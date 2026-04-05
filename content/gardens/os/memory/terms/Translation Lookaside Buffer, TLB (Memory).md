@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - os
   - os-memory
 date: 2024-05-13

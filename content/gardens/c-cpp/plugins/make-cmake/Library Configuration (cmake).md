@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - cmake
   - c-cpp
 date: 2024-12-01

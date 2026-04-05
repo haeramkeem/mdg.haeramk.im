@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - make
   - cmake
 date: 2025-03-11

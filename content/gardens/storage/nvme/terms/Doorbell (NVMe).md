@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - terms
   - nvme
 date: 2024-05-25

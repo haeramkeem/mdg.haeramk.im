@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - nvmevirt
   - nvme-kvssd
 date: 2024-08-01

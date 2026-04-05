@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - shellscript
   - story
 date: 2025-06-07

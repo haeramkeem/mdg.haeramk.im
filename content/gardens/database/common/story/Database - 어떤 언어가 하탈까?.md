@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - database
 date: 2024-07-04
 ---

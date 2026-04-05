@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - c
   - c-utils
 date: 2025-06-26

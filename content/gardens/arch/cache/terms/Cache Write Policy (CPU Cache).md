@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - arch
   - arch-cache
 date: 2024-10-09

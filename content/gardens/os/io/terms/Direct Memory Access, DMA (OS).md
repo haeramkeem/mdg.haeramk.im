@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - os
   - os-io
 date: 2024-10-20

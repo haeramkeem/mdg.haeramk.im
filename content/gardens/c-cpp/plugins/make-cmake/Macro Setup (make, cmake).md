@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - cmake
   - make
   - c-cpp

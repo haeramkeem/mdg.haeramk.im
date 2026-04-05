@@ -1,5 +1,6 @@
 ---
 tags:
+  - mdg
   - 스토리
   - kubernetes
 draft: "true"
