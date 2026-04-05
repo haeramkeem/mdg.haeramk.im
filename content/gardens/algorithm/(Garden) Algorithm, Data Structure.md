@@ -59,6 +59,7 @@ date: 2024-07-29
 - Sort
 	- [[(프로그래머스) K번째수]]
 - String
+	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
 - Stack
 	- [[(프로그래머스) 같은 숫자는 싫어]]
