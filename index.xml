@@ -12,59 +12,59 @@
     <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § Algorithm § Sort Merge Sort Data Structure § Linear Deque Sorted Run Stack, Queue, Container Adapter Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST Coding Interview § 기존 코드 저장소 github.</description>
     <pubDate>Mon, 29 Jul 2024 00:00:00 GMT</pubDate>
   </item><item>
-    <title>Merge Sort (Algorithm)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/algorithm/sort/Merge-Sort-(Algorithm)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/algorithm/sort/Merge-Sort-(Algorithm)</guid>
-    <description> 본 글은 #draft 상태입니다. 그림 추가 예제 코드 추가 가 뭔데? § Divide-and-conquer 를 이용한 sort 방식이다. 원하는 배열을 정렬되어 있는 배열들의 집합으로 나눈 다음, 이것을 합치는 방식으로 진행된다. 이것을 좀 더 구체적으로 확인해 보자.</description>
-    <pubDate>Sat, 06 Apr 2024 00:00:00 GMT</pubDate>
+    <title>Directed Acyclic Graph, DAG (Data Structure)</title>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Directed-Acyclic-Graph,-DAG-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Directed-Acyclic-Graph,-DAG-(Data-Structure)</guid>
+    <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
+    <pubDate>Sun, 05 Apr 2026 22:30:55 GMT</pubDate>
+  </item><item>
+    <title>Page Rank (Algorithm)</title>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Page-Rank-(Algorithm)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Page-Rank-(Algorithm)</guid>
+    <description> 참고한 것들 조성문의 블로그 원본 논문 본 글은 #draft 상태입니다. 내용 추가 .</description>
+    <pubDate>Sun, 05 Apr 2026 22:30:55 GMT</pubDate>
+  </item><item>
+    <title>Circular Queue (Data Structure)</title>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</guid>
+    <description> 참고한 것들 서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024) 본 글은 #draft 상태입니다. 내용 추가 .</description>
+    <pubDate>Sun, 05 Apr 2026 22:30:55 GMT</pubDate>
+  </item><item>
+    <title>Skip List (Data Structure)</title>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</guid>
+    <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
+    <pubDate>Sun, 05 Apr 2026 22:30:55 GMT</pubDate>
   </item><item>
     <title>Deque (Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Deque-(Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Deque-(Data-Structure)</guid>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Deque-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Deque-(Data-Structure)</guid>
     <description>Deque § Double-ended queue 즉, 앞뒤로의 삽입 삭제가 가능한 큐를 의미한다. Requirements § C++ 표준에서 요구하는 deque 의 요구사항은 다음과 같다 앞뒤로의 삽입 삭제가(push_front(), pop_front(), push_back(), pop_back()) O(1) 로 작동해야 한다.</description>
     <pubDate>Fri, 12 Nov 2021 00:00:00 GMT</pubDate>
   </item><item>
     <title>Sorted Run (Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Sorted-Run-(Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Sorted-Run-(Data-Structure)</guid>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Sorted-Run-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Sorted-Run-(Data-Structure)</guid>
     <description> 참고한 것들 Flink 0.3 시절 공식문서 LSM tree 자바 구현과정 블로그 글 가 뭔데? § 사진 출처 한마디로 설명하면 “Key 를 기준으로 (1) 중복 없이 (2) 정렬된 (3) overlay 되지 않은 key-value data file 들의 집합” 정도가 된다.</description>
     <pubDate>Sat, 06 Apr 2024 00:00:00 GMT</pubDate>
   </item><item>
     <title>Stack, Queue, Container Adapter (Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Stack,-Queue,-Container-Adapter-(Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/Stack,-Queue,-Container-Adapter-(Data-Structure)</guid>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Stack,-Queue,-Container-Adapter-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Stack,-Queue,-Container-Adapter-(Data-Structure)</guid>
     <description>Container Adapter § 컨테이너 어답터는 간단하게 말해서 기존의 컨테이너의 기능을 축소시키는 것이다. 즉, 많은 기능을 제공하는 컨테이너를 하나 만들어놓고 그걸 기반으로 하되 특정 기능만 사용할 수 있게 함으로써 실수로 허용되지 않는 작업을 수행하는 것을 막을 수 있는 것이다.</description>
     <pubDate>Fri, 12 Nov 2021 00:00:00 GMT</pubDate>
-  </item><item>
-    <title>Mellor-Crummey and Scott Lock, MCS Lock (Lock Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</guid>
-    <description> 참고한 것들 서울대 정형수 교수님 빅데이터 및 지식 관리 시스템 2 강의 (Spring 2025) MCS Lock § 지금 linux 에서 사용되는 locking 방식 (qspinlock.c 에 있댄다). CLH lock 에서는 uncached NUMA 에서 문제가 있었고, 이것을 해결하기 위해 나온 것이다.</description>
-    <pubDate>Mon, 05 May 2025 00:00:00 GMT</pubDate>
   </item><item>
     <title>Craig, Landin, and Hagersten Lock, CLH Lock (Lock Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 30 Mar 2026 05:28:20 GMT</pubDate>
+    <pubDate>Sun, 05 Apr 2026 22:30:55 GMT</pubDate>
   </item><item>
-    <title>Bloom Filter (Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/map/Bloom-Filter-(Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/map/Bloom-Filter-(Data-Structure)</guid>
-    <description> 참고한 것들 티스토리 블로그 블룸 필터 (Bloom Filter) § 블룸 필터는 원소가 집합 내에 존재하는지 확률적으로 알 수 있게 해주는 자료구조이다. 여기서 확률적으로 라는 말이 중요한데, 이것은 False-positive 가 존재할 수도 있다는 의미이다. 즉, 블룸필터를 돌렸을 때 “존재하지 않음” 으로 결과가 나오면 해당 원소는 반드시 집합 내에 존재하지 않지만, “존재함” 으로 결과가 나오면 집합 내에 있을수도 있고 없을 수도 있다는 얘기이다.</description>
-    <pubDate>Sun, 14 Apr 2024 00:00:00 GMT</pubDate>
-  </item><item>
-    <title>Balanced Tree, B Tree (Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/Balanced-Tree,-B-Tree-(Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/Balanced-Tree,-B-Tree-(Data-Structure)</guid>
-    <description> 참조한 것들 어떤 B-Tree 소개 블로그 글 어떤 Index, B+Tree 소개 블로그 글 Balanced Tree 의 필요성 § BST 를 생각해 보면 일반적인 경우에는 탐색의 시간복잡도가 log2(n) 이지만 최악의 경우인 모든 노드가 치우쳐져있는 경우 (전부 일렬로 연결되어 있는 경우) 에는 탐색의 시간복잡도는 n 이 된다.</description>
-    <pubDate>Sat, 06 Apr 2024 00:00:00 GMT</pubDate>
-  </item><item>
-    <title>Binary Search Tree, BST (Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/Binary-Search-Tree,-BST-(Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/Binary-Search-Tree,-BST-(Data-Structure)</guid>
-    <description> 본 글은 #draft 상태입니다. 내용 보강하기 그림 추가하기 BST § 트리 생성 규칙은 다음과 같다. Node 는 어떤 값 (Key 라고 부르기도 한다) 을 담고 있다. Node 의 자식은 최대 2개이다. Node 의 왼쪽 자식의 값은 본인의 값보다 작고, 오른쪽 자식의 값은 본인의 값보다 커야 한다.</description>
-    <pubDate>Sat, 06 Apr 2024 00:00:00 GMT</pubDate>
+    <title>Mellor-Crummey and Scott Lock, MCS Lock (Lock Data Structure)</title>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/terms/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/terms/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</guid>
+    <description> 참고한 것들 서울대 정형수 교수님 빅데이터 및 지식 관리 시스템 2 강의 (Spring 2025) MCS Lock § 지금 linux 에서 사용되는 locking 방식 (qspinlock.c 에 있댄다). CLH lock 에서는 uncached NUMA 에서 문제가 있었고, 이것을 해결하기 위해 나온 것이다.</description>
+    <pubDate>Mon, 05 May 2025 00:00:00 GMT</pubDate>
   </item>
     </channel>
   </rss>
