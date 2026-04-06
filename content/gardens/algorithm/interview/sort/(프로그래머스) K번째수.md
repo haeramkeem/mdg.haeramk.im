@@ -33,7 +33,7 @@ vector<int> solution(vector<int> array, vector<vector<int>> commands) {
 		sort(copied.begin(), copied.end());
 		ret.push_back(copied[c[2] - 1]);
 	}
-	
+
 	return ret;
 }
 ```
