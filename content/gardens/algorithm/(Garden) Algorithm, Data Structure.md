@@ -41,8 +41,6 @@ date: 2024-07-29
 - Binary search
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 	- [[(프로그래머스) 입국심사]]
-- 좌표공간
-	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
 - Brute force
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 	- [[(프로그래머스) 최소직사각형]]
@@ -53,8 +51,15 @@ date: 2024-07-29
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
 	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
+	- [[(프로그래머스) N으로 표현]]
+	- [[(프로그래머스) 정수 삼각형]]
 - Graph
 	- [[(프로그래머스) 가장 먼 노드]]
+- Greedy
+	- [[(프로그래머스) 체육복]]
+- Grid
+	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
+	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
 	- [[(프로그래머스) 완주하지 못한 선수]]
 - Priority queue

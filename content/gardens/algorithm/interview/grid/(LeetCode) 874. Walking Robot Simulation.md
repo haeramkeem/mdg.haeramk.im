@@ -3,6 +3,7 @@ tags:
   - mdg
   - algorithm
   - interview
+  - grid
 date: 2026-04-06
 ---
 > [!info] 문제 링크
