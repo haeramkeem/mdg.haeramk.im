@@ -21,7 +21,7 @@ date: 2026-04-03
 	- `dp[x][y][k]` 는 `(x, y)` 좌표에 neutralize 를 `k` 번 썼을 때의 최대 coin 이다.
 - 코드를 보자:
 
-```cpp {22-35}
+```cpp {22-32}
 #define MAX(a, b) (a > b ? a : b)
 #define MAX3(a, b, c) (MAX(MAX(a, b), c))
 #define MAX4(a, b, c, d) (MAX(MAX(a, b), MAX(c, d)))
@@ -116,7 +116,7 @@ public:
 };
 ```
 
-- Highlight 된 코드 (L22-35) 가 핵심이다.
+- Highlight 된 코드 (L22-32) 가 핵심이다.
 	- `dp[x][y][0]` 은 그냥 위/왼쪽의 값중에 큰것을 선택하면 된다.
 	- `dp[x][y][1]` 은 2가지의 경우의 수가 있다.
 		- 만약 여기서 neutralize 를 안하는 경우라면, `k=1` 일 때의 위/왼쪽이 후보가 된다.
