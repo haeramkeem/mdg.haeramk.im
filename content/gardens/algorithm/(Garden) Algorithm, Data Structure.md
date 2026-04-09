@@ -74,6 +74,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
 	- [[(프로그래머스) 완주하지 못한 선수]]
+	- [[(프로그래머스) 이중우선순위큐]]
 	- [[(프로그래머스) 폰켓몬]]
 - Priority queue
 	- [[(프로그래머스) 더 맵게]]
@@ -83,10 +84,12 @@ date: 2024-07-29
 - Sort
 	- [[(프로그래머스) K번째수]]
 	- [[(프로그래머스) 가장 큰 수]]
+	- [[(프로그래머스) 전화번호 목록]]
 - String
 	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
 - Stack
 	- [[(프로그래머스) 같은 숫자는 싫어]]
+	- [[(프로그래머스) 올바른 괄호]]
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
