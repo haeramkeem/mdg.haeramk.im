@@ -52,6 +52,7 @@ date: 2024-07-29
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
 	- [[(프로그래머스) 모의고사]]
+	- [[(프로그래머스) 소수 찾기]]
 	- [[(프로그래머스) 조이스틱]]
 	- [[(프로그래머스) 최소직사각형]]
 - Dynamic programming
@@ -82,6 +83,7 @@ date: 2024-07-29
 - Queue
 	- [[(프로그래머스) 기능개발]]
 - Sort
+	- [[(프로그래머스) H-Index]]
 	- [[(프로그래머스) K번째수]]
 	- [[(프로그래머스) 가장 큰 수]]
 	- [[(프로그래머스) 전화번호 목록]]
@@ -91,5 +93,6 @@ date: 2024-07-29
 - Stack
 	- [[(프로그래머스) 같은 숫자는 싫어]]
 	- [[(프로그래머스) 올바른 괄호]]
+	- [[(프로그래머스) 큰 수 만들기]]
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
