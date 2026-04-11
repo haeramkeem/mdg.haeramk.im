@@ -43,6 +43,7 @@ date: 2024-07-29
 - BFS
 	- [[(LeetCode) 102. Binary Tree Level Order Traversal|LeetCode 102. Binary Tree Level Order Traversal]]
 	- [[(LeetCode) 199. Binary Tree Right Side View|LeetCode 199. Binary Tree Right Side View]]
+	- [[(프로그래머스) 게임 맵 최단거리]]
 	- [[(프로그래머스) 네트워크]]
 	- [[(프로그래머스) 타겟 넘버]]
 - Binary search
@@ -83,6 +84,7 @@ date: 2024-07-29
 - Queue
 	- [[(프로그래머스) 기능개발]]
 - Sort
+	- [[(LeetCode) 3741. Minimum Distance Between Three Equal Elements II|LeetCode 3741. Minimum Distance Between Three Equal Elements II]]
 	- [[(프로그래머스) H-Index]]
 	- [[(프로그래머스) K번째수]]
 	- [[(프로그래머스) 가장 큰 수]]
