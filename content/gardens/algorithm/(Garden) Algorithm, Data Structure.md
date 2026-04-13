@@ -98,6 +98,9 @@ date: 2024-07-29
 	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
 - Stack
+	- [[(LeetCode) 92. Reverse Linked List II|LeetCode 92. Reverse Linked List II]]
+	- [[(LeetCode) 394. Decode String|LeetCode 394. Decode String]]
+	- [[(LeetCode) 739. Daily Temperatures|LeetCode 739. Daily Temperatures]]
 	- [[(프로그래머스) 같은 숫자는 싫어]]
 	- [[(프로그래머스) 올바른 괄호]]
 	- [[(프로그래머스) 큰 수 만들기]]
