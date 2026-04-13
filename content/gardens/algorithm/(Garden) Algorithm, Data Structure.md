@@ -56,6 +56,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 소수 찾기]]
 	- [[(프로그래머스) 조이스틱]]
 	- [[(프로그래머스) 최소직사각형]]
+	- [[(프로그래머스) 카펫]]
 - Dynamic programming
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
@@ -68,8 +69,10 @@ date: 2024-07-29
 	- [[(프로그래머스) 정수 삼각형]]
 - Graph
 	- [[(프로그래머스) 가장 먼 노드]]
+	- [[(프로그래머스) 단어 변환]]
 	- [[(프로그래머스) 순위]]
 - Greedy
+	- [[(프로그래머스) 구명보트]]
 	- [[(프로그래머스) 체육복]]
 - Grid
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
@@ -83,6 +86,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 디스크 컨트롤러]]
 - Queue
 	- [[(프로그래머스) 기능개발]]
+	- [[(프로그래머스) 프로세스]]
 - Sort
 	- [[(LeetCode) 3741. Minimum Distance Between Three Equal Elements II|LeetCode 3741. Minimum Distance Between Three Equal Elements II]]
 	- [[(프로그래머스) H-Index]]
