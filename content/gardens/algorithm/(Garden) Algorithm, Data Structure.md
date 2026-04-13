@@ -11,6 +11,10 @@ date: 2024-07-29
 
 ## 작물들
 
+### 오리지날 시리즈
+
+- [[(충남대) 알고리즘 강의록]]
+
 ### Algorithm
 
 - Sort
@@ -83,6 +87,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 이중우선순위큐]]
 	- [[(프로그래머스) 폰켓몬]]
 - Priority queue
+	- [[(프로그래머스-아카이브) 라면공장]]
 	- [[(프로그래머스) 더 맵게]]
 	- [[(프로그래머스) 디스크 컨트롤러]]
 - Queue
@@ -90,6 +95,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 프로세스]]
 - Sort
 	- [[(LeetCode) 3741. Minimum Distance Between Three Equal Elements II|LeetCode 3741. Minimum Distance Between Three Equal Elements II]]
+	- [[(프로그래머스-아카이브) 예산]]
 	- [[(프로그래머스) H-Index]]
 	- [[(프로그래머스) K번째수]]
 	- [[(프로그래머스) 가장 큰 수]]
