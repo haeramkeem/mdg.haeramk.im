@@ -103,6 +103,7 @@ date: 2024-07-29
 - String
 	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
+	- [[(LeetCode) 2515. Shortest Distance to Target String in a Circular Array|LeetCode 2515. Shortest Distance to Target String in a Circular Array]]
 - Stack
 	- [[(LeetCode) 92. Reverse Linked List II|LeetCode 92. Reverse Linked List II]]
 	- [[(LeetCode) 394. Decode String|LeetCode 394. Decode String]]
