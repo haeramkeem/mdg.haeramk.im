@@ -18,6 +18,7 @@ date: 2026-04-11
 > ![[Pasted image 20260411221901.png]]
 
 - `num[i]`, `i` 순서로 정렬한 뒤 앞에서부터 순회하며 연속된 세 원소의 number가 같을 때의 index 차이를 구해주면 된다.
+	- [[(LeetCode) 3740. Minimum Distance Between Three Equal Elements I|LeetCode 3740]] 의 심화 문제.
 
 ```cpp
 #define MAX_U32 (0xFFFFFFFF)
