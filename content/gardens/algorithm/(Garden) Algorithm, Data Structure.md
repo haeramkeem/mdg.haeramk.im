@@ -83,6 +83,7 @@ date: 2024-07-29
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
+	- [[(LeetCode) 3488. Closest Equal Element Queries|LeetCode 3488. Closest Equal Element Queries]]
 	- [[(프로그래머스) 완주하지 못한 선수]]
 	- [[(프로그래머스) 이중우선순위큐]]
 	- [[(프로그래머스) 폰켓몬]]
