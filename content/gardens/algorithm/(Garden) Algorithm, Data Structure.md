@@ -58,6 +58,7 @@ date: 2024-07-29
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 	- [[(LeetCode) 2078. Two Furthest Houses With Different Colors|LeetCode 2078. Two Furthest Houses With Different Colors]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
+	- [[(LeetCode) 3783. Mirror Distance of an Integer|LeetCode 3783. Mirror Distance of an Integer]]
 	- [[(프로그래머스) 모의고사]]
 	- [[(프로그래머스) 소수 찾기]]
 	- [[(프로그래머스) 조이스틱]]
