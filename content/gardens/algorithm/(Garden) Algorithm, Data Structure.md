@@ -11,6 +11,10 @@ date: 2024-07-29
 
 ## 작물들
 
+### 오리지날 시리즈
+
+- [[(충남대) 알고리즘 강의록]]
+
 ### Algorithm
 
 - Sort
@@ -50,6 +54,7 @@ date: 2024-07-29
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 	- [[(프로그래머스) 입국심사]]
 - Brute force
+	- [[(LeetCode) 1848. Minimum Distance to the Target Element|LeetCode 1848. Minimum Distance to the Target Element]]
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
 	- [[(프로그래머스) 모의고사]]
@@ -78,17 +83,22 @@ date: 2024-07-29
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
+	- [[(LeetCode) 3488. Closest Equal Element Queries|LeetCode 3488. Closest Equal Element Queries]]
+	- [[(LeetCode) 3761. Minimum Absolute Distance Between Mirror Pairs|LeetCode 3761. Minimum Absolute Distance Between Mirror Pairs]]
 	- [[(프로그래머스) 완주하지 못한 선수]]
 	- [[(프로그래머스) 이중우선순위큐]]
 	- [[(프로그래머스) 폰켓몬]]
 - Priority queue
+	- [[(프로그래머스-아카이브) 라면공장]]
 	- [[(프로그래머스) 더 맵게]]
 	- [[(프로그래머스) 디스크 컨트롤러]]
 - Queue
 	- [[(프로그래머스) 기능개발]]
 	- [[(프로그래머스) 프로세스]]
 - Sort
+	- [[(LeetCode) 3740. Minimum Distance Between Three Equal Elements I|LeetCode 3740. Minimum Distance Between Three Equal Elements I]]
 	- [[(LeetCode) 3741. Minimum Distance Between Three Equal Elements II|LeetCode 3741. Minimum Distance Between Three Equal Elements II]]
+	- [[(프로그래머스-아카이브) 예산]]
 	- [[(프로그래머스) H-Index]]
 	- [[(프로그래머스) K번째수]]
 	- [[(프로그래머스) 가장 큰 수]]
@@ -96,7 +106,11 @@ date: 2024-07-29
 - String
 	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
+	- [[(LeetCode) 2515. Shortest Distance to Target String in a Circular Array|LeetCode 2515. Shortest Distance to Target String in a Circular Array]]
 - Stack
+	- [[(LeetCode) 92. Reverse Linked List II|LeetCode 92. Reverse Linked List II]]
+	- [[(LeetCode) 394. Decode String|LeetCode 394. Decode String]]
+	- [[(LeetCode) 739. Daily Temperatures|LeetCode 739. Daily Temperatures]]
 	- [[(프로그래머스) 같은 숫자는 싫어]]
 	- [[(프로그래머스) 올바른 괄호]]
 	- [[(프로그래머스) 큰 수 만들기]]
