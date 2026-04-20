@@ -56,6 +56,7 @@ date: 2024-07-29
 - Brute force
 	- [[(LeetCode) 1848. Minimum Distance to the Target Element|LeetCode 1848. Minimum Distance to the Target Element]]
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
+	- [[(LeetCode) 2078. Two Furthest Houses With Different Colors|LeetCode 2078. Two Furthest Houses With Different Colors]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
 	- [[(프로그래머스) 모의고사]]
 	- [[(프로그래머스) 소수 찾기]]
