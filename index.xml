@@ -9,14 +9,14 @@
     <title>(Garden) Algorithm, Data Structure</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</guid>
-    <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § Algorithm § Sort Merge Sort Graph Floyd-Warshall Topological Sort Data Structure § Graph Directed Acyclic Graph, DAG Linear Deque Sorted Run Stack, Queue, Container Adapter Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST Coding Interview § 기존 코드 저장소 github.</description>
+    <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § 오리지날 시리즈 § (충남대) 알고리즘 강의록 Algorithm § Sort Merge Sort Graph Floyd-Warshall Topological Sort Data Structure § Graph Directed Acyclic Graph, DAG Linear Deque Sorted Run Stack, Queue, Container Adapter Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST Coding Interview § 기존 코드 저장소 github.</description>
     <pubDate>Mon, 29 Jul 2024 00:00:00 GMT</pubDate>
   </item><item>
     <title>Page Rank (Algorithm)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Page-Rank-(Algorithm)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Page-Rank-(Algorithm)</guid>
     <description> 참고한 것들 조성문의 블로그 원본 논문 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 13 Apr 2026 01:45:42 GMT</pubDate>
+    <pubDate>Mon, 20 Apr 2026 01:31:06 GMT</pubDate>
   </item><item>
     <title>Directed Acyclic Graph, DAG (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/terms/Directed-Acyclic-Graph,-DAG-(Data-Structure)</link>
@@ -28,13 +28,13 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</guid>
     <description> 참고한 것들 서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024) 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 13 Apr 2026 01:45:42 GMT</pubDate>
+    <pubDate>Mon, 20 Apr 2026 01:31:06 GMT</pubDate>
   </item><item>
     <title>Skip List (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 13 Apr 2026 01:45:42 GMT</pubDate>
+    <pubDate>Mon, 20 Apr 2026 01:31:06 GMT</pubDate>
   </item><item>
     <title>Deque (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Deque-(Data-Structure)</link>
@@ -58,7 +58,7 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 13 Apr 2026 01:45:42 GMT</pubDate>
+    <pubDate>Mon, 20 Apr 2026 01:31:06 GMT</pubDate>
   </item><item>
     <title>Mellor-Crummey and Scott Lock, MCS Lock (Lock Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/terms/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</link>
