@@ -25,6 +25,7 @@ date: 2024-07-29
 
 ### Data Structure
 
+- [[Disjoint Set (Data Structure)|Disjoint Set]]
 - Graph
 	- [[Directed Acyclic Graph, DAG (Data Structure)|Directed Acyclic Graph, DAG]]
 - Linear
