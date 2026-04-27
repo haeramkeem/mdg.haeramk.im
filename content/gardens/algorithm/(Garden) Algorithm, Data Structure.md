@@ -25,6 +25,7 @@ date: 2024-07-29
 
 ### Data Structure
 
+- [[Disjoint Set (Data Structure)|Disjoint Set]]
 - Graph
 	- [[Directed Acyclic Graph, DAG (Data Structure)|Directed Acyclic Graph, DAG]]
 - Linear
@@ -56,7 +57,10 @@ date: 2024-07-29
 - Brute force
 	- [[(LeetCode) 1848. Minimum Distance to the Target Element|LeetCode 1848. Minimum Distance to the Target Element]]
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
+	- [[(LeetCode) 2078. Two Furthest Houses With Different Colors|LeetCode 2078. Two Furthest Houses With Different Colors]]
+	- [[(LeetCode) 2452. Words Within Two Edits of Dictionary|LeetCode 2452. Words Within Two Edits of Dictionary]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
+	- [[(LeetCode) 3783. Mirror Distance of an Integer|LeetCode 3783. Mirror Distance of an Integer]]
 	- [[(프로그래머스) 모의고사]]
 	- [[(프로그래머스) 소수 찾기]]
 	- [[(프로그래머스) 조이스틱]]
@@ -72,6 +76,8 @@ date: 2024-07-29
 	- [[(프로그래머스) N으로 표현]]
 	- [[(프로그래머스) 등굣길]]
 	- [[(프로그래머스) 정수 삼각형]]
+- [[Disjoint Set (Data Structure)|DSU]]
+	- [[(LeetCode) 1722. Minimize Hamming Distance After Swap Operations|LeetCode 1722. Minimize Hamming Distance After Swap Operations]]
 - Graph
 	- [[(프로그래머스) 가장 먼 노드]]
 	- [[(프로그래머스) 단어 변환]]
@@ -116,3 +122,5 @@ date: 2024-07-29
 	- [[(프로그래머스) 큰 수 만들기]]
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
+- Two pointer
+	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]
