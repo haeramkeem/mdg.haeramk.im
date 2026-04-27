@@ -9,14 +9,20 @@
     <title>(Garden) Algorithm, Data Structure</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</guid>
-    <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § 오리지날 시리즈 § (충남대) 알고리즘 강의록 Algorithm § Sort Merge Sort Graph Floyd-Warshall Topological Sort Data Structure § Graph Directed Acyclic Graph, DAG Linear Deque Sorted Run Stack, Queue, Container Adapter Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST Coding Interview § 기존 코드 저장소 github.</description>
+    <description>개요 § Algorithm 및 Data structure 관련 잡식들 귀찮아도 언젠간 정리해야 된다. 작물들 § 오리지날 시리즈 § (충남대) 알고리즘 강의록 Algorithm § Sort Merge Sort Graph Floyd-Warshall Topological Sort Data Structure § Disjoint Set Graph Directed Acyclic Graph, DAG Linear Deque Sorted Run Stack, Queue, Container Adapter Lock Mellor-Crummey and Scott Lock, MCS Lock Map Bloom Filter Tree Balanced Tree, B Tree Binary Search Tree, BST Coding Interview § 기존 코드 저장소 github.</description>
     <pubDate>Mon, 29 Jul 2024 00:00:00 GMT</pubDate>
+  </item><item>
+    <title>Disjoint Set (Data Structure)</title>
+    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/dsu/terms/Disjoint-Set-(Data-Structure)</link>
+    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/dsu/terms/Disjoint-Set-(Data-Structure)</guid>
+    <description> 참고한 것들 누군가의 블로그 Disjoint Set § Disjoint set (DSU) 은 말 그대로 전체를 겹치지 않는 부분집합으로 나눈 자료구조이다. 따라서 다음의 두 조건을 만족해야 한다: 모든 부분집합의 합집합은 전체집합 어떤 두 부분집합도 교집합을 가지지 않음 보통 부분집합을 합치는 union operation 과 부분집합을 찾는 find operation 을 지원한다.</description>
+    <pubDate>Tue, 21 Apr 2026 00:00:00 GMT</pubDate>
   </item><item>
     <title>Page Rank (Algorithm)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Page-Rank-(Algorithm)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Page-Rank-(Algorithm)</guid>
     <description> 참고한 것들 조성문의 블로그 원본 논문 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 20 Apr 2026 01:31:06 GMT</pubDate>
+    <pubDate>Mon, 27 Apr 2026 04:30:19 GMT</pubDate>
   </item><item>
     <title>Directed Acyclic Graph, DAG (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/terms/Directed-Acyclic-Graph,-DAG-(Data-Structure)</link>
@@ -28,13 +34,13 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</guid>
     <description> 참고한 것들 서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024) 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 20 Apr 2026 01:31:06 GMT</pubDate>
+    <pubDate>Mon, 27 Apr 2026 04:30:19 GMT</pubDate>
   </item><item>
     <title>Skip List (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 20 Apr 2026 01:31:06 GMT</pubDate>
+    <pubDate>Mon, 27 Apr 2026 04:30:19 GMT</pubDate>
   </item><item>
     <title>Deque (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Deque-(Data-Structure)</link>
@@ -58,13 +64,7 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Mon, 20 Apr 2026 01:31:06 GMT</pubDate>
-  </item><item>
-    <title>Mellor-Crummey and Scott Lock, MCS Lock (Lock Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/terms/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/terms/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</guid>
-    <description> 참고한 것들 서울대 정형수 교수님 빅데이터 및 지식 관리 시스템 2 강의 (Spring 2025) MCS Lock § 지금 linux 에서 사용되는 locking 방식 (qspinlock.c 에 있댄다). CLH lock 에서는 uncached NUMA 에서 문제가 있었고, 이것을 해결하기 위해 나온 것이다.</description>
-    <pubDate>Mon, 05 May 2025 00:00:00 GMT</pubDate>
+    <pubDate>Mon, 27 Apr 2026 04:30:19 GMT</pubDate>
   </item>
     </channel>
   </rss>
