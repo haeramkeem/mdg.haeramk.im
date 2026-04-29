@@ -2,6 +2,7 @@
 tags:
   - mdg
   - arch
+  - cpu
   - draft
 aliases:
   - Central Processing Unit
