@@ -55,6 +55,7 @@ date: 2024-07-29
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 	- [[(프로그래머스) 입국심사]]
 - Brute force
+	- [[(LeetCode) 1391. Check if There is a Valid Path in a Grid|LeetCode 1391. Check if There is a Valid Path in a Grid]]
 	- [[(LeetCode) 1848. Minimum Distance to the Target Element|LeetCode 1848. Minimum Distance to the Target Element]]
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 	- [[(LeetCode) 2078. Two Furthest Houses With Different Colors|LeetCode 2078. Two Furthest Houses With Different Colors]]
@@ -102,6 +103,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 기능개발]]
 	- [[(프로그래머스) 프로세스]]
 - Sort
+	- [[(LeetCode) 2033. Minimum Operations to Make a Uni-Value Grid|LeetCode 2033. Minimum Operations to Make a Uni-Value Grid]]
 	- [[(LeetCode) 3740. Minimum Distance Between Three Equal Elements I|LeetCode 3740. Minimum Distance Between Three Equal Elements I]]
 	- [[(LeetCode) 3741. Minimum Distance Between Three Equal Elements II|LeetCode 3741. Minimum Distance Between Three Equal Elements II]]
 	- [[(프로그래머스-아카이브) 예산]]
