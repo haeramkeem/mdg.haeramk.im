@@ -3,7 +3,7 @@ tags:
   - mdg
   - algorithm
   - interview
-  - string
+  - brute-force
 date: 2026-05-08
 ---
 > [!info] 문제 링크
