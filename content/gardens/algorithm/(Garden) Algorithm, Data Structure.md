@@ -73,6 +73,7 @@ date: 2024-07-29
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
+	- [[(LeetCode) 396. Rotate Function|LeetCode 396. Rotate Function]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
 	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
 	- [[(프로그래머스) N으로 표현]]
