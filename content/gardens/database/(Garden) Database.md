@@ -202,3 +202,17 @@ date: 2024-07-29
 	- [[LSM Tree (RocksDB)|LSM Tree]]
 	- [[Memtable (RocksDB)|Memtable]]
 	- [[Static Sorted Table, SST (RocksDB)|Static Sorted Table, SST]]
+
+### SQL/Coding Interview
+
+> [!info] 흠...
+> - 몰라도 될거같은데... 코테에서 시키니까...
+
+- Functions
+	- [[COALESCE Function (SQL)|COALESCE]]
+	- [[ROUND Function (SQL)|ROUND]]
+- Interview
+	- [[(프로그래머스) 가장 비싼 상품 구하기]]
+	- [[(프로그래머스) 경기도에 위치한 식품창고 목록 출력하기]]
+	- [[(프로그래머스) 자동차 대여 기록에서 대여중, 대여 가능 여부 구분하기]]
+	- [[(프로그래머스) 평균 일일 대여 요금 구하기]]
