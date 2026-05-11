@@ -55,6 +55,8 @@ date: 2024-07-29
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 	- [[(프로그래머스) 입국심사]]
 - Brute force
+	- [[(LeetCode) 788. Rotated Digits|LeetCode 788. Rotated Digits]]
+	- [[(LeetCode) 796. Rotate String|LeetCode 796. Rotate String]]
 	- [[(LeetCode) 1391. Check if There is a Valid Path in a Grid|LeetCode 1391. Check if There is a Valid Path in a Grid]]
 	- [[(LeetCode) 1848. Minimum Distance to the Target Element|LeetCode 1848. Minimum Distance to the Target Element]]
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
@@ -72,6 +74,7 @@ date: 2024-07-29
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
+	- [[(LeetCode) 396. Rotate Function|LeetCode 396. Rotate Function]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
 	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
 	- [[(프로그래머스) N으로 표현]]
@@ -95,6 +98,8 @@ date: 2024-07-29
 	- [[(프로그래머스) 완주하지 못한 선수]]
 	- [[(프로그래머스) 이중우선순위큐]]
 	- [[(프로그래머스) 폰켓몬]]
+- Matrix
+	- [[(LeetCode) 48. Rotate Image|LeetCode 48. Rotate Image]]
 - Priority queue
 	- [[(프로그래머스-아카이브) 라면공장]]
 	- [[(프로그래머스) 더 맵게]]
