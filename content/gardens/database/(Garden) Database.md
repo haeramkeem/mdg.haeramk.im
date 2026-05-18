@@ -203,7 +203,7 @@ date: 2024-07-29
 	- [[Memtable (RocksDB)|Memtable]]
 	- [[Static Sorted Table, SST (RocksDB)|Static Sorted Table, SST]]
 
-### SQL/Coding Interview
+### SQL
 
 > [!info] 흠...
 > - 몰라도 될거같은데... 코테에서 시키니까...
