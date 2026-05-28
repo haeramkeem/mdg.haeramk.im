@@ -93,6 +93,7 @@ date: 2024-07-29
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
+	- [[(LeetCode) 3121. Count the Number of Special Characters II|LeetCode 3121. Count the Number of Special Characters II]]
 	- [[(LeetCode) 3488. Closest Equal Element Queries|LeetCode 3488. Closest Equal Element Queries]]
 	- [[(LeetCode) 3761. Minimum Absolute Distance Between Mirror Pairs|LeetCode 3761. Minimum Absolute Distance Between Mirror Pairs]]
 	- [[(프로그래머스) 베스트앨범]]
