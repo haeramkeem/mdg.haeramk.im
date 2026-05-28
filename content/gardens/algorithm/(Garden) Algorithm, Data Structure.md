@@ -95,6 +95,7 @@ date: 2024-07-29
 - Mapset
 	- [[(LeetCode) 3488. Closest Equal Element Queries|LeetCode 3488. Closest Equal Element Queries]]
 	- [[(LeetCode) 3761. Minimum Absolute Distance Between Mirror Pairs|LeetCode 3761. Minimum Absolute Distance Between Mirror Pairs]]
+	- [[(프로그래머스) 베스트앨범]]
 	- [[(프로그래머스) 완주하지 못한 선수]]
 	- [[(프로그래머스) 의상]]
 	- [[(프로그래머스) 이중우선순위큐]]
