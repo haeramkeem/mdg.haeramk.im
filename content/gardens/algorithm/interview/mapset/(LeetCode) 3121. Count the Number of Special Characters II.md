@@ -17,7 +17,7 @@ date: 2026-05-28
 > [!info]- 결과
 > ![[Pasted image 20260528201932.png]]
 
-- 앞에서부터 순회하며 special 한 놈을 찾아내면 된다.
+- [[(LeetCode) 3120. Count the Number of Special Characters I|LeetCode 3120]] 처럼, 앞에서부터 순회하며 special 한 놈을 찾아내면 된다.
 - 이때 set 이 사용되는데, 아래의 코드를 보자.
 
 ```cpp {20-23,15-18}
