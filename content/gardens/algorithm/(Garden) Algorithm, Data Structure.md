@@ -71,6 +71,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 최소직사각형]]
 	- [[(프로그래머스) 카펫]]
 - Dynamic programming
+	- [[(LeetCode) 70. Climbing Stairs|LeetCode 70. Climbing Stairs]]
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
