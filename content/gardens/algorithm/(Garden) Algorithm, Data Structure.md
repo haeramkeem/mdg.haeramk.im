@@ -131,6 +131,7 @@ date: 2024-07-29
 	- [[(LeetCode) 739. Daily Temperatures|LeetCode 739. Daily Temperatures]]
 	- [[(프로그래머스) 같은 숫자는 싫어]]
 	- [[(프로그래머스) 올바른 괄호]]
+	- [[(프로그래머스) 주식가격]]
 	- [[(프로그래머스) 큰 수 만들기]]
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
