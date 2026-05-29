@@ -111,6 +111,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 디스크 컨트롤러]]
 - Queue
 	- [[(프로그래머스) 기능개발]]
+	- [[(프로그래머스) 다리를 지나는 트럭]]
 	- [[(프로그래머스) 프로세스]]
 - Sort
 	- [[(LeetCode) 2033. Minimum Operations to Make a Uni-Value Grid|LeetCode 2033. Minimum Operations to Make a Uni-Value Grid]]
