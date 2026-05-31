@@ -4,7 +4,7 @@ tags:
   - database
   - db-index
 date: 2025-11-17
-title: "(논문) B-Trees Are Back: Engineering Fast and Pageable NodeLayouts"
+title: "(논문) B-Trees Are Back: Engineering Fast and Pageable Node Layouts"
 ---
 > [!info] B-Trees Are Back 링크
 > - [논문](https://dl.acm.org/doi/10.1145/3709664)
