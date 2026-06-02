@@ -62,6 +62,7 @@ date: 2024-07-29
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 	- [[(LeetCode) 2078. Two Furthest Houses With Different Colors|LeetCode 2078. Two Furthest Houses With Different Colors]]
 	- [[(LeetCode) 2452. Words Within Two Edits of Dictionary|LeetCode 2452. Words Within Two Edits of Dictionary]]
+	- [[(LeetCode) 3300. Minimum Element After Replacement With Digit Sum|LeetCode 3300. Minimum Element After Replacement With Digit Sum]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
 	- [[(LeetCode) 3783. Mirror Distance of an Integer|LeetCode 3783. Mirror Distance of an Integer]]
 	- [[(프로그래머스) 모의고사]]
@@ -70,6 +71,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 최소직사각형]]
 	- [[(프로그래머스) 카펫]]
 - Dynamic programming
+	- [[(LeetCode) 70. Climbing Stairs|LeetCode 70. Climbing Stairs]]
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
@@ -93,9 +95,13 @@ date: 2024-07-29
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
+	- [[(LeetCode) 3120. Count the Number of Special Characters I|LeetCode 3120. Count the Number of Special Characters I]]
+	- [[(LeetCode) 3121. Count the Number of Special Characters II|LeetCode 3121. Count the Number of Special Characters II]]
 	- [[(LeetCode) 3488. Closest Equal Element Queries|LeetCode 3488. Closest Equal Element Queries]]
 	- [[(LeetCode) 3761. Minimum Absolute Distance Between Mirror Pairs|LeetCode 3761. Minimum Absolute Distance Between Mirror Pairs]]
+	- [[(프로그래머스) 베스트앨범]]
 	- [[(프로그래머스) 완주하지 못한 선수]]
+	- [[(프로그래머스) 의상]]
 	- [[(프로그래머스) 이중우선순위큐]]
 	- [[(프로그래머스) 폰켓몬]]
 - Matrix
@@ -106,9 +112,11 @@ date: 2024-07-29
 	- [[(프로그래머스) 디스크 컨트롤러]]
 - Queue
 	- [[(프로그래머스) 기능개발]]
+	- [[(프로그래머스) 다리를 지나는 트럭]]
 	- [[(프로그래머스) 프로세스]]
 - Sort
 	- [[(LeetCode) 2033. Minimum Operations to Make a Uni-Value Grid|LeetCode 2033. Minimum Operations to Make a Uni-Value Grid]]
+	- [[(LeetCode) 2126. Destroying Asteroids|LeetCode 2126. Destroying Asteroids]]
 	- [[(LeetCode) 3740. Minimum Distance Between Three Equal Elements I|LeetCode 3740. Minimum Distance Between Three Equal Elements I]]
 	- [[(LeetCode) 3741. Minimum Distance Between Three Equal Elements II|LeetCode 3741. Minimum Distance Between Three Equal Elements II]]
 	- [[(프로그래머스-아카이브) 예산]]
@@ -126,8 +134,11 @@ date: 2024-07-29
 	- [[(LeetCode) 739. Daily Temperatures|LeetCode 739. Daily Temperatures]]
 	- [[(프로그래머스) 같은 숫자는 싫어]]
 	- [[(프로그래머스) 올바른 괄호]]
+	- [[(프로그래머스) 주식가격]]
 	- [[(프로그래머스) 큰 수 만들기]]
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
+- [[Trie (Data Structure)|Trie]]
+	- [[(LeetCode) 3093. Longest Common Suffix Queries|LeetCode 3093. Longest Common Suffix Queries]]
 - Two pointer
 	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]
