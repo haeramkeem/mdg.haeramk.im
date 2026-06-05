@@ -53,4 +53,4 @@ public:
 };
 ```
 
-- Set 은 간단하게 bms 사용했다.
+- Set 은 간단하게 [[Bitmap (Encoding)|BMS]] 사용했다.

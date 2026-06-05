@@ -4,6 +4,10 @@ tags:
   - database
   - db-encoding
 date: 2024-08-06
+aliases:
+  - Bitmap
+  - BitmapSet
+  - BMS
 ---
 > [!info]- 참고한 것들
 > - [비크람씨 블로그](https://vikramoberoi.com/posts/a-primer-on-roaring-bitmaps-what-they-are-and-how-they-work/)
@@ -11,6 +15,7 @@ date: 2024-08-06
 ## 정수 집합 인코딩
 
 - *Bitmap* 이라는 이름을 좀 풀어서 말하면, ==0 이상 정수의 집합을 bit 에 mapping 해놓은 것== 라고 정리할 수 있다.
+	- 그래서 *Bitmap Set*, 줄여서 *BMS* 라고 말하기도 한다.
 - 이것은 어떤 0 이상의 정수 $n$ 에 대해 $n \in S$ 이면, $n$ 번째 bit 를 1 로 설정하는 (즉, $bit_{n} = 1$) 방법이다.
 	- 프로그래밍 언어로 표현하자면, `bitmap |= (1 << n)` 정도가 된다.
 
