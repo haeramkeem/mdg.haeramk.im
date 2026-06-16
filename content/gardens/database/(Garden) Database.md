@@ -211,8 +211,11 @@ date: 2024-07-29
 - Functions
 	- [[COALESCE Function (SQL)|COALESCE]]
 	- [[ROUND Function (SQL)|ROUND]]
+- Grammar
+	- [[ORDER BY (SQL)|ORDER BY]]
 - Interview
 	- [[(프로그래머스) 가장 비싼 상품 구하기]]
 	- [[(프로그래머스) 경기도에 위치한 식품창고 목록 출력하기]]
+	- [[(프로그래머스) 인기있는 아이스크림]]
 	- [[(프로그래머스) 자동차 대여 기록에서 대여중, 대여 가능 여부 구분하기]]
 	- [[(프로그래머스) 평균 일일 대여 요금 구하기]]

@@ -76,7 +76,7 @@ char* findDifferentBinaryString(char** nums, int numsSize)
 ```
 
 - 위 코드에서 들어간 유일한 최적화는:
-	- String 비교는 느리기 때문에 이것을 integer type 의 bitmapset (BMS) 로 변환시켜서 비교했다.
+	- String 비교는 느리기 때문에 이것을 integer type 의 [[Bitmap (Encoding)|BMS]] 로 변환시켜서 비교했다.
 	- Bitmapset 으로 바꾸는 함수가 `strToBMS` 이고 반대로 string 으로 바꾸는 함수가 `BMSToStr` 이다.
 
 ### Future plan

@@ -58,4 +58,4 @@ public:
 - 이때의 kick 은 이것이다:
 	- `L20-L23`: 대문자를 만났을 때 (1) 이놈의 lowercase 가 lowercase set 에 추가되어있어야 하고, (2) 이놈이 아직 uppercase set 에 추가되어있지 않아야 하며 (3) 이놈이 special set 에도 추가되어있지 않다면, lowercase character 가 등장한 후 첫번째 uppercase 이기 때문에 special 이다. 이때에는 special set 에 추가하여 중복 카운팅을 방지하고, 카운트도 올린다.
 	- `L15-L18`: 문제의 조건을 보면 모든 lowercase character 가 uppercase character 이전에 나와야 한다. 따라서, lowercase character 를 만났을 때 이놈이 special set 에도 등록되어 있다면, special set 에서 빼주고 카운트도 줄여줌으로서 special 지위를 박탈한다.
-- 적용한 최적화는 bitmap set 이다: alphabet 의 개수가 32개보다 적기 때문에 bms 를 사용해도 된다.
+- 적용한 최적화는 [[Bitmap (Encoding)|BMS]] 이다: alphabet 의 개수가 32개보다 적기 때문에 사용해도 된다.
