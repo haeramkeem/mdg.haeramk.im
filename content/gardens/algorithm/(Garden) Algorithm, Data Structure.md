@@ -18,6 +18,7 @@ date: 2024-07-29
 ### Algorithm
 
 - Sort
+	- [[Counting Sort (Algorithm)|Counting Sort]]
 	- [[Merge Sort (Algorithm)|Merge Sort]]
 - Graph
 	- [[Floyd-Warshall (Algorithm)|Floyd-Warshall]]
