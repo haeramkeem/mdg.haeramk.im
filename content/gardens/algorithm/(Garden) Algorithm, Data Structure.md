@@ -55,6 +55,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 타겟 넘버]]
 - Binary search
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
+	- [[(LeetCode) 154. Find Minimum in Rotated Sorted Array II|LeetCode 154. Find Minimum in Rotated Sorted Array II]]
 	- [[(프로그래머스) 입국심사]]
 - Brute force (Naive approach)
 	- [[(LeetCode) 9. Palindrome Number|LeetCode 9. Palindrome Number]]
