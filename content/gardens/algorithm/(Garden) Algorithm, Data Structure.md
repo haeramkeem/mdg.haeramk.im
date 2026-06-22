@@ -156,4 +156,5 @@ date: 2024-07-29
 	- [[(LeetCode) 1178. Number of Valid Words for Each Puzzle|LeetCode 1178. Number of Valid Words for Each Puzzle]]
 	- [[(LeetCode) 3093. Longest Common Suffix Queries|LeetCode 3093. Longest Common Suffix Queries]]
 - Two pointer
+	- [[(LeetCode) 1. Two Sum|LeetCode 1. Two Sum]]
 	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]
