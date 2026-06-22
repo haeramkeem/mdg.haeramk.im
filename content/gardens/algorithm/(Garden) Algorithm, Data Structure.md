@@ -98,6 +98,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 구명보트]]
 	- [[(프로그래머스) 체육복]]
 - Grid
+	- [[(LeetCode) 695. Max Area of Island|LeetCode 695. Max Area of Island]]
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
