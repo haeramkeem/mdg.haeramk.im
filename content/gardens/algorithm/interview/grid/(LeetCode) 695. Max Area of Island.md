@@ -10,7 +10,7 @@ date: 2026-06-22
 > - [LeetCode](https://leetcode.com/problems/max-area-of-island)
 
 > [!tip] 요약
-> - BFS/DFX 로 풀면 된다.
+> - BFS/DFS 로 풀면 된다.
 
 ## 최종
 

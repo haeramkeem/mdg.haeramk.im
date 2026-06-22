@@ -100,6 +100,7 @@ date: 2024-07-29
 - Grid
 	- [[(LeetCode) 695. Max Area of Island|LeetCode 695. Max Area of Island]]
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
+	- [[(LeetCode) 994. Rotting Oranges|LeetCode 994. Rotting Oranges]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
 	- [[(LeetCode) 3120. Count the Number of Special Characters I|LeetCode 3120. Count the Number of Special Characters I]]
