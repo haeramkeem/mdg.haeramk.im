@@ -49,6 +49,7 @@ date: 2024-07-29
 - BFS
 	- [[(LeetCode) 102. Binary Tree Level Order Traversal|LeetCode 102. Binary Tree Level Order Traversal]]
 	- [[(LeetCode) 199. Binary Tree Right Side View|LeetCode 199. Binary Tree Right Side View]]
+	- [[(LeetCode) 429. N-ary Tree Level Order Traversal|LeetCode 429. N-ary Tree Level Order Traversal]]
 	- [[(프로그래머스) 게임 맵 최단거리]]
 	- [[(프로그래머스) 네트워크]]
 	- [[(프로그래머스) 타겟 넘버]]
