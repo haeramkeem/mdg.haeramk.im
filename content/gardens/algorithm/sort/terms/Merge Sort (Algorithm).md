@@ -5,6 +5,8 @@ tags:
   - sort
   - terms
 date: 2024-04-06
+aliases:
+  - Merge Sort
 ---
 > [!warning]- 본 글은 #draft 상태입니다.
 > - [ ] 그림 추가

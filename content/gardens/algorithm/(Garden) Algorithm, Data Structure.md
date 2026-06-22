@@ -18,6 +18,7 @@ date: 2024-07-29
 ### Algorithm
 
 - Sort
+	- [[Counting Sort (Algorithm)|Counting Sort]]
 	- [[Merge Sort (Algorithm)|Merge Sort]]
 - Graph
 	- [[Floyd-Warshall (Algorithm)|Floyd-Warshall]]
@@ -54,10 +55,13 @@ date: 2024-07-29
 - Binary search
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 	- [[(프로그래머스) 입국심사]]
-- Brute force
+- Brute force (Naive approach)
+	- [[(LeetCode) 9. Palindrome Number|LeetCode 9. Palindrome Number]]
 	- [[(LeetCode) 788. Rotated Digits|LeetCode 788. Rotated Digits]]
 	- [[(LeetCode) 796. Rotate String|LeetCode 796. Rotate String]]
+	- [[(LeetCode) 1344. Angle Between Hands of a Clock|LeetCode 1344. Angle Between Hands of a Clock]]
 	- [[(LeetCode) 1391. Check if There is a Valid Path in a Grid|LeetCode 1391. Check if There is a Valid Path in a Grid]]
+	- [[(LeetCode) 1732. Find the Highest Altitude|LeetCode 1732. Find the Highest Altitude]]
 	- [[(LeetCode) 1848. Minimum Distance to the Target Element|LeetCode 1848. Minimum Distance to the Target Element]]
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
 	- [[(LeetCode) 2078. Two Furthest Houses With Different Colors|LeetCode 2078. Two Furthest Houses With Different Colors]]
@@ -115,6 +119,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 다리를 지나는 트럭]]
 	- [[(프로그래머스) 프로세스]]
 - Sort
+	- [[(LeetCode) 1833. Maximum Ice Cream Bars|LeetCode 1833. Maximum Ice Cream Bars]]
 	- [[(LeetCode) 2033. Minimum Operations to Make a Uni-Value Grid|LeetCode 2033. Minimum Operations to Make a Uni-Value Grid]]
 	- [[(LeetCode) 2126. Destroying Asteroids|LeetCode 2126. Destroying Asteroids]]
 	- [[(LeetCode) 3740. Minimum Distance Between Three Equal Elements I|LeetCode 3740. Minimum Distance Between Three Equal Elements I]]
@@ -125,10 +130,13 @@ date: 2024-07-29
 	- [[(프로그래머스) 가장 큰 수]]
 	- [[(프로그래머스) 전화번호 목록]]
 - String
+	- [[(LeetCode) 13. Roman to Integer|LeetCode 13. Roman to Integer]]
+	- [[(LeetCode) 14. Longest Common Prefix|LeetCode 14. Longest Common Prefix]]
 	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
 	- [[(LeetCode) 2515. Shortest Distance to Target String in a Circular Array|LeetCode 2515. Shortest Distance to Target String in a Circular Array]]
 - Stack
+	- [[(LeetCode) 20. Valid Parentheses|LeetCode 20. Valid Parentheses]]
 	- [[(LeetCode) 92. Reverse Linked List II|LeetCode 92. Reverse Linked List II]]
 	- [[(LeetCode) 394. Decode String|LeetCode 394. Decode String]]
 	- [[(LeetCode) 739. Daily Temperatures|LeetCode 739. Daily Temperatures]]
@@ -139,6 +147,9 @@ date: 2024-07-29
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
 - [[Trie (Data Structure)|Trie]]
+	- [[(LeetCode) 208. Implement Trie|LeetCode 208. Implement Trie]]
+	- [[(LeetCode) 1032. Stream of Characters|LeetCode 1032. Stream of Characters]]
+	- [[(LeetCode) 1178. Number of Valid Words for Each Puzzle|LeetCode 1178. Number of Valid Words for Each Puzzle]]
 	- [[(LeetCode) 3093. Longest Common Suffix Queries|LeetCode 3093. Longest Common Suffix Queries]]
 - Two pointer
 	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]
