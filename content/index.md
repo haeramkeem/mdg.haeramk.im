@@ -26,6 +26,7 @@ aliases:
 - [[(Garden) C, Cpp|C, C++]]
 - [[(Garden) Cybersecurity|사이버보안]]
 - [[(Garden) Database|데이터베이스]]
+- [[(Garden)  Finance|금융]]
 - [[(Garden) Kubernetes, Cloud|쿠버네티스, 클라우드]]
 - [[(Garden) Network, Protocol|네트워크]]
 - [[(Garden) Operating Systems, Linux|운영체제]]
