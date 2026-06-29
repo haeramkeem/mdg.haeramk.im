@@ -140,6 +140,7 @@ date: 2024-07-29
 	- [[(LeetCode) 13. Roman to Integer|LeetCode 13. Roman to Integer]]
 	- [[(LeetCode) 14. Longest Common Prefix|LeetCode 14. Longest Common Prefix]]
 	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
+	- [[(LeetCode) 1967. Number of Strings That Appear as Substrings in Word|LeetCode 1967. Number of Strings That Appear as Substrings in Word]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
 	- [[(LeetCode) 2515. Shortest Distance to Target String in a Circular Array|LeetCode 2515. Shortest Distance to Target String in a Circular Array]]
 - Stack
