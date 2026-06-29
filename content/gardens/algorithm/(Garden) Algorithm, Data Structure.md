@@ -49,16 +49,21 @@ date: 2024-07-29
 - BFS
 	- [[(LeetCode) 102. Binary Tree Level Order Traversal|LeetCode 102. Binary Tree Level Order Traversal]]
 	- [[(LeetCode) 199. Binary Tree Right Side View|LeetCode 199. Binary Tree Right Side View]]
+	- [[(LeetCode) 429. N-ary Tree Level Order Traversal|LeetCode 429. N-ary Tree Level Order Traversal]]
 	- [[(프로그래머스) 게임 맵 최단거리]]
 	- [[(프로그래머스) 네트워크]]
 	- [[(프로그래머스) 타겟 넘버]]
 - Binary search
+	- [[(LeetCode) 35. Search Insert Position|LeetCode 35. Search Insert Position]]
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
+	- [[(LeetCode) 154. Find Minimum in Rotated Sorted Array II|LeetCode 154. Find Minimum in Rotated Sorted Array II]]
+	- [[(LeetCode) 374. Guess Number Higher or Lower|LeetCode 374. Guess Number Higher or Lower]]
 	- [[(프로그래머스) 입국심사]]
 - Brute force (Naive approach)
 	- [[(LeetCode) 9. Palindrome Number|LeetCode 9. Palindrome Number]]
 	- [[(LeetCode) 788. Rotated Digits|LeetCode 788. Rotated Digits]]
 	- [[(LeetCode) 796. Rotate String|LeetCode 796. Rotate String]]
+	- [[(LeetCode) 1189. Maximum Number of Balloons|LeetCode 1189. Maximum Number of Balloons]]
 	- [[(LeetCode) 1344. Angle Between Hands of a Clock|LeetCode 1344. Angle Between Hands of a Clock]]
 	- [[(LeetCode) 1391. Check if There is a Valid Path in a Grid|LeetCode 1391. Check if There is a Valid Path in a Grid]]
 	- [[(LeetCode) 1732. Find the Highest Altitude|LeetCode 1732. Find the Highest Altitude]]
@@ -96,7 +101,9 @@ date: 2024-07-29
 	- [[(프로그래머스) 구명보트]]
 	- [[(프로그래머스) 체육복]]
 - Grid
+	- [[(LeetCode) 695. Max Area of Island|LeetCode 695. Max Area of Island]]
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
+	- [[(LeetCode) 994. Rotting Oranges|LeetCode 994. Rotting Oranges]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Mapset
 	- [[(LeetCode) 3120. Count the Number of Special Characters I|LeetCode 3120. Count the Number of Special Characters I]]
@@ -152,4 +159,5 @@ date: 2024-07-29
 	- [[(LeetCode) 1178. Number of Valid Words for Each Puzzle|LeetCode 1178. Number of Valid Words for Each Puzzle]]
 	- [[(LeetCode) 3093. Longest Common Suffix Queries|LeetCode 3093. Longest Common Suffix Queries]]
 - Two pointer
+	- [[(LeetCode) 1. Two Sum|LeetCode 1. Two Sum]]
 	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]

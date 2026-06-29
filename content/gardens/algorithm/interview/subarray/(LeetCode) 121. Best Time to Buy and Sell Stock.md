@@ -2,7 +2,7 @@
 tags:
   - mdg
   - algorithm
-  - interview
+  - interview/retry
   - subarray
 date: 2026-04-04
 ---
