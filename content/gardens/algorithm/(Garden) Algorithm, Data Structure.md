@@ -162,4 +162,5 @@ date: 2024-07-29
 - Two pointer
 	- [[(LeetCode) 1. Two Sum|LeetCode 1. Two Sum]]
 	- [[(LeetCode) 2. Add Two Numbers|LeetCode 2. Add Two Numbers]]
+	- [[(LeetCode) 21. Merge Two Sorted Lists|LeetCode 21. Merge Two Sorted Lists]]
 	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]
