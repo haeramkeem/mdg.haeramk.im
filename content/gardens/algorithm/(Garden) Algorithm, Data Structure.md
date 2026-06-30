@@ -154,6 +154,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 큰 수 만들기]]
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
+	- [[(LeetCode) 1358. Number of Substrings Containing All Three Characters|LeetCode 1358. Number of Substrings Containing All Three Characters]]
 - [[Trie (Data Structure)|Trie]]
 	- [[(LeetCode) 208. Implement Trie|LeetCode 208. Implement Trie]]
 	- [[(LeetCode) 1032. Stream of Characters|LeetCode 1032. Stream of Characters]]
