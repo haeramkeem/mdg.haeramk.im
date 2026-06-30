@@ -62,6 +62,7 @@ date: 2024-07-29
 - Brute force (Naive approach)
 	- [[(LeetCode) 9. Palindrome Number|LeetCode 9. Palindrome Number]]
 	- [[(LeetCode) 26. Remove Duplicates from Sorted Array|LeetCode 26. Remove Duplicates from Sorted Array]]
+	- [[(LeetCode) 27. Remove Element|LeetCode 27. Remove Element]]
 	- [[(LeetCode) 788. Rotated Digits|LeetCode 788. Rotated Digits]]
 	- [[(LeetCode) 796. Rotate String|LeetCode 796. Rotate String]]
 	- [[(LeetCode) 1189. Maximum Number of Balloons|LeetCode 1189. Maximum Number of Balloons]]
