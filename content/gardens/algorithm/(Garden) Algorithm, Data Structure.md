@@ -55,6 +55,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 타겟 넘버]]
 - Binary search
 	- [[(LeetCode) 35. Search Insert Position|LeetCode 35. Search Insert Position]]
+	- [[(LeetCode) 69. Sqrt(x)|LeetCode 69. Sqrt(x)]]
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 	- [[(LeetCode) 154. Find Minimum in Rotated Sorted Array II|LeetCode 154. Find Minimum in Rotated Sorted Array II]]
 	- [[(LeetCode) 374. Guess Number Higher or Lower|LeetCode 374. Guess Number Higher or Lower]]
