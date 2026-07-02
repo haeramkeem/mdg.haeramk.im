@@ -55,12 +55,16 @@ date: 2024-07-29
 	- [[(프로그래머스) 타겟 넘버]]
 - Binary search
 	- [[(LeetCode) 35. Search Insert Position|LeetCode 35. Search Insert Position]]
+	- [[(LeetCode) 69. Sqrt(x)|LeetCode 69. Sqrt(x)]]
 	- [[(LeetCode) 153. Find Minimum in Rotated Sorted Array|LeetCode 153. Find Minimum in Rotated Sorted Array]]
 	- [[(LeetCode) 154. Find Minimum in Rotated Sorted Array II|LeetCode 154. Find Minimum in Rotated Sorted Array II]]
 	- [[(LeetCode) 374. Guess Number Higher or Lower|LeetCode 374. Guess Number Higher or Lower]]
 	- [[(프로그래머스) 입국심사]]
 - Brute force (Naive approach)
 	- [[(LeetCode) 9. Palindrome Number|LeetCode 9. Palindrome Number]]
+	- [[(LeetCode) 26. Remove Duplicates from Sorted Array|LeetCode 26. Remove Duplicates from Sorted Array]]
+	- [[(LeetCode) 27. Remove Element|LeetCode 27. Remove Element]]
+	- [[(LeetCode) 66. Plus One|LeetCode 66. Plus One]]
 	- [[(LeetCode) 788. Rotated Digits|LeetCode 788. Rotated Digits]]
 	- [[(LeetCode) 796. Rotate String|LeetCode 796. Rotate String]]
 	- [[(LeetCode) 1189. Maximum Number of Balloons|LeetCode 1189. Maximum Number of Balloons]]
@@ -139,7 +143,11 @@ date: 2024-07-29
 - String
 	- [[(LeetCode) 13. Roman to Integer|LeetCode 13. Roman to Integer]]
 	- [[(LeetCode) 14. Longest Common Prefix|LeetCode 14. Longest Common Prefix]]
+	- [[(LeetCode) 28. Find the Index of the First Occurrence in a String|LeetCode 28. Find the Index of the First Occurrence in a String]]
+	- [[(LeetCode) 58. Length of Last Word|LeetCode 58. Length of Last Word]]
+	- [[(LeetCode) 67. Add Binary|LeetCode 67. Add Binary]]
 	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
+	- [[(LeetCode) 1967. Number of Strings That Appear as Substrings in Word|LeetCode 1967. Number of Strings That Appear as Substrings in Word]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]
 	- [[(LeetCode) 2515. Shortest Distance to Target String in a Circular Array|LeetCode 2515. Shortest Distance to Target String in a Circular Array]]
 - Stack
@@ -153,6 +161,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 큰 수 만들기]]
 - Subarray
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
+	- [[(LeetCode) 1358. Number of Substrings Containing All Three Characters|LeetCode 1358. Number of Substrings Containing All Three Characters]]
 - [[Trie (Data Structure)|Trie]]
 	- [[(LeetCode) 208. Implement Trie|LeetCode 208. Implement Trie]]
 	- [[(LeetCode) 1032. Stream of Characters|LeetCode 1032. Stream of Characters]]
@@ -160,4 +169,6 @@ date: 2024-07-29
 	- [[(LeetCode) 3093. Longest Common Suffix Queries|LeetCode 3093. Longest Common Suffix Queries]]
 - Two pointer
 	- [[(LeetCode) 1. Two Sum|LeetCode 1. Two Sum]]
+	- [[(LeetCode) 2. Add Two Numbers|LeetCode 2. Add Two Numbers]]
+	- [[(LeetCode) 21. Merge Two Sorted Lists|LeetCode 21. Merge Two Sorted Lists]]
 	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]
