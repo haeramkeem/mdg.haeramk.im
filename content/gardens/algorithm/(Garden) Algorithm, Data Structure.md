@@ -144,6 +144,7 @@ date: 2024-07-29
 	- [[(LeetCode) 14. Longest Common Prefix|LeetCode 14. Longest Common Prefix]]
 	- [[(LeetCode) 28. Find the Index of the First Occurrence in a String|LeetCode 28. Find the Index of the First Occurrence in a String]]
 	- [[(LeetCode) 58. Length of Last Word|LeetCode 58. Length of Last Word]]
+	- [[(LeetCode) 67. Add Binary|LeetCode 67. Add Binary]]
 	- [[(LeetCode) 657. Robot Return to Origin|LeetCode 657. Robot Return to Origin]]
 	- [[(LeetCode) 1967. Number of Strings That Appear as Substrings in Word|LeetCode 1967. Number of Strings That Appear as Substrings in Word]]
 	- [[(LeetCode) 2075. Decode the Slanted Ciphertext|LeetCode 2075. Decode the Slanted Ciphertext]]

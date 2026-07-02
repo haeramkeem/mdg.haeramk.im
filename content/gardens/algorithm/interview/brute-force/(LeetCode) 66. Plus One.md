@@ -23,18 +23,9 @@ date: 2026-07-02
 
 ```cpp
 class Solution {
-	void reverse(vector<int> &digits) {
-		int n = digits.size();
-
-		for (int i = 0; i < (n >> 1); i++) {
-			int buf = digits[i];
-			digits[i] = digits[n - i - 1];
-			digits[n - i - 1] = buf;
-		}
-	}
 public:
 	vector<int> plusOne(vector<int>& digits) {
-		reverse(digits);
+		reverse(digits.begin(), digits.end());
 
 		// Plus one
 		digits[0] += 1;
@@ -52,7 +43,7 @@ public:
 			digits.push_back(carry);
 		}
 
-		reverse(digits);
+		reverse(digits.begin(), digits.end());
 		
 		return digits;
 	}
