@@ -113,6 +113,8 @@ date: 2024-07-29
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
 	- [[(LeetCode) 994. Rotting Oranges|LeetCode 994. Rotting Oranges]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
+- Linked list
+	- [[(LeetCode) 83. Remove Duplicates from Sorted List|LeetCode 83. Remove Duplicates from Sorted List]]
 - Mapset
 	- [[(LeetCode) 3120. Count the Number of Special Characters I|LeetCode 3120. Count the Number of Special Characters I]]
 	- [[(LeetCode) 3121. Count the Number of Special Characters II|LeetCode 3121. Count the Number of Special Characters II]]
