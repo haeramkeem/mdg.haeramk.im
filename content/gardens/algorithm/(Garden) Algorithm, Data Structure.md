@@ -170,6 +170,7 @@ date: 2024-07-29
 	- [[(LeetCode) 1358. Number of Substrings Containing All Three Characters|LeetCode 1358. Number of Substrings Containing All Three Characters]]
 - Tree
 	- [[(LeetCode) 94. Binary Tree Inorder Traversal|LeetCode 94. Binary Tree Inorder Traversal]]
+	- [[(LeetCode) 100. Same Tree|LeetCode 100. Same Tree]]
 - [[Trie (Data Structure)|Trie]]
 	- [[(LeetCode) 208. Implement Trie|LeetCode 208. Implement Trie]]
 	- [[(LeetCode) 1032. Stream of Characters|LeetCode 1032. Stream of Characters]]
