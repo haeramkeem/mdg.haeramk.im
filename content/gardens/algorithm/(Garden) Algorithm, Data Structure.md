@@ -21,6 +21,7 @@ date: 2024-07-29
 	- [[Counting Sort (Algorithm)|Counting Sort]]
 	- [[Merge Sort (Algorithm)|Merge Sort]]
 - Graph
+	- [[Dijkstra (Algorithm)|Dijkstra]]
 	- [[Floyd-Warshall (Algorithm)|Floyd-Warshall]]
 	- [[Topological Sort (Algorithm)|Topological Sort]]
 
@@ -100,7 +101,10 @@ date: 2024-07-29
 - Graph
 	- [[(프로그래머스) 가장 먼 노드]]
 	- [[(프로그래머스) 단어 변환]]
-	- [[(프로그래머스) 순위]]
+	- [[Dijkstra (Algorithm)|Dijkstra]]
+		- [[(LeetCode) 743. Network Delay Time|LeetCode 743. Network Delay Time]]
+	- [[Floyd-Warshall (Algorithm)|Floyd-Warshall]]
+		- [[(프로그래머스) 순위]]
 - Greedy
 	- [[(프로그래머스) 구명보트]]
 	- [[(프로그래머스) 체육복]]
