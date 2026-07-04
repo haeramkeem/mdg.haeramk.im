@@ -4,6 +4,7 @@ tags:
   - algorithm
   - interview
   - tree
+  - bfs
 date: 2026-07-04
 ---
 > [!info] 문제 링크
