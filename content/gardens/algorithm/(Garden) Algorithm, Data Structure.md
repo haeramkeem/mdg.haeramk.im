@@ -190,4 +190,5 @@ date: 2024-07-29
 	- [[(LeetCode) 2. Add Two Numbers|LeetCode 2. Add Two Numbers]]
 	- [[(LeetCode) 21. Merge Two Sorted Lists|LeetCode 21. Merge Two Sorted Lists]]
 	- [[(LeetCode) 88. Merge Sorted Array|LeetCode 88. Merge Sorted Array]]
+	- [[(LeetCode) 125. Valid Palindrome|LeetCode 125. Valid Palindrome]]
 	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]
