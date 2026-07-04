@@ -174,6 +174,7 @@ date: 2024-07-29
 - Tree
 	- [[(LeetCode) 94. Binary Tree Inorder Traversal|LeetCode 94. Binary Tree Inorder Traversal]]
 	- [[(LeetCode) 100. Same Tree|LeetCode 100. Same Tree]]
+	- [[(LeetCode) 101. Symmetric Tree|LeetCode 101. Symmetric Tree]]
 - [[Trie (Data Structure)|Trie]]
 	- [[(LeetCode) 208. Implement Trie|LeetCode 208. Implement Trie]]
 	- [[(LeetCode) 1032. Stream of Characters|LeetCode 1032. Stream of Characters]]
