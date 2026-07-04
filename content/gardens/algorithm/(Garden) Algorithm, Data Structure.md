@@ -119,6 +119,7 @@ date: 2024-07-29
 - Linked list
 	- [[(LeetCode) 83. Remove Duplicates from Sorted List|LeetCode 83. Remove Duplicates from Sorted List]]
 	- [[(LeetCode) 141. Linked List Cycle|LeetCode 141. Linked List Cycle]]
+	- [[(LeetCode) 160. Intersection of Two Linked Lists|LeetCode 160. Intersection of Two Linked Lists]]
 - Mapset
 	- [[(LeetCode) 3120. Count the Number of Special Characters I|LeetCode 3120. Count the Number of Special Characters I]]
 	- [[(LeetCode) 3121. Count the Number of Special Characters II|LeetCode 3121. Count the Number of Special Characters II]]
