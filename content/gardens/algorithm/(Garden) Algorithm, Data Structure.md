@@ -100,6 +100,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 정수 삼각형]]
 - [[Disjoint Set (Data Structure)|DSU]]
 	- [[(LeetCode) 1722. Minimize Hamming Distance After Swap Operations|LeetCode 1722. Minimize Hamming Distance After Swap Operations]]
+	- [[(LeetCode) 2492. Minimum Score of a Path Between Two Cities|LeetCode 2492. Minimum Score of a Path Between Two Cities]]
 - Graph
 	- [[(프로그래머스) 가장 먼 노드]]
 	- [[(프로그래머스) 단어 변환]]
