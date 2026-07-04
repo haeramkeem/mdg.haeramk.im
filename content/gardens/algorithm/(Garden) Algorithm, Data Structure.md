@@ -176,6 +176,7 @@ date: 2024-07-29
 	- [[(LeetCode) 100. Same Tree|LeetCode 100. Same Tree]]
 	- [[(LeetCode) 101. Symmetric Tree|LeetCode 101. Symmetric Tree]]
 	- [[(LeetCode) 104. Maximum Depth of Binary Tree|LeetCode 104. Maximum Depth of Binary Tree]]
+	- [[(LeetCode) 108. Convert Sorted Array to Binary Search Tree|LeetCode 108. Convert Sorted Array to Binary Search Tree]]
 - [[Trie (Data Structure)|Trie]]
 	- [[(LeetCode) 208. Implement Trie|LeetCode 208. Implement Trie]]
 	- [[(LeetCode) 1032. Stream of Characters|LeetCode 1032. Stream of Characters]]
