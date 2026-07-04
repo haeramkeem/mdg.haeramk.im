@@ -179,6 +179,7 @@ date: 2024-07-29
 	- [[(LeetCode) 108. Convert Sorted Array to Binary Search Tree|LeetCode 108. Convert Sorted Array to Binary Search Tree]]
 	- [[(LeetCode) 110. Balanced Binary Tree|LeetCode 110. Balanced Binary Tree]]
 	- [[(LeetCode) 111. Minimum Depth of Binary Tree|LeetCode 111. Minimum Depth of Binary Tree]]
+	- [[(LeetCode) 112. Path Sum|LeetCode 112. Path Sum]]
 - [[Trie (Data Structure)|Trie]]
 	- [[(LeetCode) 208. Implement Trie|LeetCode 208. Implement Trie]]
 	- [[(LeetCode) 1032. Stream of Characters|LeetCode 1032. Stream of Characters]]
