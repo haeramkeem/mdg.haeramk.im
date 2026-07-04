@@ -182,6 +182,7 @@ date: 2024-07-29
 	- [[(LeetCode) 111. Minimum Depth of Binary Tree|LeetCode 111. Minimum Depth of Binary Tree]]
 	- [[(LeetCode) 112. Path Sum|LeetCode 112. Path Sum]]
 	- [[(LeetCode) 144. Binary Tree Preorder Traversal|LeetCode 144. Binary Tree Preorder Traversal]]
+	- [[(LeetCode) 145. Binary Tree Postorder Traversal|LeetCode 145. Binary Tree Postorder Traversal]]
 - [[Trie (Data Structure)|Trie]]
 	- [[(LeetCode) 208. Implement Trie|LeetCode 208. Implement Trie]]
 	- [[(LeetCode) 1032. Stream of Characters|LeetCode 1032. Stream of Characters]]
