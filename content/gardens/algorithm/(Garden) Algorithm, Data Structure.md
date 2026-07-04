@@ -61,6 +61,8 @@ date: 2024-07-29
 	- [[(LeetCode) 154. Find Minimum in Rotated Sorted Array II|LeetCode 154. Find Minimum in Rotated Sorted Array II]]
 	- [[(LeetCode) 374. Guess Number Higher or Lower|LeetCode 374. Guess Number Higher or Lower]]
 	- [[(프로그래머스) 입국심사]]
+- Bitwise
+	- [[(LeetCode) 136. Single Number|LeetCode 136. Single Number]]
 - Brute force (Naive approach)
 	- [[(LeetCode) 9. Palindrome Number|LeetCode 9. Palindrome Number]]
 	- [[(LeetCode) 26. Remove Duplicates from Sorted Array|LeetCode 26. Remove Duplicates from Sorted Array]]
