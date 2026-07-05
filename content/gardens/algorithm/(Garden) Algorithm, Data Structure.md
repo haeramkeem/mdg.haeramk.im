@@ -95,6 +95,7 @@ date: 2024-07-29
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
 	- [[(LeetCode) 396. Rotate Function|LeetCode 396. Rotate Function]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
+	- [[(LeetCode) 1301. Number of Paths with Max Score|LeetCode 1301. Number of Paths with Max Score]]
 	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
 	- [[(프로그래머스) N으로 표현]]
 	- [[(프로그래머스) 등굣길]]
