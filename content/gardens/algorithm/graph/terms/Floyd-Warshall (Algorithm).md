@@ -13,6 +13,10 @@ aliases:
 > - 본 작물의 backlink를 확인하거나
 > - #floyd-warshall 태그로 검색해보자.
 
+> [!tip] 언제 Floyd-Warshall 을 사용해야 할까?
+> - 우선 Floyd-Warshall 은 $O(V^{3})$ 이기 때문에 시간복잡도가 크다. 그래서 노드의 수가 적어야 한다.
+> - 그리고 Floyd-Warshall 은 모든 노드에서 모든 노드로 가는 최소비용을 전부 구한다. 이를 활용하는 대표적인 문제는, distinct subgraph group 의 개수를 구할 때 (즉, 연결된 노드들의 그룹이 몇개인지) 이다.
+
 ## Problem
 
 - Floyd-Warshall 알고리즘이 풀려고 하는 문제는 "최단경로 계산" 이다.
