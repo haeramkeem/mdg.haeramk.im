@@ -6,16 +6,16 @@
     <lastmod>2026-04-21T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/drafts/Page-Rank-(Algorithm)</loc>
-    <lastmod>2026-06-29T00:51:54.645Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.008Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/graph/terms/Directed-Acyclic-Graph,-DAG-(Data-Structure)</loc>
     <lastmod>2026-04-09T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</loc>
-    <lastmod>2026-06-29T00:51:54.645Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.008Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</loc>
-    <lastmod>2026-06-29T00:51:54.645Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.008Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Deque-(Data-Structure)</loc>
     <lastmod>2021-11-12T00:00:00.000Z</lastmod>
@@ -27,28 +27,31 @@
     <lastmod>2021-11-12T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</loc>
-    <lastmod>2026-06-29T00:51:54.645Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.008Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/terms/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</loc>
     <lastmod>2025-05-05T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/map/drafts/Sparse-Index-(Data-Structure)</loc>
-    <lastmod>2026-06-29T00:51:54.645Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.009Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/map/terms/Bloom-Filter-(Data-Structure)</loc>
     <lastmod>2024-04-14T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/drafts/Log-Structure-Merge-Tree,-LSM-Tree-(Data-Structure)</loc>
-    <lastmod>2026-06-29T00:51:54.646Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.009Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/drafts/Trie-(Data-Structure)</loc>
-    <lastmod>2026-06-29T00:51:54.646Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.009Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/terms/Balanced-Tree,-B-Tree-(Data-Structure)</loc>
     <lastmod>2024-04-06T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/data-structure/tree/terms/Binary-Search-Tree,-BST-(Data-Structure)</loc>
     <lastmod>2024-04-06T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/graph/terms/Dijkstra-(Algorithm)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/graph/terms/Floyd-Warshall-(Algorithm)</loc>
     <lastmod>2026-04-09T00:00:00.000Z</lastmod>
@@ -86,8 +89,14 @@
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/binary-search/(LeetCode)-374.-Guess-Number-Higher-or-Lower</loc>
     <lastmod>2026-06-22T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/binary-search/(LeetCode)-69.-Sqrt(x)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/binary-search/(%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4)-%EC%9E%85%EA%B5%AD%EC%8B%AC%EC%82%AC</loc>
     <lastmod>2026-04-06T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/bitwise/(LeetCode)-136.-Single-Number</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-1189.-Maximum-Number-of-Balloons</loc>
     <lastmod>2026-06-22T00:00:00.000Z</lastmod>
@@ -97,6 +106,9 @@
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-1391.-Check-if-There-is-a-Valid-Path-in-a-Grid</loc>
     <lastmod>2026-04-27T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-168.-Excel-Sheet-Column-Title</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-1732.-Find-the-Highest-Altitude</loc>
     <lastmod>2026-06-19T00:00:00.000Z</lastmod>
@@ -113,6 +125,12 @@
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-2452.-Words-Within-Two-Edits-of-Dictionary</loc>
     <lastmod>2026-04-22T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-26.-Remove-Duplicates-from-Sorted-Array</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-27.-Remove-Element</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-3300.-Minimum-Element-After-Replacement-With-Digit-Sum</loc>
     <lastmod>2026-05-29T00:00:00.000Z</lastmod>
   </url><url>
@@ -121,6 +139,9 @@
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-3783.-Mirror-Distance-of-an-Integer</loc>
     <lastmod>2026-04-20T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-66.-Plus-One</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/brute-force/(LeetCode)-788.-Rotated-Digits</loc>
     <lastmod>2026-05-08T00:00:00.000Z</lastmod>
@@ -158,8 +179,11 @@
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/dp/(LeetCode)-120.-Triangle</loc>
     <lastmod>2026-04-04T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/dp/(LeetCode)-1301.-Number-of-Paths-with-Max-Score</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/dp/(LeetCode)-213.-House-Robber-II</loc>
-    <lastmod>2026-06-29T00:51:54.648Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.011Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/dp/(LeetCode)-3418.-Maximum-Amount-of-Money-Robot-Can-Earn</loc>
     <lastmod>2026-04-03T00:00:00.000Z</lastmod>
@@ -182,13 +206,19 @@
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/dsu/(LeetCode)-1722.-Minimize-Hamming-Distance-After-Swap-Operations</loc>
     <lastmod>2026-04-21T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/dsu/(LeetCode)-2492.-Minimum-Score-of-a-Path-Between-Two-Cities</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/graph/(%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4)-%EA%B0%80%EC%9E%A5-%EB%A8%BC-%EB%85%B8%EB%93%9C</loc>
     <lastmod>2026-04-05T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/graph/(%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4)-%EB%8B%A8%EC%96%B4-%EB%B3%80%ED%99%98</loc>
     <lastmod>2026-04-12T00:00:00.000Z</lastmod>
   </url><url>
-    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/graph/(%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4)-%EC%88%9C%EC%9C%84</loc>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/graph/dijkstra/(LeetCode)-743.-Network-Delay-Time</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/graph/floyd-warshall/(%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4)-%EC%88%9C%EC%9C%84</loc>
     <lastmod>2026-04-09T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/greedy/(%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4)-%EA%B5%AC%EB%AA%85%EB%B3%B4%ED%8A%B8</loc>
@@ -208,6 +238,15 @@
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/grid/(LeetCode)-994.-Rotting-Oranges</loc>
     <lastmod>2026-06-22T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/linked-list/(LeetCode)-141.-Linked-List-Cycle</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/linked-list/(LeetCode)-160.-Intersection-of-Two-Linked-Lists</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/linked-list/(LeetCode)-83.-Remove-Duplicates-from-Sorted-List</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/mapset/(LeetCode)-3120.-Count-the-Number-of-Special-Characters-I</loc>
     <lastmod>2026-05-28T00:00:00.000Z</lastmod>
@@ -317,17 +356,62 @@
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/string/(LeetCode)-14.-Longest-Common-Prefix</loc>
     <lastmod>2026-06-19T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/string/(LeetCode)-1967.-Number-of-Strings-That-Appear-as-Substrings-in-Word</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/string/(LeetCode)-2075.-Decode-the-Slanted-Ciphertext</loc>
     <lastmod>2026-04-04T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/string/(LeetCode)-2515.-Shortest-Distance-to-Target-String-in-a-Circular-Array</loc>
     <lastmod>2026-04-15T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/string/(LeetCode)-28.-Find-the-Index-of-the-First-Occurrence-in-a-String</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/string/(LeetCode)-58.-Length-of-Last-Word</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/string/(LeetCode)-657.-Robot-Return-to-Origin</loc>
     <lastmod>2026-04-05T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/string/(LeetCode)-67.-Add-Binary</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/subarray/(LeetCode)-121.-Best-Time-to-Buy-and-Sell-Stock</loc>
     <lastmod>2026-04-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/subarray/(LeetCode)-1358.-Number-of-Substrings-Containing-All-Three-Characters</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-100.-Same-Tree</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-101.-Symmetric-Tree</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-104.-Maximum-Depth-of-Binary-Tree</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-108.-Convert-Sorted-Array-to-Binary-Search-Tree</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-110.-Balanced-Binary-Tree</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-111.-Minimum-Depth-of-Binary-Tree</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-112.-Path-Sum</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-144.-Binary-Tree-Preorder-Traversal</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-145.-Binary-Tree-Postorder-Traversal</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/tree/(LeetCode)-94.-Binary-Tree-Inorder-Traversal</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/trie/(LeetCode)-1032.-Stream-of-Characters</loc>
     <lastmod>2026-06-19T00:00:00.000Z</lastmod>
@@ -344,8 +428,20 @@
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/two-pointer/(LeetCode)-1.-Two-Sum</loc>
     <lastmod>2026-06-22T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/two-pointer/(LeetCode)-125.-Valid-Palindrome</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/interview/two-pointer/(LeetCode)-1855.-Maximum-Distance-Between-a-Pair-of-Values</loc>
     <lastmod>2026-04-20T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/two-pointer/(LeetCode)-2.-Add-Two-Numbers</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/two-pointer/(LeetCode)-21.-Merge-Two-Sorted-Lists</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/algorithm/interview/two-pointer/(LeetCode)-88.-Merge-Sorted-Array</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/algorithm/originals/algorithm.fall.2021.cse.cnu.ac.kr/(%EC%B6%A9%EB%82%A8%EB%8C%80)-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EA%B0%95%EC%9D%98%EB%A1%9D</loc>
     <lastmod>2021-09-01T00:00:00.000Z</lastmod>
@@ -396,13 +492,13 @@
     <lastmod>2024-07-29T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cache/drafts/Caching-Home-Agent,-CHA-(Intel-Cache-Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.652Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cache/drafts/L1,-L2,-L3-Cache-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.652Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cache/drafts/Non-Blocking-Cache-(CPU-Cache)</loc>
-    <lastmod>2026-06-29T00:51:54.652Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cache/terms/CPU-Cache-(Arch)</loc>
     <lastmod>2024-10-09T00:00:00.000Z</lastmod>
@@ -420,37 +516,37 @@
     <lastmod>2024-10-09T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Central-Processing-Unit,-CPU-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.652Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Common-Data-Bus,-CDB-(CPU-Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.652Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Interrupt-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Line-Fill-Buffer-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Microprocessor-without-Interlocked-Pipeline-Stages,-MIPS-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Model-Specific-Register,-MSR-(Intel-CPU-Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Processor-Event-Based-Sampling,-PEBS-(Intel-Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Reorder-Buffer-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Reservation-Station-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Scoreboard-Architecture-(CPU-Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.015Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/drafts/Store-Buffer-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cpu/terms/Branch-Prediction-(Arch)</loc>
     <lastmod>2025-04-28T00:00:00.000Z</lastmod>
@@ -474,7 +570,7 @@
     <lastmod>2025-01-27T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cuda/drafts/CUDA-Memory-Model-(NVIDIA-CUDA)</loc>
-    <lastmod>2026-06-29T00:51:54.653Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/cuda/story/choiBLAMS---cuBLAS-from-Scratch</loc>
     <lastmod>2024-12-06T00:00:00.000Z</lastmod>
@@ -495,172 +591,172 @@
     <lastmod>2024-10-18T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Accelerator-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Activation-(Arch)</loc>
     <lastmod>2024-09-10T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Addition-(arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Amdahl's-Law-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Arithmetic-Logic-Unit,-ALU-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Bitwise-(Bit-Operation)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Collective-Communication-Library,-CCL-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Communication-Computation-Overlapping,-Latency-Hiding-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Complex-Instruction-Set-Computer,-CISC-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.016Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Control-Hazard-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/DOACROSS-Parallelism-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/DOALL-Parallelism-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Data-Hazard-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Data-Parallelism-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Division-(Bit-Operation)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Floating-point-Operation-Per-Second,-FLOPS-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Floating-point-Representation-(Arch-FP)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Fused-Multiply-Add,-FMA-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/GPU-Direct-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Graphic-Processing-Unit,-GPU-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/IEEE-754-(Arch-FP)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/In-order-Execution-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Instruction-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Instruction-Cycle-(Arch-Instruction)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Instruction-Mode-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.654Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Instruction-Pipeline-(Arch-Instruction)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Instruction-Set-Architecture,-ISA-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Integer-Representation-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Logic-gate-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Loop-Distribution-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Loop-Fusion-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Loop-carried-Dependence-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Modulo-Operation-(Bit-Operation)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Multithreaded-Processor-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Out-of-Order-Execution,-OoO-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Permute,-Shuffle-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Prefix-Sum-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Reduced-Instruction-Set-Computer,-RISC-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Reduction-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Register-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Remote-Direct-Memory-Access,-RDMA-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Rendering-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Rounding-(Arch-FP)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Scalability-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Scientific-notation-(Arch-FP)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Shader-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Shift-(Bit-Operation)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Sign-Extension-(Bit-Operation)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Stack-Pointer,-SP-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Streaming-Multiprocessor,-SM-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Subtract-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.017Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Supercomputer-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Task-Parallelism-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Types-of-Computing-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/drafts/Uni,-Multi-programming-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.655Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/ilp/drafts/Tomasulo's-Algorithm-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/ilp/terms/Instruction-Level-Parallelism-(Arch)</loc>
     <lastmod>2024-10-18T00:00:00.000Z</lastmod>
@@ -669,43 +765,43 @@
     <lastmod>2024-07-23T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/interconnect/drafts/Interconnect-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/interconnect/drafts/Ultra-Path-Interconnect,-UPI-(Intel-Interconnect-Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/Compute-Express-Link,-CXL-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/Double-Data-Rate,-DDR-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/Dynamic-Ramdom-Access-Memory,-DRAM-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/Error-Correction-Code,-ECC-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/High-Bandwidth-Memory,-HBM-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/Memory-Bandwidth-Monitoring,-MBM-(Intel-Memory-Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/Memory-Consistency-Model-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/Non-Uniform-Memory-Access,-NUMA-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/memory/drafts/Tiered-Memory-Architecture-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/ndp/drafts/Near-Data-Processing,-NDP-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/ndp/drafts/Process-In-Memory,-PIM-(Arch)</loc>
-    <lastmod>2026-06-29T00:51:54.656Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.018Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/arch/originals/aca.spring.2025.cse.snu.ac.kr/(SNU-CSE)-Advanced-Computer-Architectures</loc>
     <lastmod>2025-03-04T00:00:00.000Z</lastmod>
@@ -774,16 +870,16 @@
     <lastmod>2024-07-29T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/atomic/drafts/Atomic-Type-(C-Atomic)</loc>
-    <lastmod>2026-06-29T00:51:54.659Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.020Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/atomic/drafts/Compare-and-Swap,-CAS-(C-Atomic)</loc>
-    <lastmod>2026-06-29T00:51:54.659Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.021Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/atomic/drafts/Fetch-And-Add,-FAA-(C-Atomic)</loc>
-    <lastmod>2026-06-29T00:51:54.659Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.021Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/atomic/drafts/Test-and-Set,-TAS-(C-Atomic)</loc>
-    <lastmod>2026-06-29T00:51:54.659Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.021Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/debug/%ED%95%A8%EC%88%98-%EC%A7%84%EC%9E%85,-%ED%83%88%EC%B6%9C-%EB%A9%94%EC%84%B8%EC%A7%80-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0-(C-Debug)</loc>
     <lastmod>2024-05-07T00:00:00.000Z</lastmod>
@@ -807,13 +903,13 @@
     <lastmod>2025-04-08T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/io/drafts/Basic-file-IO-(C-File-IO)</loc>
-    <lastmod>2026-06-29T00:51:54.660Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.021Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/io/drafts/Fsync-System-Call-(C-File-IO)</loc>
-    <lastmod>2026-06-29T00:51:54.660Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.021Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/io/drafts/Read,-Write-System-Call-(C-File-IO)</loc>
-    <lastmod>2026-06-29T00:51:54.660Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.021Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/kernel/File-IO-in-Kernel-Module-(C-Linux-Kernel)</loc>
     <lastmod>2024-12-21T00:00:00.000Z</lastmod>
@@ -840,10 +936,10 @@
     <lastmod>2025-07-25T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/pthread/drafts/POSIX-Mutex-(C-POSIX-Thread)</loc>
-    <lastmod>2026-06-29T00:51:54.660Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.021Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/pthread/drafts/POSIX-RWLock-(C-POSIX-Thread)</loc>
-    <lastmod>2026-06-29T00:51:54.660Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.021Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/pthread/%EC%84%B8%EC%83%81-%EA%B0%84%EB%8B%A8%ED%95%9C-POSIX-thread-(pthread)-%EC%98%88%EC%8B%9C-(C-Thread)</loc>
     <lastmod>2024-09-08T00:00:00.000Z</lastmod>
@@ -864,7 +960,7 @@
     <lastmod>2024-10-06T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/type/drafts/String,-Character-Array-(C-Type)</loc>
-    <lastmod>2026-06-29T00:51:54.661Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.022Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/c/utils/Command-Arguments-(C)</loc>
     <lastmod>2025-06-26T00:00:00.000Z</lastmod>
@@ -972,7 +1068,7 @@
     <lastmod>2024-05-08T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/gcc-llvm/drafts/Compilation-Steps-(GCC,-LLVM)</loc>
-    <lastmod>2026-06-29T00:51:54.663Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.023Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/c-cpp/gcc-llvm/gcc---Preprocessing-Config-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0</loc>
     <lastmod>2025-02-17T00:00:00.000Z</lastmod>
@@ -1038,7 +1134,7 @@
     <lastmod>2024-05-27T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/cybersecurity/PKC/draft/Diffie-Hellman-Ephimeral,-DHE-(PKC)</loc>
-    <lastmod>2026-06-29T00:51:54.664Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.024Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/cybersecurity/PKC/story/Symmetric-Key-for-TLS---TLS-%ED%86%B5%EC%8B%A0%EC%97%90-%EB%8C%80%EC%B9%AD%ED%82%A4%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0-(PKC)</loc>
     <lastmod>2024-01-10T00:00:00.000Z</lastmod>
@@ -1050,7 +1146,7 @@
     <lastmod>2024-05-27T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/cybersecurity/PKIX/draft/Subject-Key-Identifier,-SKID-(PKIX)</loc>
-    <lastmod>2026-06-29T00:51:54.665Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.025Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/cybersecurity/PKIX/terms/Certificate-(PKIX)</loc>
     <lastmod>2024-05-27T00:00:00.000Z</lastmod>
@@ -1110,7 +1206,7 @@
     <lastmod>2024-07-29T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/benchmark/draft/CH-benCHmark-(Database-Benchmark)</loc>
-    <lastmod>2026-06-29T00:51:54.666Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.026Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/benchmark/tpc/TPC-C-(Database-Benchmark)</loc>
     <lastmod>2024-08-23T00:00:00.000Z</lastmod>
@@ -1128,7 +1224,7 @@
     <lastmod>2025-08-18T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/data-model/drafts/Constraint-(Database)</loc>
-    <lastmod>2026-06-29T00:51:54.666Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.026Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/data-model/terms/Cluster,-Database-(Data-Model)</loc>
     <lastmod>2025-02-11T00:00:00.000Z</lastmod>
@@ -1269,28 +1365,28 @@
     <lastmod>2024-11-21T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/drafts/func-heap_prepare_pagescan-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/drafts/func-heap_scan_stream_read_next_parallel-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/drafts/func-heap_scan_stream_read_next_serial-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/drafts/func-heapgettup-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/drafts/func-heapgettup_advance_block-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/drafts/func-heapgettup_continue_page-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/drafts/func-heapgettup_initial_block-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/drafts/struct-HeapScanDesc-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/heapam/func-heap_beginscan-(Postgres-Coderef)</loc>
     <lastmod>2024-12-14T00:00:00.000Z</lastmod>
@@ -1314,7 +1410,7 @@
     <lastmod>2024-12-15T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/relscan/drafts/struct-TableScanDesc-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.669Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.028Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/access.backend.src.postgresql.org/tableam/func-table_beginscan-(Postgres-Coderef)</loc>
     <lastmod>2024-12-14T00:00:00.000Z</lastmod>
@@ -1338,28 +1434,28 @@
     <lastmod>2025-02-12T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/drafts/func-ExecProcNode-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/drafts/func-ExecProject-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/drafts/func-ExecutePlan-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/drafts/func-ExecutorRun-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/drafts/func-SeqRecheck-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/drafts/func-standard_ExecutorRun-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/drafts/struct-EState-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/drafts/struct-SeqScanState-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/executor.backend.src.postgresql.org/func-ExecScan-(Postgres-Coderef)</loc>
     <lastmod>2024-12-15T00:00:00.000Z</lastmod>
@@ -1383,19 +1479,19 @@
     <lastmod>2024-12-15T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/main.backend.src.postgresql.org/drafts/func-Main-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.670Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/nodes.backend.src.postgresql.org/drafts/struct-ColumnDef-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/postmaster.backend.src.postgresql.org/drafts/func-PostmasterMain-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/postmaster.backend.src.postgresql.org/drafts/func-ServerLoop-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.029Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/postmaster.backend.src.postgresql.org/drafts/type-Backend-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/postmaster.backend.src.postgresql.org/func-BackendRun-(Postgres-Coderef)</loc>
     <lastmod>2025-04-30T00:00:00.000Z</lastmod>
@@ -1404,10 +1500,10 @@
     <lastmod>2024-11-23T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/drafts/func-read_stream_look_ahead-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/drafts/func-read_stream_start_pending_read-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/aio/func-read_stream_begin_relation-(Postgres-Coderef)</loc>
     <lastmod>2024-12-15T00:00:00.000Z</lastmod>
@@ -1422,22 +1518,22 @@
     <lastmod>2024-12-14T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/buffer/drafts/func-BufferAlloc-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/buffer/drafts/func-ExtendBufferedRelShared-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/buffer/drafts/func-PinBufferForBlock-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/buffer/drafts/func-StartReadBuffersImpl-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/buffer/drafts/func-WaitReadBuffers-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.671Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/buffer/drafts/func-WaitReadBuffersCanStartIO-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/buffer/func-ClockSweepTick-(Postgres-Coderef)</loc>
     <lastmod>2024-11-05T00:00:00.000Z</lastmod>
@@ -1461,58 +1557,58 @@
     <lastmod>2024-11-05T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/file/drafts/func-FilePrefetch-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/file/drafts/func-FileReadV-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.030Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/smgr/drafts/func-mdprefetch-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/smgr/drafts/func-mdreadv-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/smgr/drafts/func-smgrprefetch-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/storage.backend.src.postgresql.org/smgr/drafts/func-smgrreadv-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/story/Sequential-Scan-Callstack-(Postgres-Coderef)</loc>
     <lastmod>2024-12-16T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/story/drafts/Common-Query-Execution-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/tcop.backend.src.postgresql.org/drafts/func-BackendMain-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/tcop.backend.src.postgresql.org/drafts/func-PortalRun-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/tcop.backend.src.postgresql.org/drafts/func-PortalRunSelect-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/tcop.backend.src.postgresql.org/drafts/func-PostgresMain-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.672Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/tcop.backend.src.postgresql.org/drafts/func-exec_simple_query-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.673Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/coderef/utils.src.postgresql.org/drafts/func-MemoryContextSwitchTo-(Postgres-Coderef)</loc>
-    <lastmod>2026-06-29T00:51:54.673Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/drafts/Backend-(Postgres)</loc>
-    <lastmod>2026-06-29T00:51:54.673Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/drafts/Page-(PostgreSQL)</loc>
-    <lastmod>2026-06-29T00:51:54.673Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/drafts/Ring-Buffer-(PostgreSQL)</loc>
-    <lastmod>2026-06-29T00:51:54.673Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/drafts/Synchronous-Commit-(PostgreSQL)</loc>
-    <lastmod>2026-06-29T00:51:54.673Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.031Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/dbms/postgresql/story/PostgreSQL-Build-from-Source-Guide---PostgreSQL-%EB%94%94%EB%B2%84%EA%B9%85%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%86%8C%EC%8A%A4%EC%BD%94%EB%93%9C-%EB%B9%8C%EB%93%9C-%EA%B0%80%EC%9D%B4%EB%93%9C</loc>
     <lastmod>2024-11-20T00:00:00.000Z</lastmod>
@@ -1545,7 +1641,7 @@
     <lastmod>2024-04-14T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/encoding/drafts/Word-Aligned-Hybrid,-WAH-(Encoding)</loc>
-    <lastmod>2026-06-29T00:51:54.674Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.032Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/encoding/papers/fastlanes.2023.pvldb.vldb.org/(%EB%85%BC%EB%AC%B8)-The-FastLanes-Compression-Layout---Decoding-100-Billion-Integers-per-Second-with-Scalar-Code</loc>
     <lastmod>2024-08-21T00:00:00.000Z</lastmod>
@@ -1614,13 +1710,13 @@
     <lastmod>2024-08-06T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/format/drafts/Decomposition-Storage-Model,-DSM-(Database-Format)</loc>
-    <lastmod>2026-06-29T00:51:54.676Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.033Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/format/drafts/N-ary-Storage-Model,-NSM-(Database-Format)</loc>
-    <lastmod>2026-06-29T00:51:54.676Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.033Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/format/drafts/Slotted-Page-(Database-Format)</loc>
-    <lastmod>2026-06-29T00:51:54.676Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.033Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/format/papers/btrblocks.2023.sigmod.org/(%EB%85%BC%EB%AC%B8)-BtrBlocks---Efficient-Columnar-Compression-for-Data-Lakes</loc>
     <lastmod>2024-08-09T00:00:00.000Z</lastmod>
@@ -1665,13 +1761,13 @@
     <lastmod>2024-12-03T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/format/terms/parquet/drafts/Column-Chunk-(Parquet-Format)</loc>
-    <lastmod>2026-06-29T00:51:54.677Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/format/terms/parquet/drafts/File-Meta-Data-(Parquet-Format)</loc>
-    <lastmod>2026-06-29T00:51:54.677Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/format/terms/parquet/drafts/Row-Group-(Parquet-Format)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/format/terms/parquet/spec/Plain-Encoding-(Parquet-Format)</loc>
     <lastmod>2024-12-30T00:00:00.000Z</lastmod>
@@ -1683,31 +1779,31 @@
     <lastmod>2025-01-09T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/gc/drafts/Epoch-Based-Reclamation,-EBR-(Database-GC)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/drafts/AVL-Tree-(Database-Index)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/drafts/Adaptive-Index-Tree,-ART-(Database-Index)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/drafts/B+-Tree-(Database-Index)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/drafts/Bitmap-Index-(Database-Index)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/drafts/Cardinality-(Database-Index)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/drafts/Index-(Database)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/drafts/Red-black-Tree,-RB-Tree-(Database-Index)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/drafts/Structural-Modification-Operation,-SMO-(Database-Index)</loc>
-    <lastmod>2026-06-29T00:51:54.678Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.035Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/index/papers/b-trees-are-back.2025.sigmod.org/(%EB%85%BC%EB%AC%B8)-B-Trees-Are-Back---Engineering-Fast-and-Pageable-Node-Layouts</loc>
     <lastmod>2025-11-17T00:00:00.000Z</lastmod>
@@ -1734,7 +1830,7 @@
     <lastmod>2025-10-10T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/modern/papers/draft/(%EB%85%BC%EB%AC%B8)-Lakehouse---A-New-Generation-of-Open-Platforms-that-UnifyData-Warehousing-and-Advanced-Analytics</loc>
-    <lastmod>2026-06-29T00:51:54.679Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.036Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/modern/terms/Data-Cube-(Modern-Database)</loc>
     <lastmod>2024-07-18T00:00:00.000Z</lastmod>
@@ -1905,7 +2001,7 @@
     <lastmod>2025-04-23T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/query-plan/drafts/Materialization-(Database-Query-Plan)</loc>
-    <lastmod>2026-06-29T00:51:54.685Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.040Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/query-plan/papers/metis.2024.sigmod.org/(%EB%85%BC%EB%AC%B8)-Rethink-Query-Optimization-in-HTAP-Databases</loc>
     <lastmod>2025-05-18T00:00:00.000Z</lastmod>
@@ -1914,10 +2010,10 @@
     <lastmod>2025-05-18T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/query-plan/papers/metis.2024.sigmod.org/full/drafts/6.-Runtime-Optimizations-(Metis,-SIGMOD'24)</loc>
-    <lastmod>2026-06-29T00:51:54.685Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.040Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/recovery/drafts/Sequentially-Buffered-LSN,-SBL-(Database-Recovery)</loc>
-    <lastmod>2026-06-29T00:51:54.685Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.041Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/recovery/papers/bordercollie.2019.sigmod.org/Border-Collie---A-Wait-free,-Read-optimal-Algorithm-for-Database-Logging-on-Multicore-Hardware-(SIGMOD'19)</loc>
     <lastmod>2025-05-05T00:00:00.000Z</lastmod>
@@ -1977,19 +2073,19 @@
     <lastmod>2026-05-08T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/transaction/drafts/New-to-old,-UNDO,-DELTA-Versioning-(Database-Transaction)</loc>
-    <lastmod>2026-06-29T00:51:54.686Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.042Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/transaction/drafts/Old-to-new,-REDO,-FULL-Versioning-(Database-Transaction)</loc>
-    <lastmod>2026-06-29T00:51:54.686Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.042Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/transaction/drafts/Phantom-Read-(Database-Transaction)</loc>
-    <lastmod>2026-06-29T00:51:54.686Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.042Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/transaction/drafts/SWMR-MVCC-%EB%A5%BC-%EA%B5%AC%ED%98%84%ED%95%98%EB%A9%B0-%EA%B2%AA%EC%9D%80-%EC%82%AC%EA%B1%B4%EC%82%AC%EA%B3%A0%EB%93%A4</loc>
     <lastmod>2024-09-09T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/transaction/drafts/Two-Phase-Locking,-2PL-(Database-Transaction)</loc>
-    <lastmod>2026-06-29T00:51:54.687Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.042Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/transaction/papers/diva.2022.sigmod.org/DIVA---Making-MVCC-Systems-HTAP-Friendly-(SIGMOD'22)</loc>
     <lastmod>2024-10-06T00:00:00.000Z</lastmod>
@@ -2007,7 +2103,7 @@
     <lastmod>2025-05-07T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/transaction/papers/drafts/(%EB%85%BC%EB%AC%B8)-Speedy-transactions-in-multicore-in-memory-databases</loc>
-    <lastmod>2026-06-29T00:51:54.687Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.042Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/database/transaction/papers/scalable-lock-manager-for-multicores.2013.sigmod.org/A-Scalable-Lock-Manager-for-Multicores-(SIGMOD'13)</loc>
     <lastmod>2025-05-05T00:00:00.000Z</lastmod>
@@ -2108,6 +2204,405 @@
     <loc>https://mdg.haeramk.im/gardens/etc/originals/webprogramming.fall.2021.cse.cnu.ac.kr/12.-HTML,-JS,-HTTP</loc>
     <lastmod>2021-11-24T00:00:00.000Z</lastmod>
   </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/(Garden)--Finance</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/common/%EA%B8%B0%EB%AA%85,-%EB%AC%B4%EA%B8%B0%EB%AA%85-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/common/%EB%8C%80%EA%B8%88-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/common/%EB%8F%99%EC%82%B0,-%EB%B6%80%EB%8F%99%EC%82%B0,-%EC%9C%A0%EB%8F%99%ED%99%94-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/common/%EB%B2%95%EC%9D%B8-(%EB%B2%95%EB%A5%A0)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/common/%EC%9D%B4%ED%91%9C%EC%B1%84-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/common/%EC%A0%95%EA%B4%80-(%EB%B2%95%EB%A5%A0)</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EB%AF%BC%EC%82%AC/%EC%B1%84%EA%B6%8C-(%EB%AF%BC%EC%82%AC)</loc>
+    <lastmod>2026-07-06T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EB%B3%B4%ED%97%98/%EC%A0%80%EC%B6%95%EC%84%B1,-%EB%B3%B4%EC%9E%A5%EC%84%B1-(%EB%B3%B4%ED%97%98)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EB%B6%80%EC%B1%84/%EB%B6%80%EC%B1%84-(%EC%83%81%EC%97%85)</loc>
+    <lastmod>2026-07-06T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EB%B2%95%EC%A0%95%EC%A4%80%EB%B9%84%EA%B8%88-(%EB%B6%84%EB%A5%98%EC%B2%B4%EA%B3%84)</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88/%EB%AF%B8%EC%B2%98%EB%B6%84%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88-(%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-06T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88-(%EC%9E%89%EC%97%AC%EA%B8%88%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9D%B4%EC%9D%B5%EC%A4%80%EB%B9%84%EA%B8%88-(%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%84%EC%9D%98%EC%A0%81%EB%A6%BD%EA%B8%88-(%EC%9D%B4%EC%9D%B5%EC%9E%89%EC%97%AC%EA%B8%88%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-06T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%89%EC%97%AC%EA%B8%88-(%EC%9E%90%EB%B3%B8%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-05T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%9E%89%EC%97%AC%EA%B8%88-(%EC%9E%89%EC%97%AC%EA%B8%88%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%A4%80%EB%B9%84%EA%B8%88/%EA%B0%90%EC%9E%90%EC%B0%A8%EC%9D%B5-(%EC%9E%90%EB%B3%B8%EC%A4%80%EB%B9%84%EA%B8%88%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-06T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%A4%80%EB%B9%84%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%A4%80%EB%B9%84%EA%B8%88-(%EC%9E%90%EB%B3%B8%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%9E%89%EC%97%AC%EA%B8%88/%EC%9E%90%EB%B3%B8%EC%A4%80%EB%B9%84%EA%B8%88/%EC%A3%BC%EC%8B%9D%EB%B0%9C%ED%96%89%EC%B4%88%EA%B3%BC%EA%B8%88-(%EC%9E%90%EB%B3%B8%EC%A4%80%EB%B9%84%EA%B8%88%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%90%EB%B3%B8-(%EC%9E%90%EC%82%B0%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%90%EB%B3%B8%EA%B8%88/%EC%9E%90%EB%B3%B8%EA%B8%88-(%EC%9E%90%EB%B3%B8%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%90%EB%B3%B8%EA%B8%88/%EC%9E%90%EB%B3%B8%EA%B8%88%EC%9D%98-%EA%B0%90%EC%86%8C,-%EA%B0%90%EC%9E%90-(%EC%9E%90%EB%B3%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%90%EB%B3%B8%EA%B8%88/%EC%9E%90%EB%B3%B8%EA%B8%88%EC%9D%98-%EC%A6%9D%EA%B0%80,-%EC%A6%9D%EC%9E%90-(%EC%9E%90%EB%B3%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EB%B3%B8/%EC%9E%90%EB%B3%B8%EC%A1%B0%EC%A0%95-(%EC%9E%90%EB%B3%B8%EC%9D%98-%EC%9D%BC%EB%B6%80)</loc>
+    <lastmod>2026-07-06T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%EC%9E%90%EC%82%B0/%EC%9E%90%EC%82%B0-(%EC%83%81%EC%97%85)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/draft/%EB%AC%BC%EC%A0%81-%ED%9A%8C%EC%82%AC-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/draft/%EB%B0%B0%EB%8B%B9-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/draft/%EC%9D%B8%EC%A0%81-%ED%9A%8C%EC%82%AC-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/draft/%ED%95%A9%EB%AA%85-%ED%9A%8C%EC%82%AC-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/draft/%ED%95%A9%EC%9E%90-%ED%9A%8C%EC%82%AC-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%9C%A0%ED%95%9C%EC%B1%85%EC%9E%84%ED%9A%8C%EC%82%AC-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%9C%A0%ED%95%9C%ED%9A%8C%EC%82%AC-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/draft/%EB%B3%B4%ED%86%B5%EA%B2%B0%EC%9D%98-(%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/draft/%EC%9E%90%EC%82%AC%EC%A3%BC-%EC%86%8C%EA%B0%81-(%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/draft/%EC%A3%BC%EC%8B%9D%EC%9D%98-%EC%86%8C%EA%B0%81-(%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/draft/%ED%8A%B9%EB%B3%84%EA%B2%B0%EC%9D%98-(%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/%EB%B0%9C%ED%96%89%EA%B0%80-(%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/%EC%8B%9C%EC%9E%A5%EA%B0%80-(%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/%EC%95%A1%EB%A9%B4%EA%B0%80-(%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%EC%9D%98-%EB%B0%9C%ED%96%89-(%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-04T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC/%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%ED%9A%8C%EC%82%AC-(%EC%83%81%EC%97%85)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%83%81%EC%97%85/%ED%9A%8C%EC%82%AC/%ED%9A%8C%EC%82%AC%EC%9D%98-%EC%B1%85%EC%9E%84-(%ED%9A%8C%EC%82%AC)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EA%B1%B0%EC%A3%BC%EC%9E%90-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4/draft/%EB%82%A9%EC%84%B8-%EB%8F%85%EC%B4%89-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4/draft/%EC%95%95%EB%A5%98-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-06T12:49:56.112Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4%EC%9D%98-%EC%84%B1%EB%A6%BD,-%ED%99%95%EC%A0%95%EA%B3%BC-%EC%86%8C%EB%A9%B8-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4/%EB%B6%80%EA%B3%BC%ED%99%95%EC%A0%95-(%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4%EC%9D%98-%ED%99%95%EC%A0%95)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4/%EC%86%8C%EB%A9%B8%EC%8B%9C%ED%9A%A8-(%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4%EC%9D%98-%EC%86%8C%EB%A9%B8)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4/%EC%8B%A0%EA%B3%A0%ED%99%95%EC%A0%95-(%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4%EC%9D%98-%ED%99%95%EC%A0%95)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4/%EC%9E%90%EB%8F%99%ED%99%95%EC%A0%95-(%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4%EC%9D%98-%ED%99%95%EC%A0%95)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4/%EC%A0%9C%EC%B2%99%EA%B8%B0%EA%B0%84-(%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4%EC%9D%98-%EC%86%8C%EB%A9%B8)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%82%A9%EC%84%B8%EC%9D%98%EB%AC%B4%EC%9E%90-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EA%B0%84%EC%A0%91%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EA%B5%AD%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EB%88%84%EC%A7%84%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EB%AA%A9%EC%A0%81%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EB%B3%B4%ED%86%B5%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EB%B9%84%EB%A1%80%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EC%A0%95%EC%95%A1%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EC%A2%85%EA%B0%80%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EC%A2%85%EB%9F%89%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EC%A7%80%EB%B0%A9%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EB%B6%84%EB%A5%98/%EC%A7%81%EC%A0%91%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EB%B6%84%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%84%9C%EB%A5%98%EC%86%A1%EB%8B%AC/%EA%B3%B5%EC%8B%9C%EC%86%A1%EB%8B%AC-(%EC%A1%B0%EC%84%B8%EC%84%9C%EB%A5%98%EC%9D%98-%EC%86%A1%EB%8B%AC)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%84%9C%EB%A5%98%EC%86%A1%EB%8B%AC/%EA%B5%90%EB%B6%80%EC%86%A1%EB%8B%AC-(%EC%A1%B0%EC%84%B8%EC%84%9C%EB%A5%98%EC%9D%98-%EC%86%A1%EB%8B%AC)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%84%9C%EB%A5%98%EC%86%A1%EB%8B%AC/%EC%9A%B0%ED%8E%B8%EC%86%A1%EB%8B%AC-(%EC%A1%B0%EC%84%B8%EC%84%9C%EB%A5%98%EC%9D%98-%EC%86%A1%EB%8B%AC)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%84%9C%EB%A5%98%EC%86%A1%EB%8B%AC/%EC%A0%84%EC%9E%90%EC%86%A1%EB%8B%AC-(%EC%A1%B0%EC%84%B8%EC%84%9C%EB%A5%98%EC%9D%98-%EC%86%A1%EB%8B%AC)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%8B%A0%EA%B3%A0/%EA%B2%B0%EC%A0%95%EA%B3%BC-%EA%B2%BD%EC%A0%95-(%EC%84%B8%EA%B8%88-%EC%8B%A0%EA%B3%A0)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%8B%A0%EA%B3%A0/%EA%B2%BD%EC%A0%95%EC%B2%AD%EA%B5%AC-(%EC%84%B8%EA%B8%88-%EC%8B%A0%EA%B3%A0)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%8B%A0%EA%B3%A0/%EA%B3%BC%EC%84%B8%ED%91%9C%EC%A4%80-(%EC%84%B8%EA%B8%88-%EC%8B%A0%EA%B3%A0)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%8B%A0%EA%B3%A0/%EA%B8%B0%ED%95%9C%ED%9B%84%EA%B3%BC%EC%84%B8%ED%91%9C%EC%A4%80%EC%8B%A0%EA%B3%A0%EC%84%9C-(%EC%84%B8%EA%B8%88-%EC%8B%A0%EA%B3%A0)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%8B%A0%EA%B3%A0/%EC%84%B8%EA%B8%88-%EC%8B%A0%EA%B3%A0-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%8B%A0%EA%B3%A0/%EC%88%98%EC%A0%95%EC%8B%A0%EA%B3%A0-(%EC%84%B8%EA%B8%88-%EC%8B%A0%EA%B3%A0)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9B%90%EC%B2%9C%EC%A7%95%EC%88%98-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9D%B4%EB%A1%A0-%EC%9B%90%EC%B9%99/%EC%86%8C%EB%93%9D%EA%B3%BC%EC%84%B8%EC%9B%90%EC%B9%99/%EB%B6%84%EB%A5%98%EA%B3%BC%EC%84%B8-(%EC%86%8C%EB%93%9D%EC%84%B8-%EA%B3%BC%EC%84%B8%EC%9B%90%EC%B9%99)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9D%B4%EB%A1%A0-%EC%9B%90%EC%B9%99/%EC%86%8C%EB%93%9D%EA%B3%BC%EC%84%B8%EC%9B%90%EC%B9%99/%EB%B6%84%EB%A6%AC%EA%B3%BC%EC%84%B8-(%EC%86%8C%EB%93%9D%EC%84%B8-%EA%B3%BC%EC%84%B8%EC%9B%90%EC%B9%99)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9D%B4%EB%A1%A0-%EC%9B%90%EC%B9%99/%EC%86%8C%EB%93%9D%EA%B3%BC%EC%84%B8%EC%9B%90%EC%B9%99/%EC%A2%85%ED%95%A9%EA%B3%BC%EC%84%B8-(%EC%86%8C%EB%93%9D%EC%84%B8-%EA%B3%BC%EC%84%B8%EC%9B%90%EC%B9%99)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9D%B4%EB%A1%A0-%EC%9B%90%EC%B9%99/%EC%86%8C%EB%93%9D%EC%9B%90%EC%B2%9C%EC%84%A4-(%EA%B3%BC%EC%84%B8%EC%9D%B4%EB%A1%A0)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9D%B4%EB%A1%A0-%EC%9B%90%EC%B9%99/%EC%88%9C%EC%9E%90%EC%82%B0%EC%A6%9D%EA%B0%80%EC%84%A4-(%EA%B3%BC%EC%84%B8%EC%9D%B4%EB%A1%A0)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9D%B4%EB%A1%A0-%EC%9B%90%EC%B9%99/%EC%97%B4%EA%B1%B0%EC%A3%BC%EC%9D%98-%EA%B3%BC%EC%84%B8-(%EA%B3%BC%EC%84%B8%EC%9D%B4%EB%A1%A0)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9D%B4%EB%A1%A0-%EC%9B%90%EC%B9%99/%EC%9C%A0%ED%98%95%EB%B3%84-%ED%8F%AC%EA%B4%84%EC%A3%BC%EC%9D%98-%EA%B3%BC%EC%84%B8-(%EA%B3%BC%EC%84%B8%EC%9D%B4%EB%A1%A0)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%9D%B4%EB%A1%A0-%EC%9B%90%EC%B9%99/%ED%8F%AC%EA%B4%84%EC%A3%BC%EC%9D%98-%EA%B3%BC%EC%84%B8-(%EA%B3%BC%EC%84%B8%EC%9D%B4%EB%A1%A0)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A1%B0%EC%84%B8-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A1%B0%EC%84%B8%EB%B6%88%EB%B3%B5/%EC%8B%AC%EC%82%AC%EC%B2%AD%EA%B5%AC-(%EC%A1%B0%EC%84%B8%EB%B6%88%EB%B3%B5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A1%B0%EC%84%B8%EB%B6%88%EB%B3%B5/%EC%8B%AC%ED%8C%90%EC%B2%AD%EA%B5%AC-(%EC%A1%B0%EC%84%B8%EB%B6%88%EB%B3%B5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A1%B0%EC%84%B8%EB%B6%88%EB%B3%B5/%EC%9D%B4%EC%9D%98%EC%8B%A0%EC%B2%AD-(%EC%A1%B0%EC%84%B8%EB%B6%88%EB%B3%B5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A1%B0%EC%84%B8%EB%B6%88%EB%B3%B5/%EC%A1%B0%EC%84%B8%EB%B6%88%EB%B3%B5-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/draft/%EA%B5%90%EC%9C%A1%EC%84%B8-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-06T12:49:56.114Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/draft/%EC%A2%85%ED%95%A9%EB%B6%80%EB%8F%99%EC%82%B0%EC%84%B8-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-06T12:49:56.114Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/draft/%EC%A7%80%EB%B0%A9%EC%86%8C%EB%93%9D%EC%84%B8-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-06T12:49:56.114Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/draft/%EC%B7%A8%EB%93%9D%EC%84%B8-(%EC%84%B8%EA%B8%88)</loc>
+    <lastmod>2026-07-06T12:49:56.114Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EA%B0%80%EC%82%B0%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EC%A2%85%EB%A5%98)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EB%B2%95%EC%9D%B8%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EC%A2%85%EB%A5%98)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EB%B6%80%EA%B0%80%EA%B0%80%EC%B9%98%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EC%A2%85%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%83%81%EC%86%8D%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EC%A2%85%EB%A5%98)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%86%8C%EB%93%9D%EC%84%B8/%EC%86%8C%EB%93%9D%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EC%A2%85%EB%A5%98)</loc>
+    <lastmod>2026-06-29T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%86%8C%EB%93%9D%EC%84%B8/%EC%96%91%EB%8F%84%EC%86%8C%EB%93%9D%EC%84%B8-(%EC%86%8C%EB%93%9D%EC%84%B8)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%86%8C%EB%93%9D%EC%84%B8/%EC%A2%85%ED%95%A9%EC%86%8C%EB%93%9D%EC%84%B8/%EB%B0%B0%EB%8B%B9%EC%86%8C%EB%93%9D%EC%84%B8/draft/%EC%9D%98%EC%A0%9C%EB%B0%B0%EB%8B%B9-(%EB%B0%B0%EB%8B%B9%EC%86%8C%EB%93%9D%EC%84%B8)</loc>
+    <lastmod>2026-07-06T12:49:56.114Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%86%8C%EB%93%9D%EC%84%B8/%EC%A2%85%ED%95%A9%EC%86%8C%EB%93%9D%EC%84%B8/%EB%B0%B0%EB%8B%B9%EC%86%8C%EB%93%9D%EC%84%B8/draft/%EC%9D%B8%EC%A0%95%EB%B0%B0%EB%8B%B9-(%EB%B0%B0%EB%8B%B9%EC%86%8C%EB%93%9D%EC%84%B8)</loc>
+    <lastmod>2026-07-06T12:49:56.114Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%86%8C%EB%93%9D%EC%84%B8/%EC%A2%85%ED%95%A9%EC%86%8C%EB%93%9D%EC%84%B8/%EB%B0%B0%EB%8B%B9%EC%86%8C%EB%93%9D%EC%84%B8/%EB%B0%B0%EB%8B%B9%EC%86%8C%EB%93%9D%EC%84%B8-(%EC%86%8C%EB%93%9D%EC%84%B8)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%86%8C%EB%93%9D%EC%84%B8/%EC%A2%85%ED%95%A9%EC%86%8C%EB%93%9D%EC%84%B8/%EC%9D%B4%EC%9E%90%EC%86%8C%EB%93%9D%EC%84%B8-(%EC%86%8C%EB%93%9D%EC%84%B8)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%86%8C%EB%93%9D%EC%84%B8/%EC%A2%85%ED%95%A9%EC%86%8C%EB%93%9D%EC%84%B8/%EC%A2%85%ED%95%A9%EC%86%8C%EB%93%9D%EC%84%B8-(%EC%86%8C%EB%93%9D%EC%84%B8)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%86%8C%EB%93%9D%EC%84%B8/%ED%87%B4%EC%A7%81%EC%86%8C%EB%93%9D%EC%84%B8-(%EC%86%8C%EB%93%9D%EC%84%B8)</loc>
+    <lastmod>2026-07-01T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%9D%B8%EC%A7%80%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EC%A2%85%EB%A5%98)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%84%B8%EA%B8%88/%EC%A2%85%EB%A5%98/%EC%A6%9D%EC%97%AC%EC%84%B8-(%EC%84%B8%EA%B8%88%EC%9D%98-%EC%A2%85%EB%A5%98)</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%98%88%EA%B8%88,-Deposit-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%9A%94%EA%B5%AC%EB%B6%88%EC%98%88%EA%B8%88/%EB%8B%B9%EC%A2%8C%EC%98%88%EA%B8%88-(%EC%9A%94%EA%B5%AC%EB%B6%88%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%9A%94%EA%B5%AC%EB%B6%88%EC%98%88%EA%B8%88/%EB%B3%B4%ED%86%B5%EC%98%88%EA%B8%88-(%EC%9A%94%EA%B5%AC%EB%B6%88%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%9A%94%EA%B5%AC%EB%B6%88%EC%98%88%EA%B8%88/%EC%9A%94%EA%B5%AC%EB%B6%88%EC%98%88%EA%B8%88,-Demand-Deposit-(%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88/%EA%B1%B0%EC%B9%98%EC%8B%9D%EC%98%88%EA%B8%88/%EA%B1%B0%EC%B9%98%EC%8B%9D%EC%98%88%EA%B8%88-(%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88/%EA%B1%B0%EC%B9%98%EC%8B%9D%EC%98%88%EA%B8%88/%EC%98%88%ED%83%81%EA%B8%88-(%EA%B1%B0%EC%B9%98%EC%8B%9D%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88/%EA%B1%B0%EC%B9%98%EC%8B%9D%EC%98%88%EA%B8%88/%EC%A0%95%EA%B8%B0%EC%98%88%EA%B8%88-(%EA%B1%B0%EC%B9%98%EC%8B%9D%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88/%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88-(%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88/%EC%A0%81%EB%A6%BD%EC%8B%9D%EC%98%88%EA%B8%88/%EB%B6%80%EA%B8%88-(%EC%A0%81%EB%A6%BD%EC%8B%9D%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88/%EC%A0%81%EB%A6%BD%EC%8B%9D%EC%98%88%EA%B8%88/%EC%A0%81%EA%B8%88-(%EC%A0%81%EB%A6%BD%EC%8B%9D%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88/%EC%A0%81%EB%A6%BD%EC%8B%9D%EC%98%88%EA%B8%88/%EC%A0%81%EB%A6%BD%EC%8B%9D%EC%98%88%EA%B8%88-(%EC%A0%80%EC%B6%95%EC%84%B1%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%98%88%EA%B8%88/%ED%86%B5%EC%A7%80%EC%98%88%EA%B8%88-(%EC%98%88%EA%B8%88)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C/%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C/%EC%A7%80%EB%B6%84%EC%A6%9D%EA%B6%8C-(%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C/%EC%B1%84%EA%B6%8C,-Bond-(%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C/%EC%B1%84%EB%AC%B4%EC%A6%9D%EA%B6%8C-(%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C/%ED%95%A0%EC%9D%B8%EC%B1%84-(%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C/%ED%99%98%EB%A7%A4%EC%A1%B0%EA%B1%B4%EB%B6%80%EC%B1%84%EA%B6%8C,-Repurchase-Agreement,-RP-(%EC%9E%90%EB%B3%B8%EC%A6%9D%EA%B6%8C)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%EC%A6%9D%EA%B6%8C,-Securities-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%ED%99%94%ED%8F%90%EC%A6%9D%EA%B6%8C/%EC%88%98%ED%91%9C-(%ED%99%94%ED%8F%90%EC%A6%9D%EA%B6%8C)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%ED%99%94%ED%8F%90%EC%A6%9D%EA%B6%8C/%EC%96%B4%EC%9D%8C-(%ED%99%94%ED%8F%90%EC%A6%9D%EA%B6%8C)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9C%A0%EA%B0%80%EC%A6%9D%EA%B6%8C/%ED%99%94%ED%8F%90%EC%A6%9D%EA%B6%8C/%ED%99%94%ED%8F%90%EC%A6%9D%EA%B6%8C-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-03T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9E%90%EB%B3%B8%EC%8B%9C%EC%9E%A5/draft/%EC%A7%91%ED%95%A9%ED%88%AC%EC%9E%90-(%EC%9E%90%EB%B3%B8%EC%8B%9C%EC%9E%A5)</loc>
+    <lastmod>2026-07-06T12:49:56.115Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9E%90%EB%B3%B8%EC%8B%9C%EC%9E%A5/%EA%B8%88%EC%9C%B5%ED%88%AC%EC%9E%90%EC%83%81%ED%92%88/%EA%B8%88%EC%9C%B5%ED%88%AC%EC%9E%90%EC%83%81%ED%92%88-(%EC%9E%90%EB%B3%B8%EC%8B%9C%EC%9E%A5)</loc>
+    <lastmod>2026-07-02T00:00:00.000Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9E%90%EB%B3%B8%EC%8B%9C%EC%9E%A5/%EA%B8%88%EC%9C%B5%ED%88%AC%EC%9E%90%EC%83%81%ED%92%88/%ED%8C%8C%EC%83%9D%EC%83%81%ED%92%88/draft/%ED%8C%8C%EC%83%9D%EA%B2%B0%ED%95%A9%EC%83%81%ED%92%88,-Derivative-Linked-Securities,-DLS-(%EA%B8%88%EC%9C%B5)-1</loc>
+    <lastmod>2026-07-06T12:49:56.116Z</lastmod>
+  </url><url>
+    <loc>https://mdg.haeramk.im/gardens/finance/%EC%9E%90%EB%B3%B8%EC%8B%9C%EC%9E%A5/%EA%B8%88%EC%9C%B5%ED%88%AC%EC%9E%90%EC%83%81%ED%92%88/%ED%8C%8C%EC%83%9D%EC%83%81%ED%92%88/draft/%ED%8C%8C%EC%83%9D%EC%83%81%ED%92%88,-Derivatives-(%EA%B8%88%EC%9C%B5)</loc>
+    <lastmod>2026-07-06T12:49:56.116Z</lastmod>
+  </url><url>
     <loc>https://mdg.haeramk.im/gardens/k8s-cloud/(Garden)-Kubernetes,-Cloud</loc>
     <lastmod>2024-07-29T00:00:00.000Z</lastmod>
   </url><url>
@@ -2115,16 +2610,16 @@
     <lastmod>2025-03-01T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/k8s-cloud/kubernetes/draft/Container-Network-Interface,-CNI-(Kubernetes)</loc>
-    <lastmod>2026-06-29T00:51:54.775Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.116Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/k8s-cloud/kubernetes/draft/Label-(Kubernetes)</loc>
-    <lastmod>2026-06-29T00:51:54.775Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.116Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/k8s-cloud/kubernetes/draft/Namespace-(Kubernetes)</loc>
-    <lastmod>2026-06-29T00:51:54.775Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.116Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/k8s-cloud/kubernetes/draft/Pod-(Kubernetes)</loc>
-    <lastmod>2026-06-29T00:51:54.775Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.116Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/k8s-cloud/kubernetes/originals/kubernetes.h1.2023.learningspoons.com/01.-Intro.-to-Kubernetes-(Learning-Spoons-Kubernetes-Deep-dive)</loc>
     <lastmod>2023-04-22T00:00:00.000Z</lastmod>
@@ -2274,10 +2769,10 @@
     <lastmod>2024-05-25T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/bgp/draft/Border-Gateway-Protocol-Security-Extension,-BGPsec-(BGP)</loc>
-    <lastmod>2026-06-29T00:51:54.794Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.130Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/bgp/draft/Multi-Homing-(BGP)</loc>
-    <lastmod>2026-06-29T00:51:54.794Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.130Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/bgp/terms/Autonomous-System,-AS-(BGP)</loc>
     <lastmod>2024-05-26T00:00:00.000Z</lastmod>
@@ -2361,34 +2856,34 @@
     <lastmod>2024-03-24T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/Differentiated-Service-(Network)</loc>
-    <lastmod>2026-06-29T00:51:54.795Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.131Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/Explicit-Congestion-Notification,-ECN-(Network)</loc>
-    <lastmod>2026-06-29T00:51:54.795Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.131Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/File-Transfer-Protocol,-FTP-(Network)</loc>
-    <lastmod>2026-06-29T00:51:54.795Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.131Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/Internet-Protocol,-IP-(Network)</loc>
-    <lastmod>2026-06-29T00:51:54.795Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.131Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/Local-Area-Network,-LAN-(Network)</loc>
-    <lastmod>2026-06-29T00:51:54.795Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.131Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/Open-Shortest-Path-First,-OSPF-(Network)</loc>
-    <lastmod>2026-06-29T00:51:54.795Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.131Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/QUIC-(Network)</loc>
-    <lastmod>2026-06-29T00:51:54.795Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.132Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/Routing-Information-Protocol,-RIP-(Network)</loc>
-    <lastmod>2026-06-29T00:51:54.795Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.132Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/%EB%85%BC%EB%AC%B8---Increased-DNS-forgery-resistance-through-0x20-bit-encoding---security-via-leet-queries</loc>
     <lastmod>2024-05-16T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/draft/%EB%A9%94%EB%AA%A8---Detecting-DNS-tunneling-from-plaintext-to-DNS-over-HTTPS</loc>
-    <lastmod>2026-06-29T00:51:54.796Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.132Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/network/http/HTTP-with-TLS,-HTTPS-(Network)</loc>
     <lastmod>2023-02-02T00:00:00.000Z</lastmod>
@@ -2589,10 +3084,10 @@
     <lastmod>2024-07-29T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/benchmark/drafts/Yahoo-Cloud-Service-Benchmark,-YCSB-(OS-Benchmark)</loc>
-    <lastmod>2026-06-29T00:51:54.962Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.260Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/common/drafts/Tail-Latency-(OS)</loc>
-    <lastmod>2026-06-29T00:51:54.962Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.261Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/common/papers/hints.1983.sigops.org/(%EB%85%BC%EB%AC%B8)-Hints-for-Computer-System-Design</loc>
     <lastmod>2024-03-30T00:00:00.000Z</lastmod>
@@ -2625,13 +3120,13 @@
     <lastmod>2024-04-11T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/distributed/drafts/Consensus-Protocol-(Distributed-Computing)</loc>
-    <lastmod>2026-06-29T00:51:54.963Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.261Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/distributed/drafts/Paxos-(Distributed-Computing)</loc>
-    <lastmod>2026-06-29T00:51:54.963Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.261Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/distributed/drafts/Raft-Algorithm-(Distributed-Computing)</loc>
-    <lastmod>2026-06-29T00:51:54.963Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.261Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/distributed/papers/skyros.2021.sosp.sigops.org/(%EB%85%BC%EB%AC%B8)-Exploiting-Nil-Externality-for-Fast-Replicated-Storage</loc>
     <lastmod>2024-11-11T00:00:00.000Z</lastmod>
@@ -2670,13 +3165,13 @@
     <lastmod>2024-09-25T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/fs/draft/Extended-Filesystem,-EXTFS-(File-System)</loc>
-    <lastmod>2026-06-29T00:51:54.964Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.262Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/fs/draft/Flash-Friendly-File-System,-F2FS-(File-System)</loc>
-    <lastmod>2026-06-29T00:51:54.964Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.262Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/fs/draft/Log-structured-File-System,-LFS-(File-System)</loc>
-    <lastmod>2026-06-29T00:51:54.964Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.262Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/fs/papers/(%EB%85%BC%EB%AC%B8)-A-Fast-File-System-for-UNIX</loc>
     <lastmod>2024-03-30T00:00:00.000Z</lastmod>
@@ -2703,13 +3198,13 @@
     <lastmod>2024-03-27T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/io/draft/Advice-(OS)</loc>
-    <lastmod>2026-06-29T00:51:54.965Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/io/draft/Input-output-Memory-Management-Unit,-IOMMU-(OS)</loc>
-    <lastmod>2026-06-29T00:51:54.966Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/io/draft/Port-mapped-IO,-PMIO-(OS)</loc>
-    <lastmod>2026-06-29T00:51:54.966Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/io/terms/Direct-Memory-Access,-DMA-(OS)</loc>
     <lastmod>2024-10-20T00:00:00.000Z</lastmod>
@@ -2721,22 +3216,22 @@
     <lastmod>2024-08-27T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/draft/Demand-Paging-(Memory)</loc>
-    <lastmod>2026-06-29T00:51:54.966Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/draft/Page-Replacement-(Memory)</loc>
-    <lastmod>2026-06-29T00:51:54.966Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/draft/Page-Table-(Memory)</loc>
-    <lastmod>2026-06-29T00:51:54.966Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/draft/Paging-(Memory)</loc>
-    <lastmod>2026-06-29T00:51:54.966Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/draft/Shared-Memory-(Memory)</loc>
-    <lastmod>2026-06-29T00:51:54.966Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/draft/Virtual-Memory-(Memory)</loc>
-    <lastmod>2026-06-29T00:51:54.966Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.263Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/papers/(%EB%85%BC%EB%AC%B8)-Practical,-Transparent-Operating-System-Support-for-Superpages</loc>
     <lastmod>2024-05-13T00:00:00.000Z</lastmod>
@@ -2766,10 +3261,10 @@
     <lastmod>2025-01-29T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/papers/drafts/(%EB%85%BC%EB%AC%B8)-MEMTIS---Efficient-Memory-Tiering-with-Dynamic-Page-Classification-and-Page-Size-Determination</loc>
-    <lastmod>2026-06-29T00:51:54.967Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.264Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/papers/drafts/(%EB%85%BC%EB%AC%B8)-TPP---Transparent-Page-Placement-for-CXL-Enabled-Tiered-Memory</loc>
-    <lastmod>2026-06-29T00:51:54.967Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.264Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/memory/papers/hemem.2021.sosp.sigops.org/(%EB%85%BC%EB%AC%B8)-HeMem---Scalable-Tiered-Memory-Management-for-Big-Data-Applications-and-Real-NVM-(SOSP'21)</loc>
     <lastmod>2025-02-01T00:00:00.000Z</lastmod>
@@ -2961,52 +3456,52 @@
     <lastmod>2021-06-13T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Completely-Fair-Scheduling,-CFS-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.183Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Concurrency-Control-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.183Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Deadlock-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.183Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Inter-process-Communication,-IPC-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.183Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Lock-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.183Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Lock-free-Synchronization-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.183Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Non-blocking-Single-producer,-Single-consumer-Pattern-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Process-Control-Block,-PCB-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Process-State-Model-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Producer,-Consumer-Pattern-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Semaphore-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Spin-Lock-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Symmetric-Multiprocessing,-SMP-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/System-Call-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Thread-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/process/drafts/Time-Sharing-System-(Process)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/procfs/Process-Filesystem-(procfs)</loc>
     <lastmod>2024-06-07T00:00:00.000Z</lastmod>
@@ -3015,13 +3510,13 @@
     <lastmod>2024-06-07T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/replacement/draft/CLOCK-(Replacement)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/replacement/draft/First-In-First-Out,-FIFO-(Replacement)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/replacement/draft/Replacement-Policy-(OS)</loc>
-    <lastmod>2026-06-29T00:51:55.184Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.432Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/replacement/papers/arc.2003.fast.usenix.org/(%EB%85%BC%EB%AC%B8)-ARC---A-Self-Tuning,-Low-Overhead-Replacement-Cache-(FAST'03)</loc>
     <lastmod>2024-05-22T00:00:00.000Z</lastmod>
@@ -3042,31 +3537,31 @@
     <lastmod>2024-10-09T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/thread/papers/draft/(%EB%85%BC%EB%AC%B8)-Scheduler-activations---effective-kernel-support-for-the-user-level-management-of-parallelism</loc>
-    <lastmod>2026-06-29T00:51:55.185Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.433Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/os/virtualization/papers/draft/(%EB%85%BC%EB%AC%B8)-Disco---Running-Commodity-Operating-Systems-on-Scalable-Multiprocessors</loc>
-    <lastmod>2026-06-29T00:51:55.185Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.433Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/pl/(Garden)-Programming-Language,-Compiler</loc>
     <lastmod>2024-07-29T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/pl/drafts/Abstract-Syntax-Tree,-AST-(PL)</loc>
-    <lastmod>2026-06-29T00:51:55.185Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.433Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/pl/drafts/Expression-Freezing-(PL)</loc>
-    <lastmod>2026-06-29T00:51:55.185Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.433Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/pl/drafts/Intermediate-Representation,-IR-(PL)</loc>
-    <lastmod>2026-06-29T00:51:55.185Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.433Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/pl/drafts/Interpreter-(PL)</loc>
-    <lastmod>2026-06-29T00:51:55.185Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.433Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/pl/drafts/Variable-(PL)</loc>
-    <lastmod>2026-06-29T00:51:55.185Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.433Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/pl/function/drafts/Function-(PL-Function)</loc>
-    <lastmod>2026-06-29T00:51:55.185Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.433Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/pl/function/terms/First,-Second-Class-Citizen-(PL-Function)</loc>
     <lastmod>2024-10-03T00:00:00.000Z</lastmod>
@@ -3699,13 +4194,13 @@
     <lastmod>2024-04-23T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/common/draft/Parallel-ATA,-AT-Attachment,-Integrated-Drive-Electronics,-PATA,-ATA,-IDE-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.314Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.533Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/common/draft/Small-Computer-Systems-Interface,-SCSI-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.314Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.534Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/common/draft/Total-Cost-Ownership,-TCO-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.314Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.534Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/common/terms/Input-Output-per-second,-IOps-(storage)</loc>
     <lastmod>2024-03-16T00:00:00.000Z</lastmod>
@@ -3732,10 +4227,10 @@
     <lastmod>2024-05-26T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/fdp/draft/FDP-Statistics-(NVMe)</loc>
-    <lastmod>2026-06-29T00:51:55.315Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.534Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/hdd/drafts/Cylinder-Head-Section,-CHS-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.315Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.534Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/hdd/terms/Conventional-Magnetic-Recording,-CMR-HDD-(Storage)</loc>
     <lastmod>2024-05-26T00:00:00.000Z</lastmod>
@@ -3744,13 +4239,13 @@
     <lastmod>2024-03-30T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/nvme/draft/Non-Volatile-Memory-Express,-NVMe-(NVMe)</loc>
-    <lastmod>2026-06-29T00:51:55.315Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.534Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/nvme/draft/S.M.A.R.T-Log-(NVMe)</loc>
-    <lastmod>2026-06-29T00:51:55.315Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.534Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/nvme/draft/Scatter-Gather-List,-SGL-(NVMe)</loc>
-    <lastmod>2026-06-29T00:51:55.315Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.534Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/nvme/terms/Doorbell-(NVMe)</loc>
     <lastmod>2024-05-25T00:00:00.000Z</lastmod>
@@ -3765,10 +4260,10 @@
     <lastmod>2024-08-26T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/papers/draft/(%EB%85%BC%EB%AC%B8)-NVMeVirt---A-Versatile-Software-defined-Virtual-NVMe-Device</loc>
-    <lastmod>2026-06-29T00:51:55.316Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.534Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/pci/drafts/Peripheral-Component-Interconnect-Express,-PCIe-(PCIe)</loc>
-    <lastmod>2026-06-29T00:51:55.316Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.535Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/pci/terms/Base-Address-Register,-BAR-(PCIe)</loc>
     <lastmod>2024-08-27T00:00:00.000Z</lastmod>
@@ -3777,10 +4272,10 @@
     <lastmod>2024-04-06T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/ssd/draft/Deep-Dive-SSD---Storing-and-Detecting-Electrons-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.316Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.535Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/ssd/draft/One-shot-Programming-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.316Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.535Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/ssd/story/nvmevirt/NVMeVirt-%EB%94%94%EB%B2%84%EA%B9%85-%EA%B8%B0%EB%A1%9D%EB%93%A4</loc>
     <lastmod>2024-08-04T00:00:00.000Z</lastmod>
@@ -3843,16 +4338,16 @@
     <lastmod>2024-05-26T00:00:00.000Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/zsm/drafts/Zoned-Block-Commands,-ZBC-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.317Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.536Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/zsm/drafts/Zoned-Device-ATA-Command-Set,-ZAC-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.317Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.536Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/zsm/drafts/Zoned-Namespaces,-ZNS-(Storage)</loc>
-    <lastmod>2026-06-29T00:51:55.317Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.536Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/gardens/storage/zsm/papers/drafts/(%EB%85%BC%EB%AC%B8)-ZNS,-Avoiding-the-Block-Interface-Tax-for-Flash-based-SSDs</loc>
-    <lastmod>2026-06-29T00:51:55.318Z</lastmod>
+    <lastmod>2026-07-06T12:49:56.536Z</lastmod>
   </url><url>
     <loc>https://mdg.haeramk.im/</loc>
     <lastmod>2023-10-24T00:00:00.000Z</lastmod>
