@@ -81,6 +81,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2452. Words Within Two Edits of Dictionary|LeetCode 2452. Words Within Two Edits of Dictionary]]
 	- [[(LeetCode) 3300. Minimum Element After Replacement With Digit Sum|LeetCode 3300. Minimum Element After Replacement With Digit Sum]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
+	- [[(LeetCode) 3754. Concatenate Non-Zero Digits and Multiply by Sum I|LeetCode 3754. Concatenate Non-Zero Digits and Multiply by Sum I]]
 	- [[(LeetCode) 3783. Mirror Distance of an Integer|LeetCode 3783. Mirror Distance of an Integer]]
 	- [[(프로그래머스) 모의고사]]
 	- [[(프로그래머스) 소수 찾기]]
