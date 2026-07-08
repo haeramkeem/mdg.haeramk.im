@@ -5,6 +5,8 @@ tags:
   - interview
   - dp
 date: 2026-07-08
+aliases:
+  - LeetCode 22
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/generate-parentheses)
