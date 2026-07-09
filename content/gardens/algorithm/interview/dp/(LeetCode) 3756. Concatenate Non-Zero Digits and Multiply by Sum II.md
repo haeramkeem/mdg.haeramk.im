@@ -5,6 +5,8 @@ tags:
   - interview/retry
   - dp
 date: 2026-07-09
+aliases:
+  - LeetCode 3756
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/concatenate-non-zero-digits-and-multiply-by-sum-ii)
