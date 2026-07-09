@@ -4,6 +4,7 @@ tags:
   - algorithm
   - interview/retry
   - dp
+  - jump-game
 date: 2026-07-09
 aliases:
   - LeetCode 45
