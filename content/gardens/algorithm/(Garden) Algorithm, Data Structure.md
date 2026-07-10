@@ -54,6 +54,8 @@ date: 2024-07-29
 	- [[(프로그래머스) 게임 맵 최단거리]]
 	- [[(프로그래머스) 네트워크]]
 	- [[(프로그래머스) 타겟 넘버]]
+- [[Binary Lifting (Algorithm)|Binary Lifting]]
+	- [[(LeetCode) 3534. Path Existence Queries in a Graph II|LeetCode 3534. Path Existence Queries in a Graph II]]
 - Binary search
 	- [[(LeetCode) 35. Search Insert Position|LeetCode 35. Search Insert Position]]
 	- [[(LeetCode) 69. Sqrt(x)|LeetCode 69. Sqrt(x)]]
