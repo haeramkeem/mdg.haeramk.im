@@ -162,6 +162,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 가장 큰 수]]
 	- [[(프로그래머스) 전화번호 목록]]
 - String
+	- [[(LeetCode) 5. Longest Palindromic Substring|LeetCode 5. Longest Palindromic Substring]]
 	- [[(LeetCode) 13. Roman to Integer|LeetCode 13. Roman to Integer]]
 	- [[(LeetCode) 14. Longest Common Prefix|LeetCode 14. Longest Common Prefix]]
 	- [[(LeetCode) 28. Find the Index of the First Occurrence in a String|LeetCode 28. Find the Index of the First Occurrence in a String]]
