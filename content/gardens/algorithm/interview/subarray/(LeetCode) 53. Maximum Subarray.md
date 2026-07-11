@@ -5,6 +5,8 @@ tags:
   - interview
   - subarray
 date: 2026-07-11
+aliases:
+  - LeetCode 53
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/maximum-subarray)

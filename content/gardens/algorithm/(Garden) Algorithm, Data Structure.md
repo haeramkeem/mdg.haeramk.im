@@ -111,6 +111,7 @@ date: 2024-07-29
 - [[Disjoint Set (Data Structure)|DSU]]
 	- [[(LeetCode) 1722. Minimize Hamming Distance After Swap Operations|LeetCode 1722. Minimize Hamming Distance After Swap Operations]]
 	- [[(LeetCode) 2492. Minimum Score of a Path Between Two Cities|LeetCode 2492. Minimum Score of a Path Between Two Cities]]
+	- [[(LeetCode) 2685. Count the Number of Complete Components|LeetCode 2685. Count the Number of Complete Components]]
 	- [[(LeetCode) 3532. Path Existence Queries in a Graph I|LeetCode 3532. Path Existence Queries in a Graph I]]
 - Graph
 	- [[(프로그래머스) 가장 먼 노드]]
