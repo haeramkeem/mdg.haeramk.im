@@ -97,6 +97,7 @@ date: 2024-07-29
 	- [[(LeetCode) 22. Generate Parentheses|LeetCode 22. Generate Parentheses]]
 	- [[(LeetCode) 62. Unique Paths|LeetCode 62. Unique Paths]]
 	- [[(LeetCode) 63. Unique Paths II|LeetCode 63. Unique Paths II]]
+	- [[(LeetCode) 64. Minimum Path Sum|LeetCode 64. Minimum Path Sum]]
 	- [[(LeetCode) 70. Climbing Stairs|LeetCode 70. Climbing Stairs]]
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
