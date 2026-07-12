@@ -95,6 +95,7 @@ date: 2024-07-29
 		- [[(LeetCode) 45. Jump Game II|LeetCode 45. Jump Game II]]
 		- [[(LeetCode) 55. Jump Game|LeetCode 55. Jump Game]]
 	- [[(LeetCode) 22. Generate Parentheses|LeetCode 22. Generate Parentheses]]
+	- [[(LeetCode) 62. Unique Paths|LeetCode 62. Unique Paths]]
 	- [[(LeetCode) 70. Climbing Stairs|LeetCode 70. Climbing Stairs]]
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
