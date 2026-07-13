@@ -74,6 +74,7 @@ date: 2024-07-29
 	- [[(LeetCode) 788. Rotated Digits|LeetCode 788. Rotated Digits]]
 	- [[(LeetCode) 796. Rotate String|LeetCode 796. Rotate String]]
 	- [[(LeetCode) 1189. Maximum Number of Balloons|LeetCode 1189. Maximum Number of Balloons]]
+	- [[(LeetCode) 1291. Sequential Digits|LeetCode 1291. Sequential Digits]]
 	- [[(LeetCode) 1344. Angle Between Hands of a Clock|LeetCode 1344. Angle Between Hands of a Clock]]
 	- [[(LeetCode) 1391. Check if There is a Valid Path in a Grid|LeetCode 1391. Check if There is a Valid Path in a Grid]]
 	- [[(LeetCode) 1732. Find the Highest Altitude|LeetCode 1732. Find the Highest Altitude]]
