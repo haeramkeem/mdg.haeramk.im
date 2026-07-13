@@ -54,6 +54,8 @@ date: 2024-07-29
 	- [[(프로그래머스) 게임 맵 최단거리]]
 	- [[(프로그래머스) 네트워크]]
 	- [[(프로그래머스) 타겟 넘버]]
+- [[Binary Lifting (Algorithm)|Binary Lifting]]
+	- [[(LeetCode) 3534. Path Existence Queries in a Graph II|LeetCode 3534. Path Existence Queries in a Graph II]]
 - Binary search
 	- [[(LeetCode) 35. Search Insert Position|LeetCode 35. Search Insert Position]]
 	- [[(LeetCode) 69. Sqrt(x)|LeetCode 69. Sqrt(x)]]
@@ -81,6 +83,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2452. Words Within Two Edits of Dictionary|LeetCode 2452. Words Within Two Edits of Dictionary]]
 	- [[(LeetCode) 3300. Minimum Element After Replacement With Digit Sum|LeetCode 3300. Minimum Element After Replacement With Digit Sum]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
+	- [[(LeetCode) 3754. Concatenate Non-Zero Digits and Multiply by Sum I|LeetCode 3754. Concatenate Non-Zero Digits and Multiply by Sum I]]
 	- [[(LeetCode) 3783. Mirror Distance of an Integer|LeetCode 3783. Mirror Distance of an Integer]]
 	- [[(프로그래머스) 모의고사]]
 	- [[(프로그래머스) 소수 찾기]]
@@ -88,6 +91,13 @@ date: 2024-07-29
 	- [[(프로그래머스) 최소직사각형]]
 	- [[(프로그래머스) 카펫]]
 - Dynamic programming
+	- Jump game
+		- [[(LeetCode) 45. Jump Game II|LeetCode 45. Jump Game II]]
+		- [[(LeetCode) 55. Jump Game|LeetCode 55. Jump Game]]
+	- [[(LeetCode) 22. Generate Parentheses|LeetCode 22. Generate Parentheses]]
+	- [[(LeetCode) 62. Unique Paths|LeetCode 62. Unique Paths]]
+	- [[(LeetCode) 63. Unique Paths II|LeetCode 63. Unique Paths II]]
+	- [[(LeetCode) 64. Minimum Path Sum|LeetCode 64. Minimum Path Sum]]
 	- [[(LeetCode) 70. Climbing Stairs|LeetCode 70. Climbing Stairs]]
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
@@ -97,12 +107,15 @@ date: 2024-07-29
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
 	- [[(LeetCode) 1301. Number of Paths with Max Score|LeetCode 1301. Number of Paths with Max Score]]
 	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
+	- [[(LeetCode) 3756. Concatenate Non-Zero Digits and Multiply by Sum II|LeetCode 3756. Concatenate Non-Zero Digits and Multiply by Sum II]]
 	- [[(프로그래머스) N으로 표현]]
 	- [[(프로그래머스) 등굣길]]
 	- [[(프로그래머스) 정수 삼각형]]
 - [[Disjoint Set (Data Structure)|DSU]]
 	- [[(LeetCode) 1722. Minimize Hamming Distance After Swap Operations|LeetCode 1722. Minimize Hamming Distance After Swap Operations]]
 	- [[(LeetCode) 2492. Minimum Score of a Path Between Two Cities|LeetCode 2492. Minimum Score of a Path Between Two Cities]]
+	- [[(LeetCode) 2685. Count the Number of Complete Components|LeetCode 2685. Count the Number of Complete Components]]
+	- [[(LeetCode) 3532. Path Existence Queries in a Graph I|LeetCode 3532. Path Existence Queries in a Graph I]]
 - Graph
 	- [[(프로그래머스) 가장 먼 노드]]
 	- [[(프로그래머스) 단어 변환]]
@@ -143,6 +156,8 @@ date: 2024-07-29
 	- [[(프로그래머스) 다리를 지나는 트럭]]
 	- [[(프로그래머스) 프로세스]]
 - Sort
+	- [[(LeetCode) 1288. Remove Covered Intervals|LeetCode 1288. Remove Covered Intervals]]
+	- [[(LeetCode) 1331. Rank Transform of an Array|LeetCode 1331. Rank Transform of an Array]]
 	- [[(LeetCode) 1833. Maximum Ice Cream Bars|LeetCode 1833. Maximum Ice Cream Bars]]
 	- [[(LeetCode) 2033. Minimum Operations to Make a Uni-Value Grid|LeetCode 2033. Minimum Operations to Make a Uni-Value Grid]]
 	- [[(LeetCode) 2126. Destroying Asteroids|LeetCode 2126. Destroying Asteroids]]
@@ -154,6 +169,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 가장 큰 수]]
 	- [[(프로그래머스) 전화번호 목록]]
 - String
+	- [[(LeetCode) 5. Longest Palindromic Substring|LeetCode 5. Longest Palindromic Substring]]
 	- [[(LeetCode) 13. Roman to Integer|LeetCode 13. Roman to Integer]]
 	- [[(LeetCode) 14. Longest Common Prefix|LeetCode 14. Longest Common Prefix]]
 	- [[(LeetCode) 28. Find the Index of the First Occurrence in a String|LeetCode 28. Find the Index of the First Occurrence in a String]]
@@ -165,6 +181,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2515. Shortest Distance to Target String in a Circular Array|LeetCode 2515. Shortest Distance to Target String in a Circular Array]]
 - Stack
 	- [[(LeetCode) 20. Valid Parentheses|LeetCode 20. Valid Parentheses]]
+	- [[(LeetCode) 42. Trapping Rain Water|LeetCode 42. Trapping Rain Water]]
 	- [[(LeetCode) 92. Reverse Linked List II|LeetCode 92. Reverse Linked List II]]
 	- [[(LeetCode) 394. Decode String|LeetCode 394. Decode String]]
 	- [[(LeetCode) 739. Daily Temperatures|LeetCode 739. Daily Temperatures]]
@@ -173,6 +190,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 주식가격]]
 	- [[(프로그래머스) 큰 수 만들기]]
 - Subarray
+	- [[(LeetCode) 53. Maximum Subarray|LeetCode 53. Maximum Subarray]]
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
 	- [[(LeetCode) 1358. Number of Substrings Containing All Three Characters|LeetCode 1358. Number of Substrings Containing All Three Characters]]
 - Tree

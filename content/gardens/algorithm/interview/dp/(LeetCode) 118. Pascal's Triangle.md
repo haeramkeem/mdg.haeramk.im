@@ -5,6 +5,8 @@ tags:
   - interview
   - dp
 date: 2026-04-04
+aliases:
+  - LeetCode 118
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/pascals-triangle)

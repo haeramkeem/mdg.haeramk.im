@@ -5,6 +5,8 @@ tags:
   - interview
   - stack
 date: 2026-04-13
+aliases:
+  - LeetCode 739
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/daily-temperatures)
