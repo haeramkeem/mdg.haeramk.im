@@ -14,6 +14,9 @@ aliases:
 ---
 > [!info] 작물단계: #seed 
 
+> [!info] 참고한 것들
+> - [KDI 용어사전](https://eiec.kdi.re.kr/material/clickView.do?click_yymm=201512&cidx=1009)
+
 ## 란?
 
 - 우선 *환매* 라는 것은 '돌아올 환 (還)', '살 매 (買)', 즉 다시 산다는 뜻이다.
