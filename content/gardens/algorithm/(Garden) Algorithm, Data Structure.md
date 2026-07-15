@@ -104,6 +104,8 @@ date: 2024-07-29
 	- [[(LeetCode) 64. Minimum Path Sum|LeetCode 64. Minimum Path Sum]]
 	- [[(LeetCode) 70. Climbing Stairs|LeetCode 70. Climbing Stairs]]
 	- [[(LeetCode) 72. Edit Distance|LeetCode 72. Edit Distance]]
+	- [[(LeetCode) 85. Maximal Rectangle|LeetCode 85. Maximal Rectangle]]
+	- [[(LeetCode) 91. Decode Ways|LeetCode 91. Decode Ways]]
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
