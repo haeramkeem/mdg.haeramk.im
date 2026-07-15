@@ -24,6 +24,8 @@ date: 2024-07-29
 	- [[Dijkstra (Algorithm)|Dijkstra]]
 	- [[Floyd-Warshall (Algorithm)|Floyd-Warshall]]
 	- [[Topological Sort (Algorithm)|Topological Sort]]
+- 기타
+	- [[Euclidean Algorithm (GCD)|Euclidean Algorithm]]
 
 ### Data Structure
 
@@ -84,6 +86,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2452. Words Within Two Edits of Dictionary|LeetCode 2452. Words Within Two Edits of Dictionary]]
 	- [[(LeetCode) 3300. Minimum Element After Replacement With Digit Sum|LeetCode 3300. Minimum Element After Replacement With Digit Sum]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
+	- [[(LeetCode) 3658. GCD of Odd and Even Sums|LeetCode 3658. GCD of Odd and Even Sums]]
 	- [[(LeetCode) 3754. Concatenate Non-Zero Digits and Multiply by Sum I|LeetCode 3754. Concatenate Non-Zero Digits and Multiply by Sum I]]
 	- [[(LeetCode) 3783. Mirror Distance of an Integer|LeetCode 3783. Mirror Distance of an Integer]]
 	- [[(프로그래머스) 모의고사]]

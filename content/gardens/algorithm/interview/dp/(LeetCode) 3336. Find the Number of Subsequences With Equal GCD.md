@@ -4,6 +4,7 @@ tags:
   - algorithm
   - interview/retry
   - dp
+  - gcd
 date: 2026-07-14
 aliases:
   - LeetCode 3336
@@ -121,6 +122,7 @@ i == 3:
 		- `P_MAP[i]` 의 어떤 원소 `(a, b) -> c` 에 대해, `(GCM(nums[i + 1], a), b) -> c` 를 만족하고, `(a, GCM(nums[i + 1], b)) -> c` 도 만족한다.
 		- 이들의 집합을 `P_MAP'[i + 1]` 라고 하면, `P_MAP[i + 1]` 은 `P_MAP[i]` 와 `P_MAP'[i + 1]` 의 합집합이다.
 - 코드는 다음과 같다:
+	- GCD 는 [[Euclidean Algorithm (GCD)|유클리드 호제법]] 으로 간편하게 구했다.
 
 ```cpp
 #define ull unsigned long long
