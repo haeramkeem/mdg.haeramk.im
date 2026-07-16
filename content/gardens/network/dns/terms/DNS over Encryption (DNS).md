@@ -28,7 +28,7 @@ aliases:
 
 ### DNS-over-HTTPS (DoH)
 
-- [RFC8484](https://datatracker.ietf.org/doc/html/rfc8484) 로 제안된 것으로, DNS 패킷을 [[HTTP with TLS, HTTPS (Network)|HTTPS]] 로 감싸는 방법이다.
+- [RFC8484](https://datatracker.ietf.org/doc/html/rfc8484) 로 제안된 것으로, DNS 패킷을 [[HTTP with TLS, HTTPS (L7)|HTTPS]] 로 감싸는 방법이다.
 - 기존 HTTPS 와 동일한 443/[[Transmission Control Protocol, TCP (Network)|TCP]] 를 사용한다.
 - DoT 보다 더 많은 이목을 받아, 꽤 많이 배포되어 있고 생각보다 DoT 에 비해 느리지도 않다고 한다 ([이 연구](https://dl.acm.org/doi/10.1145/3355369.3355575) 에 따르면, DoH 가 DoT 보다 느릴 것 같지만, 실제로는 거의 비슷한 성능을 낸다고 한다.)
 

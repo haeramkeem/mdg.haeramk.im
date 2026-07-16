@@ -16,7 +16,6 @@ date: 2024-07-29
 
 ### 용어들
 
-- [[Classless Inter-Domain Routing, CIDR (Network)|Classless Inter-Domain Routing, CIDR]]
 - [[Cross-Origin Resource Sharing, CORS (Network)|Cross-Origin Resource Sharing, CORS]]
 - [[Denial of Service, DoS (Network)|Denial of Service, DoS]]
 - [[Dynamic Host Configuration Protocol, DHCP (Network)|Dynamic Host Configuration Protocol, DHCP]]
@@ -24,13 +23,11 @@ date: 2024-07-29
 - [[Interior Gateway Protocol, IGP (Network)|Interior Gateway Protocol, IGP]]
 - [[Internet Registry System (Network)|Internet Registry System]]
 - [[Internet Service Provider, ISP (Network)|Internet Service Provider, ISP]]
-- [[IP Class (Network)|IP Class]]
 - [[OSI 7 Layer Model (Network)|OSI 7 Layer Model]]
 - [[Split Horizon Problem, Route Loop (Network)|Split Horizon Problem, Route Loop]]
 - [[TCP-IP Suite (Network)|TCP-IP Suite]]
 - [[Transmission Control Protocol, TCP (Network)|Transmission Control Protocol, TCP]]
 - [[User Datagram Protocol, UDP (Network)|User Datagram Protocol, UDP]]
-- [[Variable Length Subnet Mask, VLSM (Network)|Variable Length Subnet Mask, VLSM]]
 
 ### BGP
 
@@ -71,11 +68,19 @@ date: 2024-07-29
 
 ### HTTP
 
-- [[HTTP with TLS, HTTPS (Network)|HTTP with TLS, HTTPS]]
-- [[Hyper Text Transfer Protocol (HTTP)]]
+- [[HTTP with TLS, HTTPS (L7)|HTTP with TLS, HTTPS]]
+- [[Hyper Text Transfer Protocol, HTTP (L7)]]
 - 용어집
 	- [[Method (HTTP)|HTTP Method]]
 	- [[Representational State Transfer API, ReST (HTTP)|Representational State Transfer API, ReST]]
+
+### IP
+
+- 용어집
+	- [[Classless Inter-Domain Routing, CIDR (Network)|Classless Inter-Domain Routing, CIDR]]
+	- [[IP Class (Network)|IP Class]]
+	- [[Network, Host Address (IP)|Network Address]]
+	- [[Variable Length Subnet Mask, VLSM (Network)|Variable Length Subnet Mask, VLSM]]
 
 ### TLS
 

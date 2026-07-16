@@ -50,6 +50,8 @@ date: 2024-07-29
 		- [[Private Key, PK (Relational Model)|Private Key, PK]]
 		- [[Record (Relational Model)|Record]]
 		- [[Relation (Relational Model)|Relation]]
+		- Relational algebra
+			- [[Projection (Relational Algebra)|Projection]]
 
 ### Encoding
 

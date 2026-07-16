@@ -10,13 +10,6 @@ aliases:
 > [!info]- 참고한 것들
 > - [[Network] IP주소 클래스(A,B,C class)란?](https://limkydev.tistory.com/168)
 
-## Network, Host address
-
-- IP 는 알다시피 `NETADDR.HOSTADDR` 형태로 구성된다
-- 일단 하나의 네트워크에 할당되는 값이 *Network Address* 이고
-- 그 네트워크에서 거기에 속한놈들에게 나눠주는 *Host Address* 가 있더라
-- Network Address 는 네트워크에 할당되기 때문에 좀 더 글로벌하고 공인된 단체가 할당해주겠지 → 이런 숫자 관련해서 등장하지 않으면 이상한 IANA 가 할당해준다
-
 ## Class A, B, C
 
 ![[Pasted image 20240526223441.png]]

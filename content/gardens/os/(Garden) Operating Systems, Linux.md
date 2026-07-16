@@ -82,3 +82,9 @@ date: 2024-07-29
 	- [[Pseudo-LRU (Replacement)|Pseudo-LRU]]
 - 논문들
 	- [[1. Introduction (ARC, FAST'03)|(Draft) ARC - A Self-Tuning, Low Overhead Replacement Cache (FAST '03)]]
+
+### Scheduling
+
+- 용어들
+	- [[Shortest Process Next, SPN (Scheduling)|Shortest Process Next, SPN]]
+	- [[Shortest Remaining Time, SRT (Scheduling)|Shortest Remaining Time, SRT]]
