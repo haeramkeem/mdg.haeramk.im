@@ -12,7 +12,7 @@ aliases:
 > - [LeetCode](https://leetcode.com/problems/unique-binary-search-trees)
 
 > [!tip] 요약
-> - 점화식찾기
+> - 점화식 찾는 문제
 
 ## 최종
 
