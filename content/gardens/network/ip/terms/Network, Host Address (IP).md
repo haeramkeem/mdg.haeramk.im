@@ -30,11 +30,11 @@ IP Address (bit): 10101010 10101010 10101010 10101010
 ```
 
 - *Network address* 는 다양한 표현방식을 가진다.
-	- [[IP Class (Network)|IP Class]] 에서는 그냥 `a.b.0.0` 이런식으로 표현한다.
+	- [[Class (IP)|IP Class]] 에서는 그냥 `a.b.0.0` 이런식으로 표현한다.
 		- 이 말은 같은 네트워크에 속한 두 IP 는 항상 `a.b.` 로 시작한다는 의미이다.
-	- [[Variable Length Subnet Mask, VLSM (Network)|VLSM]] 에서는 `a.b.c.d` 와 subnet mask `e.f.g.h` 으로 표현된다.
-		- 이 말은 같은 네트워크에 속한 두 IP 에 [[Variable Length Subnet Mask, VLSM (Network)|subnet mask]] `e.f.g.h` 를 `AND` 하면 항상 `a.b.c.d` 가 나온다는거다.
-	- [[Classless Inter-Domain Routing, CIDR (Network)|CIDR]] 에서는 `a.b.c.d/e` 으로 표현한다.
+	- [[Variable Length Subnet Mask, VLSM (IP)|VLSM]] 에서는 `a.b.c.d` 와 subnet mask `e.f.g.h` 으로 표현된다.
+		- 이 말은 같은 네트워크에 속한 두 IP 에 [[Variable Length Subnet Mask, VLSM (IP)|subnet mask]] `e.f.g.h` 를 `AND` 하면 항상 `a.b.c.d` 가 나온다는거다.
+	- [[Classless Inter-Domain Routing, CIDR (IP)|CIDR]] 에서는 `a.b.c.d/e` 으로 표현한다.
 		- 이건 위의 VLSM 과 비슷한데, subnet mask 가 MSB 부터 시작해서 `e` 개의 1bit 로 구성된 문법이다.
 - *Host address* 는 2가지가 금지된다.
 	- *Host address* 파트가 전부 0bit 라면 그건 그냥 *Network address* 와 같아진다. 그래서 이렇게는 *host address* 로 설정할 수 없다.

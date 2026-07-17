@@ -20,7 +20,7 @@ aliases:
     - 그렇지 않더라
 - CIDR 의 정곡을 찌르는 핵심은 다음과 같다
     - Classless 이다
-        - 하지만 CIDR 을 그냥 Classless IP 표현법이라고 생각하면 [[Variable Length Subnet Mask, VLSM (Network)|VLSM]] 이랑 헷갈림
+        - 하지만 CIDR 을 그냥 Classless IP 표현법이라고 생각하면 [[Variable Length Subnet Mask, VLSM (IP)|VLSM]] 이랑 헷갈림
     - Inter-Domain 이다
         - 즉, 하나의 네트워크 내에서의 서브넷을 위한 개념이 아닌 네트워크 간의 통신을 위해 등장한 개념이다 이거임
         - Domain, 네트워크 이런건 AS 와 동의어로 생각해도 좋다

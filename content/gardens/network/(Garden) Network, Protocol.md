@@ -77,10 +77,10 @@ date: 2024-07-29
 ### IP
 
 - 용어집
-	- [[Classless Inter-Domain Routing, CIDR (Network)|Classless Inter-Domain Routing, CIDR]]
-	- [[IP Class (Network)|IP Class]]
+	- [[Classless Inter-Domain Routing, CIDR (IP)|Classless Inter-Domain Routing, CIDR]]
+	- [[Class (IP)|Class]]
 	- [[Network, Host Address (IP)|Network Address]]
-	- [[Variable Length Subnet Mask, VLSM (Network)|Variable Length Subnet Mask, VLSM]]
+	- [[Variable Length Subnet Mask, VLSM (IP)|Variable Length Subnet Mask, VLSM]]
 
 ### TLS
 

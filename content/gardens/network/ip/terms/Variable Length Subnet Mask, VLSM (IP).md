@@ -15,7 +15,7 @@ aliases:
 
 ## 란?
 
-- [[IP Class (Network)|IP Class]] 의 문제점은 다음과 같다:
+- [[Class (IP)|IP Class]] 의 문제점은 다음과 같다:
 	- 네트워크에 노드가 30000개 있다면 당연히 Class B IP 가 할당되겠지.
 	- 근데 Class B 는 65536 개의 IP 가 포함되므로 나머지 35536 개의 IP 는 사용되지 않고 낭비되더라 이거다.
 - 즉, 기존의 Classful 한 방식은 IP 의 낭비가 생기므로 이것을 막기 위해 VLSM 가 도입된 셈이다.
