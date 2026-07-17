@@ -3,7 +3,6 @@ tags:
   - mdg
   - algorithm
   - interview
-  - brute-force
   - gcd
 date: 2026-07-16
 aliases:
