@@ -19,4 +19,4 @@ listen stats
 ```
 
 - 추가 옵션:
-	- `bind *:33000 ssl crt /path/to/cert.pem` 로 stat page 에 대한 [[Transport Layer Security (TLS)|TLS]] 인증서를 지정해줄 수 있다.
+	- `bind *:33000 ssl crt /path/to/cert.pem` 로 stat page 에 대한 [[Transport Layer Security, TLS (L6 Presentation Layer)|TLS]] 인증서를 지정해줄 수 있다.
