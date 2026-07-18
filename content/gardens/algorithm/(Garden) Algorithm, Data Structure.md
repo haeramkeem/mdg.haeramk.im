@@ -127,6 +127,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2685. Count the Number of Complete Components|LeetCode 2685. Count the Number of Complete Components]]
 	- [[(LeetCode) 3532. Path Existence Queries in a Graph I|LeetCode 3532. Path Existence Queries in a Graph I]]
 - GCD (최대공약수)
+	- [[(LeetCode) 1979. Find Greatest Common Divisor of Array|LeetCode 1979. Find Greatest Common Divisor of Array]]
 	- [[(LeetCode) 3312. Sorted GCD Pair Queries|LeetCode 3312. Sorted GCD Pair Queries]]
 	- [[(LeetCode) 3658. GCD of Odd and Even Sums|LeetCode 3658. GCD of Odd and Even Sums]]
 	- [[(LeetCode) 3867. Sum of GCD of Formed Pairs|LeetCode 3867. Sum of GCD of Formed Pairs]]
