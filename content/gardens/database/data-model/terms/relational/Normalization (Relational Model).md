@@ -9,7 +9,7 @@ aliases:
   - Normalization
   - 정규화
 ---
-> [!warning]- #draft 아직 미완성된 작물입니다.
+> [!warning]- 작물 단계: #draft 
 > - [ ] 구체적인 예시 추가
 
 ## Normalization, 정규화

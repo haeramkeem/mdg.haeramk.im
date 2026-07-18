@@ -10,6 +10,11 @@ date: 2024-07-29
 
 ## 문서집
 
+### 공격 기법
+
+- 용어집
+	- [[Smurfing (Attack Method)|Smurfing]]
+
 ### Hash
 
 - [[Hash (Hash)|Hash]]

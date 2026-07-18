@@ -5,15 +5,18 @@ tags:
   - data-model
   - relational-model
 date: 2024-07-17
+aliases:
+  - Foreign Key
+  - FK
 ---
 > [!info]- 참고한 것들
 > - [[01. Relational Model and Algebra|CMU-15445, Intro. to Database Systems]]
 
 ## Foreign Key
 
-- *Foreign Key (FK)* ==다른 [[Relation (Relational Model)|relation]] 의 [[Private Key, PK (Relational Model)|PK]] 를 명시하여 해당 [[Relation (Relational Model)|tuple]] 를 가리키는 포인터== 를 말한다.
-- 다만 이때 한 relation 에 FK 를 직접 박지는 않는다.
-	- 물론 1:1 관계라면 relation 의 attibute 로 FK 를 직접 박아도 되지만
+- *Foreign Key (FK)* ==다른 relation의 PK를 명시하여 해당 record를 가리키는 포인터== 를 말한다.
+- 다만 이때 한 [[Relation (Relational Model)|relation]] 에 FK 를 직접 박지는 않는다.
+	- 물론 1:1 관계라면 relation 의 [[Record (Relational Model)|attribute]] 로 FK 를 직접 박아도 되지만
 		- 이때는 아마 이렇게 하는 것보다 relation 을 합치는게 나을듯?
 		- 정규화에 이런 내용이 있었던 것 같은데 기억이 잘 안난다
 - 한 relation 에 FK 를 직접 박으면 아래처럼 1:N 이나 N:M 을 표현하기 힘들다.
