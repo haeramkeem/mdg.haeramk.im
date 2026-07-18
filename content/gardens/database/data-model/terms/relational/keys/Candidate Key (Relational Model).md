@@ -7,6 +7,7 @@ tags:
 date: 2026-07-17
 aliases:
   - Candidate Key
+  - 후보키
 ---
 > [!info] 작물 단계: #seed 
 

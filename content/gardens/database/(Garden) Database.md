@@ -45,7 +45,6 @@ date: 2024-07-29
 		- [[Snowflake Schema (Multi-dimensional Model)|Snowflake Schema]]
 		- [[Star Schema (Multi-dimensional Model)|Star Schema]]
 	- [[Relational Data Model (Data Model)|Relational Data Model]]
-		- [[Normalization (Relational Model)|Normalization]]
 		- Relational algebra
 			- [[Projection (Relational Algebra)|Projection]]
 		- Components
@@ -61,6 +60,12 @@ date: 2024-07-29
 			- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
 			- [[Private Key, PK (Relational Model)|Private Key, PK]]
 			- [[Super Key (Relational Model)|Super Key]]
+		- [[Normalization (Relational Model)|Normalization]]
+			- [[Boyce-Codd Normal Form, BCNF (Normalization)|Boyce-Codd Normal Form, BCNF]]
+			- [[First Normal Form, 1NF (Normalization)|First Normal Form, 1NF]]
+			- [[Functional Dependency, FD (Normalization)|Functional Dependency, FD]]
+			- [[Second Normal Form, 2NF (Normalization)|Second Normal Form, 2NF]]
+			- [[Third Normal Form, 3NF (Normalization)|Third Normal Form, 3NF]]
 
 ### Encoding
 
