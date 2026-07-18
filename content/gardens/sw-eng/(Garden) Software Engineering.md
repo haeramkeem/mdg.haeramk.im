@@ -42,3 +42,14 @@ date: 2026-07-17
 	- [[Routine Call Coupling (SW  Architecture)|Routine Call Coupling]]
 	- [[Stamp Coupling (SW  Architecture)|Stamp Coupling]]
 	- [[Type Use Coupling (SW  Architecture)|Type Use Coupling]]
+
+## Testing
+
+- Coverage
+	- [[Condition Coverage (SW  Testing)|Condition Coverage]]
+	- [[Condition Decision Coverage, CDC (SW  Testing)|Condition Decision Coverage, CDC]]
+	- [[Decision Coverage (SW  Testing)|Decision Coverage]]
+	- [[Modified Condition Decision Coverage, MCDC (SW  Testing)|Modified Condition Decision Coverage, MCDC]]
+	- [[Multiple Condition Coverage (SW  Testing)|Multiple Condition Coverage]]
+	- [[Path Coverage (SW  Testing)|Path Coverage]]
+	- [[Statement Coverage (SW  Testing)|Statement Coverage]]
