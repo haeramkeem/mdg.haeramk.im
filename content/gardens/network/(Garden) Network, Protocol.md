@@ -91,4 +91,6 @@ date: 2024-07-29
 	- [[HTTP with TLS, HTTPS (L7 Application Layer)|HTTP with TLS, HTTPS]]
 	- [[Method (HTTP)|HTTP Method]]
 	- [[Representational State Transfer API, ReST (HTTP)|Representational State Transfer API, ReST]]
+- [[Open Shortest Path First, OSPF (Network)|Open Shortest Path First, OSPF]]
+- [[Routing Information Protocol, RIP (Network)|Routing Information Protocol, RIP]]
 
