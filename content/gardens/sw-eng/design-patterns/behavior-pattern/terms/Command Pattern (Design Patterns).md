@@ -3,6 +3,7 @@ tags:
   - mdg
   - sw-eng
   - design-patterns
+  - behavior-pattern
 date: 2026-07-17
 aliases:
   - Command Pattern

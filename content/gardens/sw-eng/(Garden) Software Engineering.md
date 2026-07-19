@@ -15,9 +15,13 @@ date: 2026-07-17
 
 ## 디자인 패턴
 
-- 용어집
+- Behavior Pattern
 	- [[Command Pattern (Design Patterns)|Command Pattern]]
 	- [[Observer Pattern (Design Patterns)|Observer Pattern]]
+	- [[Visitor Pattern (Design Patterns)|Visitor Pattern]]
+- Generate Pattern
+	- [[Abstract Factory Pattern (Design Patterns)|Abstract Factory Pattern]]
+	- [[Factory Pattern (Design Patterns)|Factory Pattern]]
 
 ## Cohesion
 
