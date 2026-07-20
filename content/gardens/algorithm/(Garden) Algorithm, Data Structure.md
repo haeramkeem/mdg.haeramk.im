@@ -202,6 +202,7 @@ date: 2024-07-29
 	- [[(LeetCode) 92. Reverse Linked List II|LeetCode 92. Reverse Linked List II]]
 	- [[(LeetCode) 394. Decode String|LeetCode 394. Decode String]]
 	- [[(LeetCode) 739. Daily Temperatures|LeetCode 739. Daily Temperatures]]
+	- [[(LeetCode) 1081. Smallest Subsequence of Distinct Characters|LeetCode 1081. Smallest Subsequence of Distinct Characters]]
 	- [[(프로그래머스) 같은 숫자는 싫어]]
 	- [[(프로그래머스) 올바른 괄호]]
 	- [[(프로그래머스) 주식가격]]
