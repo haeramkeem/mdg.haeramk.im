@@ -1,8 +1,8 @@
 ---
 tags:
   - mdg
-  - terms
   - network
+  - draft
 aliases:
   - QUIC
 ---

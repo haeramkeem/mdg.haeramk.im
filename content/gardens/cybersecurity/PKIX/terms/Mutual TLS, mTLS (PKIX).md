@@ -12,7 +12,7 @@ aliases:
 
 ## 용어 설명
 
-- 기존의 Server [[Certificate (PKIX)|cert]] 로만 암호화 통신을 진행하던 [[Transport Layer Security (TLS)|TLS]] 와 달리,
+- 기존의 Server [[Certificate (PKIX)|cert]] 로만 암호화 통신을 진행하던 [[Transport Layer Security, TLS (L6 Presentation Layer)|TLS]] 와 달리,
 - Server cert 와 Client cert 모두 사용해서 암호화 통신을 제공하는 방법이다.
 
 ### 장점?

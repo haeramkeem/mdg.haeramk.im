@@ -7,35 +7,61 @@ date: 2024-07-29
 
 - 네트워크도 슬슬 심어볼 때 됐다 이제.
 
-## 작물들
-
-### 오리지날 시리즈
+## 오리지날 시리즈
 
 - [[(충남대) 데이터 통신 강의록]]
 - [[(충남대) 컴퓨터 네트워크 강의록]]
 
-### 용어들
+## 용어들
 
-- [[Classless Inter-Domain Routing, CIDR (Network)|Classless Inter-Domain Routing, CIDR]]
 - [[Cross-Origin Resource Sharing, CORS (Network)|Cross-Origin Resource Sharing, CORS]]
-- [[Denial of Service, DoS (Network)|Denial of Service, DoS]]
-- [[Dynamic Host Configuration Protocol, DHCP (Network)|Dynamic Host Configuration Protocol, DHCP]]
-- [[ICMP Router Discovery Protocol, DISC (Network)|ICMP Router Discovery Protocol, DISC]]
 - [[Interior Gateway Protocol, IGP (Network)|Interior Gateway Protocol, IGP]]
 - [[Internet Registry System (Network)|Internet Registry System]]
 - [[Internet Service Provider, ISP (Network)|Internet Service Provider, ISP]]
-- [[IP Class (Network)|IP Class]]
-- [[OSI 7 Layer Model (Network)|OSI 7 Layer Model]]
 - [[Split Horizon Problem, Route Loop (Network)|Split Horizon Problem, Route Loop]]
-- [[TCP-IP Suite (Network)|TCP-IP Suite]]
-- [[Transmission Control Protocol, TCP (Network)|Transmission Control Protocol, TCP]]
+
+## 공격 기법
+
+- [[Denial of Service, DoS (Network Attack Method)|Denial of Service, DoS]]
+- [[DNS Amplification Attack, Reflection Attack (Network Attack Method)|DNS Amplification (Reflection) Attack]]
+- [[Downgrade Attack (Network Attack Method)|Downgrade Attack]]
+- [[Forward Secrecy (Network Attack Method)|Forward Secrecy]]
+- [[NXDomain Attack, Random-subdomain Attack (Network Attack Method)|NXDomain (Random-subdomain) Attack]]
+- [[Smurfing (Network Attack Method)|Smurfing]]
+
+## OSI 7 Layer
+
+- [[OSI 7 Layer Model (Network)|OSI 7 Layer Model]]
+
+### Network Layer (L3)
+
+- [[Internet Control Message Protocol, ICMP (L3 Network Layer)|Internet Control Message Protocol, ICMP]]
+	- [[ICMP Router Discovery Protocol, IRDP (L3 Network Layer)|ICMP Router Discovery Protocol, IRDP]]
+	- [[ICMP Ping (L3 Network Layer)|ICMP Ping]]
+- [[Internet Protocol, IP (L3 Network Layer)|Internet Protocol, IP]]
+	- [[Classless Inter-Domain Routing, CIDR (IP)|Classless Inter-Domain Routing, CIDR]]
+	- [[Class (IP)|Class]]
+	- [[Network, Host Address (IP)|Network Address]]
+	- [[Variable Length Subnet Mask, VLSM (IP)|Variable Length Subnet Mask, VLSM]]
+- [[Packet Switch (L3 Network Layer)|Packet Switch]]
+	- [[Datagram (Packet Switch)|Datagram]]
+	- [[Virtual Circuit (Packet Switch)|Virtual Circuit]]
+- [[Virtual Router Redundancy Protocol, VRRP (L3)|Virtual Router Redundancy Protocol, VRRP]]
+	- [[Split-brain Scenario (VRRP)|Split-brain Scenario]]
+
+### Transport Layer (L4)
+
+- [[Transmission Control Protocol, TCP (L4 Tranport Layer)|Transmission Control Protocol, TCP]]
+	- [[TCP-IP Suite (L4 Tranport Layer)|TCP-IP Suite]]
 - [[User Datagram Protocol, UDP (Network)|User Datagram Protocol, UDP]]
-- [[Variable Length Subnet Mask, VLSM (Network)|Variable Length Subnet Mask, VLSM]]
 
-### BGP
+### Presentation Layer (L6)
 
-- [[Border Gateway Protocol (BGP)|Border Gateway Protocol, BGP]]
-- 용어집
+- [[Transport Layer Security, TLS (L6 Presentation Layer)]]
+
+### Application Layer (L7)
+
+- [[Border Gateway Protocol, BGP (Network)|Border Gateway Protocol, BGP]]
 	- [[Autonomous System, AS (BGP)|Autonomous System, AS]]
 	- [[External Gateway Protocol, EGP (BGP)|External Gateway Protocol, EGP]]
 	- [[Internet Routing Registry, IRR (BGP)|Internet Routing Registry, IRR]]
@@ -43,15 +69,9 @@ date: 2024-07-29
 	- [[Resource Public Key Infrastructure, RPKI (BGP)|Resource Public Key Infrastructure, RPKI]]
 	- [[Route Hijack Attack (BGP)|Route Hijack Attack]]
 	- [[Route Leak (BGP)|Route Leak]]
-
-### DNS
-
-- [[Domain Name System (DNS)|Domain Name System, DNS]]
-- 논문
-	- [[논문 - A comprehensive survey on DNS tunnel detection|(Draft) A comprehensive survey on DNS tunnel detection]]
-- 용어집
+- [[Dynamic Host Configuration Protocol, DHCP (L7 Application Layer)|Dynamic Host Configuration Protocol, DHCP]]
+- [[Domain Name System, DNS (Network)|Domain Name System, DNS]]
 	- [[Cache Poisoning, Spoofing (DNS)|Cache Poisoning, Spoofing]]
-	- [[DNS Amplification Attack, Reflection Attack (DNS)|DNS Amplification (Reflection) Attack]]
 	- [[DNS over Encryption (DNS)|DNS over Encryption]]
 	- [[DNS Security Extension, DNSSEC (DNS)|DNS Security Extension, DNSSEC]]
 	- [[DNS Tunneling (DNS)|DNS Tunneling]]
@@ -61,31 +81,16 @@ date: 2024-07-29
 	- [[Full Qualified Domain Name, FQDN (DNS)|Full Qualified Domain Name, FQDN]]
 	- [[Nameserver (DNS)|Nameserver]]
 	- [[Namespace (DNS)|Namespace]]
-	- [[NXDomain Attack, Random-subdomain Attack (DNS)|NXDomain (Random-subdomain) Attack]]
 	- [[Partially Qualified Domain Name, PQDN (DNS)|Partially Qualified Domain Name, PQDN]]
 	- [[Resolver (DNS)|Resolver]]
 	- [[Resource Record, RR (DNS)|Resource Record, RR]]
 	- [[Top Level Domain, TLD (DNS)|Top Level Domain, TLD]]
 	- [[Zone (DNS)|Zone]]
 	- [[Zone Delegation (DNS)|Zone Delegation]]
-
-### HTTP
-
-- [[HTTP with TLS, HTTPS (Network)|HTTP with TLS, HTTPS]]
-- [[Hyper Text Transfer Protocol (HTTP)]]
-- 용어집
+- [[Hyper Text Transfer Protocol, HTTP (L7 Application Layer)|Hyper Text Transfer Protocol, HTTP]]
+	- [[HTTP with TLS, HTTPS (L7 Application Layer)|HTTP with TLS, HTTPS]]
 	- [[Method (HTTP)|HTTP Method]]
 	- [[Representational State Transfer API, ReST (HTTP)|Representational State Transfer API, ReST]]
+- [[Open Shortest Path First, OSPF (Network)|Open Shortest Path First, OSPF]]
+- [[Routing Information Protocol, RIP (Network)|Routing Information Protocol, RIP]]
 
-### TLS
-
-- [[Transport Layer Security (TLS)]]
-- 용어집
-	- [[Downgrade Attack (TLS)|Downgrade Attack]]
-	- [[Forward Secrecy (TLS)|Forward Secrecy]]
-
-### VRRP
-
-- [[Virtual Router Redundancy Protocol (VRRP)]]
-- 용어집
-	- [[Split-brain Scenario (VRRP)|Split-brain Scenario]]

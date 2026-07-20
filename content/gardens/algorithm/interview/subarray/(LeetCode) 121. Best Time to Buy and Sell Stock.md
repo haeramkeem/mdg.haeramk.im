@@ -2,15 +2,17 @@
 tags:
   - mdg
   - algorithm
-  - interview/retry
+  - interview
   - subarray
 date: 2026-04-04
+aliases:
+  - LeetCode 121
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/best-time-to-buy-and-sell-stock)
 
 > [!tip] 요약
-> - 다음에 다시 한번 풀어봐야할듯
+> - Index 0 부터 차근차근 생각해보기
 
 ## 최종
 
@@ -18,7 +20,6 @@ date: 2026-04-04
 > ![[Pasted image 20260404195340.png]]
 
 - 간단하다. Index 1 부터 iterate 하면서 최소 매수 가격을 조정하고, 최소 매수 가격과 현재 가격 차이를 이용해 최대 수익을 조정하면 된다.
-- 사실 이 풀이가 너무 간단해서 잘 생각하지 못하는 것 같다. 뭔가 edge case가 있을 것 같고, 그래서 코드를 수정하다보면 계속 미궁으로 빠지게 된다.
 - 그래서 코드는:
 
 ```cpp

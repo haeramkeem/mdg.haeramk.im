@@ -30,4 +30,4 @@ aliases:
 - 첫번째 경우에 대한 프로토콜이 **IGP(Interior Gateway Protocol)** 가 되는 것이다.
 	- 즉, 위에서 말한 것 처럼 하나의 AS 내에서 라우터들 간의 통신을 명세한 것
 - 그리고 두번째 경우에 대한 프로토콜을 [[External Gateway Protocol, EGP (BGP)|External Gateway Protocol, EGP]] 라고 한다
-	- 이건 AS 의 Border Gateway 간 통신을 명세한 것으로 [[Border Gateway Protocol (BGP)|BGP]] 가 대표적이다.
+	- 이건 AS 의 Border Gateway 간 통신을 명세한 것으로 [[Border Gateway Protocol, BGP (Network)|BGP]] 가 대표적이다.

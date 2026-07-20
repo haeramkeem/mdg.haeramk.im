@@ -43,7 +43,7 @@ service docker start
 	- `WG_DEFAULT_DNS` 는 wireguard 가 설치된 장소의 네트워크 환경에서의 dns 주소를 적으면 된다.
 		- 가령 아래의 `147.46.80.1` 는 서울대학교의 dns 주소이다.
 	- `WG_ALLOWED_IPS` 는 접근이 허용된 IP 범위이다.
-		- [[PVE - Simple SDN 설정하기|Simple SDN 설정하기 가이드]] 에서 설정한 [[Classless Inter-Domain Routing, CIDR (Network)|CIDR]] 이 `10.0.0.0/24` 이기 때문에 이렇게 해줬음.
+		- [[PVE - Simple SDN 설정하기|Simple SDN 설정하기 가이드]] 에서 설정한 [[Classless Inter-Domain Routing, CIDR (IP)|CIDR]] 이 `10.0.0.0/24` 이기 때문에 이렇게 해줬음.
 		- 모든 IP 를 허용하려면 `0.0.0.0/0` 로 하면 된다.
 
 ```yaml

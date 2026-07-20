@@ -45,11 +45,27 @@ date: 2024-07-29
 		- [[Snowflake Schema (Multi-dimensional Model)|Snowflake Schema]]
 		- [[Star Schema (Multi-dimensional Model)|Star Schema]]
 	- [[Relational Data Model (Data Model)|Relational Data Model]]
-		- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
+		- Relational algebra
+			- [[Projection (Relational Algebra)|Projection]]
+		- Components
+			- [[Record (Relational Model)|Record]]
+			- [[Relation (Relational Model)|Relation]]
+		- Integrities
+			- [[Domain Integrity (Relational Model)|Domain Integrity]]
+			- [[Entity Integrity (Relational Model)|Entity Integrity]]
+			- [[Referential Integrity (Relational Model)|Referential Integrity]]
+		- Keys
+			- [[Alternative Key (Relational Model)|Alternative Key]]
+			- [[Candidate Key (Relational Model)|Candidate Key]]
+			- [[Foreign Key, FK (Relational Model)|Foreign Key, FK]]
+			- [[Private Key, PK (Relational Model)|Private Key, PK]]
+			- [[Super Key (Relational Model)|Super Key]]
 		- [[Normalization (Relational Model)|Normalization]]
-		- [[Private Key, PK (Relational Model)|Private Key, PK]]
-		- [[Record (Relational Model)|Record]]
-		- [[Relation (Relational Model)|Relation]]
+			- [[Boyce-Codd Normal Form, BCNF (Normalization)|Boyce-Codd Normal Form, BCNF]]
+			- [[First Normal Form, 1NF (Normalization)|First Normal Form, 1NF]]
+			- [[Functional Dependency, FD (Normalization)|Functional Dependency, FD]]
+			- [[Second Normal Form, 2NF (Normalization)|Second Normal Form, 2NF]]
+			- [[Third Normal Form, 3NF (Normalization)|Third Normal Form, 3NF]]
 
 ### Encoding
 
