@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html><head><title>(LeetCode) 3312. Sorted GCD Pair Queries</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="(LeetCode) 3312. Sorted GCD Pair Queries"/><meta property="og:description" content="문제 링크 LeetCode 요약 약수 카운팅하기 최종 § 결과 아래 처럼 풀리면 제일 좋겠지만, 105 의 testcase 에서 O(n2) 을 돌리는건 미친짓이다. 그래서 이렇게 접근하면 된다: cnt[a] == b 를 a 로 나누었을 때 나누어지는 (나머지가 0이 되는) 숫자의 개수를 b 개라고 하자."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../static/icon.png"/><meta name="description" content="문제 링크 LeetCode 요약 약수 카운팅하기 최종 § 결과 아래 처럼 풀리면 제일 좋겠지만, 105 의 testcase 에서 O(n2) 을 돌리는건 미친짓이다. 그래서 이렇게 접근하면 된다: cnt[a] == b 를 a 로 나누었을 때 나누어지는 (나머지가 0이 되는) 숫자의 개수를 b 개라고 하자."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/algorithm/interview/gcd/(LeetCode)-3312.-Sorted-GCD-Pair-Queries"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">(LeetCode) 3312. Sorted GCD Pair Queries</h1><p class="content-meta ">Jul 17, 2026, 7 min read</p><ul class="tags "><li><a href="../../../../tags/mdg" class="internal tag-link">#mdg</a></li><li><a href="../../../../tags/algorithm" class="internal tag-link">#algorithm</a></li><li><a href="../../../../tags/interview/retry" class="internal tag-link">#interview/retry</a></li><li><a href="../../../../tags/gcd" class="internal tag-link">#gcd</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>문제 링크 </p></div>
+                  
+                </div>
+<ul>
+<li><a href="https://leetcode.com/problems/sorted-gcd-pair-queries" class="external">LeetCode</a></li>
+</ul>
+</blockquote>
+<blockquote class="callout" data-callout="tip">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
+                  <div class="callout-title-inner"><p>요약 </p></div>
+                  
+                </div>
+<ul>
+<li>약수 카운팅하기</li>
+</ul>
+</blockquote>
+<h2 id="최종">최종<a aria-hidden="true" tabindex="-1" href="#최종" class="internal"> §</a></h2>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>결과 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<p><img src="../../../../images/Pasted-image-20260717151013.png" width="auto" height="auto"/></p>
+</blockquote>
+<ul>
+<li><a href="#brute-force" class="internal">아래</a> 처럼 풀리면 제일 좋겠지만, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span> 의 testcase 에서 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 을 돌리는건 미친짓이다.</li>
+<li>그래서 이렇게 접근하면 된다:
+<ul>
+<li><code>cnt[a] == b</code> 를 <code>a</code> 로 나누었을 때 나누어지는 (나머지가 0이 되는) 숫자의 개수를 <code>b</code> 개라고 하자. 즉, <code>a</code> 를 약수로 갖는 숫자의 개수가 <code>b</code> 인 것이다.
+<ul>
+<li>이때 <code>cnt[a]</code> 를 build 할 때는 <code>nums</code> 의 어떤 숫자에 <code>num</code> 대해 1부터 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.2397em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8003em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathnormal">n</span><span class="mord mathnormal">u</span><span class="mord mathnormal">m</span></span></span><span style="top:-2.7603em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2397em;"><span></span></span></span></span></span></span></span></span></span> 까지만 나눠보면 된다. 만약 이 범위에 있는 숫자 <code>x</code> 에 대해 <code>num % x == 0</code> 이라면 자동으로 <code>num % (num / x) == 0</code> 도 되기 때문.</li>
+</ul>
+</li>
+<li>그럼 <code>a</code> 를 공약수로 갖는 두 숫자 pair 의 개수는 <code>b * (b - 1) / 2</code> 개 이다.</li>
+<li>근데 우리는 공약수가 아닌 최대공약수가 같은 두 숫자 pair 를 찾아야 된다. 그럼 <code>a</code> 를 큰수부터 시작해서 내려오며 pair 의 개수를 찾아야 한다. 또한, 이렇게 하면 중복 카운팅이 되므로 중복된 것도 없애야 한다.</li>
+<li>뭔소린지 모르겠다면 <code>{4, 4, 3, 3}</code> 으로 예를 들어보자.
+<ul>
+<li><code>cnt[]</code> 를 만들어 보면,
+<ul>
+<li><code>cnt[1] == 4</code></li>
+<li><code>cnt[2] == 2</code></li>
+<li><code>cnt[3] == 2</code></li>
+<li><code>cnt[4] == 2</code> 가 될것이다.</li>
+</ul>
+</li>
+<li>그럼 가장 큰 <code>4</code> 부터 시작하는거다.
+<ul>
+<li><code>cnt[4] == 2</code> 이므로, <code>4</code> 를 약수로 갖고 있는놈이 2개란 소리다. 지금 우리는 가장 큰 <code>4</code> 부터 시작했으니까, 이 두 숫자에 대해 이것보다 큰 공약수는 없다. 따라서 이들로 만들 수 있는 pair 의 개수는 <code>2 * (2 - 1) / 2 == 1</code> 이다.</li>
+<li>다음으로는 <code>3</code> 을 보자. <code>cnt[3] == 2</code> 이므로, <code>3</code> 을 약수로 갖고있는놈이 2개란 소리다. 위에서와 마찬가지로, 만들 수 있는 pair 의 개수는 <code>2 * (2 - 1) / 2 == 1</code> 이다.</li>
+<li>또 <code>2</code> 를 보자. <code>cnt[2] == 2</code> 이므로, <code>2</code> 을 약수로 갖고있는놈이 2개란 소리다. 근데 이때는 위에서랑 약간 다르다. <code>4</code> 를 약수로 갖고있는놈은 <code>2</code> 도 약수로 갖고있다. 이게 위에서 말한 중복 카운팅이다. 따라서 이때는 <code>2</code> 를 약수로 갖고있는 놈들의 pair 수 (2개) 에서 <code>4</code> 를 약수로 갖고있는 놈들의 pair 수 (2개) 를 빼줘야 한다. 그래서 결과는 0이 된다.</li>
+<li>마지막으로 <code>1</code> 을 보면 <code>cnt[1] == 4</code> 인데, <code>2</code>, <code>3</code>, <code>4</code> 을 약수로 갖는 애들은 모두 <code>1</code> 도 약수로 갖고 있다.
+<ul>
+<li>그래서 <code>1</code> 을 공약수로 갖는 pair 수: <code>4 * (4 - 1) / 2 == 6</code> 에서</li>
+<li><code>2</code> 를 최대공약수로 갖는 pair 수: 0개</li>
+<li><code>3</code> 를 최대공약수로 갖는 pair 수: 1개</li>
+<li><code>4</code> 를 최대공약수로 갖는 pair 수: 1개</li>
+<li>를 빼면 가능한 pair 수는 4개인 것을 알 수 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>즉, <code>nums</code> 의 최대값이 <code>nums_max</code> 라고 하면 <code>nums_max</code> 부터 시작해 <code>1</code> 로 감소하는 <code>a</code> 에 대해:
+<ol>
+<li><code>cnt[a] = cnt[a] * (cnt[a] - 1) / 2</code> 로 <code>cnt[a]</code> 를 숫자의 개수에서 pair 의 개수로 바꿔주고</li>
+<li>중복제거를 위해 <code>cnt[a]</code> 에서 <code>cnt[a * 2]</code>, <code>cnt[a * 3]</code>, <code>cnt[a * 4]</code> … 를 빼준다.</li>
+</ol>
+</li>
+<li>위처럼 하면 <code>cnt[a]</code> 는 <code>a</code> 를 최대공약수로 하는 pair 의 개수로 바뀌게 된다. 그럼 이때 <code>queries</code> 를 처리하는건 좀만 생각해봐도 금방 알 수 있기에 설명은 생략.
+<ul>
+<li>물론 여기도 최적화를 해야 하는데, 그냥 누적합 + binary search 로 충분하다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그래서 코드는:</li>
+</ul>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="cpp" data-theme="default"><code data-language="cpp" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">class</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">Solution</span><span style="color:var(--shiki-color-text);"> {</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">public</span><span style="color:var(--shiki-token-punctuation);">:</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">vector</span><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);">> </span><span style="color:var(--shiki-token-function);">gcdValues</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-function);">vector</span><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);">></span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);"> nums</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">vector</span><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-keyword);">long</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">long</span><span style="color:var(--shiki-color-text);">></span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);"> queries) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> n </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">nums</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">size</span><span style="color:var(--shiki-color-text);">();</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> nums_max </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">-</span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-comment);">		// Get nums_max</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> num </span><span style="color:var(--shiki-token-punctuation);">:</span><span style="color:var(--shiki-color-text);"> nums) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			nums_max </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">max</span><span style="color:var(--shiki-color-text);">(nums_max</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> num);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-comment);">		// Build cnt array</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		vector</span><span style="color:var(--shiki-token-keyword);">&lt;long</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">long></span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">cnt</span><span style="color:var(--shiki-color-text);">(nums_max </span><span style="color:var(--shiki-token-keyword);">+</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> num </span><span style="color:var(--shiki-token-punctuation);">:</span><span style="color:var(--shiki-color-text);"> nums) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> divisor_max </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);">)</span><span style="color:var(--shiki-token-function);">sqrt</span><span style="color:var(--shiki-color-text);">(num);</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> d </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);">; d </span><span style="color:var(--shiki-token-keyword);">&lt;=</span><span style="color:var(--shiki-color-text);"> divisor_max; d</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">				</span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (num </span><span style="color:var(--shiki-token-keyword);">%</span><span style="color:var(--shiki-color-text);"> d </span><span style="color:var(--shiki-token-keyword);">==</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">					</span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[d]</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">					</span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (d </span><span style="color:var(--shiki-token-keyword);">!=</span><span style="color:var(--shiki-color-text);"> num </span><span style="color:var(--shiki-token-keyword);">/</span><span style="color:var(--shiki-color-text);"> d) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">						</span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[num </span><span style="color:var(--shiki-token-keyword);">/</span><span style="color:var(--shiki-color-text);"> d]</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">					}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">				}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-comment);">		// Conv to # pairs</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> nums_max; </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">&lt;=</span><span style="color:var(--shiki-color-text);"> i; i</span><span style="color:var(--shiki-token-keyword);">--</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);">			// Calc # pairs</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">-</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);">) </span><span style="color:var(--shiki-token-keyword);">/</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">2</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-comment);">			// Remove duplicates</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> m </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">2</span><span style="color:var(--shiki-color-text);">; m </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">&lt;=</span><span style="color:var(--shiki-color-text);"> nums_max; m</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">				</span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">-=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[m </span><span style="color:var(--shiki-token-keyword);">*</span><span style="color:var(--shiki-color-text);"> i];</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-token-comment);">		// Accumulate for binary search</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);">; i </span><span style="color:var(--shiki-token-keyword);">&lt;=</span><span style="color:var(--shiki-color-text);"> nums_max; i</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">+=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-color-text);">[i </span><span style="color:var(--shiki-token-keyword);">-</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);">];</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> q_n </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">queries</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">size</span><span style="color:var(--shiki-color-text);">();</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		vector</span><span style="color:var(--shiki-token-keyword);">&lt;int></span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">ret</span><span style="color:var(--shiki-color-text);">(q_n);</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">; i </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> q_n; i</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-token-comment);">			// Answer the query w/ binary search (lower_bound)</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-keyword);">auto</span><span style="color:var(--shiki-color-text);"> it </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">lower_bound</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">begin</span><span style="color:var(--shiki-color-text);">()</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">end</span><span style="color:var(--shiki-color-text);">()</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">queries</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">+</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);">);</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-constant);">ret</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> (it </span><span style="color:var(--shiki-token-keyword);">-</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">cnt</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">begin</span><span style="color:var(--shiki-color-text);">());</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">return</span><span style="color:var(--shiki-color-text);"> ret;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">};</span></span></code></pre></div>
+<h2 id="삽질-기록">삽질 기록<a aria-hidden="true" tabindex="-1" href="#삽질-기록" class="internal"> §</a></h2>
+<h3 id="brute-force">Brute force<a aria-hidden="true" tabindex="-1" href="#brute-force" class="internal"> §</a></h3>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>코드 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<div data-rehype-pretty-code-fragment><pre style="background-color:var(--shiki-color-background);" tabindex="0" data-language="cpp" data-theme="default"><code data-language="cpp" data-theme="default"><span data-line><span style="color:var(--shiki-token-keyword);">class</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">Solution</span><span style="color:var(--shiki-color-text);"> {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">getGCD</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> a</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> b) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">while</span><span style="color:var(--shiki-color-text);"> (b) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> rem </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> a </span><span style="color:var(--shiki-token-keyword);">%</span><span style="color:var(--shiki-color-text);"> b;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			a </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> b;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			b </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> rem;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">return</span><span style="color:var(--shiki-color-text);"> a;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line><span style="color:var(--shiki-token-keyword);">public</span><span style="color:var(--shiki-token-punctuation);">:</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	</span><span style="color:var(--shiki-token-function);">vector</span><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);">> </span><span style="color:var(--shiki-token-function);">gcdValues</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-function);">vector</span><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);">></span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);"> nums</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">vector</span><span style="color:var(--shiki-color-text);">&lt;</span><span style="color:var(--shiki-token-keyword);">long</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">long</span><span style="color:var(--shiki-color-text);">></span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);"> queries) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> n </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">nums</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">size</span><span style="color:var(--shiki-color-text);">();</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> q_n </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">queries</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-token-function);">size</span><span style="color:var(--shiki-color-text);">();</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		map</span><span style="color:var(--shiki-token-keyword);">&lt;int</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">int></span><span style="color:var(--shiki-color-text);"> gcd_cnt;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		vector</span><span style="color:var(--shiki-token-keyword);">&lt;int></span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-function);">ret</span><span style="color:var(--shiki-color-text);">(q_n);</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">; i </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> n; i</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> j </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">+</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">1</span><span style="color:var(--shiki-color-text);">; j </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> n; j</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">				</span><span style="color:var(--shiki-token-constant);">gcd_cnt</span><span style="color:var(--shiki-color-text);">[</span><span style="color:var(--shiki-token-function);">getGCD</span><span style="color:var(--shiki-color-text);">(</span><span style="color:var(--shiki-token-constant);">nums</span><span style="color:var(--shiki-color-text);">[i]</span><span style="color:var(--shiki-token-punctuation);">,</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">nums</span><span style="color:var(--shiki-color-text);">[j])]</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">int</span><span style="color:var(--shiki-color-text);"> i </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">; i </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> q_n; i</span><span style="color:var(--shiki-token-keyword);">++</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			</span><span style="color:var(--shiki-token-keyword);">for</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-keyword);">auto</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-keyword);">&amp;</span><span style="color:var(--shiki-color-text);">p </span><span style="color:var(--shiki-token-punctuation);">:</span><span style="color:var(--shiki-color-text);"> gcd_cnt) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">				</span><span style="color:var(--shiki-token-constant);">queries</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">-=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">p</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-color-text);">second;</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">				</span><span style="color:var(--shiki-token-keyword);">if</span><span style="color:var(--shiki-color-text);"> (</span><span style="color:var(--shiki-token-constant);">queries</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">&lt;</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">0</span><span style="color:var(--shiki-color-text);">) {</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">					</span><span style="color:var(--shiki-token-constant);">ret</span><span style="color:var(--shiki-color-text);">[i] </span><span style="color:var(--shiki-token-keyword);">=</span><span style="color:var(--shiki-color-text);"> </span><span style="color:var(--shiki-token-constant);">p</span><span style="color:var(--shiki-token-punctuation);">.</span><span style="color:var(--shiki-color-text);">first;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">					</span><span style="color:var(--shiki-token-keyword);">break</span><span style="color:var(--shiki-color-text);">;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">				}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">			}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">		}</span></span>
+<span data-line> </span>
+<span data-line><span style="color:var(--shiki-color-text);">		</span><span style="color:var(--shiki-token-keyword);">return</span><span style="color:var(--shiki-color-text);"> ret;</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">	}</span></span>
+<span data-line><span style="color:var(--shiki-color-text);">};</span></span></code></pre></div>
+</blockquote>
+<ul>
+<li>무지성풀이. 당연히 timeout 난다.</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#최종" data-for="최종">최종</a></li><li class="depth-0"><a href="#삽질-기록" data-for="삽질-기록">삽질 기록</a></li><li class="depth-1"><a href="#brute-force" data-for="brute-force">Brute force</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../gardens/algorithm/(Garden)-Algorithm,-Data-Structure" class="internal">(Garden) Algorithm, Data Structure</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2026</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../postscript.js" type="module"></script></html>

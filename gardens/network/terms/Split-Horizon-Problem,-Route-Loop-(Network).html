@@ -31,7 +31,7 @@
 </ul>
 <h2 id="실제-프로토콜에서는">실제 프로토콜에서는<a aria-hidden="true" tabindex="-1" href="#실제-프로토콜에서는" class="internal"> §</a></h2>
 <ul>
-<li>Split Horizon 이 지켜져야 하는 프로토콜은 대표적으로 <a href="../../../gardens/network/draft/Routing-Information-Protocol,-RIP-(Network)" class="internal" data-slug="gardens/network/draft/Routing-Information-Protocol,-RIP-(Network)">RIP</a>/EIGRP 와 <a href="../../../gardens/network/bgp/Border-Gateway-Protocol-(BGP)" class="internal" data-slug="gardens/network/bgp/Border-Gateway-Protocol-(BGP)">BGP</a> 가 있는데 적용방식은 좀 다르다</li>
+<li>Split Horizon 이 지켜져야 하는 프로토콜은 대표적으로 <a href="../../../gardens/network/osi/l7-application/rip/Routing-Information-Protocol,-RIP-(Network)" class="internal" data-slug="gardens/network/osi/l7-application/rip/Routing-Information-Protocol,-RIP-(Network)">RIP</a>/EIGRP 와 <a href="../../../gardens/network/osi/l7-application/bgp/Border-Gateway-Protocol,-BGP-(Network)" class="internal" data-slug="gardens/network/osi/l7-application/bgp/Border-Gateway-Protocol,-BGP-(Network)">BGP</a> 가 있는데 적용방식은 좀 다르다</li>
 <li>RIP/EIGRP 의 경우에는 라우팅 정보가 수신된 인터페이스로는 해당 정보를 송신하지 않는 식으로 Split Horizon 을 지킨다</li>
 <li>BGP 의 경우에는 라우팅 정보의 출처를 좀 더 넓게 잡는다
 <ul>
@@ -39,7 +39,7 @@
 <li>BGP 의 경우에는 라우팅 정보의 출처를 iBGP 로 잡아서 iBGP 로 연결된 놈이 전달해준 라우팅 정보는 iBGP 로 연결된 다른놈한테 보내지 않는다</li>
 <li>예를 들면
 <ol>
-<li><a href="../../../gardens/network/bgp/terms/Autonomous-System,-AS-(BGP)" class="internal" data-slug="gardens/network/bgp/terms/Autonomous-System,-AS-(BGP)">AS</a> 내에 <code>BG0</code>, <code>BG1</code>, <code>BG2</code> 세개의 BG 가 있을 때</li>
+<li><a href="../../../gardens/network/osi/l7-application/bgp/terms/Autonomous-System,-AS-(BGP)" class="internal" data-slug="gardens/network/osi/l7-application/bgp/terms/Autonomous-System,-AS-(BGP)">AS</a> 내에 <code>BG0</code>, <code>BG1</code>, <code>BG2</code> 세개의 BG 가 있을 때</li>
 <li><code>BG0</code> → <code>BG1</code> 으로 라우팅 정보를 보내면 (당연히 iBGP 겠제)</li>
 <li><code>BG1</code> 은 해당 정보를 <code>BG2</code> 에게 보내지 않는다 (<code>BG1</code> 와 <code>BG2</code> 는 iBGP 로 연결되어 있으므로)</li>
 </ol>

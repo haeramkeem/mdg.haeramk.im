@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html><head><title>Visitor Pattern (Design Patterns)</title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Visitor Pattern (Design Patterns)"/><meta property="og:description" content="작물단계: #seed 참고한 것들 충남대 김현수 교수님 소프트웨어공학 강의 (Fall 2021) 리팩토링 구루 - 이친구 잘하네 Problem Statement § 기능을 하나 추가한다고 해보자. 이걸 act() 라고 해보자. 근데 이 기능이 구현되어야 할 Class 가 여러개 있다."/><meta property="og:image" content="https://mdg.haeramk.im/static/og-image.png"/><meta property="og:width" content="1200"/><meta property="og:height" content="675"/><link rel="icon" href="../../../../../static/icon.png"/><meta name="description" content="작물단계: #seed 참고한 것들 충남대 김현수 교수님 소프트웨어공학 강의 (Fall 2021) 리팩토링 구루 - 이친구 잘하네 Problem Statement § 기능을 하나 추가한다고 해보자. 이걸 act() 라고 해보자. 근데 이 기능이 구현되어야 할 Class 가 여러개 있다."/><meta name="generator" content="Quartz"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link href="../../../../../index.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><link href="https://fonts.googleapis.com/css2?family=IBM Plex Mono&amp;family=Gowun Batang:wght@400;700&amp;family=Gowun Dodum:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet" type="text/css" spa-preserve/><script src="../../../../../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch(`../../../../../static/contentIndex.json`).then(data => data.json())</script></head><body data-slug="gardens/sw-eng/design-patterns/behavior-pattern/terms/Visitor-Pattern-(Design-Patterns)"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h1 class="page-title "><a href="../../../../..">Madison Digital Garden</a></h1><div class="spacer mobile-only"></div><div class="search "><div id="search-icon"><p>Search</p><div></div><svg tabIndex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search</title><desc id="desc">Search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></div><div id="search-container"><div id="search-space"><input autocomplete="off" id="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div id="results-container"></div></div></div></div><div class="darkmode "><input class="toggle" id="darkmode-toggle" type="checkbox" tabIndex="-1"/><label id="toggle-label-light" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xmlSpace="preserve"><title>Light mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg></label><label id="toggle-label-dark" for="darkmode-toggle" tabIndex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'" xmlSpace="preserve"><title>Dark mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></label></div></div><div class="center"><div class="page-header"><div class="popover-hint"><h1 class="article-title ">Visitor Pattern (Design Patterns)</h1><p class="content-meta ">Jul 19, 2026, 7 min read</p><ul class="tags "><li><a href="../../../../../tags/mdg" class="internal tag-link">#mdg</a></li><li><a href="../../../../../tags/sw-eng" class="internal tag-link">#sw-eng</a></li><li><a href="../../../../../tags/design-patterns" class="internal tag-link">#design-patterns</a></li><li><a href="../../../../../tags/behavior-pattern" class="internal tag-link">#behavior-pattern</a></li></ul></div></div><article class="popover-hint"><blockquote class="callout" data-callout="info">
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>작물단계: #seed </p></div>
+                  
+                </div>
+</blockquote>
+<blockquote class="callout is-collapsible is-collapsed" data-callout="info" data-callout-fold>
+<div class="callout-title">
+                  <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                  <div class="callout-title-inner"><p>참고한 것들 </p></div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </div>
+<ul>
+<li><a href="../../../../../gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/08.-디자인-패턴" class="internal" data-slug="gardens/sw-eng/originals/softwareengineering.fall.2021.cse.cnu.ac.kr/08.-디자인-패턴">충남대 김현수 교수님 소프트웨어공학 강의 (Fall 2021)</a></li>
+<li><a href="https://refactoring.guru/design-patterns/visitor" class="external">리팩토링 구루 - 이친구 잘하네</a></li>
+</ul>
+</blockquote>
+<h2 id="problem-statement">Problem Statement<a aria-hidden="true" tabindex="-1" href="#problem-statement" class="internal"> §</a></h2>
+<ul>
+<li>기능을 하나 추가한다고 해보자. 이걸 <code>act()</code> 라고 해보자.</li>
+<li>근데 이 기능이 구현되어야 할 Class 가 여러개 있다. 가령 <code>A</code>, <code>B</code>, <code>C</code> 이 세 개가 있다고 해보자.</li>
+<li>이때 가장 쉽게 떠올릴 수 있는 접근 방법은 interface 를 수정하고, 각 Class 에 이걸 구현해 주는 것이다.
+<ul>
+<li>가령 <code>A</code>, <code>B</code>, <code>C</code> 에 대한 interface <code>Iface</code> 가 있다고 해보자.</li>
+<li>그럼 이 <code>Iface</code> 에 <code>Iface::act()</code> 를 추가한다.</li>
+<li>그리고 <code>A</code>, <code>B</code>, <code>C</code> 에 <code>A::act()</code>, <code>B::act()</code>, <code>C::act()</code> 를 구현한다.</li>
+</ul>
+</li>
+<li>근데 이때 문제가 있다.
+<ul>
+<li>우선, <code>A</code>, <code>B</code>, <code>C</code> 가 이미 production 상태라 얘네를 직접 고치는건 위험할 수 있다.</li>
+<li>그리고 이렇게 하면 이와 유사한 상황이 될 때마다 <code>Iface</code>, <code>A</code>, <code>B</code>, <code>C</code> 를 다 고쳐야 한다.</li>
+</ul>
+</li>
+<li>이런 상황에 사용하기 위해 <em>Visitor Pattern</em> 이 등장한다.</li>
+</ul>
+<h2 id="solution">Solution<a aria-hidden="true" tabindex="-1" href="#solution" class="internal"> §</a></h2>
+<ul>
+<li><em>Visitor Pattern</em> 은 원하는 기능에 대한 각 Class 별 구현을 모아둔 <em>Visitor</em> Class 를 만들어 위와 같은 문제를 해결하는 방법이다.</li>
+<li>뭔소린지 위의 상황을 가지고 예를 들어보자.</li>
+</ul>
+<h3 id="visitor-class">Visitor Class<a aria-hidden="true" tabindex="-1" href="#visitor-class" class="internal"> §</a></h3>
+<ul>
+<li>우선 <code>act()</code> 에 대한 <em>Visitor</em> Class <code>ActVisitor</code> 를 만들자. 여기에는 다음의 세 method 가 있다.
+<ul>
+<li><code>ActVisitor::forA(A a)</code>: <code>A</code> 를 위한 구현 (<code>A::act()</code> 대신 여기에 구현)</li>
+<li><code>ActVisitor::forB(B b)</code>: <code>B</code> 를 위한 구현 (<code>B::act()</code> 대신 여기에 구현)</li>
+<li><code>ActVisitor::forC(C c)</code>: <code>C</code> 를 위한 구현 (<code>C::act()</code> 대신 여기에 구현)</li>
+</ul>
+</li>
+<li>즉, 이렇게 하면 <code>ActVisitor::forA(A a)</code> 를 호출했을 때 <code>A::act()</code> 를 호출한 것과 동일한 효과를 얻게 된다.</li>
+<li>근데 이렇게만 하면 문제가 있다.
+<ul>
+<li><a href="#problem-statement" class="internal">위</a> 에서 보면, <code>Iface::act()</code> 를 뚫었으므로 caller 입장에서는 <code>오브젝트.act()</code> 를 호출하면 <a href="../../../../../gardens/etc/draft/Polymorphism-(-Object-Oriented-Programming)" class="internal" data-slug="gardens/etc/draft/Polymorphism-(-Object-Oriented-Programming)">Polymorphism</a> 으로 해당 객체의 작업이 실행되게 할 수 있었다.</li>
+<li>근데 이 <code>ActVisitor</code> 를 사용하려면, caller 입장에서는 object 가 어떤 Class 인지를 알아내야 한다.
+<ul>
+<li>Java 문법으로는 <code>if (me instanceof A) { ActVisitor::forA((A)obj); }</code> 이딴식으로 해야 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이 문제를 해결하기 위해 <em>Visitor Pattern</em> 에서는 <em>Double Dispatch</em> 라는 기법을 사용한다.</li>
+</ul>
+<h3 id="double-dispatch">Double Dispatch<a aria-hidden="true" tabindex="-1" href="#double-dispatch" class="internal"> §</a></h3>
+<ul>
+<li>이걸 위해서는 인터페이스와 각 Class 에 딱 하나 수정을 해야 한다. <code>accept()</code> 라는 method 를 추가하는 것.
+<ul>
+<li>수정 안하려고 <em>Visitor Pattern</em> 을 쓴다며?? 라고 생각한다면, <a href="#%ED%99%95%EC%9E%A5%EC%84%B1" class="internal">뒤</a> 에서 설명할테니 기다려보시라.</li>
+</ul>
+</li>
+<li>이렇게 <code>accept(ActVisitor v)</code> 를 추가한다.
+<ul>
+<li><code>iface::accept(ActVisitor v)</code></li>
+<li><code>A::accept(ActVisitor v) { v.forA((A)this); }</code></li>
+<li><code>B::accept(ActVisitor v) { v.forB((B)this); }</code></li>
+<li><code>C::accept(ActVisitor v) { v.forC((C)this); }</code></li>
+</ul>
+</li>
+<li>그럼 Class <code>A</code> 에 대한 object <code>obj</code> 에 대해, <code>obj.accept(v)</code> 를 하면 자연스레 <code>A::accept(ActVisitor v)</code> 가 호출되고 이어서 <code>v.forA((A)this)</code> 가 호출된다.</li>
+<li>즉, 이 <code>accept()</code> 를 사용하면 Class 를 파악하는 코드를 짤 필요가 없다.</li>
+</ul>
+<h3 id="확장성">확장성<a aria-hidden="true" tabindex="-1" href="#확장성" class="internal"> §</a></h3>
+<ul>
+<li>위에서도 말한것처럼, <em>Visitor Pattern</em> 은 원래의 Class 에 손을 안대게 하기 위함이었다. 근데 <em>Double Dispatch</em> 를 하려면 <code>accept()</code> 를 추가해야되니 어쨋든 손을 대긴 해야 한다.</li>
+<li>이건 이렇게 방어할 수 있다.
+<ul>
+<li><code>accept()</code> 의 코드를 보면 알겠지만, <em>Visitor</em> 의 method 를 호출하는 것 하나가 전부다. 그래서 이거 하나 추가하는 것은 원래의 Class 에 아무런 영향을 주지 않는다.</li>
+<li>그리고 아래서 설명할 <em>Visitor Interface</em> 를 사용하면, 추후에 다른 <em>Visitor</em> 들이 추가되어도 Class 는 변경하지 않아도 된다.</li>
+</ul>
+</li>
+<li>두번째 이유가 중요하다. <em>Visitor</em> 에 대해서도 polymorphism 을 해서, <em>Visitor Interface</em> 를 사용하자는거다.</li>
+<li>위에서의 예시에서, <em>Visitor</em> 을 위한 interface 를 하나 정의해보자. 이놈을 <code>IfaceVisitor</code> 라고 해보자.
+<ul>
+<li><code>IfaceVisitor::forA(A a)</code>: <code>ActVisitor::forA(A a)</code> 의 추상화</li>
+<li><code>IfaceVisitor::forB(B a)</code>: <code>ActVisitor::forB(B a)</code> 의 추상화</li>
+<li><code>IfaceVisitor::forC(C a)</code>: <code>ActVisitor::forB(B a)</code> 의 추상화</li>
+</ul>
+</li>
+<li>그럼 각 Class 에는 <code>accept()</code> 를 이렇게 구현해놓으면 된다.
+<ul>
+<li><code>Iface::accept(IfaceVisitor v)</code></li>
+<li><code>A::accept(IfaceVisitor v)</code></li>
+<li><code>B::accept(IfaceVisitor v)</code></li>
+<li><code>C::accept(IfaceVisitor v)</code></li>
+</ul>
+</li>
+<li>위에서의 예시 실행 흐름을 가져와보면 다음과 같이 된다.
+<ul>
+<li><code>Iface obj = new A()</code> 와 <code>IfaceVisitor v = new ActVisitor()</code> 가 있다고 해보자.</li>
+<li><code>obj.accept(v)</code> call</li>
+<li>Polymorphism 으로 <code>A::accept(v)</code> 실행</li>
+<li><code>v.forA((A)obj)</code> call</li>
+<li>Polymorphism 으로 <code>ActVisitor::forA((A)obj)</code> 실행</li>
+</ul>
+</li>
+<li>여기에 다른 <em>Visitor</em> 를 하나 더 추가해보자. 가령 <code>play()</code> 라는 기능에 대해 <code>PlayVisitor</code> 를 추가해보자.
+<ul>
+<li><code>PlayVisitor::forA(A a)</code>: <code>A</code> 를 위한 <code>play()</code> 의 코드</li>
+<li><code>PlayVisitor::forB(B b)</code>: <code>B</code> 를 위한 <code>play()</code> 의 코드</li>
+<li><code>PlayVisitor::forC(C c)</code>: <code>C</code> 를 위한 <code>play()</code> 의 코드</li>
+</ul>
+</li>
+<li>그럼 이때는 <code>A</code>, <code>B</code>, <code>C</code> Class 에 털끝하나 건들 것 없이 그냥 사용할 수 있다.
+<ul>
+<li><code>Iface obj = new A()</code> 와 <code>IfaceVisitor v = new PlayVisitor()</code> 가 있다고 해보면,</li>
+<li><code>obj.accept(v)</code> call 을 하면 polymorphism 으로 <code>A::accept(v)</code> 가 실행된다.</li>
+<li>여기에서 <code>v.forA((A)obj)</code> call 을 하면 polymorphism 으로 <code>PlayVisitor::forA((A)obj)</code> 가 실행된다.</li>
+</ul>
+</li>
+</ul></article></div><div class="right sidebar"><div class="graph "><h3>Graph View</h3><div class="graph-outer"><div id="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div><svg version="1.1" id="global-graph-icon" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xmlSpace="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+	s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+	c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+	C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+	c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+	v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+	s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+	C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+	S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+	s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+	s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></div><div id="global-graph-outer"><div id="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[]}"></div></div></div><div class="toc desktop-only"><button type="button" id="toc"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-content"><ul class="overflow"><li class="depth-0"><a href="#problem-statement" data-for="problem-statement">Problem Statement</a></li><li class="depth-0"><a href="#solution" data-for="solution">Solution</a></li><li class="depth-1"><a href="#visitor-class" data-for="visitor-class">Visitor Class</a></li><li class="depth-1"><a href="#double-dispatch" data-for="double-dispatch">Double Dispatch</a></li><li class="depth-1"><a href="#확장성" data-for="확장성">확장성</a></li></ul></div></div><div class="backlinks "><h3>Backlinks</h3><ul class="overflow"><li><a href="../../../../../gardens/sw-eng/(Garden)-Software-Engineering" class="internal">(Garden) Software Engineering</a></li></ul></div></div></div><footer class><hr/><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.1.0</a>, © 2026</p><ul><li><a href="https://github.com/haeramkeem">GitHub</a></li><li><a href="https://www.linkedin.com/in/haeram-kim-277404220">LinkedIn</a></li><li><a href="mailto:haeram.kim1@gmail.com">Email</a></li></ul></footer></div></body><script type="application/javascript">// quartz/components/scripts/quartz/components/scripts/callout.inline.ts
+function toggleCallout() {
+  const outerBlock = this.parentElement;
+  outerBlock.classList.toggle(`is-collapsed`);
+  const collapsed = outerBlock.classList.contains(`is-collapsed`);
+  const height = collapsed ? this.scrollHeight : outerBlock.scrollHeight;
+  outerBlock.style.maxHeight = height + `px`;
+  let current = outerBlock;
+  let parent = outerBlock.parentElement;
+  while (parent) {
+    if (!parent.classList.contains(`callout`)) {
+      return;
+    }
+    const collapsed2 = parent.classList.contains(`is-collapsed`);
+    const height2 = collapsed2 ? parent.scrollHeight : parent.scrollHeight + current.scrollHeight;
+    parent.style.maxHeight = height2 + `px`;
+    current = parent;
+    parent = parent.parentElement;
+  }
+}
+function setupCallout() {
+  const collapsible = document.getElementsByClassName(
+    `callout is-collapsible`
+  );
+  for (const div of collapsible) {
+    const title = div.firstElementChild;
+    if (title) {
+      title.removeEventListener(`click`, toggleCallout);
+      title.addEventListener(`click`, toggleCallout);
+      const collapsed = div.classList.contains(`is-collapsed`);
+      const height = collapsed ? title.scrollHeight : div.scrollHeight;
+      div.style.maxHeight = height + `px`;
+    }
+  }
+}
+document.addEventListener(`nav`, setupCallout);
+window.addEventListener(`resize`, setupCallout);
+</script><script type="module">
+          import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+          const darkMode = document.documentElement.getAttribute('saved-theme') === 'dark'
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: darkMode ? 'dark' : 'default'
+          });
+          document.addEventListener('nav', async () => {
+            await mermaid.run({
+              querySelector: '.mermaid'
+            })
+          });
+          </script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="https://www.googletagmanager.com/gtag/js?id=G-N68CCP1QHG" type="application/javascript"></script><script src="../../../../../postscript.js" type="module"></script></html>

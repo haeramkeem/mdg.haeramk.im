@@ -58,7 +58,7 @@
 <li><a href="https://github.com/haeramkeem/wg-easy-helm/commit/f3a828b3f1679a9a65c7e458ae0ac07bef711f88" class="external">변경3</a>) Helm chart 의 app version 업그레이드, ingress host 로 env 설정되게 함, values typo 수정</li>
 </ul>
 </li>
-<li>원래는 NodePort 로 <code>31820</code> port 를 열고, HAProxy 로 원래의 WireGuard port 인 <code>51820</code> 으로 되돌려주려 했으나, HAProxy 에서 <a href="../../../../../../gardens/network/terms/User-Datagram-Protocol,-UDP-(Network)" class="internal" data-slug="gardens/network/terms/User-Datagram-Protocol,-UDP-(Network)">UDP</a> 를 지원하지 않아 (<a href="https://github.com/haproxy/haproxy/issues/62" class="external">참고</a>) 어쩔 수 없이 <code>31820</code> 을 사용함.
+<li>원래는 NodePort 로 <code>31820</code> port 를 열고, HAProxy 로 원래의 WireGuard port 인 <code>51820</code> 으로 되돌려주려 했으나, HAProxy 에서 <a href="../../../../../../gardens/network/osi/l4-transport/udp/User-Datagram-Protocol,-UDP-(Network)" class="internal" data-slug="gardens/network/osi/l4-transport/udp/User-Datagram-Protocol,-UDP-(Network)">UDP</a> 를 지원하지 않아 (<a href="https://github.com/haproxy/haproxy/issues/62" class="external">참고</a>) 어쩔 수 없이 <code>31820</code> 을 사용함.
 <ul>
 <li>근데 WG-Easy 에서는 <code>51820</code> 으로 인지하고 있기 때문에, tunnel config 을 생성할 때 <code>51820</code> 으로 생성해 준다.</li>
 <li>이것을 해결하기 위해 environment variable 과 ContainerPort 를 <code>31820</code> 으로 바꿔서 사용하려 했으나 잘 안됐었다.</li>
