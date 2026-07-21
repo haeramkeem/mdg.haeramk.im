@@ -112,6 +112,7 @@ date: 2024-07-29
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
 	- [[(LeetCode) 131. Palindrome Partitioning|LeetCode 131. Palindrome Partitioning]]
+	- [[(LeetCode) 132. Palindrome Partitioning II|LeetCode 132. Palindrome Partitioning II]]
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
 	- [[(LeetCode) 396. Rotate Function|LeetCode 396. Rotate Function]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
