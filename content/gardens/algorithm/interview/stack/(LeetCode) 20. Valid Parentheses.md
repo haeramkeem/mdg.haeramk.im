@@ -5,6 +5,8 @@ tags:
   - interview
   - stack
 date: 2026-06-19
+aliases:
+  - LeetCode 20
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/valid-parentheses)

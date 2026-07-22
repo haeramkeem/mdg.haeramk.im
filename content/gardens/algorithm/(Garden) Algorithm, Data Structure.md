@@ -200,6 +200,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2515. Shortest Distance to Target String in a Circular Array|LeetCode 2515. Shortest Distance to Target String in a Circular Array]]
 - Stack
 	- [[(LeetCode) 20. Valid Parentheses|LeetCode 20. Valid Parentheses]]
+	- [[(LeetCode) 32. Longest Valid Parentheses|LeetCode 32. Longest Valid Parentheses]]
 	- [[(LeetCode) 42. Trapping Rain Water|LeetCode 42. Trapping Rain Water]]
 	- [[(LeetCode) 92. Reverse Linked List II|LeetCode 92. Reverse Linked List II]]
 	- [[(LeetCode) 394. Decode String|LeetCode 394. Decode String]]
