@@ -67,6 +67,7 @@ date: 2024-07-29
 	- [[(프로그래머스) 입국심사]]
 - Bitwise
 	- [[(LeetCode) 136. Single Number|LeetCode 136. Single Number]]
+	- [[(LeetCode) 3513. Number of Unique XOR Triplets I|LeetCode 3513. Number of Unique XOR Triplets I]]
 - Brute force (Naive approach)
 	- [[(LeetCode) 9. Palindrome Number|LeetCode 9. Palindrome Number]]
 	- [[(LeetCode) 26. Remove Duplicates from Sorted Array|LeetCode 26. Remove Duplicates from Sorted Array]]
