@@ -67,6 +67,8 @@ date: 2024-07-29
 	- [[(프로그래머스) 입국심사]]
 - Bitwise
 	- [[(LeetCode) 136. Single Number|LeetCode 136. Single Number]]
+	- [[(LeetCode) 3513. Number of Unique XOR Triplets I|LeetCode 3513. Number of Unique XOR Triplets I]]
+	- [[(LeetCode) 3514. Number of Unique XOR Triplets II|LeetCode 3514. Number of Unique XOR Triplets II]]
 - Brute force (Naive approach)
 	- [[(LeetCode) 9. Palindrome Number|LeetCode 9. Palindrome Number]]
 	- [[(LeetCode) 26. Remove Duplicates from Sorted Array|LeetCode 26. Remove Duplicates from Sorted Array]]
@@ -85,6 +87,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2078. Two Furthest Houses With Different Colors|LeetCode 2078. Two Furthest Houses With Different Colors]]
 	- [[(LeetCode) 2452. Words Within Two Edits of Dictionary|LeetCode 2452. Words Within Two Edits of Dictionary]]
 	- [[(LeetCode) 3300. Minimum Element After Replacement With Digit Sum|LeetCode 3300. Minimum Element After Replacement With Digit Sum]]
+	- [[(LeetCode) 3499. Maximize Active Section with Trade I|LeetCode 3499. Maximize Active Section with Trade I]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
 	- [[(LeetCode) 3754. Concatenate Non-Zero Digits and Multiply by Sum I|LeetCode 3754. Concatenate Non-Zero Digits and Multiply by Sum I]]
 	- [[(LeetCode) 3783. Mirror Distance of an Integer|LeetCode 3783. Mirror Distance of an Integer]]
@@ -112,6 +115,7 @@ date: 2024-07-29
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
 	- [[(LeetCode) 131. Palindrome Partitioning|LeetCode 131. Palindrome Partitioning]]
+	- [[(LeetCode) 132. Palindrome Partitioning II|LeetCode 132. Palindrome Partitioning II]]
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
 	- [[(LeetCode) 396. Rotate Function|LeetCode 396. Rotate Function]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
@@ -146,6 +150,7 @@ date: 2024-07-29
 	- [[(LeetCode) 695. Max Area of Island|LeetCode 695. Max Area of Island]]
 	- [[(LeetCode) 874. Walking Robot Simulation|LeetCode 874. Walking Robot Simulation]]
 	- [[(LeetCode) 994. Rotting Oranges|LeetCode 994. Rotting Oranges]]
+	- [[(LeetCode) 1260. Shift 2D Grid|LeetCode 1260. Shift 2D Grid]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Linked list
 	- [[(LeetCode) 83. Remove Duplicates from Sorted List|LeetCode 83. Remove Duplicates from Sorted List]]
@@ -171,6 +176,8 @@ date: 2024-07-29
 	- [[(프로그래머스) 기능개발]]
 	- [[(프로그래머스) 다리를 지나는 트럭]]
 	- [[(프로그래머스) 프로세스]]
+- [[Segment Tree (Data Structure)|Segment Tree]]
+	- [[(LeetCode) 3501. Maximize Active Section with Trade II|LeetCode 3501. Maximize Active Section with Trade II]]
 - Sort
 	- [[(LeetCode) 1288. Remove Covered Intervals|LeetCode 1288. Remove Covered Intervals]]
 	- [[(LeetCode) 1331. Rank Transform of an Array|LeetCode 1331. Rank Transform of an Array]]
@@ -197,10 +204,12 @@ date: 2024-07-29
 	- [[(LeetCode) 2515. Shortest Distance to Target String in a Circular Array|LeetCode 2515. Shortest Distance to Target String in a Circular Array]]
 - Stack
 	- [[(LeetCode) 20. Valid Parentheses|LeetCode 20. Valid Parentheses]]
+	- [[(LeetCode) 32. Longest Valid Parentheses|LeetCode 32. Longest Valid Parentheses]]
 	- [[(LeetCode) 42. Trapping Rain Water|LeetCode 42. Trapping Rain Water]]
 	- [[(LeetCode) 92. Reverse Linked List II|LeetCode 92. Reverse Linked List II]]
 	- [[(LeetCode) 394. Decode String|LeetCode 394. Decode String]]
 	- [[(LeetCode) 739. Daily Temperatures|LeetCode 739. Daily Temperatures]]
+	- [[(LeetCode) 1081. Smallest Subsequence of Distinct Characters|LeetCode 1081. Smallest Subsequence of Distinct Characters]]
 	- [[(프로그래머스) 같은 숫자는 싫어]]
 	- [[(프로그래머스) 올바른 괄호]]
 	- [[(프로그래머스) 주식가격]]

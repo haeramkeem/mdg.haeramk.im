@@ -33,6 +33,7 @@ aliases:
 - [[(Garden) Programming Language, Compiler|프로그래밍 언어, 컴파일러]]
 - [[(Garden) Shell Script|쉘스크립트]]
 - [[(Garden) Storage|스토리지]]
+- [[(Garden) Software Engineering|소프트웨어 공학]]
 - [[(Garden) 그의 운명에 대한 아주 개인적인 생각|그의 운명에 대한 아주 개인적인 생각]]
 - [[(Garden) Etc.|기타]]
 
