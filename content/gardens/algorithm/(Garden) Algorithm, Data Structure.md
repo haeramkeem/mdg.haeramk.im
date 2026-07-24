@@ -175,6 +175,8 @@ date: 2024-07-29
 	- [[(프로그래머스) 기능개발]]
 	- [[(프로그래머스) 다리를 지나는 트럭]]
 	- [[(프로그래머스) 프로세스]]
+- [[Segment Tree (Data Structure)|Segment Tree]]
+	- [[(LeetCode) 3501. Maximize Active Section with Trade II|LeetCode 3501. Maximize Active Section with Trade II]]
 - Sort
 	- [[(LeetCode) 1288. Remove Covered Intervals|LeetCode 1288. Remove Covered Intervals]]
 	- [[(LeetCode) 1331. Rank Transform of an Array|LeetCode 1331. Rank Transform of an Array]]
