@@ -109,6 +109,7 @@ date: 2024-07-29
 	- [[(LeetCode) 70. Climbing Stairs|LeetCode 70. Climbing Stairs]]
 	- [[(LeetCode) 72. Edit Distance|LeetCode 72. Edit Distance]]
 	- [[(LeetCode) 85. Maximal Rectangle|LeetCode 85. Maximal Rectangle]]
+	- [[(LeetCode) 87. Scramble String|LeetCode 87. Scramble String]]
 	- [[(LeetCode) 91. Decode Ways|LeetCode 91. Decode Ways]]
 	- [[(LeetCode) 95. Unique Binary Search Trees II|LeetCode 95. Unique Binary Search Trees II]]
 	- [[(LeetCode) 96. Unique Binary Search Trees|LeetCode 96. Unique Binary Search Trees]]
