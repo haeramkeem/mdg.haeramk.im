@@ -64,7 +64,8 @@ aliases:
 - 스토리
 	- [[HCI Comparison - PVE, Harvester, oVirt...]]
 - 설정 가이드
-	- [[PVE - CA 신뢰하기|CA 신뢰하기]]
+	- [[PVE - Caddy 설정하기|Caddy 설정하기]]
+	- [[PVE - Dashboard 인증서 신뢰하기|Dashboard 인증서 신뢰하기]]
 	- [[PVE - Intel e1000e Detected Hardware Unit Hang 에러|Intel e1000e Detected Hardware Unit Hang 에러]]
 	- [[PVE - Multi-node SDN 설정하기|Multi-node SDN 설정하기]]
 	- [[PVE - NAT + Clustering 삽질|NAT + Clustering 삽질]]
