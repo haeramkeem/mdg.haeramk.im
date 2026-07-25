@@ -155,6 +155,8 @@ date: 2024-07-29
 	- [[(LeetCode) 994. Rotting Oranges|LeetCode 994. Rotting Oranges]]
 	- [[(LeetCode) 1260. Shift 2D Grid|LeetCode 1260. Shift 2D Grid]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
+- Histogram
+	- [[(LeetCode) 3536. Maximum Product of Two Digits|LeetCode 3536. Maximum Product of Two Digits]]
 - Linked list
 	- [[(LeetCode) 83. Remove Duplicates from Sorted List|LeetCode 83. Remove Duplicates from Sorted List]]
 	- [[(LeetCode) 141. Linked List Cycle|LeetCode 141. Linked List Cycle]]
