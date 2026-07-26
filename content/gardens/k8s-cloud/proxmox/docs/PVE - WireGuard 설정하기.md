@@ -44,10 +44,10 @@ service docker start
 		- 가령 아래의 `147.46.80.1` 는 서울대학교의 dns 주소이다.
 	- `WG_ALLOWED_IPS` 는 접근이 허용된 IP 범위이다.
 		- [[PVE - Simple SDN 설정하기|Simple SDN 설정하기 가이드]] 에서 설정한 [[Classless Inter-Domain Routing, CIDR (IP)|CIDR]] 이 `10.0.0.0/24` 이기 때문에 이렇게 해줬음.
+		- 여러개 subnet 을 넣으려면 comma-separated 로 하면 된다.
 		- 모든 IP 를 허용하려면 `0.0.0.0/0` 로 하면 된다.
 
 ```yaml
-version: "3.8"
 volumes:
   etc_wireguard:
 
@@ -68,7 +68,7 @@ services:
       - WG_DEFAULT_ADDRESS=10.8.0.10x
       - WG_DEFAULT_DNS=147.46.80.1
       # - WG_MTU=1420
-      - WG_ALLOWED_IPS=10.0.0.0/24
+      - WG_ALLOWED_IPS=10.0.0.0/24,172.16.0.0/24
       # - WG_PERSISTENT_KEEPALIVE=25
       # - WG_PRE_UP=echo "Pre Up" > /etc/wireguard/pre-up.txt
       # - WG_POST_UP=echo "Post Up" > /etc/wireguard/post-up.txt
@@ -82,7 +82,7 @@ services:
     volumes:
       - etc_wireguard:/etc/wireguard
     ports:
-      - "51820:51820/udp"
+      - "{외부포트}:51820/udp"
       - "51821:51821/tcp"
     restart: unless-stopped
     cap_add:
@@ -95,13 +95,15 @@ services:
 
 - [Port-forward 설정 참고](https://wiki.abyssproject.net/en/proxmox/proxmox-with-one-public-ip)
 	- 설정 결과 (`/etc/network/interfaces.d/sdn`): 아래의 것들만 추가하면 된다.
+	- 다만 SDN 에서 `Apply` 버튼을 누르면 위 항목들은 manual 하게 추가한 것이기 때문에 사라진다. 만약 SDN 설정이 바뀌어서 `Apply` 를 할 일이 있다면 위의 설정을 복붙해주자.
 
 ```
 	# WireGuard
-	post-up         iptables -t nat -A PREROUTING -i vmbr0 -p udp --dport 51820 -j DNAT --to-destination 10.0.0.2:51820
-	post-down       iptables -t nat -D PREROUTING -i vmbr0 -p udp --dport 51820 -j DNAT --to-destination 10.0.0.2:51820
-	post-up         iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 51821 -j DNAT --to-destination 10.0.0.2:51821
-	post-down       iptables -t nat -D PREROUTING -i vmbr0 -p tcp --dport 51821 -j DNAT --to-destination 10.0.0.2:51821
+	post-up         iptables -t nat -A PREROUTING -i vmbr0 -p udp --dport {외부포트} -j DNAT --to-destination {LXC 컨테이너 IP}:{외부포트}
+	post-down       iptables -t nat -D PREROUTING -i vmbr0 -p udp --dport {외부포트} -j DNAT --to-destination {LXC 컨테이너 IP}:{외부포트}
 ```
 
-- 다만 SDN 에서 `Apply` 버튼을 누르면 위 항목들은 manual 하게 추가한 것이기 때문에 사라진다. 만약 SDN 설정이 바뀌어서 `Apply` 를 할 일이 있다면 위의 설정을 복붙해주자.
+- 이대로 하면 `{LXC 컨테이너 IP}:51821` 로 접속해서 web 에 들어갈 수 있다.
+	- 근데 문제는 HTTP 로 연결된다는 것이다.
+		- 사실 보안문제는 없다 (아마?). 왜냐면 어차피 VPN 타고 내부망으로 들어와서 web 으로 가는 것이기 때문.
+		- 하지만 꼴보기 싫다. 그리고 혹시나 하는 불안감도 있다면, [[PVE - Caddy 설정하기|이거]] 를 참고해서 HTTPS 로 바꾸자.

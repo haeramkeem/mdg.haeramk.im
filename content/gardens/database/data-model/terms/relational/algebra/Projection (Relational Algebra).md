@@ -19,4 +19,3 @@ $$
 
 - *Projection* 은 특정 [[Relation (Relational Model)|relation]] 에서 특정 [[Record (Relational Model)|attribute]] 에 해당하는 값들을 뽑아내는 것이다.
 	- 즉, `SELECT col FROM rel` 와 같다.
-- 
