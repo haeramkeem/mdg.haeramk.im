@@ -17,7 +17,7 @@ date: 2026-07-25
 ## 1. Docker Compose
 
 - 이렇게 `docker-compose.yaml` 을 만들자.
-	- `{외부포트}:80/tcp` 나 `{외부포트}:443/udp` 같은거를 추가할 수 있긴 한데, 그걸 누가씀??
+	- `80:80/tcp` 나 `443:443/udp` 같은거를 추가할 수 있긴 한데, 그걸 누가씀??
 
 ```yaml
 services:
@@ -25,7 +25,7 @@ services:
     container_name: caddy
     image: caddy:2.10.0-alpine
     ports:
-      - '{외부포트}:443/tcp'
+      - '443:443/tcp'
     networks:
       - caddy
     restart: unless-stopped
@@ -69,18 +69,7 @@ wg.example.com {
 }
 ```
 
-## 3. IPTables
-
-- [[PVE - WireGuard 설정하기|여기]] 처럼, 마지막으로 이 Caddy 로 갈 수 있도록 iptables 를 손봐주면 된다.
-	- 경로는 `/etc/network/interfaces.d/sdn` 이다.
-
-```
-	# Caddy
-	post-up         iptables -t nat -A PREROUTING -i vmbr0 -p udp --dport {외부포트} -j DNAT --to-destination {LXC 컨테이너 IP}:{외부포트}
-	post-down       iptables -t nat -D PREROUTING -i vmbr0 -p udp --dport {외부포트} -j DNAT --to-destination {LXC 컨테이너 IP}:{외부포트}
-```
-
-## 4. 시작
+## 3. 시작
 
 - 이제 이놈을 시작해주면 된다.
 
@@ -88,7 +77,7 @@ wg.example.com {
 docker compose up -d
 ```
 
-## 5. CA 신뢰하기
+## 4. CA 신뢰하기
 
 - 당연히 Caddy 가 만드는 인증서는 신뢰가 안되어있다.
 - 그래서 CA 인증서를 꺼내갖고 신뢰하게 만들어야 한다.
@@ -102,7 +91,7 @@ docker cp caddy:/data/caddy/pki/authorities/local/root.crt ./root.crt
 	- [[PVE - WireGuard 설정하기|이거]] 기준으로는 지금 Docker 가 LXC 컨테이너 안에서 돌고있기 때문에 그냥 인증서 파일 `cat` 같은걸로 내용 출력해서 복붙하는게 편하다.
 	- 인증서 신뢰하는건 운영체제별로 다르니까 검색하자.
 
-## 6. wg-easy Docker compose 수정하기
+## 5. wg-easy Docker compose 수정하기
 
 - 지금 우리가 wg-easy 를 HTTPS 로 연결하기 위해 이짓을 하고 있으니까, wg-easy 의 Docker compose 도 수정해야 한다.
 - [[PVE - WireGuard 설정하기|이거]] 기준으로 이렇게 수정해주자.
