@@ -75,6 +75,7 @@ date: 2024-07-29
 	- [[(LeetCode) 27. Remove Element|LeetCode 27. Remove Element]]
 	- [[(LeetCode) 66. Plus One|LeetCode 66. Plus One]]
 	- [[(LeetCode) 168. Excel Sheet Column Title|LeetCode 168. Excel Sheet Column Title]]
+	- [[(LeetCode) 628. Maximum Product of Three Numbers|LeetCode 628. Maximum Product of Three Numbers]]
 	- [[(LeetCode) 788. Rotated Digits|LeetCode 788. Rotated Digits]]
 	- [[(LeetCode) 796. Rotate String|LeetCode 796. Rotate String]]
 	- [[(LeetCode) 1189. Maximum Number of Balloons|LeetCode 1189. Maximum Number of Balloons]]
