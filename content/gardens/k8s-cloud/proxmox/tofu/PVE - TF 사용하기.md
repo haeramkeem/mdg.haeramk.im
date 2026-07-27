@@ -1,7 +1,9 @@
 ---
 tags:
   - mdg
+  - "\bk8s-cloud"
   - proxmox
+  - tofu
 date: 2026-07-25
 ---
 ## 개요
@@ -113,7 +115,7 @@ ssh-add /path/to/pub
 
 - 그리고 이렇게 `.tf` 파일을 작성한 뒤 `tofu init` 하면 준비가 된 것이다.
 
-```terraform
+```tf
 terraform {
   required_version = ">= 1.6"
 

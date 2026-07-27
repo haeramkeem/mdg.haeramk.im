@@ -68,13 +68,13 @@ aliases:
 	- [[PVE - NVMe Emulation (ZNS, FDP)|NVMe Emulation (ZNS, FDP)]]
 	- [[PVE - NVMe Emulation for VM|NVMe Emulation for VM]]
 	- [[PVE - Simple SDN 설정하기|Simple SDN 설정하기]]
-	- 
 	- [[PVE - VM Disk 사이즈 바꾸기|VM Disk 사이즈 바꾸기]]
 	- [[PVE - VM 생성|VM 생성]]
 	- [[PVE - Windows 10 VM 설치|Windows 10 VM 설치]]
 	- [[PVE - WireGuard 설정하기|WireGuard 설정하기]]
 	- [[PVE - 추가적인 디스크 마운트하기|추가적인 디스크 마운트하기]]
 - Tofu (구 terraform) 가이드
+	- [[PVE - TF 로 Cloud Image VM 만들기|TF 로 Cloud Image VM 만들기]]
 	- [[PVE - TF 사용하기|TF 사용하기]]
 
 ### QEMU
