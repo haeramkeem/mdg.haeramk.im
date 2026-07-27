@@ -82,6 +82,7 @@ date: 2024-07-29
 	- [[(LeetCode) 1291. Sequential Digits|LeetCode 1291. Sequential Digits]]
 	- [[(LeetCode) 1344. Angle Between Hands of a Clock|LeetCode 1344. Angle Between Hands of a Clock]]
 	- [[(LeetCode) 1391. Check if There is a Valid Path in a Grid|LeetCode 1391. Check if There is a Valid Path in a Grid]]
+	- [[(LeetCode) 1464. Maximum Product of Two Elements in an Array|LeetCode 1464. Maximum Product of Two Elements in an Array]]
 	- [[(LeetCode) 1732. Find the Highest Altitude|LeetCode 1732. Find the Highest Altitude]]
 	- [[(LeetCode) 1848. Minimum Distance to the Target Element|LeetCode 1848. Minimum Distance to the Target Element]]
 	- [[(LeetCode) 1980. Find Unique Binary String|LeetCode 1980. Find Unique Binary String]]
