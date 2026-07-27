@@ -116,6 +116,7 @@ date: 2024-07-29
 	- [[(LeetCode) 95. Unique Binary Search Trees II|LeetCode 95. Unique Binary Search Trees II]]
 	- [[(LeetCode) 96. Unique Binary Search Trees|LeetCode 96. Unique Binary Search Trees]]
 	- [[(LeetCode) 97. Interleaving String|LeetCode 97. Interleaving String]]
+	- [[(LeetCode) 115. Distinct Subsequences|LeetCode 115. Distinct Subsequences]]
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
