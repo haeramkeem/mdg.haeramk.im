@@ -5,6 +5,8 @@ tags:
   - kubernetes-dashboard
   - kube-setup
 date: 2024-08-30
+aliases:
+  - kubernetes-dashboard
 ---
 > [!info]- 참고한 것들
 > - [GitHub](https://github.com/kubernetes/dashboard)

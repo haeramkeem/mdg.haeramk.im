@@ -5,6 +5,8 @@ tags:
   - nfs-subdir-external-provisioner
   - kube-setup
 date: 2024-08-30
+aliases:
+  - nfs-subdir-external-provisioner
 ---
 > [!info]- 참고한 것들
 > - [공식 문서](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)

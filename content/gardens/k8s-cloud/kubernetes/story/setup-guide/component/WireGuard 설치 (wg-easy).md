@@ -5,6 +5,8 @@ tags:
   - wg-easy
   - kube-setup
 date: 2024-08-30
+aliases:
+  - wg-easy
 ---
 > [!info]- 참고한 것들
 > - [WG-Easy](https://github.com/wg-easy/wg-easy)

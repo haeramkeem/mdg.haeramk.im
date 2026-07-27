@@ -11,22 +11,34 @@ date: 2024-08-30
 
 ## Containerd (+ Docker) 설치하기
 
-- Repo 추가
+- Prerequisites 설치
 
 ```bash
-# Add Docker's official GPG key:
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl
+```
+
+- Docker GPG 키 추가
+
+```bash
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
+```
 
-# Add the repository to Apt sources:
-echo \
-	"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-	$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-	sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+- APT repo 추가
+
+```bash
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
 ```
 
 - 설치
@@ -34,4 +46,25 @@ sudo apt-get update
 ```bash
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo systemctl enable --now docker containerd
+```
+
+- 만약 containerd 만 설치할거라면:
+
+```bash
+sudo apt-get install containerd.io
+sudo systemctl enable --now containerd
+```
+
+## 확인
+
+- Docker
+
+```bash
+sudo systemctl status docker
+```
+
+- Containerd
+
+```bash
+sudo systemctl status containerd
 ```

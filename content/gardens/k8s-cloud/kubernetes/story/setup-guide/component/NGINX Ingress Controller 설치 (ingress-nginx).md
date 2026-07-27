@@ -5,6 +5,8 @@ tags:
   - ingress-nginx
   - kube-setup
 date: 2024-08-30
+aliases:
+  - NGINX Ingress Controller
 ---
 > [!info]- 참고한 것들
 > - [Kubernetes 공식문서](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_secret_tls/)

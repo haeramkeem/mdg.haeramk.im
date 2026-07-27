@@ -48,8 +48,9 @@ aliases:
 	- 컴포넌트
 		- [[CNI 설치 (Cilium)|Cilium]]
 		- [[Dashboard 설치 (kubernetes-dashboard)|kubernetes-dashboard]]
-		- [[Ingress Controller 설치 (ingress-nginx)|ingress-nginx]]
+		- [[Kube-vip 설치 (kube-vip)|Kube-vip]]
 		- [[NFS PV Provisioner 설치 (nfs-subdir-external-provisioner)|nfs-subdir-external-provisioner]]
+		- [[NGINX Ingress Controller 설치 (ingress-nginx)|NGINX Ingress Controller]]
 		- [[WireGuard 설치 (wg-easy)|WireGuard]]
 - 병든놈 고치기
 	- [[Ingress NGINX - "upstream sent too large http2 frame 4740180" 에러 해결기]]

@@ -5,47 +5,86 @@ tags:
   - kube-setup
 date: 2024-08-14
 ---
-> [!info]- 참고한 것들
-> - [공식 문서](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#prerequisite-ipv4-forwarding-optional)
+> [!tip] Kubernetes 버전
+> ```bash
+> export KUBE_VERSION='v1.36'
+> ```
+> - 이 버전 기준 아래의 방법으로 정상적으로 설치됨이 확인됨.
 
 ## Prerequisites
 
-- [[docker - 설치하기|Docker 설치]]
-- `/etc/hosts` 설정
-- 선택
-	- [[HAProxy - 설치하기|HAProxy]]
+- [[docker - 설치하기|Containerd 설치]]
+
+## `/etc/hosts` 설정
+
+- 다음의 두가지가 `/etc/hosts` 에 있어야 한다.
+1. 클러스터 entrypoint 를 위한 놈이 하나 들어가 있어야 한다.
+	- 물론 이건 필수는 아니다. 근데 하는게 좋을껄?
+	-  왜냐면 HA 구성을 위해 VIP 를 사용해야 할 수도 있는데, 그때 클러스터의 entrypoint 가 그냥 IP 로 박혀있으면 이걸 고치는건 보통 귀찮은게 아니다.
+	- 그래서 클러스터의 entrypoint 를 IP 로 그냥 박기 보다 `/etc/hosts` 에 하나 낑가놓고 이놈을 사용하면 나중에 IP 가 바뀌어도 그냥 `/etc/hosts` 만 바꾸면 된다.
+	- 아래 예시를 보자.
+2. 모든 노드에 모든 노드에 대한 hosts 가 들어가있어야 한다.
+- 예를 들어 controlplane `192.168.0.2` 하나랑 worker `192.168.0.3` 하나가 있다고 해보자. 그럼 이렇게 하면 된다.
+
+```
+192.168.0.2 entrypoint
+192.168.0.2 controlplane
+192.168.0.3 worker
+```
+
+- 이렇게 해놨다가 나중에 VIP `192.168.0.4` 를 세팅했다고 해보자. 그럼 저 `entrypoint` 만 바꾸면 된다.
+
+```
+192.168.0.4 entrypoint
+192.168.0.2 controlplane
+192.168.0.3 worker
+```
 
 ## Kube* Binary 설치
 
+> [!info] 참고한 것들
+> - [Kubernetes - Install Kubeadm (Installing kubeadm, kubelet and kubectl)](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl)
+
+- Prerequisites 설치
+
+```shell
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+```
+
+- GPG 키 설치
+
+```shell
+curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBE_VERSION}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+```
+
 - Repo 추가
 
-```bash
-sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update
+```shell
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KUBE_VERSION}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
 - 설치
 
 ```bash
+sudo apt-get update
 sudo apt-get install -y kubeadm kubectl kubelet
 sudo apt-mark hold kubelet kubeadm kubectl
-sudo systemctl enable kubelet
+sudo systemctl enable --now kubelet
 ```
 
 ## System 설정
 
 ### Swap off
 
+> [!info] 참고한 것들
+> - [Kubernetes - Install Kubeadm (Swap Configuration)](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#swap-configuration)
+
 - 설정
 
 ```bash
 sudo swapoff -av
-sudo sed -i.bak -r 's|(.+\s+swap\s+.+)|#\1|g' /etc/fstab
+sudo sed -i.bak '/\sswap\s/s/^/#/' /etc/fstab
 ```
 
 - 확인
@@ -57,6 +96,10 @@ free -ht
 ![[Pasted image 20240830112357.png]]
 
 ### Module 설정
+
+> [!info]
+> - 옛날에는 이 설정이 필요했는데, v1.36 기준 공식문서에서 보니 없어졌다.
+> - 약간 CNI implementation 으로 책임을 넘기는 것 같아보인다; 사용하려는 CNI 에 따라 이 설정이 필요한지 필요없는지가 갈리는듯
 
 - 설정
 
@@ -78,7 +121,17 @@ sudo lsmod | grep -iE 'overlay|br_netfilter'
 
 ### `iptables` 설정
 
+> [!info] 참고한 것들
+> - [Kubernetes - Container Runtimes (Enable IPv4 packet forwarding)](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#prerequisite-ipv4-forwarding-optional)
+
 - 설정
+
+```bash
+cat << EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.ipv4.ip_forward = 1
+EOF
+sudo sysctl --system
+```
 
 ```bash
 cat << EOF | sudo tee /etc/sysctl.d/k8s.conf​
@@ -95,9 +148,16 @@ sudo sysctl --system
 sudo sysctl net.ipv4.ip_forward net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables
 ```
 
+```bash
+sudo sysctl net.ipv4.ip_forward
+```
+
 ![[Pasted image 20240830112851.png]]
 
 ### Containerd 설정
+
+> [!info] 참고한 것들
+> - [Kubernetes - Container Runtimes (Configuring the systemd cgroup driver)](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd-systemd)
 
 - 설정
 
@@ -114,9 +174,9 @@ sudo systemctl restart containerd
 ```yaml
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
-kubernetesVersion: "v1.30.4"
+kubernetesVersion: "v1.36.3"
 clusterName: "{{ 클러스터 이름 }}"
-controlPlaneEndpoint: "{{ 클러스터 엔드포인트 IP }}:{{ 클러스터 엔드포인트 Port (기본: 6443) }}"
+controlPlaneEndpoint: "{{ 클러스터 엔드포인트 도메인 }}:{{ 클러스터 엔드포인트 Port (기본: 6443) }}"
 networking:
   podSubnet: "10.240.0.0/16"
   serviceSubnet: "10.96.0.0/12"
