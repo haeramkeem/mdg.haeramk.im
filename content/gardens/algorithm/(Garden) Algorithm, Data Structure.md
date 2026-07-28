@@ -120,6 +120,7 @@ date: 2024-07-29
 	- [[(LeetCode) 118. Pascal's Triangle|LeetCode 118. Pascal's Triangle]]
 	- [[(LeetCode) 119. Pascal's Triangle II|LeetCode 119. Pascal's Triangle II]]
 	- [[(LeetCode) 120. Triangle|LeetCode 120. Triangle]]
+	- [[(LeetCode) 124. Binary Tree Maximum Path Sum|LeetCode 124. Binary Tree Maximum Path Sum]]
 	- [[(LeetCode) 131. Palindrome Partitioning|LeetCode 131. Palindrome Partitioning]]
 	- [[(LeetCode) 132. Palindrome Partitioning II|LeetCode 132. Palindrome Partitioning II]]
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
