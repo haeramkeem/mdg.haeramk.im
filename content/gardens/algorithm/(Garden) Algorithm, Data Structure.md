@@ -79,7 +79,6 @@ date: 2024-07-29
 	- [[(LeetCode) 788. Rotated Digits|LeetCode 788. Rotated Digits]]
 	- [[(LeetCode) 796. Rotate String|LeetCode 796. Rotate String]]
 	- [[(LeetCode) 1189. Maximum Number of Balloons|LeetCode 1189. Maximum Number of Balloons]]
-	- [[(LeetCode) 1291. Sequential Digits|LeetCode 1291. Sequential Digits]]
 	- [[(LeetCode) 1344. Angle Between Hands of a Clock|LeetCode 1344. Angle Between Hands of a Clock]]
 	- [[(LeetCode) 1391. Check if There is a Valid Path in a Grid|LeetCode 1391. Check if There is a Valid Path in a Grid]]
 	- [[(LeetCode) 1464. Maximum Product of Two Elements in an Array|LeetCode 1464. Maximum Product of Two Elements in an Array]]
@@ -186,6 +185,9 @@ date: 2024-07-29
 	- [[(프로그래머스-아카이브) 라면공장]]
 	- [[(프로그래머스) 더 맵게]]
 	- [[(프로그래머스) 디스크 컨트롤러]]
+- Precompute
+	- [[(LeetCode) 1291. Sequential Digits|LeetCode 1291. Sequential Digits]]
+	- [[(LeetCode) 3014. Minimum Number of Pushes to Type Word I|LeetCode 3014. Minimum Number of Pushes to Type Word I]]
 - Queue
 	- [[(프로그래머스) 기능개발]]
 	- [[(프로그래머스) 다리를 지나는 트럭]]

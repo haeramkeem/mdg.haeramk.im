@@ -3,7 +3,7 @@ tags:
   - mdg
   - algorithm
   - interview
-  - brute-force
+  - precompute
 date: 2026-07-13
 aliases:
   - LeetCode 1291
