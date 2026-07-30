@@ -101,6 +101,7 @@ date: 2024-07-29
 	- Jump game
 		- [[(LeetCode) 45. Jump Game II|LeetCode 45. Jump Game II]]
 		- [[(LeetCode) 55. Jump Game|LeetCode 55. Jump Game]]
+	- [[(LeetCode) 3. Longest Substring Without Repeating Characters|LeetCode 3. Longest Substring Without Repeating Characters]]
 	- [[(LeetCode) 10. Regular Expression Matching|LeetCode 10. Regular Expression Matching]]
 	- [[(LeetCode) 22. Generate Parentheses|LeetCode 22. Generate Parentheses]]
 	- [[(LeetCode) 44. Wildcard Matching|LeetCode 44. Wildcard Matching]]
