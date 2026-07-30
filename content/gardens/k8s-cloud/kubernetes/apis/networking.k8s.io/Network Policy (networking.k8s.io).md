@@ -8,7 +8,7 @@ aliases:
   - Network Policy
 ---
 > [!info]- 참고한 것들
-> [공홈 - Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+> - [공홈 - Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
 > - [티스토리 블로그](https://ikcoo.tistory.com/99)
 
 ## 란?

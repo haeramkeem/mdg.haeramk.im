@@ -6,8 +6,8 @@ tags:
 date: 2023-02-02
 ---
 > [!info]- 참고한 것들
-> [Finalizers](https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers/)
-> [Using Finalizers to Control Deletion](https://kubernetes.io/blog/2021/05/14/using-finalizers-to-control-deletion/)
+> - [Finalizers](https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers/)
+> - [Using Finalizers to Control Deletion](https://kubernetes.io/blog/2021/05/14/using-finalizers-to-control-deletion/)
 
 ## Overview
 

@@ -196,6 +196,10 @@ apiServer:
 - 저기서 `PodNodeSelector` 는 [[PodNodeSelector admission controller - NS 당 node selector 강제하기|이것]] 을 위한 설정이다.
 - 생성:
 
+> [!info] 만약 kube-proxy 대신 Cilium 을 사용할거라면?
+> - [공식문서](https://docs.cilium.io/en/latest/network/kubernetes/kubeproxy-free/#quick-start) 를 참고하자.
+> - 클러스터 생성단계에서 kube-proxy 를 비활성화시켜본 적이 없어서 일단 메모만. 나중에 직접 해보게 되면 추가하리라.
+
 ```bash
 sudo kubeadm init --v=5 --config=/path/to/config.yaml
 ```

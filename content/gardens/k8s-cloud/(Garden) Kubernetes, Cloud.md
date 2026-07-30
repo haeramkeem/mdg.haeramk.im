@@ -32,26 +32,36 @@ aliases:
 	- [[쿠버네티스 딥다이브 (Learning Spoons, H1 2023)]]
 	- [[쿠버네티스 교육자료 (SI Analytics, Jan. 2023)]]
 	- [[제 4회 테크 데이 - Kubernetes Korea Group 커뮤니티 기술 세미나 참석 기록]]
-- 용어집
-	- [[Finalizer (Kubernetes)|Finalizer]]
-	- [[Network Policy (Kubernetes)|Network Policy]]
-	- [[Rule-Based Aceess Control, RBAC (Kubernetes)|Rule-Based Aceess Control, RBAC]]
-- 스토리
-	- [[Kube-proxy - iptables vs ipvs mode performance comparison]]
-	- [[Kubeconfig 파일로 Kube apiserver 에 직접 cURL 찔러보기]]
-	- [[Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기|컨트롤 플레인 인증서 톺아보기]]
-	- [[Security model in etcd - etcd 에서 사용되는 인증서들|etcd 에서 사용되는 인증서들]]
-- 설정 가이드
+- API
+	- `gateway.networking.k8s.io`
+		- [[Gateway (gateway.networking.k8s.io)|Gateway]]
+		- [[HTTPRoute (gateway.networking.k8s.io)|HTTPRoute]]
+	- `networking.k8s.io`
+		- [[Network Policy (networking.k8s.io)|Network Policy]]
+	- `rbac.authorization.k8s.io`
+		- [[Rule-Based Aceess Control, RBAC (rbac.authorization.k8s.io)|Rule-Based Aceess Control, RBAC]]
+	- 기타
+		- [[Finalizer (Kubernetes)|Finalizer]]
+- 설치/설정 가이드
 	- [[Basic Kubernetes installation guide - 기본 설치 가이드|기본 설치 가이드]]
-	- [[How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기|인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기]]
-	- [[PodNodeSelector admission controller - NS 당 node selector 강제하기|NS 당 node selector 강제하기]]
+		- [[How to make 200y Kubeadm-generated certificates - 인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기|인증서가 만료되지 않는 불멸의 이순신 클러스터 구축기]]
 	- 컴포넌트
-		- [[CNI 설치 (Cilium)|Cilium]]
+		- [[기본 설치 (Cilium)|Cilium]]
+			- [[Gateway API 활성화하기 (Cilium)|Gateway API 활성화하기]]
+			- [[Kube-proxy 대체하기 (Cilium)|Kube-proxy 대체하기]]
+			- [[LB IPAM 사용하기 (Cilium)|LB IPAM 사용하기]]
 		- [[Dashboard 설치 (kubernetes-dashboard)|kubernetes-dashboard]]
 		- [[Kube-vip 설치 (kube-vip)|Kube-vip]]
 		- [[NFS PV Provisioner 설치 (nfs-subdir-external-provisioner)|nfs-subdir-external-provisioner]]
 		- [[NGINX Ingress Controller 설치 (ingress-nginx)|NGINX Ingress Controller]]
 		- [[WireGuard 설치 (wg-easy)|WireGuard]]
+	- 설정
+		- [[PodNodeSelector admission controller - NS 당 node selector 강제하기|NS 당 node selector 강제하기]]
+- 스토리
+	- [[Kube-proxy - iptables vs ipvs mode performance comparison]]
+	- [[Kubeconfig 파일로 Kube apiserver 에 직접 cURL 찔러보기]]
+	- [[Kubernetes Control Plane TLS explained - 컨트롤 플레인 인증서 톺아보기|컨트롤 플레인 인증서 톺아보기]]
+	- [[Security model in etcd - etcd 에서 사용되는 인증서들|etcd 에서 사용되는 인증서들]]
 - 병든놈 고치기
 	- [[Ingress NGINX - "upstream sent too large http2 frame 4740180" 에러 해결기]]
 	- [[RabbitMQ on Kubernetes - Troubleshooting error "Command df timed out"|RabbitMQ on Kubernetes - "Command timed out: 'df -kP ...'" 에러 해결기]]

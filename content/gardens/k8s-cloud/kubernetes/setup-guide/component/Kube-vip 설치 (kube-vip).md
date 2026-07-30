@@ -45,7 +45,6 @@ config:
 env:
   vip_interface: "{{VIP NIC}}"
   cp_enable: "true"
-  svc_enable: "true"
   vip_arp: "true"
   vip_leaderelection: "true"
 
@@ -65,6 +64,18 @@ helm -n system-kube-vip upgrade --install kube-vip kube-vip/kube-vip -f kube-vip
 ```
 
 ### Kube-vip-cloud-provider
+
+> [!warning] Deprecated
+> - [[index|주인장]] 은 이제 더 이상 Kube-vip 의 LB 기능을 사용하지 않는다 ([[LB IPAM 사용하기 (Cilium)|관련 기록]]).
+> - 아래는 그냥 기록용.
+
+- Kube-vip helm value 수정:
+	- 이놈을 사용하려면 아래처럼 kube-vip 의 helm value 를 수정해야 한다.
+
+```yaml
+env:
+  svc_enable: "true" # <-- 이놈
+```
 
 - Helm value:
 	- `cm.data` 에 할당할 IP 범위를 지정할 수 있다.

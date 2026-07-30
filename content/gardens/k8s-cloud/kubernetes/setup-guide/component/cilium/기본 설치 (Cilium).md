@@ -1,10 +1,15 @@
 ---
 tags:
   - mdg
+  - k8s-cloud
   - kubernetes
+  - story
+  - setup-guide
+  - component
   - cilium
-  - kube-setup
 date: 2024-08-30
+aliases:
+  - Cilium
 ---
 > [!info]- 참고한 것들
 > - [Cilium 공식 문서](https://docs.cilium.io/en/stable/installation/k8s-install-helm/)
