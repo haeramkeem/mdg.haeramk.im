@@ -10,6 +10,7 @@ aliases:
 ---
 > [!info]- 참고한 것들
 > - [K8s GW API](https://gateway-api.sigs.k8s.io/guides/getting-started/introduction/)
+> - [Cilium 공식문서](https://docs.cilium.io/en/latest/network/servicemesh/gateway-api/gateway-api)
 
 ## 개요
 

@@ -5,6 +5,10 @@ tags:
   - security
   - pkix
 date: 2024-05-27
+aliases:
+  - Certificate
+  - Cert
+  - 인증서
 ---
 > [!info]- 참고한 것들
 > - [[7. PKC|서울대 권태경 교수님 컴퓨터네트워크보안특강 강의 (Spring 2024)]]
@@ -14,7 +18,6 @@ date: 2024-05-27
 - Client 입장에서는 server 의 [[Public Key Cryptography, PKC (PKC)|pubkey]] 를 가지고 [[Transport Layer Security, TLS (L6 Presentation Layer)|TLS]] 를 하던 해야 되는데
 - 근데 pubkey 라는것이 원래가 막 공개되는 놈이기 때문에 client 입장에서는 어떤 pubkey 가 내가 원하는 server 의 pubkey 인지 알 수가 없다.
 - 그래서 *Trusted Third Party* (*TTP*) 가 server 에 대한 정보들을 포함한 여러 정보들과 pubkey 까지 묶어서 서명을해 client 입장에서 이 pubkey 가 내가 원하는 server 의 것이 맞구나 를 알게 하는 방법을 사용하게 된다.
-	- TTP 가 
 - 여기서 이 `pubkey + 여러 정보 + sign` 을 합쳐서 인증서 (*Certificate*) 라고 부르고
 	- 이 "여러 정보" 에는 간단하게
 		- 누가 발급해줬는지 (*Issuer*)
