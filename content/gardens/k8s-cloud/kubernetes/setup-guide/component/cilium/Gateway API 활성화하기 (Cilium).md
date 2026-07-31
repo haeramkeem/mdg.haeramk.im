@@ -108,3 +108,10 @@ spec:
 ```bash
 kubectl delete httproute/nginx gateway/default deploy/nginx svc/nginx
 ```
+
+## 발견된 문제점들
+
+### TCPRoute
+
+- July 30, 2026 기준 TCPRoute 가 안된다.
+	- [cilium#21929](https://github.com/cilium/cilium/issues/21929)
