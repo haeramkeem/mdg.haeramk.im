@@ -126,6 +126,7 @@ date: 2024-07-29
 	- [[(LeetCode) 139. Word Break|LeetCode 139. Word Break]]
 	- [[(LeetCode) 140. Word Break II|LeetCode 140. Word Break II]]
 	- [[(LeetCode) 152. Maximum Product Subarray|LeetCode 152. Maximum Product Subarray]]
+	- [[(LeetCode) 198. House Robber|LeetCode 198. House Robber]]
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
 	- [[(LeetCode) 396. Rotate Function|LeetCode 396. Rotate Function]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
