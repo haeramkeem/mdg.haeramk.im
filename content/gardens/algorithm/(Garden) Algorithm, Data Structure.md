@@ -129,6 +129,7 @@ date: 2024-07-29
 	- [[(LeetCode) 198. House Robber|LeetCode 198. House Robber]]
 	- [[(LeetCode) 213. House Robber II|LeetCode 213. House Robber II]]
 	- [[(LeetCode) 238. Product of Array Except Self|LeetCode 238. Product of Array Except Self]]
+	- [[(LeetCode) 279. Perfect Squares|LeetCode 279. Perfect Squares]]
 	- [[(LeetCode) 396. Rotate Function|LeetCode 396. Rotate Function]]
 	- [[(LeetCode) 509. Fibonacci Number|LeetCode 509. Fibonacci Number]]
 	- [[(LeetCode) 746. Min Cost Climbing Stairs|LeetCode 746. Min Cost Climbing Stairs]]
