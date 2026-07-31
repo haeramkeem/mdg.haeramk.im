@@ -164,6 +164,7 @@ date: 2024-07-29
 	- [[(LeetCode) 1260. Shift 2D Grid|LeetCode 1260. Shift 2D Grid]]
 	- [[(LeetCode) 2069. Walking Robot Simulation II|LeetCode 2069. Walking Robot Simulation II]]
 - Histogram
+	- [[(LeetCode) 3016. Minimum Number of Pushes to Type Word II|LeetCode 3016. Minimum Number of Pushes to Type Word II]]
 	- [[(LeetCode) 3517. Smallest Palindromic Rearrangement I|LeetCode 3517. Smallest Palindromic Rearrangement I]]
 	- [[(LeetCode) 3518. Smallest Palindromic Rearrangement II|LeetCode 3518. Smallest Palindromic Rearrangement II]]
 	- [[(LeetCode) 3536. Maximum Product of Two Digits|LeetCode 3536. Maximum Product of Two Digits]]
