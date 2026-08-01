@@ -131,6 +131,7 @@ date: 2024-07-29
 	- [[(LeetCode) 238. Product of Array Except Self|LeetCode 238. Product of Array Except Self]]
 	- [[(LeetCode) 279. Perfect Squares|LeetCode 279. Perfect Squares]]
 	- [[(LeetCode) 396. Rotate Function|LeetCode 396. Rotate Function]]
+	- [[(LeetCode) 486. Predict the Winner|LeetCode 486. Predict the Winner]]
 	- [[(LeetCode) 509. Fibonacci Number|LeetCode 509. Fibonacci Number]]
 	- [[(LeetCode) 746. Min Cost Climbing Stairs|LeetCode 746. Min Cost Climbing Stairs]]
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
