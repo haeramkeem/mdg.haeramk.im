@@ -17,6 +17,7 @@ date: 2024-04-23
 ### 스토리
 
 - [[Linux Kernel Build Guide - 리눅스 커널 빌드 가이드|리눅스 커널 빌드 가이드]]
+- [[PCI Passthrough 가이드]]
 - [[TAR vs GZIP - 뭔차이지?]]
 - [[디스크 마운트하기]]
 

@@ -89,6 +89,7 @@ aliases:
 	- [[PVE - 추가적인 디스크 마운트하기|추가적인 디스크 마운트하기]]
 - Tofu (구 terraform) 가이드
 	- [[PVE - TF 로 Cloud Image VM 만들기|TF 로 Cloud Image VM 만들기]]
+	- [[PVE - TF 로 GPU VM 만들기|TF 로 GPU VM 만들기]]
 	- [[PVE - TF 사용하기|TF 사용하기]]
 
 ### QEMU

@@ -19,7 +19,7 @@ aliases:
 - Cloud Image 를 PVE Provider 가 다운로드 하게 하려면 `PVEAdmin` 으로는 안된다.
 - 우선 `Sys.Modify` 가 달린 role 을 하나 만들고,
 
-```
+```bash
 pveum role add {{Role 이름}} -privs "Sys.Modify"
 ```
 
