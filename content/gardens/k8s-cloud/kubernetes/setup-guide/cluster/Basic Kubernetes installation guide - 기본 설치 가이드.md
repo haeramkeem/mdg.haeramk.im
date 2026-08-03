@@ -126,12 +126,14 @@ sudo lsmod | grep -iE 'overlay|br_netfilter'
 
 - 설정
 
-```bash
-cat << EOF | sudo tee /etc/sysctl.d/k8s.conf
-net.ipv4.ip_forward = 1
-EOF
-sudo sysctl --system
-```
+> [!tip] 최신 업데이트
+> - 요즘은 `net.ipv4.ip_forward` 만 해줘도 되는 것 같아 보인다:
+> ```bash
+> cat << EOF | sudo tee /etc/sysctl.d/k8s.conf
+> net.ipv4.ip_forward = 1
+> EOF
+> sudo sysctl --system
+> ```
 
 ```bash
 cat << EOF | sudo tee /etc/sysctl.d/k8s.conf​
@@ -148,10 +150,6 @@ sudo sysctl --system
 sudo sysctl net.ipv4.ip_forward net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables
 ```
 
-```bash
-sudo sysctl net.ipv4.ip_forward
-```
-
 ![[Pasted image 20240830112851.png]]
 
 ### Containerd 설정
@@ -165,6 +163,12 @@ sudo sysctl net.ipv4.ip_forward
 containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i.bak 's|SystemdCgroup = false|SystemdCgroup = true|g' /etc/containerd/config.toml
 sudo systemctl restart containerd
+```
+
+- 확인
+
+```bash
+grep 'SystemdCgroup' /etc/containerd/config.toml
 ```
 
 ## Cluster 생성 및 합류
@@ -213,3 +217,8 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
 - 클러스터 합류는 "생성" 단계의 결과에서 출력된 것을 참고하자.
+- 혹은 기존의 클러스터에 합류하는 경우에는 ==Controlplane 노드 tty 에서== 이 명령어를 실행하면 된다:
+
+```bash
+kubeadm token create --print-join-command
+```

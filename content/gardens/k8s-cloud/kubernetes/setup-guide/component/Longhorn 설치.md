@@ -81,7 +81,7 @@ lsblk
 	- 그리고 여기서 중요한건 저 `-L longhorn` 이다. `lsblk` 으로 확인한 디스크 이름은 재부팅할 때 바뀔수도 있기 때문에, 저렇게 label 을 붙여주면 디스크 이름이 바뀌어도 문제가 없다.
 
 ```bash
-sudo mkfs.ext4 -L longhorn /dev/sdb
+sudo mkfs.ext4 -L longhorn /dev/어쩌고
 ```
 
 - Longhorn 은 기본적으로 `/var/lib/longhorn` 경로를 사용한다. 물론 설정으로 바꿀 수도 있는데 굳이?
