@@ -4,6 +4,8 @@ tags:
   - terms
   - pkix
 date: 2023-12-11
+aliases:
+  - SAN
 ---
 > [!info]- 참고한 것들
 > - [DNSimple](https://support.dnsimple.com/articles/what-is-ssl-san/)

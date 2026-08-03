@@ -4,6 +4,10 @@ tags:
   - algorithm
   - interview
   - dp
+date: 2026-04-03
+aliases:
+  - LeetCode 213
+  - LeetCode 213. House Robber II
 ---
 > [!info] 문제 링크
 > - [LeetCode](https://leetcode.com/problems/house-robber-ii)

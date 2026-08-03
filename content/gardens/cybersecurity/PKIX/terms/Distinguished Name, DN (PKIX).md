@@ -4,6 +4,9 @@ tags:
   - terms
   - pkix
 date: 2023-12-11
+aliases:
+  - CN
+  - DN
 ---
 > [!info]- 참고한 것들
 > - [어떤 회사 문서](https://support.dnsimple.com/articles/what-is-common-name/)

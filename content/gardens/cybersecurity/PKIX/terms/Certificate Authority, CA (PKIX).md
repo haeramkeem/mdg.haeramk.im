@@ -4,6 +4,8 @@ tags:
   - pkix
   - terms
 date: 2024-01-10
+aliases:
+  - CA
 ---
 > [!info]- 참고한 것들
 > - [TechTarget 문서](https://www.techtarget.com/searchsecurity/definition/certificate-authority)

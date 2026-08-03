@@ -19,6 +19,7 @@ date: 2024-04-22
 	2. Hostname 변경
 		- 깡통에 있는 hostname 도 그대로 가져오기 때문에 간지나는걸로 하나 만들어서 바꿔주자.
 		- [[hostnamectl - Hostname 변경하기|이 가이드]] 보면 된다.
+
 ## Cloud init 설정 + template 화
 
 - Cloud init 생성
