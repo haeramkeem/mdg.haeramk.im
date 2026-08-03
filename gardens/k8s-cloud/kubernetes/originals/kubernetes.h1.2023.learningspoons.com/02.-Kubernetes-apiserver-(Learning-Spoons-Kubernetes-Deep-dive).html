@@ -87,7 +87,7 @@
 <li>GarbageCollector 는 DeletionTimestamp 가 설정되어 있고 Finalizer 가 비워져있는 놈을 찾아서 지워야 한다.</li>
 </ol>
 </li>
-<li>따라서 <a href="../../../../../gardens/k8s-cloud/kubernetes/terms/Finalizer-(Kubernetes)" class="internal" data-slug="gardens/k8s-cloud/kubernetes/terms/Finalizer-(Kubernetes)">Finalizer</a> 를 임의로 지워서 stuck 걸린 리소스를 지우는 것은 state 에서만 지우는 거고 실제 자원은 남아있기 때문에 Controller 의 이슈를 먼저 해결해야 한다</li>
+<li>따라서 <a href="../../../../../gardens/k8s-cloud/kubernetes/apis/etc/Finalizer-(Kubernetes)" class="internal" data-slug="gardens/k8s-cloud/kubernetes/apis/etc/Finalizer-(Kubernetes)">Finalizer</a> 를 임의로 지워서 stuck 걸린 리소스를 지우는 것은 state 에서만 지우는 거고 실제 자원은 남아있기 때문에 Controller 의 이슈를 먼저 해결해야 한다</li>
 <li><em>Scale subresource</em>: CRD 를 생성했을 때 Scale subresource 를 정의할 수 있고, 이것을 이용해 HPA 같은 것을 사용할 수 있음
 <ul>
 <li>이것을 자동화해주는게 Keda 라는 솔루션이다</li>
