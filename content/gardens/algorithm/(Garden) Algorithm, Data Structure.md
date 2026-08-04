@@ -210,6 +210,7 @@ date: 2024-07-29
 	- [[(LeetCode) 1833. Maximum Ice Cream Bars|LeetCode 1833. Maximum Ice Cream Bars]]
 	- [[(LeetCode) 2033. Minimum Operations to Make a Uni-Value Grid|LeetCode 2033. Minimum Operations to Make a Uni-Value Grid]]
 	- [[(LeetCode) 2126. Destroying Asteroids|LeetCode 2126. Destroying Asteroids]]
+	- [[(LeetCode) 3731. Find Missing Elements|LeetCode 3731. Find Missing Elements]]
 	- [[(LeetCode) 3740. Minimum Distance Between Three Equal Elements I|LeetCode 3740. Minimum Distance Between Three Equal Elements I]]
 	- [[(LeetCode) 3741. Minimum Distance Between Three Equal Elements II|LeetCode 3741. Minimum Distance Between Three Equal Elements II]]
 	- [[(프로그래머스-아카이브) 예산]]
