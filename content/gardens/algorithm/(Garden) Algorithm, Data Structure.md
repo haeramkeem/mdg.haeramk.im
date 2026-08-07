@@ -88,6 +88,7 @@ date: 2024-07-29
 	- [[(LeetCode) 2078. Two Furthest Houses With Different Colors|LeetCode 2078. Two Furthest Houses With Different Colors]]
 	- [[(LeetCode) 2452. Words Within Two Edits of Dictionary|LeetCode 2452. Words Within Two Edits of Dictionary]]
 	- [[(LeetCode) 3300. Minimum Element After Replacement With Digit Sum|LeetCode 3300. Minimum Element After Replacement With Digit Sum]]
+	- [[(LeetCode) 3345. Smallest Divisible Digit Product I|LeetCode 3345. Smallest Divisible Digit Product I]]
 	- [[(LeetCode) 3499. Maximize Active Section with Trade I|LeetCode 3499. Maximize Active Section with Trade I]]
 	- [[(LeetCode) 3653. XOR After Range Multiplication Queries I|LeetCode 3653. XOR After Range Multiplication Queries I]]
 	- [[(LeetCode) 3754. Concatenate Non-Zero Digits and Multiply by Sum I|LeetCode 3754. Concatenate Non-Zero Digits and Multiply by Sum I]]
