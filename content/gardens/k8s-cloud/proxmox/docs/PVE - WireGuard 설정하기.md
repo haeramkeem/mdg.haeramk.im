@@ -93,14 +93,16 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1
 ```
 
-- [Port-forward 설정 참고](https://wiki.abyssproject.net/en/proxmox/proxmox-with-one-public-ip)
-	- 설정 결과 (`/etc/network/interfaces.d/sdn`): 아래의 것들만 추가하면 된다.
-	- 다만 SDN 에서 `Apply` 버튼을 누르면 위 항목들은 manual 하게 추가한 것이기 때문에 사라진다. 만약 SDN 설정이 바뀌어서 `Apply` 를 할 일이 있다면 위의 설정을 복붙해주자.
+- 그리고 PVE 의 iptables 를 이용해 외부 트래픽이 컨테이너로 갈 수 있도록 해준다.
+	- [Port-forward 설정 참고](https://wiki.abyssproject.net/en/proxmox/proxmox-with-one-public-ip)
 
-```
-	# WireGuard
+```bash
+cat << EOF > /etc/network/interfaces.d/wg
+auto lo
+iface lo inet loopback
 	post-up         iptables -t nat -A PREROUTING -i vmbr0 -p udp --dport {외부포트} -j DNAT --to-destination {LXC 컨테이너 IP}:{외부포트}
 	post-down       iptables -t nat -D PREROUTING -i vmbr0 -p udp --dport {외부포트} -j DNAT --to-destination {LXC 컨테이너 IP}:{외부포트}
+EOF
 ```
 
 - 이대로 하면 `{LXC 컨테이너 IP}:51821` 로 접속해서 web 에 들어갈 수 있다.
