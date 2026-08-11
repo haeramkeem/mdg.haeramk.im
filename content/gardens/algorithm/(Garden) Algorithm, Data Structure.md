@@ -181,6 +181,7 @@ date: 2024-07-29
 	- [[(LeetCode) 141. Linked List Cycle|LeetCode 141. Linked List Cycle]]
 	- [[(LeetCode) 160. Intersection of Two Linked Lists|LeetCode 160. Intersection of Two Linked Lists]]
 - Mapset
+	- [[(LeetCode) 2996. Smallest Missing Integer Greater Than Sequential Prefix Sum|LeetCode 2996. Smallest Missing Integer Greater Than Sequential Prefix Sum]]
 	- [[(LeetCode) 3120. Count the Number of Special Characters I|LeetCode 3120. Count the Number of Special Characters I]]
 	- [[(LeetCode) 3121. Count the Number of Special Characters II|LeetCode 3121. Count the Number of Special Characters II]]
 	- [[(LeetCode) 3488. Closest Equal Element Queries|LeetCode 3488. Closest Equal Element Queries]]
