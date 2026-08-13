@@ -47,6 +47,7 @@ date: 2024-07-29
 	- [[Relational Data Model (Data Model)|Relational Data Model]]
 		- Relational algebra
 			- [[Projection (Relational Algebra)|Projection]]
+			- [[Select (Relational Algebra)|Select]]
 		- Components
 			- [[Record (Relational Model)|Record]]
 			- [[Relation (Relational Model)|Relation]]
