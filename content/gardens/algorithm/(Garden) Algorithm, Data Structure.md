@@ -139,6 +139,7 @@ date: 2024-07-29
 	- [[(LeetCode) 1137. N-th Tribonacci Number|LeetCode 1137. N-th Tribonacci Number]]
 	- [[(LeetCode) 1301. Number of Paths with Max Score|LeetCode 1301. Number of Paths with Max Score]]
 	- [[(LeetCode) 1406. Stone Game III|LeetCode 1406. Stone Game III]]
+	- [[(LeetCode) 3090. Maximum Length Substring With Two Occurrences|LeetCode 3090. Maximum Length Substring With Two Occurrences]]
 	- [[(LeetCode) 3336. Find the Number of Subsequences With Equal GCD|LeetCode 3336. Find the Number of Subsequences With Equal GCD]]
 	- [[(LeetCode) 3418. Maximum Amount of Money Robot Can Earn|LeetCode 3418. Maximum Amount of Money Robot Can Earn]]
 	- [[(LeetCode) 3756. Concatenate Non-Zero Digits and Multiply by Sum II|LeetCode 3756. Concatenate Non-Zero Digits and Multiply by Sum II]]
