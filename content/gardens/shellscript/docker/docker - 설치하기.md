@@ -45,6 +45,7 @@ sudo apt update
 
 ```bash
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-mark hold docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo systemctl enable --now docker containerd
 ```
 
@@ -52,6 +53,7 @@ sudo systemctl enable --now docker containerd
 
 ```bash
 sudo apt-get install containerd.io
+sudo apt-mark hold containerd.io
 sudo systemctl enable --now containerd
 ```
 
