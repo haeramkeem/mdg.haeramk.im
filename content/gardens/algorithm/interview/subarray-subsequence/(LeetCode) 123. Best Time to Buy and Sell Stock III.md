@@ -3,7 +3,7 @@ tags:
   - mdg
   - algorithm
   - interview
-  - subarray
+  - subarray-subsequence
 date: 2026-07-18
 aliases:
   - LeetCode 123

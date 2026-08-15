@@ -246,13 +246,14 @@ date: 2024-07-29
 	- [[(프로그래머스) 올바른 괄호]]
 	- [[(프로그래머스) 주식가격]]
 	- [[(프로그래머스) 큰 수 만들기]]
-- Subarray
+- Subarray / Subsequence
 	- [[(LeetCode) 53. Maximum Subarray|LeetCode 53. Maximum Subarray]]
 	- [[(LeetCode) 121. Best Time to Buy and Sell Stock|LeetCode 121. Best Time to Buy and Sell Stock]]
 	- [[(LeetCode) 122. Best Time to Buy and Sell Stock II|LeetCode 122. Best Time to Buy and Sell Stock II]]
 	- [[(LeetCode) 123. Best Time to Buy and Sell Stock III|LeetCode 123. Best Time to Buy and Sell Stock III]]
 	- [[(LeetCode) 188. Best Time to Buy and Sell Stock IV|LeetCode 188. Best Time to Buy and Sell Stock IV]]
 	- [[(LeetCode) 1358. Number of Substrings Containing All Three Characters|LeetCode 1358. Number of Substrings Containing All Three Characters]]
+	- [[(LeetCode) 3302. Find the Lexicographically Smallest Valid Sequence|LeetCode 3302. Find the Lexicographically Smallest Valid Sequence]]
 - Tree
 	- [[(LeetCode) 94. Binary Tree Inorder Traversal|LeetCode 94. Binary Tree Inorder Traversal]]
 	- [[(LeetCode) 100. Same Tree|LeetCode 100. Same Tree]]

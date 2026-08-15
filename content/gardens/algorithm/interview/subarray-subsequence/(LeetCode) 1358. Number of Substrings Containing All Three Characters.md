@@ -3,7 +3,7 @@ tags:
   - mdg
   - algorithm
   - interview/retry
-  - subarray
+  - subarray-subsequence
 date: 2026-06-30
 ---
 > [!info] 문제 링크
