@@ -277,3 +277,5 @@ date: 2024-07-29
 	- [[(LeetCode) 88. Merge Sorted Array|LeetCode 88. Merge Sorted Array]]
 	- [[(LeetCode) 125. Valid Palindrome|LeetCode 125. Valid Palindrome]]
 	- [[(LeetCode) 1855. Maximum Distance Between a Pair of Values|LeetCode 1855. Maximum Distance Between a Pair of Values]]
+- Window
+	- [[(LeetCode) 2958. Length of Longest Subarray With at Most K Frequency|LeetCode 2958. Length of Longest Subarray With at Most K Frequency]]
