@@ -14,7 +14,7 @@ aliases:
 ## 란?
 
 - 이놈은 주기적으로 [[Shared Buffer (PostgreSQL)|Shared Buffer]] 을 검사해서 [[Page (PostgreSQL)|page]] 를 disk 로 flush 해주는 오브젝트이다.
-	- 아마 별도 thread 로 돌아가고 있을듯?
+	- 아마 별도 worker 로 돌아가고 있을듯?
 
 ### 설정
 
