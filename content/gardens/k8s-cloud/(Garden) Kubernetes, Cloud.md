@@ -51,6 +51,7 @@ aliases:
 			- [[Kube-proxy 대체하기 (Cilium)|Kube-proxy 대체하기]]
 			- [[LB IPAM 사용하기 (Cilium)|LB IPAM 사용하기]]
 		- [[Cert Manager 설치 (cert-manager)|cert-manager]]
+		- [[Cloud Native Postgres Operator 설치 (CloudNativePG, CNPG)|CloudNativePG]]
 		- [[Forgejo 설치|Forgejo]]
 		- [[Kubernetes Dashboard 설치 (kubernetes-dashboard)|kubernetes-dashboard]]
 		- [[Longhorn 설치|Longhorn]]
