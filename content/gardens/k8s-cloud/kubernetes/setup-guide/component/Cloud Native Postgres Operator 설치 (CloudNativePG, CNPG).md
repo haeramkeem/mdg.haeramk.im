@@ -10,6 +10,12 @@ aliases:
   - CloudNativePG
   - CNPG
 ---
+## 개요
+
+- Kubernetes app 들 중에 PG 를 [[Database Management System, DBMS (Database)|DBMS]] 로 사용할 수 있게 지원하는 것들이 유독 많다.
+- 아마 여러 DBMS operator 중에 CNPG 가 그만큼 유명하고 영향력이 있기 때문에 다른 app 들도 이놈과의 integration 을 지원하는듯하다.
+- 그래서 이거 하나 설치해두면 편하게 PG instance 를 띄우고 app 에서 요긴하게 사용할 수 있다.
+
 ## 설치
 
 - NS 생성 (선택)
@@ -49,6 +55,7 @@ spec:
 
   storage:
     size: {{PG 가 사용할 storage 크기}}
+    storageClass: # (아마도) 비워두면 default 를 사용한다.
 
   bootstrap:
     initdb:
