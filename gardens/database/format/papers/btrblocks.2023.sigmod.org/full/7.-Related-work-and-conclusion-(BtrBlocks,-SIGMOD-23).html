@@ -156,7 +156,7 @@
 <ol start="3">
 <li><a href="https://dl.acm.org/doi/10.1145/2463676.2465322" class="external">이 논문</a> 과 <a href="https://dl.acm.org/doi/10.1145/2723372.2747642" class="external">이 논문</a> 에서는 세로로 값을 저장하고 SIMD 를 적용해 더 빠르게 predicate evaluation 을 했다고 한다.
 <ul>
-<li>저 “세로로 값을 저장” 하는 것은 64bit 값을 하나의 address 가 아닌 64개의 address 에 저장해, 여러 값들에 대한 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 번째 bit 가 하나의 address 에 들어오도록 한 것을 의미한다 [^kth-bit-adjacent].</li>
+<li>저 “세로로 값을 저장” 하는 것은 64bit 값을 하나의 address 가 아닌 64개의 address 에 저장해, 여러 값들에 대한 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></span> 번째 bit 가 하나의 address 에 들어오도록 한 것을 의미한다 [^kth-bit-adjacent].</li>
 </ul>
 </li>
 <li><a href="https://dl.acm.org/doi/abs/10.14778/1453856.1453925" class="external">이 논문</a> 에서는 predicate 에서 일반적으로 여러 column 이 evaluation 된다는 생각에, 여러 column 에 대한 값들을 하나의 “word” 에 집어넣고 이 “word” 에 대해 SIMD 로 최적화한 operation 을 돌리는 방식을 제안했다.</li>

@@ -38,14 +38,14 @@
 <h2 id="design-and-implementation-of-lru-k-replacement-algorithm">Design and Implementation of LRU-K Replacement Algorithm<a aria-hidden="true" tabindex="-1" href="#design-and-implementation-of-lru-k-replacement-algorithm" class="internal"> §</a></h2>
 <ul>
 <li>LRU-K RA 는 <em>Backward K-Distance</em> (너무 기니까 줄여서 <em>BKD</em> 라고 부르자) 가 최대가 되는 frame 을 방출하는 것이다.</li>
-<li>이때 <em>BKD</em> 는 어떤 frame 에 대한 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 지난 번째 접근에의 timestamp 와 현재 timestamp 간의 차이를 의미한다.
+<li>이때 <em>BKD</em> 는 어떤 frame 에 대한 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 지난 번째 접근에의 timestamp 와 현재 timestamp 간의 차이를 의미한다.
 <ul>
-<li>즉, 오래된 순서로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 번째가 아닌, 최근순으로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 번째인 것.</li>
+<li>즉, 오래된 순서로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 번째가 아닌, 최근순으로 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 번째인 것.</li>
 </ul>
 </li>
 <li>여기서 몇가지 조건이 달린다.
 <ul>
-<li>만약 어떤 frame 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 번 접근되지 않아 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 번째가 없다면, <em>BKD</em> 는 양의 무한대가 된다.</li>
+<li>만약 어떤 frame 이 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 번 접근되지 않아 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 번째가 없다면, <em>BKD</em> 는 양의 무한대가 된다.</li>
 <li>만약 <em>BKD</em> 값이 양의 무한대가 되는 frame 이 여러개 있을 때에는, LRU-K 가 아닌 LRU 로 작동하게 해야 한다.</li>
 <li>Victim 으로 선정된 frame 은 evictable 해야 한다. 즉, evictable 플래그가 꺼져 있는 frame 은 victim 선정 과정에서 제외된다.</li>
 </ul>
@@ -64,7 +64,7 @@
 <ul>
 <li>원래의 code template 에는 <code>std::list</code> 로 제공된다. 하지만 random access 를 하고싶어서 <code>std::deque</code> 로 변경했다.</li>
 <li>어떤 frame 에 대한 접근 시간을 deque 에 <code>push_front</code> 하고</li>
-<li><em>BKD</em> 를 구할 때에는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 번째 원소 (즉, index <code>[k - 1]</code>) 에 접근하면 되게끔</li>
+<li><em>BKD</em> 를 구할 때에는 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 번째 원소 (즉, index <code>[k - 1]</code>) 에 접근하면 되게끔</li>
 </ul>
 </li>
 <li><code>bool is_evictable_{false}</code>: Evictable 플래그</li>
@@ -76,7 +76,7 @@
 <ul>
 <li>초기값은 <code>0</code> 이 아니라 <code>1</code> 로 주었다.
 <ul>
-<li>왜냐면 <em>BKD</em> 가 최대가 되기 위해서는 access timestamp 가 최소가 되어야 하고, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 번째 timestamp 가 없는 경우에는 <em>BKD</em> 가 양의 무한대로 최대가 되어야 하기 때문에 timestamp 는 최소가 되어야 한다.</li>
+<li>왜냐면 <em>BKD</em> 가 최대가 되기 위해서는 access timestamp 가 최소가 되어야 하고, <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 번째 timestamp 가 없는 경우에는 <em>BKD</em> 가 양의 무한대로 최대가 되어야 하기 때문에 timestamp 는 최소가 되어야 한다.</li>
 <li>따라서 timestamp <code>0</code> 을 reserve 해 양의 무한대의 <em>BKD</em> 에 대한 timestamp 에 대응하게 했다.</li>
 </ul>
 </li>
@@ -95,7 +95,7 @@
 </li>
 </ul>
 </li>
-<li><code>size_t k_</code>: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 값.</li>
+<li><code>size_t k_</code>: <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 값.</li>
 </ul>
 <h3 id="lrukreplacersize"><code>LRUKReplacer::Size</code><a aria-hidden="true" tabindex="-1" href="#lrukreplacersize" class="internal"> §</a></h3>
 <ul>
@@ -149,18 +149,18 @@
 <li>대망의 Evict. 이놈이 제일 어려웠다.</li>
 <li>우선 시간복잡도의 측면에서 짚고 가야 할 것이 있다.
 <ul>
-<li>일단 LRU-K 알고리즘은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span> 의 시간복잡도를 가진다고 알려져 있다.
+<li>일단 LRU-K 알고리즘은 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mclose">)</span></span></span></span></span> 의 시간복잡도를 가진다고 알려져 있다.
 <ul>
-<li>물론 LRU-2 의 경우에는 이것을 최적화해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 로 만든 2Q 가 있지만 어쨋든.</li>
+<li>물론 LRU-2 의 경우에는 이것을 최적화해 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 로 만든 2Q 가 있지만 어쨋든.</li>
 </ul>
 </li>
-<li>근데 일단 PoC 를 위해 최적화는 나중에 하기로 하고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span> 으로 구현했다.</li>
+<li>근데 일단 PoC 를 위해 최적화는 나중에 하기로 하고 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mclose">)</span></span></span></span></span> 으로 구현했다.</li>
 </ul>
 </li>
-<li>기본적인 구조는 그냥 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span> 으로 최소값 찾는 알고리즘이다:
+<li>기본적인 구조는 그냥 <span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mclose">)</span></span></span></span></span> 으로 최소값 찾는 알고리즘이다:
 <ul>
 <li>만약에 frame 이 evictable 하지 않으면 그냥 지나치고</li>
-<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 번째 timestamp 가 더 작은 frame 이 있으면 그 frame 으로 victim 을 업데이트해준다.</li>
+<li><span class="math math-inline"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span></span> 번째 timestamp 가 더 작은 frame 이 있으면 그 frame 으로 victim 을 업데이트해준다.</li>
 </ul>
 </li>
 <li>여기서 추가적으로 고려된 것은 LRU-K &lt;-> LRU 간의 전환이다.
