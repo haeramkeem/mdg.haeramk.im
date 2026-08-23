@@ -42,7 +42,7 @@ lspci -nn | grep -i nvidia
 DD:DD.0 VGA compatible controller ... NVIDIA Corporation ... [XXXX:XXXX] ...
 ```
 
-- 일반 소비자용 GPU 의 경우에는 Audio 까지 두개가 뜰 수 있다. 그렇다면 이렇게 두개가 뜰 수 있다.
+- 일반 소비자용 GPU 의 경우에는 Audio 까지 두개가 뜰 수 있다.
 
 ```
 DD:DD.0 VGA compatible controller ... NVIDIA Corporation ... [XXXX:XXXX] ...
@@ -89,7 +89,7 @@ EOF
 
 - 그리고 `vfio` 설정을 해준다.
 	- 여기서 `XXXX:XXXX` 는 위에서 확인한 vendor/device ID 다.
-	- 만약 audio 까지 있으면, 두개를 넣어주면 된다: `ids=XXXX:XXXX,XXXX:XXXX`
+	- 이때 여러개를 넣어야 된다면 (가령 GPU 여러개 혹은 audio 까지) comma-separated 로 적으면 된다: `ids=XXXX:XXXX,XXXX:XXXX`
 
 ```bash
 cat << EOF | tee /etc/modprobe.d/vfio.conf
