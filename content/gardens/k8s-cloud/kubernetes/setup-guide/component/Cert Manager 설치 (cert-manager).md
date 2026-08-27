@@ -48,6 +48,12 @@ helm repo update
 helm -n {{Cert manager namespace 이름}} upgrade --install cert-manager jetstack/cert-manager -f values.yaml
 ```
 
+## Resources
+
+- `ClusterIssuer`: Cert issuer resource 이다.
+- `Certificate`: Cert resource 이다.
+	- 이놈을 생성하면 동일한 이름의 [[Secret (Kubernetes)|Secret]] 이 생성된다.
+
 ## Self-signed 템플릿
 
 - 물론 cert-manager 를 사용하면 ACME 를 이용해 public cert 를 받을 수 있다.
