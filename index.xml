@@ -6,6 +6,12 @@
       <description>Last 10 notes on Madison Digital Garden</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>(Garden) AI</title>
+    <link>https://mdg.haeramk.im/gardens/ai/(Garden)-AI</link>
+    <guid>https://mdg.haeramk.im/gardens/ai/(Garden)-AI</guid>
+    <description>개요 § 오만한 이야기지만, 이전에는 AI를 좀 무시했다. CS 고수라면 system으로 가야지라고 생각하고 AI 하는 사람들을 살짝 내려다보는 시선으로 바라봤다. 그렇게 살다가 system 도 잘 모르고 AI는 아예 모르는 무쓸모 인간이 됐다. 반성해야지. 그래서 이 정원은 이제라도 조금씩 해보는 ‘무쓸모 인간의 AI 공부’다.</description>
+    <pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
+  </item><item>
     <title>(Garden) Algorithm, Data Structure</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</guid>
@@ -28,13 +34,13 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</guid>
     <description> 참고한 것들 서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024) 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Thu, 27 Aug 2026 00:37:22 GMT</pubDate>
+    <pubDate>Mon, 31 Aug 2026 13:10:39 GMT</pubDate>
   </item><item>
     <title>Skip List (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Thu, 27 Aug 2026 00:37:22 GMT</pubDate>
+    <pubDate>Mon, 31 Aug 2026 13:10:39 GMT</pubDate>
   </item><item>
     <title>Deque (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Deque-(Data-Structure)</link>
@@ -58,13 +64,7 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Thu, 27 Aug 2026 00:37:22 GMT</pubDate>
-  </item><item>
-    <title>Mellor-Crummey and Scott Lock, MCS Lock (Lock Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/terms/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/terms/Mellor-Crummey-and-Scott-Lock,-MCS-Lock-(Lock-Data-Structure)</guid>
-    <description> 참고한 것들 서울대 정형수 교수님 빅데이터 및 지식 관리 시스템 2 강의 (Spring 2025) MCS Lock § 지금 linux 에서 사용되는 locking 방식 (qspinlock.c 에 있댄다). CLH lock 에서는 uncached NUMA 에서 문제가 있었고, 이것을 해결하기 위해 나온 것이다.</description>
-    <pubDate>Mon, 05 May 2025 00:00:00 GMT</pubDate>
+    <pubDate>Mon, 31 Aug 2026 13:10:39 GMT</pubDate>
   </item>
     </channel>
   </rss>
