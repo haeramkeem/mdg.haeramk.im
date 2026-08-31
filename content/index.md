@@ -21,6 +21,7 @@ aliases:
 
 대강 이런 작물들을 심고 있습니다.
 
+- [[(Garden) AI|AI]]
 - [[(Garden) Algorithm, Data Structure|알고리즘, 자료구조]]
 - [[(Garden) Computer Architectures, GPU|컴퓨터 구조, GPU]]
 - [[(Garden) C, Cpp|C, C++]]
