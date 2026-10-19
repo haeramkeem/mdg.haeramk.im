@@ -15,6 +15,6 @@ date: 2024-03-05
 ## TL;DR!
 
 ```bash
-cp $TRUST_CERT.crt /usr/local/shared/ca-certificates/
+cp $TRUST_CERT.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
 ```

@@ -107,6 +107,8 @@ date: 2024-07-29
 
 - 용어들
 	- [[2. Bw-Tree Essentials (OpenBwTree, SIGMOD 18)|Buzz Word Tree, Bw-Tree]] (redirect [[(논문) Building a Bw-Tree Takes More Than Just Buzz Words|OpenBwTree]])
+	- Hash
+		- [[Extendible Hash (Hash Index)|Extendible Hash]]
 - 논문들
 	- [[(논문) B-Trees Are Back - Engineering Fast and Pageable Node Layouts|B-Trees Are Back: Engineering Fast and Pageable Node Layouts (SIGMOD'25)]]
 	- [[(논문) CUBIT - Concurrent Updatable Bitmap Indexing|CUBIT: Concurrent Updatable Bitmap Indexing (VLDB'24)]]

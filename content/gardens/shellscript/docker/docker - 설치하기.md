@@ -70,3 +70,13 @@ sudo systemctl status docker
 ```bash
 sudo systemctl status containerd
 ```
+
+## Docker `sudo` 없이
+
+- `sudo` 없이 docker 를 사용하려면 이렇게 하면 된다.
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+- 그 다음 shell 을 닫고 다시 로그인해주면 적용된다.
