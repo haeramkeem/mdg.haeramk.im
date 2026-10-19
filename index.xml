@@ -12,6 +12,12 @@
     <description>개요 § 오만한 이야기지만, 이전에는 AI를 좀 무시했다. CS 고수라면 system으로 가야지라고 생각하고 AI 하는 사람들을 살짝 내려다보는 시선으로 바라봤다. 그렇게 살다가 system 도 잘 모르고 AI는 아예 모르는 무쓸모 인간이 됐다. 반성해야지. 그래서 이 정원은 이제라도 조금씩 해보는 ‘무쓸모 인간의 AI 공부’다.</description>
     <pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
   </item><item>
+    <title>Lamar.dvs</title>
+    <link>https://mdg.haeramk.im/gardens/ai/lamar.dvs/Lamar.dvs</link>
+    <guid>https://mdg.haeramk.im/gardens/ai/lamar.dvs/Lamar.dvs</guid>
+    <description>개요 § GitHub github://haeramkeem/lamar.dvs LLM inference engine 개발 기록 눈치챘겠지만, 프로젝트 이름은 llama.cpp 와 Lamar Davis 를 합친거다. Time-series §.</description>
+    <pubDate>Thu, 10 Sep 2026 00:00:00 GMT</pubDate>
+  </item><item>
     <title>(Garden) Algorithm, Data Structure</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/(Garden)-Algorithm,-Data-Structure</guid>
@@ -34,13 +40,13 @@
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Circular-Queue-(Data-Structure)</guid>
     <description> 참고한 것들 서울대 이재진 교수님 확장형 고성능 컴퓨팅 강의 (Fall 2024) 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Wed, 09 Sep 2026 09:22:27 GMT</pubDate>
+    <pubDate>Mon, 19 Oct 2026 00:28:48 GMT</pubDate>
   </item><item>
     <title>Skip List (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</link>
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/drafts/Skip-List-(Data-Structure)</guid>
     <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Wed, 09 Sep 2026 09:22:27 GMT</pubDate>
+    <pubDate>Mon, 19 Oct 2026 00:28:48 GMT</pubDate>
   </item><item>
     <title>Deque (Data Structure)</title>
     <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Deque-(Data-Structure)</link>
@@ -59,12 +65,6 @@
     <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/linear/terms/Stack,-Queue,-Container-Adapter-(Data-Structure)</guid>
     <description>Container Adapter § 컨테이너 어답터는 간단하게 말해서 기존의 컨테이너의 기능을 축소시키는 것이다. 즉, 많은 기능을 제공하는 컨테이너를 하나 만들어놓고 그걸 기반으로 하되 특정 기능만 사용할 수 있게 함으로써 실수로 허용되지 않는 작업을 수행하는 것을 막을 수 있는 것이다.</description>
     <pubDate>Fri, 12 Nov 2021 00:00:00 GMT</pubDate>
-  </item><item>
-    <title>Craig, Landin, and Hagersten Lock, CLH Lock (Lock Data Structure)</title>
-    <link>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</link>
-    <guid>https://mdg.haeramk.im/gardens/algorithm/data-structure/lock/drafts/Craig,-Landin,-and-Hagersten-Lock,-CLH-Lock-(Lock-Data-Structure)</guid>
-    <description> 본 글은 #draft 상태입니다. 내용 추가 .</description>
-    <pubDate>Wed, 09 Sep 2026 09:22:27 GMT</pubDate>
   </item>
     </channel>
   </rss>
