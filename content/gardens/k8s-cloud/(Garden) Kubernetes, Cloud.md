@@ -50,6 +50,7 @@ aliases:
 			- [[Gateway API 활성화하기 (Cilium)|Gateway API 활성화하기]]
 			- [[Kube-proxy 대체하기 (Cilium)|Kube-proxy 대체하기]]
 			- [[LB IPAM 사용하기 (Cilium)|LB IPAM 사용하기]]
+		- [[ArgoCD 설치|ArgoCD]]
 		- [[Authentik 설치|Authentik]]
 		- [[Cert Manager 설치 (cert-manager)|cert-manager]]
 		- [[Cloud Native Postgres Operator 설치 (CloudNativePG, CNPG)|CloudNativePG]]
